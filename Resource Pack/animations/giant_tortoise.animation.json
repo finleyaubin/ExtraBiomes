@@ -1,0 +1,97 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.giant_tortoise.general": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [
+						"query.has_target==1?variable.roll+query.modified_distance_moved*30:0",
+						0,
+						0
+					]
+				}
+			}
+		},
+		"animation.giant_tortoise.ground_move": {
+			"anim_time_update": "query.modified_distance_moved",
+			"loop": true,
+			"bones": {
+				"leg0": {
+					"rotation": [
+						"math.clamp(math.cos(query.anim_time*variable.timemultiplier*variable.legspeedmultiplier*15+180)*variable.backlegmultiplier*query.modified_move_speed*15,-90,90)-this",
+						"-this",
+						"-this"
+					]
+				},
+				"leg1": {
+					"rotation": [
+						"math.clamp(math.cos(query.anim_time*variable.timemultiplier*variable.legspeedmultiplier*15+180)*variable.backlegmultiplier*query.modified_move_speed*15,-90,90)-this",
+						"-this",
+						"-this"
+					]
+				},
+				"leg2": {
+					"rotation": [
+						"math.clamp(math.cos(query.anim_time*variable.timemultiplier*variable.legspeedmultiplier*15+180)*variable.frontlegmultiplier*query.modified_move_speed*15,-90,90)-this",
+						"-this",
+						"-this"
+					]
+				},
+				"leg3": {
+					"rotation": [
+						"math.clamp(math.cos(query.anim_time*variable.timemultiplier*variable.legspeedmultiplier*15+180)*variable.frontlegmultiplier*query.modified_move_speed*15,-90,90)-this",
+						"-this",
+						"-this"
+					]
+				}
+			}
+		},
+		"animation.giant_tortoise.move": {
+			"anim_time_update": "query.modified_distance_moved",
+			"loop": true,
+			"bones": {
+				"leg0": {
+					"rotation": [
+						"math.clamp(math.cos(query.anim_time*22.92)*query.modified_move_speed*28.65,-90,90)-this",
+						"-this",
+						"-this"
+					]
+				},
+				"leg1": {
+					"rotation": [
+						"math.clamp(math.cos(query.anim_time*22.92+180)*query.modified_move_speed*28.65,-90,90)-this",
+						"-this",
+						"-this"
+					]
+				},
+				"leg2": {
+					"rotation": [
+						"-this",
+						"-this",
+						"math.clamp(math.cos(query.anim_time*22.92+180)*query.modified_move_speed*28.65,-90,90)-this"
+					]
+				},
+				"leg3": {
+					"rotation": [
+						"-this",
+						"-this",
+						"math.clamp(math.cos(query.anim_time*22.92)*query.modified_move_speed*28.65,-90,90)-this"
+					]
+				}
+			}
+		},
+		"animation.giant_tortoise.jumping": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [
+						"variable.roll+query.modified_distance_moved+query.vertical_speed*30",
+						0,
+						0
+					]
+				}
+			}
+		}
+	}
+}

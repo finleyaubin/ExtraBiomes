@@ -1,0 +1,52 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.harpy.fly": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"left_wing": {
+					"rotation": [
+						0,
+						"(math.sin(query.modified_distance_moved*15)*20)+1.5",
+						0
+					]
+				},
+				"right_wing": {
+					"rotation": [
+						0,
+						"(-1*math.sin(query.modified_distance_moved*15)*20)+1.5",
+						0
+					]
+				},
+				"support5": {
+					"rotation": [
+						0,
+						"(math.sin(query.modified_distance_moved*15)*20)+1.5",
+						0
+					]
+				},
+				"support2": {
+					"rotation": [
+						0,
+						"(-1*math.sin(query.modified_distance_moved*15)*20)+1.5",
+						0
+					]
+				}
+			}
+		},
+		"animation.harpy.tilt": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"root": {
+					"rotation": [
+						"(query.modified_move_speed/variable.gliding_speed_value)*45",
+						0,
+						0
+					]
+				}
+			}
+		}
+	}
+}

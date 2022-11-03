@@ -1,0 +1,69 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.piranha.flop": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [
+						0,
+						"math.cos(variable.animationamountblend*45)*2",
+						"variable.zrot"
+					]
+				},
+				"head": {
+					"rotation": [
+						0,
+						"math.cos(variable.animationamountblend*45)*4",
+						0
+					]
+				},
+				"tailfin": {
+					"rotation": [
+						0,
+						"math.cos(variable.animationamountblend*45)*-25.75",
+						0
+					]
+				}
+			}
+		},
+		"animation.piranha.swim": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [
+						0,
+						"math.cos(variable.animationamountblend*30)*2",
+						0
+					]
+				},
+				"head": {
+					"rotation": [
+						0,
+						"math.cos(variable.animationamountblend*30)*4",
+						0
+					]
+				},
+				"tailfin": {
+					"rotation": [
+						0,
+						"math.cos(variable.animationamountblend*30)*-25.75",
+						0
+					]
+				}
+			}
+		},
+		"animation.piranha.bite": {
+			"loop": true,
+			"bones": {
+				"jaw": {
+					"rotation": [
+						"(math.sin(query.life_time)*math.sin(query.life_time)*40)",
+						0,
+						0
+					]
+				}
+			}
+		}
+	}
+}

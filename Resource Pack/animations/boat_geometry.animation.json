@@ -1,0 +1,73 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.boat_geometry.setup": {
+			"loop": true,
+			"bones": {
+				"head": {
+					"rotation": [
+						0,
+						"90+query.target_y_rotation-this",
+						0
+					]
+				}
+			}
+		},
+		"animation.boat_geometry.water": {
+			"loop": true,
+			"bones": {
+				"head": {
+					"position": [
+						0,
+						4,
+						0
+					]
+				}
+			}
+		},
+		"animation.boat_geometry.move": {
+			"loop": true,
+			"animation_length": 1.6,
+			"bones": {
+				"paddle1": {
+					"rotation": {
+						"0.0": [
+							0,
+							0,
+							-70
+						],
+						"0.8": [
+							0,
+							0,
+							140
+						],
+						"1.6": [
+							0,
+							0,
+							-70
+						]
+					}
+				},
+				"paddle2": {
+					"rotation": {
+						"0.0": [
+							0,
+							0,
+							-70
+						],
+						"0.8": [
+							0,
+							0,
+							140
+						],
+						"1.6": [
+							0,
+							0,
+							-70
+						]
+					}
+				}
+			}
+		}
+	}
+}

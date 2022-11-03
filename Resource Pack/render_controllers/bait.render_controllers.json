@@ -1,0 +1,32 @@
+{
+	"format_version": "1.8.0",
+	"render_controllers": {
+		"controller.render.bait": {
+			"arrays": {
+				"textures": {
+					"Array.skins": [
+						"Texture.bait10",
+						"Texture.bait20",
+						"Texture.bait30",
+						"Texture.bait40",
+						"Texture.bait50",
+						"Texture.bait60",
+						"Texture.bait70",
+						"Texture.bait80",
+						"Texture.bait90",
+						"Texture.bait90"
+					]
+				}
+			},
+			"geometry": "geometry.default",
+			"materials": [
+				{
+					"*": "material.default"
+				}
+			],
+			"textures": [
+				"array.skins[math.floor(query.health/10)]"
+			]
+		}
+	}
+}

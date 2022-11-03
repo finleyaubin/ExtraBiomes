@@ -1,0 +1,87 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.treefrog.jump": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [
+						"query.vertical_speed*-5",
+						0,
+						0
+					]
+				},
+				"leg1": {
+					"rotation": [
+						"math.sin(query.vertical_speed*10)*142.5",
+						"math.sin(query.vertical_speed*10)*-152.5",
+						"math.sin(query.vertical_speed*10)*145"
+					]
+				},
+				"leglow1": {
+					"rotation": [
+						0,
+						"math.sin(query.vertical_speed*10)*-10",
+						"math.sin(query.vertical_speed*10)*-140"
+					]
+				},
+				"bottom1": {
+					"rotation": [
+						0,
+						0,
+						"math.sin(query.vertical_speed*10)*105"
+					]
+				},
+				"leg4": {
+					"rotation": [
+						"math.sin(query.vertical_speed*10)*47.5",
+						"math.sin(query.vertical_speed*10)*-87.5",
+						"math.sin(query.vertical_speed*10)*17.5"
+					]
+				},
+				"leglow4": {
+					"rotation": [
+						0,
+						0,
+						"math.sin(query.vertical_speed*10)*82.5"
+					]
+				},
+				"leg2": {
+					"rotation": [
+						"math.sin(query.vertical_speed*10)*-37.5",
+						"math.sin(query.vertical_speed*10)*-200",
+						"math.sin(query.vertical_speed*10)*42.5"
+					]
+				},
+				"leglow2": {
+					"rotation": [
+						0,
+						0,
+						"math.sin(query.vertical_speed*10)*132.5"
+					]
+				},
+				"bottom2": {
+					"rotation": [
+						0,
+						0,
+						"math.sin(query.vertical_speed*10)*-102.5"
+					]
+				},
+				"leg3": {
+					"rotation": [
+						"math.sin(query.vertical_speed*10)*157.5",
+						"math.sin(query.vertical_speed*10)*147.5",
+						"math.sin(query.vertical_speed*10)*82.5"
+					]
+				},
+				"leglow3": {
+					"rotation": [
+						"math.sin(query.vertical_speed*10)*-2.5",
+						"math.sin(query.vertical_speed*10)*-17.5",
+						"math.sin(query.vertical_speed*10)*-10"
+					]
+				}
+			}
+		}
+	}
+}

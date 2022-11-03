@@ -1,0 +1,262 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.bait.wrigle": {
+			"loop": true,
+			"bones": {
+				"head1": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head2": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head3": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body2": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head5": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head6": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head7": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body3": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head9": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head10": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head11": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body4": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head13": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head14": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head15": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body5": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head17": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head18": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head19": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body6": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head21": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head22": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head23": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body7": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head25": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head26": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head27": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body8": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head29": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head30": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head31": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body9": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head33": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				},
+				"head34": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"head35": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*-45",
+						0,
+						0
+					]
+				},
+				"body10": {
+					"rotation": [
+						"math.abs(math.sin(query.life_time*50))*45",
+						0,
+						0
+					]
+				}
+			}
+		}
+	}
+}
