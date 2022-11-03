@@ -1,0 +1,25 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:palm_slab"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:palm_planks"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:palm_slab",
+				"count": 6
+			}
+		]
+	}
+}

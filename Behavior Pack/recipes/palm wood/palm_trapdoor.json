@@ -1,0 +1,26 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:palm_trapdoor"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~~",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:palm_planks"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:palm_trapdoor",
+				"count": 2
+			}
+		]
+	}
+}

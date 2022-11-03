@@ -1,0 +1,27 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:composter_from_palm"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~ ~",
+			"~ ~",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:palm_slab"
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:composter",
+				"count": 1
+			}
+		]
+	}
+}

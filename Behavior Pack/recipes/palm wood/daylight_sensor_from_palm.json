@@ -1,0 +1,33 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:daylight_sensor_from_palm"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"!!!",
+			"###",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:palm_slab"
+			},
+			"#": {
+				"item": "minecraft:quartz"
+			},
+			"!": {
+				"item": "minecraft:glass"
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:daylight_detector",
+				"count": 1
+			}
+		]
+	}
+}

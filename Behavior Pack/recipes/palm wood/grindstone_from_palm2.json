@@ -1,0 +1,32 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:grindstone_from_palm2"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"!#!",
+			"~ ~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:palm_planks"
+			},
+			"#": {
+				"item": "minecraft:stone_slab2"
+			},
+			"!": {
+				"item": "minecraft:stick"
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:grindstone",
+				"count": 1
+			}
+		]
+	}
+}

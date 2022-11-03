@@ -1,0 +1,30 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:wooden_axe_from_palm"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~",
+			"~#",
+			" #"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:palm_planks"
+			},
+			"#": {
+				"item": "minecraft:stick"
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:wooden_axe",
+				"count": 1
+			}
+		]
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:palm_fence_gate"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"#~#",
+			"#~#"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:palm_planks"
+			},
+			"#": {
+				"item": "minecraft:stick"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:palm_fence_gate",
+				"count": 1
+			}
+		]
+	}
+}
