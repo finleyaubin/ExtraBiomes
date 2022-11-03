@@ -1,0 +1,8 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:texture_set": {
+		"color": "ash_door",
+		"metalness_emissive_roughness": "ash_door_mer",
+		"heightmap": "ash_door_heightmap"
+	}
+}
