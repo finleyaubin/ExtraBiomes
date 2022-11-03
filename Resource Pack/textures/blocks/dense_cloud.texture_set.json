@@ -1,0 +1,8 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:texture_set": {
+		"color": "dense_cloud",
+		"metalness_emissive_roughness": "dense_cloud_mer",
+		"heightmap": "dense_cloud_heightmap"
+	}
+}
