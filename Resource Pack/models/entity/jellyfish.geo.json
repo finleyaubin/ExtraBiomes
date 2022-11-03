@@ -1,0 +1,483 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.jellyfish",
+				"texture_width": 64,
+				"texture_height": 32,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [
+					0,
+					0.75,
+					0
+				]
+			},
+			"bones": [
+				{
+					"name": "body",
+					"pivot": [
+						0,
+						0,
+						0
+					]
+				},
+				{
+					"name": "tentacles",
+					"parent": "body",
+					"pivot": [
+						0,
+						0,
+						0
+					]
+				},
+				{
+					"name": "tentacle2",
+					"parent": "tentacles",
+					"pivot": [
+						0,
+						0,
+						0
+					]
+				},
+				{
+					"name": "upper2",
+					"parent": "tentacle2",
+					"pivot": [
+						-1.5,
+						10,
+						-2
+					],
+					"cubes": [
+						{
+							"origin": [
+								-2,
+								5,
+								-2
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "lower2",
+					"parent": "upper2",
+					"pivot": [
+						-1.5,
+						5,
+						-2
+					],
+					"cubes": [
+						{
+							"origin": [
+								-2,
+								0,
+								-2
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "tentacle1",
+					"parent": "tentacles",
+					"pivot": [
+						0,
+						0,
+						0
+					]
+				},
+				{
+					"name": "upper",
+					"parent": "tentacle1",
+					"pivot": [
+						0,
+						10,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-1,
+								5,
+								0
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "lower",
+					"parent": "upper",
+					"pivot": [
+						0,
+						5,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-1,
+								0,
+								0
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "tentacle4",
+					"parent": "tentacles",
+					"pivot": [
+						1.5,
+						10,
+						-1
+					]
+				},
+				{
+					"name": "upper4",
+					"parent": "tentacle4",
+					"pivot": [
+						1.5,
+						10,
+						-1
+					],
+					"cubes": [
+						{
+							"origin": [
+								1,
+								5,
+								-1
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "lower4",
+					"parent": "upper4",
+					"pivot": [
+						1.5,
+						5,
+						-1
+					],
+					"cubes": [
+						{
+							"origin": [
+								1,
+								0,
+								-1
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "tentacle5",
+					"parent": "tentacles",
+					"pivot": [
+						1,
+						0,
+						0
+					]
+				},
+				{
+					"name": "upper5",
+					"parent": "tentacle5",
+					"pivot": [
+						0,
+						10,
+						2
+					],
+					"cubes": [
+						{
+							"origin": [
+								-1,
+								5,
+								2
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"pivot": [
+								0,
+								0,
+								2
+							],
+							"rotation": [
+								0,
+								-90,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "lower5",
+					"parent": "upper5",
+					"pivot": [
+						0,
+						5,
+						2
+					],
+					"cubes": [
+						{
+							"origin": [
+								-1,
+								0,
+								2
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"pivot": [
+								0,
+								0,
+								2
+							],
+							"rotation": [
+								0,
+								-90,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "tentacle3",
+					"parent": "tentacles",
+					"pivot": [
+						0,
+						0,
+						0
+					]
+				},
+				{
+					"name": "upper3",
+					"parent": "tentacle3",
+					"pivot": [
+						-1.5,
+						10,
+						2
+					],
+					"cubes": [
+						{
+							"origin": [
+								-2,
+								5,
+								2
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "lower3",
+					"parent": "upper3",
+					"pivot": [
+						-1.5,
+						5,
+						2
+					],
+					"cubes": [
+						{
+							"origin": [
+								-2,
+								0,
+								2
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "tentacle6",
+					"parent": "tentacle3",
+					"pivot": [
+						3,
+						0,
+						-1
+					]
+				},
+				{
+					"name": "upper6",
+					"parent": "tentacle6",
+					"pivot": [
+						2,
+						10,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								1,
+								5,
+								1
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"pivot": [
+								2,
+								0,
+								1
+							],
+							"rotation": [
+								0,
+								-90,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "lower6",
+					"parent": "upper6",
+					"pivot": [
+						2,
+						5,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								1,
+								0,
+								1
+							],
+							"size": [
+								1,
+								5,
+								0
+							],
+							"pivot": [
+								2,
+								0,
+								1
+							],
+							"rotation": [
+								0,
+								-90,
+								0
+							],
+							"uv": [
+								60,
+								0
+							]
+						}
+					]
+				},
+				{
+					"name": "head",
+					"parent": "body",
+					"pivot": [
+						0,
+						10,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-4,
+								10,
+								-4
+							],
+							"size": [
+								8,
+								5,
+								8
+							],
+							"uv": [
+								0,
+								0
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

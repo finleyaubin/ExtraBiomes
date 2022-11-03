@@ -1,0 +1,32 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:treefrog",
+			"materials": {
+				"default": "entity_alphablend"
+			},
+			"textures": {
+				"default": "textures/entity/treefrog"
+			},
+			"geometry": {
+				"default": "geometry.treefrog"
+			},
+			"scripts": {
+				"animate": [
+					"jumping"
+				]
+			},
+			"animations": {
+				"jumping": "animation.treefrog.jump"
+			},
+			"render_controllers": [
+				"controller.render.treefrog"
+			],
+			"spawn_egg": {
+				"base_color": "#329b17",
+				"overlay_color": "#034722"
+			}
+		}
+	}
+}

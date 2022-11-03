@@ -1,0 +1,36 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:palm_boat",
+			"materials": {
+				"default": "armor_stand"
+			},
+			"textures": {
+				"default": "textures/entity/boat/boat_palm"
+			},
+			"geometry": {
+				"default": "geometry.boat_geometry"
+			},
+			"animations": {
+				"look_at_target": "animation.boat_geometry.setup",
+				"water": "animation.boat_geometry.water",
+				"movement": "animation.boat_geometry.move"
+			},
+			"scripts": {
+				"animate": [
+					"look_at_target",
+					{
+						"water": "query.is_in_water"
+					},
+					{
+						"movement": "query.modified_move_speed"
+					}
+				]
+			},
+			"render_controllers": [
+				"controller.render.boat"
+			]
+		}
+	}
+}

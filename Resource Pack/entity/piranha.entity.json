@@ -1,0 +1,42 @@
+{
+	"format_version": "1.8.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:piranha",
+			"materials": {
+				"default": "cod"
+			},
+			"textures": {
+				"default": "textures/entity/fish/piranha",
+				"default2": "textures/entity/fish/piranha2",
+				"default3": "textures/entity/fish/piranha3"
+			},
+			"geometry": {
+				"default": "geometry.piranha"
+			},
+			"scripts": {
+				"pre_animation": [
+					"variable.ZRot = !query.is_in_water ? Math.cos((query.time_stamp + query.frame_alpha) * 14.32) * 90 : 0.0;",
+					"variable.AnimationAmountBlend = query.modified_distance_moved;"
+				]
+			},
+			"animations": {
+				"flop": "animation.piranha.flop",
+				"swim": "animation.piranha.swim",
+				"bite": "animation.piranha.bite"
+			},
+			"animation_controllers": [
+				{
+					"general": "controller.animation.piranha.general"
+				}
+			],
+			"render_controllers": [
+				"controller.render.piranha"
+			],
+			"spawn_egg": {
+				"base_color": "#444444",
+				"overlay_color": "#251515"
+			}
+		}
+	}
+}

@@ -1,0 +1,36 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:jellyfish",
+			"min_engine_version": "1.8.0",
+			"materials": {
+				"default": "entity_alphablend"
+			},
+			"textures": {
+				"pink": "textures/entity/fish/jellyfish",
+				"purple": "textures/entity/fish/jellyfish1"
+			},
+			"geometry": {
+				"default": "geometry.jellyfish"
+			},
+			"scripts": {
+				"animate": [
+					"swim",
+					"jiggle"
+				]
+			},
+			"animations": {
+				"swim": "animation.jellyfish.swim",
+				"jiggle": "animation.jellyfish.jiggle"
+			},
+			"render_controllers": [
+				"controller.render.jellyfish"
+			],
+			"spawn_egg": {
+				"base_color": "#932A9E",
+				"overlay_color": "#DC7CE6"
+			}
+		}
+	}
+}

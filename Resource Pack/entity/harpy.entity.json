@@ -1,0 +1,45 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:harpy",
+			"min_engine_version": "1.8.0",
+			"materials": {
+				"default": "entity_alphatest"
+			},
+			"textures": {
+				"default": "textures/entity/harpy"
+			},
+			"geometry": {
+				"default": "geometry.harpy"
+			},
+			"scripts": {
+				"animate": [
+					"fly",
+					"move.arms",
+					"move.legs",
+					"tilt",
+					"look_at_target"
+				],
+				"scale": "1.2",
+				"pre_animation": [
+					"variable.tcos0 = (math.cos(query.modified_distance_moved * 20.17) * query.modified_move_speed / variable.gliding_speed_value) * 20.3;"
+				]
+			},
+			"animations": {
+				"fly": "animation.harpy.fly",
+				"tilt": "animation.harpy.tilt",
+				"move.arms": "animation.player.move.arms",
+				"move.legs": "animation.player.move.legs",
+				"look_at_target": "animation.common.look_at_target"
+			},
+			"render_controllers": [
+				"controller.render.harpy"
+			],
+			"spawn_egg": {
+				"base_color": "#2319af",
+				"overlay_color": "#e9c600"
+			}
+		}
+	}
+}

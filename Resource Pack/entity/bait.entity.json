@@ -1,0 +1,37 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:bait",
+			"min_engine_version": "1.8.0",
+			"materials": {
+				"default": "skeleton"
+			},
+			"textures": {
+				"bait90": "textures/entity/bait90",
+				"bait80": "textures/entity/bait80",
+				"bait70": "textures/entity/bait70",
+				"bait60": "textures/entity/bait60",
+				"bait50": "textures/entity/bait50",
+				"bait40": "textures/entity/bait40",
+				"bait30": "textures/entity/bait30",
+				"bait20": "textures/entity/bait20",
+				"bait10": "textures/entity/bait10"
+			},
+			"geometry": {
+				"default": "geometry.bait"
+			},
+			"scripts": {
+				"animate": [
+					"wrigle"
+				]
+			},
+			"animations": {
+				"wrigle": "animation.bait.wrigle"
+			},
+			"render_controllers": [
+				"controller.render.bait"
+			]
+		}
+	}
+}

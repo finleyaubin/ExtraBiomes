@@ -1,0 +1,1 @@
+{"format_version":"1.16.100","minecraft:fog_settings":{"description":{"identifier":"extrabiomes:fog_jellyfish_fields"},"distance":{"water":{"fog_start":30,"fog_end":90,"fog_color":"#02c7d5","render_distance_type":"fixed"}}}}

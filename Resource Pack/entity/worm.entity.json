@@ -1,0 +1,33 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:worm",
+			"min_engine_version": "1.8.0",
+			"materials": {
+				"default": "turtle"
+			},
+			"textures": {
+				"default": "textures/entity/worm"
+			},
+			"geometry": {
+				"default": "geometry.worm"
+			},
+			"scripts": {
+				"animate": [
+					"move"
+				]
+			},
+			"animations": {
+				"move": "animation.worm.move"
+			},
+			"render_controllers": [
+				"controller.render.worm"
+			],
+			"spawn_egg": {
+				"base_color": "#ff81d9",
+				"overlay_color": "#ff4343"
+			}
+		}
+	}
+}

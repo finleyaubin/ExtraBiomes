@@ -1,0 +1,36 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:diamond_razor_feather",
+			"materials": {
+				"default": "arrow"
+			},
+			"textures": {
+				"default": "textures/items/diamond_razor_feather"
+			},
+			"geometry": {
+				"default": "geometry.razor_feather"
+			},
+			"animations": {
+				"move": "animation.razor_feather.move",
+				"throw": "animation.razor_feather.throw"
+			},
+			"scripts": {
+				"pre_animation": [
+					"variable.shake = query.shake_time - query.frame_alpha;",
+					"variable.shake_power = variable.shake > 0.0 ? -Math.sin(variable.shake * 200.0) * variable.shake : 0.0;",
+					"variable.roll = 0;"
+				],
+				"animate": [
+					"move",
+					"throw"
+				],
+				"scale": "1.2"
+			},
+			"render_controllers": [
+				"controller.render.razor_feather"
+			]
+		}
+	}
+}
