@@ -1,0 +1,72 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "shattered_swamp"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.5,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 0.8
+			},
+			"minecraft:overworld_height": {
+				"noise_params": [
+					0,
+					1.2125
+				]
+			},
+			"minecraft:swamp_surface": {
+				"sea_floor_depth": 7,
+				"sea_floor_material": "minecraft:gravel",
+				"foundation_material": "minecraft:stone",
+				"mid_material": "minecraft:dirt",
+				"top_material": "minecraft:grass",
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:surface_material_adjustments": {
+				"adjustments": [
+					{
+						"materials": {
+							"mid_material": "minecraft:stone",
+							"top_material": "minecraft:moss_block"
+						},
+						"noise_frequency_scale": 0.0625,
+						"noise_range": [
+							0.212,
+							1
+						]
+					},
+					{
+						"materials": {
+							"top_material": {
+								"name": "minecraft:grass"
+							}
+						},
+						"noise_frequency_scale": 0.0625,
+						"noise_range": [
+							-0.061,
+							0.212
+						]
+					}
+				]
+			},
+			"minecraft:overworld_generation_rules": {
+				"generate_for_climates": [
+					[
+						"medium",
+						1
+					]
+				]
+			},
+			"animal": {},
+			"monster": {},
+			"overworld": {},
+			"swamp": {},
+			"shattered_swamp": {}
+		}
+	}
+}

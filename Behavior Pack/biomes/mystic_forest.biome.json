@@ -1,0 +1,45 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "mystic_forest"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.9,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 0.95,
+				"blue_spores": 0.2
+			},
+			"minecraft:overworld_height": {
+				"noise_params": [
+					-0.05,
+					0.5
+				]
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": 7,
+				"sea_floor_material": "minecraft:gravel",
+				"foundation_material": "minecraft:stone",
+				"mid_material": "minecraft:dirt",
+				"top_material": "minecraft:grass",
+				"sea_material": "extrabiomes:goo"
+			},
+			"minecraft:overworld_generation_rules": {
+				"generate_for_climates": [
+					[
+						"medium",
+						1
+					]
+				]
+			},
+			"animal": {},
+			"overworld": {},
+			"mystic": {},
+			"swamp": {}
+		}
+	}
+}

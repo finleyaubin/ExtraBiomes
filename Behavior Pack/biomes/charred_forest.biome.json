@@ -1,0 +1,73 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "charred_forest"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.5,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 2
+			},
+			"minecraft:overworld_height": {
+				"noise_params": [
+					0.08,
+					0.05
+				]
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": -6,
+				"sea_floor_material": "minecraft:stone",
+				"foundation_material": "minecraft:stone",
+				"mid_material": "minecraft:dirt",
+				"top_material": {
+					"name": "minecraft:dirt",
+					"states": {
+						"dirt_type": "coarse"
+					}
+				},
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:overworld_generation_rules": {
+				"generate_for_climates": [
+					[
+						"warm",
+						1
+					]
+				]
+			},
+			"minecraft:surface_material_adjustments": {
+				"adjustments": [
+					{
+						"materials": {
+							"top_material": "minecraft:dirt"
+						},
+						"noise_frequency_scale": 0.0625,
+						"noise_range": [
+							0.212,
+							1
+						]
+					},
+					{
+						"materials": {
+							"top_material": "minecraft:grass_path"
+						},
+						"noise_frequency_scale": 0.0625,
+						"noise_range": [
+							-0.061,
+							0
+						]
+					}
+				]
+			},
+			"overworld": {},
+			"animal": {},
+			"monster": {},
+			"charred": {}
+		}
+	}
+}

@@ -1,0 +1,54 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "cold_mesa"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 1,
+				"snow_accumulation": [
+					0.5,
+					1.5
+				],
+				"temperature": 0
+			},
+			"minecraft:mesa_surface": {
+				"bryce_pillars": false,
+				"clay_material": "minecraft:stained_hardened_clay",
+				"sea_floor_depth": 7,
+				"sea_floor_material": "minecraft:gravel",
+				"foundation_material": "minecraft:stone",
+				"hard_clay_material": "minecraft:hardened_clay",
+				"has_forest": false,
+				"mid_material": "minecraft:hardened_clay",
+				"top_material": {
+					"name": "minecraft:sand",
+					"states": {
+						"sand_type": "red"
+					}
+				},
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:overworld_height": {
+				"noise_type": "default"
+			},
+			"minecraft:overworld_generation_rules": {
+				"mutate_transformation": "cold_mesa_bryce",
+				"hills_transformation": [
+					"cold_mesa_plateau"
+				],
+				"generate_for_climates": [
+					[
+						"frozen",
+						2
+					]
+				]
+			},
+			"mesa": {},
+			"monster": {},
+			"overworld": {},
+			"frozen": {}
+		}
+	}
+}

@@ -1,0 +1,38 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "high_moorlands"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.5,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 0.5
+			},
+			"minecraft:overworld_height": {
+				"noise_params": [
+					0.1,
+					0.3
+				]
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": -6,
+				"sea_floor_material": "minecraft:stone",
+				"foundation_material": "minecraft:stone",
+				"mid_material": "minecraft:stone",
+				"top_material": "minecraft:grass",
+				"sea_material": "minecraft:water"
+			},
+			"overworld": {},
+			"river": {},
+			"plains": {},
+			"moorlands": {},
+			"animal": {},
+			"monster": {}
+		}
+	}
+}

@@ -1,0 +1,51 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "lush_mesa"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.7,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 2
+			},
+			"minecraft:mesa_surface": {
+				"bryce_pillars": false,
+				"clay_material": "minecraft:stained_hardened_clay",
+				"sea_floor_depth": 7,
+				"sea_floor_material": "minecraft:gravel",
+				"foundation_material": "minecraft:stained_hardened_clay",
+				"hard_clay_material": "minecraft:hardened_clay",
+				"has_forest": false,
+				"mid_material": "minecraft:hardened_clay",
+				"top_material": {
+					"name": "minecraft:grass"
+				},
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:overworld_height": {
+				"noise_type": "default"
+			},
+			"minecraft:overworld_generation_rules": {
+				"mutate_transformation": "lush_mesa_bryce",
+				"generate_for_climates": [
+					[
+						"warm",
+						2
+					]
+				],
+				"river_transformation": "jungle_river",
+				"shore_transformation": "jungle_marsh"
+			},
+			"mesa": {},
+			"monster": {},
+			"overworld": {},
+			"jungle": {},
+			"animal": {}
+		}
+	}
+}

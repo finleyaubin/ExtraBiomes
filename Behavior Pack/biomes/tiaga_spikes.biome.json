@@ -1,0 +1,61 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "tiaga_spikes"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 1,
+				"snow_accumulation": [
+					0.5,
+					1.5
+				],
+				"temperature": 0
+			},
+			"minecraft:overworld_height": {
+				"noise_params": [
+					0.425,
+					0.45
+				]
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": 7,
+				"sea_floor_material": "minecraft:gravel",
+				"foundation_material": "minecraft:stone",
+				"mid_material": "minecraft:dirt",
+				"top_material": "minecraft:grass",
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:surface_material_adjustments": {
+				"adjustments": [
+					{
+						"materials": {
+							"top_material": "minecraft:snow"
+						},
+						"noise_frequency_scale": 0.0625,
+						"noise_range": [
+							0.212,
+							1
+						]
+					}
+				]
+			},
+			"minecraft:overworld_generation_rules": {
+				"generate_for_climates": [
+					[
+						"frozen",
+						2
+					]
+				],
+				"mutate_transformation": "shattered_tiaga_spikes"
+			},
+			"frozen": {},
+			"ice_plains": {},
+			"monster": {},
+			"mutated": {},
+			"overworld": {},
+			"taiga": {}
+		}
+	}
+}

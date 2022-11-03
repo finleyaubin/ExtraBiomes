@@ -1,0 +1,66 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "jungle_river"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.9,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 0.95
+			},
+			"minecraft:overworld_height": {
+				"noise_params": [
+					-0.8,
+					0
+				]
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": 3,
+				"sea_floor_material": "minecraft:cobblestone",
+				"foundation_material": "minecraft:stone",
+				"mid_material": "minecraft:cobblestone",
+				"top_material": "minecraft:cobblestone",
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:overworld_generation_rules": {
+				"shore_transformation": "jungle_marsh"
+			},
+			"minecraft:surface_material_adjustments": {
+				"adjustments": [
+					{
+						"materials": {
+							"mid_material": "minecraft:mossy_cobblestone",
+							"top_material": "minecraft:mossy_cobblestone",
+							"sea_floor_material": "minecraft:mossy_cobblestone"
+						},
+						"noise_frequency_scale": 0.25,
+						"noise_range": [
+							0.212,
+							1
+						]
+					},
+					{
+						"materials": {
+							"mid_material": "minecraft:moss_block",
+							"top_material": "minecraft:moss_block",
+							"sea_floor_material": "minecraft:moss_block"
+						},
+						"noise_frequency_scale": 0.3,
+						"noise_range": [
+							0.5,
+							1
+						]
+					}
+				]
+			},
+			"overworld": {},
+			"river": {},
+			"jungle": {}
+		}
+	}
+}

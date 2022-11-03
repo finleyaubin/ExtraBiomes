@@ -1,0 +1,38 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "river_bed"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0,
+				"snow_accumulation": [
+					-0.2,
+					0.125
+				],
+				"temperature": 2
+			},
+			"minecraft:overworld_height": {
+				"noise_type": "river"
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": 6,
+				"sea_floor_material": "minecraft:water",
+				"foundation_material": "minecraft:stone",
+				"mid_material": {
+					"name": "minecraft:dirt",
+					"states": {
+						"dirt_type": "coarse"
+					}
+				},
+				"top_material": "minecraft:sand",
+				"sea_material": "minecraft:water"
+			},
+			"overworld": {},
+			"river": {},
+			"warm": {},
+			"ocean": {}
+		}
+	}
+}

@@ -1,0 +1,51 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "the_netherlands"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.5,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 0.5
+			},
+			"minecraft:overworld_height": {
+				"noise_params": [
+					-0.08,
+					0
+				]
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": -6,
+				"sea_floor_material": "minecraft:stone",
+				"foundation_material": "minecraft:netherrack",
+				"mid_material": "minecraft:dirt",
+				"top_material": "grass",
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:overworld_generation_rules": {
+				"generate_for_climates": [
+					[
+						"medium",
+						3
+					]
+				],
+				"mutate_transformation": "the_netherlands_mutated",
+				"hills_transformation": [
+					"the_netherlands_mutated"
+				]
+			},
+			"nether": {},
+			"overworld": {},
+			"nether_wastes": {},
+			"animal": {},
+			"monster": {},
+			"bee_habitat": {},
+			"the_netherlands": {}
+		}
+	}
+}

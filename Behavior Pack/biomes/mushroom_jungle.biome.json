@@ -1,0 +1,71 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:biome": {
+		"description": {
+			"identifier": "mushroom_jungle"
+		},
+		"components": {
+			"minecraft:climate": {
+				"downfall": 0.9,
+				"snow_accumulation": [
+					0,
+					0.125
+				],
+				"temperature": 0.95
+			},
+			"minecraft:overworld_height": {
+				"noise_type": "default"
+			},
+			"minecraft:surface_parameters": {
+				"sea_floor_depth": 7,
+				"sea_floor_material": "minecraft:gravel",
+				"foundation_material": "minecraft:stone",
+				"mid_material": "minecraft:dirt",
+				"top_material": "minecraft:grass",
+				"sea_material": "minecraft:water"
+			},
+			"minecraft:surface_material_adjustments": {
+				"adjustments": [
+					{
+						"materials": {
+							"mid_material": "minecraft:stone",
+							"top_material": "minecraft:mycelium"
+						},
+						"noise_frequency_scale": 0.0625,
+						"noise_range": [
+							0,
+							1
+						]
+					},
+					{
+						"materials": {
+							"top_material": {
+								"name": "minecraft:grass"
+							}
+						},
+						"noise_frequency_scale": 0.0625,
+						"noise_range": [
+							-0.061,
+							0.212
+						]
+					}
+				]
+			},
+			"minecraft:overworld_generation_rules": {
+				"generate_for_climates": [
+					[
+						"medium",
+						2
+					]
+				],
+				"river_transformation": "jungle_river",
+				"shore_transformation": "jungle_marsh"
+			},
+			"animal": {},
+			"mooshroom_island": {},
+			"jungle": {},
+			"overworld": {},
+			"rare": {}
+		}
+	}
+}
