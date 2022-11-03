@@ -1,0 +1,31 @@
+{
+  "format_version": "1.17.0",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "extrabiomes:shattered_swamp_bamboo_feature",
+      "places_feature": "extrabiomes:shattered_swamp/bamboo_feature"
+    },
+    "conditions": {
+      "placement_pass": "after_surface_pass",
+      "minecraft:biome_filter": [
+        {
+          "test": "has_biome_tag",
+          "operator": "==",
+          "value": "shattered_swamp"
+        }
+      ]
+    },
+    "distribution": {
+      "iterations": "math.clamp(math.trunc(math.ceil((query.noise(math.trunc(variable.originx / 180), math.trunc(variable.originz / 180)) + 0.3) * 15)), 15, 15)",
+      "x": {
+        "distribution": "uniform",
+        "extent": [ 0, 16 ]
+      },
+      "y": "query.heightmap(variable.worldx, variable.worldz)",
+      "z": {
+        "distribution": "uniform",
+        "extent": [ 0, 16 ]
+      }
+    }
+  }
+}

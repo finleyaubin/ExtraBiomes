@@ -1,0 +1,49 @@
+{
+  "format_version": "1.17.0",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "extrabiomes:palm_tree_feature",
+      "places_feature": "extrabiomes:tree/select_palm_tree_feature"
+    },
+    "conditions": {
+      "placement_pass": "after_surface_pass",
+      "minecraft:biome_filter": [
+        {
+          "all_of": [
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "beach"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "!=",
+              "value": "stone"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "!=",
+              "value": "cold"
+            }
+          ]
+        }
+      ]
+    },
+    "distribution": {
+      "iterations": 40,
+      "x": {
+        "distribution": "uniform",
+        "extent": [ 0, 16 ]
+      },
+      "y":
+      {
+        "distribution": "uniform",
+        "extent": [ "query.heightmap(variable.worldx, variable.worldz)-5", "query.heightmap(variable.worldx, variable.worldz)-1" ]
+      } ,
+      "z": {
+        "distribution": "uniform",
+        "extent": [ 0, 16 ]
+      }
+    }
+  }
+}
