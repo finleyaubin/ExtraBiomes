@@ -1,0 +1,110 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:green_mushroom_placed"
+		},
+		"components": {
+			"minecraft:entity_collision": false,
+			"minecraft:pick_collision": {
+				"origin": [
+					-3,
+					0,
+					-3
+				],
+				"size": [
+					6,
+					6,
+					6
+				]
+			},
+			"minecraft:geometry": "geometry.sapling_model",
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "green_mushroom",
+					"render_method": "alpha_test",
+					"face_dimming": false,
+					"ambient_occlusion": true
+				}
+			},
+			"minecraft:block_light_absorption": 0,
+			//"minecraft:breakonpush": true,
+			"minecraft:on_interact": {
+				"event": "extrabiomes:grow",
+				"target": "self",
+				"condition": "query.get_equipped_item_name == 'bone_meal'"
+			},
+			"minecraft:placement_filter": {
+				"conditions": [
+					{
+						"block_filter": [
+							"minecraft:dirt",
+							"minecraft:farmland",
+							"minecraft:mycelium",
+							"minecraft:stone",
+							"minecraft:deepslate",
+							"minecraft:netherrack",
+							"minecraft:blackstone",
+							"minecraft:basalt"
+						],
+						"allowed_faces": [
+							"up"
+						]
+					}
+				]
+			},
+			"minecraft:map_color": "#070841",
+			"minecraft:loot": "loot_tables/blocks/mushroom/green_mushroom.json"
+		},
+		"events": {
+			"extrabiomes:grow": {
+				"sequence": [
+					{
+						"condition": "query.get_equipped_item_name('main_hand') == 'bone_meal'",
+						"run_command": {
+							"command": [
+								"particle minecraft:crop_growth_emitter ~ ~ ~",
+								"playsound item.bone_meal.use @a ~ ~ ~"
+							]
+						},
+						"trigger": {
+							"event": "extrabiomes:random",
+							"target": "self"
+						}
+					},
+					{
+						"condition": "query.get_equipped_item_name('main_hand') != 'bone_meal'",
+						"randomize": [
+							{
+								"weight": 9,
+								"decrement_stack": {},
+								"run_command": {
+									"command": [
+										"structure load extrabiomes:huge_green_mushroom ~-2 ~ ~-2"
+									]
+								}
+							}
+						]
+					}
+				]
+			},
+			"extrabiomes:random": {
+				"randomize": [
+					{
+						"weight": 75,
+						"decrement_stack": {}
+					},
+					{
+						"weight": 25,
+						"decrement_stack": {},
+						"run_command": {
+							"command": [
+								"structure load extrabiomes:huge_green_mushroom ~-2 ~ ~-2"
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,53 @@
+{
+	"format_version": "1.17.10",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:goo",
+			"is_experimental": true
+		},
+		"components": {
+			"minecraft:friction": 0.1,
+			"minecraft:flammable": {
+				"flame_odds": 300,
+				"burn_odds": 50
+			},
+			"minecraft:block_light_absorption": 3,
+			"minecraft:block_light_emission": 0,
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "goo",
+					"render_method": "blend"
+				}
+			},
+			"minecraft:unit_cube": {},
+			"minecraft:creative_category": {
+				"category": "Construction"
+			},
+			"minecraft:pick_collision": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					14,
+					16
+				]
+			},
+			"minecraft:entity_collision": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					14,
+					16
+				]
+			},
+			"minecraft:map_color": "#CE5CA4"
+		}
+	}
+}
