@@ -1,0 +1,27 @@
+{
+	"format_version": "1.10.0",
+	"animation_controllers": {
+		"controller.animation.frog_hat": {
+			"states": {
+				"default": {
+					"transitions": [
+						{
+							"frog": "query.skin_id==2"
+						}
+					]
+				},
+				"frog": {
+					"transitions": [
+						{
+							"default": "query.skin_id==2"
+						}
+					],
+					"on_entry": [
+						"/effect @e[r=1] water_breathing 15 1 true",
+						"/effect @e[r=1] jump_boost 15 1 true"
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"format_version": "1.10.0",
+	"animation_controllers": {
+		"controller.animation.jellyfish": {
+			"states": {
+				"default": {
+					"transitions": [
+						{
+							"despawn": "query.skin_id==1"
+						}
+					]
+				},
+				"despawn": {
+					"transitions": [
+						{
+							"default": "query.skin_id!=1"
+						}
+					],
+					"on_entry": [
+						"/tp @e[type = extrabiomes:jellyfish,r=1] 0 -70 ~"
+					]
+				}
+			}
+		}
+	}
+}
