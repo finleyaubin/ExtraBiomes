@@ -1,0 +1,30 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:underground_jungle/select_moss_or_jungle_tree_feature"
+		},
+		"features": [
+			[
+				"minecraft:mega_jungle_tree_feature",
+				1
+			],
+			[
+				"minecraft:optional_fallen_jungle_tree_feature",
+				5
+			],
+			[
+				"minecraft:jungle_tree_with_cocoa_feature",
+				10
+			],
+			[
+				"minecraft:moss_vegetation_feature",
+				9
+			],
+			[
+				"minecraft:bamboo_feature",
+				1
+			]
+		]
+	}
+}

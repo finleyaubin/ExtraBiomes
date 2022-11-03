@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:tree/future_tree_feature_3"
+		},
+		"structure_name": "extrabiomes:3_tall_white_tree",
+		"constraints": {
+			"unburied": {},
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

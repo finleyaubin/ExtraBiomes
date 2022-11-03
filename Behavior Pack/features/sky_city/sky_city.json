@@ -1,0 +1,19 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:sky_city/sky_city"
+		},
+		"structure_name": "extrabiomes:sky_city",
+		"constraints": {
+			"unburied": {},
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air",
+					"minecraft:snow_layer"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

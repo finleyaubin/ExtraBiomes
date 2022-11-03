@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:sky_city/overworld_floating_island_leveller"
+		},
+		"count": 33,
+		"replace_rules": [
+			{
+				"places_block": "minecraft:air",
+				"may_replace": [
+					"extrabiomes:dense_cloud",
+					"minecraft:snow_layer"
+				]
+			}
+		]
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:sky_city/overworld_floating_island"
+		},
+		"count": 60,
+		"replace_rules": [
+			{
+				"places_block": "extrabiomes:dense_cloud",
+				"may_replace": [
+					"minecraft:air"
+				]
+			}
+		]
+	}
+}

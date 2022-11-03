@@ -1,0 +1,22 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:tree/mystic_tree"
+		},
+		"structure_name": "extrabiomes:mystic_tree",
+		"constraints": {
+			"unburied": {},
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air",
+					"minecraft:grass",
+					"minecraft:water",
+					"extrabiomes:goo",
+					"extrabiomes:dense_cloud"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

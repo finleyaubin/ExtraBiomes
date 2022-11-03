@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:tree/palm_tree_1"
+		},
+		"structure_name": "extrabiomes:palm_tree_1",
+		"constraints": {
+			"unburied": {},
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

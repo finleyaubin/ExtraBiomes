@@ -1,0 +1,19 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:the_netherlands/lapis_ore_feature"
+		},
+		"count": 3,
+		"replace_rules": [
+			{
+				"places_block": "extrabiomes:nether_lapis_ore",
+				"may_replace": [
+					{
+						"name": "minecraft:netherrack"
+					}
+				]
+			}
+		]
+	}
+}

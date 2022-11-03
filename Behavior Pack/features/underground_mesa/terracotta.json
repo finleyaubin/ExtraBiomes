@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:underground_mesa/terracotta"
+		},
+		"count": 60,
+		"replace_rules": [
+			{
+				"places_block": "minecraft:hardened_clay",
+				"may_replace": [
+					"minecraft:stone",
+					"minecraft:deepslate"
+				]
+			}
+		]
+	}
+}

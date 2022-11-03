@@ -1,0 +1,14 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:aggregate_feature": {
+		"description": {
+			"identifier": "extrabiomes:tree/select_palm_tree_feature"
+		},
+		"features": [
+			"extrabiomes:tree/palm_tree_1",
+			"extrabiomes:tree/palm_tree_3",
+			"extrabiomes:tree/palm_tree_2",
+			"minecraft:moss_vegetation_feature"
+		]
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:the_netherlands/select_wheat"
+		},
+		"features": [
+			[
+				"extrabiomes:the_netherlands/wheat_big",
+				5
+			],
+			[
+				"extrabiomes:the_netherlands/wheat_small",
+				3
+			]
+		]
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:stick_pile/select_stick_pile"
+		},
+		"features": [
+			[
+				"extrabiomes:stick_pile/stick_pile0",
+				1
+			],
+			[
+				"extrabiomes:stick_pile/stick_pile1",
+				1
+			]
+		]
+	}
+}

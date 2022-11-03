@@ -1,0 +1,13 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:aggregate_feature": {
+		"description": {
+			"identifier": "extrabiomes:underground_jungle/select_moss_or_jungle_tree_upper_feature"
+		},
+		"features": [
+			"minecraft:optional_fallen_jungle_tree_feature",
+			"minecraft:jungle_tree_with_cocoa_feature",
+			"minecraft:moss_vegetation_feature"
+		]
+	}
+}

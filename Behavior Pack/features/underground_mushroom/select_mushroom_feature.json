@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:underground_mushroom/select_mushroom_feature"
+		},
+		"features": [
+			[
+				"extrabiomes:mushroom/select_huge_mushroom",
+				3
+			],
+			[
+				"minecraft:legacy:small_mushrooms_feature",
+				3
+			]
+		]
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:underground_mesa/terracotta_blue"
+		},
+		"count": 60,
+		"replace_rules": [
+			{
+				"places_block": {
+					"name": "minecraft:stained_hardened_clay",
+					"states": {
+						"color": "blue"
+					}
+				},
+				"may_replace": [
+					"minecraft:stone",
+					"minecraft:deepslate"
+				]
+			}
+		]
+	}
+}

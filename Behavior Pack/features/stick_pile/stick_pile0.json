@@ -1,0 +1,20 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:stick_pile/stick_pile0"
+		},
+		"structure_name": "extrabiomes:big_stick_pile0",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air"
+				]
+			},
+			"grounded": {},
+			"unburied": {}
+		},
+		"adjustment_radius": 4,
+		"facing_direction": "north"
+	}
+}
