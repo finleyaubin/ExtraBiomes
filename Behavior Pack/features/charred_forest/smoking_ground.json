@@ -1,0 +1,28 @@
+{
+	"format_version": "1.15.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:charred_forest/smoking_ground"
+		},
+		"count": 3,
+		"replace_rules": [
+			{
+				"places_block": "minecraft:campfire",
+				"may_replace": [
+					{
+						"name": "minecraft:dirt"
+					},
+					{
+						"name": "minecraft:grass_path"
+					},
+					{
+						"name": "minecraft:dirt",
+						"states": {
+							"dirt_type": "coarse"
+						}
+					}
+				]
+			}
+		]
+	}
+}

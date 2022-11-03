@@ -1,0 +1,19 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:mushroom/huge_black_mushroom"
+		},
+		"structure_name": "extrabiomes:huge_black_mushroom",
+		"constraints": {
+			"unburied": {},
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air",
+					"minecraft:water"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

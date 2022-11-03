@@ -1,0 +1,22 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:boulder/pebble"
+		},
+		"features": [
+			[
+				"extrabiomes:boulder/regular_pebble",
+				2
+			],
+			[
+				"extrabiomes:boulder/small_pebble",
+				1
+			],
+			[
+				"extrabiomes:boulder/large_pebble",
+				1
+			]
+		]
+	}
+}

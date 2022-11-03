@@ -1,0 +1,46 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:mushroom/mushroom_custom_feature"
+		},
+		"features": [
+			[
+				"extrabiomes:mushroom/scatter_purple_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_blue_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_yellow_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_green_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_cyan_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_white_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_white_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_black_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/scatter_orange_mushroom",
+				1
+			]
+		]
+	}
+}

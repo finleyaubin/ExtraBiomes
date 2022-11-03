@@ -1,0 +1,17 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:boulder/small_pebble"
+		},
+		"structure_name": "extrabiomes:small_pebble",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

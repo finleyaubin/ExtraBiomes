@@ -1,0 +1,28 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:charred_forest/burnt_basalt"
+		},
+		"count": 3,
+		"replace_rules": [
+			{
+				"places_block": "minecraft:basalt",
+				"may_replace": [
+					{
+						"name": "minecraft:dirt"
+					},
+					{
+						"name": "minecraft:grass_path"
+					},
+					{
+						"name": "minecraft:dirt",
+						"states": {
+							"dirt_type": "coarse"
+						}
+					}
+				]
+			}
+		]
+	}
+}

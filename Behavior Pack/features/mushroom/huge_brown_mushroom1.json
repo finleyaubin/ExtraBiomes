@@ -1,0 +1,20 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:mushroom/huge_brown_mushroom1"
+		},
+		"structure_name": "extrabiomes:huge_brown_mushroom1",
+		"facing_direction": "south",
+		"constraints": {
+			"unburied": {},
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air",
+					"minecraft:water"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

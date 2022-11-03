@@ -1,0 +1,17 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:charred_forest/burnt_magma"
+		},
+		"count": 22,
+		"replace_rules": [
+			{
+				"places_block": "minecraft:magma",
+				"may_replace": [
+					"minecraft:basalt"
+				]
+			}
+		]
+	}
+}

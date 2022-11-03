@@ -1,0 +1,19 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:jellycoral/jellycoral_2"
+		},
+		"structure_name": "extrabiomes:jellycoral_2",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:water",
+					"minecraft:seagrass",
+					"minecraft:kelp"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

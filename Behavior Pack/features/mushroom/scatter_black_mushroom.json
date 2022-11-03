@@ -1,0 +1,30 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:scatter_feature": {
+		"description": {
+			"identifier": "extrabiomes:mushroom/scatter_black_mushroom"
+		},
+		"places_feature": "extrabiomes:mushroom/black_mushroom_patch",
+		"scatter_chance": {
+			"numerator": 2,
+			"denominator": 3
+		},
+		"iterations": "v.black_mushroom_patch.size = math.random_integer(1,8); return math.random_integer(math.pow(v.black_mushroom_patch.size, 2) / 6, math.pow(v.black_mushroom_patch.size, 1) / 4);",
+		"project_input_to_floor": true,
+		"x": {
+			"distribution": "gaussian",
+			"extent": [
+				0,
+				"v.black_mushroom_patch.size"
+			]
+		},
+		"z": {
+			"distribution": "gaussian",
+			"extent": [
+				0,
+				"v.black_mushroom_patch.size"
+			]
+		},
+		"y": 0
+	}
+}

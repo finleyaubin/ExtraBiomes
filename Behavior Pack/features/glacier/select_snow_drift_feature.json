@@ -1,0 +1,18 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:glacier/select_snow_drift_feature"
+		},
+		"features": [
+			[
+				"extrabiomes:glacier/snow_drift_1_feature",
+				2
+			],
+			[
+				"extrabiomes:glacier/snow_drift_2_feature",
+				1
+			]
+		]
+	}
+}

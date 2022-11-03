@@ -1,0 +1,12 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:aggregate_feature": {
+		"description": {
+			"identifier": "extrabiomes:moorland/moorlands_podzol_feature"
+		},
+		"early_out": "first_failure",
+		"features": [
+			"minecraft:optional_podzol_feature"
+		]
+	}
+}

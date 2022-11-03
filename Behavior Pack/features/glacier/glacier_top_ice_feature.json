@@ -1,0 +1,41 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:ore_feature": {
+		"description": {
+			"identifier": "extrabiomes:glacier/glacier_top_ice_feature"
+		},
+		"count": 110,
+		"replace_rules": [
+			{
+				"places_block": "minecraft:ice",
+				"may_replace": [
+					"minecraft:stone",
+					{
+						"name": "minecraft:stone",
+						"states": {
+							"stone_type": "granite"
+						}
+					},
+					{
+						"name": "minecraft:stone",
+						"states": {
+							"stone_type": "andesite"
+						}
+					},
+					{
+						"name": "minecraft:stone",
+						"states": {
+							"stone_type": "diorite"
+						}
+					},
+					"minecraft:dirt",
+					"minecraft:grass",
+					"minecraft:sand",
+					"minecraft:gravel",
+					"minecraft:sandstone",
+					"minecraft:deepslate"
+				]
+			}
+		]
+	}
+}

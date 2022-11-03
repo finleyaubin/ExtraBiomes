@@ -1,0 +1,58 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:mushroom/select_huge_mushroom"
+		},
+		"features": [
+			[
+				"minecraft:huge_mushroom_feature",
+				10
+			],
+			[
+				"extrabiomes:mushroom/huge_red_mushroom1",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_brown_mushroom1",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_purple_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_blue_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_yellow_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_green_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_cyan_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_white_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_black_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_orange_mushroom",
+				1
+			],
+			[
+				"extrabiomes:mushroom/huge_glow_mushroom",
+				1
+			]
+		]
+	}
+}

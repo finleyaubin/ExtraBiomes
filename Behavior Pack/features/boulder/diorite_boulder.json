@@ -1,0 +1,35 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:vegetation_patch_feature": {
+		"description": {
+			"identifier": "extrabiomes:boulder/diorite_boulder"
+		},
+		"replaceable_blocks": [
+			"minecraft:dirt",
+			"minecraft:podzol",
+			"minecraft:dirt_with_roots",
+			"minecraft:stone",
+			"minecraft:grass",
+			"minecraft:snow"
+		],
+		"ground_block": {
+			"name": "minecraft:stone",
+			"states": {
+				"stone_type": "diorite"
+			}
+		},
+		"vegetation_feature": "extrabiomes:boulder/pebble",
+		"surface": "floor",
+		"depth": {
+			"range_min": 1,
+			"range_max": 6
+		},
+		"vertical_range": 5,
+		"vegetation_chance": 0.1,
+		"horizontal_radius": {
+			"range_min": 1,
+			"range_max": 4
+		},
+		"extra_edge_column_chance": 0.3
+	}
+}

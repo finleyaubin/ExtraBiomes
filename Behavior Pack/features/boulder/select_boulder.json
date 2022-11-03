@@ -1,0 +1,50 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:boulder/select_boulder"
+		},
+		"features": [
+			[
+				"extrabiomes:boulder/stone_boulder",
+				10
+			],
+			[
+				"extrabiomes:boulder/andesite_boulder",
+				5
+			],
+			[
+				"extrabiomes:boulder/diorite_boulder",
+				5
+			],
+			[
+				"extrabiomes:boulder/granite_boulder",
+				5
+			],
+			[
+				"extrabiomes:boulder/calcite_boulder",
+				4
+			],
+			[
+				"extrabiomes:boulder/tuff_boulder",
+				2
+			],
+			[
+				"extrabiomes:boulder/cobblestone_boulder",
+				2
+			],
+			[
+				"extrabiomes:boulder/mossy_cobblestone_boulder",
+				1
+			],
+			[
+				"extrabiomes:boulder/blackstone_boulder",
+				1
+			],
+			[
+				"extrabiomes:boulder/pebble_patch",
+				50
+			]
+		]
+	}
+}
