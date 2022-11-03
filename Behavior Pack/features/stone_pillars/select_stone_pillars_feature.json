@@ -1,0 +1,22 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:stone_pillars/select_stone_pillars_feature"
+		},
+		"features": [
+			[
+				"extrabiomes:stone_pillars/stone_pillar_1",
+				1
+			],
+			[
+				"extrabiomes:stone_pillars/stone_pillar_2",
+				1
+			],
+			[
+				"extrabiomes:stone_pillars/stone_pillar_3",
+				1
+			]
+		]
+	}
+}

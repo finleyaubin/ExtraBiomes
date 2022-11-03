@@ -1,0 +1,20 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:stone_pillars/stone_pillar_3"
+		},
+		"structure_name": "extrabiomes:stone_pillar_3",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air",
+					"minecraft:grass",
+					"minecraft:dirt",
+					"minecraft:water",
+					"minecraft:stone"
+				]
+			}
+		}
+	}
+}
