@@ -1,0 +1,8 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:texture_set": {
+		"color": "leaves_mystic",
+		"metalness_emissive_roughness": "leaves_mystic_mer",
+		"heightmap": "leaves_mystic_heightmap"
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:texture_set": {
+		"color": "sapling_palm",
+		"metalness_emissive_roughness": "sapling_palm_mer",
+		"heightmap": "sapling_palm_heightmap"
+	}
+}

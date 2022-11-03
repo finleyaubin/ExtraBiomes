@@ -1,0 +1,8 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:texture_set": {
+		"color": "planks_sky",
+		"metalness_emissive_roughness": "planks_sky_mer",
+		"heightmap": "planks_sky_heightmap"
+	}
+}
