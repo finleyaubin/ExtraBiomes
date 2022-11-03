@@ -1,0 +1,9 @@
+wood mechanics from Aguilesgamer's Cherry Blossom Wood 1 (A Custom Wood Example Pack):https://mcpedl.com/cherry-blossom-wood-1-addon/
+
+a couple of MADLAD3718's RTX assets from https://mcpedl.com/defined-pbr-an-rtx-resource-pack/ were used as templates when I was starting out with RTX
+
+treefrog sound effects by hikeart on youtube https://youtu.be/UiidibfhidE
+
+hopping spore sound effect by: https://mixkit.co/free-sound-effects/squeak/
+
+and members of the MCPEDL community and the bedrock addon's discord: https://discord.gg/NGeNhZpvzV for helping me out with some parts of the addon
