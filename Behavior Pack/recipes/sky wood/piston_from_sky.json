@@ -1,0 +1,37 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:piston_from_sky"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~~",
+			"#&#",
+			"#!#"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:sky_planks"
+			},
+			"#": {
+				"item": "minecraft:cobblestone"
+			},
+			"&": {
+				"item": "minecraft:iron_ingot"
+			},
+			"!": {
+				"item": "minecraft:redstone"
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:piston",
+				"data": 1,
+				"count": 1
+			}
+		]
+	}
+}

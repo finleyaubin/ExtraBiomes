@@ -1,0 +1,29 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:sky_boat"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~#~",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:sky_planks"
+			},
+			"#": {
+				"item": "minecraft:wooden_shovel"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:sky_boat",
+				"count": 1
+			}
+		]
+	}
+}

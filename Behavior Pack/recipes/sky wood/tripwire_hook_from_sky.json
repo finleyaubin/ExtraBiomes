@@ -1,0 +1,33 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:tripwire_hook_from_sky"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"!",
+			"#",
+			"~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:sky_planks"
+			},
+			"#": {
+				"item": "minecraft:stick"
+			},
+			"!": {
+				"item": "minecraft:iron_ingot"
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:tripwire_hook",
+				"count": 2
+			}
+		]
+	}
+}

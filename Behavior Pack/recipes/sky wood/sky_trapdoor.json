@@ -1,0 +1,26 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:sky_trapdoor"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~~",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:sky_planks"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:sky_trapdoor",
+				"count": 2
+			}
+		]
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:sky_fence_gate"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"#~#",
+			"#~#"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:sky_planks"
+			},
+			"#": {
+				"item": "minecraft:stick"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:sky_fence_gate",
+				"count": 1
+			}
+		]
+	}
+}

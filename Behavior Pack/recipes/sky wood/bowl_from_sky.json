@@ -1,0 +1,26 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:bowl_from_sky"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~ ~",
+			" ~ "
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:sky_planks"
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:bowl",
+				"count": 4
+			}
+		]
+	}
+}

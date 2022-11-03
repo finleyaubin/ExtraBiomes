@@ -1,0 +1,32 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:bed_pink_from_sky"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"###",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:sky_planks",
+				"data": 0
+			},
+			"#": {
+				"item": "minecraft:wool",
+				"data": 6
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:bed",
+				"data": 6,
+				"count": 1
+			}
+		]
+	}
+}
