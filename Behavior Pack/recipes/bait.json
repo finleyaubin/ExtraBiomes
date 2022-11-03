@@ -1,0 +1,25 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:bait"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"###",
+			"###",
+			"###"
+		],
+		"key": {
+			"#": {
+				"item": "extrabiomes:worm"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:bait",
+			"count": 1
+		}
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:diamond_razor_feather"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"#+",
+			"##"
+		],
+		"key": {
+			"#": {
+				"item": "extrabiomes:razor_feather"
+			},
+			"+": {
+				"item": "minecraft:diamond"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:diamond_razor_feather",
+			"count": 3
+		}
+	}
+}

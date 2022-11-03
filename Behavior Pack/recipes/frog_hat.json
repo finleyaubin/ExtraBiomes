@@ -1,0 +1,32 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:frog_hat"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"#+#",
+			"# #",
+			"/ /"
+		],
+		"key": {
+			"#": {
+				"item": "minecraft:wool",
+				"data": 5
+			},
+			"+": {
+				"item": "minecraft:turtle_helmet"
+			},
+			"/": {
+				"item": "extrabiomes:frogs_legs"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:frog_helmet",
+			"count": 1
+		}
+	}
+}

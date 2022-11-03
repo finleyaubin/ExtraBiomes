@@ -1,0 +1,16 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_furnace": {
+		"description": {
+			"identifier": "extrabiomes:cooked_piranha"
+		},
+		"tags": [
+			"furnace",
+			"smoker",
+			"campfire",
+			"soul_campfire"
+		],
+		"input": "extrabiomes:piranha",
+		"output": "extrabiomes:cooked_piranha"
+	}
+}

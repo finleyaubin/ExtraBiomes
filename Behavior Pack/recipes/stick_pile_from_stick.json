@@ -1,0 +1,27 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:stick_pile_from_stick"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~~",
+			"~~~",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "minecraft:stick"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:stick_pile",
+				"count": 1
+			}
+		]
+	}
+}

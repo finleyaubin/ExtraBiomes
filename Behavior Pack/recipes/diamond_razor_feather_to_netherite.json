@@ -1,0 +1,28 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:diamond_razor_feather_to_netherite"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"##+",
+			"###",
+			"###"
+		],
+		"key": {
+			"#": {
+				"item": "extrabiomes:diamond_razor_feather"
+			},
+			"+": {
+				"item": "minecraft:netherite_ingot"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:netherite_razor_feather",
+			"count": 8
+		}
+	}
+}

@@ -1,0 +1,25 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shapeless": {
+		"description": {
+			"identifier": "extrabiomes:gilded_sky_stairs"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"ingredients": [
+			{
+				"item": "extrabiomes:sky_stairs"
+			},
+			{
+				"item": "minecraft:gold_ingot"
+			}
+		],
+		"result": [
+			{
+				"item": "extrabiomes:gilded_sky_stairs",
+				"count": 1
+			}
+		]
+	}
+}

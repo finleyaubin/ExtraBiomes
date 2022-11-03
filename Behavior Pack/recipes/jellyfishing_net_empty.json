@@ -1,0 +1,28 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:jellyfishing_net_empty"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"  A",
+			" # ",
+			"#  "
+		],
+		"key": {
+			"#": {
+				"item": "minecraft:stick"
+			},
+			"A": {
+				"item": "minecraft:string"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:jellyfishing_net_empty",
+			"count": 1
+		}
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_furnace": {
+		"description": {
+			"identifier": "extrabiomes:slime_from_goo"
+		},
+		"tags": [
+			"campfire",
+			"soul_campfire"
+		],
+		"input": "extrabiomes:goo",
+		"output": "minecraft:slime_ball"
+	}
+}

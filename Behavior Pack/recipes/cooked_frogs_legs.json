@@ -1,0 +1,16 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_furnace": {
+		"description": {
+			"identifier": "extrabiomes:cooked_frogs_legs"
+		},
+		"tags": [
+			"furnace",
+			"smoker",
+			"campfire",
+			"soul_campfire"
+		],
+		"input": "extrabiomes:frogs_legs",
+		"output": "extrabiomes:cooked_frogs_legs"
+	}
+}
