@@ -1,0 +1,46 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:item": {
+		"description": {
+			"identifier": "extrabiomes:razor_feather",
+			"category": "Equipment"
+		},
+		"components": {
+			"minecraft:use_animation": "swing",
+			"minecraft:max_stack_size": 16,
+			"minecraft:icon": {
+				"texture": "razor_feather"
+			},
+			"minecraft:use_duration": 10,
+			"minecraft:cooldown": {
+				"category": "razor_feather",
+				"duration": 1
+			},
+			"minecraft:on_use": {
+				"on_use": {
+					"event": "extrabiomes:release",
+					"target": "self"
+				}
+			},
+			"minecraft:creative_category": {
+				"parent": "itemGroup.name.razor_feather"
+			},
+			"minecraft:hand_equipped": true,
+			"minecraft:damage": 5
+		},
+		"events": {
+			"extrabiomes:release": {
+				"sequence": [
+					{
+						"shoot": {
+							"projectile": "extrabiomes:razor_feather",
+							"launch_power": 2,
+							"angle_offset": 20
+						},
+						"decrement_stack": {}
+					}
+				]
+			}
+		}
+	}
+}

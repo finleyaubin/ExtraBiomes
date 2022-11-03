@@ -1,0 +1,245 @@
+{
+	"format_version": "1.17.100",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "extrabiomes:giant_tortoise",
+			"is_spawnable": true,
+			"is_summonable": true,
+			"is_experimental": false
+		},
+		"component_groups": {
+			"minecraft:baby": {
+				"minecraft:type_family": {
+					"family": [
+						"giant_tortoise",
+						"baby_giant_tortoise",
+						"mob",
+						"monster"
+					]
+				},
+				"minecraft:collision_box": {
+					"width": 0.6,
+					"height": 0.5
+				},
+				"minecraft:underwater_movement": {
+					"value": 0.06
+				},
+				"minecraft:is_baby": {},
+				"minecraft:scale": {
+					"value": 0.16
+				}
+			},
+			"minecraft:adult": {
+				"minecraft:experience_reward": {
+					"on_death": "query.last_hit_by_player?math.random(5,20):0"
+				},
+				"minecraft:type_family": {
+					"family": [
+						"giant_tortoise",
+						"mob",
+						"monster"
+					]
+				},
+				"minecraft:collision_box": {
+					"width": 1.2,
+					"height": 0.4
+				},
+				"minecraft:underwater_movement": {
+					"value": 0.3
+				},
+				"minecraft:loot": {
+					"table": "loot_tables/entities/giant_tortoise.json"
+				},
+				"minecraft:behavior.move_to_land": {
+					"priority": 6,
+					"search_range": 16,
+					"search_height": 5,
+					"goal_radius": 0.5
+				},
+				"minecraft:behavior.random_stroll": {
+					"priority": 9,
+					"interval": 100
+				},
+				"minecraft:behavior.jump_to_block": {
+					"priority": 8,
+					"search_width": 10,
+					"search_height": 10,
+					"minimum_path_length": 8,
+					"minimum_distance": 1,
+					"scale_factor": 0.6
+				},
+				"minecraft:attack": {
+					"damage": 10
+				},
+				"minecraft:behavior.melee_attack": {
+					"priority": 3,
+					"speed_multiplier": 1,
+					"track_target": false
+				},
+				"minecraft:behavior.ram_attack": {
+					"priority": 2,
+					"run_speed": 1,
+					"ram_speed": 2,
+					"min_ram_distance": 4,
+					"ram_distance": 7,
+					"knockback_force": 2.5,
+					"knockback_height": 0.04,
+					"ram_impact_sound": "ram_impact"
+				},
+				"minecraft:behavior.nearest_attackable_target": {
+					"priority": 1,
+					"within_radius": 25,
+					"reselect_targets": true,
+					"must_see_forget_duration": 17,
+					"entity_types": [
+						{
+							"filters": {
+								"any_of": [
+									{
+										"test": "is_family",
+										"subject": "other",
+										"value": "player"
+									},
+									{
+										"test": "is_family",
+										"subject": "other",
+										"value": "snowgolem"
+									},
+									{
+										"test": "is_family",
+										"subject": "other",
+										"value": "irongolem"
+									},
+									{
+										"test": "is_family",
+										"subject": "other",
+										"value": "warden"
+									}
+								]
+							},
+							"max_dist": 35
+						}
+					],
+					"must_see": false
+				}
+			}
+		},
+		"components": {
+			"minecraft:is_hidden_when_invisible": {},
+			"minecraft:breathable": {
+				"total_supply": 15,
+				"suffocate_time": 0,
+				"breathes_water": true,
+				"breathes_air": true,
+				"generates_bubbles": false
+			},
+			"minecraft:nameable": {},
+			"minecraft:health": {
+				"value": 70
+			},
+			"minecraft:damage_sensor": {
+				"triggers": {
+					"cause": "lightning",
+					"deals_damage": true,
+					"damage_multiplier": 2000
+				}
+			},
+			"minecraft:hurt_on_condition": {
+				"damage_conditions": [
+					{
+						"filters": {
+							"test": "in_lava",
+							"subject": "self",
+							"operator": "==",
+							"value": true
+						},
+						"cause": "lava",
+						"damage_per_tick": 4
+					}
+				]
+			},
+			"minecraft:movement": {
+				"value": 0.3
+			},
+			"minecraft:behavior.hurt_by_target": {
+				"priority": 1
+			},
+			"minecraft:water_movement": {
+				"drag_factor": 0.9
+			},
+			"minecraft:navigation.generic": {
+				"is_amphibious": true,
+				"can_path_over_water": false,
+				"can_swim": true,
+				"can_walk": true,
+				"can_sink": false,
+				"avoid_damage_blocks": true
+			},
+			"minecraft:movement.amphibious": {
+				"max_turn": 5
+			},
+			"minecraft:jump.static": {},
+			"minecraft:physics": {},
+			"minecraft:pushable": {
+				"is_pushable": true,
+				"is_pushable_by_piston": true
+			},
+			"minecraft:despawn": {
+				"despawn_from_distance": {}
+			},
+			"minecraft:behavior.random_swim": {
+				"priority": 7,
+				"interval": 0,
+				"xz_dist": 30,
+				"y_dist": 15
+			},
+			"minecraft:behavior.look_at_player": {
+				"priority": 8,
+				"target_distance": 6,
+				"probability": 0.02
+			},
+			"minecraft:conditional_bandwidth_optimization": {}
+		},
+		"events": {
+			"minecraft:entity_spawned": {
+				"randomize": [
+					{
+						"weight": 9,
+						"add": {
+							"component_groups": [
+								"minecraft:adult"
+							]
+						}
+					},
+					{
+						"weight": 1,
+						"add": {
+							"component_groups": [
+								"minecraft:baby"
+							]
+						}
+					}
+				]
+			},
+			"minecraft:entity_born": {
+				"add": {
+					"component_groups": [
+						"minecraft:baby"
+					]
+				}
+			},
+			"minecraft:ageable_grow_up": {
+				"remove": {
+					"component_groups": [
+						"minecraft:baby"
+					]
+				},
+				"add": {
+					"component_groups": [
+						"minecraft:adult"
+					]
+				}
+			}
+		}
+	}
+}

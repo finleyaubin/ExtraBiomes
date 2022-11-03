@@ -1,0 +1,32 @@
+{
+	"format_version": "1.17.100",
+	"minecraft:item": {
+		"description": {
+			"identifier": "extrabiomes:glow_mushroom",
+			"category": "Nature"
+		},
+		"components": {
+			"minecraft:icon": {
+				"texture": "glow_mushroom"
+			},
+			"minecraft:creative_category": {
+				"parent": "itemGroup.name.mushroom"
+			},
+			"minecraft:block_placer": {
+				"block": "extrabiomes:glow_mushroom_placed",
+				"use_on": [
+					"minecraft:dirt",
+					"minecraft:grass",
+					"minecraft:farmland",
+					"minecraft:mycelium",
+					"minecraft:stone",
+					"minecraft:deepslate",
+					"minecraft:netherrack",
+					"minecraft:blackstone",
+					"minecraft:basalt",
+					"minecraft:grass"
+				]
+			}
+		}
+	}
+}

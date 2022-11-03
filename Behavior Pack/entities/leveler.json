@@ -1,0 +1,72 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "extrabiomes:leveller",
+			"is_summonable": true,
+			"is_spawnable": false,
+			"is_experimental": false
+		},
+		"components": {
+			"minecraft:collision_box": {
+				"width": 0,
+				"height": 0
+			},
+			"minecraft:pushable": {
+				"is_pushable": false,
+				"is_pushable_by_piston": false
+			},
+			"minecraft:physics": {
+				"has_collision": false,
+				"has_gravity": false
+			},
+			"minecraft:damage_sensor": {
+				"triggers": [
+					{
+						"cause": "all",
+						"deals_damage": false
+					}
+				]
+			},
+			"minecraft:health": {
+				"value": 1000,
+				"max": 1000
+			},
+			"minecraft:timer": {
+				"looping": true,
+				"time": 1,
+				"time_down_event": {
+					"event": "extrabiomes:load",
+					"target": "self"
+				}
+			},
+			"minecraft:custom_hit_test": {
+				"hitboxes": [
+					{
+						"width": 0,
+						"height": 0,
+						"pivot": [
+							0,
+							0,
+							0
+						]
+					}
+				]
+			}
+		},
+		"events": {
+			"extrabiomes:load": {
+				"sequence": [
+					{
+						"run_command": {
+							"command": [
+								"fill ~-16 ~ ~-16 ~16 ~10 ~16 air 0 replace extrabiomes:dense_cloud",
+								"kill @e[r=1, c=1]"
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:item": {
+		"description": {
+			"identifier": "extrabiomes:sky_sapling",
+			"category": "Nature"
+		},
+		"components": {
+			"minecraft:creative_category": {
+				"parent": "itemGroup.name.sapling"
+			},
+			"minecraft:icon": {
+				"texture": "sky_sapling"
+			},
+			"minecraft:fuel": {
+				"duration": 5
+			},
+			"minecraft:block_placer": {
+				"block": "extrabiomes:sky_sapling_block",
+				"use_on": [
+					"extrabiomes:dense_cloud"
+				]
+			}
+		}
+	}
+}

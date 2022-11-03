@@ -1,0 +1,40 @@
+{
+	"format_version": "1.17.100",
+	"minecraft:item": {
+		"description": {
+			"identifier": "extrabiomes:jellyfish_jam_bottle",
+			"category": "Equipment"
+		},
+		"components": {
+			"minecraft:creative_category": {
+				"parent": "itemGroup.name.miscFood"
+			},
+			"minecraft:use_duration": 2,
+			"minecraft:max_stack_size": 16,
+			"minecraft:use_animation": "drink",
+			"minecraft:foil": true,
+			"minecraft:food": {
+				"nutrition": 8,
+				"saturation_modifier": "good",
+				"can_always_eat": true,
+				"is_meat": false,
+				"using_converts_to": "glass_bottle",
+				"on_consume": {
+					"event": "extrabiomes:clear",
+					"target": "self"
+				}
+			},
+			"minecraft:icon": {
+				"texture": "jellyfish_jam_bottle"
+			}
+		},
+		"events": {
+			"extrabiomes:clear": {
+				"remove_mob_effect": {
+					"effect": "poison",
+					"target": "holder"
+				}
+			}
+		}
+	}
+}

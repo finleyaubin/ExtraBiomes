@@ -1,0 +1,89 @@
+{
+	"format_version": "1.17.100",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "extrabiomes:bait",
+			"is_spawnable": false,
+			"is_summonable": true,
+			"is_experimental": false
+		},
+		"components": {
+			"minecraft:is_hidden_when_invisible": {},
+			"minecraft:type_family": {
+				"family": [
+					"bait"
+				]
+			},
+			"minecraft:collision_box": {
+				"width": 0.4,
+				"height": 0.5
+			},
+			"minecraft:hurt_on_condition": {
+				"damage_conditions": [
+					{
+						"filters": {
+							"test": "in_lava",
+							"subject": "self",
+							"operator": "==",
+							"value": true
+						},
+						"cause": "lava",
+						"damage_per_tick": 4
+					}
+				]
+			},
+			"minecraft:knockback_resistance": {
+				"value": 0.5
+			},
+			"minecraft:projectile": {
+				"power": 3,
+				"gravity": 0.001,
+				"uncertainty_base": 16,
+				"uncertainty_multiplier": 4,
+				"anchor": 5,
+				"offset": [
+					0,
+					-0.1,
+					0
+				],
+				"inertia": 0.2,
+				"liquid_inertia": 0.3
+			},
+			"minecraft:scale": {
+				"value": 1
+			},
+			"minecraft:navigation.generic": {
+				"is_amphibious": false,
+				"can_path_over_water": false,
+				"can_swim": false,
+				"can_walk": false,
+				"can_breach": false,
+				"can_sink": false
+			},
+			"minecraft:physics": {
+				"has_gravity": true
+			},
+			"minecraft:movement": {
+				"value": 0.1
+			},
+			"minecraft:pushable": {
+				"is_pushable": false,
+				"is_pushable_by_piston": true
+			},
+			"minecraft:movement.sway": {
+				"sway_amplitude": 0
+			},
+			"minecraft:health": {
+				"value": 90,
+				"max": 90
+			},
+			"minecraft:despawn": {
+				"despawn_from_distance": {
+					"min_distance": 32,
+					"max_distance": 40
+				}
+			},
+			"minecraft:conditional_bandwidth_optimization": {}
+		}
+	}
+}

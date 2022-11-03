@@ -1,0 +1,166 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "extrabiomes:sky_boat",
+			"is_summonable": true,
+			"is_spawnable": false,
+			"is_experimental": false
+		},
+		"component_groups": {
+			"extrabiomes:water_ride": {
+				"minecraft:rideable": {
+					"seat_count": 2,
+					"interact_text": "action.interact.ride.boat",
+					"pull_in_entities": true,
+					"priority": 0,
+					"seats": [
+						{
+							"position": [
+								0,
+								0.4,
+								0
+							],
+							"min_rider_count": 0,
+							"max_rider_count": 1
+						},
+						{
+							"position": [
+								0,
+								0.4,
+								0.1
+							],
+							"min_rider_count": 2,
+							"max_rider_count": 2
+						},
+						{
+							"position": [
+								0,
+								0.4,
+								-0.7
+							],
+							"min_rider_count": 2,
+							"max_rider_count": 2
+						}
+					]
+				}
+			},
+			"extrabiomes:land_ride": {
+				"minecraft:rideable": {
+					"seat_count": 2,
+					"interact_text": "action.interact.ride.boat",
+					"pull_in_entities": true,
+					"priority": 0,
+					"seats": [
+						{
+							"position": [
+								0,
+								0.2,
+								0
+							],
+							"min_rider_count": 0,
+							"max_rider_count": 1
+						},
+						{
+							"position": [
+								0,
+								0.2,
+								0.1
+							],
+							"min_rider_count": 2,
+							"max_rider_count": 2
+						},
+						{
+							"position": [
+								0,
+								0.2,
+								-0.7
+							],
+							"min_rider_count": 2,
+							"max_rider_count": 2
+						}
+					]
+				}
+			}
+		},
+		"components": {
+			"minecraft:behavior.rise_to_liquid_level": {
+				"priority": 0,
+				"liquid_y_offset": 0.25,
+				"rise_delta": 0.01,
+				"sink_delta": 0.01
+			},
+			"minecraft:underwater_movement": {
+				"value": 0.06
+			},
+			"minecraft:navigation.walk": {
+				"can_sink": false
+			},
+			"minecraft:input_ground_controlled": {},
+			"minecraft:health": {
+				"value": 1,
+				"max": 1
+			},
+			"minecraft:movement": {
+				"value": 0.01
+			},
+			"minecraft:movement.basic": {},
+			"minecraft:collision_box": {
+				"width": 1.4,
+				"height": 0.455
+			},
+			"minecraft:physics": {},
+			"minecraft:environment_sensor": {
+				"triggers": [
+					{
+						"filters": {
+							"test": "in_water",
+							"subject": "self",
+							"operator": "==",
+							"value": true
+						},
+						"event": "extrabiomes:water_ride"
+					},
+					{
+						"filters": {
+							"test": "in_water",
+							"subject": "self",
+							"operator": "==",
+							"value": false
+						},
+						"event": "extrabiomes:land_ride"
+					}
+				]
+			},
+			"minecraft:loot": {
+				"table": "loot_tables/entities/sky_boat.json"
+			}
+		},
+		"events": {
+			"extrabiomes:water_ride": {
+				"remove": {
+					"component_groups": [
+						"extrabiomes:land_ride"
+					]
+				},
+				"add": {
+					"component_groups": [
+						"extrabiomes:water_ride"
+					]
+				}
+			},
+			"extrabiomes:land_ride": {
+				"remove": {
+					"component_groups": [
+						"extrabiomes:water_ride"
+					]
+				},
+				"add": {
+					"component_groups": [
+						"extrabiomes:land_ride"
+					]
+				}
+			}
+		}
+	}
+}

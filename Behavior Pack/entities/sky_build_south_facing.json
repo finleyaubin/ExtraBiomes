@@ -1,0 +1,184 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "extrabiomes:sky_build_south_facing",
+			"is_summonable": true,
+			"is_spawnable": false,
+			"is_experimental": false
+		},
+		"component_groups": {
+			"extrabiomes:f": {
+				"minecraft:instant_despawn": {}
+			}
+		},
+		"components": {
+			"minecraft:collision_box": {
+				"width": 0,
+				"height": 0
+			},
+			"minecraft:pushable": {
+				"is_pushable": false,
+				"is_pushable_by_piston": false
+			},
+			"minecraft:physics": {
+				"has_collision": false,
+				"has_gravity": false
+			},
+			"minecraft:damage_sensor": {
+				"triggers": [
+					{
+						"cause": "all",
+						"deals_damage": false
+					}
+				]
+			},
+			"minecraft:health": {
+				"value": 1,
+				"max": 1
+			},
+			"minecraft:timer": {
+				"time": 1,
+				"time_down_event": {
+					"event": "extrabiomes:f",
+					"target": "self"
+				}
+			},
+			"minecraft:inside_block_notifier": {
+				"block_list": [
+					{
+						"block": {
+							"name": "minecraft:air"
+						},
+						"entered_block_event": {
+							"event": "extrabiomes:stop",
+							"target": "self"
+						}
+					},
+					{
+						"block": {
+							"name": "extrabiomes:dense_cloud_brick"
+						},
+						"entered_block_event": {
+							"event": "extrabiomes:f",
+							"target": "self"
+						}
+					},
+					{
+						"block": {
+							"name": "extrabiomes:dense_cloud"
+						},
+						"entered_block_event": {
+							"event": "extrabiomes:load",
+							"target": "self"
+						}
+					}
+				]
+			},
+			"minecraft:custom_hit_test": {
+				"hitboxes": [
+					{
+						"width": 0,
+						"height": 0,
+						"pivot": [
+							0,
+							0,
+							0
+						]
+					}
+				]
+			}
+		},
+		"events": {
+			"extrabiomes:load": {
+				"sequence": [
+					{
+						"randomize": [
+							{
+								"weight": 20,
+								"run_command": {
+									"command": [
+										"structure load extrabiomes:south_path ~-1 ~ ~-9"
+									]
+								}
+							},
+							{
+								"weight": 2
+							},
+							{
+								"weight": 3,
+								"run_command": {
+									"command": [
+										"structure load extrabiomes:south_path_cross ~-5 ~ ~-9",
+										"fill ~-80 223 ~-80 ~80 223 ~80 air 0 replace extrabiomes:sky_city_block"
+									]
+								}
+							},
+							{
+								"weight": 1,
+								"run_command": {
+									"command": [
+										"structure load extrabiomes:sky_tower ~-6 ~ ~-11 0_degrees"
+									]
+								}
+							}
+						]
+					},
+					{
+						"add": {
+							"component_groups": [
+								"extrabiomes:f"
+							]
+						}
+					}
+				]
+			},
+			"extrabiomes:f": {
+				"add": {
+					"component_groups": [
+						"extrabiomes:f"
+					]
+				}
+			},
+			"extrabiomes:stop": {
+				"sequence": [
+					{
+						"randomize": [
+							{
+								"weight": 40,
+								"run_command": {
+									"command": [
+										"structure load extrabiomes:south_path ~-1 ~ ~-9"
+									]
+								}
+							},
+							{
+								"weight": 18,
+								"run_command": {
+									"command": [
+										"structure load extrabiomes:south_sky_end ~-3 ~ ~-4"
+									]
+								}
+							},
+							{
+								"weight": 3,
+								"run_command": {
+									"command": [
+										"structure load extrabiomes:south_sky_fountain ~-5 ~-1 ~-9"
+									]
+								}
+							}
+						]
+					},
+					{
+						"add": {
+							"component_groups": [
+								"extrabiomes:f"
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}
