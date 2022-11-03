@@ -1,0 +1,86 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:sky_leaves"
+		},
+		"components": {
+			"minecraft:creative_category": {
+                "group": "itemGroup.name.leaves",
+                "category": "nature"
+            },
+			"minecraft:destroy_time": 0.3,
+			"minecraft:flammable": {
+				"burn_odds": 50,
+				"flame_odds": 50
+			},
+			"minecraft:map_color": "#ff78f8",
+			"minecraft:unit_cube": {},
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "sky_leaves",
+					"render_method": "blend"
+				}
+			},
+			"minecraft:block_light_absorption": 0,
+			"minecraft:on_player_destroyed": {
+				"event": "extrabiomes:spawn_loot",
+				"target": "self"
+			},
+			"minecraft:loot": "loot_tables/empty.json",
+			"tag:leaves": {}
+		},
+		"events": {
+			"extrabiomes:spawn_loot": {
+				"sequence": [
+					{
+						"condition": "query.get_equipped_item_name('main_hand') == 'shears'",
+						"damage": {
+							"amount": 1,
+							"type": "durability",
+							"target": "item"
+						},
+						"spawn_loot": {
+							"table": "loot_tables/blocks/sky wood/sky_leaves.json"
+						}
+					},
+					{
+						"condition": "query.get_equipped_item_name('main_hand') != 'shears'",
+						"trigger": {
+							"event": "extrabiomes:random_loot",
+							"target": "self"
+						}
+					}
+				]
+			},
+			"extrabiomes:random_loot": {
+				"randomize": [
+					{
+						"weight": 25,
+						"spawn_loot": {
+							"table": "loot_tables/blocks/sky wood/sky_leaves2.json"
+						}
+					},
+					{
+						"weight": 10,
+						"spawn_loot": {
+							"table": "loot_tables/blocks/sky wood/sky_leaves3.json"
+						}
+					},
+					{
+						"weight": 15,
+						"spawn_loot": {
+							"table": "loot_tables/blocks/sky wood/sky_leaves1.json"
+						}
+					},
+					{
+						"weight": 50,
+						"spawn_loot": {
+							"table": "loot_tables/empty.json"
+						}
+					}
+				]
+			}
+		}
+	}
+}

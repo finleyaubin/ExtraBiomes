@@ -1,0 +1,253 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:mystic_stairs",
+			"properties": {
+				"extrabiomes:facing": [
+					0,
+					1,
+					2,
+					3,
+					4,
+					5,
+					6
+				],
+				"extrabiomes:upside_bit": [
+					0,
+					1
+				]
+			}
+		},
+		"components": {
+			"minecraft:creative_category": {
+				"group": "itemGroup.name.stairs",
+				"category": "construction"
+			},
+			"minecraft:destroy_time": 0.5,
+			"minecraft:block_light_absorption": 0,
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "mystic_planks",
+					"render_method": "alpha_test"
+				}
+			},
+			"minecraft:on_player_placing": {
+				"event": "extrabiomes:facing"
+			},
+			"minecraft:on_step_on": {
+				"event": "extrabiomes:upper_collision",
+				"target": "self"
+			},
+			"minecraft:map_color": "#ff78f8",
+			"tag:stairs": {}
+		},
+		"permutations": [
+			{
+				"condition": "query.block_property('extrabiomes:facing') == 0",
+				"components": {
+					"minecraft:geometry": "geometry.stairs"
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:facing') == 2 && query.block_property('extrabiomes:upside_bit') == 0",
+				"components": {
+					"minecraft:geometry": "geometry.stairs",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							0,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:facing') == 3 && query.block_property('extrabiomes:upside_bit') == 0",
+				"components": {
+					"minecraft:geometry": "geometry.stairs_south",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							0,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:facing') == 4 && query.block_property('extrabiomes:upside_bit') == 0",
+				"components": {
+					"minecraft:geometry": "geometry.stairs_west",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							0,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:facing') == 5 && query.block_property('extrabiomes:upside_bit') == 0",
+				"components": {
+					"minecraft:geometry": "geometry.stairs_east",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							0,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:upside_bit') == 1 && query.block_property('extrabiomes:facing') == 2",
+				"components": {
+					"minecraft:geometry": "geometry.stairs_upside",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							8,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:upside_bit') == 1 && query.block_property('extrabiomes:facing') == 3",
+				"components": {
+					"minecraft:geometry": "geometry.stairs_south_upside",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							8,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:upside_bit') == 1 && query.block_property('extrabiomes:facing') == 4",
+				"components": {
+					"minecraft:geometry": "geometry.stairs_west_upside",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							8,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:upside_bit') == 1 && query.block_property('extrabiomes:facing') == 5",
+				"components": {
+					"minecraft:geometry": "geometry.stairs_east_upside",
+					"minecraft:entity_collision": {
+						"origin": [
+							-8,
+							8,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					}
+				}
+			}
+		],
+		"events": {
+			"extrabiomes:facing": {
+				"sequence": [
+					{
+						"condition": "query.target_x_rotation > 0",
+						"set_block_property": {
+							"extrabiomes:facing": "query.cardinal_facing_2d"
+						}
+					},
+					{
+						"condition": "query.target_x_rotation < 0",
+						"set_block_property": {
+							"extrabiomes:facing": "query.cardinal_facing_2d",
+							"extrabiomes:upside_bit": "1"
+						}
+					}
+				]
+			},
+			"extrabiomes:upper_collision": {
+				"sequence": [
+					{
+						"condition": "query.block_property('extrabiomes:facing') == 2",
+						"run_command": {
+							"command": [
+								"setblock ~ ~1 ~ extrabiomes:stairs_collision[\"direction\":0]"
+							]
+						}
+					},
+					{
+						"condition": "query.block_property('extrabiomes:facing') == 3",
+						"run_command": {
+							"command": [
+								"setblock ~ ~1 ~ extrabiomes:stairs_collision[\"direction\":1]"
+							]
+						}
+					},
+					{
+						"condition": "query.block_property('extrabiomes:facing') == 4",
+						"run_command": {
+							"command": [
+								"setblock ~ ~1 ~ extrabiomes:stairs_collision[\"direction\":2]"
+							]
+						}
+					},
+					{
+						"condition": "query.block_property('extrabiomes:facing') == 5",
+						"run_command": {
+							"command": [
+								"setblock ~ ~1 ~ extrabiomes:stairs_collision[\"direction\":3]"
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}

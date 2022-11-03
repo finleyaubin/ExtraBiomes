@@ -1,0 +1,37 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:nether_lapis_ore"
+		},
+		"components": {
+			"minecraft:creative_category": {
+				"category": "nature",
+				"group": "itemGroup.name.ore"
+			},
+			"minecraft:destroy_time": 1,
+			"minecraft:block_light_absorption": 15,
+			"minecraft:explosion_resistance": 3,
+			"minecraft:unit_cube": {},
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "nether_lapis_ore",
+					"render_method": "opaque"
+				}
+			},
+			"minecraft:on_player_destroyed": {
+				"event": "xp_reward"
+			},
+			"minecraft:loot": "loot_tables/blocks/lapis_ore.json"
+		},
+		"events": {
+			"xp_reward": {
+				"run_command": {
+					"command": [
+						"structure load xp_structure ~~~"
+					]
+				}
+			}
+		}
+	}
+}
