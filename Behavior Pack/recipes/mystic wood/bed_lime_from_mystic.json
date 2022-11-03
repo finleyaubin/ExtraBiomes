@@ -1,0 +1,32 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:bed_lime_from_mystic"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"###",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:mystic_planks",
+				"data": 0
+			},
+			"#": {
+				"item": "minecraft:wool",
+				"data": 5
+			}
+		},
+		"result": [
+			{
+				"item": "minecraft:bed",
+				"data": 5,
+				"count": 1
+			}
+		]
+	}
+}

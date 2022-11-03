@@ -1,0 +1,26 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:mystic_trapdoor"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~~",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:mystic_planks"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:mystic_trapdoor",
+				"count": 2
+			}
+		]
+	}
+}

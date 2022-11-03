@@ -1,0 +1,29 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:mystic_fence"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~#~",
+			"~#~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:mystic_planks"
+			},
+			"#": {
+				"item": "minecraft:stick"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:mystic_fence",
+				"count": 3
+			}
+		]
+	}
+}

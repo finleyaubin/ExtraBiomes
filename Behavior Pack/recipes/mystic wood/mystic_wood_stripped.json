@@ -1,0 +1,26 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:mystic_wood_stripped"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~",
+			"~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:stripped_mystic_log"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:stripped_mystic_wood",
+				"count": 3
+			}
+		]
+	}
+}

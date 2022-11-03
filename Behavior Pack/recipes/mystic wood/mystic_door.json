@@ -1,0 +1,27 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:mystic_door"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~",
+			"~~",
+			"~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:mystic_planks"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:mystic_door",
+				"count": 3
+			}
+		]
+	}
+}
