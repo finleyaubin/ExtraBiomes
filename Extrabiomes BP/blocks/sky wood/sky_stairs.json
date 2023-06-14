@@ -1,0 +1,235 @@
+{
+	"format_version": "1.19.80",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:sky_stairs",
+			"menu_category": {
+				"category": "construction",
+				"group": "itemGroup.name.stairs"
+			},
+			"properties": {
+				"extrabiomes:is_upside_down": [
+					false, true
+				],
+				"extrabiomes:direction": [
+					0, 1, 2, 3
+				]
+			}
+		},
+		"components": {
+			"minecraft:on_player_placing": {
+				"event": "extrabiomes:set_direction"
+			},
+			"minecraft:flammable": {
+				"burn_odds": 5,
+				"flame_odds": 5
+			},
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 0.5
+			},
+			"minecraft:collision_box": {
+				"origin": [ -8, 0, -8 ],
+				"size": [ 16, 8, 16 ]
+			},
+			"minecraft:selection_box": {
+				"origin": [ -8, 0, -8 ],
+				"size": [ 16, 8, 16 ]
+			},
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "sky_planks",
+					"render_method": "opaque"
+				}
+			},
+			"minecraft:geometry": { "identifier": "geometry.custom_stairs", "bone_visibility": { "north_down": false, "north_up": false, "south_down": false, "south_up": false, "east_down": false, "east_up": false, "west_down": false, "west_up": false } },
+			//"minecraft:loot": "loot_tables/sky wood/sky_stairs.json",	
+			"minecraft:destructible_by_explosion": true,
+			"minecraft:breathability": "air",
+			"tag:wood": { }
+		},
+		"permutations": [
+			{
+				"condition": "query.block_property('extrabiomes:is_upside_down') == false",
+				"components": {
+					"minecraft:collision_box": {
+						"origin": [ -8, 0, -8 ],
+						"size": [ 16, 8, 16 ]
+					},
+					"minecraft:selection_box": {
+						"origin": [ -8, 0, -8 ],
+						"size": [ 16, 16, 16 ]
+					}
+				}
+			},
+			{
+				"condition": "query.block_property('extrabiomes:is_upside_down') == true",
+				"components": {
+					"minecraft:collision_box": {
+						"origin": [ -8, 8, -8 ],
+						"size": [ 16, 8, 16 ]
+					},
+					"minecraft:selection_box": {
+						"origin": [ -8, 0, -8 ],
+						"size": [ 16, 16, 16 ]
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 1) && query.block_property('extrabiomes:is_upside_down') == false",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false
+						}
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 1) && query.block_property('extrabiomes:is_upside_down') == true",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false
+						}
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 0) && query.block_property('extrabiomes:is_upside_down') == false",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false
+						}
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 0) && query.block_property('extrabiomes:is_upside_down') == true",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false
+						}
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 3) && query.block_property('extrabiomes:is_upside_down') == false",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false
+						}
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 3) && query.block_property('extrabiomes:is_upside_down') == true",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"west_down": false,
+							"west_up": false
+						}
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 2) && query.block_property('extrabiomes:is_upside_down') == false",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_up": false
+						}
+					}
+				}
+			},
+			{
+				"condition": "(query.block_property('extrabiomes:direction') == 2) && query.block_property('extrabiomes:is_upside_down') == true",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.custom_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false
+						}
+					}
+				}
+			}
+		],
+		"events": {
+			"extrabiomes:set_direction": {
+				"sequence": [
+					{
+						"condition": "query.target_x_rotation>=0",
+						"set_block_property": {
+							"extrabiomes:direction": "query.cardinal_facing_2d-2",
+							"extrabiomes:is_upside_down": false
+						}
+					},
+					{
+						"condition": "query.target_x_rotation<=0",
+						"set_block_property": {
+							"extrabiomes:direction": "query.cardinal_facing_2d-2",
+							"extrabiomes:is_upside_down": true
+						}
+					}
+				]
+			}
+		}
+	}
+}

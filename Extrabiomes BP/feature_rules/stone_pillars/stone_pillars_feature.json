@@ -1,0 +1,42 @@
+{
+  "format_version": "1.17.0",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "extrabiomes:stone_pillars_feature",
+      "places_feature": "extrabiomes:stone_pillars/select_stone_pillars_feature"
+    },
+    "conditions": {
+      "placement_pass": "before_underground_pass",
+      "minecraft:biome_filter": [
+        {
+          "any_of": [
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "stone_pillars"
+            }
+          ]
+        }
+      ]
+    },
+    "distribution": {
+      "scatter_chance": 1,
+      "iterations": 1,
+      "x": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      },
+      "y": "query.above_top_solid(variable.worldx, variable.worldz)-5",
+      "z": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      }
+    }
+  }
+}

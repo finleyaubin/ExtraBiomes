@@ -1,0 +1,17 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:boulder/regular_mossy_pebble"
+		},
+		"structure_name": "extrabiomes:mossy_pebble",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

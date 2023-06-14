@@ -1,0 +1,23 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:item": {
+		"description": {
+			"identifier": "extrabiomes:gilded_sky_door",
+			"category": "construction"
+		},
+		"components": {
+			"minecraft:icon": {
+				"texture": "gilded_sky_door"
+			},
+			"minecraft:block_placer": {
+				"block": "extrabiomes:gilded_sky_door_bottom"
+			},
+			"minecraft:creative_category": {
+				"parent": "itemGroup.name.door"
+			},
+			"minecraft:fuel": {
+				"duration": 10
+			}
+		}
+	}
+}

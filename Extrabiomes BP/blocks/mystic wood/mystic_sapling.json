@@ -1,0 +1,113 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:mystic_sapling_block"
+		},
+		"components": {
+			"minecraft:creative_category": {
+                "category": "none"
+            },
+			"minecraft:entity_collision": false,
+			"minecraft:pick_collision": {
+				"origin": [
+					-6,
+					0,
+					-6
+				],
+				"size": [
+					12,
+					12,
+					12
+				]
+			},
+			"minecraft:geometry": "geometry.sapling_model",
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "mystic_sapling",
+					"render_method": "alpha_test",
+					"face_dimming": false,
+					"ambient_occlusion": true
+				}
+			},
+			"minecraft:block_light_absorption": 0,
+			//"minecraft:breakonpush": true,
+			"minecraft:on_interact": {
+				"event": "extrabiomes:grow",
+				"target": "self",
+				"condition": "query.get_equipped_item_name == 'bone_meal'"
+			},
+			"minecraft:placement_filter": {
+				"conditions": [
+					{
+						"block_filter": [
+							"minecraft:dirt",
+							"minecraft:grass",
+							"minecraft:farmland"
+						],
+						"allowed_faces": [
+							"up"
+						]
+					}
+				]
+			},
+			"minecraft:ticking": {
+				"looping": true,
+				"range": [
+					2000,
+					2500
+				],
+				"on_tick": {
+					"event": "extrabiomes:grow",
+					"target": "self"
+				}
+			},
+			"minecraft:map_color": "#f156ea",
+			"minecraft:loot": "loot_tables/blocks/mystic wood/mystic_sapling.json"
+		},
+		"events": {
+			"extrabiomes:grow": {
+				"sequence": [
+					{
+						"condition": "query.get_equipped_item_name('main_hand') == 'bone_meal'",
+						"run_command": {
+							"command": [
+								"particle minecraft:crop_growth_emitter ~ ~ ~",
+								"playsound item.bone_meal.use @a ~ ~ ~"
+							]
+						},
+						"trigger": {
+							"event": "extrabiomes:random",
+							"target": "self"
+						}
+					},
+					{
+						"condition": "query.get_equipped_item_name('main_hand') != 'bone_meal'",
+						"run_command": {
+							"command": [
+								"structure load extrabiomes:mystic_tree ~-7 ~ ~-8"
+							]
+						}
+					}
+				]
+			},
+			"extrabiomes:random": {
+				"randomize": [
+					{
+						"weight": 75,
+						"decrement_stack": {}
+					},
+					{
+						"weight": 25,
+						"decrement_stack": {},
+						"run_command": {
+							"command": [
+								"structure load extrabiomes:mystic_tree ~-7 ~ ~-8"
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}

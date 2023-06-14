@@ -1,8 +1,0 @@
-{
-	"format_version": "1.16.100",
-	"minecraft:texture_set": {
-		"color": "planks_palm",
-		"metalness_emissive_roughness": "planks_palm_mer",
-		"heightmap": "planks_palm_heightmap"
-	}
-}

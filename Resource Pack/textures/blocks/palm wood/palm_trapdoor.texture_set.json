@@ -1,8 +1,0 @@
-{
-	"format_version": "1.16.100",
-	"minecraft:texture_set": {
-		"color": "palm_trapdoor",
-		"metalness_emissive_roughness": "palm_trapdoor_mer",
-		"heightmap": "palm_trapdoor_heightmap"
-	}
-}

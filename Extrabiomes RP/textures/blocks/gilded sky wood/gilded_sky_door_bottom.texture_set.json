@@ -1,0 +1,8 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:texture_set": {
+		"color": "gilded_sky_door_bottom",
+		"metalness_emissive_roughness": "gilded_sky_door_bottom_mer",
+		"heightmap": "gilded_sky_door_bottom_heightmap"
+	}
+}

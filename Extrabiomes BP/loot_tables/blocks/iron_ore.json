@@ -1,0 +1,474 @@
+{
+	"pools": [
+		{
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:stone_pickaxe",
+					"count": 1
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:stone_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 1
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 2,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:stone_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 2
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 3,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:stone_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 3
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 4,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:iron_pickaxe",
+					"count": 1
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:iron_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 1
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 2,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:iron_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 2
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 3,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:iron_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 3
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 4,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:gold_pickaxe",
+					"count": 1
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:gold_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 1
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 2,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:gold_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 2
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 3,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:gold_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 3
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 4,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:diamond_pickaxe",
+					"count": 1
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:diamond_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 1
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 2,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:diamond_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 2
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 3,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:diamond_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 3
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 4,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:netherite_pickaxe",
+					"count": 1
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:netherite_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 1
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 2,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:netherite_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 2
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 3,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		},
+		{
+			"conditions": [
+				{
+					"condition": "match_tool",
+					"item": "minecraft:netherite_pickaxe",
+					"count": 1,
+					"enchantments": [
+						{
+							"fortune": {
+								"level": 3
+							}
+						}
+					]
+				}
+			],
+			"rolls": {
+				"max": 4,
+				"min": 1
+			},
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:raw_iron"
+				}
+			]
+		}
+	]
+}

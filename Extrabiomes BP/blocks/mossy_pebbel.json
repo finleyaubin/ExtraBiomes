@@ -1,0 +1,71 @@
+{
+	"format_version": "1.17.10",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:medium_mossy_pebble"
+		},
+		"components": {
+			"minecraft:block_light_absorption": 0,
+			"minecraft:block_light_emission": 0,
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "cobblestone_mossy",
+					"render_method": "alpha_test"
+				}
+			},
+			"minecraft:destroy_time": 0.1,
+			"minecraft:geometry": "geometry.pebble",
+			"minecraft:creative_category": {
+				"category": "Nature"
+			},
+			"minecraft:pick_collision": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					2,
+					16
+				]
+			},
+			"minecraft:entity_collision": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					2,
+					16
+				]
+			},
+			"minecraft:on_interact": {
+				"event": "increment_pile",
+				"target": "other",
+				"condition": "query.is_item_name_any('slot.weapon.mainhand', 0, 'extrabiomes:mossy_pebble')"
+			},
+			"minecraft:loot": "loot_tables/blocks/pebble/mossy/2pebble.json"
+		},
+		"events":{
+			"increment_pile":{
+				"sequence":[
+					{
+						"decrement_stack":{}
+
+					},
+					{
+						"run_command": {
+							"command": [
+								"setblock ~~~ extrabiomes:large_mossy_pebble",
+								"playsound place.deepslate @a[r=20] ~ ~ ~"
+							]
+						}
+					}
+				]
+			}
+		}
+	}
+}

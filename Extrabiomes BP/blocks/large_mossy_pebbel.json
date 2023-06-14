@@ -1,0 +1,48 @@
+{
+	"format_version": "1.17.10",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:large_mossy_pebble"
+		},
+		"components": {
+			"minecraft:block_light_absorption": 0,
+			"minecraft:block_light_emission": 0,
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "cobblestone_mossy",
+					"render_method": "alpha_test"
+				}
+			},
+			"minecraft:geometry": "geometry.large_pebble",
+			"minecraft:creative_category": {
+				"category": "Nature"
+			},
+			"minecraft:destroy_time": 0.2,
+			"minecraft:pick_collision": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					3,
+					16
+				]
+			},
+			"minecraft:entity_collision": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					3,
+					16
+				]
+			},
+			"minecraft:loot": "loot_tables/blocks/pebble/mossy/3pebble.json"
+		}
+	}
+}

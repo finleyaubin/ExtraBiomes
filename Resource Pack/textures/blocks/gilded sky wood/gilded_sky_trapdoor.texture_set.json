@@ -1,8 +1,0 @@
-{
-	"format_version": "1.16.100",
-	"minecraft:texture_set": {
-		"color": "gilded_sky_trapdoor",
-		"metalness_emissive_roughness": "gilded_sky_trapdoor_mer",
-		"heightmap": "gilded_sky_trapdoor_heightmap"
-	}
-}

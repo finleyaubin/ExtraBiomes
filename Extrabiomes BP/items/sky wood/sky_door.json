@@ -1,0 +1,23 @@
+{
+	"format_version": "1.16.100",
+	"minecraft:item": {
+		"description": {
+			"identifier": "extrabiomes:sky_door",
+			"category": "construction"
+		},
+		"components": {
+			"minecraft:icon": {
+				"texture": "sky_door"
+			},
+			"minecraft:block_placer": {
+				"block": "extrabiomes:sky_door_bottom"
+			},
+			"minecraft:creative_category": {
+				"parent": "itemGroup.name.door"
+			},
+			"minecraft:fuel": {
+				"duration": 10
+			}
+		}
+	}
+}

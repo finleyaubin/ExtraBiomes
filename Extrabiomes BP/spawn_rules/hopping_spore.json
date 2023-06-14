@@ -1,0 +1,57 @@
+{
+  "format_version": "1.8.0",
+  "minecraft:spawn_rules": {
+    "description": {
+      "identifier": "extrabiomes:hopping_spore",
+      "population_control": "animal"
+    },
+    "conditions": [
+      {
+        "minecraft:spawns_on_surface": {},
+        "minecraft:spawns_underground": {},
+        "minecraft:distance_filter": {
+          "min": 12,
+          "max": 32
+        },
+        "minecraft:brightness_filter": {
+          "min": 0,
+          "max": 15,
+          "adjust_for_weather": true
+        },
+        "minecraft:weight": {
+          "default": 35
+        },
+        "minecraft:density_limit": {
+          "surface": 15
+        },
+        "minecraft:spawn_event": {
+          "event": "minecraft:entity_spawned"
+        },
+        "minecraft:herd": {
+          "min_size": 5,
+          "max_size": 1,
+          "event": "minecraft:entity_spawned"
+        },
+        "minecraft:biome_filter": {
+          "any_of": [
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "mooshroom_island"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "crimson_forest"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "warped_forest"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
