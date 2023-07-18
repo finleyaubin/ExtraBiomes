@@ -1,0 +1,45 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.puckoo.eatPebble": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"kneck": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.0": [75, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 0, 0],
+						"1.0": [0, -3, 0]
+					}
+				},
+				"head": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.0": [-25, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 0, 0],
+						"1.0": [0, 1, -2]
+					}
+				},
+				"upperjaw": {
+					"rotation": [0, 0, 0],
+					"position": [0, 0, 0]
+				},
+				"Lowerjaw": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.0": [12.5, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 0, 0],
+						"1.0": [0, -1, 0]
+					}
+				}
+			}
+		}
+	}
+}

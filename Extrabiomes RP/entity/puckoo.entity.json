@@ -1,0 +1,51 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:puckoo",
+			"min_engine_version": "1.8.0",
+			"materials": {
+				"default": "goat"
+			},
+			"textures": {
+				"base0": "textures/entity/puckoo/puckoo base",//the nameing here got confusing after I deleted a few lol
+				"base1": "textures/entity/puckoo/puckoo base2",
+				"base2": "textures/entity/puckoo/puckoo base3",
+				"base3": "textures/entity/puckoo/puckoo base4",
+				"koi_0": "textures/entity/puckoo/Koi0",
+				"koi_1": "textures/entity/puckoo/Koi1",
+				"koi_2": "textures/entity/puckoo/Koi2",
+				"koi_3": "textures/entity/puckoo/Koi3"
+			},
+			"geometry": {
+				"default": "geometry.puckoo"
+			},
+			"scripts": {
+				"animate": [
+					"general",
+					{ "move": "query.modified_move_speed" },
+					"look_at_target",
+					{ "baby_transform": "query.is_baby" }
+				  ]
+			},
+			"animations": {
+				"move": "animation.chicken.move",
+				"general": "animation.chicken.general",
+				"look_at_target": "animation.common.look_at_target",
+				"baby_transform": "animation.chicken.baby_transform",
+				"eat_stone": "animation.puckoo.eat stone",
+				"shock":  "animation.puckoo.shock"
+			},
+			"render_controllers": [
+				"controller.render.puckoo.koi",
+				"controller.render.puckoo.base"
+				
+
+			],
+			"spawn_egg": {
+				"base_color": "#ffffff",
+				"overlay_color": "#ea7630"
+			}
+		}
+	}
+}
