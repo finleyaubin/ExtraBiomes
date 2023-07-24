@@ -57,6 +57,7 @@ tile.extrabiomes:stripped_mystic_log.name=Stripped Mystic Log
 tile.extrabiomes:stripped_mystic_wood.name=Stripped Mystic Wood
 entity.extrabiomes:mystic_boat.name=Mystic Boat
 item.extrabiomes:mystic_boat=Mystic Boat
+item.extrabiomes:mystic_door=Mystic Door
 
 tile.extrabiomes:palm_log.name=Palm Log
 tile.extrabiomes:palm_leaves.name=Palm leaves
@@ -74,6 +75,7 @@ tile.extrabiomes:palm_sapling_block.name=Palm Sapling
 item.extrabiomes:palm_sapling=Palm Sapling
 entity.extrabiomes:palm_boat.name=Palm Boat
 item.extrabiomes:palm_boat=Palm Boat
+item.extrabiomes:palm_door=Palm Door
 
 tile.extrabiomes:sky_log.name=Sky Log
 tile.extrabiomes:sky_door.name=Sky Door
@@ -91,6 +93,7 @@ tile.extrabiomes:sky_sapling_block.name=Sky Sapling
 item.extrabiomes:sky_sapling=Sky Sapling
 entity.extrabiomes:sky_boat.name=Sky Boat
 item.extrabiomes:sky_boat=Sky Boat
+item.extrabiomes:sky_door=sky Door
 
 tile.extrabiomes:gilded_sky_log.name= §eGilded sky log§r
 tile.extrabiomes:gilded_sky_door.name=§eGilded Sky Door§r
@@ -100,12 +103,16 @@ tile.extrabiomes:gilded_sky_slab.name=§eGilded Sky Slab§r
 tile.extrabiomes:gilded_sky_stairs.name=§eGilded Sky Stairs§r
 tile.extrabiomes:gilded_sky_trapdoor.name=§eGilded Sky Trapdoor§r
 tile.extrabiomes:gilded_sky_wood.name=§eGilded Sky Wood§r
+item.extrabiomes:gilded_sky_door=§eGilded Sky Door§r
 
-tile.extrabiomes:small_pebble.name=Small Pebble
-tile.extrabiomes:pebble.name=Pebble
-tile.extrabiomes:large_pebble.name=Large Pebble
 tile.extrabiomes:stick_pile.name=Stick Pile
 
+tile.extrabiomes:nether_redstone_ore.name=Nether Redstone Ore
+tile.extrabiomes:nether_lapis_ore.name=Nether Lapis Ore
+tile.extrabiomes:nether_iron_ore.name=Nether Iron Ore
+tile.extrabiomes:nether_diamond_ore.name=Nether Diamond Ore
+tile.extrabiomes:nether_emerald_ore.name=Nether Emerald Ore
+tile.extrabiomes:nether_copper_ore.name=Nether Copper Ore
 
 tile.extrabiomes:blue_mushroom_block.name=Blue Mushroom Block
 tile.extrabiomes:Purple_mushroom_block.name=Purple Mushroom Block
@@ -126,4 +133,15 @@ item.extrabiomes:orange_mushroom=Orange Mushroom
 tile.extrabiomes:orange_mushroom_block.name=Orange Mushroom Block
 item.extrabiomes:glow_mushroom=Glow Mushroom
 tile.extrabiomes:glow_mushroom_block.name=Glow Mushroom Block
-tile.extrabiomes:nether_coal_ore.name=Nether Coal ore
+
+tile.extrabiomes:large_mossy_pebble.name=Large Mossy Pebble Stack
+tile.extrabiomes:large_pebble.name=Large Pebble Stack
+tile.extrabiomes:medium_mossy_pebble.name=Mossy Pebble Stack
+tile.extrabiomes:medium_pebble.name=Pebble Stack
+tile.extrabiomes:small_mossy_pebble.name=Small Mossy Pebble Stack
+tile.extrabiomes:small_pebble.name=Small Pebble Stack
+item.extrabiomes:pebble.name=Pebble
+item.extrabiomes:mossy_pebble=Mossy Pebble
+item.extrabiomes:pebble=Pebble
+item.spawn_egg.entity.extrabiomes:puckoo.name=Spawn Puckoo
+entity.extrabiomes:puckoo.name=Puckoo

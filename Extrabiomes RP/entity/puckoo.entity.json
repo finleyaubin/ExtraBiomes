@@ -23,24 +23,28 @@
 			"scripts": {
 				"animate": [
 					"general",
-					{ "move": "query.modified_move_speed" },
-					"look_at_target",
+					"move",
+					{"look_at_target":"!q.is_angry && !q.is_grazing"},
 					{ "baby_transform": "query.is_baby" }
-				  ]
+
+				  ],
+				  "initialize": [
+					"v.wing_flap=!q.is_on_ground ? Math.sin(q.life_time*80)*90:0;"
+				]
 			},
 			"animations": {
-				"move": "animation.chicken.move",
+				"move": "controller.animation.puckoo.move",
+				"walk": "animation.chicken.move",
 				"general": "animation.chicken.general",
 				"look_at_target": "animation.common.look_at_target",
 				"baby_transform": "animation.chicken.baby_transform",
-				"eat_stone": "animation.puckoo.eat stone",
-				"shock":  "animation.puckoo.shock"
+				"eat_stone": "animation.puckoo.eat_stone",
+				"shock":  "animation.puckoo.shock",
+				"setup": "animation.puckoo.setup"
 			},
 			"render_controllers": [
 				"controller.render.puckoo.koi",
 				"controller.render.puckoo.base"
-				
-
 			],
 			"spawn_egg": {
 				"base_color": "#ffffff",

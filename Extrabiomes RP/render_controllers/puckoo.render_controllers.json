@@ -15,7 +15,7 @@
 			"geometry": "geometry.default",
 			"part_visibility": [
 				{
-					"whiskers": "q.variant>=4"
+					"whiskers": "q.property('extrabiomes:gender')=='male'"
 				}
 			],
 			"materials": [

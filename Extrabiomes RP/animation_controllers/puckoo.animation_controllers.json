@@ -1,0 +1,42 @@
+{
+	"format_version" : "1.10.0",
+	"animation_controllers" : {
+		"controller.animation.puckoo.move" : {
+			"initial_state" : "default",
+			"states" : {
+				"default" : {
+					"animations" : [
+						{
+							"walk" : "query.modified_move_speed"
+						},
+						"setup"
+					],
+					"transitions" : [
+						{
+							"shock" : "q.is_angry"
+						},
+						{
+							"eat_stone": "q.is_grazing || q.is_in_love "
+						}
+					]
+				},
+				"eat_stone" : {
+					"animations" : [ "eat_stone" ],
+					"transitions" : [
+						{
+							"default" : "query.all_animations_finished"
+						}
+					]
+				},
+				"shock" : {
+					"animations" : [ "shock", "setup" ],
+					"transitions" : [
+						{
+							"default" : "query.all_animations_finished"
+						}
+					]
+				}
+			}
+		}
+	}
+}

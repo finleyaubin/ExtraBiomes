@@ -1,11 +1,21 @@
 {
-  "format_version": "1.16.0",
+  "format_version": "1.20.0",
   "minecraft:entity": {
     "description": {
       "identifier": "extrabiomes:puckoo",
       "is_spawnable": true,
       "is_summonable": true,
-      "is_experimental": false
+      "is_experimental": false,
+      "runtime_identifier": "minecraft:sheep",
+      "properties": {
+        "extrabiomes:gender": {
+          "type": "enum",
+          "values": [ "male", "female" ],
+          "default": "male",
+          "client_sync": true
+        }
+      }
+
     },
     "component_groups": {
       "extrabiomes:puckoo_baby": {
@@ -17,12 +27,7 @@
         "minecraft:ageable": {
           "duration": 1200,
           "feed_items": [
-            "wheat_seeds",
-            "beetroot_seeds",
-            "melon_seeds",
-            "pumpkin_seeds",
-            "pitcher_pod",
-            "torchflower_seeds"
+            "extrabiomes:mossy_pebble"
           ],
           "grow_up": {
             "event": "minecraft:ageable_grow_up",
@@ -54,12 +59,7 @@
             }
           },
           "breed_items": [
-            "wheat_seeds",
-            "beetroot_seeds",
-            "melon_seeds",
-            "pumpkin_seeds",
-            "pitcher_pod",
-            "torchflower_seeds"
+            "extrabiomes:mossy_pebble"
           ]
         },
         "minecraft:behavior.breed": {
@@ -74,17 +74,41 @@
           "seats": {
             "position": [ 0.0, 0.4, 0.0 ]
           }
+        }
+      },
+      "extrabiomes:puckoo_calm": {
+        "minecraft:on_target_acquired": {
+          "event": "extrabiomes:become_scared",
+          "target": "self"
         },
+        "minecraft:movement": {
+          "value": 0.25
+        }
+      },
+      "extrabiomes:drop_pebble": {
         "minecraft:spawn_entity": {
           "entities": {
-            "min_wait_time": 300,
-            "max_wait_time": 600,
-            "spawn_sound": "plop",
+            "min_wait_time": 7,
+            "max_wait_time": 7,
             "spawn_item": "extrabiomes:pebble",
-            "filters": {
-              "test": "rider_count", "subject": "self", "operator": "==", "value": 0
-            }
+            "spawn_item_event": {
+              "event": "extrabiomes:on_drop",
+              "target": "self"
+            }   
           }
+        }
+      },
+
+      "extrabiomes:puckoo_scared": {
+        "minecraft:angry": {
+          "duration": 4,
+          "calm_event": {
+            "event": "extrabiomes:puckoo_become_calm",
+            "target": "self"
+          }
+        },
+        "minecraft:movement": {
+          "value": 0
         }
       },
       "extrabiomes:skin_0": {
@@ -133,10 +157,10 @@
       "minecraft:is_hidden_when_invisible": {
       },
       "minecraft:type_family": {
-        "family": [ "chicken", "mob" ]
+        "family": [ "puckoo", "fish", "chicken", "mob" ]
       },
       "minecraft:breathable": {
-        "total_supply": 15,
+        "total_supply": 60,
         "suffocate_time": 0
       },
       "minecraft:collision_box": {
@@ -146,8 +170,8 @@
       "minecraft:nameable": {
       },
       "minecraft:health": {
-        "value": 4,
-        "max": 4
+        "value": 6,
+        "max": 6
       },
       "minecraft:hurt_on_condition": {
         "damage_conditions": [
@@ -157,6 +181,9 @@
             "damage_per_tick": 4
           }
         ]
+      },
+      "minecraft:behavior.hurt_by_target": {
+        "priority": 3
       },
       "minecraft:movement": {
         "value": 0.25
@@ -195,6 +222,7 @@
         "priority": 1,
         "speed_multiplier": 1.5
       },
+
       "minecraft:behavior.mount_pathing": {
         "priority": 2,
         "speed_multiplier": 1.5,
@@ -205,13 +233,27 @@
         "priority": 4,
         "speed_multiplier": 1.0,
         "items": [
-          "wheat_seeds",
-          "beetroot_seeds",
-          "melon_seeds",
-          "pumpkin_seeds",
-          "pitcher_pod",
-          "torchflower_seeds"
+          "extrabiomes:mossy_pebble"
         ]
+      },
+      "minecraft:lookat": {
+        "search_radius": 3.0,
+        "set_target": true,
+        "look_cooldown": 50.0,
+        "filters": {
+          "any_of": [
+            {
+              "subject": "other",
+              "test": "is_family",
+              "value": "player"
+            },
+            {
+              "subject": "other",
+              "test": "is_family",
+              "value": "puckoo"
+            }
+          ]
+        }
       },
       "minecraft:behavior.random_stroll": {
         "priority": 6,
@@ -220,7 +262,7 @@
       "minecraft:behavior.look_at_player": {
         "priority": 7,
         "look_distance": 6.0,
-        "probability": 0.02
+        "probability": 8.0
       },
       "minecraft:behavior.random_look_around": {
         "priority": 8
@@ -235,12 +277,33 @@
       },
       "minecraft:game_event_movement_tracking": {
         "emit_flap": true
+      },
+      "minecraft:behavior.eat_block": {
+        "priority": 6,
+        "success_chance": "query.is_baby ? 0.02 : 0.01",
+        "eat_and_replace_block_pairs": [
+          { "eat_block": "extrabiomes:large_mossy_pebble", "replace_block": "extrabiomes:medium_mossy_pebble" },
+          { "eat_block": "extrabiomes:medium_mossy_pebble", "replace_block": "extrabiomes:small_mossy_pebble" },
+          { "eat_block": "extrabiomes:small_mossy_pebble", "replace_block": "air" }
+        ],
+        "time_until_eat": 0,
+        "on_eat": {
+          "event": "extrabiomes:drop",
+          "target": "self"
+        }
+
       }
     },
 
     "events": {
       "from_egg": {
         "add": { "component_groups": [ "extrabiomes:puckoo_baby" ] }
+      },
+      "extrabiomes:drop": {
+        "add": { "component_groups": [ "extrabiomes:drop_pebble" ] }
+      },
+      "extrabiomes:on_drop": {
+        "remove": { "component_groups": [ "extrabiomes:drop_pebble" ] }
       },
 
       "minecraft:entity_spawned": {
@@ -332,6 +395,29 @@
                 }
               }
             ]
+          },
+          {
+            "randomize": [
+              {
+                "weight": 1,
+                "set_property": {
+                  "extrabiomes:gender": "male"
+                }
+              },
+              {
+                "weight": 1,
+                "set_property": {
+                  "extrabiomes:gender": "female"
+                }
+              }
+            ]
+          },
+          {
+            "add": {
+              "component_groups": [
+                "extrabiomes:puckoo_calm"
+              ]
+            }
           }
         ]
       },
@@ -363,6 +449,30 @@
         "add": {
           "component_groups": [
             "extrabiomes:puckoo_adult"
+          ]
+        }
+      },
+      "extrabiomes:become_scared": {
+        "remove": {
+          "component_groups": [
+            "extrabiomes:puckoo_calm"
+          ]
+        },
+        "add": {
+          "component_groups": [
+            "extrabiomes:puckoo_scared"
+          ]
+        }
+      },
+      "extrabiomes:puckoo_become_calm": {
+        "remove": {
+          "component_groups": [
+            "extrabiomes:puckoo_scared"
+          ]
+        },
+        "add": {
+          "component_groups": [
+            "extrabiomes:puckoo_calm"
           ]
         }
       }
