@@ -1,0 +1,21 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:the_netherlands/water_feature"
+		},
+		"structure_name": "extrabiomes:farm_water",
+		"adjustment_radius": 0,
+		"facing_direction": "random",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air", 
+					"minecraft:farmland",
+					"minecraft:wheat",
+					"minecraft:dirt"
+				]
+			}
+		}
+	}
+}

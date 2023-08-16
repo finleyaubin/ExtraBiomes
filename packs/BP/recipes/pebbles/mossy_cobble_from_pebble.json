@@ -1,0 +1,24 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:mossy_cobble_from_pebble"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"##",
+			"##"
+		],
+		"key": {
+			"#": {
+				"item": "extrabiomes:mossy_pebble"
+			}
+		},
+		"result": {
+			"item": "minecraft:mossy_cobblestone",
+			"count": 1
+		}
+	}
+}

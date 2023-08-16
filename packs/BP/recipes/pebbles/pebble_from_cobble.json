@@ -1,0 +1,23 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:pebble_from_cobble"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"#"
+		],
+		"key": {
+			"#": {
+				"item": "minecraft:cobblestone"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:pebble",
+			"count": 4
+		}
+	}
+}

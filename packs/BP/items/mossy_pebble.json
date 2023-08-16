@@ -1,0 +1,41 @@
+{
+	"format_version": "1.19.80",
+	"minecraft:item": {
+		"description": {
+			"identifier": "extrabiomes:mossy_pebble",
+			"category": "construction"
+		},
+		"components": {
+			"minecraft:icon": {
+				"texture": "mossy_pebble"
+			},
+			"minecraft:block_placer": {
+				"block": "extrabiomes:small_mossy_pebble"
+			},
+			"minecraft:creative_category": {
+				"parent": "itemGroup.name.stone"
+			},
+			"minecraft:on_use": {
+                "on_use": {
+                    "event": "yeet"
+                }
+            }
+		},
+		"events": {
+            "yeet": {
+                "shoot": {
+                    "projectile": "extrabiomes:mossy_pebble_projectile",
+                    "launch_power": 2,
+                    "angle_offset": 20
+                },
+                "swing": {},
+                "decrement_stack": {},
+                "run_command": {
+                    "command": [
+                        "playsound mob.witch.throw"
+                    ]
+                }
+            }
+		}
+	}
+}
