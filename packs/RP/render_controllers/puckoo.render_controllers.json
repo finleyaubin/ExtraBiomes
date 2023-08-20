@@ -47,6 +47,17 @@
 			"textures": [
 				"Array.koi[q.variant]"
 			]
+		},
+		"controller.render.puckoo.saddled": {
+			"geometry": "geometry.default",
+			"materials": [
+				{
+					"*": "material.default"
+				}
+			],
+			"textures": [
+				"Texture.saddled"
+			]
 		}
 	}
 }

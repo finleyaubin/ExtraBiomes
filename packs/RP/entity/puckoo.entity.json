@@ -15,7 +15,8 @@
 				"koi_0": "textures/entity/puckoo/Koi0",
 				"koi_1": "textures/entity/puckoo/Koi1",
 				"koi_2": "textures/entity/puckoo/Koi2",
-				"koi_3": "textures/entity/puckoo/Koi3"
+				"koi_3": "textures/entity/puckoo/Koi3",
+				"saddled": "textures/entity/puckoo/saddle"
 			},
 			"geometry": {
 				"default": "geometry.puckoo"
@@ -43,6 +44,7 @@
 				"setup": "animation.puckoo.setup"
 			},
 			"render_controllers": [
+				{"controller.render.puckoo.saddled":"q.is_saddled"},
 				"controller.render.puckoo.koi",
 				"controller.render.puckoo.base"
 			],

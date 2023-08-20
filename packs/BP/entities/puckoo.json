@@ -48,32 +48,9 @@
         "minecraft:loot": {
           "table": "loot_tables/entities/chicken.json"
         },
-        "minecraft:breedable": {
-          "require_tame": false,
-          "breeds_with": {
-            "mate_type": "extrabiomes:puckoo",
-            "baby_type": "extrabiomes:puckoo",
-            "breed_event": {
-              "event": "minecraft:entity_born",
-              "target": "baby"
-            }
-          },
-          "breed_items": [
-            "extrabiomes:mossy_pebble"
-          ]
-        },
         "minecraft:behavior.breed": {
           "priority": 3,
           "speed_multiplier": 1.0
-        },
-        "minecraft:rideable": {
-          "seat_count": 1,
-          "family_types": [
-            "player"
-          ],
-          "seats": {
-            "position": [0, 0.5, -0.1]
-          }
         }
       },
       "extrabiomes:puckoo_calm": {
@@ -109,6 +86,125 @@
         },
         "minecraft:movement": {
           "value": 0
+        }
+      },
+      "extrabiomes:puckoo_wild": {
+        "minecraft:rideable": {
+          "seat_count": 1,
+          "family_types": [
+            "player",
+            "zombie"
+          ],
+          "interact_text": "action.interact.mount",
+          "seats": {
+            "position": [0, 0.5, -0.1]
+          }
+
+        },
+        "minecraft:behavior.mount_pathing": {
+          "priority": 2,
+          "speed_multiplier": 1.5,
+          "target_dist": 0.0,
+          "track_target": true
+        },
+        "minecraft:tamemount": {
+          "min_temper": 0,
+          "max_temper": 100,
+          "feed_text": "action.interact.feed",
+          "ride_text": "action.interact.mount",
+          "feed_items": [
+            {
+              "item": "extrabiomes:mossy_pebble",
+              "temper_mod": 4
+            }
+          ],
+          "auto_reject_items": [
+            {
+              "item": "saddle"
+            }
+          ],
+          "tame_event": {
+            "event": "minecraft:on_tame",
+            "target": "self"
+          }
+        }
+      },
+      "extrabiomes:puckoo_tamed": {
+        "minecraft:is_tamed": {
+        },
+        "minecraft:rideable": {
+          "seat_count": 1,
+          "crouching_skip_interact": true,
+          "family_types": [
+            "player"
+          ],
+          "interact_text": "Ride Puckoo",//add to lang file later 
+          "seats": {
+            "position": [ 0, 0.5, -0.1]
+          }
+
+        },
+        "minecraft:interact": {
+          "interactions": [
+            {
+              "play_sounds": "saddle",
+              "on_interact": {
+                "filters": {
+                  "all_of": [
+                    { "test": "has_equipment", "subject": "self", "domain": "inventory", "operator": "not", "value": "saddle" },
+                    { "test": "has_equipment", "subject": "other", "domain": "hand", "value": "saddle" },
+                    { "test": "is_family", "subject": "other", "value": "player" },
+                    { "test": "is_sneak_held", "subject": "other", "value": false }
+                  ]
+                },
+                "target": "self"
+              },
+              "equip_item_slot": 0,
+              "interact_text": "action.interact.saddle"
+            }
+          ]
+        },
+        "minecraft:inventory": {
+          "inventory_size": 1,
+          "container_type": "horse"
+        },
+        "minecraft:breedable": {
+          "parent_centric_attribute_blending": [//todo work on movement atributes 
+            "minecraft:movement",
+            "minecraft:horse_jump_strength"
+          ],
+          "require_tame": true,
+          "inherit_tamed": false,
+          "breeds_with": [
+            {
+              "mate_type": "extrabiomes:puckoo",
+              "baby_type": "extrabiomes:puckoo",
+              "breed_event": {
+                "event": "minecraft:entity_born",
+                "target": "baby"
+              }
+            }
+          ],
+          "breed_items": [
+            "extrabiomes:mossy_pebble"
+          ],
+          "mutation_factor": {
+            "extra_variant": 0.2, // 1/5
+            "variant": 0.111 // ~1/9
+          },
+          "mutation_strategy": "random",
+          "random_variant_mutation_interval": [0, 7],
+          "random_extra_variant_mutation_interval": [0, 5]
+        }
+      },
+      "extrabiomes:puckoo_saddled": {
+        "minecraft:is_saddled": {
+        },
+        "minecraft:input_ground_controlled": {
+        },
+        "minecraft:behavior.player_ride_tamed": {
+        },
+        "minecraft:can_power_jump":{
         }
       },
       "extrabiomes:skin_0": {
@@ -156,8 +252,24 @@
     "components": {
       "minecraft:is_hidden_when_invisible": {
       },
+
       "minecraft:type_family": {
         "family": [ "puckoo", "fish", "chicken", "mob" ]
+      },
+      "minecraft:equippable": {
+        "slots": [
+          {
+            "slot": 0,
+            "item": "saddle",
+            "accepted_items": [ "saddle" ],
+            "on_equip": {
+              "event": "extrabiomes:puckoo_saddled"
+            },
+            "on_unequip": {
+              "event": "extrabiomes:puckoo_unsaddled"
+            }
+          }
+        ]
       },
       "minecraft:breathable": {
         "total_supply": 60,
@@ -186,7 +298,16 @@
         "priority": 3
       },
       "minecraft:movement": {
-        "value": 0.25
+        "value": {
+          "range_min": 0.25,
+          "range_max": 0.45
+        }
+      },
+      "minecraft:horse.jump_strength": {
+        "value": {
+          "range_min": 0.35,
+          "range_max": 0.45
+        }
       },
       "minecraft:damage_sensor": {
         "triggers": {
@@ -440,7 +561,8 @@
         },
         "add": {
           "component_groups": [
-            "extrabiomes:puckoo_adult"
+            "extrabiomes:puckoo_adult",
+            "extrabiomes:puckoo_wild"
           ]
         }
       },
@@ -448,7 +570,34 @@
       "minecraft:spawn_adult": {
         "add": {
           "component_groups": [
-            "extrabiomes:puckoo_adult"
+            "extrabiomes:puckoo_adult",
+            "extrabiomes:puckoo_wild"
+          ]
+        }
+      },
+      "minecraft:on_tame": {
+        "remove": {
+          "component_groups": [
+            "extrabiomes:puckoo_wild"
+          ]
+        },
+        "add": {
+          "component_groups": [
+            "extrabiomes:puckoo_tamed"
+          ]
+        }
+      },
+      "extrabiomes:puckoo_saddled": {
+        "add": {
+          "component_groups": [
+            "extrabiomes:puckoo_saddled"
+          ]
+        }
+      },
+      "extrabiomes:puckoo_unsaddled": {
+        "remove": {
+          "component_groups": [
+            "extrabiomes:puckoo_saddled"
           ]
         }
       },
