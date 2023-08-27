@@ -1,6 +1,6 @@
 {
-	"num_mip_levels": 0,
-	"padding": 0,
+	"num_mip_levels": 8,
+	"padding": 4,
 	"resource_pack_name": "Extra Biomes",
 	"texture_name": "atlas.terrain",
 	"texture_data": {

@@ -4,7 +4,7 @@
         "description": "the resource pack for extra biomes\nby Win Epic Fin",
         "name": "Extra biomes [RP]",
         "uuid": "4313ba2a-7cef-4fc6-a6e6-66022d8c8beb",
-        "version": [1,0,4],
+        "version": [2,0,0],
         "min_engine_version": [
             1,
             16,
@@ -17,26 +17,10 @@
             "type": "resources",
             "uuid": "2c9251d0-c2b1-47e6-825a-31e1ab99c1a4",
             "version": [
-                1,
+                2,
                 0,
-                6
+                0
             ]
         }
-    ],
-    "capabilities": [
-        "raytraced"
-    ],
-    "subpacks": [
-		{
-			"folder_name": "RTX on",
-			"name": "RTX - on",
-			"memory_tier": 1
-		},
-		{
-			"folder_name": "RTX off",
-			"name": "RTX - off",
-			"memory_tier": 1
-		}
     ]
-
 }
