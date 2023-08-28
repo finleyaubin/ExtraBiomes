@@ -31,7 +31,7 @@
 				"generate_for_climates": [
 					[
 						"medium",
-						3000
+						3
 					]
 				],
 				"mutate_transformation": "the_netherlands_mutated",
