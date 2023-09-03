@@ -1,0 +1,11 @@
+{
+	"description": "Automatically creates the `texture_list.json` file, based on the images you've added into your resource pack.",
+	"filters": [
+		{
+			"name": "Generating texture_list.json",
+			"runWith": "python",
+			"script": "./texture_list.py"
+		}
+	],
+	"version": "1.1.2"
+}
