@@ -10,7 +10,8 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, ExtraBiomes.MOD_ID);
-    public  static final RegistryObject<Item> pebble = ITEMS.register("Pebble",()-> new Item(new Item.Properties()));
+    public  static final RegistryObject<Item> pebble = ITEMS.register("pebble",()-> new Item(new Item.Properties()));
+    public  static final RegistryObject<Item> mossy_pebble = ITEMS.register("mossy_pebble",()-> new Item(new Item.Properties()));
     public static void  register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }
