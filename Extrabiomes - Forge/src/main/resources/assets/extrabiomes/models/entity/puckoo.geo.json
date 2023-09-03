@@ -1,0 +1,131 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.puckoo",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "Body",
+					"pivot": [0, 8.5, -1],
+					"cubes": [
+						{"origin": [-3.5, 6.25, -6], "size": [7, 5, 10], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "leg0",
+					"parent": "Body",
+					"pivot": [2, 6, -1],
+					"cubes": [
+						{"origin": [0.5, 0.25, -3], "size": [3, 5, 3], "uv": [32, 13]},
+						{"origin": [0.49, 4.25, -2], "size": [3, 3, 3], "uv": [32, 32]}
+					]
+				},
+				{
+					"name": "leg1",
+					"parent": "Body",
+					"pivot": [-2, 6, -1],
+					"cubes": [
+						{"origin": [-3.49, 4.25, -2], "size": [3, 3, 3], "uv": [27, 26]},
+						{"origin": [-3.5, 0.25, -3], "size": [3, 5, 3], "uv": [25, 0]}
+					]
+				},
+				{
+					"name": "Tail",
+					"parent": "Body",
+					"pivot": [0, 10, 4],
+					"cubes": [
+						{"origin": [0, 9.25, 3], "size": [0, 5, 5], "uv": [21, 27]}
+					]
+				},
+				{
+					"name": "wing0",
+					"parent": "Body",
+					"pivot": [3, 9.5, -3],
+					"cubes": [
+						{"origin": [3.5, 7.75, -4], "size": [0, 3, 4], "pivot": [3, 11.75, -4], "rotation": [-5, 5, -2.5], "uv": [0, 32]}
+					]
+				},
+				{
+					"name": "wing1",
+					"parent": "Body",
+					"pivot": [-4, 9.5, -3],
+					"cubes": [
+						{"origin": [-3.5, 7.75, -4], "size": [0, 3, 4], "pivot": [-4, 11.75, -4], "rotation": [-5, -5, 2.5], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Saddle",
+					"parent": "Body",
+					"pivot": [0, 8.5, -1],
+					"cubes": [
+						{"origin": [-3.5, 6.25, -6], "size": [7, 5, 10], "inflate": 0.101, "uv": [30, 49]}
+					]
+				},
+				{
+					"name": "kneck",
+					"pivot": [0, 11, -6],
+					"cubes": [
+						{"origin": [-1.5, 9.75, -8.25], "size": [3, 3, 4], "pivot": [0, 11.25, -6], "rotation": [-42.5, 0, 0], "uv": [0, 24]}
+					]
+				},
+				{
+					"name": "head",
+					"parent": "kneck",
+					"pivot": [0, 11, -6],
+					"cubes": [
+						{"origin": [-2.25, 11.25, -8], "size": [4.5, 4, 2], "uv": [41, 43]},
+						{"origin": [-0.25, 13.25, -9], "size": [0, 5, 5], "uv": [10, 27]}
+					]
+				},
+				{
+					"name": "upperjaw",
+					"parent": "head",
+					"pivot": [0, 13, -8],
+					"cubes": [
+						{"origin": [-2.25, 13.25, -11], "size": [4.5, 2, 3], "uv": [4, 43]}
+					]
+				},
+				{
+					"name": "Lowerjaw",
+					"parent": "head",
+					"pivot": [0, 13, -8],
+					"cubes": [
+						{"origin": [-2.25, 11.25, -11], "size": [4.5, 2, 3], "uv": [26, 43]}
+					]
+				},
+				{
+					"name": "mossy_pebble",
+					"parent": "Lowerjaw",
+					"pivot": [-0.5, 12.75, -8],
+					"cubes": [
+						{"origin": [-1.5, 12.25, -11], "size": [3, 1, 4], "uv": [50, 16]}
+					]
+				},
+				{
+					"name": "Pebble",
+					"parent": "Lowerjaw",
+					"pivot": [0, 12.75, -8],
+					"cubes": [
+						{"origin": [-1.5, 12.25, -11], "size": [3, 1, 4], "uv": [50, 5]}
+					]
+				},
+				{
+					"name": "whiskers",
+					"parent": "Lowerjaw",
+					"pivot": [0, 13, -8],
+					"cubes": [
+						{"origin": [2.26, 8.25, -9], "size": [0, 4, 2], "uv": [1, 53]},
+						{"origin": [-2.26, 8.25, -9], "size": [0, 4, 2], "uv": [1, 53]}
+					]
+				}
+			]
+		}
+	]
+}
