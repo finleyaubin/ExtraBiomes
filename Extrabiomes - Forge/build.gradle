@@ -1,3 +1,11 @@
+
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+    }
+    dependencies {
+    }
+}
 plugins {
     id 'eclipse'
     id 'idea'
