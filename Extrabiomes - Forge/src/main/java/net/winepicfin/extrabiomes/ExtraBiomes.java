@@ -1,8 +1,7 @@
 package net.winepicfin.extrabiomes;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -14,9 +13,13 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.winepicfin.extrabiomes.biomes.Region1;
+import net.winepicfin.extrabiomes.biomes.Region2;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
+import terrablender.api.Regions;
+import terrablender.api.SurfaceRuleManager;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -39,13 +42,21 @@ public class ExtraBiomes
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+        event.enqueueWork(() ->
+        {
+            // Weights are kept intentionally low as we add minimal biomes
+           // Regions.register(new Region1(new ResourceLocation(MOD_ID, "overworld_1"), 2));
+           // Regions.register(new Region2(new ResourceLocation(MOD_ID, "overworld_2"), 2));
+
+            // Register our surface rules
+            //SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, TestSurfaceRuleData.makeRules());
+        });
     }
 
 
