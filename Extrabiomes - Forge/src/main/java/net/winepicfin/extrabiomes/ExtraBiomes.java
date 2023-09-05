@@ -13,13 +13,13 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.winepicfin.extrabiomes.biomes.Region1;
-import net.winepicfin.extrabiomes.biomes.Region2;
+//import net.winepicfin.extrabiomes.biomes.Region1;
+//import net.winepicfin.extrabiomes.biomes.Region2;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
-import terrablender.api.Regions;
-import terrablender.api.SurfaceRuleManager;
+//import terrablender.api.Regions;
+//import terrablender.api.SurfaceRuleManager;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
