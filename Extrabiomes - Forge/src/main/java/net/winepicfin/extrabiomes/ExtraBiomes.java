@@ -13,13 +13,13 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-//import net.winepicfin.extrabiomes.biomes.Region1;
-//import net.winepicfin.extrabiomes.biomes.Region2;
+import net.winepicfin.extrabiomes.biomes.Charred_forest;
+import net.winepicfin.extrabiomes.biomes.Cold_mesa;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
-//import terrablender.api.Regions;
-//import terrablender.api.SurfaceRuleManager;
+import terrablender.api.Regions;
+import terrablender.api.SurfaceRuleManager;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -51,11 +51,11 @@ public class ExtraBiomes
         event.enqueueWork(() ->
         {
             // Weights are kept intentionally low as we add minimal biomes
-           // Regions.register(new Region1(new ResourceLocation(MOD_ID, "overworld_1"), 2));
-           // Regions.register(new Region2(new ResourceLocation(MOD_ID, "overworld_2"), 2));
+           Regions.register(new Charred_forest(new ResourceLocation(MOD_ID, "overworld_1"), 2));
+           Regions.register(new Cold_mesa(new ResourceLocation(MOD_ID, "overworld_2"), 2));
 
             // Register our surface rules
-            //SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, TestSurfaceRuleData.makeRules());
+            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, TestSurfaceRuleData.makeRules());
         });
     }
 

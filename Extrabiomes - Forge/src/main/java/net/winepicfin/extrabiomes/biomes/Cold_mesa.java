@@ -13,8 +13,9 @@ import terrablender.api.VanillaParameterOverlayBuilder;
 import java.util.function.Consumer;
 
 import static terrablender.api.ParameterUtils.*;
-public class Region1 extends Region{
-    public Region1(ResourceLocation name, int weight)
+
+public class Cold_mesa extends Region{
+    public Cold_mesa(ResourceLocation name, int weight)
     {
         super(name, RegionType.OVERWORLD, weight);
     }
@@ -26,13 +27,13 @@ public class Region1 extends Region{
         // Overlap Vanilla's parameters with our own for our COLD_BLUE biome.
         // The parameters for this biome are chosen arbitrarily.
         new ParameterPointListBuilder()
-                .temperature(Temperature.span(Temperature.COOL, Temperature.FROZEN))
+                .temperature(Temperature.HOT)
                 .humidity(Humidity.span(Humidity.ARID, Humidity.DRY))
-                .continentalness(Continentalness.INLAND)
+                .continentalness(Continentalness.span(Continentalness.MID_INLAND,Continentalness.FAR_INLAND))
                 .erosion(Erosion.EROSION_0, Erosion.EROSION_1)
                 .depth(Depth.SURFACE, Depth.FLOOR)
-                .weirdness(Weirdness.MID_SLICE_NORMAL_ASCENDING, Weirdness.MID_SLICE_NORMAL_DESCENDING)
-                .build().forEach(point -> builder.add(point, ModBiomes.COLD_BLUE));
+                .weirdness(Weirdness.LOW_SLICE_NORMAL_DESCENDING)
+                .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA));
 
         // Add our points to the mapper
         builder.build().forEach(mapper::accept);

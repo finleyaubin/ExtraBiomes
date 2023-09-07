@@ -3,14 +3,15 @@ package net.winepicfin.extrabiomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.SurfaceSystem;
 import net.winepicfin.extrabiomes.biomes.ModBiomes;
 
 public class TestSurfaceRuleData
 {
     private static final SurfaceRules.RuleSource DIRT = makeStateRule(Blocks.DIRT);
     private static final SurfaceRules.RuleSource GRASS_BLOCK = makeStateRule(Blocks.GRASS_BLOCK);
-    private static final SurfaceRules.RuleSource RED_TERRACOTTA = makeStateRule(Blocks.RED_TERRACOTTA);
-    private static final SurfaceRules.RuleSource BLUE_TERRACOTTA = makeStateRule(Blocks.BLUE_TERRACOTTA);
+    private static final SurfaceRules.RuleSource RED_TERRACOTTA = makeStateRule(Blocks.COARSE_DIRT);
+
 
     protected static SurfaceRules.RuleSource makeRules()
     {
@@ -18,8 +19,9 @@ public class TestSurfaceRuleData
         SurfaceRules.RuleSource grassSurface = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrAboveWaterLevel, GRASS_BLOCK), DIRT);
 
         return SurfaceRules.sequence(
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.HOT_RED), RED_TERRACOTTA),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_BLUE), BLUE_TERRACOTTA),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.CHARRED_FOREST), RED_TERRACOTTA),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA), SurfaceRules.bandlands()),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_ERODED_MESA), SurfaceRules.bandlands()),
 
                 // Default to a grass and dirt surface
                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface)

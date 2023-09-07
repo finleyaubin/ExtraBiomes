@@ -13,9 +13,8 @@ import terrablender.api.VanillaParameterOverlayBuilder;
 import java.util.function.Consumer;
 
 import static terrablender.api.ParameterUtils.*;
-
-public class Region2 extends Region{
-    public Region2(ResourceLocation name, int weight)
+public class Charred_forest extends Region{
+    public Charred_forest(ResourceLocation name, int weight)
     {
         super(name, RegionType.OVERWORLD, weight);
     }
@@ -33,7 +32,7 @@ public class Region2 extends Region{
                 .erosion(Erosion.EROSION_0, Erosion.EROSION_1)
                 .depth(Depth.SURFACE, Depth.FLOOR)
                 .weirdness(Weirdness.MID_SLICE_NORMAL_ASCENDING, Weirdness.MID_SLICE_NORMAL_DESCENDING)
-                .build().forEach(point -> builder.add(point, ModBiomes.HOT_RED));
+                .build().forEach(point -> builder.add(point, ModBiomes.CHARRED_FOREST));
 
         // Add our points to the mapper
         builder.build().forEach(mapper::accept);

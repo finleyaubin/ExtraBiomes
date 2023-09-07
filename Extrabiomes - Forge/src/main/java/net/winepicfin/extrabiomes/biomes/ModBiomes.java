@@ -9,8 +9,9 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 
 public class ModBiomes
 {
-    public static final ResourceKey<Biome> HOT_RED = register("hot_red");
-    public static final ResourceKey<Biome> COLD_BLUE = register("cold_blue");
+    public static final ResourceKey<Biome> CHARRED_FOREST = register("charred_forest");
+    public static final ResourceKey<Biome> COLD_MESA = register("cold_mesa");
+    public static final ResourceKey<Biome> COLD_ERODED_MESA = register("cold_eroded_mesa");
 
     private static ResourceKey<Biome> register(String name)
     {

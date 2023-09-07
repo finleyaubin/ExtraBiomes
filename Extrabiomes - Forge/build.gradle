@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'org.spongepowered.mixin'
 
-group "test"
+group = 'net.winepicfin.extrabiomes'
 archivesBaseName = "ExtraBiomes"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
