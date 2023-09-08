@@ -38,7 +38,7 @@ public class Cold_mesa extends Region{
                 .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA));
 
         // Add our points to the mapper
-        builder.build().forEach(mapper::accept);
+        builder.build().forEach(mapper);
 
     }
     public static TagKey<Biome> COLD_MESA = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:mesa"));

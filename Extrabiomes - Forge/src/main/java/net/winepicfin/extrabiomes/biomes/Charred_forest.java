@@ -37,7 +37,7 @@ public class Charred_forest extends Region{
                 .build().forEach(point -> builder.add(point, ModBiomes.CHARRED_FOREST));
 
         // Add our points to the mapper
-        builder.build().forEach(mapper::accept);
+        builder.build().forEach(mapper);
     }
     public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:Charred"));
 }
