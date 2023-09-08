@@ -54,6 +54,7 @@ public class ExtraBiomes
            Regions.register(new Charred_forest(new ResourceLocation(MOD_ID, "overworld_1"), 2));
            Regions.register(new Cold_mesa(new ResourceLocation(MOD_ID, "overworld_2"), 2));
 
+
             // Register our surface rules
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, TestSurfaceRuleData.makeRules());
         });

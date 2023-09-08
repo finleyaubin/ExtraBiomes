@@ -2,8 +2,10 @@ package net.winepicfin.extrabiomes.biomes;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import terrablender.api.Region;
@@ -27,7 +29,7 @@ public class Cold_mesa extends Region{
         // Overlap Vanilla's parameters with our own for our COLD_BLUE biome.
         // The parameters for this biome are chosen arbitrarily.
         new ParameterPointListBuilder()
-                .temperature(Temperature.HOT)
+                .temperature(Temperature.span(Temperature.COOL, Temperature.FROZEN))
                 .humidity(Humidity.span(Humidity.ARID, Humidity.DRY))
                 .continentalness(Continentalness.span(Continentalness.MID_INLAND,Continentalness.FAR_INLAND))
                 .erosion(Erosion.EROSION_0, Erosion.EROSION_1)
@@ -37,5 +39,9 @@ public class Cold_mesa extends Region{
 
         // Add our points to the mapper
         builder.build().forEach(mapper::accept);
+
     }
+    public static TagKey<Biome> COLD_MESA = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:mesa"));
+    public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:cold"));
+
 }

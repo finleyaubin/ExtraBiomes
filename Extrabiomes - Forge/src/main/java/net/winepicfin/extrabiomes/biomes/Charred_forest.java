@@ -2,8 +2,10 @@ package net.winepicfin.extrabiomes.biomes;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import terrablender.api.Region;
@@ -37,4 +39,5 @@ public class Charred_forest extends Region{
         // Add our points to the mapper
         builder.build().forEach(mapper::accept);
     }
+    public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:Charred"));
 }
