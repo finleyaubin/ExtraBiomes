@@ -10,8 +10,6 @@ import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 
-import java.rmi.registry.Registry;
-
 public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExtraBiomes.MOD_ID);
     public static final RegistryObject<CreativeModeTab> EXTRABIOMES_TAB = CREATIVE_MODE_TAB.register("extrabiomes_tab",()-> CreativeModeTab.builder().icon(()->new ItemStack(ModItems.mossy_pebble.get()))
@@ -20,6 +18,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModItems.pebble.get());
                 pOutput.accept(ModItems.mossy_pebble.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
+                pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
             })
             .build());
     public static void register(IEventBus eventBus){
