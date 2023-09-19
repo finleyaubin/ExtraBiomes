@@ -17,9 +17,11 @@ public class ModCreativeModeTabs {
             .displayItems((pParameters, pOutput)->{
                 pOutput.accept(ModItems.pebble.get());
                 pOutput.accept(ModItems.mossy_pebble.get());
+                pOutput.accept(ModItems.RAZOR_FEATHER.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
                 pOutput.accept(ModBlocks.NETHER_DIAMOND_ORE.get());
+
             })
             .build());
     public static void register(IEventBus eventBus){
