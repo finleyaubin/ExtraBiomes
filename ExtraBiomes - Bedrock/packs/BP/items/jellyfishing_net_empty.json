@@ -1,5 +1,5 @@
 {
-	"format_version": "1.20.20",
+	"format_version": "1.20.30",
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:jellyfishing_net_empty",
@@ -7,7 +7,7 @@
 		},
 		"components": {
 			"minecraft:max_stack_size": 16,
-			"minecraft:use_animation": "swing",
+			"minecraft:use_animation": {"animation":"swing"},
 			"minecraft:icon": {
 				"texture": "jellyfishing_net_empty"
 			}

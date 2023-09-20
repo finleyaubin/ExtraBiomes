@@ -3,7 +3,8 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:mossy_pebble",
-			"category": "construction"
+			"category": "construction",
+			"menu_category":"itemGroup.name.stone"
 		},
 		"components": {
 			"minecraft:icon": {
@@ -11,9 +12,6 @@
 			},
 			"minecraft:block_placer": {
 				"block": "extrabiomes:small_mossy_pebble"
-			},
-			"minecraft:creative_category": {
-				"parent": "itemGroup.name.stone"
 			},
 			"minecraft:on_use": {
                 "on_use": {

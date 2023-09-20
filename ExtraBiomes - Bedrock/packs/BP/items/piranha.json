@@ -1,14 +1,12 @@
 {
-	"format_version": "1.20.20",
+	"format_version": "1.20.30",
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:piranha",
-			"category": "Nature"
+			"category": "Nature",
+			"menu_category":"itemGroup.name.rawFood"
 		},
 		"components": {
-			"minecraft:creative_category": {
-				"parent": "itemGroup.name.rawFood"
-			},
 			"minecraft:max_stack_size": 64,
 			"minecraft:icon": {
 				"texture": "piranha"
@@ -17,7 +15,7 @@
 			"minecraft:use_duration": 1,
 			"minecraft:food": {
 				"nutrition": 4,
-				"saturation_modifier": "low"
+				"saturation_modifier": 0.3
 			},
 			"is_meat": {}
 		}
