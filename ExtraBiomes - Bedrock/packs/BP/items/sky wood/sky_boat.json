@@ -3,12 +3,12 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:sky_boat",
-			"category": "Items"
+			"menu_category":{
+				"group": "itemGroup.name.boat",
+				"category": "Items"
+			}
 		},
 		"components": {
-			"minecraft:creative_category": {
-				"parent": "itemGroup.name.boat"
-			},
 			"minecraft:max_stack_size": 1,
 			"minecraft:entity_placer": {
 				"dispense_on": [

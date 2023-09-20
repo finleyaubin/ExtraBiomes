@@ -3,8 +3,10 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:frogs_legs",
-			"category": "Nature",
-			"menu_category":"itemGroup.name.rawFood"
+			"menu_category":{
+				"group":"itemGroup.name.rawFood",
+				"category": "Nature"
+			}
 		},
 		"components": {
 			"minecraft:max_stack_size": 64,

@@ -3,12 +3,12 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:palm_sapling",
-			"category": "Nature"
+			"menu_category":{
+				"group": "itemGroup.name.sapling",
+				"category": "Nature"
+			}
 		},
 		"components": {
-			"minecraft:creative_category": {
-				"parent": "itemGroup.name.sapling"
-			},
 			"minecraft:icon": {
 				"texture": "palm_sapling"
 			},

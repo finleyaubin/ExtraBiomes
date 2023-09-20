@@ -3,7 +3,10 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:palm_door",
-			"category": "construction"
+			"menu_category":{
+				"group": "itemGroup.name.door",
+				"category": "construction"
+			}
 		},
 		"components": {
 			"minecraft:icon": {
@@ -11,9 +14,6 @@
 			},
 			"minecraft:block_placer": {
 				"block": "extrabiomes:palm_door_bottom"
-			},
-			"minecraft:creative_category": {
-				"parent": "itemGroup.name.door"
 			},
 			"minecraft:fuel": {
 				"duration": 10

@@ -3,8 +3,10 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:piranha",
-			"category": "Nature",
-			"menu_category":"itemGroup.name.rawFood"
+			"menu_category":{
+				"group": "itemGroup.name.rawFood",
+				"category": "Nature"
+			}
 		},
 		"components": {
 			"minecraft:max_stack_size": 64,

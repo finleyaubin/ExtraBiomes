@@ -3,14 +3,14 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:green_mushroom",
-			"category": "Nature"
+			"menu_category":{
+				"group": "itemGroup.name.mushroom",
+				"category": "Nature"
+			}
 		},
 		"components": {
 			"minecraft:icon": {
 				"texture": "green_mushroom"
-			},
-			"minecraft:creative_category": {
-				"parent": "itemGroup.name.mushroom"
 			},
 			"minecraft:block_placer": {
 				"block": "extrabiomes:green_mushroom_placed",

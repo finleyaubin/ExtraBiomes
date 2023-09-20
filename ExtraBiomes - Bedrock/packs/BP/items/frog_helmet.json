@@ -3,8 +3,10 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:frog_helmet",
-			"category": "Equipment",
-			"menu_category": "itemGroup.name.helmet"
+			"menu_category":{
+				"group":"itemGroup.name.helmet",
+				"category": "Equipment"
+			}
 		},
 		"components": {
 			"minecraft:max_stack_size": 1,

@@ -3,8 +3,10 @@
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:jellyfish_jam_bottle",
-			"category": "Equipment",
-			"menu_category":"itemGroup.name.miscFood"
+			"menu_category":{
+				"group": "itemGroup.name.miscFood",
+				"category": "Equipment"
+			}
 		},
 		"components": {
 			"minecraft:use_duration": 2,
