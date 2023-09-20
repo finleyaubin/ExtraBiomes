@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.SurfaceRules;
@@ -22,7 +23,6 @@ public class TestSurfaceRuleData
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.CHARRED_FOREST), RED_TERRACOTTA),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA), SurfaceRules.bandlands()),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_ERODED_MESA), SurfaceRules.bandlands()),
-
                 // Default to a grass and dirt surface
                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface)
         );

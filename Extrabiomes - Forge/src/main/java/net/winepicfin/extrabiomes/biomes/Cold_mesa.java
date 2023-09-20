@@ -29,19 +29,19 @@ public class Cold_mesa extends Region{
         // Overlap Vanilla's parameters with our own for our COLD_BLUE biome.
         // The parameters for this biome are chosen arbitrarily.
         new ParameterPointListBuilder()
-                .temperature(Temperature.span(Temperature.COOL, Temperature.FROZEN))
-                .humidity(Humidity.span(Humidity.ARID, Humidity.DRY))
-                .continentalness(Continentalness.span(Continentalness.MID_INLAND,Continentalness.FAR_INLAND))
-                .erosion(Erosion.EROSION_0, Erosion.EROSION_1)
-                .depth(Depth.SURFACE, Depth.FLOOR)
-                .weirdness(Weirdness.LOW_SLICE_NORMAL_DESCENDING)
+                .temperature(Temperature.FROZEN)
+                .humidity(Humidity.span(Humidity.DRY, Humidity.WET))
+                .continentalness(Continentalness.span(Continentalness.INLAND,Continentalness.FAR_INLAND))
+                .erosion(Erosion.FULL_RANGE)
+                .depth(Depth.FULL_RANGE)
+                .weirdness(Weirdness.VALLEY)
                 .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA));
 
         // Add our points to the mapper
-        builder.build().forEach(mapper);
+        builder.build().forEach(mapper::accept);
 
     }
-    public static TagKey<Biome> COLD_MESA = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:mesa"));
-    public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:cold"));
+    public static TagKey<Biome> COLD_MESA = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:is_mesa"));
+    public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:is_cold"));
 
 }

@@ -1,5 +1,5 @@
 {
-	"format_version": "1.14.0",
+	"format_version": "1.20.20",
 	"minecraft:weighted_random_feature": {
 		"description": {
 			"identifier": "extrabiomes:underground_jungle/select_moss_or_jungle_tree_feature"

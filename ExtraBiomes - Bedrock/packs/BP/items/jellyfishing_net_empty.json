@@ -1,5 +1,5 @@
 {
-	"format_version": "1.17.100",
+	"format_version": "1.20.20",
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:jellyfishing_net_empty",

@@ -1,5 +1,5 @@
 {
-  "format_version": "1.16.0",
+  "format_version": "1.20.20",
   "minecraft:feature_rules": {
     "description": {
       "identifier": "extrabiomes:mushroom_surface_mycelium_floor_feature",

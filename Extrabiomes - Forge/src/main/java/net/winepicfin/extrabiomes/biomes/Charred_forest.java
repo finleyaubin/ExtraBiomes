@@ -28,7 +28,7 @@ public class Charred_forest extends Region{
         // Overlap Vanilla's parameters with our own for our COLD_BLUE biome.
         // The parameters for this biome are chosen arbitrarily.
         new ParameterPointListBuilder()
-                .temperature(Temperature.span(Temperature.COOL, Temperature.FROZEN))
+                .temperature(Temperature.HOT)
                 .humidity(Humidity.span(Humidity.ARID, Humidity.DRY))
                 .continentalness(Continentalness.INLAND)
                 .erosion(Erosion.EROSION_0, Erosion.EROSION_1)
@@ -37,8 +37,7 @@ public class Charred_forest extends Region{
                 .build().forEach(point -> builder.add(point, ModBiomes.CHARRED_FOREST));
 
         // Add our points to the mapper
-        builder.build().forEach(mapper);
+        builder.build().forEach(mapper::accept);
     }
-
-    public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation("forge:charred"));
+    public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:charred"));
 }

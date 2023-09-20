@@ -4,8 +4,8 @@
         "description": "adds more biomes, mobs, Items and blocks to the game as well as inproving upon some existing biomes",
         "min_engine_version": [
             1,
-            16,
-            0
+            20,
+            30
         ],
         "name": "Extra Biomes[BP]",
         "uuid": "ba061c91-c0c6-47f7-82d4-a29f8b3e2859",
