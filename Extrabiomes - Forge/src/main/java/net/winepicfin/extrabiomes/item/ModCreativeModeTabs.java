@@ -15,9 +15,13 @@ public class ModCreativeModeTabs {
     public static final RegistryObject<CreativeModeTab> EXTRABIOMES_TAB = CREATIVE_MODE_TAB.register("extrabiomes_tab",()-> CreativeModeTab.builder().icon(()->new ItemStack(ModItems.mossy_pebble.get()))
             .title(Component.translatable("creativetab.extrabiomes"))
             .displayItems((pParameters, pOutput)->{
+                //~~~~~~~~~~~~~Items~~~~~~~~~~~~\\
                 pOutput.accept(ModItems.pebble.get());
                 pOutput.accept(ModItems.mossy_pebble.get());
                 pOutput.accept(ModItems.RAZOR_FEATHER.get());
+                pOutput.accept(ModItems.FROGS_LEGS.get());
+                pOutput.accept(ModItems.COOKED_FROGS_LEGS.get());
+                //~~~~~~~~~~~~~Blocks~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
                 pOutput.accept(ModBlocks.NETHER_DIAMOND_ORE.get());

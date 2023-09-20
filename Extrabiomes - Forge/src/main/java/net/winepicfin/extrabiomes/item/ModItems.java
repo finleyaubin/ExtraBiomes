@@ -13,7 +13,10 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, ExtraBiomes.MOD_ID);
     public  static final RegistryObject<Item> pebble = ITEMS.register("pebble",()-> new Item(new Item.Properties()));
     public  static final RegistryObject<Item> mossy_pebble = ITEMS.register("mossy_pebble",()-> new Item(new Item.Properties()));
-public static final RegistryObject<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
+    public static final RegistryObject<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
+    public static final RegistryObject<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS)));
+    public static final RegistryObject<Item> COOKED_FROGS_LEGS = ITEMS.register("cooked_frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.COOKED_FROGS_LEGS)));
+
     public static void  register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }
