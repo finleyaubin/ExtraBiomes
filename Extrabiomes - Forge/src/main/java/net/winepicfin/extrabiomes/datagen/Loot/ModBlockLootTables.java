@@ -22,9 +22,21 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.DENSE_CLOUD.get());
         this.dropSelf(ModBlocks.DENSE_CLOUD_BRICK.get());
 
-
         this.add(ModBlocks.NETHER_DIAMOND_ORE.get(),block -> createOreDrop(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
+
+        //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
+        this.dropSelf(ModBlocks.MYSTIC_PLANKS.get());
+        this.dropSelf(ModBlocks.MYSTIC_STAIRS.get());
+        this.dropSelf(ModBlocks.MYSTIC_BUTTON.get());
+        this.dropSelf(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
+        this.dropSelf(ModBlocks.MYSTIC_TRAPDOOR.get());
+        this.dropSelf(ModBlocks.MYSTIC_FENCE.get());
+        this.dropSelf(ModBlocks.MYSTIC_FENCE_GATE.get());
+
+        this.add(ModBlocks.MYSTIC_SLAB.get(), block -> createSlabItemTable(ModBlocks.MYSTIC_SLAB.get()));
+        this.add(ModBlocks.MYSTIC_DOOR.get(), block -> createDoorTable(ModBlocks.MYSTIC_DOOR.get()));
     }
+
 
     @Override
     protected @NotNull Iterable<Block> getKnownBlocks(){

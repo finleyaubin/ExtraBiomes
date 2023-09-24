@@ -44,7 +44,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.DENSE_CLOUD.get()
         );
 
+        this.tag(Tags.Blocks.FENCES).add(
+                ModBlocks.MYSTIC_FENCE.get()
+        );
 
+        this.tag(Tags.Blocks.FENCE_GATES).add(
+                ModBlocks.MYSTIC_FENCE_GATE.get()
+        );
 
     }
 }

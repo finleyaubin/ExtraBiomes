@@ -25,6 +25,16 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
                 pOutput.accept(ModBlocks.NETHER_DIAMOND_ORE.get());
+                //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~~~\\
+                pOutput.accept(ModBlocks.MYSTIC_PLANKS.get());
+                pOutput.accept(ModBlocks.MYSTIC_STAIRS.get());
+                pOutput.accept(ModBlocks.MYSTIC_SLAB.get());
+                pOutput.accept(ModBlocks.MYSTIC_BUTTON.get());
+                pOutput.accept(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
+                pOutput.accept(ModBlocks.MYSTIC_FENCE.get());
+                pOutput.accept(ModBlocks.MYSTIC_FENCE_GATE.get());
+                pOutput.accept(ModBlocks.MYSTIC_DOOR.get());
+                pOutput.accept(ModBlocks.MYSTIC_TRAPDOOR.get());
 
             })
             .build());

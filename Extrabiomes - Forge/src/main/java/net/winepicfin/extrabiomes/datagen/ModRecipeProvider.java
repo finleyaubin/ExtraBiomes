@@ -25,7 +25,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     @Override
     protected void buildRecipes(RecipeOutput pWriter) {
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
-        foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs");
+        foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs", Boolean.TRUE);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC,ModBlocks.DENSE_CLOUD_BRICK.get())
                 .pattern("&&")
@@ -50,8 +50,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
     }
 
-    protected static void foodCooking(RecipeOutput p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
+    protected static void foodCooking(RecipeOutput p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_, Boolean campfireAndSmoker) {
         oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_cooking");
+        if (campfireAndSmoker){
+            campfireCooking(p_250654_,"campfire_cooking", 600, p_250172_, p_251868_,p_250789_);
+            SmokingCooking(p_250654_,"smoking", 100, p_250172_, p_251868_,p_250789_);
+        }
     }
 
     protected static void oreCooking(RecipeOutput pfinishedRecipeConsumer, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> p_249619_, RecipeCategory p_251154_, ItemLike p_250066_, float p_251871_, int p_251316_, String p_251450_, String pRecipieName) {
@@ -59,8 +63,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), p_251154_, p_250066_, p_251871_, p_251316_, recipeSerializer).group(p_251450_).unlockedBy(getHasName(itemlike), has(itemlike))
                     .save(pfinishedRecipeConsumer, ExtraBiomes.MOD_ID + ":" + getItemName(p_250066_) + pRecipieName + "_" + getItemName(itemlike));
         }
-
     }
 
+    private static void campfireCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
+        for(ItemLike itemlike : ingredient) {
+        SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, p_252138_, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
+        }
+    }
+
+    private static void SmokingCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
+        for(ItemLike itemlike : ingredient) {
+            SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, p_252138_, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
+        }
+    }
 
 }
