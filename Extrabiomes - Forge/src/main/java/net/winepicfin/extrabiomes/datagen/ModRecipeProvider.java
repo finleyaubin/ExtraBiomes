@@ -21,10 +21,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     public ModRecipeProvider(PackOutput packOutput) {
         super(packOutput);
     }
-    public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
-    public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
+
     @Override
-    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> pWriter) {
+    protected void buildRecipes(RecipeOutput pWriter) {
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
         foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs");
 
@@ -34,26 +33,28 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('&', ModBlocks.DENSE_CLOUD.get())
                 .unlockedBy(getHasName(ModBlocks.DENSE_CLOUD.get()), has(ModBlocks.DENSE_CLOUD.get()))
                 .save(pWriter);
-
-
     }
 
-    protected static void oreSmelting(Consumer<FinishedRecipe> p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
+    public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
+    public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
+
+
+    protected static void oreSmelting(RecipeOutput p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
         oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_smelting");
     }
 
-    protected static void oreBlasting(Consumer<FinishedRecipe> p_248775_, List<ItemLike> p_251504_, RecipeCategory p_248846_, ItemLike p_249735_, float p_248783_, int p_250303_, String p_251984_, Boolean createSmelting) {
+    protected static void oreBlasting(RecipeOutput p_248775_, List<ItemLike> p_251504_, RecipeCategory p_248846_, ItemLike p_249735_, float p_248783_, int p_250303_, String p_251984_, Boolean createSmelting) {
         oreCooking(p_248775_, RecipeSerializer.BLASTING_RECIPE, p_251504_, p_248846_, p_249735_, p_248783_, p_250303_, p_251984_, "_from_blasting");
         if (createSmelting){
             oreSmelting(p_248775_, p_251504_, p_248846_, p_249735_, p_248783_, p_250303_*2, p_251984_);
         }
     }
 
-    protected static void foodCooking(Consumer<FinishedRecipe> p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
+    protected static void foodCooking(RecipeOutput p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
         oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_cooking");
     }
 
-    protected static void oreCooking(Consumer<FinishedRecipe> pfinishedRecipeConsumer, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> p_249619_, RecipeCategory p_251154_, ItemLike p_250066_, float p_251871_, int p_251316_, String p_251450_, String pRecipieName) {
+    protected static void oreCooking(RecipeOutput pfinishedRecipeConsumer, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> p_249619_, RecipeCategory p_251154_, ItemLike p_250066_, float p_251871_, int p_251316_, String p_251450_, String pRecipieName) {
         for(ItemLike itemlike : p_249619_) {
             SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), p_251154_, p_250066_, p_251871_, p_251316_, recipeSerializer).group(p_251450_).unlockedBy(getHasName(itemlike), has(itemlike))
                     .save(pfinishedRecipeConsumer, ExtraBiomes.MOD_ID + ":" + getItemName(p_250066_) + pRecipieName + "_" + getItemName(itemlike));
