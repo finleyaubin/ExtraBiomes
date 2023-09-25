@@ -6,6 +6,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.common.Mod;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.util.ModTags;
@@ -37,18 +38,30 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.NETHER_DIAMOND_ORE.get()
         );
 
-        this.tag(BlockTags.MINEABLE_WITH_AXE);
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(
+                ModBlocks.MYSTIC_PLANKS.get(),
+                ModBlocks.MYSTIC_STAIRS.get(),
+                ModBlocks.MYSTIC_SLAB.get(),
+                ModBlocks.MYSTIC_BUTTON.get(),
+                ModBlocks.MYSTIC_BUTTON.get(),
+                ModBlocks.MYSTIC_PRESSURE_PLATE.get(),
+                ModBlocks.MYSTIC_FENCE.get(),
+                ModBlocks.MYSTIC_FENCE_GATE.get(),
+                ModBlocks.MYSTIC_DOOR.get(),
+                ModBlocks.MYSTIC_TRAPDOOR.get()
+
+        );
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL);
         this.tag(BlockTags.MINEABLE_WITH_HOE);
         this.tag(Tags.Blocks.NEEDS_WOOD_TOOL).add(
                 ModBlocks.DENSE_CLOUD.get()
         );
 
-        this.tag(Tags.Blocks.FENCES).add(
+        this.tag(BlockTags.FENCES).add(
                 ModBlocks.MYSTIC_FENCE.get()
         );
 
-        this.tag(Tags.Blocks.FENCE_GATES).add(
+        this.tag(BlockTags.FENCE_GATES).add(
                 ModBlocks.MYSTIC_FENCE_GATE.get()
         );
 

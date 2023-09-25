@@ -29,8 +29,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);
         fenceItem(ModBlocks.MYSTIC_FENCE, ModBlocks.MYSTIC_PLANKS);
-        fenceItem(ModBlocks.MYSTIC_BUTTON, ModBlocks.MYSTIC_PLANKS);
-        fenceItem(ModBlocks.MYSTIC_TRAPDOOR, ModBlocks.MYSTIC_PLANKS);
+        buttonItem(ModBlocks.MYSTIC_BUTTON, ModBlocks.MYSTIC_PLANKS);
+        trapdoorItem(ModBlocks.MYSTIC_TRAPDOOR);
+        evenSimplerBlockItem(ModBlocks.MYSTIC_STAIRS);
+        evenSimplerBlockItem(ModBlocks.MYSTIC_SLAB);
+        evenSimplerBlockItem(ModBlocks.MYSTIC_PRESSURE_PLATE);
+        evenSimplerBlockItem(ModBlocks.MYSTIC_FENCE_GATE);
 
 
     }
