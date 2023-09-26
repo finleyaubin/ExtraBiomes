@@ -24,6 +24,10 @@ public class ModBlocks {
    public static final RegistryObject<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore",()-> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops(), UniformInt.of(3,7)));
 //~~~~~~~~~mystic wood~~~~~~~~\\
    public static final RegistryObject<Block> MYSTIC_PLANKS = registerBlock("mystic_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
+   public static final RegistryObject<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
+   public static final RegistryObject<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
+   public static final RegistryObject<Block> STRIPED_MYSTIC_LOG = registerBlock("striped_mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
+   public static final RegistryObject<Block> STRIPED_MYSTIC_WOOD = registerBlock("striped_mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
    public static final RegistryObject<Block> MYSTIC_STAIRS = registerBlock("mystic_stairs", () -> new StairBlock(()-> ModBlocks.MYSTIC_PLANKS.get().defaultBlockState(),BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
    public static final RegistryObject<Block> MYSTIC_SLAB = registerBlock("mystic_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
    public static final RegistryObject<Block> MYSTIC_BUTTON = registerBlock("mystic_button", () -> new ButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON), BlockSetType.OAK, 10, true));
