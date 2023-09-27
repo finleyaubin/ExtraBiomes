@@ -35,6 +35,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.MYSTIC_SLAB);
         evenSimplerBlockItem(ModBlocks.MYSTIC_PRESSURE_PLATE);
         evenSimplerBlockItem(ModBlocks.MYSTIC_FENCE_GATE);
+        saplingItem(ModBlocks.MYSTIC_SAPLING);
+
 
 
     }
@@ -68,5 +70,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         return withExistingParent(item.getId().getPath(),
                 new ResourceLocation("item/generated")).texture("layer0",
                 new ResourceLocation(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+    }
+
+    private ItemModelBuilder saplingItem(RegistryObject<Block> item) {
+        return withExistingParent(item.getId().getPath(),
+                new ResourceLocation("item/generated")).texture("layer0",
+                new ResourceLocation(ExtraBiomes.MOD_ID,"block/" + item.getId().getPath()));
     }
 }

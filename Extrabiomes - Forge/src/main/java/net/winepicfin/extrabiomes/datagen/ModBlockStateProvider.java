@@ -4,10 +4,14 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import org.apache.commons.compress.compressors.lz77support.LZ77Compressor;
+
+import java.util.Objects;
 
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(PackOutput output, ExistingFileHelper existingFileHelper){
@@ -21,6 +25,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.DENSE_CLOUD);
 
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPED_MYSTIC_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.MYSTIC_WOOD.get()), blockTexture(ModBlocks.MYSTIC_LOG.get()),blockTexture(ModBlocks.MYSTIC_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPED_MYSTIC_WOOD.get()), blockTexture(ModBlocks.STRIPED_MYSTIC_LOG.get()),blockTexture(ModBlocks.STRIPED_MYSTIC_LOG.get()));
+        blockWithItem(ModBlocks.MYSTIC_LEAVES);
+        saplingBlock(ModBlocks.MYSTIC_SAPLING);
+        simpleBlockItem(ModBlocks.MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:mystic_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:mystic_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPED_MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:striped_mystic_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPED_MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:striped_mystic_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.MYSTIC_STAIRS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         slabBlock(((SlabBlock) ModBlocks.MYSTIC_SLAB.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.MYSTIC_BUTTON.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
@@ -32,5 +46,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
     private void blockWithItem(RegistryObject<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));
+    }
+
+    private void saplingBlock(RegistryObject<Block> blockRegistryObject){
+        simpleBlock(blockRegistryObject.get(),models().cross(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get())).getPath(),blockTexture(blockRegistryObject.get())).renderType("cutout"));
     }
 }

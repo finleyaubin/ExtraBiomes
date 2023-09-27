@@ -35,6 +35,12 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.MYSTIC_FENCE_GATE.get());
                 pOutput.accept(ModBlocks.MYSTIC_DOOR.get());
                 pOutput.accept(ModBlocks.MYSTIC_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.MYSTIC_LOG.get());
+                pOutput.accept(ModBlocks.MYSTIC_WOOD.get());
+                pOutput.accept(ModBlocks.STRIPED_MYSTIC_LOG.get());
+                pOutput.accept(ModBlocks.STRIPED_MYSTIC_WOOD.get());
+                pOutput.accept(ModBlocks.MYSTIC_SAPLING.get());
+                pOutput.accept(ModBlocks.MYSTIC_LEAVES.get());
 
             })
             .build());

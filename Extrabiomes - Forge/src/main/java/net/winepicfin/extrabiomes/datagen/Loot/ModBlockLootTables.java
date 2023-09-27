@@ -26,15 +26,20 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         this.dropSelf(ModBlocks.MYSTIC_PLANKS.get());
+        this.dropSelf(ModBlocks.MYSTIC_LOG.get());
+        this.dropSelf(ModBlocks.MYSTIC_WOOD.get());
+        this.dropSelf(ModBlocks.STRIPED_MYSTIC_LOG.get());
+        this.dropSelf(ModBlocks.STRIPED_MYSTIC_WOOD.get());
         this.dropSelf(ModBlocks.MYSTIC_STAIRS.get());
         this.dropSelf(ModBlocks.MYSTIC_BUTTON.get());
         this.dropSelf(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
         this.dropSelf(ModBlocks.MYSTIC_TRAPDOOR.get());
         this.dropSelf(ModBlocks.MYSTIC_FENCE.get());
         this.dropSelf(ModBlocks.MYSTIC_FENCE_GATE.get());
-
         this.add(ModBlocks.MYSTIC_SLAB.get(), block -> createSlabItemTable(ModBlocks.MYSTIC_SLAB.get()));
         this.add(ModBlocks.MYSTIC_DOOR.get(), block -> createDoorTable(ModBlocks.MYSTIC_DOOR.get()));
+        this.dropSelf(ModBlocks.MYSTIC_SAPLING.get());
+        this.add(ModBlocks.MYSTIC_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.MYSTIC_LEAVES.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
     }
 
 

@@ -1,11 +1,15 @@
 package net.winepicfin.extrabiomes.block;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -13,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.item.ModItems;
+import net.winepicfin.extrabiomes.worldgen.tree.MysticTreeGrower;
 
 import java.util.function.Supplier;
 
@@ -23,19 +28,203 @@ public class ModBlocks {
    public static final RegistryObject<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(0.5f)));
    public static final RegistryObject<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore",()-> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops(), UniformInt.of(3,7)));
 //~~~~~~~~~mystic wood~~~~~~~~\\
-   public static final RegistryObject<Block> MYSTIC_PLANKS = registerBlock("mystic_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-   public static final RegistryObject<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
-   public static final RegistryObject<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
-   public static final RegistryObject<Block> STRIPED_MYSTIC_LOG = registerBlock("striped_mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
-   public static final RegistryObject<Block> STRIPED_MYSTIC_WOOD = registerBlock("striped_mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
-   public static final RegistryObject<Block> MYSTIC_STAIRS = registerBlock("mystic_stairs", () -> new StairBlock(()-> ModBlocks.MYSTIC_PLANKS.get().defaultBlockState(),BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-   public static final RegistryObject<Block> MYSTIC_SLAB = registerBlock("mystic_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-   public static final RegistryObject<Block> MYSTIC_BUTTON = registerBlock("mystic_button", () -> new ButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON), BlockSetType.OAK, 10, true));
-   public static final RegistryObject<Block> MYSTIC_PRESSURE_PLATE = registerBlock("mystic_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS),BlockSetType.OAK));
-   public static final RegistryObject<Block> MYSTIC_FENCE = registerBlock("mystic_fence", () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-   public static final RegistryObject<Block> MYSTIC_FENCE_GATE = registerBlock("mystic_fence_gate", () -> new FenceGateBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS), SoundEvents.FENCE_GATE_OPEN,SoundEvents.FENCE_GATE_CLOSE));
-   public static final RegistryObject<Block> MYSTIC_DOOR = registerBlock("mystic_door", () -> new DoorBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS).noOcclusion(),BlockSetType.OAK));
-   public static final RegistryObject<Block> MYSTIC_TRAPDOOR = registerBlock("mystic_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS).noOcclusion(), BlockSetType.OAK));
+   public static final RegistryObject<Block> MYSTIC_PLANKS = registerBlock("mystic_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+   @Override
+   public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+      return true;
+   }
+   @Override
+   public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+      return 5;
+   }
+   @Override
+   public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+      return 5;
+   }
+});
+   public static final RegistryObject<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> STRIPED_MYSTIC_LOG = registerBlock("striped_mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 30;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 60;
+      }
+   });
+   public static final RegistryObject<Block> STRIPED_MYSTIC_WOOD = registerBlock("striped_mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_SAPLING = registerBlock("mystic_sapling", () -> new SaplingBlock(new MysticTreeGrower(),BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_STAIRS = registerBlock("mystic_stairs", () -> new StairBlock(()-> ModBlocks.MYSTIC_PLANKS.get().defaultBlockState(),BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_SLAB = registerBlock("mystic_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_BUTTON = registerBlock("mystic_button", () -> new ButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON), BlockSetType.OAK, 10, true){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_PRESSURE_PLATE = registerBlock("mystic_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS),BlockSetType.OAK){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_FENCE = registerBlock("mystic_fence", () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_FENCE_GATE = registerBlock("mystic_fence_gate", () -> new FenceGateBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS), SoundEvents.FENCE_GATE_OPEN,SoundEvents.FENCE_GATE_CLOSE){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> MYSTIC_DOOR = registerBlock("mystic_door", () -> new DoorBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS).noOcclusion(),BlockSetType.OAK){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;}
+      @Override public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){ return 20; }
+   });
+   public static final RegistryObject<Block> MYSTIC_TRAPDOOR = registerBlock("mystic_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS).noOcclusion(), BlockSetType.OAK){
+      @Override public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return true;}
+      @Override public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return 5;}
+      @Override public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return 20;}
+   });
 
    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
       RegistryObject<T> output = BLOCKS.register(name, block);
