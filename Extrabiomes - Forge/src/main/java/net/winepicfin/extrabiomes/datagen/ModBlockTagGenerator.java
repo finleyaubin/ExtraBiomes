@@ -65,5 +65,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.MYSTIC_FENCE_GATE.get()
         );
 
+        this.tag(BlockTags.LOGS).add(
+                ModBlocks.MYSTIC_LOG.get(),
+                ModBlocks.STRIPED_MYSTIC_LOG.get(),
+                ModBlocks.MYSTIC_WOOD.get(),
+                ModBlocks.STRIPED_MYSTIC_WOOD.get()
+        );
+
     }
 }
