@@ -66,22 +66,22 @@ private final Vector3f fogColour;
         consumer.accept(new IClientFluidTypeExtensions(){
             @Override
             public ResourceLocation getStillTexture() {
-                return IClientFluidTypeExtensions.super.getStillTexture();
+                return stillTexture;
             }
 
             @Override
             public @Nullable ResourceLocation getOverlayTexture() {
-                return IClientFluidTypeExtensions.super.getOverlayTexture();
+                return flowingTexture;
             }
 
             @Override
             public int getTintColor() {
-                return IClientFluidTypeExtensions.super.getTintColor();
+                return tintColour;
             }
 
             @Override
             public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
-                return IClientFluidTypeExtensions.super.modifyFogColor(camera, partialTick, level, renderDistance, darkenWorldAmount, fluidFogColor);
+                return fogColour;
             }
 
             @Override
