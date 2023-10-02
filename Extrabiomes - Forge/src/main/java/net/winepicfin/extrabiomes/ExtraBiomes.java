@@ -18,9 +18,9 @@ import net.winepicfin.extrabiomes.biomes.Cold_mesa;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
+import org.slf4j.Logger;
 import terrablender.api.Regions;
 import terrablender.api.SurfaceRuleManager;
-import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(ExtraBiomes.MOD_ID)

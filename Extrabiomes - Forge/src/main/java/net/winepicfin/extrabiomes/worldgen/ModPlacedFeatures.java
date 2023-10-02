@@ -15,7 +15,6 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.tree.ModConfigureFeatures;
 
-import java.security.PublicKey;
 import java.util.List;
 
 public class ModPlacedFeatures{

@@ -1,10 +1,8 @@
 package net.winepicfin.extrabiomes;
 
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.SurfaceRules;
-import net.minecraft.world.level.levelgen.SurfaceSystem;
 import net.winepicfin.extrabiomes.biomes.ModBiomes;
 
 public class TestSurfaceRuleData
