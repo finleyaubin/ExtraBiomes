@@ -21,6 +21,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModItems.RAZOR_FEATHER.get());
                 pOutput.accept(ModItems.FROGS_LEGS.get());
                 pOutput.accept(ModItems.COOKED_FROGS_LEGS.get());
+                pOutput.accept(ModItems.BUCKET_OF_GOO.get());
                 //~~~~~~~~~~~~~Blocks~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());

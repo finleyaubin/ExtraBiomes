@@ -25,6 +25,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.COOKED_FROGS_LEGS);
         simpleItem(ModItems.FROGS_LEGS);
         simpleItem(ModItems.RAZOR_FEATHER);
+        simpleItem(ModItems.BUCKET_OF_GOO);
 
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);

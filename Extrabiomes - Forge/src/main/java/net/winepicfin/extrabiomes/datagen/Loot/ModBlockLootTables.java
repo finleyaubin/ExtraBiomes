@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.datagen.loot;
+package net.winepicfin.extrabiomes.datagen.Loot;
 
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
