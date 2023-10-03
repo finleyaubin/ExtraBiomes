@@ -12,7 +12,7 @@ import org.joml.Vector3f;
 public class ModFluidTypes {
     public static final ResourceLocation WATER_STILL_RL = new ResourceLocation("block/water_still");
     public static final ResourceLocation WATER_FLOWING_RL = new ResourceLocation("block/water_flow");
-    public static final ResourceLocation GOO_OVERLAY_RL = new ResourceLocation("blocks/goo");
+    public static final ResourceLocation GOO_OVERLAY_RL = new ResourceLocation("block/goo");
     public static  final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, ExtraBiomes.MOD_ID);
 
     public static RegistryObject<FluidType> register(String name, FluidType.Properties properties){
