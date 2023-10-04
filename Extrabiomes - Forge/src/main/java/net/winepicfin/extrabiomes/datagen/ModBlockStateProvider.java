@@ -22,7 +22,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         blockWithItem(ModBlocks.DENSE_CLOUD);
-
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
         logBlock((RotatedPillarBlock) ModBlocks.STRIPED_MYSTIC_LOG.get());
