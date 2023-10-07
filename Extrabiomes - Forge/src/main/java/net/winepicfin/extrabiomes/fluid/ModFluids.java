@@ -17,7 +17,7 @@ public class ModFluids {
     public static final RegistryObject<FlowingFluid>SOURCE_GOO = FLUIDS.register("source_goo",()->new ForgeFlowingFluid.Source(ModFluids.GOO_PROPERTIES));
     public static final RegistryObject<FlowingFluid>FLOWING_GOO = FLUIDS.register("flowing_goo",()->new ForgeFlowingFluid.Flowing(ModFluids.GOO_PROPERTIES));
 public static final ForgeFlowingFluid.Properties GOO_PROPERTIES = new ForgeFlowingFluid.Properties(
-        ModFluidTypes.GOO_FLUID_TYPE, SOURCE_GOO,FLOWING_GOO).slopeFindDistance(2).levelDecreasePerBlock(2).block(ModBlocks.GOO).bucket(ModItems.BUCKET_OF_GOO);
+        ModFluidTypes.GOO_FLUID_TYPE, SOURCE_GOO,FLOWING_GOO).slopeFindDistance(1).levelDecreasePerBlock(5).block(ModBlocks.GOO).bucket(ModItems.BUCKET_OF_GOO);
 
     public static void register(IEventBus eventBus){
         FLUIDS.register(eventBus);

@@ -69,7 +69,7 @@ private final Vector3f fogColour;
 
             @Override
             public @Nullable ResourceLocation getOverlayTexture() {
-                return flowingTexture;
+                return overlayTexture;
             }
             @Override
             public ResourceLocation getFlowingTexture() {

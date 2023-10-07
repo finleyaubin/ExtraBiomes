@@ -80,5 +80,5 @@ tasks.named('jar', Jar).configure {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
-    implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${terrablender_version}")
+    implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:' + minecraft_version + '-' + terrablender_version)
 }

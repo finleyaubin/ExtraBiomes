@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "extrabiomes:misc/goo"
+    },
+    {
+      "type": "single",
+      "resource": "extrabiomes:misc/goo_flow"
+    },
+    {
+      "type": "single",
+      "resource": "extrabiomes:misc/goo_still"
+    }
+  ]
+}
