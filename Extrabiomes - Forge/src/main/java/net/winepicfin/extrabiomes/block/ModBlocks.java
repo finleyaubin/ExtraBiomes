@@ -19,6 +19,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.worldgen.tree.MysticTreeGrower;
+import net.winepicfin.extrabiomes.worldgen.tree.SkyTreeGrower;
 
 import java.util.function.Supplier;
 
@@ -223,6 +224,204 @@ public class ModBlocks {
       @Override public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){ return 20; }
    });
    public static final RegistryObject<Block> MYSTIC_TRAPDOOR = registerBlock("mystic_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS).noOcclusion(), BlockSetType.OAK){
+      @Override public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return true;}
+      @Override public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return 5;}
+      @Override public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return 20;}
+   });
+   //~~~~~~~~~sky wood~~~~~~~~\\
+   public static final RegistryObject<Block> SKY_PLANKS = registerBlock("sky_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+   });
+   public static final RegistryObject<Block> SKY_LOG = registerBlock("sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_WOOD = registerBlock("sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> STRIPED_SKY_LOG = registerBlock("striped_sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 30;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 60;
+      }
+   });
+   public static final RegistryObject<Block> STRIPED_SKY_WOOD = registerBlock("striped_sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(5f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_SAPLING = registerBlock("sky_sapling", () -> new SaplingBlock(new SkyTreeGrower(),BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_STAIRS = registerBlock("sky_stairs", () -> new StairBlock(()-> ModBlocks.SKY_PLANKS.get().defaultBlockState(),BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_SLAB = registerBlock("sky_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_BUTTON = registerBlock("sky_button", () -> new ButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON), BlockSetType.OAK, 10, true){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_PRESSURE_PLATE = registerBlock("sky_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS),BlockSetType.OAK){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_FENCE = registerBlock("sky_fence", () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_FENCE_GATE = registerBlock("sky_fence_gate", () -> new FenceGateBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS), SoundEvents.FENCE_GATE_OPEN,SoundEvents.FENCE_GATE_CLOSE){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;
+      }
+      @Override
+      public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 20;
+      }
+   });
+   public static final RegistryObject<Block> SKY_DOOR = registerBlock("sky_door", () -> new DoorBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS).noOcclusion(),BlockSetType.OAK){
+      @Override
+      public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return true;
+      }
+      @Override
+      public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){
+         return 5;}
+      @Override public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){ return 20; }
+   });
+   public static final RegistryObject<Block> SKY_TRAPDOOR = registerBlock("sky_trapdoor", () -> new TrapDoorBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS).noOcclusion(), BlockSetType.OAK){
       @Override public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return true;}
       @Override public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return 5;}
       @Override public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction){return 20;}

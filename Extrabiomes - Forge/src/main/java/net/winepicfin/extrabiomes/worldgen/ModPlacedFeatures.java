@@ -13,7 +13,6 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
-import net.winepicfin.extrabiomes.worldgen.tree.ModConfigureFeatures;
 
 import java.util.List;
 

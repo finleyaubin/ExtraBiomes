@@ -45,7 +45,17 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.MYSTIC_FENCE.get(),
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.MYSTIC_DOOR.get(),
-                ModBlocks.MYSTIC_TRAPDOOR.get()
+                ModBlocks.MYSTIC_TRAPDOOR.get(),
+                ModBlocks.SKY_PLANKS.get(),
+                ModBlocks.SKY_STAIRS.get(),
+                ModBlocks.SKY_SLAB.get(),
+                ModBlocks.SKY_BUTTON.get(),
+                ModBlocks.SKY_BUTTON.get(),
+                ModBlocks.SKY_PRESSURE_PLATE.get(),
+                ModBlocks.SKY_FENCE.get(),
+                ModBlocks.SKY_FENCE_GATE.get(),
+                ModBlocks.SKY_DOOR.get(),
+                ModBlocks.SKY_TRAPDOOR.get()
 
         );
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL);
@@ -55,18 +65,24 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         );
 
         this.tag(BlockTags.FENCES).add(
-                ModBlocks.MYSTIC_FENCE.get()
+                ModBlocks.MYSTIC_FENCE.get(),
+                ModBlocks.SKY_FENCE.get()
         );
 
         this.tag(BlockTags.FENCE_GATES).add(
-                ModBlocks.MYSTIC_FENCE_GATE.get()
+                ModBlocks.MYSTIC_FENCE_GATE.get(),
+                ModBlocks.SKY_FENCE_GATE.get()
         );
 
         this.tag(BlockTags.LOGS).add(
                 ModBlocks.MYSTIC_LOG.get(),
                 ModBlocks.STRIPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
-                ModBlocks.STRIPED_MYSTIC_WOOD.get()
+                ModBlocks.STRIPED_MYSTIC_WOOD.get(),
+                ModBlocks.SKY_LOG.get(),
+                ModBlocks.STRIPED_SKY_LOG.get(),
+                ModBlocks.SKY_WOOD.get(),
+                ModBlocks.STRIPED_SKY_WOOD.get()
         );
 
     }

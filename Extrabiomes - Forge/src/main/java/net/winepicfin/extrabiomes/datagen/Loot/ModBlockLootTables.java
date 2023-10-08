@@ -38,6 +38,22 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.MYSTIC_DOOR.get(), block -> createDoorTable(ModBlocks.MYSTIC_DOOR.get()));
         this.dropSelf(ModBlocks.MYSTIC_SAPLING.get());
         this.add(ModBlocks.MYSTIC_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.MYSTIC_LEAVES.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
+        //~~~~~~~~~~~~~Sky Wood~~~~~~~~~~\\
+        this.dropSelf(ModBlocks.SKY_PLANKS.get());
+        this.dropSelf(ModBlocks.SKY_LOG.get());
+        this.dropSelf(ModBlocks.SKY_WOOD.get());
+        this.dropSelf(ModBlocks.STRIPED_SKY_LOG.get());
+        this.dropSelf(ModBlocks.STRIPED_SKY_WOOD.get());
+        this.dropSelf(ModBlocks.SKY_STAIRS.get());
+        this.dropSelf(ModBlocks.SKY_BUTTON.get());
+        this.dropSelf(ModBlocks.SKY_PRESSURE_PLATE.get());
+        this.dropSelf(ModBlocks.SKY_TRAPDOOR.get());
+        this.dropSelf(ModBlocks.SKY_FENCE.get());
+        this.dropSelf(ModBlocks.SKY_FENCE_GATE.get());
+        this.add(ModBlocks.SKY_SLAB.get(), block -> createSlabItemTable(ModBlocks.SKY_SLAB.get()));
+        this.add(ModBlocks.SKY_DOOR.get(), block -> createDoorTable(ModBlocks.SKY_DOOR.get()));
+        this.dropSelf(ModBlocks.SKY_SAPLING.get());
+        this.add(ModBlocks.SKY_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.SKY_LEAVES.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
     }
 
 

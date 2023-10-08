@@ -7,7 +7,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
-import net.winepicfin.extrabiomes.worldgen.tree.ModConfigureFeatures;
+import net.winepicfin.extrabiomes.worldgen.ModConfigureFeatures;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;

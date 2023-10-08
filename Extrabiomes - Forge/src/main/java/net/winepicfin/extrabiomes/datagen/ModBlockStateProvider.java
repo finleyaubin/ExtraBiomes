@@ -22,6 +22,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         blockWithItem(ModBlocks.DENSE_CLOUD);
+        //~~~~~~~~~mystic wood~~~~~~~~\\
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
         logBlock((RotatedPillarBlock) ModBlocks.STRIPED_MYSTIC_LOG.get());
@@ -41,7 +42,26 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceGateBlock(((FenceGateBlock) ModBlocks.MYSTIC_FENCE_GATE.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.MYSTIC_DOOR.get()), modLoc("block/mystic_door_bottom"),modLoc("block/mystic_door_top"),"cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.MYSTIC_TRAPDOOR.get()), modLoc("block/mystic_trapdoor"),true,"cutout");
-
+        //~~~~~~~~~sky wood~~~~~~~~\\
+        blockWithItem(ModBlocks.SKY_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.SKY_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPED_SKY_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.SKY_WOOD.get()), blockTexture(ModBlocks.SKY_LOG.get()),blockTexture(ModBlocks.SKY_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPED_SKY_WOOD.get()), blockTexture(ModBlocks.STRIPED_SKY_LOG.get()),blockTexture(ModBlocks.STRIPED_SKY_LOG.get()));
+        blockWithItem(ModBlocks.SKY_LEAVES);
+        saplingBlock(ModBlocks.SKY_SAPLING);
+        simpleBlockItem(ModBlocks.SKY_LOG.get(),models().withExistingParent("extrabiomes:sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.SKY_WOOD.get(),models().withExistingParent("extrabiomes:sky_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPED_SKY_LOG.get(),models().withExistingParent("extrabiomes:striped_sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:striped_sky_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.SKY_STAIRS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.SKY_SLAB.get()), blockTexture(ModBlocks.SKY_PLANKS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.SKY_BUTTON.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.SKY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.SKY_FENCE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.SKY_FENCE_GATE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.SKY_DOOR.get()), modLoc("block/sky_door_bottom"),modLoc("block/sky_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SKY_TRAPDOOR.get()), modLoc("block/sky_trapdoor"),true,"cutout");
     }
     private void blockWithItem(RegistryObject<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));

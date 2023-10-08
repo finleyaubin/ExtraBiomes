@@ -7,10 +7,10 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.winepicfin.extrabiomes.worldgen.ModConfigureFeatures;
 import org.jetbrains.annotations.Nullable;
 
-public class MysticTreeGrower extends AbstractTreeGrower {
+public class SkyTreeGrower extends AbstractTreeGrower {
     @Nullable
     @Override
     protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource p_222910_, boolean p_222911_) {
-        return ModConfigureFeatures.MYSTIC_KEY;
+        return ModConfigureFeatures.SKY_KEY;
     }
 }
