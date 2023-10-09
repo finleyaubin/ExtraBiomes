@@ -62,6 +62,26 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceGateBlock(((FenceGateBlock) ModBlocks.SKY_FENCE_GATE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.SKY_DOOR.get()), modLoc("block/sky_door_bottom"),modLoc("block/sky_door_top"),"cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SKY_TRAPDOOR.get()), modLoc("block/sky_trapdoor"),true,"cutout");
+        //~~~~~~~~~palm wood~~~~~~~~\\
+        blockWithItem(ModBlocks.PALM_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.PALM_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPED_PALM_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.PALM_WOOD.get()), blockTexture(ModBlocks.PALM_LOG.get()),blockTexture(ModBlocks.PALM_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPED_PALM_WOOD.get()), blockTexture(ModBlocks.STRIPED_PALM_LOG.get()),blockTexture(ModBlocks.STRIPED_PALM_LOG.get()));
+        blockWithItem(ModBlocks.PALM_LEAVES);
+        saplingBlock(ModBlocks.PALM_SAPLING);
+        simpleBlockItem(ModBlocks.PALM_LOG.get(),models().withExistingParent("extrabiomes:palm_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.PALM_WOOD.get(),models().withExistingParent("extrabiomes:palm_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPED_PALM_LOG.get(),models().withExistingParent("extrabiomes:striped_palm_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPED_PALM_WOOD.get(),models().withExistingParent("extrabiomes:striped_palm_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.PALM_STAIRS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.PALM_SLAB.get()), blockTexture(ModBlocks.PALM_PLANKS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.PALM_BUTTON.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.PALM_PRESSURE_PLATE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.PALM_FENCE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.PALM_FENCE_GATE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.PALM_DOOR.get()), modLoc("block/palm_door_bottom"),modLoc("block/palm_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.PALM_TRAPDOOR.get()), modLoc("block/palm_trapdoor"),true,"cutout");
     }
     private void blockWithItem(RegistryObject<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));

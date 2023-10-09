@@ -22,6 +22,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_KEY = registerKey("mystic");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SKY_KEY = registerKey("sky");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> PALM_KEY = registerKey("palm");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context){//todo untested, probably looks shit
         register(context, MYSTIC_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -35,6 +36,13 @@ public class ModConfigureFeatures {
                 BlockStateProvider.simple(ModBlocks.SKY_LOG.get()),
                 new StraightTrunkPlacer(5, 5, 2),
                 BlockStateProvider.simple(ModBlocks.SKY_LEAVES.get()),
+                new BlobFoliagePlacer(ConstantInt.of(2),ConstantInt.of(0),3),
+                new TwoLayersFeatureSize(4, 10, 6)).build()
+        );
+        register(context, PALM_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.PALM_LOG.get()),
+                new StraightTrunkPlacer(5, 5, 2),
+                BlockStateProvider.simple(ModBlocks.PALM_LEAVES.get()),
                 new BlobFoliagePlacer(ConstantInt.of(2),ConstantInt.of(0),3),
                 new TwoLayersFeatureSize(4, 10, 6)).build()
         );

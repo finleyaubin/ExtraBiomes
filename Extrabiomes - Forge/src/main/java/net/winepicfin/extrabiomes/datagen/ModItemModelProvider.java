@@ -37,7 +37,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.MYSTIC_PRESSURE_PLATE);
         evenSimplerBlockItem(ModBlocks.MYSTIC_FENCE_GATE);
         saplingItem(ModBlocks.MYSTIC_SAPLING);
-        //~~~~~~~~~~~~~sky Wood~~~~~~~~~~\\
+        //~~~~~~~~~~~~~Sky Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.SKY_DOOR);
         fenceItem(ModBlocks.SKY_FENCE, ModBlocks.SKY_PLANKS);
         buttonItem(ModBlocks.SKY_BUTTON, ModBlocks.SKY_PLANKS);
@@ -47,6 +47,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.SKY_PRESSURE_PLATE);
         evenSimplerBlockItem(ModBlocks.SKY_FENCE_GATE);
         saplingItem(ModBlocks.SKY_SAPLING);
+        //~~~~~~~~~~~~~Palm Wood~~~~~~~~~~\\
+        simpleBlockItem(ModBlocks.PALM_DOOR);
+        fenceItem(ModBlocks.PALM_FENCE, ModBlocks.PALM_PLANKS);
+        buttonItem(ModBlocks.PALM_BUTTON, ModBlocks.PALM_PLANKS);
+        trapdoorItem(ModBlocks.PALM_TRAPDOOR);
+        evenSimplerBlockItem(ModBlocks.PALM_STAIRS);
+        evenSimplerBlockItem(ModBlocks.PALM_SLAB);
+        evenSimplerBlockItem(ModBlocks.PALM_PRESSURE_PLATE);
+        evenSimplerBlockItem(ModBlocks.PALM_FENCE_GATE);
+        saplingItem(ModBlocks.PALM_SAPLING);
 
 
     }

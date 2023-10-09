@@ -36,6 +36,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         );
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(
+                //~~~~~~~~~mystic wood~~~~~~~~\\
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.MYSTIC_STAIRS.get(),
                 ModBlocks.MYSTIC_SLAB.get(),
@@ -46,6 +47,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.MYSTIC_DOOR.get(),
                 ModBlocks.MYSTIC_TRAPDOOR.get(),
+                //~~~~~~~~~sky wood~~~~~~~~\\
                 ModBlocks.SKY_PLANKS.get(),
                 ModBlocks.SKY_STAIRS.get(),
                 ModBlocks.SKY_SLAB.get(),
@@ -55,8 +57,18 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_FENCE.get(),
                 ModBlocks.SKY_FENCE_GATE.get(),
                 ModBlocks.SKY_DOOR.get(),
-                ModBlocks.SKY_TRAPDOOR.get()
-
+                ModBlocks.SKY_TRAPDOOR.get(),
+                //~~~~~~~~~palm wood~~~~~~~~\\
+                ModBlocks.PALM_PLANKS.get(),
+                ModBlocks.PALM_STAIRS.get(),
+                ModBlocks.PALM_SLAB.get(),
+                ModBlocks.PALM_BUTTON.get(),
+                ModBlocks.PALM_BUTTON.get(),
+                ModBlocks.PALM_PRESSURE_PLATE.get(),
+                ModBlocks.PALM_FENCE.get(),
+                ModBlocks.PALM_FENCE_GATE.get(),
+                ModBlocks.PALM_DOOR.get(),
+                ModBlocks.PALM_TRAPDOOR.get()
         );
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL);
         this.tag(BlockTags.MINEABLE_WITH_HOE);

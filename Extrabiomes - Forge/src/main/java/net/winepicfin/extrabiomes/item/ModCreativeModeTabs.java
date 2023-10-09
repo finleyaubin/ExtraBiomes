@@ -12,7 +12,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 
 public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExtraBiomes.MOD_ID);
-    public static final RegistryObject<CreativeModeTab> EXTRABIOMES_TAB = CREATIVE_MODE_TAB.register("extrabiomes_tab",()-> CreativeModeTab.builder().icon(()->new ItemStack(ModItems.mossy_pebble.get()))
+    public static final RegistryObject<CreativeModeTab> EXTRABIOMES_TAB = CREATIVE_MODE_TAB.register("extrabiomes_tab",()-> CreativeModeTab.builder().icon(()->new ItemStack(ModBlocks.MYSTIC_SAPLING.get()))
             .title(Component.translatable("creativetab.extrabiomes"))
             .displayItems((pParameters, pOutput)->{
                 //~~~~~~~~~~~~~Items~~~~~~~~~~~~\\
@@ -58,6 +58,22 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.STRIPED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.SKY_SAPLING.get());
                 pOutput.accept(ModBlocks.SKY_LEAVES.get());
+                //~~~~~~~~~~~~~Palm Wood~~~~~~~~~~~~\\
+                pOutput.accept(ModBlocks.PALM_PLANKS.get());
+                pOutput.accept(ModBlocks.PALM_STAIRS.get());
+                pOutput.accept(ModBlocks.PALM_SLAB.get());
+                pOutput.accept(ModBlocks.PALM_BUTTON.get());
+                pOutput.accept(ModBlocks.PALM_PRESSURE_PLATE.get());
+                pOutput.accept(ModBlocks.PALM_FENCE.get());
+                pOutput.accept(ModBlocks.PALM_FENCE_GATE.get());
+                pOutput.accept(ModBlocks.PALM_DOOR.get());
+                pOutput.accept(ModBlocks.PALM_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.PALM_LOG.get());
+                pOutput.accept(ModBlocks.PALM_WOOD.get());
+                pOutput.accept(ModBlocks.STRIPED_PALM_LOG.get());
+                pOutput.accept(ModBlocks.STRIPED_PALM_WOOD.get());
+                pOutput.accept(ModBlocks.PALM_SAPLING.get());
+                pOutput.accept(ModBlocks.PALM_LEAVES.get());
 
             })
             .build());

@@ -1,8 +1,0 @@
-{
-	"format_version": "1.16.100",
-	"minecraft:texture_set": {
-		"color": "stripped_palm_log",
-		"metalness_emissive_roughness": "log_palm_mer",
-		"heightmap": "stripped_palm_log_heightmap"
-	}
-}
