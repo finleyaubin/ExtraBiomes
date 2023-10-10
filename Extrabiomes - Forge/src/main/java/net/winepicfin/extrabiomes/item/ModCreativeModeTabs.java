@@ -74,6 +74,18 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.STRIPED_PALM_WOOD.get());
                 pOutput.accept(ModBlocks.PALM_SAPLING.get());
                 pOutput.accept(ModBlocks.PALM_LEAVES.get());
+                //~~~~~~~~~~~~~Gilded Sky Wood~~~~~~~~~~~~\\
+                pOutput.accept(ModBlocks.GILDED_SKY_PLANKS.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_STAIRS.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_SLAB.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_BUTTON.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_FENCE.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_FENCE_GATE.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_DOOR.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_LOG.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_WOOD.get());
 
             })
             .build());

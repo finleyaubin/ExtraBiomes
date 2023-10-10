@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.datagen.Loot;
+package net.winepicfin.extrabiomes.datagen.loot;
 
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -70,6 +70,19 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.PALM_DOOR.get(), block -> createDoorTable(ModBlocks.PALM_DOOR.get()));
         this.dropSelf(ModBlocks.PALM_SAPLING.get());
         this.add(ModBlocks.PALM_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.PALM_LEAVES.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
+        //~~~~~~~~~~~~~Gilded sky Wood~~~~~~~~~~\\
+        this.dropSelf(ModBlocks.GILDED_SKY_PLANKS.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_LOG.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_WOOD.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_STAIRS.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_BUTTON.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_TRAPDOOR.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_FENCE.get());
+        this.dropSelf(ModBlocks.GILDED_SKY_FENCE_GATE.get());
+        this.add(ModBlocks.GILDED_SKY_SLAB.get(), block -> createSlabItemTable(ModBlocks.GILDED_SKY_SLAB.get()));
+        this.add(ModBlocks.GILDED_SKY_DOOR.get(), block -> createDoorTable(ModBlocks.GILDED_SKY_DOOR.get()));
+
     }
 
 

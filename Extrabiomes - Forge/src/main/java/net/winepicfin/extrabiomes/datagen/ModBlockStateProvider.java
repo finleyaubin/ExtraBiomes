@@ -82,6 +82,20 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceGateBlock(((FenceGateBlock) ModBlocks.PALM_FENCE_GATE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.PALM_DOOR.get()), modLoc("block/palm_door_bottom"),modLoc("block/palm_door_top"),"cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.PALM_TRAPDOOR.get()), modLoc("block/palm_trapdoor"),true,"cutout");
+        //~~~~~~~~~GILDED_SKY wood~~~~~~~~\\
+        blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.GILDED_SKY_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.GILDED_SKY_WOOD.get()), blockTexture(ModBlocks.GILDED_SKY_LOG.get()),blockTexture(ModBlocks.GILDED_SKY_LOG.get()));
+        simpleBlockItem(ModBlocks.GILDED_SKY_LOG.get(),models().withExistingParent("extrabiomes:gilded_sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.GILDED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:gilded_sky_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.GILDED_SKY_STAIRS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.GILDED_SKY_SLAB.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.GILDED_SKY_BUTTON.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.GILDED_SKY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.GILDED_SKY_FENCE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.GILDED_SKY_FENCE_GATE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.GILDED_SKY_DOOR.get()), modLoc("block/gilded_sky_door_bottom"),modLoc("block/gilded_sky_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.GILDED_SKY_TRAPDOOR.get()), modLoc("block/gilded_sky_trapdoor"),true,"cutout");
     }
     private void blockWithItem(RegistryObject<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));

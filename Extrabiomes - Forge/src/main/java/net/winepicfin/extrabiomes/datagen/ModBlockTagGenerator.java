@@ -68,7 +68,18 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.PALM_FENCE.get(),
                 ModBlocks.PALM_FENCE_GATE.get(),
                 ModBlocks.PALM_DOOR.get(),
-                ModBlocks.PALM_TRAPDOOR.get()
+                ModBlocks.PALM_TRAPDOOR.get(),
+                //~~~~~~~~~Gilded_sky wood~~~~~~~~\\
+                ModBlocks.GILDED_SKY_PLANKS.get(),
+                ModBlocks.GILDED_SKY_STAIRS.get(),
+                ModBlocks.GILDED_SKY_SLAB.get(),
+                ModBlocks.GILDED_SKY_BUTTON.get(),
+                ModBlocks.GILDED_SKY_BUTTON.get(),
+                ModBlocks.GILDED_SKY_PRESSURE_PLATE.get(),
+                ModBlocks.GILDED_SKY_FENCE.get(),
+                ModBlocks.GILDED_SKY_FENCE_GATE.get(),
+                ModBlocks.GILDED_SKY_DOOR.get(),
+                ModBlocks.GILDED_SKY_TRAPDOOR.get()
         );
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL);
         this.tag(BlockTags.MINEABLE_WITH_HOE);
@@ -78,12 +89,16 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
         this.tag(BlockTags.FENCES).add(
                 ModBlocks.MYSTIC_FENCE.get(),
-                ModBlocks.SKY_FENCE.get()
+                ModBlocks.SKY_FENCE.get(),
+                ModBlocks.PALM_FENCE.get(),
+                ModBlocks.GILDED_SKY_FENCE.get()
         );
 
         this.tag(BlockTags.FENCE_GATES).add(
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
-                ModBlocks.SKY_FENCE_GATE.get()
+                ModBlocks.SKY_FENCE_GATE.get(),
+                ModBlocks.PALM_FENCE_GATE.get(),
+                ModBlocks.GILDED_SKY_FENCE_GATE.get()
         );
 
         this.tag(BlockTags.LOGS).add(
@@ -94,7 +109,14 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
-                ModBlocks.STRIPED_SKY_WOOD.get()
+                ModBlocks.STRIPED_SKY_WOOD.get(),
+                ModBlocks.GILDED_SKY_LOG.get()
+        );
+        this.tag(BlockTags.PLANKS).add(
+                ModBlocks.MYSTIC_PLANKS.get(),
+                ModBlocks.SKY_PLANKS.get(),
+                ModBlocks.PALM_PLANKS.get(),
+                ModBlocks.GILDED_SKY_PLANKS.get()
         );
 
     }

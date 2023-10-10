@@ -1,8 +1,0 @@
-{
-	"format_version": "1.16.100",
-	"minecraft:texture_set": {
-		"color": "log_ash",
-		"metalness_emissive_roughness": "log_ash_mer",
-		"heightmap": "log_ash_heightmap"
-	}
-}

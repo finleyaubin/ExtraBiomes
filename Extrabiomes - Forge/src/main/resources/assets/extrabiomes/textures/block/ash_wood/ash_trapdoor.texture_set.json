@@ -1,8 +1,0 @@
-{
-	"format_version": "1.16.100",
-	"minecraft:texture_set": {
-		"color": "ash_trapdoor",
-		"metalness_emissive_roughness": "ash_trapdoor_mer",
-		"heightmap": "ash_trapdoor_heightmap"
-	}
-}
