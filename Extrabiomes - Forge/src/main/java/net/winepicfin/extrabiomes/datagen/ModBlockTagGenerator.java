@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
@@ -118,6 +119,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.PALM_PLANKS.get(),
                 ModBlocks.GILDED_SKY_PLANKS.get()
         );
+
 
     }
 }
