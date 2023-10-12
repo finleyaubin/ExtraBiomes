@@ -128,8 +128,15 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .texture("layer1", trimResLoc);
 
                 // Non-trimmed armorItem file (normal variant)
+                String modelLocation;
+                if (armorItemPath.equals("item/frog_helmet")) {
+                    modelLocation = "frog_helmet_model";
+                }
+                else {
+                    modelLocation = "generated";
+                }
                 this.withExistingParent(itemRegistryObject.getId().getPath(),
-                                mcLoc("item/generated"))
+                                mcLoc("item/"+modelLocation))
                         .override()
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
                         .predicate(mcLoc("trim_type"), trimValue).end()
