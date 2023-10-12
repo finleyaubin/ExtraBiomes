@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.item;
 
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -20,6 +21,7 @@ public class ModItems {
     public static final RegistryObject<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
     public static final RegistryObject<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS)));
     public static final RegistryObject<Item> COOKED_FROGS_LEGS = ITEMS.register("cooked_frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.COOKED_FROGS_LEGS)));
+    public static final RegistryObject<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> new ArmorItem(ModItemMaterials.FROG, ArmorItem.Type.HELMET, new Item.Properties()));
 
     public static void  register(IEventBus eventBus){
         ITEMS.register(eventBus);
