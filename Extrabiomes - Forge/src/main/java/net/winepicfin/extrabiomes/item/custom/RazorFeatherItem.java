@@ -18,7 +18,7 @@ public class RazorFeatherItem extends Item {
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand){
         ItemStack itemStack = player.getItemInHand(hand);
-        level.playSound((Player) null, player.getX(),player.getY(),player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.5F,0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+        level.playSound(null, player.getX(),player.getY(),player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.5F,0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!level.isClientSide) {       //TODO change to razor feather
             Razor_Feather_Projectile razorFeatherProjectile = new Razor_Feather_Projectile(level, player);
             razorFeatherProjectile.setItem(itemStack);

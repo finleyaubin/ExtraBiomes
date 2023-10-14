@@ -13,6 +13,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.spongepowered.mixin'
 
 group = 'net.winepicfin.extrabiomes'
 archivesBaseName = "ExtraBiomes"
@@ -77,8 +78,18 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 
+// This is the repositories block in your build.gradle. NOT the one in publishing, or in buildscript. If it does not exist already, create it.
+repositories {
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
+}
+
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
     implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:' + minecraft_version + '-' + terrablender_version)
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.2.2')
 }
