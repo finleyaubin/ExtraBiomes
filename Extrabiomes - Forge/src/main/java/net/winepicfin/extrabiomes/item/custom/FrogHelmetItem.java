@@ -1,31 +1,45 @@
 package net.winepicfin.extrabiomes.item.custom;
 
 import com.google.common.collect.ImmutableMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.winepicfin.extrabiomes.entity.client.armour.FrogHelmetRenderer;
 import net.winepicfin.extrabiomes.item.ModItemMaterials;
+import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.example.client.renderer.armor.GeckoArmorRenderer;
+import software.bernie.example.registry.ItemRegistry;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.constant.DefaultAnimations;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 
-public class FrogHelmetItem extends ArmorItem implements GeoItem {
+public final class FrogHelmetItem extends ArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public static final Map<ArmorMaterial, MobEffectInstance> MATERIAL_MOB_EFFECT_INSTANCE_MAP = (new ImmutableMap.Builder<ArmorMaterial, MobEffectInstance>()).put(ModItemMaterials.FROG, new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 1, false, false, true ))
              .build();
@@ -72,16 +86,19 @@ public class FrogHelmetItem extends ArmorItem implements GeoItem {
             player.addEffect(new MobEffectInstance(MobEffects.JUMP,200, 1, false, false, true ));
         }
     }
+    // Create our armor model/renderer for forge and return it
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private FrogHelmetRenderer<?> renderer;
+            private GeoArmorRenderer<?> renderer;
 
             @Override
             public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 if (this.renderer == null)
-                    this.renderer = new ExampleArmorRenderer();
+                    this.renderer = new FrogHelmetRenderer();
 
+                // This prepares our GeoArmorRenderer for the current render frame.
+                // These parameters may be null however, so we don't do anything further with them
                 this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
 
                 return this.renderer;
@@ -89,9 +106,10 @@ public class FrogHelmetItem extends ArmorItem implements GeoItem {
         });
     }
 
+
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(DefaultAnimations.genericIdleController(this));
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+
     }
 
     @Override
