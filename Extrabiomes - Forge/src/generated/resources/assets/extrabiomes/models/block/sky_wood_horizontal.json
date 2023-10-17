@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "extrabiomes:block/sky_log",
+    "side": "extrabiomes:block/sky_log"
+  }
+}

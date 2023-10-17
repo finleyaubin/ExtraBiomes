@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "extrabiomes:block/striped_palm_log_top",
+    "side": "extrabiomes:block/striped_palm_log"
+  }
+}

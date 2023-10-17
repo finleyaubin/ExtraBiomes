@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "extrabiomes:block/striped_sky_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "extrabiomes:block/striped_sky_log"
+    },
+    "axis=z": {
+      "model": "extrabiomes:block/striped_sky_log_horizontal",
+      "x": 90
+    }
+  }
+}

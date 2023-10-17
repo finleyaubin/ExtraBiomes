@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "extrabiomes:block/sky_slab"
+    },
+    "type=double": {
+      "model": "extrabiomes:block/sky_planks"
+    },
+    "type=top": {
+      "model": "extrabiomes:block/sky_slab_top"
+    }
+  }
+}

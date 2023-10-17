@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "extrabiomes:block/palm_pressure_plate"
+    },
+    "powered=true": {
+      "model": "extrabiomes:block/palm_pressure_plate_down"
+    }
+  }
+}

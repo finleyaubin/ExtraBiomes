@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "extrabiomes:block/sky_planks",
+    "side": "extrabiomes:block/sky_planks",
+    "top": "extrabiomes:block/sky_planks"
+  }
+}
