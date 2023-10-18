@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "extrabiomes:block/sky_planks",
-    "side": "extrabiomes:block/sky_planks",
-    "top": "extrabiomes:block/sky_planks"
-  }
-}

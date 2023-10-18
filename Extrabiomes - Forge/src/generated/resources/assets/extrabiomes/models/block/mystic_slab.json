@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "extrabiomes:block/mystic_planks",
-    "side": "extrabiomes:block/mystic_planks",
-    "top": "extrabiomes:block/mystic_planks"
-  }
-}
