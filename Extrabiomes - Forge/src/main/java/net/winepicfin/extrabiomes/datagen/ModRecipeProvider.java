@@ -8,12 +8,14 @@ import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -26,13 +28,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> pWriter) {
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
         foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs", Boolean.TRUE);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,ModBlocks.DENSE_CLOUD_BRICK.get())
-                .pattern("&&")
-                .pattern("&&")
-                .define('&', ModBlocks.DENSE_CLOUD.get())
-                .unlockedBy(getHasName(ModBlocks.DENSE_CLOUD.get()), has(ModBlocks.DENSE_CLOUD.get()))
-                .save(pWriter);
+        woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(),ModBlocks.STRIPED_MYSTIC_LOG.get(),ModBlocks.STRIPED_MYSTIC_WOOD.get(),ModBlocks.MYSTIC_STAIRS.get(),ModBlocks.MYSTIC_SLAB.get(),ModBlocks.MYSTIC_BUTTON.get(),ModBlocks.MYSTIC_PRESSURE_PLATE.get(),ModBlocks.MYSTIC_FENCE_GATE.get(),ModBlocks.MYSTIC_FENCE.get(),ModBlocks.MYSTIC_DOOR.get(),ModBlocks.MYSTIC_TRAPDOOR.get());
+        woodRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModBlocks.PALM_LOG.get(), ModBlocks.PALM_WOOD.get(),ModBlocks.STRIPED_PALM_LOG.get(),ModBlocks.STRIPED_PALM_WOOD.get(),ModBlocks.PALM_STAIRS.get(),ModBlocks.PALM_SLAB.get(),ModBlocks.PALM_BUTTON.get(),ModBlocks.PALM_PRESSURE_PLATE.get(),ModBlocks.PALM_FENCE_GATE.get(),ModBlocks.PALM_FENCE.get(),ModBlocks.PALM_DOOR.get(),ModBlocks.PALM_TRAPDOOR.get());
+        woodRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModBlocks.SKY_LOG.get(), ModBlocks.SKY_WOOD.get(),ModBlocks.STRIPED_SKY_LOG.get(),ModBlocks.STRIPED_SKY_WOOD.get(),ModBlocks.SKY_STAIRS.get(),ModBlocks.SKY_SLAB.get(),ModBlocks.SKY_BUTTON.get(),ModBlocks.SKY_PRESSURE_PLATE.get(),ModBlocks.SKY_FENCE_GATE.get(),ModBlocks.SKY_FENCE.get(),ModBlocks.SKY_DOOR.get(),ModBlocks.SKY_TRAPDOOR.get());
+        brick(pWriter,ModBlocks.DENSE_CLOUD.get(),ModBlocks.DENSE_CLOUD_BRICK.get());
     }
 
     public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
@@ -54,7 +53,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_cooking");
         if (campfireAndSmoker){
             campfireCooking(p_250654_,"campfire_cooking", 600, p_250172_, p_251868_,p_250789_);
-            SmokingCooking(p_250654_,"smoking", 100, p_250172_, p_251868_,p_250789_);
+            smokingCooking(p_250654_,"smoking", 100, p_250172_, p_251868_,p_250789_);
         }
     }
 
@@ -71,10 +70,116 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
     }
 
-    private static void SmokingCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
+    private static void smokingCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
         for(ItemLike itemlike : ingredient) {
             SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, p_252138_, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
         }
+    }
+    private static void woodRecipes(Consumer<FinishedRecipe> recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block stripedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor){
+        List<ItemLike> woods=new ArrayList<>(){{add(log);add(strippedLog);add(wood);add(stripedWood);}};
+        planks(recipeOutput, woods,plank);
+        wood(recipeOutput,log,wood);
+        wood(recipeOutput,strippedLog,stripedWood);
+        stair(recipeOutput,plank,stairs);
+        slab(recipeOutput,plank,slab);
+        fence(recipeOutput,plank,fence);
+        fenceGate(recipeOutput,plank,fenceGate);
+        door(recipeOutput,plank,door);
+        trapDoor(recipeOutput,plank,trapDoor);
+        pressurePlate(recipeOutput,plank,pressurePlate);
+        oneToOne(recipeOutput,plank,button);
+
+    }
+
+    private static void planks(Consumer<FinishedRecipe> recipeOutput, List<ItemLike> ingredients, Block output){
+        for(ItemLike itemlike : ingredients) {
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,output,4)
+                .requires(itemlike)
+                .unlockedBy(getHasName(itemlike), has(itemlike))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(itemlike));
+        }
+    }
+
+    private static void wood(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,3)
+                .pattern("&&")
+                .pattern("&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void stair(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,4)
+                .pattern("&  ")
+                .pattern("&& ")
+                .pattern("&&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void slab(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,6)
+                .pattern("&&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void fence(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,3)
+                .pattern("&$&")
+                .pattern("&$&")
+                .define('&', ingredient)
+                .define('$', Items.STICK)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void fenceGate(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,3)
+                .pattern("$&$")
+                .pattern("$&$")
+                .define('&', ingredient)
+                .define('$', Items.STICK)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void door(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,3)
+                .pattern("&&")
+                .pattern("&&")
+                .pattern("&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void trapDoor(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,2)
+                .pattern("&&&")
+                .pattern("&&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void pressurePlate(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC,output,2)
+                .pattern("&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput,ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+
+    private static void oneToOne(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output){
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,output,1)
+                .requires(ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" +getItemName(ingredient));
+    }
+    private static void brick(Consumer<FinishedRecipe> recipeOutput,Block ingredient, Block output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
+                .pattern("&&")
+                .pattern("&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput);
     }
 
 }

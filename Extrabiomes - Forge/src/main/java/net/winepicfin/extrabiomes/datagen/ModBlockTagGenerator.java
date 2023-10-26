@@ -113,6 +113,17 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.STRIPED_SKY_WOOD.get(),
                 ModBlocks.GILDED_SKY_LOG.get()
         );
+        this.tag(BlockTags.LOGS_THAT_BURN).add(
+                ModBlocks.MYSTIC_LOG.get(),
+                ModBlocks.STRIPED_MYSTIC_LOG.get(),
+                ModBlocks.MYSTIC_WOOD.get(),
+                ModBlocks.STRIPED_MYSTIC_WOOD.get(),
+                ModBlocks.SKY_LOG.get(),
+                ModBlocks.STRIPED_SKY_LOG.get(),
+                ModBlocks.SKY_WOOD.get(),
+                ModBlocks.STRIPED_SKY_WOOD.get(),
+                ModBlocks.GILDED_SKY_LOG.get()
+        );
         this.tag(BlockTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.SKY_PLANKS.get(),
