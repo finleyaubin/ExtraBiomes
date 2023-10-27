@@ -791,6 +791,8 @@ public class ModBlocks {
             return 20;
         }
     });
+//~~~~~~~~~Mushroom Blocks~~~~~~~~\\
+    public static final RegistryObject<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

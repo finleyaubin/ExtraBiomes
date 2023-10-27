@@ -31,7 +31,6 @@
                 "target": "self"
             },
             "minecraft:map_color": "#ff78f8",
-            "minecraft:unwalkable": true,
             "tag:wood": {}
         },
         "permutations": [
