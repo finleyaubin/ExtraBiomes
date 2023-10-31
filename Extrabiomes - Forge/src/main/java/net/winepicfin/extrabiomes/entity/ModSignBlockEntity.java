@@ -4,14 +4,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.winepicfin.extrabiomes.block.ModBlocks;
 
 public class ModSignBlockEntity extends SignBlockEntity {
-    public ModSignBlockEntity(BlockPos p_155700_, BlockState p_155701_) {
-        super(p_155700_, p_155701_);
+    public ModSignBlockEntity(BlockPos pPos, BlockState pState) {
+        super(ModBlockEntities.MOD_SIGN.get(),pPos,pState);
     }
 
     @Override
     public BlockEntityType<?> getType(){
-
+        return ModBlockEntities.MOD_SIGN.get();
     }
 }

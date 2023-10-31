@@ -47,6 +47,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.MYSTIC_PRESSURE_PLATE);
         evenSimplerBlockItem(ModBlocks.MYSTIC_FENCE_GATE);
         saplingItem(ModBlocks.MYSTIC_SAPLING);
+        simpleItem(ModItems.MYSTIC_SIGN);
+        simpleItem(ModItems.MYSTIC_HANGING_SIGN);
         //~~~~~~~~~~~~~Sky Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.SKY_DOOR);
         fenceItem(ModBlocks.SKY_FENCE, ModBlocks.SKY_PLANKS);
@@ -57,6 +59,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.SKY_PRESSURE_PLATE);
         evenSimplerBlockItem(ModBlocks.SKY_FENCE_GATE);
         saplingItem(ModBlocks.SKY_SAPLING);
+        simpleItem(ModItems.SKY_SIGN);
+        simpleItem(ModItems.SKY_HANGING_SIGN);
         //~~~~~~~~~~~~~Palm Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.PALM_DOOR);
         fenceItem(ModBlocks.PALM_FENCE, ModBlocks.PALM_PLANKS);
@@ -67,6 +71,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.PALM_PRESSURE_PLATE);
         evenSimplerBlockItem(ModBlocks.PALM_FENCE_GATE);
         saplingItem(ModBlocks.PALM_SAPLING);
+        simpleItem(ModItems.PALM_SIGN);
+        simpleItem(ModItems.PALM_HANGING_SIGN);
         //~~~~~~~~~~~~~Gilded Sky Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.GILDED_SKY_DOOR);
         fenceItem(ModBlocks.GILDED_SKY_FENCE, ModBlocks.GILDED_SKY_PLANKS);
@@ -76,6 +82,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.GILDED_SKY_SLAB);
         evenSimplerBlockItem(ModBlocks.GILDED_SKY_PRESSURE_PLATE);
         evenSimplerBlockItem(ModBlocks.GILDED_SKY_FENCE_GATE);
+        simpleItem(ModItems.GILDED_SKY_SIGN);
+        simpleItem(ModItems.GILDED_SKY_HANGING_SIGN);
 
 
     }

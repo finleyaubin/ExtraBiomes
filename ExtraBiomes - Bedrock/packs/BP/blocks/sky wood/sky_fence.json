@@ -72,7 +72,6 @@
 				}
 			},
 			"minecraft:geometry": { "identifier": "geometry.fence", "bone_visibility": { "north": false, "south": false, "east": false, "west": false } },
-			"minecraft:unwalkable": true,
 			"minecraft:map_color": "#944619",
 			"tag:wood": { }
 		},

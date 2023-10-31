@@ -1,13 +1,16 @@
 package net.winepicfin.extrabiomes.datagen;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import org.checkerframework.checker.units.qual.K;
 
 import java.util.Objects;
 
@@ -41,6 +44,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceGateBlock(((FenceGateBlock) ModBlocks.MYSTIC_FENCE_GATE.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.MYSTIC_DOOR.get()), modLoc("block/mystic_door_bottom"),modLoc("block/mystic_door_top"),"cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.MYSTIC_TRAPDOOR.get()), modLoc("block/mystic_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.MYSTIC_SIGN.get()),((WallSignBlock) ModBlocks.MYSTIC_WALL_SIGN.get()),blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        hangingSignBlock((ModBlocks.MYSTIC_HANGING_SIGN.get()),( ModBlocks.MYSTIC_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         //~~~~~~~~~sky wood~~~~~~~~\\
         blockWithItem(ModBlocks.SKY_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.SKY_LOG.get());
@@ -61,6 +66,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceGateBlock(((FenceGateBlock) ModBlocks.SKY_FENCE_GATE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.SKY_DOOR.get()), modLoc("block/sky_door_bottom"),modLoc("block/sky_door_top"),"cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SKY_TRAPDOOR.get()), modLoc("block/sky_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.SKY_SIGN.get()),((WallSignBlock) ModBlocks.SKY_WALL_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
+        hangingSignBlock((ModBlocks.SKY_HANGING_SIGN.get()),( ModBlocks.SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
         //~~~~~~~~~palm wood~~~~~~~~\\
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.PALM_LOG.get());
@@ -81,7 +88,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceGateBlock(((FenceGateBlock) ModBlocks.PALM_FENCE_GATE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.PALM_DOOR.get()), modLoc("block/palm_door_bottom"),modLoc("block/palm_door_top"),"cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.PALM_TRAPDOOR.get()), modLoc("block/palm_trapdoor"),true,"cutout");
-        //~~~~~~~~~GILDED_SKY wood~~~~~~~~\\
+        signBlock(((StandingSignBlock) ModBlocks.PALM_SIGN.get()),((WallSignBlock) ModBlocks.PALM_WALL_SIGN.get()),blockTexture(ModBlocks.PALM_PLANKS.get()));
+        hangingSignBlock((ModBlocks.PALM_HANGING_SIGN.get()),( ModBlocks.PALM_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.PALM_PLANKS.get()));
+        //~~~~~~~~~Gilded Sky wood~~~~~~~~\\
         blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.GILDED_SKY_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.GILDED_SKY_WOOD.get()), blockTexture(ModBlocks.GILDED_SKY_LOG.get()),blockTexture(ModBlocks.GILDED_SKY_LOG.get()));
@@ -95,6 +104,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceGateBlock(((FenceGateBlock) ModBlocks.GILDED_SKY_FENCE_GATE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.GILDED_SKY_DOOR.get()), modLoc("block/gilded_sky_door_bottom"),modLoc("block/gilded_sky_door_top"),"cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.GILDED_SKY_TRAPDOOR.get()), modLoc("block/gilded_sky_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.GILDED_SKY_SIGN.get()),((WallSignBlock) ModBlocks.GILDED_SKY_WALL_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        hangingSignBlock((ModBlocks.GILDED_SKY_HANGING_SIGN.get()),( ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        //~~~~~~~~~Mushrooms~~~~~~~~\\
+        blockWithItem(ModBlocks.BLACK_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.BLUE_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.CYAN_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.GREEN_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.ORANGE_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.PURPLE_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.WHITE_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.YELLOW_MUSHROOM_BLOCK);
+        blockWithItem(ModBlocks.GLOW_MUSHROOM_BLOCK);
     }
     private void blockWithItem(RegistryObject<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));
@@ -102,5 +123,22 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void saplingBlock(RegistryObject<Block> blockRegistryObject){
         simpleBlock(blockRegistryObject.get(),models().cross(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get())).getPath(),blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+    public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture){
+        ModelFile sign= models().sign(name(signBlock),texture);
+        hangingSignBlock(signBlock,wallSignBlock,sign);
+    }
+
+    public void hangingSignBlock(Block signBlock, Block wallSignBlock, ModelFile sign){
+        simpleBlock(signBlock,sign);
+        simpleBlock(wallSignBlock,sign);
+    }
+
+    private String name(Block block){
+        return key(block).getPath();
+    }
+
+    private ResourceLocation key(Block block){
+        return ForgeRegistries.BLOCKS.getKey(block);
     }
 }

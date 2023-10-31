@@ -43,6 +43,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.STRIPED_MYSTIC_WOOD.get());
                 pOutput.accept(ModBlocks.MYSTIC_SAPLING.get());
                 pOutput.accept(ModBlocks.MYSTIC_LEAVES.get());
+                pOutput.accept(ModBlocks.MYSTIC_SIGN.get());
+                pOutput.accept(ModBlocks.MYSTIC_HANGING_SIGN.get());
                 //~~~~~~~~~~~~~Sky Wood~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.SKY_PLANKS.get());
                 pOutput.accept(ModBlocks.SKY_STAIRS.get());
@@ -59,6 +61,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.STRIPED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.SKY_SAPLING.get());
                 pOutput.accept(ModBlocks.SKY_LEAVES.get());
+                pOutput.accept(ModBlocks.SKY_SIGN.get());
+                pOutput.accept(ModBlocks.SKY_HANGING_SIGN.get());
                 //~~~~~~~~~~~~~Palm Wood~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.PALM_PLANKS.get());
                 pOutput.accept(ModBlocks.PALM_STAIRS.get());
@@ -75,6 +79,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.STRIPED_PALM_WOOD.get());
                 pOutput.accept(ModBlocks.PALM_SAPLING.get());
                 pOutput.accept(ModBlocks.PALM_LEAVES.get());
+                pOutput.accept(ModBlocks.PALM_SIGN.get());
+                pOutput.accept(ModBlocks.PALM_HANGING_SIGN.get());
                 //~~~~~~~~~~~~~Gilded Sky Wood~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.GILDED_SKY_PLANKS.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_STAIRS.get());
@@ -87,6 +93,18 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.GILDED_SKY_TRAPDOOR.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_LOG.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_WOOD.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_SIGN.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get());
+                //~~~~~~~~~Mushrooms~~~~~~~~\\
+                pOutput.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.CYAN_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.GREEN_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.ORANGE_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.PURPLE_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.WHITE_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.YELLOW_MUSHROOM_BLOCK.get());
+                pOutput.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get());
 
             })
             .build());
