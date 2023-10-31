@@ -8,11 +8,11 @@ import net.winepicfin.extrabiomes.block.custom.ModHangingSignBlock;
 
 public class ModHangingSignBlockEntity extends SignBlockEntity {
     public ModHangingSignBlockEntity(BlockPos pPos, BlockState pState) {
-        super(ModBlockEntities.MOD__HANGING_SIGN.get(), pPos,pState);
+        super(ModBlockEntities.MOD_HANGING_SIGN.get(), pPos,pState);
     }
 
     @Override
     public BlockEntityType<?> getType(){
-        return ModBlockEntities.MOD__HANGING_SIGN.get();
+        return ModBlockEntities.MOD_HANGING_SIGN.get();
     }
 }
