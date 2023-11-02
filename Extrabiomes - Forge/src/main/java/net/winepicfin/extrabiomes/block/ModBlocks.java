@@ -443,10 +443,10 @@ public class ModBlocks {
             return 20;
         }
     });
-    public static final RegistryObject<Block> SKY_SIGN = BLOCKS.register("sky_sign",()->new ModStandingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> SKY_WALL_SIGN = BLOCKS.register("sky_wall_sign",()->new ModWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> SKY_HANGING_SIGN = BLOCKS.register("sky_hanging_sign",()->new ModHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> SKY_WALL_HANGING_SIGN = BLOCKS.register("sky_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.MYSTIC));
+    public static final RegistryObject<Block> SKY_SIGN = BLOCKS.register("sky_sign",()->new ModStandingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.SKY));
+    public static final RegistryObject<Block> SKY_WALL_SIGN = BLOCKS.register("sky_wall_sign",()->new ModWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.SKY));
+    public static final RegistryObject<Block> SKY_HANGING_SIGN = BLOCKS.register("sky_hanging_sign",()->new ModHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.SKY));
+    public static final RegistryObject<Block> SKY_WALL_HANGING_SIGN = BLOCKS.register("sky_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.SKY));
     //~~~~~~~~~Palm wood~~~~~~~~\\
     public static final RegistryObject<Block> PALM_PLANKS = registerBlock("palm_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)) {
         @Override
@@ -648,10 +648,10 @@ public class ModBlocks {
             return 20;
         }
     });
-    public static final RegistryObject<Block> PALM_SIGN = BLOCKS.register("palm_sign",()->new ModStandingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> PALM_WALL_SIGN = BLOCKS.register("palm_wall_sign",()->new ModWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> PALM_HANGING_SIGN = BLOCKS.register("palm_hanging_sign",()->new ModHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> PALM_WALL_HANGING_SIGN = BLOCKS.register("palm_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.MYSTIC));
+    public static final RegistryObject<Block> PALM_SIGN = BLOCKS.register("palm_sign",()->new ModStandingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.PALM));
+    public static final RegistryObject<Block> PALM_WALL_SIGN = BLOCKS.register("palm_wall_sign",()->new ModWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.PALM));
+    public static final RegistryObject<Block> PALM_HANGING_SIGN = BLOCKS.register("palm_hanging_sign",()->new ModHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.PALM));
+    public static final RegistryObject<Block> PALM_WALL_HANGING_SIGN = BLOCKS.register("palm_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.PALM));
     //~~~~~~~~~Gilded sky wood~~~~~~~~\\
     public static final RegistryObject<Block> GILDED_SKY_PLANKS = registerBlock("gilded_sky_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)) {
         @Override
@@ -809,10 +809,10 @@ public class ModBlocks {
             return 20;
         }
     });
-    public static final RegistryObject<Block> GILDED_SKY_SIGN = BLOCKS.register("gilded_sky_sign",()->new ModStandingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> GILDED_SKY_WALL_SIGN = BLOCKS.register("gilded_sky_wall_sign",()->new ModWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> GILDED_SKY_HANGING_SIGN = BLOCKS.register("gilded_sky_hanging_sign",()->new ModHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.MYSTIC));
-    public static final RegistryObject<Block> GILDED_SKY_WALL_HANGING_SIGN = BLOCKS.register("gilded_sky_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.MYSTIC));
+    public static final RegistryObject<Block> GILDED_SKY_SIGN = BLOCKS.register("gilded_sky_sign",()->new ModStandingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SIGN), ModWoodTypes.GILDED_SKY));
+    public static final RegistryObject<Block> GILDED_SKY_WALL_SIGN = BLOCKS.register("gilded_sky_wall_sign",()->new ModWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.GILDED_SKY));
+    public static final RegistryObject<Block> GILDED_SKY_HANGING_SIGN = BLOCKS.register("gilded_sky_hanging_sign",()->new ModHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.GILDED_SKY));
+    public static final RegistryObject<Block> GILDED_SKY_WALL_HANGING_SIGN = BLOCKS.register("gilded_sky_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.GILDED_SKY));
 //~~~~~~~~~Mushroom Blocks~~~~~~~~\\
     public static final RegistryObject<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
     public static final RegistryObject<Block>  BLUE_MUSHROOM_BLOCK= registerBlock("blue_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
