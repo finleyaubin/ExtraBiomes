@@ -48,6 +48,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.MYSTIC_DOOR.get(),
                 ModBlocks.MYSTIC_TRAPDOOR.get(),
+                ModBlocks.MYSTIC_SIGN.get(),
+                ModBlocks.MYSTIC_HANGING_SIGN.get(),
+                ModBlocks.MYSTIC_WALL_SIGN.get(),
+                ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),
                 //~~~~~~~~~sky wood~~~~~~~~\\
                 ModBlocks.SKY_PLANKS.get(),
                 ModBlocks.SKY_STAIRS.get(),
@@ -59,6 +63,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_FENCE_GATE.get(),
                 ModBlocks.SKY_DOOR.get(),
                 ModBlocks.SKY_TRAPDOOR.get(),
+                ModBlocks.SKY_SIGN.get(),
+                ModBlocks.SKY_HANGING_SIGN.get(),
+                ModBlocks.SKY_WALL_SIGN.get(),
+                ModBlocks.SKY_WALL_HANGING_SIGN.get(),
                 //~~~~~~~~~palm wood~~~~~~~~\\
                 ModBlocks.PALM_PLANKS.get(),
                 ModBlocks.PALM_STAIRS.get(),
@@ -70,6 +78,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.PALM_FENCE_GATE.get(),
                 ModBlocks.PALM_DOOR.get(),
                 ModBlocks.PALM_TRAPDOOR.get(),
+                ModBlocks.PALM_SIGN.get(),
+                ModBlocks.PALM_HANGING_SIGN.get(),
+                ModBlocks.PALM_WALL_SIGN.get(),
+                ModBlocks.PALM_WALL_HANGING_SIGN.get(),
                 //~~~~~~~~~Gilded_sky wood~~~~~~~~\\
                 ModBlocks.GILDED_SKY_PLANKS.get(),
                 ModBlocks.GILDED_SKY_STAIRS.get(),
@@ -80,7 +92,11 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.GILDED_SKY_FENCE.get(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get(),
                 ModBlocks.GILDED_SKY_DOOR.get(),
-                ModBlocks.GILDED_SKY_TRAPDOOR.get()
+                ModBlocks.GILDED_SKY_TRAPDOOR.get(),
+                ModBlocks.GILDED_SKY_SIGN.get(),
+                ModBlocks.GILDED_SKY_HANGING_SIGN.get(),
+                ModBlocks.GILDED_SKY_WALL_SIGN.get(),
+                ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()
         );
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL);
         this.tag(BlockTags.MINEABLE_WITH_HOE);
