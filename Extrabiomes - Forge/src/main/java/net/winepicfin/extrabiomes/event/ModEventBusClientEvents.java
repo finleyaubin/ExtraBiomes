@@ -8,6 +8,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
+import net.winepicfin.extrabiomes.entity.client.ModModelLayers;
+import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 
 @Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
@@ -15,5 +17,9 @@ public class ModEventBusClientEvents {
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
+    }
+    @SubscribeEvent
+    public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event){
+        event.registerLayerDefinition(ModModelLayers.PUCKOO_LAYER, PuckooModel::createBodyLayer);
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +21,8 @@ import net.winepicfin.extrabiomes.biomes.Charred_forest;
 import net.winepicfin.extrabiomes.biomes.Cold_mesa;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
+import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.entity.client.PuckooRenderer;
 import net.winepicfin.extrabiomes.fluid.ModFluidTypes;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
@@ -44,6 +47,7 @@ public class ExtraBiomes
         ModBlocks.register(modEventBus);
         ModFluids.register(modEventBus);
         ModFluidTypes.register(modEventBus);
+        ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -86,6 +90,7 @@ private void addCreative(BuildCreativeModeTabContentsEvent event){
             Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
             ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
+            EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
         }
     }
 }
