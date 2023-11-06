@@ -28,9 +28,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> pWriter) {
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
         foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs", Boolean.TRUE);
-        woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPED_MYSTIC_LOG.get(), ModBlocks.STRIPED_MYSTIC_WOOD.get(), ModBlocks.MYSTIC_STAIRS.get(), ModBlocks.MYSTIC_SLAB.get(), ModBlocks.MYSTIC_BUTTON.get(), ModBlocks.MYSTIC_PRESSURE_PLATE.get(), ModBlocks.MYSTIC_FENCE_GATE.get(), ModBlocks.MYSTIC_FENCE.get(), ModBlocks.MYSTIC_DOOR.get(), ModBlocks.MYSTIC_TRAPDOOR.get());
-        woodRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModBlocks.PALM_LOG.get(), ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPED_PALM_LOG.get(), ModBlocks.STRIPED_PALM_WOOD.get(), ModBlocks.PALM_STAIRS.get(), ModBlocks.PALM_SLAB.get(), ModBlocks.PALM_BUTTON.get(), ModBlocks.PALM_PRESSURE_PLATE.get(), ModBlocks.PALM_FENCE_GATE.get(), ModBlocks.PALM_FENCE.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.PALM_TRAPDOOR.get());
-        woodRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModBlocks.SKY_LOG.get(), ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPED_SKY_LOG.get(), ModBlocks.STRIPED_SKY_WOOD.get(), ModBlocks.SKY_STAIRS.get(), ModBlocks.SKY_SLAB.get(), ModBlocks.SKY_BUTTON.get(), ModBlocks.SKY_PRESSURE_PLATE.get(), ModBlocks.SKY_FENCE_GATE.get(), ModBlocks.SKY_FENCE.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.SKY_TRAPDOOR.get());
+        woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPED_MYSTIC_LOG.get(), ModBlocks.STRIPED_MYSTIC_WOOD.get(), ModBlocks.MYSTIC_STAIRS.get(), ModBlocks.MYSTIC_SLAB.get(), ModBlocks.MYSTIC_BUTTON.get(), ModBlocks.MYSTIC_PRESSURE_PLATE.get(), ModBlocks.MYSTIC_FENCE_GATE.get(), ModBlocks.MYSTIC_FENCE.get(), ModBlocks.MYSTIC_DOOR.get(), ModBlocks.MYSTIC_TRAPDOOR.get(),ModBlocks.MYSTIC_SIGN.get());
+        woodRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModBlocks.PALM_LOG.get(), ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPED_PALM_LOG.get(), ModBlocks.STRIPED_PALM_WOOD.get(), ModBlocks.PALM_STAIRS.get(), ModBlocks.PALM_SLAB.get(), ModBlocks.PALM_BUTTON.get(), ModBlocks.PALM_PRESSURE_PLATE.get(), ModBlocks.PALM_FENCE_GATE.get(), ModBlocks.PALM_FENCE.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.PALM_SIGN.get());
+        woodRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModBlocks.SKY_LOG.get(), ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPED_SKY_LOG.get(), ModBlocks.STRIPED_SKY_WOOD.get(), ModBlocks.SKY_STAIRS.get(), ModBlocks.SKY_SLAB.get(), ModBlocks.SKY_BUTTON.get(), ModBlocks.SKY_PRESSURE_PLATE.get(), ModBlocks.SKY_FENCE_GATE.get(), ModBlocks.SKY_FENCE.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.SKY_TRAPDOOR.get(),ModBlocks.SKY_SIGN.get());
         brick(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_BRICK.get());
         gildRecipes(pWriter,
                 new ArrayList<>() {{
@@ -45,6 +45,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         add(ModBlocks.SKY_FENCE.get());
                         add(ModBlocks.SKY_DOOR.get());
                         add(ModBlocks.SKY_TRAPDOOR.get());
+                        add(ModBlocks.SKY_SIGN.get());
                     }
                 }, new ArrayList<>() {{
                     add(ModBlocks.GILDED_SKY_PLANKS.get());
@@ -58,6 +59,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                     add(ModBlocks.GILDED_SKY_FENCE.get());
                     add(ModBlocks.GILDED_SKY_DOOR.get());
                     add(ModBlocks.GILDED_SKY_TRAPDOOR.get());
+                    add(ModBlocks.GILDED_SKY_SIGN.get());
                 }});
     }
 
@@ -110,7 +112,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
     }
 
-    private static void woodRecipes(Consumer<FinishedRecipe> recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block stripedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor) {
+    private static void woodRecipes(Consumer<FinishedRecipe> recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block stripedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign) {
         List<ItemLike> woods = new ArrayList<>() {{
             add(log);
             add(strippedLog);
@@ -127,6 +129,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         door(recipeOutput, plank, door);
         trapDoor(recipeOutput, plank, trapDoor);
         pressurePlate(recipeOutput, plank, pressurePlate);
+        sign(recipeOutput,plank, sign);
         oneToOne(recipeOutput, plank, button);
 
     }
@@ -210,6 +213,16 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 2)
                 .pattern("&&")
                 .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
+    }
+    private static void sign(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
+                .pattern("&&&")
+                .pattern("&&&")
+                .pattern(" $ ")
+                .define('&', ingredient)
+                .define('$', Items.STICK)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
