@@ -1,12 +1,14 @@
 package net.winepicfin.extrabiomes.item;
 
 import net.minecraft.world.item.*;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.custom.FrogHelmetItem;
 import net.winepicfin.extrabiomes.item.custom.RazorFeatherItem;
@@ -29,6 +31,7 @@ public class ModItems {
     public static final RegistryObject<Item> SKY_HANGING_SIGN = ITEMS.register("sky_hanging_sign",()-> new HangingSignItem(ModBlocks.SKY_HANGING_SIGN.get(),ModBlocks.SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> GILDED_SKY_SIGN = ITEMS.register("gilded_sky_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get()));
     public static final RegistryObject<Item> GILDED_SKY_HANGING_SIGN = ITEMS.register("gilded_sky_hanging_sign",()-> new HangingSignItem(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> PUCKOO_SPAWN_EGG= ITEMS.register("puckoo_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.PUCKOO,0xffffff, 0xea7630,new Item.Properties()));
 
 
     public static void  register(IEventBus eventBus){

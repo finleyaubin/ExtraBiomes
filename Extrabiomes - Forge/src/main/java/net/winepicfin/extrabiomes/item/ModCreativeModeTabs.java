@@ -105,6 +105,9 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.WHITE_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.YELLOW_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get());
+                //~~~~~~~~~Spawn Eggs~~~~~~~~\\
+                pOutput.accept(ModItems.PUCKOO_SPAWN_EGG.get());
+
 
             })
             .build());
