@@ -1,8 +1,12 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -19,6 +23,29 @@ import java.util.Random;
 public class PuckooEntity extends Animal {
     public PuckooEntity(EntityType<? extends Animal> p_27557_, Level p_27558_) {
         super(p_27557_, p_27558_);
+    }
+
+
+
+
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.level().isClientSide()){
+
+        }
+    }
+
+
+    @Override
+    protected void updateWalkAnimation(float pPartialTick) {
+        float f;
+        if (this.getPose() == Pose.STANDING) {
+            f=Math.min(pPartialTick*6f,1f);
+        }else {
+            f=0f;
+        }
+        this.walkAnimation.update(f,0.2f);
     }
 
     @Override
@@ -46,5 +73,11 @@ public class PuckooEntity extends Animal {
     @Override
     public boolean isFood(ItemStack p_27600_) {
         return p_27600_.is(ModItems.mossy_pebble.get());
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundEvents.CHICKEN_AMBIENT;
     }
 }

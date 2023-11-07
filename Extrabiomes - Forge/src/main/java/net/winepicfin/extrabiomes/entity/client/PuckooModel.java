@@ -5,23 +5,32 @@ package net.winepicfin.extrabiomes.entity.client;// Made with Blockbench 4.8.3
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.custom.PuckooEntity;
 
 
 public class PuckooModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart Puckoo;
 	private final ModelPart neck;
+	private final ModelPart head;
+	private final ModelPart leg0;
+	private final ModelPart leg1;
 
 
 	public PuckooModel(ModelPart root) {
 		this.Puckoo = root.getChild("Puckoo");
 		this.neck = Puckoo.getChild("neck");
+		this.head = Puckoo.getChild("neck").getChild("head");
+		this.leg0=Puckoo.getChild("leg0");
+		this.leg1=Puckoo.getChild("leg1");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -71,7 +80,17 @@ public class PuckooModel<T extends Entity> extends HierarchicalModel<T> {
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-//TODO
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		this.applyHeadRotation(netHeadYaw,headPitch,ageInTicks);
+		this.leg0.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.leg1.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+	}
+	private void applyHeadRotation(float pNetHeadYaw, float pHeadPitch, float pAgeInTicks) {
+		pNetHeadYaw = Mth.clamp(pNetHeadYaw, -30.0F, 30.0F);
+		pHeadPitch = Mth.clamp(pHeadPitch, -25.0F, 45.0F);
+
+		this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+		this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
 	}
 
 	@Override
