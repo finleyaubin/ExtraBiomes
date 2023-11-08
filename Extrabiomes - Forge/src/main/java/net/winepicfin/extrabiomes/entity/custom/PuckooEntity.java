@@ -3,6 +3,7 @@ package net.winepicfin.extrabiomes.entity.custom;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -11,18 +12,25 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.horse.Variant;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.entity.custom.varents.PuckooBaseVariants;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 public class PuckooEntity extends Animal {
+    private static int BASE_TEXTURE;
+    private static int KOI_TEXTURE;
     public PuckooEntity(EntityType<? extends Animal> p_27557_, Level p_27558_) {
         super(p_27557_, p_27558_);
+        Random random=new Random();
+        BASE_TEXTURE= random.nextInt(4);
+        KOI_TEXTURE= random.nextInt(4);
     }
 
 
@@ -58,6 +66,10 @@ public class PuckooEntity extends Animal {
         this.goalSelector.addGoal(5, new RandomStrollGoal(this,1.0));
     }
 
+    protected void randomizeAttributes(RandomSource p_218815_) {
+        this.getAttribute(Attributes.MOVEMENT_SPEED);
+
+    }
     public static AttributeSupplier.Builder createAttributes(){
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH,6)
@@ -79,5 +91,13 @@ public class PuckooEntity extends Animal {
     @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.CHICKEN_AMBIENT;
+    }
+
+    public int get_Base_Texture() {
+        return BASE_TEXTURE;
+    }
+
+    public int get_Koi_Texture() {
+        return KOI_TEXTURE;
     }
 }

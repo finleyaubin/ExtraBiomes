@@ -20,6 +20,6 @@ public class ModEventBusClientEvents {
     }
     @SubscribeEvent
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event){
-        event.registerLayerDefinition(ModModelLayers.PUCKOO_LAYER, PuckooModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.PUCKOO_BASE_LAYER, PuckooModel::createBodyLayer);
     }
 }
