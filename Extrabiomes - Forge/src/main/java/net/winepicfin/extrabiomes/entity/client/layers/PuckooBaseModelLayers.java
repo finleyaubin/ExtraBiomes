@@ -1,10 +1,10 @@
-package net.winepicfin.extrabiomes.entity.client;
+package net.winepicfin.extrabiomes.entity.client.layers;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
-public class ModModelLayers {
+public class PuckooBaseModelLayers {
     public static final ModelLayerLocation PUCKOO_BASE_LAYER= new ModelLayerLocation(
             new ResourceLocation(ExtraBiomes.MOD_ID,"puckoo_base_layer"), "main");
     public static final ModelLayerLocation PUCKOO_KOI_LAYER= new ModelLayerLocation(

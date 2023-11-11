@@ -5,6 +5,7 @@ import java.util.function.IntFunction;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.animal.horse.Variant;
+import org.jetbrains.annotations.NotNull;
 
 public enum PuckooBaseVariants implements StringRepresentable {
     WHITE(0, "white"),
@@ -30,7 +31,7 @@ public enum PuckooBaseVariants implements StringRepresentable {
         return BY_ID.apply(id);
     }
 
-    public String getSerializedName() {
+    public @NotNull String getSerializedName() {
         return this.name;
     }
 }
