@@ -59,8 +59,11 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     public void addAdditionalSaveData(CompoundTag p_30716_) {
         super.addAdditionalSaveData(p_30716_);
         p_30716_.putInt("Variant", this.getTypeVariant());
-
     }
+    public void readAdditionalSaveData(CompoundTag p_30711_) {
+        super.readAdditionalSaveData(p_30711_);
+        this.setTypeVariant(p_30711_.getInt("Variant"));
+        }
     @Override
     protected void updateWalkAnimation(float pPartialTick) {
         float f;
