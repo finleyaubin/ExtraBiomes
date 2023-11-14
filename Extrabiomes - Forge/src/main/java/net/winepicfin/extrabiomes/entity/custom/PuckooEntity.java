@@ -8,20 +8,18 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.animal.horse.Horse;
-import net.minecraft.world.entity.animal.horse.Markings;
-import net.minecraft.world.entity.animal.horse.Variant;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -32,7 +30,7 @@ import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
+import java.util.Objects;
 
 public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooBaseVariants> {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(PuckooEntity.class, EntityDataSerializers.INT);
@@ -86,7 +84,8 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     }
 
     protected void randomizeAttributes(RandomSource p_218815_) {
-        this.getAttribute(Attributes.MOVEMENT_SPEED);
+        Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue((double)generateMaxHealth(p_218815_::nextInt));
+        Objects.requireNonNull(this.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(generateSpeed(p_218815_::nextDouble));
 
     }
     public static AttributeSupplier.Builder createAttributes(){
@@ -97,8 +96,30 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     }
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob p_146744_) {
-        return ModEntities.PUCKOO.get().create(level);
+    public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob partner) {
+        PuckooEntity puckoo = (PuckooEntity) partner;
+        PuckooEntity baby = ModEntities.PUCKOO.get().create(level);
+        if (baby != null){
+            int i = this.random.nextInt(9);
+            PuckooBaseVariants variant;
+            if (i<4){
+                variant = this.getVariant();
+            }else if (i < 8){
+                variant=puckoo.getVariant();
+            }
+            else {
+                variant = Util.getRandom(PuckooBaseVariants.values(), this.random);
+            }
+            int j =this.random.nextInt(5);
+            PuckooKoiMarkings markings;
+            if (j<2){
+                markings=this.getMarkings();
+            }else if (j < 4){
+                markings = puckoo.getMarkings();
+            }else  markings = Util.getRandom(PuckooKoiMarkings.values(),this.random);
+            baby.setVariantAndMarkings(variant,markings);
+        }
+        return baby;
     }
 
     @Override
