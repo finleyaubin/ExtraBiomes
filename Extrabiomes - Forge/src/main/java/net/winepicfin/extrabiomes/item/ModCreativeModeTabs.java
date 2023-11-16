@@ -16,8 +16,8 @@ public class ModCreativeModeTabs {
             .title(Component.translatable("creativetab.extrabiomes"))
             .displayItems((pParameters, pOutput)->{
                 //~~~~~~~~~~~~~Items~~~~~~~~~~~~\\
-                pOutput.accept(ModItems.pebble.get());
-                pOutput.accept(ModItems.mossy_pebble.get());
+                pOutput.accept(ModItems.PEBBLE.get());
+                pOutput.accept(ModItems.MOSSY_PEBBLE.get());
                 pOutput.accept(ModItems.RAZOR_FEATHER.get());
                 pOutput.accept(ModItems.FROGS_LEGS.get());
                 pOutput.accept(ModItems.COOKED_FROGS_LEGS.get());

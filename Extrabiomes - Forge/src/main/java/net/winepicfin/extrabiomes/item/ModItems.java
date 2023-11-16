@@ -16,8 +16,8 @@ import net.winepicfin.extrabiomes.item.custom.RazorFeatherItem;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, ExtraBiomes.MOD_ID);
-    public  static final RegistryObject<Item> pebble = ITEMS.register("pebble",()-> new Item(new Item.Properties()));
-    public  static final RegistryObject<Item> mossy_pebble = ITEMS.register("mossy_pebble",()-> new Item(new Item.Properties()));
+    public  static final RegistryObject<Item> PEBBLE = ITEMS.register("pebble",()-> new Item(new Item.Properties()));
+    public  static final RegistryObject<Item> MOSSY_PEBBLE = ITEMS.register("mossy_pebble",()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> BUCKET_OF_GOO = ITEMS.register("bucket_of_goo",()-> new BucketItem(ModFluids.SOURCE_GOO, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     public static final RegistryObject<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
     public static final RegistryObject<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS)));
