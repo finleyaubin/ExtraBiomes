@@ -1,11 +1,15 @@
 package net.winepicfin.extrabiomes.entity.custom.projectile;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +27,7 @@ public class MossyPebbleProjectileEntity extends ThrowableItemProjectile {
 
     @Override
     protected @NotNull Item getDefaultItem() {
-        return ModItems.mossy_pebble.get();
+        return ModItems.MOSSY_PEBBLE.get();
     }
 
     @Override
@@ -33,5 +37,10 @@ public class MossyPebbleProjectileEntity extends ThrowableItemProjectile {
             //this.level().setBlock(blockPosition(),,3)
         }
         super.onHitBlock(pResult);
+    }
+
+    @Override
+    protected void onHitEntity(EntityHitResult result) {
+        result.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), 3.0F);
     }
 }

@@ -58,7 +58,7 @@ public class PebbleBlock extends Block {
              state =SIZE.getValue("size").get();
             if(state==1){
                 if (event.getEntity()!=null && event.getItemStack().getItem()== ModItems.MOSSY_PEBBLE.get()){
-                    event.getLevel().setBlock(event.getPos(), .setValue(PebbleBlock.SIZE, 2);
+                    event.getLevel().setBlock(event.getPos(), SIZE,2);
                 }
             }
         }
