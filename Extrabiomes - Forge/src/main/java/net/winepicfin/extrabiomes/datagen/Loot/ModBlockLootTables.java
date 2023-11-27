@@ -21,6 +21,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.DENSE_CLOUD.get());
         this.dropSelf(ModBlocks.DENSE_CLOUD_BRICK.get());
         this.add(ModBlocks.NETHER_DIAMOND_ORE.get(),block -> createOreDrop(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
+        this.add(ModBlocks.PEBBLE.get(),block -> createSingleItemTable(ModItems.PEBBLE.get()));
 
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         this.dropSelf(ModBlocks.MYSTIC_PLANKS.get());
