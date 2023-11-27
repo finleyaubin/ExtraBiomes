@@ -1,16 +1,17 @@
 package net.winepicfin.extrabiomes.datagen;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 import org.checkerframework.checker.units.qual.K;
 
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         blockWithItem(ModBlocks.DENSE_CLOUD);
-        simpleBlock(ModBlocks.PEBBLE.get(), new ModelFile.UncheckedModelFile(modLoc("block/pebble")));
+        pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         //~~~~~~~~~mystic wood~~~~~~~~\\
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
@@ -136,6 +137,28 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(wallSignBlock,sign);
     }
 
+    private void pebbleBlock(PebbleBlock pebbleBlock,String type){
+        getVariantBuilder(pebbleBlock).forAllStates(blockState -> {
+            Integer size = blockState.getValue(PebbleBlock.SIZE);
+            ModelFile modelFile;
+            switch (size){
+                case 1:
+                    modelFile= new ModelFile.UncheckedModelFile(modLoc("block/small_"+type));
+                    break;
+                case 2:
+                    modelFile= new ModelFile.UncheckedModelFile(modLoc("block/medium_"+type));
+                    break;
+                default:
+                    modelFile= new ModelFile.UncheckedModelFile(modLoc("block/large_"+type));
+                    break;
+            }
+            return ConfiguredModel.builder()
+                    .modelFile(modelFile)
+                    .build();
+            }
+        );
+    }
+
     private String name(Block block){
         return key(block).getPath();
     }
@@ -143,4 +166,5 @@ public class ModBlockStateProvider extends BlockStateProvider {
     private ResourceLocation key(Block block){
         return ForgeRegistries.BLOCKS.getKey(block);
     }
+
 }
