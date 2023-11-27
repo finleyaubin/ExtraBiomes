@@ -78,7 +78,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5));
         this.goalSelector.addGoal(2, new BreedGoal(this,1.15));
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1.20, Ingredient.of(ModItems.mossy_pebble.get()), false));
+        this.goalSelector.addGoal(3, new TemptGoal(this, 1.20, Ingredient.of(ModItems.MOSSY_PEBBLE.get()), false));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(5, new RandomStrollGoal(this,1.0));
     }
@@ -124,7 +124,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
 
     @Override
     public boolean isFood(ItemStack p_27600_) {
-        return p_27600_.is(ModItems.mossy_pebble.get());
+        return p_27600_.is(ModItems.MOSSY_PEBBLE.get());
     }
 
     @Nullable

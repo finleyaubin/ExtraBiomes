@@ -29,8 +29,8 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(ModItems.pebble);
-        simpleItem(ModItems.mossy_pebble);
+        simpleItem(ModItems.PEBBLE);
+        simpleItem(ModItems.MOSSY_PEBBLE);
         simpleItem(ModItems.COOKED_FROGS_LEGS);
         simpleItem(ModItems.FROGS_LEGS);
         simpleItem(ModItems.RAZOR_FEATHER);

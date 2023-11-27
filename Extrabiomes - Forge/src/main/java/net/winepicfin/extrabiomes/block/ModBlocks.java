@@ -34,7 +34,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(0.5f)));
     public static final RegistryObject<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops(), UniformInt.of(3, 7)));
     public static final RegistryObject<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> new LiquidBlock(ModFluids.SOURCE_GOO, BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
-    public static final RegistryObject<Block> PEBBLE = registerBlock("pebble", () -> new PebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
+    public static final RegistryObject<Block> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion()));
 
     //~~~~~~~~~mystic wood~~~~~~~~\\
     public static final RegistryObject<Block> MYSTIC_PLANKS = registerBlock("mystic_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)) {
