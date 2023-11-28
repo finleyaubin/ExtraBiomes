@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -18,18 +17,17 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PebbleBlock extends Block {
+public class MossyPebbleBlock extends Block {
     public static final VoxelShape SHAPE1=Block.box(0,0,0,16,2,16);
     public static final VoxelShape SHAPE2=Block.box(0,0,0,16,3,16);
     public static final VoxelShape SHAPE3=Block.box(0,0,0,16,4,16);
     public static IntegerProperty SIZE=IntegerProperty.create("size", 1,3);
 
-    public PebbleBlock(Properties p_49795_) {
+    public MossyPebbleBlock(Properties p_49795_) {
         super(p_49795_);
         this.registerDefaultState(this.getStateDefinition().any().setValue(SIZE, 1));
     }
@@ -70,7 +68,7 @@ public class PebbleBlock extends Block {
     public @NotNull InteractionResult use(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
         ItemStack heldItem = pPlayer.getItemInHand(pHand);
 
-    if (pState.getValue(SIZE) < 3 && heldItem.getItem() == ModItems.PEBBLE.get()) {
+    if (pState.getValue(SIZE) < 3 && heldItem.getItem() == ModItems.MOSSY_PEBBLE.get()) {
             // Increase the block size
             pLevel.setBlockAndUpdate(pPos, pState.setValue(SIZE, pState.getValue(SIZE) + 1));
 

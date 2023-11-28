@@ -27,6 +27,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         blockWithItem(ModBlocks.DENSE_CLOUD);
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
+        pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
         //~~~~~~~~~mystic wood~~~~~~~~\\
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
@@ -137,7 +138,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(wallSignBlock,sign);
     }
 
-    private void pebbleBlock(PebbleBlock pebbleBlock,String type){
+    private void pebbleBlock(Block pebbleBlock,String type){
         getVariantBuilder(pebbleBlock).forAllStates(blockState -> {
             Integer size = blockState.getValue(PebbleBlock.SIZE);
             ModelFile modelFile;
