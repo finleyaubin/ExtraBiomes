@@ -1,27 +1,9 @@
-package net.winepicfin.extrabiomes.datagen.Loot;
+package net.winepicfin.extrabiomes.datagen.loot;
 
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.core.Direction;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.MultifaceBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
@@ -29,7 +11,6 @@ import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-import java.util.function.Function;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
     public ModBlockLootTables() {
@@ -41,8 +22,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.DENSE_CLOUD.get());
         this.dropSelf(ModBlocks.DENSE_CLOUD_BRICK.get());
         this.add(ModBlocks.NETHER_DIAMOND_ORE.get(),block -> createOreDrop(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
-        this.add(ModBlocks.PEBBLE.get(),block -> createSingleItemTable(ModItems.PEBBLE.get()));
-        this.add(ModBlocks.MOSSY_PEBBLE.get(),block -> createSingleItemTable(ModItems.MOSSY_PEBBLE.get()));
 
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         this.dropSelf(ModBlocks.MYSTIC_PLANKS.get());
@@ -131,22 +110,6 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.YELLOW_MUSHROOM_BLOCK.get());
         this.dropSelf(ModBlocks.GLOW_MUSHROOM_BLOCK.get());
     }
-
-    /*private LootTable.Builder createPebbleDrops(Block pebbleBlock, Item pebbleItem, LootItemCondition.Builder lootCondition) {
-        Integer size = pebbleBlock.getValue(PebbleBlock.SIZE);
-
-        return LootTable.lootTable().withPool(LootPool.lootPool()
-                .add(AlternativesEntry.alternatives(
-                        size.getPossibleValues().stream()
-                                .map(size -> (Function<BlockState, LootEntry.Builder<?>>) state -> {
-                                    int blockSize = state.getValue(sizeProperty);
-                                    return LootItem.lootTableItem(pebbleItem)
-                                            .apply(SetCountFunction.setCount(ConstantValue.exactly(blockSize)));
-                                })
-                                .toArray(size -> new Function[size])
-                ))
-        );
-    }*/
 
 
     @Override

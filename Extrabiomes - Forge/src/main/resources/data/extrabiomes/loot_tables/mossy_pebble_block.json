@@ -1,0 +1,83 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            }
+          ],
+          "entries": [
+            {
+              "type": "minecraft:item",
+              "name": "extrabiomes:mossy_pebble",
+              "count":1,
+              "conditions": [
+                {
+                  "block": "extrabiomes:mossy_pebble_block",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "size": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "rolls": 1.0
+        },
+        {
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            }
+          ],
+          "entries": [
+            {
+              "type": "minecraft:item",
+              "name": "extrabiomes:mossy_pebble",
+              "count":2,
+              "conditions": [
+                {
+                  "block": "extrabiomes:mossy_pebble_block",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "size": 2
+                  }
+                }
+              ]
+            }
+          ],
+          "rolls": 1.0
+        },
+        {
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            }
+          ],
+          "entries": [
+            {
+              "type": "minecraft:item",
+              "name": "extrabiomes:mossy_pebble",
+              "count":3,
+              "conditions": [
+                {
+                  "block": "extrabiomes:mossy_pebble_block",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "size": 3
+                  }
+                }
+              ]
+            }
+          ],
+          "rolls": 1.0
+        }
+      ]
+    }
+  ],
+  "random_sequence": "extrabiomes:blocks/pebble_block"
+}
