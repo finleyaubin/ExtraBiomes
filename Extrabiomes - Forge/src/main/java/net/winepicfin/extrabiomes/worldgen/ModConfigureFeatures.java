@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.MysticTrunkPlacer;
 
 public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_KEY = registerKey("mystic");
@@ -27,10 +28,10 @@ public class ModConfigureFeatures {
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context){//todo untested, probably looks shit
         register(context, MYSTIC_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LOG.get()),
-                new FancyTrunkPlacer(9, 5,7),
+                new MysticTrunkPlacer(9, 5,7),
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LEAVES.get()),
-                new FancyFoliagePlacer(ConstantInt.of(7),ConstantInt.of(7),5),
-                new TwoLayersFeatureSize(4,10,6)).build()
+                new FancyFoliagePlacer(ConstantInt.of(3),ConstantInt.of(3),5),
+                new TwoLayersFeatureSize(4,6,6)).build()
         );
         register(context, SKY_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.SKY_LOG.get()),
