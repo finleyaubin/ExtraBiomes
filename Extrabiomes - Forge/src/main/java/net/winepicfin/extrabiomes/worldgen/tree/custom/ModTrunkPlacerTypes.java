@@ -6,7 +6,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.entity.custom.varents.PuckooKoiMarkings;
 
 public class ModTrunkPlacerTypes {
     public static final DeferredRegister<TrunkPlacerType<?>> TRUNK_PLACER = DeferredRegister.create(Registries.TRUNK_PLACER_TYPE, ExtraBiomes.MOD_ID);
