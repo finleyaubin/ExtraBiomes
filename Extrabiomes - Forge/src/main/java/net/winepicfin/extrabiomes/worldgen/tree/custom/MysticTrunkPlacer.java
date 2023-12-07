@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.CherryTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
@@ -60,13 +59,22 @@ public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((
 
     @Override
     public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig) {
-        setDirtAt(pLevel, pBlockSetter, pRandom, pPos.below(), pConfig);
+        BlockPos blockpos = pPos.below();
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos, pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.north(), pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.east(), pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.south(), pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.west(), pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.north().east(), pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.north().west(), pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.south().east(), pConfig);
+        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.south().west(), pConfig);
+
         int i = Math.max(0, pFreeTreeHeight - 1 + this.branchStartOffsetFromTop.sample(pRandom));
         int j = Math.max(0, pFreeTreeHeight - 1 + this.secondBranchStartOffsetFromTop.sample(pRandom));
         if (j >= i) {
             ++j;
         }
-
         int k = this.branchCount.sample(pRandom);
         boolean flag = k == 3;
         boolean flag1 = k >= 2;
@@ -78,9 +86,16 @@ public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((
         } else {
             l = i + 1;
         }
-
+        this.placeLog(pLevel, pBlockSetter, pRandom, pPos.north().east(), pConfig);
+        this.placeLog(pLevel, pBlockSetter, pRandom, pPos.north().west(), pConfig);
+        this.placeLog(pLevel, pBlockSetter, pRandom, pPos.south().east(), pConfig);
+        this.placeLog(pLevel, pBlockSetter, pRandom, pPos.south().west(), pConfig);
         for(int i1 = 0; i1 < l; ++i1) {
             this.placeLog(pLevel, pBlockSetter, pRandom, pPos.above(i1), pConfig);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPos.north().above(i1), pConfig);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPos.east().above(i1), pConfig);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPos.south().above(i1), pConfig);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPos.west().above(i1), pConfig);
         }
 
         List<FoliagePlacer.FoliageAttachment> list = new ArrayList<>();
