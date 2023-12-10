@@ -18,8 +18,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.winepicfin.extrabiomes.biomes.Charred_forest;
-import net.winepicfin.extrabiomes.biomes.Cold_mesa;
+import net.winepicfin.extrabiomes.biomes.ModTerrablender;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -52,6 +51,7 @@ public class ExtraBiomes
         ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModTrunkPlacerTypes.register(modEventBus);
+        ModTerrablender.registerBiomes();
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::addCreative);
@@ -67,11 +67,6 @@ public class ExtraBiomes
     {
         event.enqueueWork(() ->
         {
-            // Weights are kept intentionally low as we add minimal biomes
-           Regions.register(new Charred_forest(new ResourceLocation(MOD_ID, "overworld_1"), 2));
-           Regions.register(new Cold_mesa(new ResourceLocation(MOD_ID, "overworld_2"), 2));
-
-
             // Register our surface rules
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, TestSurfaceRuleData.makeRules());
         });

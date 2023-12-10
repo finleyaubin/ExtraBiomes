@@ -6,7 +6,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
 import net.winepicfin.extrabiomes.block.ModBlocks;
-import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 

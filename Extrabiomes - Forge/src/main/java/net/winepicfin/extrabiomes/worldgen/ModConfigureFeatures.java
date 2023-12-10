@@ -10,6 +10,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -32,6 +33,7 @@ public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_KEY = registerKey("mystic");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SKY_KEY = registerKey("sky");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PALM_KEY = registerKey("palm");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CHARRED_KEY = registerKey("charred");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context){//todo untested, probably looks shit
         register(context, MYSTIC_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -54,6 +56,13 @@ public class ModConfigureFeatures {
                 BlockStateProvider.simple(ModBlocks.PALM_LEAVES.get()),
                 new BlobFoliagePlacer(ConstantInt.of(2),ConstantInt.of(0),3),
                 new TwoLayersFeatureSize(4, 10, 6)).build()
+        );
+        register(context, CHARRED_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(Blocks.BASALT),
+                new FancyTrunkPlacer(5, 2, 0),
+                BlockStateProvider.simple(Blocks.AIR),
+                new BlobFoliagePlacer(ConstantInt.of(0),ConstantInt.of(0),0),
+                new TwoLayersFeatureSize(0, 0, 0)).build()
         );
     }
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name){

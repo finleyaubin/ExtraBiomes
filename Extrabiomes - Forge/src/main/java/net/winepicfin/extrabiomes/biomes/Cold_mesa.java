@@ -41,7 +41,5 @@ public class Cold_mesa extends Region{
         builder.build().forEach(mapper::accept);
 
     }
-    public static TagKey<Biome> COLD_MESA = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:is_mesa"));
-    public static TagKey<Biome> CHARRED = TagKey.create(Registries.BIOME, new ResourceLocation( "forge:is_cold"));
 
 }
