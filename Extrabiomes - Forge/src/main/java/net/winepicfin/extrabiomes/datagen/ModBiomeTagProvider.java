@@ -16,6 +16,5 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         super(p_255800_, p_256205_, ExtraBiomes.MOD_ID, existingFileHelper);
     }
     protected void addTags(HolderLookup.Provider p_256485_) {
-        this.tag(BiomeTags.HAS_MINESHAFT_MESA).add(ModBiomes.CHARRED_FOREST);
     }
 }
