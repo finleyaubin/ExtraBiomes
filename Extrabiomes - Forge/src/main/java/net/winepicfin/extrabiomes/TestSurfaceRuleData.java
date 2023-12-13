@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Noises;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.winepicfin.extrabiomes.biomes.ModBiomes;
 
@@ -15,14 +16,15 @@ public class TestSurfaceRuleData
     protected static SurfaceRules.RuleSource makeRules()
     {
         SurfaceRules.ConditionSource isAtOrAboveWaterLevel = SurfaceRules.waterBlockCheck(-1, 0);
-        SurfaceRules.RuleSource grassSurface = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrAboveWaterLevel, GRASS_BLOCK), DIRT);
+      //  SurfaceRules.RuleSource grassSurface = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrAboveWaterLevel, GRASS_BLOCK), DIRT);
 
         return SurfaceRules.sequence(
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.CHARRED_FOREST),RED_TERRACOTTA),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.CHARRED_FOREST), RED_TERRACOTTA),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA), SurfaceRules.bandlands()),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_ERODED_MESA), SurfaceRules.bandlands()),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_ERODED_MESA), SurfaceRules.bandlands())
                 // Default to a grass and dirt surface
-                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface)
+                //SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface)
         );
     }
 

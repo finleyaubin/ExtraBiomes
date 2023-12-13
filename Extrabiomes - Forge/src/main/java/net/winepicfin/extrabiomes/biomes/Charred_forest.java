@@ -46,15 +46,10 @@ public class Charred_forest{
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
-        BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addFerns(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
 
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_PLAINS);
-
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.CHARRED_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
@@ -64,11 +59,11 @@ public class Charred_forest{
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x159204)
-                        .waterFogColor(0x329011)
-                        .skyColor(0x103167)
-                        .ambientParticle(new AmbientParticleSettings(ParticleTypes.END_ROD, 0.118093334F))
-                        .fogColor(0x12638463)
+                        .waterColor(0x384c5e)
+                        .waterFogColor(0x3b405e)
+                        .skyColor(0x2b251e)
+                        .fogColor(0x2221a3ab)
+                        .ambientParticle(new AmbientParticleSettings(ParticleTypes.ASH, 0.018093334F))
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
                         .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DESERT)).build())
                 .build();

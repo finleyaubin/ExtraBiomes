@@ -31,7 +31,6 @@ public class ModBiomes
         BiomeDefaultFeatures.addDefaultUndergroundVariety(builder);
         BiomeDefaultFeatures.addDefaultSprings(builder);
         BiomeDefaultFeatures.addSurfaceFreezing(builder);
-        BiomeDefaultFeatures.addSurfaceFreezing(builder);
     }
 
 }
