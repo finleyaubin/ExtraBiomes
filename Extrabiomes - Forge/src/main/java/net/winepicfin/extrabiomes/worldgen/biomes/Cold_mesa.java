@@ -1,11 +1,9 @@
-package net.winepicfin.extrabiomes.biomes;
+package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import terrablender.api.Region;

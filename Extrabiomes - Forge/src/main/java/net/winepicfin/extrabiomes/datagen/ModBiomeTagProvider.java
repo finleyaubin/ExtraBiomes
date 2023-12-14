@@ -3,10 +3,8 @@ package net.winepicfin.extrabiomes.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraft.tags.BiomeTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.biomes.ModBiomes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;

@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.biomes;
+package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.resources.ResourceLocation;
 import net.winepicfin.extrabiomes.ExtraBiomes;

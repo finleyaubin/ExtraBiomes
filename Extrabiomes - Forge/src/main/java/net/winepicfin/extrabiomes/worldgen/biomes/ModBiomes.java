@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.biomes;
+package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;

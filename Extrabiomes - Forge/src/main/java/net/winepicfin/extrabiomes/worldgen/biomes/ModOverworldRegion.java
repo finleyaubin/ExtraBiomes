@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.biomes;
+package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Registry;
