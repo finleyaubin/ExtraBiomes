@@ -14,6 +14,7 @@ public class ModBiomes
     public static final ResourceKey<Biome> CHARRED_FOREST = register("charred_forest");
     public static final ResourceKey<Biome> COLD_MESA = register("cold_mesa");
     public static final ResourceKey<Biome> COLD_ERODED_MESA = register("cold_eroded_mesa");
+    public static final ResourceKey<Biome>  MYSTIC_FOREST = register("mystic_forest");
 
 
     private static ResourceKey<Biome> register(String name)
@@ -21,8 +22,13 @@ public class ModBiomes
         return ResourceKey.create(Registries.BIOME, new ResourceLocation(ExtraBiomes.MOD_ID, name));
     }
     public static void boostrap(BootstapContext<Biome> context) {
-        Charred_forest charredForest = new Charred_forest();
+        CharredForest charredForest = new CharredForest();
+        MysticForest mysticForest = new MysticForest();
+        ColdMesa coldMesa = new ColdMesa();
         context.register(CHARRED_FOREST,charredForest.Register(context));
+        context.register(MYSTIC_FOREST,mysticForest.Register(context));
+        context.register(COLD_MESA,coldMesa.Register(context));
+        context.register(COLD_ERODED_MESA,coldMesa.Register(context));
     }
     public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);

@@ -35,10 +35,29 @@ public class ModOverworldRegion extends Region {
                 .temperature(ParameterUtils.Temperature.FROZEN)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.FULL_RANGE)
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.VALLEY)
+                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA));
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.FROZEN)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
+                .build().forEach(point -> builder.add(point, ModBiomes.COLD_ERODED_MESA));
+
+
+
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.NEUTRAL)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.HUMID, ParameterUtils.Humidity.WET))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
+                .build().forEach(point -> builder.add(point, ModBiomes.MYSTIC_FOREST));
 
 
         // Add our points to the mapper
