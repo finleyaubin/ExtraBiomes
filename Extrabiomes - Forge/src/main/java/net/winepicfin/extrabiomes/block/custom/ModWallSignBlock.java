@@ -10,8 +10,8 @@ import net.winepicfin.extrabiomes.entity.ModHangingSignBlockEntity;
 import net.winepicfin.extrabiomes.entity.ModSignBlockEntity;
 
 public class ModWallSignBlock extends WallSignBlock {
-    public ModWallSignBlock(Properties p_251606_, WoodType p_252140_) {
-        super(p_251606_, p_252140_);
+    public ModWallSignBlock(Properties properties, WoodType woodType) {
+        super(woodType,properties);
     }
 
     @Override

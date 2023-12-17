@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
@@ -25,7 +26,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     }
 
     @Override
-    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> pWriter) {
+    protected void buildRecipes(RecipeOutput pWriter) {
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
         foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs", Boolean.TRUE);
         woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPED_MYSTIC_LOG.get(), ModBlocks.STRIPED_MYSTIC_WOOD.get(), ModBlocks.MYSTIC_STAIRS.get(), ModBlocks.MYSTIC_SLAB.get(), ModBlocks.MYSTIC_BUTTON.get(), ModBlocks.MYSTIC_PRESSURE_PLATE.get(), ModBlocks.MYSTIC_FENCE_GATE.get(), ModBlocks.MYSTIC_FENCE.get(), ModBlocks.MYSTIC_DOOR.get(), ModBlocks.MYSTIC_TRAPDOOR.get(),ModBlocks.MYSTIC_SIGN.get());
@@ -67,18 +68,18 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
 
 
-    protected static void oreSmelting(Consumer<FinishedRecipe> p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
+    protected static void oreSmelting(RecipeOutput p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
         oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_smelting");
     }
 
-    protected static void oreBlasting(Consumer<FinishedRecipe> p_248775_, List<ItemLike> p_251504_, RecipeCategory p_248846_, ItemLike p_249735_, float p_248783_, int p_250303_, String p_251984_, Boolean createSmelting) {
+    protected static void oreBlasting(RecipeOutput p_248775_, List<ItemLike> p_251504_, RecipeCategory p_248846_, ItemLike p_249735_, float p_248783_, int p_250303_, String p_251984_, Boolean createSmelting) {
         oreCooking(p_248775_, RecipeSerializer.BLASTING_RECIPE, p_251504_, p_248846_, p_249735_, p_248783_, p_250303_, p_251984_, "_from_blasting");
         if (createSmelting) {
             oreSmelting(p_248775_, p_251504_, p_248846_, p_249735_, p_248783_, p_250303_ * 2, p_251984_);
         }
     }
 
-    protected static void foodCooking(Consumer<FinishedRecipe> p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_, Boolean campfireAndSmoker) {
+    protected static void foodCooking(RecipeOutput p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_, Boolean campfireAndSmoker) {
         oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_cooking");
         if (campfireAndSmoker) {
             campfireCooking(p_250654_, "campfire_cooking", 600, p_250172_, p_251868_, p_250789_);
@@ -86,33 +87,33 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
     }
 
-    protected static void oreCooking(Consumer<FinishedRecipe> pfinishedRecipeConsumer, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> p_249619_, RecipeCategory p_251154_, ItemLike p_250066_, float p_251871_, int p_251316_, String p_251450_, String pRecipieName) {
+    protected static void oreCooking(RecipeOutput pFinishedRecipeConsumer, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> p_249619_, RecipeCategory category, ItemLike ingredient, float p_251871_, int p_251316_, String p_251450_, String pRecipeName) {
         for (ItemLike itemlike : p_249619_) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), p_251154_, p_250066_, p_251871_, p_251316_, recipeSerializer).group(p_251450_).unlockedBy(getHasName(itemlike), has(itemlike))
-                    .save(pfinishedRecipeConsumer, ExtraBiomes.MOD_ID + ":" + getItemName(p_250066_) + pRecipieName + "_" + getItemName(itemlike));
+            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), category, ingredient, p_251871_, p_251316_,recipeSerializer, null).group(p_251450_).unlockedBy(getHasName(itemlike), has(itemlike))//TODO this almost definitely shouldn't be null but I also dont know what it should be lol
+                    .save(pFinishedRecipeConsumer, ExtraBiomes.MOD_ID + ":" + getItemName(ingredient) + pRecipeName + "_" + getItemName(itemlike));
         }
     }
 
-    private static void campfireCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
+    private static void campfireCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
         for (ItemLike itemlike : ingredient) {
             SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, p_252138_, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
         }
     }
 
-    private static void smokingCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
+    private static void smokingCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
         for (ItemLike itemlike : ingredient) {
             SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, p_252138_, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
         }
     }
 
-    private static void gildRecipes(Consumer<FinishedRecipe> recipeOutput, ArrayList<Block> nonGilded, ArrayList<Block> gilded) {
+    private static void gildRecipes(RecipeOutput recipeOutput, ArrayList<Block> nonGilded, ArrayList<Block> gilded) {
         int recipeNum = 0;
         for (Block currentNonGilded : nonGilded) {
             gild(recipeOutput, currentNonGilded, gilded.get(recipeNum++));
         }
     }
 
-    private static void woodRecipes(Consumer<FinishedRecipe> recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block stripedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign) {
+    private static void woodRecipes(RecipeOutput recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block stripedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign) {
         List<ItemLike> woods = new ArrayList<>() {{
             add(log);
             add(strippedLog);
@@ -134,7 +135,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     }
 
-    private static void planks(Consumer<FinishedRecipe> recipeOutput, List<ItemLike> ingredients, Block output) {
+    private static void planks(RecipeOutput recipeOutput, List<ItemLike> ingredients, Block output) {
         for (ItemLike itemlike : ingredients) {
             ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, 4)
                     .requires(itemlike)
@@ -143,7 +144,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         }
     }
 
-    private static void wood(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void wood(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&&")
                 .pattern("&&")
@@ -152,7 +153,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void stair(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void stair(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 4)
                 .pattern("&  ")
                 .pattern("&& ")
@@ -162,7 +163,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void slab(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void slab(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 6)
                 .pattern("&&&")
                 .define('&', ingredient)
@@ -170,7 +171,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void fence(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void fence(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&$&")
                 .pattern("&$&")
@@ -180,7 +181,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void fenceGate(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void fenceGate(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
                 .pattern("$&$")
                 .pattern("$&$")
@@ -190,7 +191,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void door(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void door(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&&")
                 .pattern("&&")
@@ -200,7 +201,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void trapDoor(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void trapDoor(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 2)
                 .pattern("&&&")
                 .pattern("&&&")
@@ -209,14 +210,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void pressurePlate(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void pressurePlate(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 2)
                 .pattern("&&")
                 .define('&', ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
-    private static void sign(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void sign(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&&&")
                 .pattern("&&&")
@@ -227,14 +228,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void oneToOne(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void oneToOne(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, 1)
                 .requires(ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void brick(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void brick(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
                 .pattern("&&")
                 .pattern("&&")
@@ -243,7 +244,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput);
     }
 
-    private static void gild(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+    private static void gild(RecipeOutput recipeOutput, Block ingredient, Block output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
                 .pattern(" * ")
                 .pattern("*^*")

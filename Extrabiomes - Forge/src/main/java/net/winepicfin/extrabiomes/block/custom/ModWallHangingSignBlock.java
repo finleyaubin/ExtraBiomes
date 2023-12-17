@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.winepicfin.extrabiomes.entity.ModHangingSignBlockEntity;
 
 public class ModWallHangingSignBlock extends WallHangingSignBlock {
-    public ModWallHangingSignBlock(Properties p_251606_, WoodType p_252140_) {
-        super(p_251606_, p_252140_);
+    public ModWallHangingSignBlock(Properties properties, WoodType woodType) {
+        super(woodType,properties);
     }
 
     @Override

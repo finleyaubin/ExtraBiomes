@@ -9,8 +9,8 @@ import net.winepicfin.extrabiomes.entity.ModSignBlockEntity;
 
 
 public class ModStandingSignBlock extends StandingSignBlock {
-    public ModStandingSignBlock(Properties p_56990_, WoodType p_56991_) {
-        super(p_56990_, p_56991_);
+    public ModStandingSignBlock(Properties properties, WoodType woodType) {
+        super(woodType,properties);
     }
 
     @Override

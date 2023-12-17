@@ -18,6 +18,6 @@ license="MIT Licence"
 [[dependencies.extrabiomes]]
     modId="terrablender"
     mandatory=true
-    versionRange="[1.0.0.59,)"
+    versionRange="[3.3.0.3,)"
     ordering="NONE"
     side="BOTH"
