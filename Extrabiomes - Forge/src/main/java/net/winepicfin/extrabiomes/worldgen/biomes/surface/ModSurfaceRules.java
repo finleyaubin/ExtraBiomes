@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ForgeBiomeTagsProvider;
+import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
 public class ModSurfaceRules {
