@@ -15,6 +15,7 @@ public class ModBiomes
     public static final ResourceKey<Biome> COLD_MESA = register("cold_mesa");
     public static final ResourceKey<Biome> COLD_ERODED_MESA = register("cold_eroded_mesa");
     public static final ResourceKey<Biome>  MYSTIC_FOREST = register("mystic_forest");
+    public static final ResourceKey<Biome>  LUSH_MESA = register("lush_mesa");
 
 
     private static ResourceKey<Biome> register(String name)
@@ -25,10 +26,12 @@ public class ModBiomes
         CharredForest charredForest = new CharredForest();
         MysticForest mysticForest = new MysticForest();
         ColdMesa coldMesa = new ColdMesa();
+        LushMesa lushMesa = new LushMesa();
         context.register(CHARRED_FOREST,charredForest.Register(context));
         context.register(MYSTIC_FOREST,mysticForest.Register(context));
         context.register(COLD_MESA,coldMesa.Register(context));
         context.register(COLD_ERODED_MESA,coldMesa.Register(context));
+        context.register(LUSH_MESA,lushMesa.Register(context));
     }
     public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);

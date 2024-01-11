@@ -29,6 +29,7 @@ public class ModSurfaceRules {
                                 SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),COARSE_DIRT_FLOOR)))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA), SurfaceRules.bandlands()),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_ERODED_MESA), SurfaceRules.bandlands()),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.LUSH_MESA), SurfaceRules.bandlands()),
                 SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.isBiome(Biomes.JUNGLE),
                         SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface)))
         );
