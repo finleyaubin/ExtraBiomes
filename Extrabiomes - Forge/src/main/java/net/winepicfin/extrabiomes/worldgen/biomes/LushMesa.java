@@ -23,10 +23,13 @@ public class LushMesa {
 
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
+        BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
+        BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
-        BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
+        BiomeDefaultFeatures.addJungleVines(biomeBuilder);
+        BiomeDefaultFeatures.addJungleMelons(biomeBuilder);
+
 
 
         return new Biome.BiomeBuilder()
