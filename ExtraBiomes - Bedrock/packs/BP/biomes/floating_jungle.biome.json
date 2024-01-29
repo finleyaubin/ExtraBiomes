@@ -41,7 +41,8 @@
 			"jungle": {},
 			"monster": {},
 			"overworld": {},
-			"rare": {}
+			"rare": {},
+			"caves": {}
 		}
 	}
 }

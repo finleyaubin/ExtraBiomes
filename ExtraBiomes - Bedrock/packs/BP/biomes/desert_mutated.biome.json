@@ -33,7 +33,8 @@
 			"desert": {},
 			"monster": {},
 			"mutated": {},
-			"overworld_generation": {}
+			"overworld_generation": {},
+			"caves": {}
 		}
 	}
 }

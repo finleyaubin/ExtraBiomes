@@ -38,7 +38,8 @@
 			"monster": {},
 			"ocean": {},
 			"overworld": {},
-			"warm": {}
+			"warm": {},
+			"caves": {}
 		}
 	}
 }

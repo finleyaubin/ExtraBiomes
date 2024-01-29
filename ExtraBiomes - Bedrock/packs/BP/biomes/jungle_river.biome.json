@@ -60,7 +60,8 @@
 			},
 			"overworld": {},
 			"river": {},
-			"jungle": {}
+			"jungle": {},
+			"caves": {}
 		}
 	}
 }

@@ -66,7 +66,8 @@
 			"monster": {},
 			"overworld": {},
 			"swamp": {},
-			"shattered_swamp": {}
+			"shattered_swamp": {},
+			"caves": {}
 		}
 	}
 }

@@ -28,7 +28,8 @@
 				"mutate_transformation": "river_bed"
 			},
 			"overworld": {},
-			"river": {}
+			"river": {},
+			"caves": {}
 		}
 	}
 }

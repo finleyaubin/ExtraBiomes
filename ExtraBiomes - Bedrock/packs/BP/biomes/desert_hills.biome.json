@@ -37,7 +37,8 @@
 			"desert": {},
 			"hills": {},
 			"monster": {},
-			"overworld": {}
+			"overworld": {},
+			"caves": {}
 		}
 	}
 }

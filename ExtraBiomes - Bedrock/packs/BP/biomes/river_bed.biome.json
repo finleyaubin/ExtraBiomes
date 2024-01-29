@@ -32,7 +32,8 @@
 			"overworld": {},
 			"river": {},
 			"warm": {},
-			"ocean": {}
+			"ocean": {},
+			"caves": {}
 		}
 	}
 }

@@ -37,7 +37,8 @@
 			"animal": {},
 			"monster": {},
 			"overworld": {},
-			"swamp": {}
+			"swamp": {},
+			"caves": {}
 		}
 	}
 }

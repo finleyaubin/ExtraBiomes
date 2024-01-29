@@ -43,7 +43,8 @@
 			"desert": {},
 			"monster": {},
 			"overworld": {},
-			"rare": {}
+			"rare": {},
+			"caves": {}
 		}
 	}
 }

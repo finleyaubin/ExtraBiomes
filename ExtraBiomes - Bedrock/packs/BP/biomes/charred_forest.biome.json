@@ -67,7 +67,8 @@
 			"overworld": {},
 			"animal": {},
 			"monster": {},
-			"charred": {}
+			"charred": {},
+			"cave": {}
 		}
 	}
 }

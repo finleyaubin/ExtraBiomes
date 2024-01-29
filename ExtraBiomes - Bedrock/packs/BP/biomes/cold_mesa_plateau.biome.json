@@ -41,7 +41,8 @@
 			"overworld": {},
 			"plateau": {},
 			"rare": {},
-			"frozen": {}
+			"frozen": {},
+			"caves": {}
 		}
 	}
 }

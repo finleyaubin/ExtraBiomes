@@ -48,7 +48,8 @@
 			"mesa": {},
 			"monster": {},
 			"overworld": {},
-			"frozen": {}
+			"frozen": {},
+			"caves": {}
 		}
 	}
 }

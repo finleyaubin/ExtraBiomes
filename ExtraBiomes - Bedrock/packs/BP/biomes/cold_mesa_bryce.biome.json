@@ -38,7 +38,8 @@
 			"monster": {},
 			"mutated": {},
 			"overworld": {},
-			"frozen": {}
+			"frozen": {},
+			"caves": {}
 		}
 	}
 }
