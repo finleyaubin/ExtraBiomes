@@ -33,6 +33,8 @@ import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
 
+import static java.lang.Thread.sleep;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(ExtraBiomes.MOD_ID)
 public class ExtraBiomes
@@ -40,8 +42,9 @@ public class ExtraBiomes
     public static final String MOD_ID = "extrabiomes";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public ExtraBiomes()
-    {
+    public ExtraBiomes() throws InterruptedException {
+        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
@@ -59,8 +62,7 @@ public class ExtraBiomes
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

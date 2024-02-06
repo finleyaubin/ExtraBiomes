@@ -23,6 +23,7 @@ public class Config
     static void onLoad(final ModConfigEvent event)
     {
         biomeWeight = BIOMEWEIGHT.get();
+        System.out.println(biomeWeight+" is the biome weight On load");
 
     }
 }
