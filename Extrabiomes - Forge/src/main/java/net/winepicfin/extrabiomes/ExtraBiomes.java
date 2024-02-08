@@ -17,8 +17,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.winepicfin.extrabiomes.util.ModVanillaCompat;
-import net.winepicfin.extrabiomes.worldgen.biomes.ModTerrablender;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -27,13 +25,12 @@ import net.winepicfin.extrabiomes.fluid.ModFluidTypes;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
+import net.winepicfin.extrabiomes.util.ModVanillaCompat;
 import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
-
-import static java.lang.Thread.sleep;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(ExtraBiomes.MOD_ID)
@@ -41,11 +38,14 @@ public class ExtraBiomes
 {
     public static final String MOD_ID = "extrabiomes";
     private static final Logger LOGGER = LogUtils.getLogger();
+    public static void LoadConfig(){
 
-    public ExtraBiomes() throws InterruptedException {
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+}
+
+    public ExtraBiomes() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
         ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
@@ -54,7 +54,6 @@ public class ExtraBiomes
         ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModTrunkPlacerTypes.register(modEventBus);
-        ModTerrablender.registerBiomes();
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::addCreative);
@@ -62,7 +61,8 @@ public class ExtraBiomes
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-
+        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
