@@ -22,5 +22,18 @@
                 1
             ]
         }
+    ],
+    "subpacks": [
+        {
+			"folder_name": "uhd_panorama",
+			"name": "A higher resolution version of the extrabiomes background panorama that looks beautiful, but may cause block textures to all turn black on devices with insuficient V-RAM",
+			"memory_tier": 1
+		},
+		{
+			"folder_name": "sd_panorama",
+			"name": "Lower Resolution background Panorama that fixes the black world issue that occurs on some devices",
+			"memory_tier": 1
+		}
+
     ]
 }
