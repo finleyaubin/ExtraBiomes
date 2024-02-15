@@ -11,7 +11,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 public class ModBiomeModifiers {
 
     public static final ResourceKey<BiomeModifier> ADD_TREE_CHARRED = registerKey("add_tree_charred");
-
+    public static final ResourceKey<BiomeModifier> ADD_LUSH_GRASS = registerKey("add_lush_grass");
 
     public static void bootstrap(BootstapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
