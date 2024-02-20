@@ -5,6 +5,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.util.ModTags;
+import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -14,5 +16,6 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         super(p_255800_, p_256205_, ExtraBiomes.MOD_ID, existingFileHelper);
     }
     protected void addTags(HolderLookup.Provider p_256485_) {
+        this.tag(ModTags.Biomes.tag("lush_mesa")).add(ModBiomes.LUSH_MESA);
     }
 }

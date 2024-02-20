@@ -32,7 +32,7 @@ public class ModPlacedFeatures{
         register(context, MYSTIC_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.MYSTIC_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), ModBlocks.MYSTIC_SAPLING.get()));//first int div float must = an int not a float
         register(context, PALM_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.PALM_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.5f,2), ModBlocks.PALM_SAPLING.get()));//first int div float must = an int not a float
         register(context, CHARRED_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.CHARRED_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), Blocks.OAK_SAPLING));//first int div float must = an int not a float
-        register(context, LUSH_GRASS_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.LUSH_GRASS_KEY), ModOrePlacement.commonOrePlacement(40, HeightRangePlacement.uniform(VerticalAnchor.TOP,VerticalAnchor.TOP)));
+        register(context, LUSH_GRASS_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.LUSH_GRASS_KEY), ModOrePlacement.commonOrePlacement(40, HeightRangePlacement.uniform(VerticalAnchor.BOTTOM,VerticalAnchor.TOP)));
     }
 
     private static ResourceKey<PlacedFeature> createKey(String name) {

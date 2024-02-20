@@ -12,15 +12,15 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 
 public class ModTags {
     public static class Blocks{
-        private  static TagKey<Block> tag(String name){
+        public static TagKey<Block> tag(String name){
             return BlockTags.create(new ResourceLocation(ExtraBiomes.MOD_ID, name));        }
     }
     public static class Items{
-        private  static TagKey<Item> tag(String name){
+        public static TagKey<Item> tag(String name){
             return ItemTags.create(new ResourceLocation(ExtraBiomes.MOD_ID, name));        }
     }
-    private static class Biomes{
-        private static TagKey<Biome> tag(String name ){
+    public static class Biomes{
+        public static TagKey<Biome> tag(String name ){
            return TagKey.create(Registries.BIOME, new ResourceLocation( ExtraBiomes.MOD_ID,name));
         }
     }
