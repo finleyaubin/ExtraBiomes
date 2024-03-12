@@ -9,6 +9,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.versions.forge.ForgeVersion;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
 public class ModTags {

@@ -26,7 +26,7 @@ public class ModBiomeModifiers {
 
     context.register(ADD_LUSH_GRASS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModTags.Biomes.LUSH_MESA),
             HolderSet.direct(placedFeatures.getOrThrow(ModPlacedFeatures.LUSH_GRASS_PLACED_KEY)),
-            GenerationStep.Decoration.UNDERGROUND_ORES));
+            GenerationStep.Decoration.TOP_LAYER_MODIFICATION));
 }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {

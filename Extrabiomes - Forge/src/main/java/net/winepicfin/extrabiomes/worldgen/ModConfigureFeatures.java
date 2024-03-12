@@ -78,7 +78,7 @@ public class ModConfigureFeatures {
         );
         //make sure that the tag is added to the biome
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
-        register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 7, 1));
+        register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 40, 0));
     }
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name){
         return ResourceKey.create(Registries.CONFIGURED_FEATURE,new ResourceLocation(ExtraBiomes.MOD_ID, name));
