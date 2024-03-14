@@ -39,10 +39,11 @@ public class LushMesa {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x54d7ed80)
-                        .waterFogColor(0x329011)
-                        .skyColor(0x8103167)
-                        .fogColor(0x12638463).build())
+                        //colours are ARGB not RGBA
+                        .waterColor(0x8054d7ed)
+                        .waterFogColor(0x113290)
+                        .skyColor(0x6781031)
+                        .fogColor(0x63126384).build())
                 .build();
     }
 }
