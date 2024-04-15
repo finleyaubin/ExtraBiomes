@@ -42,8 +42,8 @@ public class LushMesa {
                         //colours are ARGB not RGBA
                         .waterColor(0x8054d7ed)
                         .waterFogColor(0x113290)
-                        .skyColor(0x6781031)
-                        .fogColor(0x63126384).build())
+                        .skyColor(0xB891CCFF)
+                        .fogColor(0x95FDEEB4).build())
                 .build();
     }
 }

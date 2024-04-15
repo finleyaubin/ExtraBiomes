@@ -36,10 +36,10 @@ public class ColdMesa {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x4159204)
-                        .waterFogColor(0x329011)
+                        .waterColor(0x5920441)
+                        .waterFogColor(0x113290)
                         .skyColor(0x8103167)
-                        .fogColor(0x12638463)
+                        .fogColor(0x84631263)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }
