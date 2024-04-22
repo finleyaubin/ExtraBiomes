@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -11,7 +12,11 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -42,7 +47,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
     public static final RegistryObject<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
     public static final RegistryObject<Block> STRIPED_MYSTIC_LOG = registerBlock("striped_mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(5f)));
-    public static final RegistryObject<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)));
+    public static final RegistryObject<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)));
     public static final RegistryObject<Block> STRIPED_MYSTIC_WOOD = registerBlock("striped_mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(5f)));
     public static final RegistryObject<Block> MYSTIC_SAPLING = registerBlock("mystic_sapling", () -> new SaplingBlock(new MysticTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistryObject<Block> MYSTIC_STAIRS = registerBlock("mystic_stairs", () -> new StairBlock(() -> ModBlocks.MYSTIC_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
@@ -134,8 +139,17 @@ public class ModBlocks {
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block) {
         return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
-
+    private static Boolean ocelotOrParrot(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, EntityType<?> entityType) {
+        return entityType == EntityType.OCELOT || entityType == EntityType.PARROT;
+    }
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
+    }
+
+    private static boolean always(BlockState BlockState, BlockGetter blockGetter, BlockPos BlockPos) {
+        return true;
+    }
+    private static boolean never(BlockState BlockState, BlockGetter blockGetter, BlockPos BlockPos) {
+        return false;
     }
 }

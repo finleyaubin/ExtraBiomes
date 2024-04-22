@@ -23,6 +23,7 @@ public class ModTags {
     }
     public static class Biomes{
         public static final TagKey<Biome> LUSH_MESA = tag("lush_mesa");
+        public static final TagKey<Biome> MYSTIC_FOREST = tag("mystic_forest");
         public static TagKey<Biome> tag(String name){
            return TagKey.create(Registries.BIOME, new ResourceLocation(ExtraBiomes.MOD_ID,name));
         }

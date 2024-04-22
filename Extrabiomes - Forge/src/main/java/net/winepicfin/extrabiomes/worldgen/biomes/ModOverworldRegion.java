@@ -39,6 +39,7 @@ public class ModOverworldRegion extends Region {
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA));
+
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
@@ -68,6 +69,14 @@ public class ModOverworldRegion extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.LUSH_MESA));
 
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.FROZEN)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.MID_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
+                .build().forEach(point -> builder.add(point, ModBiomes.TIAGA_SPIKES));
 
         // Add our points to the mapper
         builder.build().forEach(mapper::accept);
