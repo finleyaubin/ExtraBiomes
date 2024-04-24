@@ -1,11 +1,17 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
+import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
 public class TiagaSpikes {
 
@@ -32,7 +38,7 @@ public class TiagaSpikes {
         // UNDERGROUND_STRUCTURES
 
         // SURFACE_STRUCTURES
-
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, Feature.ICE_SPIKE);
         // STRONGHOLDS
 
         // UNDERGROUND_ORES
@@ -49,6 +55,8 @@ public class TiagaSpikes {
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+
+
 
         // TOP_LAYER_MODIFICATION
 
