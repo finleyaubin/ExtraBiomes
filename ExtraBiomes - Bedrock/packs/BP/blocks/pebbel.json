@@ -1,71 +1,72 @@
 {
-	"format_version": "1.17.10",
-	"minecraft:block": {
-		"description": {
-			"identifier": "extrabiomes:medium_pebble"
-		},
-		"components": {
-			"minecraft:block_light_absorption": 0,
-			"minecraft:block_light_emission": 0,
-			"minecraft:material_instances": {
-				"*": {
-					"texture": "stone",
-					"render_method": "alpha_test"
-				}
-			},
-			"minecraft:destroy_time": 0.1,
-			"minecraft:geometry": "geometry.pebble",
-			"minecraft:creative_category": {
-				"category": "Nature"
-			},
-			"minecraft:pick_collision": {
-				"origin": [
-					-8,
-					0,
-					-8
-				],
-				"size": [
-					16,
-					2,
-					16
-				]
-			},
-			"minecraft:entity_collision": {
-				"origin": [
-					-8,
-					0,
-					-8
-				],
-				"size": [
-					16,
-					2,
-					16
-				]
-			},
-			"minecraft:on_interact": {
-				"event": "increment_pile",
-				"target": "other",
-				"condition": "query.is_item_name_any('slot.weapon.mainhand', 0, 'extrabiomes:pebble')"
-			},
-			"minecraft:loot": "loot_tables/blocks/pebble/2pebble.json"
-		},
-		"events":{
-			"increment_pile":{
-				"sequence":[
-					{
-						"decrement_stack":{}
-
-					},
-					{
-						"run_command": {
-							"command": [
-								"setblock ~~~ extrabiomes:large_pebble",
-								"playsound place.deepslate @a[r=20] ~ ~ ~"
-							]
-						}
-					}
-				]
-			}
-		}
-	}
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:medium_pebble",
+      "menu_category": {
+        "category": "Nature"
+      }
+    },
+    "components": {
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "stone",
+          "render_method": "alpha_test"
+        }
+      },
+      "minecraft:geometry": "geometry.pebble",
+      "minecraft:pick_collision": {
+        "origin": [
+          -8,
+          0,
+          -8
+        ],
+        "size": [
+          16,
+          2,
+          16
+        ]
+      },
+      "minecraft:entity_collision": {
+        "origin": [
+          -8,
+          0,
+          -8
+        ],
+        "size": [
+          16,
+          2,
+          16
+        ]
+      },
+      "minecraft:on_interact": {
+        "event": "increment_pile",
+        "target": "other",
+        "condition": "query.is_item_name_any('slot.weapon.mainhand', 0, 'extrabiomes:pebble')"
+      },
+      "minecraft:loot": "loot_tables/blocks/pebble/2pebble.json",
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.1
+      },
+      "minecraft:light_dampening": 0,
+      "minecraft:light_emission": 0
+    },
+    "events": {
+      "increment_pile": {
+        "sequence": [
+          {
+            "decrement_stack": {}
+          },
+          {
+            "run_command": {
+              "command": [
+                "setblock ~~~ extrabiomes:large_pebble",
+                "playsound place.deepslate @a[r=20] ~ ~ ~"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
 }

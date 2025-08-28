@@ -1,5 +1,5 @@
 {
-	"format_version": "1.16.100",
+	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
 			"identifier": "extrabiomes:purple_mushroom_placed"

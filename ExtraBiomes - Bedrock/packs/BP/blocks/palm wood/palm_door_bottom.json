@@ -1,312 +1,360 @@
 {
-	"format_version": "1.19.80",
-	"minecraft:block": {
-		"description": {
-			"identifier": "extrabiomes:palm_door_bottom",
-			"menu_category": {
-				"category": "none"
-			},
-			"properties": {
-				"extrabiomes:is_open": [
-					false, true
-				],
-				"extrabiomes:direction": [
-					0, 1, 2, 3
-				],
-				"extrabiomes:top_refresh": [
-					false, true
-				]
-			}
-		},
-		"components": {
-			"minecraft:material_instances": {
-				"*": {
-					"texture": "palm_door_bottom",
-					"render_method": "blend",
-					"face_dimming": true,
-					"ambient_occlusion": false
-				}
-			},
-			"minecraft:placement_filter": {
-				"conditions": [ {
-						"allowed_faces": [
-							"up"
-						],
-						"block_filter": [ {
-								"tags": "!query.any_tag('extrabiomes_palm_door')"
-							} ]
-					} ]
-			},
-			"minecraft:destructible_by_mining": {
-				"seconds_to_destroy": 0.5
-			},
-			"minecraft:on_player_placing": {
-				"event": "extrabiomes:set_direction"
-			},
-			"minecraft:on_placed": {
-				"event": "extrabiomes:setup"
-			},
-			"minecraft:on_player_destroyed": {
-				"event": "extrabiomes:reset_top"
-			},
-			"minecraft:geometry": { "identifier": "geometry.custom_door", "bone_visibility": { "closed": false, "open": false } },
-			"minecraft:loot": "loot_tables/palm/palm_door.json",
-			"minecraft:map_color": "#52221D",
-			"minecraft:light_dampening": 10,
-			"tag:extrabiomes_palm_door": { },
-			"tag:wood": { }
-		},
-		"permutations": [ {
-				"condition": "query.block_property('extrabiomes:direction') == 0",
-				"components": {
-					"minecraft:transformation": {
-						"rotation": [
-							0,
-							180,
-							0
-						]
-					}
-				}
-			},
-			{
-				"condition": "query.block_property('extrabiomes:direction') == 1",
-				"components": {
-					"minecraft:transformation": {
-						"rotation": [
-							0,
-							0,
-							0
-						]
-					}
-				}
-			},
-			{
-				"condition": "query.block_property('extrabiomes:direction') == 2",
-				"components": {
-					"minecraft:transformation": {
-						"rotation": [
-							0,
-							270,
-							0
-						]
-					}
-				}
-			},
-			{
-				"condition": "query.block_property('extrabiomes:direction') == 3",
-				"components": {
-					"minecraft:transformation": {
-						"rotation": [
-							0,
-							90,
-							0
-						]
-					}
-				}
-			},
-			{
-				"condition": "query.block_property('extrabiomes:is_open') == 0",
-				"components": {
-					"minecraft:on_interact": {
-						"event": "extrabiomes:open_door"
-					},
-					"minecraft:collision_box": {
-						"origin": [ -8, 0, -8 ],
-						"size": [ 16, 16, 3 ]
-					},
-					"minecraft:selection_box": {
-						"origin": [ -8, 0, -8 ],
-						"size": [ 16, 16, 3 ]
-					},
-
-					"tag:extrabiomes:closed_palm_door": { }
-				}
-			},
-			{
-				"condition": "query.block_property('extrabiomes:is_open') == 1",
-				"components": {
-					"minecraft:on_interact": {
-						"event": "extrabiomes:close_door"
-					},
-					"minecraft:collision_box": {
-						"origin": [ -8, 0, -8 ],
-						"size": [ 3, 16, 16 ]
-					},
-					"minecraft:selection_box": {
-						"origin": [ -8, 0, -8 ],
-						"size": [ 3, 16, 16 ]
-					},
-					"tag:extrabiomes:open_palm_door": { }
-				}
-			},
-			{
-				"condition": "query.block_property('extrabiomes:is_open') == false",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.custom_door",
-						"bone_visibility": {
-							"open": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "query.block_property('extrabiomes:is_open') == true",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.custom_door",
-						"bone_visibility": {
-							"closed": false
-						}
-					}
-				}
-			}
-		],
-		"events": {
-			"extrabiomes:set_direction": {
-				"sequence": [
-					{
-						"set_block_property": {
-							"extrabiomes:direction": "query.cardinal_facing_2d-2"
-						}
-					}
-				]
-			},
-			"extrabiomes:setup": {
-				"sequence": [
-					{
-						"condition": "query.block_property('extrabiomes:top_refresh')==false",
-						"trigger": {
-							"event": "extrabiomes:set_upper_block",
-							"target": "self"
-						}
-					},
-					{
-						"condition": "query.block_property('extrabiomes:top_refresh')==true",
-						"set_block_property": {
-							"extrabiomes:top_refresh": false
-						}
-					}
-				]
-			},
-			"extrabiomes:set_upper_block": {
-				"sequence": [
-					{
-						"condition": "query.block_property('extrabiomes:direction')==0&&query.block_property('extrabiomes:is_open')==false",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":0, \"extrabiomes:is_open\":false]"
-							]
-						}
-					},
-					{
-						"condition": "query.block_property('extrabiomes:direction')==1&&query.block_property('extrabiomes:is_open')==false",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":1, \"extrabiomes:is_open\":false]"
-							]
-						}
-					},
-					{
-						"condition": "query.block_property('extrabiomes:direction')==2&&query.block_property('extrabiomes:is_open')==false",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":2, \"extrabiomes:is_open\":false]"
-							]
-						}
-					},
-					{
-						"condition": "query.block_property('extrabiomes:direction')==3&&query.block_property('extrabiomes:is_open')==false",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":3, \"extrabiomes:is_open\":false]"
-							]
-						}
-					},
-
-					{
-						"condition": "query.block_property('extrabiomes:direction')==0&&query.block_property('extrabiomes:is_open')==true",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":0, \"extrabiomes:is_open\":true]"
-							]
-						}
-					},
-					{
-						"condition": "query.block_property('extrabiomes:direction')==1&&query.block_property('extrabiomes:is_open')==true",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":1, \"extrabiomes:is_open\":true]"
-							]
-						}
-					},
-					{
-						"condition": "query.block_property('extrabiomes:direction')==2&&query.block_property('extrabiomes:is_open')==true",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":2, \"extrabiomes:is_open\":true]"
-							]
-						}
-					},
-					{
-						"condition": "query.block_property('extrabiomes:direction')==3&&query.block_property('extrabiomes:is_open')==true",
-						"run_command": {
-							"command": [
-								"setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":3, \"extrabiomes:is_open\":true]"
-							]
-						}
-					}
-				]
-			},
-			"extrabiomes:close_door": {
-				"sequence": [ {
-						"run_command": {
-							"command": [
-								"playsound random.door_close @a ~ ~ ~"
-							]
-						}
-					},
-					{
-						"set_block_property": {
-							"extrabiomes:is_open": 0
-						}
-					},
-					{
-						"trigger": {
-							"event": "extrabiomes:set_upper_block",
-							"target": "self"
-						}
-					}
-				]
-			},
-			"extrabiomes:open_door": {
-				"sequence": [ {
-						"run_command": {
-							"command": [
-								"playsound random.door_open @a ~ ~ ~"
-							]
-						}
-					},
-					{
-						"set_block_property": {
-							"extrabiomes:is_open": 1
-						}
-					},
-					{
-						"trigger": {
-							"event": "extrabiomes:set_upper_block",
-							"target": "self"
-						}
-					}
-				]
-			},
-			"extrabiomes:reset_top": {
-				"run_command": {
-					"command": [
-						"setblock ~~1~ air"
-					]
-				}
-			}
-		}
-	}
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:palm_door_bottom",
+      "menu_category": {
+        "category": "none"
+      },
+      "properties": {
+        "extrabiomes:is_open": [
+          false,
+          true
+        ],
+        "extrabiomes:direction": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "extrabiomes:top_refresh": [
+          false,
+          true
+        ]
+      }
+    },
+    "components": {
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "palm_door_bottom",
+          "render_method": "blend",
+          "face_dimming": true,
+          "ambient_occlusion": false
+        }
+      },
+      "minecraft:placement_filter": {
+        "conditions": [
+          {
+            "allowed_faces": [
+              "up"
+            ],
+            "block_filter": [
+              {
+                "tags": "!query.any_tag('extrabiomes_palm_door')"
+              }
+            ]
+          }
+        ]
+      },
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.5
+      },
+      "minecraft:on_player_placing": {
+        "event": "extrabiomes:set_direction"
+      },
+      "minecraft:on_placed": {
+        "event": "extrabiomes:setup"
+      },
+      "minecraft:on_player_destroyed": {
+        "event": "extrabiomes:reset_top"
+      },
+      "minecraft:geometry": {
+        "identifier": "geometry.custom_door",
+        "bone_visibility": {
+          "closed": false,
+          "open": false
+        }
+      },
+      "minecraft:loot": "loot_tables/palm/palm_door.json",
+      "minecraft:map_color": "#52221D",
+      "minecraft:light_dampening": 10,
+      "tag:extrabiomes_palm_door": {},
+      "tag:wood": {}
+    },
+    "permutations": [
+      {
+        "condition": "query.block_property('extrabiomes:direction') == 0",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              180,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:direction') == 1",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:direction') == 2",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              270,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:direction') == 3",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              90,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:is_open') == 0",
+        "components": {
+          "minecraft:on_interact": {
+            "event": "extrabiomes:open_door"
+          },
+          "minecraft:collision_box": {
+            "origin": [
+              -8,
+              0,
+              -8
+            ],
+            "size": [
+              16,
+              16,
+              3
+            ]
+          },
+          "minecraft:selection_box": {
+            "origin": [
+              -8,
+              0,
+              -8
+            ],
+            "size": [
+              16,
+              16,
+              3
+            ]
+          },
+          "tag:extrabiomes:closed_palm_door": {}
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:is_open') == 1",
+        "components": {
+          "minecraft:on_interact": {
+            "event": "extrabiomes:close_door"
+          },
+          "minecraft:collision_box": {
+            "origin": [
+              -8,
+              0,
+              -8
+            ],
+            "size": [
+              3,
+              16,
+              16
+            ]
+          },
+          "minecraft:selection_box": {
+            "origin": [
+              -8,
+              0,
+              -8
+            ],
+            "size": [
+              3,
+              16,
+              16
+            ]
+          },
+          "tag:extrabiomes:open_palm_door": {}
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:is_open') == false",
+        "components": {
+          "minecraft:geometry": {
+            "identifier": "geometry.custom_door",
+            "bone_visibility": {
+              "open": false
+            }
+          }
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:is_open') == true",
+        "components": {
+          "minecraft:geometry": {
+            "identifier": "geometry.custom_door",
+            "bone_visibility": {
+              "closed": false
+            }
+          }
+        }
+      }
+    ],
+    "events": {
+      "extrabiomes:set_direction": {
+        "sequence": [
+          {
+            "set_block_property": {
+              "extrabiomes:direction": "query.cardinal_facing_2d-2"
+            }
+          }
+        ]
+      },
+      "extrabiomes:setup": {
+        "sequence": [
+          {
+            "condition": "query.block_property('extrabiomes:top_refresh')==false",
+            "trigger": {
+              "event": "extrabiomes:set_upper_block",
+              "target": "self"
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:top_refresh')==true",
+            "set_block_property": {
+              "extrabiomes:top_refresh": false
+            }
+          }
+        ]
+      },
+      "extrabiomes:set_upper_block": {
+        "sequence": [
+          {
+            "condition": "query.block_property('extrabiomes:direction')==0&&query.block_property('extrabiomes:is_open')==false",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":0, \"extrabiomes:is_open\":false]"
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:direction')==1&&query.block_property('extrabiomes:is_open')==false",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":1, \"extrabiomes:is_open\":false]"
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:direction')==2&&query.block_property('extrabiomes:is_open')==false",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":2, \"extrabiomes:is_open\":false]"
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:direction')==3&&query.block_property('extrabiomes:is_open')==false",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":3, \"extrabiomes:is_open\":false]"
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:direction')==0&&query.block_property('extrabiomes:is_open')==true",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":0, \"extrabiomes:is_open\":true]"
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:direction')==1&&query.block_property('extrabiomes:is_open')==true",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":1, \"extrabiomes:is_open\":true]"
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:direction')==2&&query.block_property('extrabiomes:is_open')==true",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":2, \"extrabiomes:is_open\":true]"
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:direction')==3&&query.block_property('extrabiomes:is_open')==true",
+            "run_command": {
+              "command": [
+                "setblock ~~1~ extrabiomes:palm_door_top [\"extrabiomes:direction\":3, \"extrabiomes:is_open\":true]"
+              ]
+            }
+          }
+        ]
+      },
+      "extrabiomes:close_door": {
+        "sequence": [
+          {
+            "run_command": {
+              "command": [
+                "playsound random.door_close @a ~ ~ ~"
+              ]
+            }
+          },
+          {
+            "set_block_property": {
+              "extrabiomes:is_open": 0
+            }
+          },
+          {
+            "trigger": {
+              "event": "extrabiomes:set_upper_block",
+              "target": "self"
+            }
+          }
+        ]
+      },
+      "extrabiomes:open_door": {
+        "sequence": [
+          {
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~"
+              ]
+            }
+          },
+          {
+            "set_block_property": {
+              "extrabiomes:is_open": 1
+            }
+          },
+          {
+            "trigger": {
+              "event": "extrabiomes:set_upper_block",
+              "target": "self"
+            }
+          }
+        ]
+      },
+      "extrabiomes:reset_top": {
+        "run_command": {
+          "command": [
+            "setblock ~~1~ air"
+          ]
+        }
+      }
+    }
+  }
 }

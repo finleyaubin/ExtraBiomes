@@ -1,7 +1,7 @@
 {
     "format_version": 2,
     "header": {
-        "description": "adds more biomes, mobs, Items and blocks to the game as well as inproving upon some existing biomes",
+        "description": "adds more biomes, mobs, Items and blocks to the game as well as improving upon some existing biomes",
         "min_engine_version": [
             1,
             20,
@@ -12,7 +12,7 @@
         "version": [
             2,
             0,
-            2
+            3
         ]
     },
     "modules": [
@@ -22,7 +22,7 @@
             "version": [
                 2,
                 0,
-                2
+                3
             ]
         },
         {

@@ -1,215 +1,262 @@
 {
-    "format_version": "1.16.100",
-    "minecraft:block": {
-        "description": {
-            "identifier": "extrabiomes:palm_fence_gate",
-            "properties": {
-                "extrabiomes:facing": [0, 1, 2, 3],
-                "extrabiomes:open_bit": [0, 1],
-                "extrabiomes:mirror_bit": [0, 1]
-            }
-        },
-        "components": {
-            "minecraft:destroy_time": 0.5,
-            "minecraft:creative_category": {
-                "group": "itemGroup.name.fenceGate",
-                "category": "construction"
-            },
-            "minecraft:block_light_absorption": 0,
-            "minecraft:material_instances": {
-                "*": {
-                    "texture": "palm_planks",
-                    "render_method": "alpha_test"
-                }
-            },
-            "minecraft:pick_collision": {
-                "origin": [-8, 0, -2],
-                "size": [16, 16, 4]
-            },
-            "minecraft:on_player_placing": {
-                "event": "extrabiomes:facing",
-                "target": "self"
-            },
-            "minecraft:map_color": "#ff78f8",
-            "tag:wood": {}
-        },
-        "permutations": [
-            {
-                "condition": "query.block_property('extrabiomes:facing') == 0",
-                "components": {
-					"minecraft:rotation": [
-						0,
-						180,
-						0
-					]
-				}
-            },
-            {
-                "condition": "query.block_property('extrabiomes:facing') == 1",
-                "components": {
-					"minecraft:rotation": [
-						0,
-						0,
-						0
-					]
-				}
-            },
-            {
-                "condition": "query.block_property('extrabiomes:facing') == 2",
-                "components": {
-					"minecraft:rotation": [
-						0,
-						-90,
-						0
-					]
-				}
-            },
-            {
-                "condition": "query.block_property('extrabiomes:facing') == 3",
-                "components": {
-					"minecraft:rotation": [
-						0,
-						90,
-						0
-					]
-				}
-            },
-            {
-                "condition": "query.block_property('extrabiomes:open_bit') == 0",
-                "components": {
-                    "minecraft:geometry": "geometry.fence_gate",
-                    "minecraft:on_interact": {
-                        "event": "extrabiomes:open",
-                        "target": "self"
-                    },
-                    "minecraft:entity_collision": {
-                        "origin": [-8, 0, -2],
-                        "size": [16, 16, 4]
-                    }
-                }
-            },
-            {
-                "condition": "query.block_property('extrabiomes:open_bit') == 1 && query.block_property('extrabiomes:mirror_bit') == 0",
-                "components": {
-                    "minecraft:geometry": "geometry.fence_gate_open_mirror",
-                    "minecraft:on_interact": {
-                        "event": "extrabiomes:close",
-                        "target": "self"
-                    },
-                    "minecraft:entity_collision": false
-                }
-            },
-            {
-                "condition": "query.block_property('extrabiomes:open_bit') == 1 && query.block_property('extrabiomes:mirror_bit') == 1",
-                "components": {
-                    "minecraft:geometry": "geometry.fence_gate_open",
-                    "minecraft:on_interact": {
-                        "event": "extrabiomes:close",
-                        "target": "self"
-                    },
-                    "minecraft:entity_collision": false
-                }
-            }
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:palm_fence_gate",
+      "properties": {
+        "extrabiomes:facing": [
+          0,
+          1,
+          2,
+          3
         ],
-        "events": {
-            "extrabiomes:facing": {
-                "set_block_property": {
-                    "extrabiomes:facing": "query.cardinal_facing_2d-2"
-                }
-            },
-            "extrabiomes:open": {
-                "sequence": [
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 0",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "0"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    },
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 0 && query.block_face == 3",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "1"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    },
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 1",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "0"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    },
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 1 && query.block_face == 2",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "1"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    },
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 2",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "0"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    },
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 2 && query.block_face == 5",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "1"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    },
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 3",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "0"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    },
-                    {
-                        "condition": "query.block_property('extrabiomes:facing') == 3 && query.block_face == 4",
-                        "set_block_property": {
-                            "extrabiomes:open_bit": "1",
-                            "extrabiomes:mirror_bit": "1"
-                        },
-                        "run_command": {
-                            "command": ["playsound random.door_open @a ~ ~ ~ "]
-                        }
-                    }
-                ]
-            },
-            "extrabiomes:close": {
-                "set_block_property": {
-                    "extrabiomes:open_bit": "0",
-                    "extrabiomes:mirror_bit": "0"
-                },
-                "run_command": {
-                    "command": ["playsound random.door_close @a ~ ~ ~ "]
-                }
-            }
+        "extrabiomes:open_bit": [
+          0,
+          1
+        ],
+        "extrabiomes:mirror_bit": [
+          0,
+          1
+        ]
+      },
+      "menu_category": {
+        "category": "construction",
+        "group": "itemGroup.name.fenceGate"
+      }
+    },
+    "components": {
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "palm_planks",
+          "render_method": "alpha_test"
         }
+      },
+      "minecraft:pick_collision": {
+        "origin": [
+          -8,
+          0,
+          -2
+        ],
+        "size": [
+          16,
+          16,
+          4
+        ]
+      },
+      "minecraft:on_player_placing": {
+        "event": "extrabiomes:facing",
+        "target": "self"
+      },
+      "minecraft:map_color": "#ff78f8",
+      "tag:wood": {},
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.5
+      },
+      "minecraft:light_dampening": 0
+    },
+    "permutations": [
+      {
+        "condition": "query.block_property('extrabiomes:facing') == 0",
+        "components": {
+          "minecraft:rotation": [
+            0,
+            180,
+            0
+          ]
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:facing') == 1",
+        "components": {
+          "minecraft:rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:facing') == 2",
+        "components": {
+          "minecraft:rotation": [
+            0,
+            -90,
+            0
+          ]
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:facing') == 3",
+        "components": {
+          "minecraft:rotation": [
+            0,
+            90,
+            0
+          ]
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:open_bit') == 0",
+        "components": {
+          "minecraft:geometry": "geometry.fence_gate",
+          "minecraft:on_interact": {
+            "event": "extrabiomes:open",
+            "target": "self"
+          },
+          "minecraft:entity_collision": {
+            "origin": [
+              -8,
+              0,
+              -2
+            ],
+            "size": [
+              16,
+              16,
+              4
+            ]
+          }
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:open_bit') == 1 && query.block_property('extrabiomes:mirror_bit') == 0",
+        "components": {
+          "minecraft:geometry": "geometry.fence_gate_open_mirror",
+          "minecraft:on_interact": {
+            "event": "extrabiomes:close",
+            "target": "self"
+          },
+          "minecraft:entity_collision": false
+        }
+      },
+      {
+        "condition": "query.block_property('extrabiomes:open_bit') == 1 && query.block_property('extrabiomes:mirror_bit') == 1",
+        "components": {
+          "minecraft:geometry": "geometry.fence_gate_open",
+          "minecraft:on_interact": {
+            "event": "extrabiomes:close",
+            "target": "self"
+          },
+          "minecraft:entity_collision": false
+        }
+      }
+    ],
+    "events": {
+      "extrabiomes:facing": {
+        "set_block_property": {
+          "extrabiomes:facing": "query.cardinal_facing_2d-2"
+        }
+      },
+      "extrabiomes:open": {
+        "sequence": [
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 0",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "0"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 0 && query.block_face == 3",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "1"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 1",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "0"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 1 && query.block_face == 2",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "1"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 2",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "0"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 2 && query.block_face == 5",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "1"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 3",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "0"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          },
+          {
+            "condition": "query.block_property('extrabiomes:facing') == 3 && query.block_face == 4",
+            "set_block_property": {
+              "extrabiomes:open_bit": "1",
+              "extrabiomes:mirror_bit": "1"
+            },
+            "run_command": {
+              "command": [
+                "playsound random.door_open @a ~ ~ ~ "
+              ]
+            }
+          }
+        ]
+      },
+      "extrabiomes:close": {
+        "set_block_property": {
+          "extrabiomes:open_bit": "0",
+          "extrabiomes:mirror_bit": "0"
+        },
+        "run_command": {
+          "command": [
+            "playsound random.door_close @a ~ ~ ~ "
+          ]
+        }
+      }
     }
+  }
 }

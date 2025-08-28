@@ -4,10 +4,10 @@
         "description": "the resource pack for extra biomes\nby Win Epic Fin",
         "name": "Extra biomes [RP]",
         "uuid": "4313ba2a-7cef-4fc6-a6e6-66022d8c8beb",
-        "version": [2,0,2],
+        "version": [2,0,3],
         "min_engine_version": [
             1,
-            16,
+            21,
             0
         ]
     },
@@ -19,7 +19,7 @@
             "version": [
                 2,
                 0,
-                2
+                3
             ]
         }
     ],

@@ -1,7 +1,5 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
@@ -12,8 +10,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
 
@@ -39,7 +35,7 @@ public class MysticForest {
 
 
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.MYSTIC_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, (Holder<PlacedFeature>) Feature.TWISTING_VINES);
+        //biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, (Holder<PlacedFeature>) Feature.TWISTING_VINES);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

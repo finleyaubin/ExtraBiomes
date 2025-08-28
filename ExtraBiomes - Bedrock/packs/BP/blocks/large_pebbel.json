@@ -1,48 +1,50 @@
 {
-	"format_version": "1.17.10",
-	"minecraft:block": {
-		"description": {
-			"identifier": "extrabiomes:large_pebble"
-		},
-		"components": {
-			"minecraft:block_light_absorption": 0,
-			"minecraft:block_light_emission": 0,
-			"minecraft:material_instances": {
-				"*": {
-					"texture": "stone",
-					"render_method": "alpha_test"
-				}
-			},
-			"minecraft:geometry": "geometry.large_pebble",
-			"minecraft:creative_category": {
-				"category": "Nature"
-			},
-			"minecraft:destroy_time": 0.2,
-			"minecraft:pick_collision": {
-				"origin": [
-					-8,
-					0,
-					-8
-				],
-				"size": [
-					16,
-					3,
-					16
-				]
-			},
-			"minecraft:entity_collision": {
-				"origin": [
-					-8,
-					0,
-					-8
-				],
-				"size": [
-					16,
-					3,
-					16
-				]
-			},
-			"minecraft:loot": "loot_tables/blocks/pebble/3pebble.json"
-		}
-	}
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:large_pebble",
+      "menu_category": {
+        "category": "Nature"
+      }
+    },
+    "components": {
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "stone",
+          "render_method": "alpha_test"
+        }
+      },
+      "minecraft:geometry": "geometry.large_pebble",
+      "minecraft:pick_collision": {
+        "origin": [
+          -8,
+          0,
+          -8
+        ],
+        "size": [
+          16,
+          3,
+          16
+        ]
+      },
+      "minecraft:entity_collision": {
+        "origin": [
+          -8,
+          0,
+          -8
+        ],
+        "size": [
+          16,
+          3,
+          16
+        ]
+      },
+      "minecraft:loot": "loot_tables/blocks/pebble/3pebble.json",
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.2
+      },
+      "minecraft:light_dampening": 0,
+      "minecraft:light_emission": 0
+    }
+  }
 }

@@ -1,7 +1,7 @@
 
 
 {
-	"format_version": "1.19.80",
+	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
 			"identifier": "extrabiomes:dense_cloud_brick_stairs",

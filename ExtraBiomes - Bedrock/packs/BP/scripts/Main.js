@@ -1,29 +1,17 @@
-//apparently not possible in current version :c
-/* // Import world system and player component from "@minecraft/server"
-import { world, system } from '@minecraft/server';
+import { system } from "@minecraft/server";
 
-// Subscribe to an event that calls every Minecraft tick
-system.runInterval(() => {
-    // Get all online players
-    const players = world.getPlayers();
+/** @type {import("@minecraft/server").BlockCustomComponent} */
+const XpRewardComponent = {
+  onPlayerBreak(event) {
+    const { dimension, block } = event;
+    // Instead of "run_command", we now spawn loot, XP, or entities programmatically
+    dimension.runCommand(`summon xp_orb ${block.location.x} ${block.location.y} ${block.location.z}`);
+  }
+};
 
-    // Loop through players
-    for (const player of players) {
-		const equipment = player.getComponent("equipment_inventory");
-        const head_equipment=equipment.getEquipmentSlot("head");
-		world.sendMessage(head_equipment);//testing 
-        // Check if the head equipment is a frog helmet
-        if (head_equipment === 'extrabiomes:frog_helmet')()=> {
-			// Apply the jump boost effect and water breathing effects
-			(async () => {
-				await world.getDimension("overworld").runCommandAsync(`effect ${player.getName()} jump_boost 15 1 true`);
-				await world.getDimension("overworld").runCommandAsync(`effect ${player.getName()} water_breathing 15 1 true`);
-
-			
-				world.sendMessage("Ah Victory");
-			})();
-            
-        }
-    }
-},300);//runs every 15 seconds */
-
+system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
+  blockComponentRegistry.registerCustomComponent(
+    "extrabiomes:xp_reward_component",
+    XpRewardComponent
+  );
+});

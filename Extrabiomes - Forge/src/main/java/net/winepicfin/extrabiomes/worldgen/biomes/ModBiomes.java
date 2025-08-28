@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -37,6 +38,7 @@ public class ModBiomes
         context.register(COLD_ERODED_MESA,coldMesa.Register(context));
         context.register(LUSH_MESA,lushMesa.Register(context));
         context.register(TIAGA_SPIKES,tiagaSpikes.Register(context));
+
     }
     public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);

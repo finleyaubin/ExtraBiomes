@@ -1,22 +1,34 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
-import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
 public class TiagaSpikes {
 
     public Biome Register(BootstapContext<Biome> context)
     {
+
+
+        // Get access to placed features registry
+        HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
+
+        // Get vanilla ICE_SPIKE and ICE_PATCH features
+        Holder<PlacedFeature> iceSpike = placed.getOrThrow(
+                ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("minecraft", "ice_spike"))
+        );
+        Holder<PlacedFeature> icePatch = placed.getOrThrow(
+                ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("minecraft", "ice_patch"))
+        );
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
         spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 5, 4, 4));
@@ -38,7 +50,9 @@ public class TiagaSpikes {
         // UNDERGROUND_STRUCTURES
 
         // SURFACE_STRUCTURES
-        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, Feature.ICE_SPIKE);
+        System.out.println("Adding ice spikes to TiagaSpikes");
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, iceSpike);
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, icePatch);
         // STRONGHOLDS
 
         // UNDERGROUND_ORES
@@ -58,8 +72,8 @@ public class TiagaSpikes {
 
 
 
-        // TOP_LAYER_MODIFICATION
 
+        // TOP_LAYER_MODIFICATION
 
 
         return new Biome.BiomeBuilder()
