@@ -9,6 +9,7 @@
       }
     },
     "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:material_instances": {
         "*": {
           "texture": "nether_copper_ore",
