@@ -2,7 +2,7 @@
   "format_version": "1.20.100",
   "minecraft:block": {
     "description": {
-      "identifier": "Extrabiomes:nether_diamond_ore",
+      "identifier": "extrabiomes:nether_diamond_ore",
       "menu_category": {
         "category": "nature",
         "group": "itemGroup.name.ore"
