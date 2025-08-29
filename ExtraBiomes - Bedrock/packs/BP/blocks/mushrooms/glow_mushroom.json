@@ -2,7 +2,7 @@
 	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:glow_mushroom_placed"
+			"identifier": "extrabiomes:glow_mushroom"
 		},
 		"components": {
 			// "minecraft:creative_category": {

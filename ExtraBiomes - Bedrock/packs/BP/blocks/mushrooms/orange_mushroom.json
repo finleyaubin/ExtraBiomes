@@ -2,7 +2,7 @@
 	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:orange_mushroom_placed"
+			"identifier": "extrabiomes:orange_mushroom"
 		},
 		"components": {
 			// "minecraft:creative_category": {

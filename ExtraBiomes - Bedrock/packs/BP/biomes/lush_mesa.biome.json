@@ -2,7 +2,7 @@
 	"format_version": "1.17.0",
 	"minecraft:biome": {
 		"description": {
-			"identifier": "lush_mesa"
+			"identifier": "extrabiomes:lush_mesa"
 		},
 		"components": {
 			"minecraft:climate": {

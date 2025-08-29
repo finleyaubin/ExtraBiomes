@@ -27,25 +27,25 @@
         },
         {
             "uuid": "239c134f-67bf-4738-9bcc-8c69d31b1f72",
-            "version": [1, 0, 0],
+            "version": [2, 0, 0],
             "type": "script",
             "language": "javascript",
             "entry": "scripts/Main.js"
         }
     ],
-      // to use eval() and Function(), remove it if it's not neccessary
+      // to use eval() and Function(), remove it if it's not necessary
   "capabilities": ["script_eval"],
   "dependencies": [
     {
 			// Enables the use of @minecraft/server module
 			// note that version changes every monthly releases.
       "module_name": "@minecraft/server",
-      "version": "1.3.0"
+      "version": "2.1.0"
     },
     {
 			// Enables the use of @minecraft/server-ui module
       "module_name": "@minecraft/server-ui",
-      "version": "1.1.0"
+      "version": "2.0.0"
     }
   ]
 }

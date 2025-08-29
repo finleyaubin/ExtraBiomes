@@ -15,9 +15,6 @@
           "render_method": "opaque"
         }
       },
-      "minecraft:on_player_destroyed": {
-        "event": "xp_reward"
-      },
       "minecraft:loot": "loot_tables/blocks/copper_ore.json",
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 1

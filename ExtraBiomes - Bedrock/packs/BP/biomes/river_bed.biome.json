@@ -2,7 +2,7 @@
 	"format_version": "1.13.0",
 	"minecraft:biome": {
 		"description": {
-			"identifier": "river_bed"
+			"identifier": "extrabiomes:river_bed"
 		},
 		"components": {
 			"minecraft:climate": {

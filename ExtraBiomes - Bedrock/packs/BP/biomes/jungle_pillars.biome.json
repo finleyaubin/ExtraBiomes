@@ -2,7 +2,7 @@
 	"format_version": "1.13.0",
 	"minecraft:biome": {
 		"description": {
-			"identifier": "jungle_pillars"
+			"identifier": "extrabiomes:jungle_pillars"
 		},
 		"components": {
 			"minecraft:climate": {

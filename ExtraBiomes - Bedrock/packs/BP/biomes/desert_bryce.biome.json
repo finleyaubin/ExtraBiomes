@@ -2,7 +2,7 @@
 	"format_version": "1.13.0",
 	"minecraft:biome": {
 		"description": {
-			"identifier": "desert_bryce"
+			"identifier": "extrabiomes:desert_bryce"
 		},
 		"components": {
 			"minecraft:climate": {

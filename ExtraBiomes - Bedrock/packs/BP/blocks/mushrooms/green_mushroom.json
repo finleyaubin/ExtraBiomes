@@ -2,7 +2,7 @@
 	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:green_mushroom_placed"
+			"identifier": "extrabiomes:green_mushroom"
 		},
 		"components": {
 			// "minecraft:creative_category": {

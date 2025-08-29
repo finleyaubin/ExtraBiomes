@@ -2,7 +2,7 @@
 	"format_version": "1.13.0",
 	"minecraft:biome": {
 		"description": {
-			"identifier": "the_netherlands"
+			"identifier": "extrabiomes:the_netherlands"
 		},
 		"components": {
 			"minecraft:climate": {

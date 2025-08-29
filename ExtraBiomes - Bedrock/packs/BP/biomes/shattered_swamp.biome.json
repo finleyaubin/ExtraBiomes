@@ -2,7 +2,7 @@
 	"format_version": "1.13.0",
 	"minecraft:biome": {
 		"description": {
-			"identifier": "shattered_swamp"
+			"identifier": "extrabiomes:shattered_swamp"
 		},
 		"components": {
 			"minecraft:climate": {

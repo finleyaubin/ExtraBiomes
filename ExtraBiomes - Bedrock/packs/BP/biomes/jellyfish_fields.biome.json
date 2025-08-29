@@ -2,7 +2,7 @@
 	"format_version": "1.13.0",
 	"minecraft:biome": {
 		"description": {
-			"identifier": "jellyfish_fields"
+			"identifier": "extrabiomes:jellyfish_fields"
 		},
 		"components": {
 			"minecraft:climate": {
