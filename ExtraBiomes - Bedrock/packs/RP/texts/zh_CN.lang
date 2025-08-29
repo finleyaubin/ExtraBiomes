@@ -27,8 +27,8 @@ entity.extrabiomes:harpy.name=Harpy
 item.spawn_egg.entity.extrabiomes:harpy.name=Spawn Harpy
 item.spawn_egg.entity.extrabiomes:jellyfish.name=Spawn Jellyfish
 entity.extrabiomes:jellyfish.name=Jellyfish
-item.spawn_egg.entity.extrabiomes:hopping_spore.name=Spawn Hopping Spore
-entity.extrabiomes:hopping_spore.name=Hopping Spore
+item.spawn_egg.entity.extrabiomes:hoppleshroom.name=Spawn Hoppleshroom
+entity.extrabiomes:hoppleshroom.name=Hoppleshroom
 
 tile.extrabiomes:goo.name=Goo
 tile.extrabiomes:air_block.name=Air

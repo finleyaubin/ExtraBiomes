@@ -1,0 +1,50 @@
+{
+	"format_version": "1.10.0",
+	"minecraft:client_entity": {
+		"description": {
+			"identifier": "extrabiomes:hoppleshroom",
+			"materials": {
+				"default": "cow"
+			},
+			"particle_effects": {
+				"spore": "extrabiomes:spore_dust"
+			},
+			"textures": {
+				"warped": "textures/entity/hoppleshroom/warped",
+				"crimson": "textures/entity/hoppleshroom/crimson",
+				"red": "textures/entity/hoppleshroom/red",
+				"brown": "textures/entity/hoppleshroom/brown",
+				"black": "textures/entity/hoppleshroom/black",
+				"blue": "textures/entity/hoppleshroom/blue",
+				"cyan": "textures/entity/hoppleshroom/cyan",
+				"green": "textures/entity/hoppleshroom/green",
+				"orange": "textures/entity/hoppleshroom/orange",
+				"purple": "textures/entity/hoppleshroom/purple",
+				"white": "textures/entity/hoppleshroom/white",
+				"yellow": "textures/entity/hoppleshroom/yellow"
+			},
+			"geometry": {
+				"default": "geometry.hoppleshroom"
+			},
+			"scripts": {
+				"animate": [
+					"jumping",
+					{
+						"spore": "q.is_on_ground"
+					}
+				]
+			},
+			"animations": {
+				"jumping": "animation.hoppleshroom.jump",
+				"spore": "animation.hoppleshroom.drop_spores"
+			},
+			"render_controllers": [
+				"controller.render.hoppleshroom"
+			],
+			"spawn_egg": {
+				"base_color": "#9b1717",
+				"overlay_color": "#fdd8d8"
+			}
+		}
+	}
+}

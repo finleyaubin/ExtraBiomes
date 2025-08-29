@@ -7,10 +7,10 @@
             "sounds/mob/treefrog/idle"
          ]
       },
-      "mob.hopping_spore.jump" : {
+      "mob.hoppleshroom.jump" : {
          "category" : "neutral",
          "sounds" : [
-            "sounds/mob/hopping_spore/jump"
+            "sounds/mob/hoppleshroom/jump"
          ]
       }
    }

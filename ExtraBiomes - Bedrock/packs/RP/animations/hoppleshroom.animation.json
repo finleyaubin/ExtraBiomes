@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.hopping_spore.jump": {
+		"animation.hoppleshroom.jump": {
 			"loop": true,
 			"bones": {
 				"leg": {
@@ -20,7 +20,7 @@
 				}
 			}
 		},
-		"animation.hopping_spore.drop_spores": {
+		"animation.hoppleshroom.drop_spores": {
 			"loop": true,
 			"particle_effects": {
 				"0.0": {

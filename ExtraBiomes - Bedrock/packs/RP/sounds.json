@@ -11,14 +11,14 @@
             ],
             "volume": 1.0
          },
-         "extrabiomes:hopping_spore": {
+         "extrabiomes:hoppleshroom": {
             "events": {
-               "fall.small": "mob.hopping_spore.jump",
-               "fall.big": "mob.hopping_spore.jump",
-               "hurt": "mob.hopping_spore.jump",
-               "death": "mob.hopping_spore.jump",
-               "jump": "mob.hopping_spore.jump",
-               "ambient": "mob.hopping_spore.jump"
+               "fall.small": "mob.hoppleshroom.jump",
+               "fall.big": "mob.hoppleshroom.jump",
+               "hurt": "mob.hoppleshroom.jump",
+               "death": "mob.hoppleshroom.jump",
+               "jump": "mob.hoppleshroom.jump",
+               "ambient": "mob.hoppleshroom.jump"
             },
             "pitch": [
                0.90,
