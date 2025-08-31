@@ -16,7 +16,7 @@
       },
       "minecraft:geometry": "geometry.small_pebble",
       "minecraft:loot": "loot_tables/blocks/pebble/mossy/1pebble.json",
-      "minecraft:pick_collision": {
+      "minecraft:collision_box": {
         "origin": [
           -8,
           0,
@@ -27,43 +27,10 @@
           1,
           16
         ]
-      },
-      "minecraft:entity_collision": {
-        "origin": [
-          -8,
-          0,
-          -8
-        ],
-        "size": [
-          16,
-          1,
-          16
-        ]
-      },
-      "minecraft:on_interact": {
-        "event": "increment_pile",
-        "target": "other",
-        "condition": "query.is_item_name_any('slot.weapon.mainhand', 0, 'extrabiomes:mossy_pebble')"
       },
       "minecraft:light_dampening": 0,
-      "minecraft:light_emission": 0
-    },
-    "events": {
-      "increment_pile": {
-        "sequence": [
-          {
-            "decrement_stack": {}
-          },
-          {
-            "run_command": {
-              "command": [
-                "setblock ~~~ extrabiomes:medium_mossy_pebble",
-                "playsound place.deepslate @a[r=20] ~ ~ ~"
-              ]
-            }
-          }
-        ]
-      }
+      "minecraft:light_emission": 0,
+      "extrabiomes:pebbleUpdater":{}
     }
   }
 }

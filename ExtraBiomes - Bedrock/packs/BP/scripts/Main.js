@@ -2,9 +2,10 @@ import { system, ItemTypes, world, ItemStack } from "@minecraft/server";
 import { MushroomGrowComponent } from "./mushroom_grower.js";
 import { XpRewardComponent } from "./xp_reward.js";
 import { MushroomLootComponent } from "./mushroom_loot.js";
+import { PebbleUpdaterComponent } from "./pebble_updater.js";
 
 
-system.beforeEvents.startup.subscribe(({blockComponentRegistry})=>{
+system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
   blockComponentRegistry.registerCustomComponent(
     "extrabiomes:mushroom_grow",
     MushroomGrowComponent
@@ -13,8 +14,12 @@ system.beforeEvents.startup.subscribe(({blockComponentRegistry})=>{
     "extrabiomes:xp_reward_component",
     XpRewardComponent
   );
-    blockComponentRegistry.registerCustomComponent(
+  blockComponentRegistry.registerCustomComponent(
     "extrabiomes:mushroom_loot",
     MushroomLootComponent
+  );
+  blockComponentRegistry.registerCustomComponent(
+    "extrabiomes:pebbleUpdater",
+    PebbleUpdaterComponent
   );
 });
