@@ -8,6 +8,7 @@
       }
     },
     "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:material_instances": {
         "*": {
           "texture": "dense_cloud_brick",
@@ -19,7 +20,6 @@
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 0.2
       }
-    },
-    "events": {}
+    }
   }
 }
