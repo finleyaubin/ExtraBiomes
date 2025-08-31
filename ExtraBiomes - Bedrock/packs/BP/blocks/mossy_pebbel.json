@@ -33,7 +33,16 @@
       },
       "minecraft:light_dampening": 0,
       "minecraft:light_emission": 0,
-      "extrabiomes:pebbleUpdater":{}
+      "extrabiomes:pebbleUpdater": {},
+      "minecraft:liquid_detection": {
+        "detection_rules": [
+          {
+            "liquid_type": "water",
+            "can_contain_liquid": true, // Waterloggable
+            "on_liquid_touches": "no_reaction" // Water flows through the block like air
+          }
+        ]
+      }
     }
   }
 }

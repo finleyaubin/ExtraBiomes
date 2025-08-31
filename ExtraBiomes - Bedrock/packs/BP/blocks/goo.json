@@ -9,6 +9,7 @@
       }
     },
     "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:friction": 0.1,
       "minecraft:flammable": {
         "flame_odds": 300,
@@ -20,19 +21,7 @@
           "render_method": "blend"
         }
       },
-      "minecraft:pick_collision": {
-        "origin": [
-          -8,
-          0,
-          -8
-        ],
-        "size": [
-          16,
-          14,
-          16
-        ]
-      },
-      "minecraft:entity_collision": {
+      "minecraft:collision_box": {
         "origin": [
           -8,
           0,

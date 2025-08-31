@@ -3,14 +3,22 @@
 	"format_version": "1.20.100",
   	"minecraft:block": {
     "description": {
-      "identifier": "extrabiomes:black_mushroom",
-      "menu_category": { "category": "nature" }
+      "identifier": "extrabiomes:black_mushroom_placed",
+      "menu_category": { "category": "none" }
     },
     "components": {
-      "minecraft:entity_collision": false,
-      "minecraft:pick_collision": {
-        "origin": [-3, 0, -3],
-        "size": [6, 6, 6]
+      "minecraft:collision_box": false,
+      "minecraft:selection_box": {
+        "origin": [
+          -8,
+          0,
+          -8
+        ],
+        "size": [
+          16,
+          2,
+          16
+        ]
       },
       "minecraft:geometry": "geometry.sapling_model",
       "minecraft:material_instances": {
@@ -21,6 +29,7 @@
           "ambient_occlusion": true
         }
       },
+      "minecraft:light_dampening": 0,
       "minecraft:placement_filter": {
         "conditions": [
           {
@@ -40,7 +49,7 @@
       },
       "minecraft:map_color": "#000000",
       "minecraft:loot": "loot_tables/blocks/mushroom/black_mushroom.json",
-      "extrabiomes:mushroom_grow": {} 
+      "extrabiomes:mushroom_grow": {}
     }
   }
 }

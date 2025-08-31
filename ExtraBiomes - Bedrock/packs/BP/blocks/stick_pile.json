@@ -76,6 +76,15 @@
       "tag:wood": {},
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 0.5
+      },
+      "minecraft:liquid_detection": {
+        "detection_rules": [
+          {
+            "liquid_type": "water",
+            "can_contain_liquid": true, // Waterloggable
+            "on_liquid_touches": "no_reaction" // Water flows through the block like air
+          }
+        ]
       }
     }
   }
