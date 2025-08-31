@@ -22,9 +22,9 @@
         "components": {
           "minecraft:transformation": {
             "rotation": [
+              90,
               0,
-              0,
-              90
+              0
             ]
           }
         }
@@ -37,7 +37,7 @@
             "rotation": [
               0,
               0,
-              0
+              90
             ]
           }
         }
@@ -48,8 +48,8 @@
         "components": {
           "minecraft:transformation": {
             "rotation": [
-              90,
               0,
+              90,
               0
             ]
           }
