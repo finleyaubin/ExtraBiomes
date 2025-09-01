@@ -22,8 +22,7 @@
       "minecraft:entity_fall_on": {
         "min_fall_distance": 3 
       },
-      "minecraft:light_dampening": 0,
-      "extrabiomes:denseCloudEffect":{}
+      "minecraft:light_dampening": 0
     }
   }
 }
