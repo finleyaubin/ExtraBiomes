@@ -1,4 +1,3 @@
-import { ItemStack } from "@minecraft/server";
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 export const PebbleUpdaterComponent = {
   onPlayerInteract(event) {

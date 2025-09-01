@@ -3,6 +3,7 @@ import { MushroomGrowComponent } from "./mushroom_grower.js";
 import { XpRewardComponent } from "./xp_reward.js";
 import { MushroomLootComponent } from "./mushroom_loot.js";
 import { PebbleUpdaterComponent } from "./pebble_updater.js";
+import { DenseCloudEffect } from "./DenseCloudEffect.js"
 
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
@@ -21,5 +22,10 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
   blockComponentRegistry.registerCustomComponent(
     "extrabiomes:pebbleUpdater",
     PebbleUpdaterComponent
+  );
+
+  blockComponentRegistry.registerCustomComponent(
+    "extrabiomes:denseCloudEffect",
+    DenseCloudEffect
   );
 });
