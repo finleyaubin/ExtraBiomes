@@ -4,6 +4,7 @@ import { XpRewardComponent } from "./xp_reward.js";
 import { MushroomLootComponent } from "./mushroom_loot.js";
 import { PebbleUpdaterComponent } from "./pebble_updater.js";
 import "./DenseCloudEffect.js";
+import { StripperComponent } from "./stripper.js";
 
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
@@ -23,5 +24,8 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     "extrabiomes:pebbleUpdater",
     PebbleUpdaterComponent
   );
-
+    blockComponentRegistry.registerCustomComponent(
+    "extrabiomes:stripper_component",
+    StripperComponent
+  );
 });

@@ -75,8 +75,9 @@
       "minecraft:map_color": "#ff78f8",
       "tag:wood": {},
       "minecraft:destructible_by_mining": {
-        "seconds_to_destroy": 0.5
+        "seconds_to_destroy": 2.5
       },
+      "tag:minecraft:is_axe_item_destructible":{},
       "minecraft:liquid_detection": {
         "detection_rules": [
           {

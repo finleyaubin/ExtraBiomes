@@ -1,5 +1,5 @@
 {
-	"format_version": "1.13.0",
+	"format_version": "1.21.100",
 	"minecraft:biome": {
 		"description": {
 			"identifier": "extrabiomes:jungle_pillars"
@@ -13,17 +13,20 @@
 				],
 				"temperature": 0.95
 			},
-			"minecraft:mesa_surface": {
-				"bryce_pillars": true,
-				"clay_material": "minecraft:stone",
-				"sea_floor_depth": 7,
-				"sea_floor_material": "minecraft:stone",
-				"foundation_material": "minecraft:stone",
-				"hard_clay_material": "minecraft:stone",
-				"has_forest": false,
-				"mid_material": "minecraft:stone",
-				"top_material": "minecraft:grass",
-				"sea_material": "minecraft:water"
+			"minecraft:surface_builder": {
+				"builder": {
+					"type": "minecraft:mesa",
+					"bryce_pillars": true, 
+					"clay_material": "minecraft:stone",
+					"sea_floor_depth": 7,
+					"sea_floor_material": "minecraft:stone",
+					"foundation_material": "minecraft:stone",
+					"hard_clay_material": "minecraft:stone",
+					"has_forest": false,
+					"mid_material": "minecraft:stone",
+					"top_material": "minecraft:grass",
+					"sea_material": "minecraft:water"
+				}
 			},
 			"minecraft:overworld_height": {
 				"noise_params": [
@@ -31,7 +34,19 @@
 					0.4
 				]
 			},
-			"minecraft:overworld_generation_rules": {
+			"minecraft:replace_biomes": {
+				"replacements": [
+					{
+						"dimension": "minecraft:overworld",
+						"targets": [
+							"minecraft:forest"
+						],
+						"amount": 0.15,
+						"noise_frequency_scale": 1.2
+					}
+				]
+			},
+			/* 			"minecraft:overworld_generation_rules": {
 				"river_transformation": "jungle_river",
 				"shore_transformation": "jungle_marsh",
 				"generate_for_climates": [
@@ -40,13 +55,17 @@
 						1
 					]
 				]
-			},
-			"animal": {},
-			"stone_pillars": {},
-			"jungle": {},
-			"overworld": {},
-			"rare": {},
-			"caves": {}
+			}, */
+			"minecraft:tags": {
+				"tags": [
+					"animal",
+					"stone_pillars",
+					"jungle",
+					"overworld",
+					"rare",
+					"caves"
+				]
+			}
 		}
 	}
 }
