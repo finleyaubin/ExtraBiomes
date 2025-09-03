@@ -20,68 +20,14 @@
           "render_method": "blend"
         }
       },
-      "minecraft:on_player_destroyed": {
-        "event": "extrabiomes:spawn_loot",
-        "target": "self"
-      },
-      "minecraft:loot": "loot_tables/empty.json",
-      "tag:leaves": {},
+      "minecraft:loot": "loot_tables/blocks/palm_wood/palm_leaves.json",
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 0.3
       },
-      "minecraft:light_dampening": 0
-    },
-    "events": {
-      "extrabiomes:spawn_loot": {
-        "sequence": [
-          {
-            "condition": "query.get_equipped_item_name('main_hand') == 'shears'",
-            "damage": {
-              "amount": 1,
-              "type": "durability",
-              "target": "item"
-            },
-            "spawn_loot": {
-              "table": "loot_tables/blocks/palm wood/palm_leaves.json"
-            }
-          },
-          {
-            "condition": "query.get_equipped_item_name('main_hand') != 'shears'",
-            "trigger": {
-              "event": "extrabiomes:random_loot",
-              "target": "self"
-            }
-          }
-        ]
-      },
-      "extrabiomes:random_loot": {
-        "randomize": [
-          {
-            "weight": 25,
-            "spawn_loot": {
-              "table": "loot_tables/blocks/palm wood/palm_leaves2.json"
-            }
-          },
-          {
-            "weight": 10,
-            "spawn_loot": {
-              "table": "loot_tables/blocks/palm wood/palm_leaves3.json"
-            }
-          },
-          {
-            "weight": 15,
-            "spawn_loot": {
-              "table": "loot_tables/blocks/palm wood/palm_leaves1.json"
-            }
-          },
-          {
-            "weight": 50,
-            "spawn_loot": {
-              "table": "loot_tables/empty.json"
-            }
-          }
-        ]
-      }
+      "minecraft:light_dampening": 0,
+      "tag:minecraft:leaves": {},
+      "tag:minecraft:is_hoe_item_destructible":{},
+      "tag:minecraft:is_shears_item_destructible":{}
     }
   }
 }
