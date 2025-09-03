@@ -3,41 +3,44 @@
   "minecraft:block": {
     "description": {
       "identifier": "extrabiomes:palm_slab",
-      "properties": {
-        "extrabiomes:slab": [
-          0,
-          1,
-          2
-        ]
-      },
       "menu_category": {
         "category": "construction",
         "group": "itemGroup.name.slab"
+      },
+      "states": {
+        "extrabiomes:is_double": [
+          false,
+          true
+        ]
+      },
+      "traits": {
+        "minecraft:placement_position": {
+          "enabled_states": [
+            "minecraft:vertical_half"
+          ]
+        }
       }
     },
     "components": {
-      "minecraft:on_player_placing": {
-        "event": "extrabiomes:up",
-        "target": "self",
-        "condition": "query.target_x_rotation <= 0"
-      },
       "minecraft:map_color": "#ff78f8",
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 0.5
-      }
+      },
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "palm_planks",
+          "render_method": "opaque"
+        }
+      },
+      "tag:minecraft:is_axe_item_destructible": {}
     },
     "permutations": [
       {
-        "condition": "query.block_property('extrabiomes:slab') == 0",
+        "condition": "q.block_state('minecraft:vertical_half') == 'bottom'  && query.block_state('extrabiomes:is_double') == false ",
         "components": {
           "minecraft:geometry": "geometry.slab_down",
-          "minecraft:block_light_absorption": 0,
-          "minecraft:on_interact": {
-            "event": "extrabiomes:block",
-            "target": "self",
-            "condition": "query.get_equipped_item_name('main_hand') == 'palm_slab' && query.block_face == 1"
-          },
-          "minecraft:entity_collision": {
+          "minecraft:light_dampening": 0,
+          "minecraft:collision_box": {
             "origin": [
               -8,
               0,
@@ -49,7 +52,7 @@
               16
             ]
           },
-          "minecraft:pick_collision": {
+          "minecraft:selection_box": {
             "origin": [
               -8,
               0,
@@ -61,25 +64,15 @@
               16
             ]
           },
-          "minecraft:material_instances": {
-            "*": {
-              "texture": "palm_planks",
-              "render_method": "opaque"
-            }
-          }
+          "extrabiomes:slabber_component": {}
         }
       },
       {
-        "condition": "query.block_property('extrabiomes:slab') == 1",
+        "condition": "q.block_state('minecraft:vertical_half') == 'top' && query.block_state('extrabiomes:is_double') == false",
         "components": {
           "minecraft:geometry": "geometry.slab_up",
-          "minecraft:block_light_absorption": 0,
-          "minecraft:on_interact": {
-            "event": "extrabiomes:block",
-            "target": "self",
-            "condition": "query.get_equipped_item_name('main_hand') == 'palm_slab' && query.block_face == 0"
-          },
-          "minecraft:entity_collision": {
+          "minecraft:light_dampening": 0,
+          "minecraft:collision_box": {
             "origin": [
               -8,
               8,
@@ -91,7 +84,7 @@
               16
             ]
           },
-          "minecraft:pick_collision": {
+          "minecraft:selection_box": {
             "origin": [
               -8,
               8,
@@ -103,41 +96,42 @@
               16
             ]
           },
-          "minecraft:material_instances": {
-            "*": {
-              "texture": "palm_planks",
-              "render_method": "opaque"
-            }
-          }
+          "extrabiomes:slabber_component": {}
         }
       },
       {
-        "condition": "query.block_property('extrabiomes:slab') == 2",
+        "condition": "query.block_state('extrabiomes:is_double') == true",
         "components": {
-          "minecraft:unit_cube": {},
+          "minecraft:geometry": "minecraft:geometry.full_block",
           "minecraft:loot": "loot_tables/blocks/palm wood/palm_slab.json",
-          "minecraft:block_light_absorption": 15,
-          "minecraft:material_instances": {
-            "*": {
-              "texture": "palm_planks",
-              "render_method": "opaque"
-            }
+          "minecraft:light_dampening": 15,
+                    "minecraft:collision_box": {
+            "origin": [
+              -8,
+              0,
+              -8
+            ],
+            "size": [
+              16,
+              16,
+              16
+            ]
+          },
+          "minecraft:selection_box": {
+            "origin": [
+              -8,
+              0,
+              -8
+            ],
+            "size": [
+              16,
+              16,
+              16
+            ]
           }
         }
       }
-    ],
-    "events": {
-      "extrabiomes:block": {
-        "set_block_property": {
-          "extrabiomes:slab": 2
-        },
-        "decrement_stack": {}
-      },
-      "extrabiomes:up": {
-        "set_block_property": {
-          "extrabiomes:slab": 1
-        }
-      }
-    }
+      
+    ]
   }
 }
