@@ -103,7 +103,7 @@
         "condition": "query.block_state('extrabiomes:is_double') == true",
         "components": {
           "minecraft:geometry": "minecraft:geometry.full_block",
-          "minecraft:loot": "loot_tables/blocks/palm wood/palm_slab.json",
+          "minecraft:loot": "loot_tables/blocks/palm_wood/palm_slab.json",
           "minecraft:light_dampening": 15,
                     "minecraft:collision_box": {
             "origin": [

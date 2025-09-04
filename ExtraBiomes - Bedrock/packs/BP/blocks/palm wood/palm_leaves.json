@@ -6,6 +6,9 @@
       "menu_category": {
         "category": "nature",
         "group": "itemGroup.name.leaves"
+      },
+      "states": {
+        "extrabiomes:extraloot": ["minecraft:cocoa_beans","none"]//none is never used
       }
     },
     "components": {
@@ -20,14 +23,15 @@
           "render_method": "blend"
         }
       },
-      "minecraft:loot": "loot_tables/blocks/palm_wood/palm_leaves.json",
+      "minecraft:loot": "loot_tables/empty.json",
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 0.3
       },
       "minecraft:light_dampening": 0,
+      "extrabiomes:leaf_loot": {},
       "tag:minecraft:leaves": {},
-      "tag:minecraft:is_hoe_item_destructible":{},
-      "tag:minecraft:is_shears_item_destructible":{}
+      "tag:minecraft:is_hoe_item_destructible": {},
+      "tag:minecraft:is_shears_item_destructible": {}
     }
   }
 }
