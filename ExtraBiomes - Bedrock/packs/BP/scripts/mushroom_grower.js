@@ -1,3 +1,4 @@
+//if the player is holding bone meal, it has a chance to grow a large mushroom structure of that type with the base replacing where the mushroom was
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 export const MushroomGrowComponent = {
   onPlayerInteract(event) {

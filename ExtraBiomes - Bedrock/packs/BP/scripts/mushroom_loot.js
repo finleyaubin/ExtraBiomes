@@ -1,3 +1,4 @@
+//if a mushroom is broken with sheers, drop the mushroom block, otherwise there is a 15% chance to drop the mushroom
 import { ItemStack } from "@minecraft/server";
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 export const MushroomLootComponent = {
