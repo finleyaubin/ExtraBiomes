@@ -1,24 +1,26 @@
 //special thanks to ZoMb1eRaBb1tT for the palm used for this leaf decay. 
-import { BlockPermutation, world } from "@minecraft/server";
 
-const MAX_DISTANCE = 6;
-const LOG_IDS = new Set([
-  "extrabiomes:palm_log",
-  "extrabiomes:palm_log_stripped"
+import { world, BlockPermutation, ItemStack} from '@minecraft/server';
+
+// Allowed and leaf blocks combined into sets for quick lookups
+const allowedBlocksSet = new Set([
+  'extrabiomes:palm_log', 'extrabiomes:palm_log_stripped'
 ]);
 
-// --- Utility: check if any logs are nearby ---
-function hasNearbyLog(block) {
-  const { x, y, z } = block.location;
-  const dim = block.dimension;
+const leafBlocksSet = new Set([
+  'extrabiomes:palm_leaves'
+]);
 
-  // Cheaper check: scan cube, but break ASAP when log found
-  for (let dx = -MAX_DISTANCE; dx <= MAX_DISTANCE; dx++) {
-    for (let dy = -MAX_DISTANCE; dy <= MAX_DISTANCE; dy++) {
-      for (let dz = -MAX_DISTANCE; dz <= MAX_DISTANCE; dz++) {
-        const b = dim.getBlock({ x: x + dx, y: y + dy, z: z + dz });
-        if (b && LOG_IDS.has(b.typeId)) {
-          return true;
+// Check if an allowed block is nearby within a 6-block radius
+function isWithinRadiusOfAllowedBlock(block, maxDistance) {
+  const { x: startX, y: startY, z: startZ } = block.location;
+  for (let x = startX - maxDistance; x <= startX + maxDistance; x++) {
+    for (let y = startY - maxDistance; y <= startY + maxDistance; y++) {
+      for (let z = startZ - maxDistance; z <= startZ + maxDistance; z++) {
+        const currentBlock = block.dimension.getBlock({ x, y, z });
+        if (currentBlock && allowedBlocksSet.has(currentBlock.typeId)) {
+          const distance = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2) + Math.pow(z - startZ, 2));
+          if (distance <= maxDistance) return true;
         }
       }
     }
@@ -26,45 +28,76 @@ function hasNearbyLog(block) {
   return false;
 }
 
-// --- Update a leaf's decay state ---
-function updateLeafDecay(block) {
-  const hasLog = hasNearbyLog(block);
-  const states = block.permutation.getAllStates();
-  const newStates = { ...states, "extrabiomes:can_decay": !hasLog };
-  block.setPermutation(BlockPermutation.resolve(block.typeId, newStates));
+// Recalculate persistence for a block based on nearby allowed blocks
+function recalculatePersistence(block) {
+  const persistent = isWithinRadiusOfAllowedBlock(block, 6);
+  const currentStates = block.permutation.getAllStates();
+  const newStates = { ...currentStates, 'extrabiomes:persist': persistent };
+  const newPermutation = BlockPermutation.resolve(block.typeId, newStates);
+  block.setPermutation(newPermutation);
+
+  if (!persistent && !block.permutation.getState('extrabiomes:placed')) {
+    const { x, y, z } = block.location;
+    try {
+      drop_leaf_loot(block);
+      block.dimension.runCommand(`/setblock ${x} ${y} ${z} air destroy`);
+    } catch (error) {
+      console.error("Failed to set block to air:", error);
+    }
+  }
 }
 
-// --- Custom component: only destroy decaying leaves ---
+function drop_leaf_loot(block) {
+      function getLeafFromId(blockId) {
+      const [, rest] = blockId.split(':');
+      const [leaf] = rest.split('_');
+      return leaf;
+    }
+    const leaf = getLeafFromId(block.type.id)
+    var extraLoot="none";
+    switch (leaf){
+      case"palm":
+        extraLoot="cocoa_beans"
+        break;
+      case "mystic":
+         extraLoot="glow_berries"
+         break;
+    }
+      const weight = Math.random();
+      if (weight <= 0.10) {
+        block.dimension.spawnItem(new ItemStack(`extrabiomes:${leaf}_sapling`, 1), block.center());
+      }
+      else if (weight > 0.10 && weight <= 0.20) {
+        block.dimension.spawnItem(new ItemStack(`minecraft:stick`, 1), block.center());
+      }
+      else if (weight <= 0.30 && extraLoot && extraLoot !== "none") {
+        block.dimension.spawnItem(new ItemStack(extraLoot, 1), block.center());
+      }
+}
+
+
+// Register custom component for leaf decay
 export const LeafDecayComponent = {
-  onRandomTick(event) {
-    const { block } = event;
-    if (!block) return;
-
-    const perm = block.permutation;
-    if (perm.getState("extrabiomes:can_decay")) {
-      // 20% chance to decay on random tick
-      if (Math.random() < 0.2) {
-        block.setPermutation(BlockPermutation.resolve("minecraft:air"));
-      }
+  // Handle player breaking blocks
+  onPlayerBreak(eventData) {
+    const { block } = eventData;
+    if (allowedBlocksSet.has(block.typeId) || leafBlocksSet.has(block.typeId)) {
+      recalculatePersistence(block);
     }
-  }
+  },
+
+  // Handle player placing blocks
+  onPlayerPlace(eventData) {
+    const { block } = eventData;
+    if (leafBlocksSet.has(block.typeId) && !block.permutation.getState('extrabiomes:placed')) {
+      const currentStates = block.permutation.getAllStates();
+      const newStates = { ...currentStates, 'extrabiomes:placed': true };
+      const newPermutation = BlockPermutation.resolve(block.typeId, newStates);
+      block.setPermutation(newPermutation);
+    }
+  },
+    onRandomTick: (e) => {
+    const { block } = e;
+    if (leafBlocksSet.has(block.typeId)) recalculatePersistence(block);
+  },
 };
-
-// --- Global event hooks to update state only when needed ---
-world.afterEvents.playerBreakBlock.subscribe(({ block }) => {
-  if (LOG_IDS.has(block.typeId)) {
-    // Update nearby leaves after log broken
-    const { x, y, z } = block.location;
-    const dim = block.dimension;
-    for (let dx = -MAX_DISTANCE; dx <= MAX_DISTANCE; dx++) {
-      for (let dy = -MAX_DISTANCE; dy <= MAX_DISTANCE; dy++) {
-        for (let dz = -MAX_DISTANCE; dz <= MAX_DISTANCE; dz++) {
-          const b = dim.getBlock({ x: x + dx, y: y + dy, z: z + dz });
-          if (b?.typeId === "extrabiomes:palm_leaves") {
-            updateLeafDecay(b);
-          }
-        }
-      }
-    }
-  }
-});
