@@ -9,7 +9,8 @@
       },
       "states": {
         "extrabiomes:persist": [0,1],
-        "extrabiomes:placed": [false,true]
+        "extrabiomes:placed": [false,true],
+        "extrabiomes:decay": [0,1]
       }
     },
     "components": {
