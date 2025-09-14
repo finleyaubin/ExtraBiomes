@@ -1,14 +1,15 @@
 //registers the events from the scripts so that they can be used by the blocks.json's
 import { system } from "@minecraft/server";
-import { MushroomGrowComponent } from "./mushroom_grower.js";
-import { XpRewardComponent } from "./xp_reward.js";
-import { MushroomLootComponent } from "./mushroom_loot.js";
-import { PebbleUpdaterComponent } from "./pebble_updater.js";
-import "./DenseCloudEffect.js";
-import { StripperComponent } from "./stripper.js";
-import { SlabberComponent } from "./slabber.js";
-import { LeafLootComponent } from "./leaf_loot.js";
-import { LeafDecayComponent } from"./leaf_decay.js";
+import { MushroomGrowComponent } from "./blocks/mushroom_grower.js";
+import { XpRewardComponent } from "./blocks/xp_reward.js";
+import { MushroomLootComponent } from "./blocks/mushroom_loot.js";
+import { PebbleUpdaterComponent } from "./blocks/pebble_updater.js";
+import "./blocks/DenseCloudEffect.js";
+import { StripperComponent } from "./blocks/stripper.js";
+import { SlabberComponent } from "./blocks/slabber.js";
+import { LeafLootComponent } from "./blocks/leaf_loot.js";
+import { LeafDecayComponent } from "./blocks/leaf_decay.js";
+import { SaplingGrowComponent } from "./blocks/sapling_grower.js";
 
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
@@ -40,8 +41,12 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
     "extrabiomes:leaf_loot",
     LeafLootComponent
   );
-    blockComponentRegistry.registerCustomComponent(
+  blockComponentRegistry.registerCustomComponent(
     "extrabiomes:leaf_decay",
     LeafDecayComponent
+  );
+  blockComponentRegistry.registerCustomComponent(
+    "extrabiomes:sapling_grower",
+    SaplingGrowComponent
   );
 });

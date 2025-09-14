@@ -2,12 +2,13 @@
 	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:orange_mushroom_placed"
+			"identifier": "extrabiomes:orange_mushroom_placed",
+			"menu_category": {
+				"category": "none",
+				"is_hidden_in_commands": true
+			}
 		},
 		"components": {
-			// "minecraft:creative_category": {
-			//     "category": "none"
-			// },
 			"minecraft:collision_box": false,
 			"minecraft:selection_box": {
 				"origin": [
@@ -50,9 +51,18 @@
 					}
 				]
 			},
+			"minecraft:liquid_detection": {
+				"detection_rules": [
+					{
+						"can_contain_liquid": true,
+						"liquid_type": "water",
+						"on_liquid_touches": "popped"
+					}
+				]
+			},
 			"minecraft:map_color": "#070841",
 			"minecraft:loot": "loot_tables/blocks/mushroom/orange_mushroom.json",
-      		"extrabiomes:mushroom_grow": {} 
+			"extrabiomes:mushroom_grow": {}
 		}
 	}
 }

@@ -4,7 +4,8 @@
     "description": {
       "identifier": "extrabiomes:medium_pebble",
       "menu_category": {
-        "category": "Nature"
+        "category": "none",
+        "is_hidden_in_commands": true
       }
     },
     "components": {
