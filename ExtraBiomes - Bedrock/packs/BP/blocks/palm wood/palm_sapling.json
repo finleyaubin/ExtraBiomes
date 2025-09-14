@@ -22,7 +22,7 @@
 					12
 				]
 			},
-			"minecraft:geometry": "geometry.sapling_model",
+			"minecraft:geometry": "geometry.palm_sapling",
 			"minecraft:material_instances": {
 				"*": {
 					"texture": "palm_sapling",

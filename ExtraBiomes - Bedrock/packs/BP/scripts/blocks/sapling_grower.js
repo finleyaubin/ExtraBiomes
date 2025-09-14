@@ -31,19 +31,15 @@ export const SaplingGrowComponent = {
         case "palm":
           const weight=Math.random()
           if(weight<0.15){
-            console.log("tree 1")
             dimension.runCommand(`structure load extrabiomes:palm_tree_1 ${block.location.x - 5} ${block.location.y} ${block.location.z - 2}`);
           }
           else if(weight>=0.15&& weight <0.35){
-            console.log("tree 2")
             dimension.runCommand(`structure load extrabiomes:palm_tree_2 ${block.location.x - 1} ${block.location.y} ${block.location.z - 1}`);
           }
           else if(weight>=0.35&& weight <0.60){
-            console.log("tree 3")
             dimension.runCommand(`structure load extrabiomes:palm_tree_3 ${block.location.x - 4} ${block.location.y} ${block.location.z - 5}`);
           }
           else{
-            console.log("tree 4")
             dimension.runCommand(`structure load extrabiomes:palm_tree_4 ${block.location.x - 6} ${block.location.y} ${block.location.z - 4}`);
           }
           break;
