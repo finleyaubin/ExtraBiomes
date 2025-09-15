@@ -1,7 +1,7 @@
 //special thanks to ZoMb1eRaBb1tT for the palm used for this leaf decay. 
 
 import { BlockPermutation} from '@minecraft/server';
-import { drop_leaf_loot } from './leaf_loot';
+import { drop_leaf_loot } from './Components/leaf_loot';
 
 // Allowed and leaf blocks combined into sets for quick lookups
 const allowedBlocksSet = new Set([
@@ -51,7 +51,7 @@ function recalculatePersistence(block) {
 
 
 // Register custom component for leaf decay
-export const LeafDecayComponent = {
+export const LeafDecay = {
   // Handle player breaking blocks
   onPlayerBreak(event) {
     const { block } = event;

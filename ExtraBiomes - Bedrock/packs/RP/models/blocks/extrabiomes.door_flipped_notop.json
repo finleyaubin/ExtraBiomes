@@ -3,20 +3,20 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.stairs_upside",
+				"identifier": "geometry.extrabiomes_door_flipped_notop",
 				"texture_width": 16,
 				"texture_height": 16,
-				"visible_bounds_width": 4,
-				"visible_bounds_height": 4,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
 				"visible_bounds_offset": [
 					0,
-					1,
+					0.75,
 					0
 				]
 			},
 			"bones": [
 				{
-					"name": "unknown_bone",
+					"name": "closed",
 					"pivot": [
 						0,
 						0,
@@ -26,33 +26,33 @@
 						{
 							"origin": [
 								-8,
-								8,
-								0
+								0,
+								-8
 							],
 							"size": [
 								16,
-								8,
-								8
+								16,
+								3
 							],
 							"uv": {
 								"north": {
 									"uv": [
-										0,
-										8
+										16,
+										0
 									],
 									"uv_size": [
-										16,
-										8
+										-16,
+										16
 									]
 								},
 								"east": {
 									"uv": [
-										0,
+										1,
 										0
 									],
 									"uv_size": [
-										8,
-										8
+										3,
+										16
 									]
 								},
 								"south": {
@@ -62,41 +62,46 @@
 									],
 									"uv_size": [
 										16,
-										8
+										16
 									]
 								},
 								"west": {
 									"uv": [
-										8,
+										9,
 										0
 									],
 									"uv_size": [
-										8,
-										8
-									]
-								},
-								"up": {
-									"uv": [
-										0,
-										8
-									],
-									"uv_size": [
-										16,
-										8
+										3,
+										16
 									]
 								},
 								"down": {
 									"uv": [
-										16,
-										8
+										0,
+										15
 									],
 									"uv_size": [
-										-16,
-										-8
+										16,
+										-3
 									]
 								}
 							}
-						},
+						}
+					]
+				},
+				{
+					"name": "open",
+					"pivot": [
+						0,
+						0,
+						0
+					],
+					"rotation": [
+						0,
+						-90,
+						0
+					],
+					"cubes": [
 						{
 							"origin": [
 								-8,
@@ -106,7 +111,7 @@
 							"size": [
 								16,
 								16,
-								8
+								3
 							],
 							"uv": {
 								"north": {
@@ -121,52 +126,42 @@
 								},
 								"east": {
 									"uv": [
-										8,
+										1,
 										0
 									],
 									"uv_size": [
-										8,
+										3,
 										16
 									]
 								},
 								"south": {
 									"uv": [
-										0,
+										16,
 										0
 									],
 									"uv_size": [
-										16,
+										-16,
 										16
 									]
 								},
 								"west": {
 									"uv": [
-										0,
+										9,
 										0
 									],
 									"uv_size": [
-										8,
+										3,
 										16
-									]
-								},
-								"up": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										8
 									]
 								},
 								"down": {
 									"uv": [
-										16,
-										16
+										0,
+										15
 									],
 									"uv_size": [
-										-16,
-										-8
+										16,
+										-3
 									]
 								}
 							}

@@ -2,7 +2,7 @@
 	"format_version": "1.21.60",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:palm_door_bottom",
+			"identifier": "extrabiomes:palm_door_bottom_flipped",
 			"menu_category": {
 				"category": "none",
 				"is_hidden_in_commands": true
@@ -13,10 +13,6 @@
 					true
 				],
 				"extrabiomes:top_refresh": [
-					false,
-					true
-				],
-				"extrabiomes:doubledoor": [
 					false,
 					true
 				]
@@ -46,7 +42,7 @@
 						],
 						"block_filter": [
 							{
-								"tags": "!query.any_tag('extrabiomes_palm_door')"
+								"tags": "!query.any_tag('extrabiome_palm_door_flipped')"
 							}
 						]
 					}
@@ -60,19 +56,19 @@
 				"seconds_to_destroy": 3
 			},
 			"tag:minecraft:is_axe_item_destructible": {},
+			"minecraft:loot": "loot_tables/empty.json",
+			"minecraft:map_color": "#52221D",
+			"minecraft:light_dampening": 0,
+			"tag:extrabiomes:palm_door_flipped": {},
+			"tag:wood": {},
+			"tag:no_fence_join": {},
 			"minecraft:geometry": {
-				"identifier": "geometry.extrabiomes_door",
+				"identifier": "geometry.extrabiomes_door_flipped",
 				"bone_visibility": {
 					"open": "query.block_state('extrabiomes:is_open') == true",
 					"closed": "query.block_state('extrabiomes:is_open') == false"
 				}
 			},
-			"minecraft:loot": "loot_tables/empty.json",
-			"minecraft:map_color": "#52221D",
-			"minecraft:light_dampening": 0,
-			"tag:extrabiomes:palm_door": {},
-			"tag:wood": {},
-			"tag:no_fence_join": {},
 			"tag:extrabiomes:door": {}
 		},
 		"permutations": [
@@ -85,8 +81,7 @@
 							180,
 							0
 						]
-					},
-					"tag:extrabiomesdir_0": {}
+					}
 				}
 			},
 			{
@@ -98,8 +93,7 @@
 							0,
 							0
 						]
-					},
-					"tag:extrabiomesdir_1": {}
+					}
 				}
 			},
 			{
@@ -111,8 +105,7 @@
 							270,
 							0
 						]
-					},
-					"tag:extrabiomesdir_2": {}
+					}
 				}
 			},
 			{
@@ -124,8 +117,7 @@
 							90,
 							0
 						]
-					},
-					"tag:extrabiomesdir_3": {}
+					}
 				}
 			},
 			{
@@ -155,11 +147,9 @@
 							3
 						]
 					},
-					"tag:extrabiomes:closed_palm_door": {},
 					"minecraft:custom_components": [
 						"extrabiomes:door_open",
-						"extrabiomes:door_place",
-						"extrabiomes:reset_top"
+						"extrabiomes:door_place"
 					]
 				}
 			},
@@ -168,7 +158,7 @@
 				"components": {
 					"minecraft:collision_box": {
 						"origin": [
-							-8,
+							5,
 							0,
 							-8
 						],
@@ -180,7 +170,7 @@
 					},
 					"minecraft:selection_box": {
 						"origin": [
-							-8,
+							5,
 							0,
 							-8
 						],
@@ -190,17 +180,9 @@
 							16
 						]
 					},
-					"tag:extrabiomes:open_palm_door": {},
 					"minecraft:custom_components": [
-						"extrabiomes:door_close",
-						"extrabiomes:reset_top"
+						"extrabiomes:door_close"
 					]
-				}
-			},
-			{
-				"condition": "query.block_state('extrabiomes:doubledoor') == true",
-				"components": {
-					"tag:extrabiomes_door_paired": {}
 				}
 			}
 		]

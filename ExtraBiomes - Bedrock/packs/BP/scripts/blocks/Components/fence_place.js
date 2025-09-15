@@ -1,5 +1,5 @@
 import { world } from "@minecraft/server";
-import { fence_Manager } from "./fence_manager";
+import { fence_Manager } from "../fence_manager";
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 export const fence = {
     onPlace(event) {
