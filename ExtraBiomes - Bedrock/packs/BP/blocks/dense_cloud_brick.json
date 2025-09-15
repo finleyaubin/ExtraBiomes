@@ -11,7 +11,7 @@
       "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:material_instances": {
         "*": {
-          "texture": "dense_cloud_brick",
+          "texture": "extrabiomes_dense_cloud_brick",
           "render_method": "opaque"
         }
       },

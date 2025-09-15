@@ -14,7 +14,7 @@
       "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:material_instances": {
         "*": {
-          "texture": "green_mushroom_block",
+          "texture": "extrabiomes_green_mushroom_block",
           "render_method": "opaque"
         }
       },

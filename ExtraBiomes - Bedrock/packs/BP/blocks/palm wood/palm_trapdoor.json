@@ -34,7 +34,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "palm_trapdoor",
+          "texture": "extrabiomes_palm_trapdoor",
           "render_method": "alpha_test"
         }
       },

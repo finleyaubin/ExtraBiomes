@@ -15,7 +15,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "sky_planks",
+          "texture": "extrabiomes_sky_planks",
           "render_method": "opaque"
         }
       },

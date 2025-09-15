@@ -14,15 +14,15 @@
       "minecraft:map_color": "#008425",
       "minecraft:material_instances": {
         "*": {
-          "texture": "grass_stone_side",
+          "texture": "extrabiomes_grass_stone_side",
           "render_method": "opaque"
         },
         "up": {
-          "texture": "grass_stone_top",
+          "texture": "extrabiomes_grass_stone_top",
           "render_method": "opaque"
         },
         "down": {
-          "texture": "grass_stone_bottom",
+          "texture": "extrabiomes_grass_stone_bottom",
           "render_method": "opaque"
         }
       },

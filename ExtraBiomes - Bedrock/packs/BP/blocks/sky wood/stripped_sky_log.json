@@ -22,15 +22,15 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "sky_stripped_log",
+          "texture": "extrabiomes_sky_stripped_log",
           "render_method": "opaque"
         },
         "up": {
-          "texture": "sky_stripped_log_top",
+          "texture": "extrabiomes_sky_stripped_log_top",
           "render_method": "opaque"
         },
         "down": {
-          "texture": "sky_stripped_log_top",
+          "texture": "extrabiomes_sky_stripped_log_top",
           "render_method": "opaque"
         }
       },

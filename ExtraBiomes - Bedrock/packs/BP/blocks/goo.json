@@ -17,7 +17,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "goo",
+          "texture": "extrabiomes_goo",
           "render_method": "blend"
         }
       },

@@ -22,7 +22,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "palm_log",
+          "texture": "extrabiomes_palm_log",
           "render_method": "opaque"
         }
       },

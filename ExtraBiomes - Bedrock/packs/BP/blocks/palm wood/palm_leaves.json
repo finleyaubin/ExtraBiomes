@@ -21,7 +21,7 @@
       "minecraft:map_color": "#ff78f8",
       "minecraft:material_instances": {
         "*": {
-          "texture": "palm_leaves",
+          "texture": "extrabiomes_palm_leaves",
           "render_method": "blend",
           "ambient_occlusion": true,
 					"face_dimming": true

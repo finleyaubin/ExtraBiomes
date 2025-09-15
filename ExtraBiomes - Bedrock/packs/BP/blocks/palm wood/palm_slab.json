@@ -28,7 +28,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "palm_planks",
+          "texture": "extrabiomes_palm_planks",
           "render_method": "opaque"
         }
       },

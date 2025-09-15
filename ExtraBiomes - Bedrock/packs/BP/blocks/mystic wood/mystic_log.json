@@ -26,15 +26,15 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "mystic_log",
+          "texture": "extrabiomes_mystic_log",
           "render_method": "opaque"
         },
         "up": {
-          "texture": "mystic_log_top",
+          "texture": "extrabiomes_mystic_log_top",
           "render_method": "opaque"
         },
         "down": {
-          "texture": "mystic_log_top",
+          "texture": "extrabiomes_mystic_log_top",
           "render_method": "opaque"
         }
       },

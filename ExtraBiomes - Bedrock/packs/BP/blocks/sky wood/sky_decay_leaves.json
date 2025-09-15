@@ -15,7 +15,7 @@
       "minecraft:map_color": "#ff78f8",
       "minecraft:material_instances": {
         "*": {
-          "texture": "sky_leaves",
+          "texture": "extrabiomes_sky_leaves",
           "render_method": "blend"
         }
       },

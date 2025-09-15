@@ -60,15 +60,15 @@
       "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:material_instances": {
         "*": {
-          "texture": "palm_log",
+          "texture": "extrabiomes_palm_log",
           "render_method": "opaque"
         },
         "up": {
-          "texture": "palm_log_top",
+          "texture": "extrabiomes_palm_log_top",
           "render_method": "opaque"
         },
         "down": {
-          "texture": "palm_log_top",
+          "texture": "extrabiomes_palm_log_top",
           "render_method": "opaque"
         }
       },

@@ -15,7 +15,7 @@
       "minecraft:map_color": "#ff78f8",
       "minecraft:material_instances": {
         "*": {
-          "texture": "mystic_leaves",
+          "texture": "extrabiomes_mystic_leaves",
           "render_method": "blend"
         }
       },

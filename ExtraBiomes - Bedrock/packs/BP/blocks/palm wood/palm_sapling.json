@@ -25,7 +25,7 @@
 			"minecraft:geometry": "geometry.palm_sapling",
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "palm_sapling",
+					"texture": "extrabiomes_palm_sapling",
 					"render_method": "alpha_test",
 					"face_dimming": false,
 					"ambient_occlusion": true

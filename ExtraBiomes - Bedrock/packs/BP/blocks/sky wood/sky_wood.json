@@ -22,7 +22,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "sky_log",
+          "texture": "extrabiomes_sky_log",
           "render_method": "opaque"
         }
       },

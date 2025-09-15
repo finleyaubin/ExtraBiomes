@@ -23,7 +23,7 @@
           },
           "minecraft:material_instances": {
             "*": {
-              "texture": "gilded_sky_planks",
+              "texture": "extrabiomes_gilded_sky_planks",
               "render_method": "opaque"
             }
           }
@@ -33,7 +33,7 @@
     "components": {
       "minecraft:material_instances": {
         "*": {
-          "texture": "barrier",
+          "texture": "extrabiomes_barrier",
           "render_method": "alpha_test"
         }
       },

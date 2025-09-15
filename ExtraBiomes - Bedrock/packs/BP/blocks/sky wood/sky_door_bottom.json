@@ -26,7 +26,7 @@
     "components": {
       "minecraft:material_instances": {
         "*": {
-          "texture": "sky_door_bottom",
+          "texture": "extrabiomes_sky_door_bottom",
           "render_method": "blend",
           "face_dimming": true,
           "ambient_occlusion": false

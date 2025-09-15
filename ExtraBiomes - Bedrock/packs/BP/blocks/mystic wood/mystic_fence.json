@@ -67,7 +67,7 @@
 			"minecraft:light_dampening": 0,
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "mystic_planks",
+					"texture": "extrabiomes_mystic_planks",
 					"render_method": "alpha_test"
 				}
 			},

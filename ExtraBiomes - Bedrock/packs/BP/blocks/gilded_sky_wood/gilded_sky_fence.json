@@ -67,7 +67,7 @@
 			"minecraft:light_dampening": 0,
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "gilded_sky_planks",
+					"texture": "extrabiomes_gilded_sky_planks",
 					"render_method": "alpha_test"
 				}
 			},

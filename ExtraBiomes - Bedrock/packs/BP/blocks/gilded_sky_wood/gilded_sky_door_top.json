@@ -22,7 +22,7 @@
     "components": {
       "minecraft:material_instances": {
         "*": {
-          "texture": "gilded_sky_door_top",
+          "texture": "extrabiomes_gilded_sky_door_top",
           "render_method": "blend",
           "face_dimming": true,
           "ambient_occlusion": false

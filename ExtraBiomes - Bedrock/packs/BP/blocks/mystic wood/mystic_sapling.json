@@ -24,7 +24,7 @@
 			"minecraft:geometry": "geometry.sapling_model",
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "mystic_sapling",
+					"texture": "extrabiomes_mystic_sapling",
 					"render_method": "alpha_test",
 					"face_dimming": false,
 					"ambient_occlusion": true

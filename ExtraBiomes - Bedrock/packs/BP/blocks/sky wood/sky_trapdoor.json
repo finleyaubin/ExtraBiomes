@@ -34,7 +34,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "sky_trapdoor",
+          "texture": "extrabiomes_sky_trapdoor",
           "render_method": "alpha_test"
         }
       },
