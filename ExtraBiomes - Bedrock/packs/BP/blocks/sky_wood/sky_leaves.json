@@ -1,0 +1,61 @@
+{
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:sky_leaves",
+      "menu_category": {
+        "category": "nature",
+        "group": "itemGroup.name.leaves"
+      },
+      "states": {
+        "extrabiomes:persist": [
+          0,
+          1
+        ],
+        "extrabiomes:placed": [
+          false,
+          true
+        ],
+        "extrabiomes:decay": [
+          0,
+          1
+        ]
+      }
+    },
+    "components": {
+      "minecraft:flammable": {
+        "burn_odds": 50,
+        "flame_odds": 50
+      },
+      "minecraft:map_color": "#ff78f8",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "extrabiomes_sky_leaves",
+          "render_method": "blend",
+          "ambient_occlusion": true,
+          "face_dimming": true
+        }
+      },
+      "minecraft:loot": "loot_tables/empty.json",
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.3
+      },
+      "minecraft:liquid_detection": {
+        "detection_rules": [
+          {
+            "liquid_type": "water",
+            "can_contain_liquid": true,
+            "on_liquid_touches": "blocking"
+          }
+        ]
+      },
+      "minecraft:light_dampening": 0,
+      "extrabiomes:leaf_loot": {},
+      "extrabiomes:leaf_decay": {},
+      "tag:minecraft:leaves": {},
+      "tag:minecraft:is_hoe_item_destructible": {},
+      "tag:minecraft:is_shears_item_destructible": {},
+      "tag:extrabiomes:sky_leaves": {}
+    }
+  }
+}

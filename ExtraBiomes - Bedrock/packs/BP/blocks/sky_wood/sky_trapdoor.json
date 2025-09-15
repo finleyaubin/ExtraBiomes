@@ -1,11 +1,11 @@
 {
-	"format_version": "1.21.60",
+	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:gilded_sky_door_top",
+			"identifier": "extrabiomes:sky_trapdoor",
 			"menu_category": {
-				"category": "none",
-				"is_hidden_in_commands": true
+				"group": "itemGroup.name.trapdoor",
+				"category": "construction"
 			},
 			"states": {
 				"extrabiomes:is_open": [
@@ -14,6 +14,11 @@
 				]
 			},
 			"traits": {
+				"minecraft:placement_position": {
+					"enabled_states": [
+						"minecraft:vertical_half"
+					]
+				},
 				"minecraft:placement_direction": {
 					"enabled_states": [
 						"minecraft:cardinal_direction"
@@ -24,25 +29,10 @@
 		"components": {
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "extrabiomes_gilded_sky_door_top",
-					"render_method": "alpha_test",
-					"face_dimming": true,
+					"texture": "extrabiomes_sky_trapdoor",
+					"render_method": "blend",
 					"ambient_occlusion": false
 				}
-			},
-			"minecraft:placement_filter": {
-				"conditions": [
-					{
-						"allowed_faces": [
-							"up"
-						],
-						"block_filter": [
-							{
-								"tags": "query.any_tag('extrabiomes:gilded_sky_door')"
-							}
-						]
-					}
-				]
 			},
 			"minecraft:flammable": {
 				"destroy_chance_modifier": 45,
@@ -52,28 +42,55 @@
 				"seconds_to_destroy": 3
 			},
 			"tag:minecraft:is_axe_item_destructible": {},
-			"minecraft:geometry": {
-				"identifier": "geometry.extrabiomes_door",
-				"bone_visibility": {
-					"open": "query.block_state('extrabiomes:is_open') == true",
-					"closed": "query.block_state('extrabiomes:is_open') == false"
-				}
+			"minecraft:map_color": "#52221D",
+			"minecraft:collision_box": {
+				"size": [
+					16,
+					3,
+					16
+				],
+				"orgin": [
+					-8,
+					0,
+					-8
+				]
+			},
+			"minecraft:selection_box": {
+				"size": [
+					16,
+					3,
+					16
+				],
+				"orgin": [
+					-8,
+					0,
+					-8
+				]
 			},
 			"minecraft:liquid_detection": {
 				"detection_rules": [
 					{
 						"liquid_type": "water",
-						"can_contain_liquid": true,
+						"can_contain_liquid": true, 
 						"on_liquid_touches": "blocking"
 					}
 				]
 			},
-			"minecraft:loot": "loot_tables/gilded_sky/gilded_sky_door.json",
-			"minecraft:map_color": "#52221D",
 			"minecraft:light_dampening": 0,
-			"tag:no_fence_join": {},
-			"tag:extrabiomes:door_top": {},
-			"tag:extrabiomes:door": {}
+			"minecraft:friction": 0.4,
+			"tag:wood": {},
+			"tag:extrabiomes:no_fence_join": {},
+			"extrabiomes:open": {},
+			"minecraft:geometry": {
+				"identifier": "geometry.extrabiomes_trapdoor",
+				"bone_visibility": {
+					"down_close": "query.block_state('minecraft:vertical_half') == 'bottom' && query.block_state('extrabiomes:is_open') == false",
+					"up_open": "query.block_state('minecraft:vertical_half') == 'top' && query.block_state('extrabiomes:is_open') == true",
+					"up_close": "query.block_state('minecraft:vertical_half') == 'top' && query.block_state('extrabiomes:is_open') == false",
+					"down_open": "query.block_state('minecraft:vertical_half') == 'bottom' && query.block_state('extrabiomes:is_open') == true"
+				}
+			},
+			"tag:extrabiomes:trapdoor": {}
 		},
 		"permutations": [
 			{
@@ -125,71 +142,61 @@
 				}
 			},
 			{
-				"condition": "query.block_state('extrabiomes:is_open') == false",
+				"condition": "query.block_state('extrabiomes:is_open') == true",
 				"components": {
-					"minecraft:collision_box": {
-						"origin": [
-							-8,
-							0,
-							-8
-						],
-						"size": [
-							16,
-							16,
-							3
-						]
-					},
 					"minecraft:selection_box": {
-						"origin": [
-							-8,
-							0,
-							-8
-						],
 						"size": [
 							16,
 							16,
 							3
+						],
+						"origin": [
+							-8,
+							0,
+							5
 						]
 					},
-					"tag:extrabiomes:closed_gilded_sky_door": {},
-					"minecraft:custom_components": [
-						"extrabiomes:door_open",
-						"extrabiomes:reset_bottom"
-					]
+					"minecraft:collision_box": {
+						"size": [
+							16,
+							16,
+							3
+						],
+						"origin": [
+							-8,
+							0,
+							5
+						]
+					}
 				}
 			},
 			{
-				"condition": "query.block_state('extrabiomes:is_open') == true",
+				"condition": "query.block_state('minecraft:vertical_half') == 'top' && query.block_state('extrabiomes:is_open') == false",
 				"components": {
-					"minecraft:collision_box": {
-						"origin": [
-							-8,
-							0,
-							-8
-						],
-						"size": [
-							3,
-							16,
-							16
-						]
-					},
 					"minecraft:selection_box": {
+						"size": [
+							16,
+							3,
+							16
+						],
 						"origin": [
 							-8,
-							0,
+							13,
 							-8
-						],
-						"size": [
-							3,
-							16,
-							16
 						]
 					},
-					"tag:extrabiomes:open_gilded_sky_door": {},
-					"minecraft:custom_components": [
-						"extrabiomes:door_close",
-						"extrabiomes:reset_bottom"
-					]
+					"minecraft:collision_box": {
+						"size": [
+							16,
+							3,
+							16
+						],
+						"origin": [
+							-8,
+							13,
+							-8
+						]
+					}
 				}
 			}
 		]

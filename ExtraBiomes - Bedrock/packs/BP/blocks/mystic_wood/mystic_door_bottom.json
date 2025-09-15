@@ -2,13 +2,21 @@
 	"format_version": "1.21.60",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:gilded_sky_door_top",
+			"identifier": "extrabiomes:mystic_door_bottom",
 			"menu_category": {
 				"category": "none",
 				"is_hidden_in_commands": true
 			},
 			"states": {
 				"extrabiomes:is_open": [
+					false,
+					true
+				],
+				"extrabiomes:top_refresh": [
+					false,
+					true
+				],
+				"extrabiomes:doubledoor": [
 					false,
 					true
 				]
@@ -24,7 +32,7 @@
 		"components": {
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "extrabiomes_gilded_sky_door_top",
+					"texture": "extrabiomes_mystic_door_bottom",
 					"render_method": "alpha_test",
 					"face_dimming": true,
 					"ambient_occlusion": false
@@ -38,7 +46,7 @@
 						],
 						"block_filter": [
 							{
-								"tags": "query.any_tag('extrabiomes:gilded_sky_door')"
+								"tags": "!query.any_tag('extrabiomes_mystic_door')"
 							}
 						]
 					}
@@ -63,16 +71,17 @@
 				"detection_rules": [
 					{
 						"liquid_type": "water",
-						"can_contain_liquid": true,
+						"can_contain_liquid": true, 
 						"on_liquid_touches": "blocking"
 					}
 				]
 			},
-			"minecraft:loot": "loot_tables/gilded_sky/gilded_sky_door.json",
+			"minecraft:loot": "loot_tables/empty.json",
 			"minecraft:map_color": "#52221D",
 			"minecraft:light_dampening": 0,
+			"tag:extrabiomes:mystic_door": {},
+			"tag:wood": {},
 			"tag:no_fence_join": {},
-			"tag:extrabiomes:door_top": {},
 			"tag:extrabiomes:door": {}
 		},
 		"permutations": [
@@ -85,7 +94,8 @@
 							180,
 							0
 						]
-					}
+					},
+					"tag:extrabiomesdir_0": {}
 				}
 			},
 			{
@@ -97,7 +107,8 @@
 							0,
 							0
 						]
-					}
+					},
+					"tag:extrabiomesdir_1": {}
 				}
 			},
 			{
@@ -109,7 +120,8 @@
 							270,
 							0
 						]
-					}
+					},
+					"tag:extrabiomesdir_2": {}
 				}
 			},
 			{
@@ -121,7 +133,8 @@
 							90,
 							0
 						]
-					}
+					},
+					"tag:extrabiomesdir_3": {}
 				}
 			},
 			{
@@ -151,10 +164,11 @@
 							3
 						]
 					},
-					"tag:extrabiomes:closed_gilded_sky_door": {},
+					"tag:extrabiomes:closed_mystic_door": {},
 					"minecraft:custom_components": [
 						"extrabiomes:door_open",
-						"extrabiomes:reset_bottom"
+						"extrabiomes:door_place",
+						"extrabiomes:reset_top"
 					]
 				}
 			},
@@ -185,11 +199,17 @@
 							16
 						]
 					},
-					"tag:extrabiomes:open_gilded_sky_door": {},
+					"tag:extrabiomes:open_mystic_door": {},
 					"minecraft:custom_components": [
 						"extrabiomes:door_close",
-						"extrabiomes:reset_bottom"
+						"extrabiomes:reset_top"
 					]
+				}
+			},
+			{
+				"condition": "query.block_state('extrabiomes:doubledoor') == true",
+				"components": {
+					"tag:extrabiomes_door_paired": {}
 				}
 			}
 		]

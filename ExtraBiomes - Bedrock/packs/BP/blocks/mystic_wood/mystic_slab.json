@@ -2,7 +2,7 @@
   "format_version": "1.20.100",
   "minecraft:block": {
     "description": {
-      "identifier": "extrabiomes:gilded_sky_slab",
+      "identifier": "extrabiomes:mystic_slab",
       "menu_category": {
         "category": "construction",
         "group": "itemGroup.name.slab"
@@ -28,7 +28,7 @@
       },
       "minecraft:material_instances": {
         "*": {
-          "texture": "extrabiomes_gilded_sky_planks",
+          "texture": "extrabiomes_mystic_planks",
           "render_method": "opaque"
         }
       },
@@ -112,7 +112,7 @@
         "condition": "query.block_state('extrabiomes:is_double') == true",
         "components": {
           "minecraft:geometry": "minecraft:geometry.full_block",
-          "minecraft:loot": "loot_tables/blocks/gilded_sky_wood/gilded_sky_slab.json",
+          "minecraft:loot": "loot_tables/blocks/mystic_wood/mystic_slab.json",
           "minecraft:light_dampening": 15,
                     "minecraft:collision_box": {
             "origin": [

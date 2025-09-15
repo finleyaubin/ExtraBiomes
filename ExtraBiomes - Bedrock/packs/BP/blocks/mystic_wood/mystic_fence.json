@@ -2,7 +2,7 @@
 	"format_version": "1.20.100",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:gilded_sky_fence",
+			"identifier": "extrabiomes:mystic_fence",
 			"states": {
 				"extrabiomes:north": [
 					false,
@@ -65,7 +65,7 @@
 			},
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "extrabiomes_gilded_sky_planks",
+					"texture": "extrabiomes_mystic_planks",
 					"render_method": "opaque"
 				}
 			},

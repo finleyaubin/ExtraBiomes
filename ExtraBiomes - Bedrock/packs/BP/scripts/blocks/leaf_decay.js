@@ -5,11 +5,11 @@ import { drop_leaf_loot } from './Components/leaf_loot';
 
 // Allowed and leaf blocks combined into sets for quick lookups
 const allowedBlocksSet = new Set([
-  'extrabiomes:palm_log', 'extrabiomes:palm_log_stripped'
+  'extrabiomes:palm_log', 'extrabiomes:palm_log_stripped', 'extrabiomes:mystic_log', 'extrabiomes:mystic_log_stripped', 'extrabiomes:sky_log', 'extrabiomes:sky_log_stripped'
 ]);
 
 const leafBlocksSet = new Set([
-  'extrabiomes:palm_leaves'
+  'extrabiomes:palm_leaves', 'extrabiomes:mystic_leaves', 'extrabiomes:sky_leaves'
 ]);
 
 // Check if an allowed block is nearby within a 6-block radius

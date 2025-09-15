@@ -2,7 +2,7 @@
   "format_version": "1.20.100",
   "minecraft:block": {
     "description": {
-      "identifier": "extrabiomes:gilded_sky_log",
+      "identifier": "extrabiomes:stripped_mystic_log",
       "menu_category": {
         "category": "nature",
         "group": "itemGroup.name.log"
@@ -60,15 +60,15 @@
       "minecraft:geometry": "minecraft:geometry.full_block",
       "minecraft:material_instances": {
         "*": {
-          "texture": "extrabiomes_gilded_sky_log",
+          "texture": "extrabiomes_mystic_stripped_log",
           "render_method": "opaque"
         },
         "up": {
-          "texture": "extrabiomes_gilded_sky_log_top",
+          "texture": "extrabiomes_mystic_stripped_log_top",
           "render_method": "opaque"
         },
         "down": {
-          "texture": "extrabiomes_gilded_sky_log_top",
+          "texture": "extrabiomes_mystic_stripped_log_top",
           "render_method": "opaque"
         }
       },
@@ -81,8 +81,6 @@
       "minecraft:destructible_by_mining": {
         "seconds_to_destroy": 2
       },
-      "extrabiomes:stripper_component":{},
-      
       "tag:minecraft:is_axe_item_destructible":{}
     }
   }

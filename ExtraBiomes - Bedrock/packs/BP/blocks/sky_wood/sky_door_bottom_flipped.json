@@ -2,13 +2,17 @@
 	"format_version": "1.21.60",
 	"minecraft:block": {
 		"description": {
-			"identifier": "extrabiomes:gilded_sky_door_top",
+			"identifier": "extrabiomes:sky_door_bottom_flipped",
 			"menu_category": {
 				"category": "none",
 				"is_hidden_in_commands": true
 			},
 			"states": {
 				"extrabiomes:is_open": [
+					false,
+					true
+				],
+				"extrabiomes:top_refresh": [
 					false,
 					true
 				]
@@ -24,7 +28,7 @@
 		"components": {
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "extrabiomes_gilded_sky_door_top",
+					"texture": "extrabiomes_sky_door_bottom",
 					"render_method": "alpha_test",
 					"face_dimming": true,
 					"ambient_occlusion": false
@@ -38,7 +42,7 @@
 						],
 						"block_filter": [
 							{
-								"tags": "query.any_tag('extrabiomes:gilded_sky_door')"
+								"tags": "!query.any_tag('extrabiome_sky_door_flipped')"
 							}
 						]
 					}
@@ -51,28 +55,29 @@
 			"minecraft:destructible_by_mining": {
 				"seconds_to_destroy": 3
 			},
+			"minecraft:liquid_detection": {
+				"detection_rules": [
+					{
+						"liquid_type": "water",
+						"can_contain_liquid": true, 
+						"on_liquid_touches": "blocking"
+					}
+				]
+			},
 			"tag:minecraft:is_axe_item_destructible": {},
+			"minecraft:loot": "loot_tables/empty.json",
+			"minecraft:map_color": "#52221D",
+			"minecraft:light_dampening": 0,
+			"tag:extrabiomes:sky_door_flipped": {},
+			"tag:wood": {},
+			"tag:no_fence_join": {},
 			"minecraft:geometry": {
-				"identifier": "geometry.extrabiomes_door",
+				"identifier": "geometry.extrabiomes_door_flipped",
 				"bone_visibility": {
 					"open": "query.block_state('extrabiomes:is_open') == true",
 					"closed": "query.block_state('extrabiomes:is_open') == false"
 				}
 			},
-			"minecraft:liquid_detection": {
-				"detection_rules": [
-					{
-						"liquid_type": "water",
-						"can_contain_liquid": true,
-						"on_liquid_touches": "blocking"
-					}
-				]
-			},
-			"minecraft:loot": "loot_tables/gilded_sky/gilded_sky_door.json",
-			"minecraft:map_color": "#52221D",
-			"minecraft:light_dampening": 0,
-			"tag:no_fence_join": {},
-			"tag:extrabiomes:door_top": {},
 			"tag:extrabiomes:door": {}
 		},
 		"permutations": [
@@ -151,10 +156,9 @@
 							3
 						]
 					},
-					"tag:extrabiomes:closed_gilded_sky_door": {},
 					"minecraft:custom_components": [
 						"extrabiomes:door_open",
-						"extrabiomes:reset_bottom"
+						"extrabiomes:door_place"
 					]
 				}
 			},
@@ -163,7 +167,7 @@
 				"components": {
 					"minecraft:collision_box": {
 						"origin": [
-							-8,
+							5,
 							0,
 							-8
 						],
@@ -175,7 +179,7 @@
 					},
 					"minecraft:selection_box": {
 						"origin": [
-							-8,
+							5,
 							0,
 							-8
 						],
@@ -185,10 +189,8 @@
 							16
 						]
 					},
-					"tag:extrabiomes:open_gilded_sky_door": {},
 					"minecraft:custom_components": [
-						"extrabiomes:door_close",
-						"extrabiomes:reset_bottom"
+						"extrabiomes:door_close"
 					]
 				}
 			}
