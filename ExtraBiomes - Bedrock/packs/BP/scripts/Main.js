@@ -10,6 +10,8 @@ import { SlabberComponent } from "./blocks/slabber.js";
 import { LeafLootComponent } from "./blocks/leaf_loot.js";
 import { LeafDecayComponent } from "./blocks/leaf_decay.js";
 import { SaplingGrowComponent } from "./blocks/sapling_grower.js";
+import { OpenComponent } from "./blocks/open.js";
+import { fence } from "./blocks/fence_place.js";
 
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
@@ -48,5 +50,13 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
   blockComponentRegistry.registerCustomComponent(
     "extrabiomes:sapling_grower",
     SaplingGrowComponent
+  );
+  blockComponentRegistry.registerCustomComponent(
+    "extrabiomes:open",
+    OpenComponent
+  );
+    blockComponentRegistry.registerCustomComponent(
+    "extrabiomes:fence",
+    fence
   );
 });

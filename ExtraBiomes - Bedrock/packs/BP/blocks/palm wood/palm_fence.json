@@ -3,358 +3,113 @@
 	"minecraft:block": {
 		"description": {
 			"identifier": "extrabiomes:palm_fence",
-			"menu_category": {
-				"category": "construction",
-				"group": "itemGroup.name.stairs"
-			},
-			"properties": {
+			"states": {
 				"extrabiomes:north": [
-					0,
-					1
+					false,
+					true
 				],
 				"extrabiomes:south": [
-					0,
-					1
+					false,
+					true
 				],
 				"extrabiomes:east": [
-					0,
-					1
+					false,
+					true
 				],
 				"extrabiomes:west": [
-					0,
-					1
+					false,
+					true
+				],
+				"extrabiomes:on_placed": [
+					false,
+					true
 				]
+			},
+			"menu_category": {
+				"category": "construction",
+				"group": "itemGroup.name.fence"
 			}
 		},
 		"components": {
-			"minecraft:queued_ticking": {
-				"looping": true,
-				"on_tick": {
-					"event": "state_change"
-				},
-				"interval_range": [
-					0,
-					0
-				]
+			"minecraft:flammable": {
+				"destroy_chance_modifier": 45,
+				"catch_chance_modifier": 80
 			},
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 3
+			},
+			"tag:minecraft:is_axe_item_destructible": {},
 			"minecraft:collision_box": {
 				"origin": [
-					-5,
+					-6,
 					0,
-					-5
+					-6
 				],
 				"size": [
-					10,
+					12,
 					16,
-					10
+					12
 				]
 			},
 			"minecraft:selection_box": {
 				"origin": [
-					-5,
+					-2,
 					0,
-					-5
+					-2
 				],
 				"size": [
-					10,
-					16,
-					10
+					4,
+					12,
+					4
 				]
 			},
-			"minecraft:destructible_by_mining": {
-				"seconds_to_destroy": 0.5
-			},
-			"minecraft:light_dampening": 0,
 			"minecraft:material_instances": {
 				"*": {
 					"texture": "extrabiomes_palm_planks",
-					"render_method": "alpha_test"
+					"render_method": "opaque"
 				}
 			},
-			"minecraft:geometry": { "identifier": "geometry.fence", "bone_visibility": { "north": false, "south": false, "east": false, "west": false } },
-			"minecraft:map_color": "#944619",
-			"tag:wood": { }
+			"minecraft:geometry": {
+				"identifier": "geometry.extrabiomes_fence",
+				"bone_visibility": {
+					"preview": "query.block_state('extrabiomes:on_placed') == false",
+					"fence": "query.block_state('extrabiomes:on_placed') == true",
+					"north": "query.block_state('extrabiomes:north') == true",
+					"south": "query.block_state('extrabiomes:south') == true",
+					"east": "query.block_state('extrabiomes:east') == true",
+					"west": "query.block_state('extrabiomes:west') == true"
+				}
+			},
+			"minecraft:transformation": {
+				"translation": [
+					0,
+					0.255,
+					0
+				]
+			},
+			"minecraft:destructible_by_explosion": true,
+			"tag:extrabiomes:fence": {},
+			"tag:wood": {},
+			"extrabiomes:fence":{}
+			
 		},
 		"permutations": [
-			//this used to be 6 lines of code, why did they have to remove part visibility :c 
 			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 0)",
+				"condition": "q.block_state('extrabiomes:on_placed') == true",
 				"components": {
 					"minecraft:geometry": {
-						"identifier": "geometry.fence",
+						"identifier": "geometry.extrabiomes_fence",
 						"bone_visibility": {
-							"north": false,
-							"south": false,
-							"east": false,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": false,
-							"south": false,
-							"east": false,
-							"west": true
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 0)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": false,
-							"south": false,
-							"east": true,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": false,
-							"south": false,
-							"east": true,
-							"west": true
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 0)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": false,
-							"south": true,
-							"east": false,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": false,
-							"south": true,
-							"east": false,
-							"west": true
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 0)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": false,
-							"south": true,
-							"east": true,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 0) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": false,
-							"south": true,
-							"east": true,
-							"west": true
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 0)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": false,
-							"east": false,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": false,
-							"east": false,
-							"west": true
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 0)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": false,
-							"east": true,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 0) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": false,
-							"east": true,
-							"west": true
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 0)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": true,
-							"east": false,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 0) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": true,
-							"east": false,
-							"west": true
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 0)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": true,
-							"east": true,
-							"west": false
-						}
-					}
-				}
-			},
-			{
-				"condition": "(query.block_property('extrabiomes:north') == 1) && (query.block_property('extrabiomes:south') == 1) && (query.block_property('extrabiomes:east') == 1) && (query.block_property('extrabiomes:west') == 1)",
-				"components": {
-					"minecraft:geometry": {
-						"identifier": "geometry.fence",
-						"bone_visibility": {
-							"north": true,
-							"south": true,
-							"east": true,
-							"west": true
+							"north": "query.block_state('extrabiomes:north')",
+							"south": "query.block_state('extrabiomes:south')",
+							"east": "query.block_state('extrabiomes:east')",
+							"west": "query.block_state('extrabiomes:west')",
+							"preview": false,
+							"fence": true
 						}
 					}
 				}
 			}
-		],
-		"events": {
-			"state_change": {
-				"sequence": [
-					{
-						"condition": "q.block_neighbor_has_any_tag(0,0,-1,'wood')",
-						"set_block_property": {
-							"extrabiomes:north": 1
-						}
-					},
-					{
-						"condition": "!q.block_neighbor_has_any_tag(0,0,-1,'wood')",
-						"set_block_property": {
-							"extrabiomes:north": 0
-						}
-					},
-					{
-						"condition": "q.block_neighbor_has_any_tag(0,0,1,'wood')",
-						"set_block_property": {
-							"extrabiomes:south": 1
-						}
-					},
-					{
-						"condition": "!q.block_neighbor_has_any_tag(0,0,1,'wood')",
-						"set_block_property": {
-							"extrabiomes:south": 0
-						}
-					},
-					{
-						"condition": "q.block_neighbor_has_any_tag(1,0,0,'wood')",
-						"set_block_property": {
-							"extrabiomes:east": 1
-						}
-					},
-					{
-						"condition": "!q.block_neighbor_has_any_tag(1,0,0,'wood')",
-						"set_block_property": {
-							"extrabiomes:east": 0
-						}
-					},
-					{
-						"condition": "q.block_neighbor_has_any_tag(-1,0,0,'wood')",
-						"set_block_property": {
-							"extrabiomes:west": 1
-						}
-					},
-					{
-						"condition": "!q.block_neighbor_has_any_tag(-1,0,0,'wood')",
-						"set_block_property": {
-							"extrabiomes:west": 0
-						}
-					}
-				]
-			}
-		}
+		]
 	}
 }

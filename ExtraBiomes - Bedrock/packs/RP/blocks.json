@@ -110,8 +110,7 @@
 		"sound": "wood"
 	},
 	"extrabiomes:palm_fence": {
-		"sound": "wood",
-		"textures": "extrabiomes_palm_planks"
+		"sound": "wood"
 	},
 	"extrabiomes:sky_door": {
 		"sound": "wood"

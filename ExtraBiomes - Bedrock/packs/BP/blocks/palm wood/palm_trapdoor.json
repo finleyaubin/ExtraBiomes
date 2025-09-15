@@ -1,306 +1,196 @@
 {
-  "format_version": "1.20.100",
-  "minecraft:block": {
-    "description": {
-      "identifier": "extrabiomes:palm_trapdoor",
-      "properties": {
-        "extrabiomes:open": [
-          false,
-          true
-        ],
-        "extrabiomes:face": [
-          0,
-          1,
-          2,
-          3,
-          4,
-          5
-        ],
-        "extrabiomes:block_rotation": [
-          2,
-          3,
-          4,
-          5
-        ]
-      },
-      "menu_category": {
-        "category": "construction",
-        "group": "itemGroup.name.trapdoor"
-      }
-    },
-    "components": {
-      "minecraft:on_player_placing": {
-        "event": "extrabiomes:update_rotation"
-      },
-      "minecraft:material_instances": {
-        "*": {
-          "texture": "extrabiomes_palm_trapdoor",
-          "render_method": "alpha_test"
-        }
-      },
-      "minecraft:breathability": "air",
-      "minecraft:on_interact": {
-        "event": "inter"
-      },
-      "minecraft:map_color": "#ff78f8",
-      "tag:wood": {},
-      "minecraft:destructible_by_mining": {
-        "seconds_to_destroy": 0.5
-      },
-      "minecraft:light_dampening": 0
-    },
-    "events": {
-      "set": {
-        "set_block_property": {
-          "extrabiomes:face": "query.block_face"
-        }
-      },
-      "inter": {
-        "sequence": [
-          {
-            "condition": "query.block_property('extrabiomes:open')==true",
-            "set_block_property": {
-              "extrabiomes:open": false
-            },
-            "run_command": {
-              "command": [
-                "playsound random.door_close @a ~ ~ ~"
-              ]
-            }
-          },
-          {
-            "condition": "query.block_property('extrabiomes:open')==false",
-            "set_block_property": {
-              "extrabiomes:open": true
-            },
-            "run_command": {
-              "command": [
-                "playsound random.door_open @a[r=5]"
-              ]
-            }
-          }
-        ]
-      },
-      "extrabiomes:update_rotation": {
-        "set_block_property": {
-          "extrabiomes:block_rotation": "query.cardinal_facing_2d"
-        },
-        "trigger": "set"
-      }
-    },
-    "permutations": [
-      {
-        "condition": "query.block_property('extrabiomes:face') == 1 && query.block_property('extrabiomes:open') == false",
-        "components": {
-          "minecraft:geometry": "geometry.trapdoor_closed",
-          "minecraft:pick_collision": {
-            "size": [
-              16,
-              3,
-              16
-            ]
-          },
-          "minecraft:entity_collision": {
-            "size": [
-              16,
-              3,
-              16
-            ]
-          }
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:face') == 1 && query.block_property('extrabiomes:open') == true",
-        "components": {
-          "minecraft:geometry": "geometry.trapdoor_side_open",
-          "minecraft:pick_collision": {
-            "size": [
-              16,
-              16,
-              3
-            ],
-            "origin": [
-              -8,
-              0,
-              5
-            ]
-          },
-          "minecraft:entity_collision": {
-            "size": [
-              16,
-              16,
-              3
-            ],
-            "origin": [
-              -8,
-              0,
-              5
-            ]
-          },
-          "minecraft:destroy_time": 2,
-          "minecraft:block_light_absorption": 0
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:face') > 1 && query.block_property('extrabiomes:open') == false",
-        "components": {
-          "minecraft:geometry": "geometry.trapdoor_side",
-          "minecraft:pick_collision": {
-            "size": [
-              16,
-              3,
-              16
-            ],
-            "origin": [
-              -8,
-              13,
-              -8
-            ]
-          },
-          "minecraft:entity_collision": {
-            "size": [
-              16,
-              3,
-              16
-            ],
-            "origin": [
-              -8,
-              13,
-              -8
-            ]
-          }
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:face') > 1 && query.block_property('extrabiomes:open') == true",
-        "components": {
-          "minecraft:geometry": "geometry.trapdoor_side_open",
-          "minecraft:pick_collision": {
-            "size": [
-              16,
-              16,
-              3
-            ],
-            "origin": [
-              -8,
-              0,
-              5
-            ]
-          },
-          "minecraft:entity_collision": {
-            "size": [
-              16,
-              16,
-              3
-            ],
-            "origin": [
-              -8,
-              0,
-              5
-            ]
-          }
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:face') == 0 && query.block_property('extrabiomes:open') == false",
-        "components": {
-          "minecraft:geometry": "geometry.trapdoor_side",
-          "minecraft:pick_collision": {
-            "size": [
-              16,
-              3,
-              16
-            ],
-            "origin": [
-              -8,
-              13,
-              -8
-            ]
-          },
-          "minecraft:entity_collision": {
-            "size": [
-              16,
-              3,
-              16
-            ],
-            "origin": [
-              -8,
-              13,
-              -8
-            ]
-          }
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:face') == 0 && query.block_property('extrabiomes:open') == true",
-        "components": {
-          "minecraft:geometry": "geometry.trapdoor_side_open",
-          "minecraft:pick_collision": {
-            "size": [
-              16,
-              16,
-              3
-            ],
-            "origin": [
-              -8,
-              0,
-              5
-            ]
-          },
-          "minecraft:entity_collision": {
-            "size": [
-              16,
-              16,
-              3
-            ],
-            "origin": [
-              -8,
-              0,
-              5
-            ]
-          }
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:block_rotation') == 2",
-        "components": {
-          "minecraft:rotation": [
-            0,
-            180,
-            0
-          ]
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:block_rotation') == 3",
-        "components": {
-          "minecraft:rotation": [
-            0,
-            0,
-            0
-          ]
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:block_rotation') == 4",
-        "components": {
-          "minecraft:rotation": [
-            0,
-            270,
-            0
-          ]
-        }
-      },
-      {
-        "condition": "query.block_property('extrabiomes:block_rotation') == 5",
-        "components": {
-          "minecraft:rotation": [
-            0,
-            90,
-            0
-          ]
-        }
-      }
-    ]
-  }
+	"format_version": "1.20.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:palm_trapdoor",
+			"menu_category": {
+				"group": "itemGroup.name.trapdoor",
+				"category": "construction"
+			},
+			"states": {
+				"extrabiomes:is_open": [
+					false,
+					true
+				]
+			},
+			"traits": {
+				"minecraft:placement_position": {
+					"enabled_states": [
+						"minecraft:vertical_half"
+					]
+				},
+				"minecraft:placement_direction": {
+					"enabled_states": [
+						"minecraft:cardinal_direction"
+					]
+				}
+			}
+		},
+		"components": {
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "extrabiomes_palm_trapdoor",
+					"render_method": "blend",
+					"ambient_occlusion": false
+				}
+			},
+			"minecraft:flammable": {
+				"destroy_chance_modifier": 45,
+				"catch_chance_modifier": 80
+			},
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 3
+			},
+			"tag:minecraft:is_axe_item_destructible": {},
+			"minecraft:map_color": "#52221D",
+			"minecraft:collision_box": {
+				"size": [
+					16,
+					3,
+					16
+				],
+				"orgin": [
+					-8,
+					0,
+					-8
+				]
+			},
+			"minecraft:selection_box": {
+				"size": [
+					16,
+					3,
+					16
+				],
+				"orgin": [
+					-8,
+					0,
+					-8
+				]
+			},
+			"minecraft:loot": "loot_tables/palm/palm_trapdoor.json",
+			"minecraft:light_dampening": 0,
+			"minecraft:friction": 0.4,
+			"tag:wood": {},
+			"tag:extrabiomes:no_fence_join": {},
+      "extrabiomes:open":{},
+			"minecraft:geometry": {
+				"identifier": "geometry.extrabiomes_trapdoor",
+				"bone_visibility": {
+					"down_close": "query.block_state('minecraft:vertical_half') == 'bottom' && query.block_state('extrabiomes:is_open') == false",
+					"up_open": "query.block_state('minecraft:vertical_half') == 'top' && query.block_state('extrabiomes:is_open') == true",
+					"up_close": "query.block_state('minecraft:vertical_half') == 'top' && query.block_state('extrabiomes:is_open') == false",
+					"down_open": "query.block_state('minecraft:vertical_half') == 'bottom' && query.block_state('extrabiomes:is_open') == true"
+				}
+			},
+			"tag:extrabiomes:trapdoor": {}
+		},
+		"permutations": [
+			{
+				"condition": "query.block_state('minecraft:cardinal_direction') == 'north'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							180,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_state('minecraft:cardinal_direction') == 'south'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							0,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_state('minecraft:cardinal_direction') == 'west'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							270,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_state('minecraft:cardinal_direction') == 'east'",
+				"components": {
+					"minecraft:transformation": {
+						"rotation": [
+							0,
+							90,
+							0
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_state('extrabiomes:is_open') == true",
+				"components": {
+					"minecraft:selection_box": {
+						"size": [
+							16,
+							16,
+							3
+						],
+						"origin": [
+							-8,
+							0,
+							5
+						]
+					},
+					"minecraft:collision_box": {
+						"size": [
+							16,
+							16,
+							3
+						],
+						"origin": [
+							-8,
+							0,
+							5
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_state('minecraft:vertical_half') == 'top' && query.block_state('extrabiomes:is_open') == false",
+				"components": {
+					"minecraft:selection_box": {
+						"size": [
+							16,
+							3,
+							16
+						],
+						"origin": [
+							-8,
+							13,
+							-8
+						]
+					},
+					"minecraft:collision_box": {
+						"size": [
+							16,
+							3,
+							16
+						],
+						"origin": [
+							-8,
+							13,
+							-8
+						]
+					}
+				}
+			}
+		]
+	}
 }

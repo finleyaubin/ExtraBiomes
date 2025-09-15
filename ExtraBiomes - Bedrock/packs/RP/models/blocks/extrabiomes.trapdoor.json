@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.custom_trapdoor",
+				"identifier": "geometry.extrabiomes_trapdoor",
 				"texture_width": 16,
 				"texture_height": 16,
 				"visible_bounds_width": 2,
@@ -16,175 +16,16 @@
 			},
 			"bones": [
 				{
-					"name": "up_close",
+					"name": "trapdoor",
 					"pivot": [
 						0,
 						0,
 						0
-					],
-					"cubes": [
-						{
-							"origin": [
-								-8,
-								13,
-								-8
-							],
-							"size": [
-								16,
-								3,
-								16
-							],
-							"uv": {
-								"north": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"east": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"south": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"west": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"up": {
-									"uv": [
-										16,
-										16
-									],
-									"uv_size": [
-										-16,
-										-16
-									]
-								},
-								"down": {
-									"uv": [
-										16,
-										16
-									],
-									"uv_size": [
-										-16,
-										-16
-									]
-								}
-							}
-						}
 					]
 				},
 				{
-					"name": "down_close",
-					"pivot": [
-						0,
-						0,
-						0
-					],
-					"cubes": [
-						{
-							"origin": [
-								-8,
-								0,
-								-8
-							],
-							"size": [
-								16,
-								3,
-								16
-							],
-							"uv": {
-								"north": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"east": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"south": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"west": {
-									"uv": [
-										0,
-										0
-									],
-									"uv_size": [
-										16,
-										3
-									]
-								},
-								"up": {
-									"uv": [
-										16,
-										16
-									],
-									"uv_size": [
-										-16,
-										-16
-									]
-								},
-								"down": {
-									"uv": [
-										16,
-										16
-									],
-									"uv_size": [
-										-16,
-										-16
-									]
-								}
-							}
-						}
-					]
-				},
-				{
-					"name": "open",
+					"name": "up_open",
+					"parent": "trapdoor",
 					"pivot": [
 						0,
 						0,
@@ -235,18 +76,18 @@
 								},
 								"west": {
 									"uv": [
-										0,
+										3,
 										0
 									],
 									"uv_size": [
-										3,
+										-3,
 										16
 									]
 								},
 								"up": {
 									"uv": [
 										16,
-										3
+										8
 									],
 									"uv_size": [
 										-16,
@@ -256,11 +97,266 @@
 								"down": {
 									"uv": [
 										16,
+										5
+									],
+									"uv_size": [
+										-16,
 										3
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "down_open",
+					"parent": "trapdoor",
+					"pivot": [
+						0,
+						8,
+						6.5
+					],
+					"cubes": [
+						{
+							"origin": [
+								-8,
+								0,
+								5
+							],
+							"size": [
+								16,
+								16,
+								3
+							],
+							"uv": {
+								"north": {
+									"uv": [
+										0,
+										16
+									],
+									"uv_size": [
+										16,
+										-16
+									]
+								},
+								"east": {
+									"uv": [
+										0,
+										0
+									],
+									"uv_size": [
+										3,
+										16
+									]
+								},
+								"south": {
+									"uv": [
+										0,
+										16
+									],
+									"uv_size": [
+										16,
+										-16
+									]
+								},
+								"west": {
+									"uv": [
+										3,
+										0
+									],
+									"uv_size": [
+										-3,
+										16
+									]
+								},
+								"up": {
+									"uv": [
+										16,
+										8
 									],
 									"uv_size": [
 										-16,
 										-3
+									]
+								},
+								"down": {
+									"uv": [
+										16,
+										11
+									],
+									"uv_size": [
+										-16,
+										-3
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "up_close",
+					"parent": "trapdoor",
+					"pivot": [
+						0,
+						12,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-8,
+								13,
+								-8
+							],
+							"size": [
+								16,
+								3,
+								16
+							],
+							"uv": {
+								"north": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										-3
+									]
+								},
+								"east": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										3
+									]
+								},
+								"south": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										3
+									]
+								},
+								"west": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										3
+									]
+								},
+								"up": {
+									"uv": [
+										16,
+										0
+									],
+									"uv_size": [
+										-16,
+										16
+									]
+								},
+								"down": {
+									"uv": [
+										16,
+										16
+									],
+									"uv_size": [
+										-16,
+										-16
+									]
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "down_close",
+					"parent": "trapdoor",
+					"pivot": [
+						0,
+						0,
+						0
+					],
+					"cubes": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								3,
+								16
+							],
+							"uv": {
+								"north": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										-3
+									]
+								},
+								"east": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										3
+									]
+								},
+								"south": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										3
+									]
+								},
+								"west": {
+									"uv": [
+										0,
+										8
+									],
+									"uv_size": [
+										16,
+										3
+									]
+								},
+								"up": {
+									"uv": [
+										16,
+										0
+									],
+									"uv_size": [
+										-16,
+										16
+									]
+								},
+								"down": {
+									"uv": [
+										16,
+										16
+									],
+									"uv_size": [
+										-16,
+										-16
 									]
 								}
 							}
