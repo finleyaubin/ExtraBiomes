@@ -112,7 +112,7 @@
         "condition": "query.block_state('extrabiomes:is_double') == true",
         "components": {
           "minecraft:geometry": "minecraft:geometry.full_block",
-          "minecraft:loot": "loot_tables/blocks/gilded_sky_wood/gilded_sky_slab.json",
+          "minecraft:loot": "loot_tables/blocks/gilded_sky/gilded_sky_slab.json",
           "minecraft:light_dampening": 15,
                     "minecraft:collision_box": {
             "origin": [

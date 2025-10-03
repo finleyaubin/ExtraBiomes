@@ -5,7 +5,7 @@
 			"entries": [
 				{
 					"type": "item",
-					"name": "extrabiomes:black_mushroom_block",
+					"name": "extrabiomes:glow_mushroom",
 					"weight": 1,
 					"functions": [
 						{

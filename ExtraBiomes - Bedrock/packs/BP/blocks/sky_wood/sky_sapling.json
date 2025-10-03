@@ -55,7 +55,7 @@
 				]
 			},
 			"minecraft:map_color": "#07410f",
-			"minecraft:loot": "loot_tables/blocks/sky wood/sky_sapling.json",
+			"minecraft:loot": "loot_tables/blocks/sky_wood/sky_sapling.json",
 			"extrabiomes:sapling_grower":{}
 		}
 	}

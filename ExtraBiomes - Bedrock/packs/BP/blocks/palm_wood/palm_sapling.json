@@ -58,7 +58,7 @@
 				]
 			},
 			"minecraft:map_color": "#07410f",
-			"minecraft:loot": "loot_tables/blocks/palm wood/palm_sapling.json",
+			"minecraft:loot": "loot_tables/blocks/palm_wood/palm_sapling.json",
 			"extrabiomes:sapling_grower":{}
 		}
 	}

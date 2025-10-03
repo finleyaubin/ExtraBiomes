@@ -15,9 +15,19 @@ export const SlabberComponent = {
         const held = mainhand.getItem ? mainhand.getItem() : mainhand;
         if (!held) return;
 
-
+        var slabId;
         const type = block.typeId.split(":")[1].split("_")[0];
-        const slabId = `extrabiomes:${type}_slab`;
+        if (type === "dense") {
+            slabId = 'extrabiomes:dense_cloud_brick_slab';
+        }
+        else if (type === "gilded") {
+            slabId = 'extrabiomes:gilded_sky_slab';
+        }
+        else {
+            slabId = `extrabiomes:${type}_slab`;
+        }
+
+
         if (held.typeId !== slabId) return;
 
         const perm = block.permutation;

@@ -5,7 +5,7 @@
 			"entries": [
 				{
 					"type": "item",
-					"name": "extrabiomes:dense_cloud_brick_slab_slab",
+					"name": "extrabiomes:dense_cloud_brick_slab",
 					"weight": 1,
 					"functions": [
 						{

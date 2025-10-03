@@ -58,7 +58,7 @@
 				]
 			},
 			"minecraft:map_color": "#07410f",
-			"minecraft:loot": "loot_tables/blocks/mystic wood/mystic_sapling.json",
+			"minecraft:loot": "loot_tables/blocks/mystic_wood/mystic_sapling.json",
 			"extrabiomes:sapling_grower":{}
 		}
 	}

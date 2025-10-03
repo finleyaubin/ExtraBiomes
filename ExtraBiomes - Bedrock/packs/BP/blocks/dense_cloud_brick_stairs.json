@@ -1,0 +1,1024 @@
+{
+	"format_version": "1.20.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:dense_cloud_brick_stairs",
+			"menu_category": {
+				"category": "construction",
+				"group": "itemGroup.name.stairs"
+			},
+			"states": {
+				"extrabiomes:is_upside_down": [
+					false,
+					true
+				],
+				"extrabiomes:direction": [
+					0,
+					1,
+					2,
+					3,
+					4,
+					5,
+					6,
+					7,
+					8,
+					9,
+					10,
+					11
+				]
+			},
+			"traits": {
+				"minecraft:placement_position": {
+					"enabled_states": [
+						"minecraft:vertical_half"
+					]
+				},
+				"minecraft:placement_direction": {
+					"enabled_states": [
+						"minecraft:cardinal_direction"
+					]
+				}
+			}
+		},
+		"components": {
+			"minecraft:geometry": {
+				"identifier": "geometry.extrabiomes_stairs",
+				"bone_visibility": {
+					"north_down": false,
+					"north_up": false,
+					"south_down": false,
+					"south_up": false,
+					"east_down": false,
+					"east_up": false,
+					"west_down": false,
+					"west_up": false,
+					"northeast_outer_down": false,
+					"northeast_outer_up": false,
+					"southeast_outer_down": false,
+					"southeast_outer_up": false,
+					"northwest_outer_down": false,
+					"northwest_outer_up": false,
+					"southwest_outer_down": false,
+					"southwest_outer_up": false,
+					"northeast_inner_down": false,
+					"northeast_inner_up": false,
+					"northwest_inner_down": false,
+					"northwest_inner_up": false,
+					"southeast_inner_down": false,
+					"southeast_inner_up": false,
+					"southwest_inner_down": false,
+					"southwest_inner_up": false
+				}
+			},
+			"minecraft:flammable": {
+				"destroy_chance_modifier": 45,
+				"catch_chance_modifier": 80
+			},
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 3
+			},
+			"minecraft:collision_box": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					8,
+					16
+				]
+			},
+			"minecraft:selection_box": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					8,
+					16
+				]
+			},
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "extrabiomes_dense_cloud_brick",
+					"render_method": "opaque"
+				}
+			},
+			"minecraft:liquid_detection": {
+				"detection_rules": [
+					{
+						"liquid_type": "water",
+						"can_contain_liquid": true, 
+						"on_liquid_touches": "blocking"
+					}
+				]
+			},
+			"minecraft:destructible_by_explosion": true,
+			"tag:minecraft:is_pickaxe_item_destructible": {},
+			"tag:extrabiomes:stairs": {}
+		},
+		"permutations": [
+			{
+				"condition": "query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:collision_box": {
+						"origin": [
+							-8,
+							0,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					},
+					"minecraft:selection_box": {
+						"origin": [
+							-8,
+							0,
+							-8
+						],
+						"size": [
+							16,
+							16,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:collision_box": {
+						"origin": [
+							-8,
+							8,
+							-8
+						],
+						"size": [
+							16,
+							8,
+							16
+						]
+					},
+					"minecraft:selection_box": {
+						"origin": [
+							-8,
+							0,
+							-8
+						],
+						"size": [
+							16,
+							16,
+							16
+						]
+					}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'north') && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": true,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_north": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'north') && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": true,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_north": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'south') && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": true,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_south": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'south') && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": true,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_south": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'west') && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": true,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_west": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'west') && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": true,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_west": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'east') && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": true,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_east": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('minecraft:cardinal_direction') == 'east') && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": true,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_east": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 4) && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": true,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 4) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": true,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 5) && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": true,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 5) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": true,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 6) &&  query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": true,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 6) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": true,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 7) && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": true,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 7) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": true,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_outer": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 8) && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": true,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 8) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": true,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 9) && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": true,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 9) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": true,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 10) && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": true,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 10) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": true
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 11) && query.block_state('minecraft:vertical_half') == 'bottom'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": true,
+							"southeast_inner_up": false,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			},
+			{
+				"condition": "(query.block_state('extrabiomes:direction') == 11) && query.block_state('minecraft:vertical_half') == 'top'",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_stairs",
+						"bone_visibility": {
+							"north_down": false,
+							"north_up": false,
+							"south_down": false,
+							"south_up": false,
+							"east_down": false,
+							"east_up": false,
+							"west_down": false,
+							"west_up": false,
+							"northeast_outer_down": false,
+							"northeast_outer_up": false,
+							"southeast_outer_down": false,
+							"southeast_outer_up": false,
+							"northwest_outer_down": false,
+							"northwest_outer_up": false,
+							"southwest_outer_down": false,
+							"southwest_outer_up": false,
+							"northeast_inner_down": false,
+							"northeast_inner_up": false,
+							"northwest_inner_down": false,
+							"northwest_inner_up": false,
+							"southeast_inner_down": false,
+							"southeast_inner_up": true,
+							"southwest_inner_down": false,
+							"southwest_inner_up": false
+						}
+					},
+					"tag:extrabiomes:stairs_inner": {}
+				}
+			}
+		]
+	}
+}

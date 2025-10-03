@@ -1,6 +1,6 @@
 import { world, system, BlockVolume } from "@minecraft/server";
 
-const CloudBlocks = ["extrabiomes:dense_cloud", "extrabiomes:dense_cloud_brick"];
+const CloudBlocks = ["extrabiomes:dense_cloud", "extrabiomes:dense_cloud_brick", "extrabiomes:dense_cloud_brick_slab", "extrabiomes:dense_cloud_brick_stairs"];
 
 system.runInterval(() => {
   const players = world.getAllPlayers();
