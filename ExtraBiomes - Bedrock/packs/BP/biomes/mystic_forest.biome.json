@@ -1,5 +1,5 @@
 {
-	"format_version": "1.13.0",
+	"format_version": "1.21.100",
 	"minecraft:biome": {
 		"description": {
 			"identifier": "extrabiomes:mystic_forest"
@@ -27,18 +27,10 @@
 						"targets": [
 							"minecraft:forest"
 						],
-						"amount": 0.07,
+						"amount": 0.15,
 						"noise_frequency_scale": 1.3
 					}
 				]
-			},
-			"minecraft:surface_parameters": {
-				"sea_floor_depth": 7,
-				"sea_floor_material": "minecraft:gravel",
-				"foundation_material": "minecraft:stone",
-				"mid_material": "minecraft:dirt",
-				"top_material": "minecraft:grass",
-				"sea_material": "extrabiomes:goo"
 			},
 			"minecraft:overworld_generation_rules": {
 				"generate_for_climates": [
@@ -48,11 +40,29 @@
 					]
 				]
 			},
-			"animal": {},
-			"overworld": {},
-			"mystic": {},
-			"swamp": {},
-			"caves": {}
+			"minecraft:humidity": {
+				"is_humid": true
+			},
+			"minecraft:surface_builder": {
+				"builder": {
+					"type": "minecraft:overworld",
+					"foundation_material": "minecraft:stone",
+					"mid_material": "minecraft:dirt",
+					"sea_floor_depth": 7,
+					"sea_floor_material": "minecraft:gravel",
+					"sea_material": "extrabiomes:goo",
+					"top_material": "minecraft:grass"
+				}
+			}	,
+		"minecraft:tags": {
+				"tags": [
+					"animal",
+					"overworld",
+					"mystic",
+					"swamp",
+					"caves"
+				]
+			}
 		}
 	}
 }

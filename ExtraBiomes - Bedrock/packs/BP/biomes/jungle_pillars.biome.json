@@ -16,7 +16,7 @@
 			"minecraft:surface_builder": {
 				"builder": {
 					"type": "minecraft:mesa",
-					"bryce_pillars": true, 
+					"bryce_pillars": true,
 					"clay_material": "minecraft:stone",
 					"sea_floor_depth": 7,
 					"sea_floor_material": "minecraft:stone",
@@ -39,23 +39,13 @@
 					{
 						"dimension": "minecraft:overworld",
 						"targets": [
-							"minecraft:forest"
+							"minecraft:jungle"
 						],
 						"amount": 0.15,
 						"noise_frequency_scale": 1.2
 					}
 				]
 			},
-			/* 			"minecraft:overworld_generation_rules": {
-				"river_transformation": "jungle_river",
-				"shore_transformation": "jungle_marsh",
-				"generate_for_climates": [
-					[
-						"medium",
-						1
-					]
-				]
-			}, */
 			"minecraft:tags": {
 				"tags": [
 					"animal",
