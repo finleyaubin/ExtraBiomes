@@ -1,0 +1,93 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:biome": {
+    "description": {
+      "identifier": "extrabiomes:dry_oasis"
+    },
+    "components": {
+      "minecraft:climate": {
+        "downfall": 0,
+        "snow_accumulation": [
+          0,
+          0.125
+        ],
+        "temperature": 2
+      },
+/*       "minecraft:mountain_parameters": {
+        "steep_material_adjustment": {
+          "material": "minecraft:sand",
+          "north_slopes": true,
+          "east_slopes": true
+        },
+        "top_slide": {
+          "enabled": false
+        }
+      }, */
+      "minecraft:overworld_height": {
+        "noise_params": [
+          5,
+          3.4
+        ]
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:desert"
+            ],
+            "amount": 0.2,
+            "noise_frequency_scale": 0.2
+          }
+        ]
+      },
+      "minecraft:surface_material_adjustments": {
+        "adjustments": [
+          {
+            "materials": {
+              "top_material": "minecraft:red_sand"
+            },
+            "noise_frequency_scale": 0.1,
+            "noise_range": [
+              0.15,
+              0.3
+            ]
+          },
+          {
+            "materials": {
+              "mid_material": "minecraft:sandstone"
+            },
+            "noise_frequency_scale": 0.1,
+            "noise_range": [
+              0.45,
+              0.58
+            ]
+          }
+        ]
+      },
+      "minecraft:surface_builder": {
+        "builder": {
+          "type": "minecraft:overworld",
+          "foundation_material": "minecraft:stone",
+          "mid_material": "minecraft:sand",
+          "top_material": "minecraft:sand",
+          "sea_floor_depth": 7,
+          "sea_floor_material": "minecraft:gravel",
+          "sea_material": "minecraft:water"
+        }
+      },
+      "minecraft:tags": {
+        "tags": [
+          "caves",
+          "desert",
+          "hills",
+          "monster",
+          "overworld",
+          "mountains",
+          "soulsand_valley",
+          "beach"
+        ]
+      }
+    }
+  }
+}

@@ -19,6 +19,18 @@
           0.15
         ]
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:desert"
+            ],
+            "amount": 0.2,
+            "noise_frequency_scale": 0.2
+          }
+        ]
+      },
       "minecraft:surface_builder": {
         "builder": {
           "type": "minecraft:mesa",
@@ -38,7 +50,6 @@
         "tags": [
           "caves",
           "desert",
-          "minecraft:mesa_surface",
           "monster",
           "overworld",
           "rare"
