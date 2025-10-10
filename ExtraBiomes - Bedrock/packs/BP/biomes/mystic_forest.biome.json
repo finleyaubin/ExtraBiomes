@@ -1,5 +1,5 @@
 {
-	"format_version": "1.21.100",
+	"format_version": "1.21.110",
 	"minecraft:biome": {
 		"description": {
 			"identifier": "extrabiomes:mystic_forest"
@@ -11,8 +11,7 @@
 					0,
 					0.125
 				],
-				"temperature": 0.95,
-				"blue_spores": 0.2
+				"temperature": 0.95
 			},
 			"minecraft:overworld_height": {
 				"noise_params": [
@@ -32,14 +31,6 @@
 					}
 				]
 			},
-			"minecraft:overworld_generation_rules": {
-				"generate_for_climates": [
-					[
-						"medium",
-						1
-					]
-				]
-			},
 			"minecraft:humidity": {
 				"is_humid": true
 			},
@@ -53,8 +44,8 @@
 					"sea_material": "extrabiomes:goo",
 					"top_material": "minecraft:grass"
 				}
-			}	,
-		"minecraft:tags": {
+			},
+			"minecraft:tags": {
 				"tags": [
 					"animal",
 					"overworld",

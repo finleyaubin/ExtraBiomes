@@ -1,1 +1,72 @@
-{"format_version":"1.16.100","minecraft:fog_settings":{"description":{"identifier":"extrabiomes:mystic_fog"},"distance":{"water":{"fog_start":0,"fog_end":60,"fog_color":"#af1d9c","render_distance_type":"fixed"},"air":{"fog_start":30,"fog_end":96,"fog_color":"#af1d9c","render_distance_type":"fixed"},"weather":{"fog_start":0,"fog_end":96,"fog_color":"#ffe600","render_distance_type":"fixed"}}}}
+{
+    "format_version": "1.21.110",
+    "minecraft:fog_settings": {
+        "description": {
+            "identifier": "extrabiomes:mystic_fog"
+        },
+        "distance": {
+            "air": {
+                "fog_start": 32,
+                "fog_end": 1200,
+                "fog_color": "#4A3C2D",
+                "render_distance_type": "fixed"
+            },
+            "water": {
+                "fog_start": 0,
+                "fog_end": 12,
+                "fog_color": "#3A5F78",
+                "render_distance_type": "fixed"
+            },
+            "lava": {
+                "fog_start": 0,
+                "fog_end": 8,
+                "fog_color": "#9B2300",
+                "render_distance_type": "fixed"
+            }
+        },
+        "volumetric": {
+            "density": {
+                "air": {
+                    "max_density": 0.15,
+                    "uniform": false,
+                    "max_density_height": 64,
+                    "zero_density_height": 80
+                },
+                "water": {
+                    "max_density": 0.002,
+                    "uniform": true
+                },
+                "lava": {
+                    "max_density": 0.08,
+                    "uniform": true
+                }
+            },
+            "media_coefficients": {
+                "air": {
+                    "scattering": [
+                        0.018,
+                        0.022,
+                        0.028
+                    ],
+                    "absorption": [
+                        0.0005,
+                        0.0008,
+                        0.0012
+                    ]
+                },
+                "water": {
+                    "scattering": [
+                        0.045,
+                        0.050,
+                        0.055
+                    ],
+                    "absorption": [
+                        0.002,
+                        0.003,
+                        0.004
+                    ]
+                }
+            }
+        }
+    }
+}
