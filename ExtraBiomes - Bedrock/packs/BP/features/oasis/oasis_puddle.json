@@ -1,0 +1,18 @@
+{
+	"format_version": "1.21.110",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:oasis/oasis_puddle"
+		},
+		"structure_name": "extrabiomes:oasis_puddle",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:sand",
+					"minecraft:red_sand"
+				]
+			},
+			"grounded": {}
+		}
+	}
+}

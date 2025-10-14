@@ -1,0 +1,30 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "extrabiomes:oasis_puddle_placer",
+      "places_feature": "extrabiomes:oasis/oasis_puddle"
+    },
+    "conditions": {
+      "placement_pass": "before_surface_pass",
+      "minecraft:biome_filter": [
+        {
+          "any_of": [
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "oasis"
+            }
+          ]
+        }
+      ]
+    },
+    "distribution": {
+      "iterations": 1,
+      "scatter_chance": 1,
+      "x": 0,
+      "y": "(query.heightmap(variable.worldx, variable.worldz))-4",
+      "z": 0
+    }
+  }
+}
