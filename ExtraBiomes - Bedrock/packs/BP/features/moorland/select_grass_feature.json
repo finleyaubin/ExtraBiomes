@@ -1,0 +1,14 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:aggregate_feature": {
+		"description": {
+			"identifier": "extrabiomes:moorland/select_grass_feature"
+		},
+		"features": [
+			"extrabiomes:moorland/moorlands_scatter_tall_grass_feature",
+			"extrabiomes:moorland/moorlands_scatter_tall_dry_grass_feature",
+			"extrabiomes:moorland/moorlands_scatter_small_dry_grass_feature",
+			"extrabiomes:moorland/moorlands_scatter_double_tall_grass_feature"
+		]
+	}
+}

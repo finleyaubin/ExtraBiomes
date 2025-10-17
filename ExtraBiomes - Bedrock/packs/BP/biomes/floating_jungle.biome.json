@@ -19,6 +19,28 @@
           10
         ]
       },
+      "minecraft:mountain_parameters": {
+        "steep_material_adjustment": {
+          "material": "minecraft:stone",
+          "north_slopes": true,
+          "east_slopes": true
+        },
+        "top_slide": {
+          "enabled": false
+        }
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:stony_peaks"
+            ],
+            "amount": 0.2,
+            "noise_frequency_scale": 1.2
+          }
+        ]
+      },
       "minecraft:surface_builder": {
         "builder": {
           "type": "minecraft:overworld",

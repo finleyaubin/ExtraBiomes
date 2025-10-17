@@ -30,6 +30,20 @@
           "sea_material": "minecraft:water"
         }
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:grove",
+              "minecraft:cherry_grove",
+              "minecraft:ice_plains"
+            ],
+            "amount": 0.7,
+            "noise_frequency_scale": 0.2
+          }
+        ]
+      },
       "minecraft:tags": {
         "tags": [
           "caves",

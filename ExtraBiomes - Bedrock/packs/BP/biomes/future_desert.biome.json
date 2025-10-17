@@ -13,15 +13,20 @@
         ],
         "temperature": 2
       },
-      "minecraft:multinoise_generation_rules": {
-        "target_temperature": 0.4,
-        "target_humidity": -0.4,
-        "target_altitude": 0,
-        "target_weirdness": 0,
-        "weight": 0.1
-      },
       "minecraft:overworld_height": {
         "noise_type": "lowlands"
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:desert"
+            ],
+            "amount": 0.1,
+            "noise_frequency_scale": 0.7
+          }
+        ]
       },
       "minecraft:surface_builder": {
         "builder": {
@@ -39,7 +44,6 @@
           "caves",
           "desert",
           "future",
-          "minecraft:multinoise_generation_rules",
           "monster",
           "overworld",
           "rare"

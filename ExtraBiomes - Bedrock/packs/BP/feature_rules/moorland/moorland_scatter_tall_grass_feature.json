@@ -3,7 +3,7 @@
   "minecraft:feature_rules": {
     "description": {
       "identifier": "extrabiomes:moorland_scatter_tall_grass_feature",
-      "places_feature": "extrabiomes:moorland/moorlands_scatter_tall_grass_feature"
+      "places_feature": "extrabiomes:moorland/select_grass_feature"
     },
     "conditions": {
       "placement_pass": "surface_pass",

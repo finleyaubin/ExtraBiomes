@@ -27,6 +27,20 @@
           "sea_material": "minecraft:water"
         }
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:jungle",
+              "minecraft:jungle_mutated",
+              "minecraft:bamboo_jungle"
+            ],
+            "amount": 0.4,
+            "noise_frequency_scale": 0.6
+          }
+        ]
+      },
       "minecraft:tags": {
         "tags": [
           "animal",

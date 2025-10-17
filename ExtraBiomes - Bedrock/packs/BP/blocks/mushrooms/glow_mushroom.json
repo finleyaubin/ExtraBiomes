@@ -32,7 +32,7 @@
 				}
 			},
 			"minecraft:light_dampening": 0,
-			"minecraft:light_emission": 0.7,
+			"minecraft:light_emission": 10,
 			"minecraft:placement_filter": {
 				"conditions": [
 					{

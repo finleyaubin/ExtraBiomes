@@ -2,18 +2,10 @@
     "format_version": 2,
     "header": {
         "description": "adds more biomes, mobs, Items and blocks to the game as well as improving upon some existing biomes",
-        "min_engine_version": [
-            1,
-            20,
-            30
-        ],
-        "name": "Extra Biomes[BP]",
+        "min_engine_version": [1,21,0],
+        "name": "ExtraBiomes",
         "uuid": "ba061c91-c0c6-47f7-82d4-a29f8b3e2859",
-        "version": [
-            2,
-            0,
-            3
-        ]
+        "version": [2,0,3]
     },
     "modules": [
         {
@@ -27,7 +19,7 @@
         },
         {
             "uuid": "239c134f-67bf-4738-9bcc-8c69d31b1f72",
-            "version": [2, 0, 0],
+            "version": [2, 0, 3],
             "type": "script",
             "language": "javascript",
             "entry": "scripts/Main.js"
@@ -36,6 +28,10 @@
       // to use eval() and Function(), remove it if it's not necessary
   "capabilities": ["script_eval"],
   "dependencies": [
+    {
+      "uuid": "4313ba2a-7cef-4fc6-a6e6-66022d8c8beb",
+      "version": [2, 0, 3]
+    },
     {
 			// Enables the use of @minecraft/server module
 			// note that version changes every monthly releases.
@@ -47,5 +43,8 @@
       "module_name": "@minecraft/server-ui",
       "version": "2.0.0"
     }
-  ]
+  ],
+    "metadata": {
+        "product_type": "addon"
+    }
 }

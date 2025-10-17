@@ -19,6 +19,18 @@
           0.2
         ]
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:beach"
+            ],
+            "amount": 0.3,
+            "noise_frequency_scale": 1.2
+          }
+        ]
+      },
       "minecraft:surface_builder": {
         "builder": {
           "type": "minecraft:overworld",
