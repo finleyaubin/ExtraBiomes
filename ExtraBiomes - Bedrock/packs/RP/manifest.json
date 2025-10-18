@@ -4,7 +4,7 @@
         "description": "the resource pack for extra biomes\nby Win Epic Fin",
         "name": "ExtraBiomes",
         "uuid": "4313ba2a-7cef-4fc6-a6e6-66022d8c8beb",
-        "version": [2,0,3],
+        "version": [3,0,0],
         "min_engine_version": [1,21,0]
     },
     "modules": [
@@ -12,21 +12,8 @@
             "description": "ExtraBiomes",
             "type": "resources",
             "uuid": "2c9251d0-c2b1-47e6-825a-31e1ab99c1a4",
-            "version": [2,0,3]
+            "version": [3,0,0]
         }
-    ],
-    "subpacks": [
-        {
-			"folder_name": "uhd_panorama",
-			"name": "A higher resolution version of the extrabiomes background panorama that looks beautiful, but may cause block textures to all turn black on devices with insuficient V-RAM",
-			"memory_tier": 1
-		},
-		{
-			"folder_name": "sd_panorama",
-			"name": "Lower Resolution background Panorama that fixes the black world issue that occurs on some devices",
-			"memory_tier": 1
-		}
-
     ],
     "metadata": {
         "product_type": "addon"

@@ -5,21 +5,21 @@
         "min_engine_version": [1,21,0],
         "name": "ExtraBiomes",
         "uuid": "ba061c91-c0c6-47f7-82d4-a29f8b3e2859",
-        "version": [2,0,3]
+        "version": [3,0,0]
     },
     "modules": [
         {
             "type": "data",
             "uuid": "59a1b775-de10-4ccb-a9ee-30cdc0ff095d",
             "version": [
-                2,
+                3,
                 0,
-                3
+                0
             ]
         },
         {
             "uuid": "239c134f-67bf-4738-9bcc-8c69d31b1f72",
-            "version": [2, 0, 3],
+            "version": [3, 0, 0],
             "type": "script",
             "language": "javascript",
             "entry": "scripts/Main.js"
@@ -30,7 +30,7 @@
   "dependencies": [
     {
       "uuid": "4313ba2a-7cef-4fc6-a6e6-66022d8c8beb",
-      "version": [2, 0, 3]
+      "version": [3, 0, 0]
     },
     {
 			// Enables the use of @minecraft/server module
