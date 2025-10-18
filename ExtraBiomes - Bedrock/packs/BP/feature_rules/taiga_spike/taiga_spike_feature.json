@@ -1,0 +1,57 @@
+{
+  "format_version": "1.17.0",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "extrabiomes:taiga_spike/taiga_spike_feature.",
+      "places_feature": "extrabiomes:taiga_spike/select_spike"
+    },
+    "conditions": {
+      "placement_pass": "first_pass",
+      "minecraft:biome_filter": [
+        {
+          "all_of": [
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "taiga"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "frozen"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "mutated"
+            }
+          ]
+        }
+      ]
+    },
+    "distribution": {
+      "iterations": 1,
+      "x": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      },
+      "y": {
+        "distribution": "uniform",
+        "extent": [
+          "query.above_top_solid(variable.worldx, variable.worldz)-9",
+          "query.above_top_solid(variable.worldx, variable.worldz)"
+        ]
+      },
+      "z": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      }
+    }
+  }
+}

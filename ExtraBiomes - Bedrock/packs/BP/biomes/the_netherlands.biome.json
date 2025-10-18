@@ -24,11 +24,24 @@
           "type": "minecraft:overworld",
           "foundation_material": "minecraft:netherrack",
           "mid_material": "minecraft:dirt",
-          "top_material": "grass",
+          "top_material": "minecraft:grass_block",
           "sea_floor_depth": 0,
           "sea_floor_material": "minecraft:stone",
           "sea_material": "minecraft:water"
         }
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:forest",
+              "minecraft:plains"
+            ],
+            "amount": 0.4,
+            "noise_frequency_scale": 0.3
+          }
+        ]
       },
       "minecraft:tags": {
         "tags": [

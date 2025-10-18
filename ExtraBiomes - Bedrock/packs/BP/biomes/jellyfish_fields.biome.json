@@ -19,6 +19,34 @@
           0.13
         ]
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:ocean",
+              "minecraft:deep_ocean",
+              "minecraft:warm_ocean"
+            ],
+            "amount": 0.08,
+            "noise_frequency_scale": 0.6
+          }
+        ]
+      },
+      "minecraft:surface_material_adjustments": {
+        "adjustments": [
+          {
+            "materials": {
+              "sea_floor_material": "minecraft:moss_block"
+            },
+            "noise_frequency_scale": 0.09,
+            "noise_range": [
+              0.1,
+              0.3
+            ]
+          }
+        ]
+      },
       "minecraft:surface_builder": {
         "builder": {
           "type": "minecraft:overworld",
@@ -26,7 +54,7 @@
           "mid_material": "minecraft:stone",
           "top_material": "minecraft:grass",
           "sea_floor_depth": 3,
-          "sea_floor_material": "minecraft:moss_block",
+          "sea_floor_material": "extrabiomes:grass_stone",
           "sea_material": "minecraft:water"
         }
       },

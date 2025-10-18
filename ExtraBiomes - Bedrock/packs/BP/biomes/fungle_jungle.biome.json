@@ -27,6 +27,20 @@
           "sea_material": "minecraft:water"
         }
       },
+      "minecraft:surface_material_adjustments": {
+        "adjustments": [
+          {
+            "materials": {
+              "top_material": "minecraft:mycelium"
+            },
+            "noise_frequency_scale": 0.6,
+            "noise_range": [
+              0.2,
+              0.4
+            ]
+          }
+        ]
+      },
       "minecraft:replace_biomes": {
         "replacements": [
           {

@@ -21,14 +21,29 @@
       },
       "minecraft:surface_builder": {
         "builder": {
-          "type": "minecraft:overworld",
+          "type": "minecraft:swamp",
           "foundation_material": "minecraft:stone",
           "mid_material": "minecraft:dirt",
           "top_material": "minecraft:grass",
           "sea_floor_depth": 9,
           "sea_floor_material": "minecraft:dirt",
-          "sea_material": "minecraft:water"
+          "sea_material": "minecraft:water",
+          "max_puddle_depth_below_sea_level": 6
         }
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:jungle",
+              "minecraft:jungle_mutated",
+              "minecraft:bamboo_jungle"
+            ],
+            "amount": 0.5,
+            "noise_frequency_scale": 0.5
+          }
+        ]
       },
       "minecraft:tags": {
         "tags": [

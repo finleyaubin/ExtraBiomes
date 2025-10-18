@@ -5,7 +5,7 @@
 			"identifier": "extrabiomes:jellyfish",
 			"is_spawnable": true,
 			"is_summonable": true,
-			"is_experimental": true
+			"is_experimental": false
 		},
 		"component_groups": {
 			"jellyfish_purple": {

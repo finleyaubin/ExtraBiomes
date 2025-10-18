@@ -1,0 +1,22 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:weighted_random_feature": {
+		"description": {
+			"identifier": "extrabiomes:taiga_spike/select_spike"
+		},
+		"features": [
+			[
+				"extrabiomes:taiga_spike/spike_1",
+				1
+			],
+			[
+				"extrabiomes:taiga_spike/spike_2",
+				1
+			],
+			[
+				"extrabiomes:taiga_spike/spike_3",
+				7
+			]
+		]
+	}
+}

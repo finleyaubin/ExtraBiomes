@@ -13,7 +13,7 @@
             {
               "test": "has_biome_tag",
               "operator": "==",
-              "value": "plains"
+              "value": "the_netherlands"
             }
           ]
         }
@@ -21,7 +21,7 @@
     },
     "distribution": {
       "scatter_chance": {
-        "numerator": 1,
+        "numerator": 5,
         "denominator": 50
       },
       "iterations": 1,

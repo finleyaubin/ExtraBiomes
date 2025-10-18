@@ -30,6 +30,19 @@
           "sea_material": "minecraft:water"
         }
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:forest",
+              "minecraft:plains"
+            ],
+            "amount": 0.4,
+            "noise_frequency_scale": 0.3
+          }
+        ]
+      },
       "minecraft:tags": {
         "tags": [
           "animal",

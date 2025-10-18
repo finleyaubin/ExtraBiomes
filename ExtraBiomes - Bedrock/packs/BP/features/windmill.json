@@ -12,7 +12,11 @@
 				"block_allowlist": [
 					"minecraft:air",
 					"minecraft:wheat",
-					"red_flower"
+					"red_flower",
+					"orange_tulip",
+					"pink_tulip",
+					"white_tulip",
+					"red_tulip"
 				]
 			},
 			"grounded": {}

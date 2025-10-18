@@ -1,0 +1,21 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:structure_template_feature": {
+		"description": {
+			"identifier": "extrabiomes:taiga_spike/spike_1"
+		},
+		"structure_name": "extrabiomes:ice_spikes/1",
+		"constraints": {
+			"block_intersection": {
+				"block_allowlist": [
+					"minecraft:air",
+					"minecraft:water",
+					"minecraft:snow_layer",
+					"minecraft:snow",
+					"minecraft:dirt",
+					"minecraft:stone"
+				]
+			}
+		}
+	}
+}

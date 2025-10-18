@@ -34,15 +34,29 @@
           "has_forest": false
         }
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:mesa",
+              "minecraft:mesa_bryce"
+            ],
+            "amount": 0.3,
+            "noise_frequency_scale": 0.5
+          }
+        ]
+      },
       "minecraft:tags": {
         "tags": [
           "animal",
           "caves",
           "jungle",
           "mesa",
-          "minecraft:mesa_surface",
           "monster",
-          "overworld"
+          "overworld",
+          "spawns_mesa_mobs",
+          "spawns_warm_variant_farm_animals"
         ]
       }
     }

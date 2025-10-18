@@ -31,6 +31,18 @@
           "bryce_pillars": false
         }
       },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:mesa"
+            ],
+            "amount": 0.3,
+            "noise_frequency_scale": 0.5
+          }
+        ]
+      },
       "minecraft:tags": {
         "tags": [
           "animal",
@@ -39,7 +51,9 @@
           "mesa",
           "minecraft:mesa_surface",
           "monster",
-          "overworld"
+          "overworld",
+          "spawns_mesa_mobs",
+          "spawns_warm_variant_farm_animals"
         ]
       }
     }

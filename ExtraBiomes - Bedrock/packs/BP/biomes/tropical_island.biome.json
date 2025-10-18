@@ -2,7 +2,7 @@
   "format_version": "1.21.110",
   "minecraft:biome": {
     "description": {
-      "identifier": "extrabiomes:island_chain"
+      "identifier": "extrabiomes:tropical_island"
     },
     "components": {
       "minecraft:climate": {
