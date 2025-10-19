@@ -41,8 +41,8 @@
       "y": {
         "distribution": "uniform",
         "extent": [
-          "query.above_top_solid(variable.worldx, variable.worldz)-9",
-          "query.above_top_solid(variable.worldx, variable.worldz)"
+          "query.above_top_solid(variable.worldx, variable.worldz)-13",
+          "query.above_top_solid(variable.worldx, variable.worldz)-4"
         ]
       },
       "z": {

@@ -35,8 +35,6 @@
           {
             "dimension": "minecraft:overworld",
             "targets": [
-              "minecraft:grove",
-              "minecraft:cherry_grove",
               "minecraft:ice_plains"
             ],
             "amount": 0.7,

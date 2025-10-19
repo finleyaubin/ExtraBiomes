@@ -38,7 +38,7 @@
               "minecraft:forest",
               "minecraft:plains"
             ],
-            "amount": 0.4,
+            "amount": 0.1,
             "noise_frequency_scale": 0.3
           }
         ]

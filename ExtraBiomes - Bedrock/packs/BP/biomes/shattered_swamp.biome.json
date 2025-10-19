@@ -42,7 +42,7 @@
               "minecraft:forest",
               "minecraft:swampland"
             ],
-            "amount": 0.4,
+            "amount": 0.2,
             "noise_frequency_scale": 0.5
           }
         ]
