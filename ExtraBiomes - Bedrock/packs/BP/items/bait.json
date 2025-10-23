@@ -1,36 +1,21 @@
 {
-	"format_version": "1.20.30",
+	"format_version": "1.21.100",
 	"minecraft:item": {
 		"description": {
-			"identifier": "extrabiomes:bait",
-			"category": "Equipment"
+			"identifier": "extrabiomes:bait"
 		},
 		"components": {
-			"minecraft:use_animation": {"animation":"swing"},
+			"minecraft:hand_equipped": true,
 			"minecraft:max_stack_size": 16,
-			"minecraft:icon": {
-				"texture": "bait"
+			"minecraft:icon": "bait",
+			"minecraft:projectile": {
+				"projectile_entity": "extrabiomes:bait_projectile"
 			},
-			"minecraft:use_duration": 0.5,
-			"minecraft:on_use": {
-				"on_use": {
-					"event": "extrabiomes:release",
-					"target": "self"
-				}
-			}
-		},
-		"events": {
-			"extrabiomes:release": {
-				"sequence": [
-					{
-						"shoot": {
-							"projectile": "extrabiomes:bait",
-							"launch_power": 0.5,
-							"angle_offset": 20
-						},
-						"decrement_stack": {}
-					}
-				]
+			"minecraft:throwable": {
+			},
+						"minecraft:cooldown": {
+				"category": "extrabiomes:bait_throw",
+				"duration": 10
 			}
 		}
 	}
