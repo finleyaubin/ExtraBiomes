@@ -1,4 +1,4 @@
-//registers the events from the scripts so that they can be used by the blocks.json's
+//Imoport block components
 import { system } from "@minecraft/server";
 import { MushroomGrowComponent } from "./blocks/Components/mushroom_grower.js";
 import { XpRewardComponent } from "./blocks/Components/xp_reward.js";
@@ -12,74 +12,35 @@ import { OpenComponent } from "./blocks/Components/open.js";
 import { fence } from "./blocks/Components/fence_place.js";
 import { DoorCloseComponent, DoorOnPlace, DoorOpenComponent, ResetTop, ResetBottom } from "./blocks/Components/door.js";
 
+//Import item components
+import { JellyfishReleaseComponent } from "./items/jellyfish_release.js";
+import { DrinkJellyfishJamComponent } from "./items/drink_jellyfish_jam.js";
 
+//Runs Scripts
 import "./blocks/dense_cloud_effect.js";
 import "./blocks/stairs.js"
 import { LeafDecay } from "./blocks/leaf_decay.js";
 
-system.beforeEvents.startup.subscribe(({ blockComponentRegistry }) => {
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:mushroom_grow",
-    MushroomGrowComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:xp_reward_component",
-    XpRewardComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:mushroom_loot",
-    MushroomLootComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:pebbleUpdater",
-    PebbleUpdaterComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:stripper_component",
-    StripperComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:slabber_component",
-    SlabberComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:leaf_loot",
-    LeafLootComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:leaf_decay",
-    LeafDecay
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:sapling_grower",
-    SaplingGrowComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:open",
-    OpenComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:fence",
-    fence
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:door_place",
-    DoorOnPlace
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:door_close",
-    DoorCloseComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:door_open",
-    DoorOpenComponent
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:reset_top",
-    ResetTop
-  );
-  blockComponentRegistry.registerCustomComponent(
-    "extrabiomes:reset_bottom",
-    ResetBottom
-  );
+system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRegistry }) => {
+  //Registers block components
+  blockComponentRegistry.registerCustomComponent("extrabiomes:mushroom_grow",MushroomGrowComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:xp_reward_component",XpRewardComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:mushroom_loot",MushroomLootComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:pebbleUpdater",PebbleUpdaterComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:stripper_component",StripperComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:slabber_component",SlabberComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:leaf_loot",LeafLootComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:leaf_decay",LeafDecay);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:sapling_grower",SaplingGrowComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:open",OpenComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:fence",fence);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:door_place",DoorOnPlace);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:door_close",DoorCloseComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:door_open",DoorOpenComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:reset_top",ResetTop);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:reset_bottom",ResetBottom);
+
+  //Registers item components
+  itemComponentRegistry.registerCustomComponent("extrabiomes:jellyfish_release",JellyfishReleaseComponent);
+  itemComponentRegistry.registerCustomComponent("extrabiomes:drink_jellyfish_jam",DrinkJellyfishJamComponent);
 });
