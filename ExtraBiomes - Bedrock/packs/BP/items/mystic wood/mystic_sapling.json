@@ -10,7 +10,7 @@
 		},
 		"components": {
 			"minecraft:icon": {
-				"texture": "mystic_sapling"
+				"texture": "extrabiomes:mystic_sapling"
 			},
 			"minecraft:fuel": {
 				"duration": 5

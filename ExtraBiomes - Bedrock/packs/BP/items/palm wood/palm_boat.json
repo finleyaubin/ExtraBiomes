@@ -18,7 +18,7 @@
 			},
 			"minecraft:liquid_clipped": true,
 			"minecraft:icon": {
-				"texture": "palm_boat"
+				"texture": "extrabiomes:palm_boat"
 			},
 			"minecraft:fuel": {
 				"duration": 60

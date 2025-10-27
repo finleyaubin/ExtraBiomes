@@ -2,10 +2,14 @@
 	"format_version": "1.21.110",
 	"minecraft:item": {
 		"description": {
-			"identifier": "extrabiomes:mossy_pebble"
+			"identifier": "extrabiomes:mossy_pebble",
+			"menu_category": {
+				"group": "minecraft:itemGroup.name.stone",
+				"category": "nature"
+			}
 		},
 		"components": {
-			"minecraft:icon": "mossy_pebble",
+			"minecraft:icon": "extrabiomes:mossy_pebble",
 			"minecraft:hand_equipped": true,
 			"minecraft:block_placer": {
 				"block": "extrabiomes:small_mossy_pebble"

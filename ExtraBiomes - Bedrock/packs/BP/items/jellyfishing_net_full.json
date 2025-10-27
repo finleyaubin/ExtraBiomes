@@ -2,11 +2,14 @@
     "format_version": "1.21.110",
     "minecraft:item": {
         "description": {
-            "identifier": "extrabiomes:jellyfishing_net_full"
+            "identifier": "extrabiomes:jellyfishing_net_full",
+            "menu_category": {
+                "category": "equipment"
+            }
         },
         "components": {
             "minecraft:max_stack_size": 1,
-            "minecraft:icon": "jellyfishing_net_full",
+            "minecraft:icon": "extrabiomes:jellyfishing_net_full",
             "minecraft:use_modifiers": {
                 "movement_modifier": 0.8,
                 "use_duration": 1.0

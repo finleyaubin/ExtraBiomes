@@ -10,7 +10,7 @@
 		},
 		"components": {
 			"minecraft:icon": {
-				"texture": "sky_sapling"
+				"texture": "extrabiomes:sky_sapling"
 			},
 			"minecraft:fuel": {
 				"duration": 5

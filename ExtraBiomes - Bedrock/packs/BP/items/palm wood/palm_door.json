@@ -10,7 +10,7 @@
 		},
 		"components": {
 			"minecraft:icon": {
-				"texture": "palm_door"
+				"texture": "extrabiomes:palm_door"
 			},
 			"minecraft:block_placer": {
 				"block": "extrabiomes:palm_door_bottom"

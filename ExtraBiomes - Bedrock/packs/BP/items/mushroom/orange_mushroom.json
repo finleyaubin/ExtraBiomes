@@ -10,7 +10,7 @@
 		},
 		"components": {
 			"minecraft:icon": {
-				"texture": "orange_mushroom"
+				"texture": "extrabiomes:orange_mushroom"
 			},
 			"minecraft:block_placer": {
 				"block": "extrabiomes:orange_mushroom_placed",

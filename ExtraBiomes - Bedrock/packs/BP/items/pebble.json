@@ -2,10 +2,14 @@
 	"format_version": "1.21.110",
 	"minecraft:item": {
 		"description": {
-			"identifier": "extrabiomes:pebble"
+			"identifier": "extrabiomes:pebble",
+			"menu_category": {
+				"group": "minecraft:itemGroup.name.stone",
+				"category": "nature"
+			}
 		},
 		"components": {
-			"minecraft:icon": "pebble",
+			"minecraft:icon": "extrabiomes:pebble",
 			"minecraft:hand_equipped": true,
 			"minecraft:block_placer": {
 				"block": "extrabiomes:small_pebble"

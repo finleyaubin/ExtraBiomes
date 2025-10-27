@@ -18,7 +18,7 @@
 			},
 			"minecraft:liquid_clipped": true,
 			"minecraft:icon": {
-				"texture": "sky_boat"
+				"texture": "extrabiomes:sky_boat"
 			},
 			"minecraft:fuel": {
 				"duration": 60

@@ -10,7 +10,7 @@
 		},
 		"components": {
 			"minecraft:icon": {
-				"texture": "sky_door"
+				"texture": "extrabiomes:sky_door"
 			},
 			"minecraft:block_placer": {
 				"block": "extrabiomes:sky_door_bottom"

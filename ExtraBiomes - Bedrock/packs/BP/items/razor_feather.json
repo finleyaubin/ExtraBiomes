@@ -9,7 +9,7 @@
 			"minecraft:use_animation": {"animation":"swing"},
 			"minecraft:max_stack_size": 16,
 			"minecraft:icon": {
-				"texture": "razor_feather"
+				"texture": "extrabiomes:razor_feather"
 			},
 			"minecraft:use_duration": 10,
 			"minecraft:cooldown": {
@@ -24,20 +24,6 @@
 			},
 			"minecraft:hand_equipped": true,
 			"minecraft:damage": 5
-		},
-		"events": {
-			"extrabiomes:release": {
-				"sequence": [
-					{
-						"shoot": {
-							"projectile": "extrabiomes:razor_feather",
-							"launch_power": 2,
-							"angle_offset": 20
-						},
-						"decrement_stack": {}
-					}
-				]
-			}
 		}
 	}
 }

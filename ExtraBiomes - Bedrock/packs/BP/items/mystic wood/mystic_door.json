@@ -10,7 +10,7 @@
 		},
 		"components": {
 			"minecraft:icon": {
-				"texture": "mystic_door"
+				"texture": "extrabiomes:mystic_door"
 			},
 			"minecraft:block_placer": {
 				"block": "extrabiomes:mystic_door_bottom"

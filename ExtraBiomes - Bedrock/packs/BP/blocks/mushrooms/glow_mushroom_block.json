@@ -1,12 +1,11 @@
 {
-  "format_version": "1.20.100",
+  "format_version": "1.21.100",
   "minecraft:block": {
     "description": {
       "identifier": "extrabiomes:glow_mushroom_block",
-      "is_experimental": true,
       "menu_category": {
-        "category": "nature"//,
-        //"group": "itemGroup.name.mushroom"
+        "category": "nature",
+        "group": "minecraft:itemGroup.name.mushroom"
       }
     },
     
