@@ -102,7 +102,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:north_path ~-1 ~ ~"
+                    "structure load \"extrabiomes:sky_city/north_path\" ~-1 ~ ~"
                   ]
                 }
               },
@@ -111,8 +111,8 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:north_path_cross ~-5 ~ ~",
-                    "fill ~-80 223 ~-80 ~80 223 ~80 air 0 replace extrabiomes:sky_city_block"
+                    "structure load \"extrabiomes:sky_city/north_path_cross\" ~-5 ~ ~",
+                    "fill ~-80 223 ~-80 ~80 223 ~80 air replace extrabiomes:sky_city_block"
                   ]
                 }
               },
@@ -121,7 +121,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:sky_chalet ~-2 ~ ~ 0_degrees"
+                    "structure load \"extrabiomes:sky_city/sky_chalet\" ~-2 ~ ~ 0_degrees"
                   ]
                 }
               }
@@ -152,7 +152,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:north_path ~-1 ~ ~"
+                    "structure load \"extrabiomes:sky_city/north_path\" ~-1 ~ ~"
                   ]
                 }
               },
@@ -161,7 +161,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:north_sky_end ~-3 ~ ~"
+                    "structure load \"extrabiomes:sky_city/north_sky_end\" ~-3 ~ ~"
                   ]
                 }
               },
@@ -170,7 +170,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:north_sky_fountain ~-5 ~-1 ~"
+                    "structure load \"extrabiomes:sky_city/north_sky_fountain\" ~-5 ~-1 ~"
                   ]
                 }
               }

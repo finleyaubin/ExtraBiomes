@@ -99,7 +99,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:south_path ~-1 ~ ~-9"
+                    "structure load \"extrabiomes:sky_city/south_path\" ~-1 ~ ~-9"
                   ]
                 }
               },
@@ -111,7 +111,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:south_path_cross ~-5 ~ ~-9",
+                    "structure load \"extrabiomes:sky_city/south_path_cross\" ~-5 ~ ~-9",
                     "fill ~-80 223 ~-80 ~80 223 ~80 air 0 replace extrabiomes:sky_city_block"
                   ]
                 }
@@ -121,7 +121,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:sky_tower ~-6 ~ ~-11 0_degrees"
+                    "structure load \"extrabiomes:sky_city/sky_tower\" ~-6 ~ ~-11 0_degrees"
                   ]
                 }
               }
@@ -152,7 +152,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:south_path ~-1 ~ ~-9"
+                    "structure load \"extrabiomes:sky_city/south_path\" ~-1 ~ ~-9"
                   ]
                 }
               },
@@ -161,7 +161,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:south_sky_end ~-3 ~ ~-4"
+                    "structure load \"extrabiomes:sky_city/south_sky_end\" ~-3 ~ ~-4"
                   ]
                 }
               },
@@ -170,7 +170,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:south_sky_fountain ~-5 ~-1 ~-9"
+                    "structure load \"extrabiomes:sky_city/south_sky_fountain\" ~-5 ~-1 ~-9"
                   ]
                 }
               }

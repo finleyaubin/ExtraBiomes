@@ -99,7 +99,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:west_path ~ ~ ~-1"
+                    "structure load \"extrabiomes:sky_city/west_path\" ~ ~ ~-1"
                   ]
                 }
               },
@@ -111,8 +111,8 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:east_path_cross ~ ~ ~-5",
-                    "fill ~-80 223 ~-80 ~80 223 ~80 air 0 replace extrabiomes:sky_city_block"
+                    "structure load \"extrabiomes:sky_city/east_path_cross\" ~ ~ ~-5",
+                    "fill ~-80 223 ~-80 ~80 223 ~80 air replace extrabiomes:sky_city_block"
                   ]
                 }
               },
@@ -121,7 +121,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:sky_house_1 ~ ~ ~-5"
+                    "structure load \"extrabiomes:sky_city/sky_house_1\" ~ ~ ~-5"
                   ]
                 }
               },
@@ -130,7 +130,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:sky_tower_2 ~ ~ ~-4"
+                    "structure load \"extrabiomes:sky_city/sky_tower_2\" ~ ~ ~-4"
                   ]
                 }
               }
@@ -161,7 +161,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:west_path ~ ~ ~-1"
+                    "structure load \"extrabiomes:sky_city/west_path\" ~ ~ ~-1"
                   ]
                 }
               },
@@ -170,7 +170,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:east_sky_end ~ ~ ~-3"
+                    "structure load \"extrabiomes:sky_city/east_sky_end\" ~ ~ ~-3"
                   ]
                 }
               },
@@ -179,7 +179,7 @@
                 "queue_command": {
                   "target": "self",
                   "command": [
-                    "structure load extrabiomes:east_sky_fountain ~ ~-1 ~-5"
+                    "structure load \"extrabiomes:sky_city/east_sky_fountain\" ~ ~-1 ~-5"
                   ]
                 }
               }
