@@ -1,45 +1,35 @@
 {
-	"format_version": "1.20.30",
+	"format_version": "1.21.110",
 	"minecraft:item": {
 		"description": {
 			"identifier": "extrabiomes:diamond_razor_feather",
-			"category": "Equipment"
+			"menu_category": {
+				"category": "equipment",
+				"group": "extrabiomes:razor_feathers"
+			}
 		},
 		"components": {
-			"minecraft:use_animation": {
-				"animation": "swing"
-			},
+			"minecraft:use_animation": "brush",
 			"minecraft:max_stack_size": 16,
-			"minecraft:icon": {
-				"texture": "extrabiomes:diamond_razor_feather"
-			},
-			"minecraft:use_duration": 5,
-			"minecraft:on_use": {
-				"on_use": {
-					"event": "extrabiomes:release",
-					"target": "self"
-				}
-			},
+			"minecraft:icon": "extrabiomes:diamond_razor_feather",
 			"minecraft:cooldown": {
 				"category": "diamond_razor_feather",
-				"duration": 0.7
+				"duration": 0.5
+			},
+			"minecraft:projectile": {
+				"projectile_entity": "extrabiomes:diamond_razor_feather"
+			},
+			"minecraft:throwable": {
+				"launch_power_scale": 2.0,
+				"max_launch_power": 5.0,
+				"min_draw_duration": 1
+			},
+			"minecraft:use_modifiers": {
+				"movement_modifier": 0.5,
+				"use_duration": 1.0
 			},
 			"minecraft:hand_equipped": true,
-			"minecraft:damage": 7
-		},
-		"events": {
-			"extrabiomes:release": {
-				"sequence": [
-					{
-						"shoot": {
-							"projectile": "extrabiomes:diamond_razor_feather",
-							"launch_power": 3,
-							"angle_offset": 20
-						},
-						"decrement_stack": {}
-					}
-				]
-			}
+			"minecraft:damage": 8
 		}
 	}
 }
