@@ -4,8 +4,7 @@
 		"description": {
 			"identifier": "extrabiomes:white_mushroom_placed",
 			"menu_category": {
-				"category": "none",
-				"is_hidden_in_commands": true
+				"category": "none"
 			}
 		},
 		"components": {
