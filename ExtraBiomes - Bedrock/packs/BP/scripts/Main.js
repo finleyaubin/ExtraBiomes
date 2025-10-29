@@ -11,6 +11,7 @@ import { SaplingGrowComponent } from "./blocks/Components/sapling_grower.js";
 import { OpenComponent } from "./blocks/Components/open.js";
 import { fence } from "./blocks/Components/fence_place.js";
 import { DoorCloseComponent, DoorOnPlace, DoorOpenComponent, ResetTop, ResetBottom } from "./blocks/Components/door.js";
+import { SkyCityBlockUpdateComponent } from "./blocks/Components/sky_city_block_update.js";
 
 //Import item components
 import { JellyfishReleaseComponent } from "./items/jellyfish_release.js";
@@ -39,6 +40,7 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
   blockComponentRegistry.registerCustomComponent("extrabiomes:door_open",DoorOpenComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:reset_top",ResetTop);
   blockComponentRegistry.registerCustomComponent("extrabiomes:reset_bottom",ResetBottom);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:sky_city_block_update",SkyCityBlockUpdateComponent);
 
   //Registers item components
   itemComponentRegistry.registerCustomComponent("extrabiomes:jellyfish_release",JellyfishReleaseComponent);

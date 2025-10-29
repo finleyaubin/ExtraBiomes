@@ -10,6 +10,18 @@
     "component_groups": {
       "extrabiomes:f": {
         "minecraft:instant_despawn": {}
+      },
+      "extrabiomes:delayed_despawn": {
+        "minecraft:timer": {
+          "time": [
+            0.05,
+            0.1
+          ],
+          "time_down_event": {
+            "event": "extrabiomes:f",
+            "target": "self"
+          }
+        }
       }
     },
     "components": {
@@ -55,17 +67,22 @@
       "minecraft:entity_spawned": {
         "sequence": [
           {
-            "queue_command": {
-              "target": "self",
-              "command": [
-                "structure load \"extrabiomes:sky_city/sky_start\" ~-5 ~-1 ~-5 0_degrees none block_by_block 0.3"
-              ]
-            }
+            "randomize": [
+              {
+                "weight": 1,
+                "queue_command": {
+                  "target": "self",
+                  "command": [
+                    "structure load \"extrabiomes:sky_city/sky_start\" ~-5 ~-1 ~-5 0_degrees none block_by_block 0.3"
+                  ]
+                }
+              }
+            ]
           },
           {
             "add": {
               "component_groups": [
-                "extrabiomes:f"
+                "extrabiomes:delayed_despawn"
               ]
             }
           }
