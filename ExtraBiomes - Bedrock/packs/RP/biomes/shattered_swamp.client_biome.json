@@ -2,20 +2,17 @@
     "format_version": "1.21.110",
     "minecraft:client_biome": {
         "description": {
-            "identifier": "extrabiomes:mystic_forest"
+            "identifier": "extrabioms:shattered_swamp"
         },
         "components": {
             "minecraft:water_appearance": {
-                "surface_color": "#a896ea"
+                "surface_color": "#3a442c"
             },
             "minecraft:foliage_appearance": {
-                "color": "#a896ea"
+                "color": "#4b5e14"
             },
             "minecraft:grass_appearance": {
-                "color": "#3ebc7b"
-            },
-            "minecraft:precipitation": {
-                "blue_spores": 0.2
+                "color": "#293013"
             }
         }
     }
