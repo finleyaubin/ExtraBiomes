@@ -2,21 +2,19 @@
     "format_version": "1.21.110",
     "minecraft:client_biome": {
         "description": {
-            "identifier": "extrabiomes:mystic_forest"
+            "identifier": "extrabiomes:moorlands"
         },
         "components": {
             "minecraft:water_appearance": {
-                "surface_color": "#a896ea"
+                "surface_color": "#2846ea"
             },
             "minecraft:foliage_appearance": {
-                "color": "#a896ea"
+                "color": "#28962a"
             },
             "minecraft:grass_appearance": {
-                "color": "#3ebc7b"
-            },
-            "minecraft:precipitation": {
-                "blue_spores": 0.2
+                "color": "#bcbc2b"
             }
         }
     }
 }
+

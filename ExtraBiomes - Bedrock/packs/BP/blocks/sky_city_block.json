@@ -2,7 +2,10 @@
   "format_version": "1.20.100",
   "minecraft:block": {
     "description": {
-      "identifier": "extrabiomes:sky_city_block"
+      "identifier": "extrabiomes:sky_city_block",
+      "menu_category": {
+        "category": "construction"
+      }
     },
     "components": {
       "minecraft:material_instances": {
@@ -11,11 +14,12 @@
           "render_method": "alpha_test"
         }
       },
-			"minecraft:collision_box": false,
-			"minecraft:selection_box": false,
+      "minecraft:collision_box": false,
+      "minecraft:selection_box": false,
+      "minecraft:geometry": "minecraft:geometry.full_block",
       "extrabiomes:sky_city_block_update":{},
       "minecraft:destructible_by_mining": {
-        "seconds_to_destroy": 999999
+        "seconds_to_destroy": 99
       }
     }
   }
