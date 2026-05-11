@@ -7,7 +7,7 @@
 		"features": [
 			"minecraft:optional_fallen_jungle_tree_feature",
 			"minecraft:jungle_tree_with_cocoa_feature",
-			"minecraft:moss_vegetation_feature"
+			"extrabiomes:custom_moss_patch_feature"
 		]
 	}
 }

@@ -9,7 +9,7 @@
 		"enforce_placement_rules": false,
 		"may_attach_to": {
 			"min_sides_must_attach": 1,
-			"bottom": "minecraft:grass"
+			"bottom": ["minecraft:grass","minecraft:moss_block"]
 		}
 	}
 }

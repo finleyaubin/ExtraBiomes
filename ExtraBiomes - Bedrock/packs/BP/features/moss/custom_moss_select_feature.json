@@ -1,0 +1,13 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:aggregate_feature": {
+		"description": {
+			"identifier": "extrabiomes:custom_moss_select_feature"
+		},
+		"features": [
+			"extrabiomes:moorland/moorlands_scatter_tall_grass_feature",
+			"extrabiomes:moss/scatter_carpet_feature",
+			"minecraft:jungle_bush_feature"
+		]
+	}
+}

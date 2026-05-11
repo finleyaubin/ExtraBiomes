@@ -1,0 +1,14 @@
+{
+	"format_version": "1.14.0",
+	"minecraft:scatter_feature": {
+		"description": {
+			"identifier": "extrabiomes:moss/scatter_carpet_feature"
+		},
+		"iterations": 10,
+		"x": 0,
+		"y": 0,
+		"z": 0,
+		"coordinate_eval_order": "zxy",
+		"places_feature": "extrabiomes:moss/carpet_patch"
+	}
+}

@@ -3,7 +3,7 @@
   "minecraft:feature_rules": {
     "description": {
       "identifier": "extrabiomes:tropical_growth_1_feature",
-      "places_feature": "minecraft:moss_vegetation_feature"
+      "places_feature": "extrabiomes:custom_moss_patch_feature"
     },
     "conditions": {
       "placement_pass": "after_surface_pass",
@@ -16,7 +16,7 @@
       ]
     },
     "distribution": {
-      "iterations": 100,
+      "iterations": 1,
       "x": {
         "distribution": "uniform",
         "extent": [ 0, 16 ]

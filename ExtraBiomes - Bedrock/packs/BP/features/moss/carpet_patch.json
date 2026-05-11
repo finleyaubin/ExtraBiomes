@@ -1,0 +1,14 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:single_block_feature": {
+		"description": {
+			"identifier": "extrabiomes:moss/carpet_patch"
+		},
+		"places_block": "minecraft:moss_carpet",
+		"enforce_survivability_rules": true,
+		"enforce_placement_rules": true,
+		"may_replace": [
+			"minecraft:air"
+		]
+	}
+}
