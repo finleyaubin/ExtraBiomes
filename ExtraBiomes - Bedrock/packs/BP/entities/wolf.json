@@ -623,14 +623,6 @@
       }
     },
     "components": {
-      "minecraft:shareables": {
-        "items": [
-          {
-            "item": "extrabiomes:frog_helmet",
-            "priority": 1
-          }
-        ]
-      },
       "minecraft:balloonable": {
         "mass": 0.8
       },
