@@ -1,0 +1,21 @@
+{
+  "format_version": "1.21.100",
+  "minecraft:structure_set": {
+    "description": {
+      "identifier": "extrabiomes:sky_city"
+    },
+    "placement": {
+      "type": "minecraft:random_spread",
+      "salt": 283829,
+      "separation": 12,
+      "spacing": 40,
+      "spread_type": "linear"
+    },
+    "structures": [
+      {
+        "structure": "extrabiomes:sky_city",
+        "weight": 1
+      }
+    ]
+  }
+}

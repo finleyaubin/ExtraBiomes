@@ -1,0 +1,28 @@
+{
+    "format_version": "1.26.10",
+    "minecraft:jigsaw": {
+        "description": {
+            "identifier": "extrabiomes:sky_city"
+        },
+        "step": "top_layer_modification",
+        "heightmap_projection": "none",
+        "liquid_settings": "apply_waterlogging",
+        "start_height": {
+            "type": "constant",
+            "value": {
+                "absolute": 223
+            }
+        },
+        "max_depth": 20,
+        "terrain_adaptation": "none",
+        "start_pool": "extrabiomes:sky_city_connection",
+        "max_distance_from_center": 128,
+        "dimension_padding": 0,
+        "biome_filters": [
+            {
+                "test": "has_biome_tag",
+                "value": "has_structure_trail_ruins"
+            }
+        ],
+    }
+}

@@ -1,0 +1,82 @@
+{
+  "format_version": "1.26.10",
+  "minecraft:template_pool": {
+    "description": {
+      "identifier": "extrabiomes:sky_city_connection"
+    },
+    "elements": [
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/cross",
+          "projection": "rigid"
+        },
+        "weight": 10
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/path",
+          "projection": "rigid"
+        },
+        "weight": 15
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/path_end",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/T",
+          "projection": "rigid"
+        },
+        "weight": 15
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/fountain",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/buildings/house_1",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+            {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/buildings/sky_challet",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+            {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/buildings/tower_1",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+            {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/buildings/tower_2",
+          "projection": "rigid"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

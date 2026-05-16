@@ -12,7 +12,7 @@ The Java port of extrabiomes is still in development, but can be compiled from s
 ### Biomes
 ### Mobs
 #### The Puckoo
-   The Puckoo is a mob whose concept was made by a friend of mine (who wishes not to be named) in the concept art you see above. They can also be tamed, saddled and ridden like a horse. They are fast but have a hard time jumping.
+   The Puckoo is a mob whose concept was submitted to me by a friend of mine (who wishes not to be named) in the concept art you see bellow. They can also be tamed, saddled and ridden like a horse. They are fast but have a hard time jumping.
    <img width="258" height="774" alt="image" src="https://github.com/user-attachments/assets/6de7ce15-268c-418e-a579-2eb0b09f34f8" />
    <img width="700" height="776" alt="image" src="https://github.com/user-attachments/assets/6b64bf8f-7194-4e36-8413-2305b8ffcdec" />
  
