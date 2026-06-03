@@ -18,6 +18,7 @@ import { JellyfishReleaseComponent } from "./items/jellyfish_release.js";
 import { DrinkJellyfishJamComponent } from "./items/drink_jellyfish_jam.js";
 
 //Runs Scripts
+import "./sky_city_placer.js";
 import "./blocks/dense_cloud_effect.js";
 import "./blocks/stairs.js"
 import { LeafDecay } from "./blocks/leaf_decay.js";
