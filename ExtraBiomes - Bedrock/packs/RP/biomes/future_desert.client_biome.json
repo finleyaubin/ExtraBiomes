@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:future_desert"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#0858e0"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#8898a8"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#b8c0c8"
+            }
+        }
+    }
+}

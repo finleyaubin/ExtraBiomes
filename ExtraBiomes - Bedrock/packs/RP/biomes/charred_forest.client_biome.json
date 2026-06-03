@@ -1,0 +1,22 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:charred_forest"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#3f76e4"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#3a2e14"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#5a3e1e"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "minecraft:fog_basalt_deltas"
+            }
+        }
+    }
+}

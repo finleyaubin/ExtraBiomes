@@ -1,0 +1,22 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:mystic_forest"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#FF63FF"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#9040c8"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#8050e0"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "extrabiomes:mystic_fog"
+            }
+        }
+    }
+}

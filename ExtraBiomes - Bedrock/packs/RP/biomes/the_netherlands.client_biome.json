@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:the_netherlands"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#962820"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#a03020"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#b84030"
+            }
+        }
+    }
+}

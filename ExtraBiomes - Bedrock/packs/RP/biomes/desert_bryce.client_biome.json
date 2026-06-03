@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:desert_bryce"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#30a8a0"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#aa8030"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#c8a040"
+            }
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:jellyfish_fields"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#02B0E5",
+                "surface_transparency": 0.45
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#38b078"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#58c898"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "extrabiomes:fog_jellyfish_fields"
+            }
+        }
+    }
+}

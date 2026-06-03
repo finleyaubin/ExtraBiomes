@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:tropical_island"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#28c8e0"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#40b020"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#60c840"
+            }
+        }
+    }
+}

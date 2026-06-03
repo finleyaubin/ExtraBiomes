@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:cold_mesa_bryce"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#3d5cdb"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#5a9a8a"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#7aaaa0"
+            }
+        }
+    }
+}

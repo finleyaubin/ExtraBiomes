@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:jungle_marsh"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#2a6830"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#386020"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#487030"
+            }
+        }
+    }
+}
