@@ -1,0 +1,22 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:lush_mesa"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#1B9ED8"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#58b028"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#78c040"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "minecraft:fog_jungle_hills"
+            }
+        }
+    }
+}

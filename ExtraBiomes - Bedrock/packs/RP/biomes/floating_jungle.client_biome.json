@@ -1,0 +1,22 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:floating_jungle"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#1B9ED8"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#30bb0b"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#59c93c"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "minecraft:fog_jungle_hills"
+            }
+        }
+    }
+}

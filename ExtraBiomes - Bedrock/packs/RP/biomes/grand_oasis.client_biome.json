@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:grand_oasis"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#20c8a0"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#58b028"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#80c040"
+            }
+        }
+    }
+}

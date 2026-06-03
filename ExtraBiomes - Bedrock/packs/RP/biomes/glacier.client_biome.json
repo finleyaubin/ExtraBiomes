@@ -1,0 +1,19 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:glacier"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#2838c8"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#60a0b0"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#80b0c0"
+            }
+        }
+    }
+}
