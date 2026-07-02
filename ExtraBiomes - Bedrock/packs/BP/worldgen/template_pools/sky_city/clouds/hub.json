@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.10",
+  "minecraft:template_pool": {
+    "description": {
+      "identifier": "extrabiomes:sky_city_hub"
+    },
+    "elements": [
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/cross",
+          "projection": "rigid"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}

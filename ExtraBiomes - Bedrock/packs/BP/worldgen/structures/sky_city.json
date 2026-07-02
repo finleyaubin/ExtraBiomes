@@ -10,12 +10,12 @@
         "start_height": {
             "type": "constant",
             "value": {
-                "absolute": 223
+                "absolute": 209
             }
         },
         "max_depth": 20,
         "terrain_adaptation": "none",
-        "start_pool": "extrabiomes:sky_city_connection",
+        "start_pool": "extrabiomes:sky_city_island",
         "max_distance_from_center": 128,
         "dimension_padding": 0,
         "biome_filters": [

@@ -1,0 +1,58 @@
+{
+  "format_version": "1.26.10",
+  "minecraft:template_pool": {
+    "description": {
+      "identifier": "extrabiomes:sky_city_cloud_puff"
+    },
+    "elements": [
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/clouds/puff_0",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/clouds/puff_1",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/clouds/puff_2",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/clouds/puff_3",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/clouds/puff_4",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/clouds/puff_5",
+          "projection": "rigid"
+        },
+        "weight": 1
+      }
+    ]
+  }
+}
