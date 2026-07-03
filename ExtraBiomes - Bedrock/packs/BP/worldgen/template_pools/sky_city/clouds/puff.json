@@ -32,7 +32,7 @@
       {
         "element": {
           "element_type": "minecraft:single_pool_element",
-          "location": "extrabiomes/sky_city/islands/island_0",
+          "location": "extrabiomes/sky_city/islands/island_puff_0",
           "projection": "rigid"
         },
         "weight": 1
@@ -40,7 +40,7 @@
       {
         "element": {
           "element_type": "minecraft:single_pool_element",
-          "location": "extrabiomes/sky_city/islands/island_1",
+          "location": "extrabiomes/sky_city/islands/island_puff_1",
           "projection": "rigid"
         },
         "weight": 1
@@ -48,7 +48,7 @@
       {
         "element": {
           "element_type": "minecraft:single_pool_element",
-          "location": "extrabiomes/sky_city/islands/island_2",
+          "location": "extrabiomes/sky_city/islands/island_puff_2",
           "projection": "rigid"
         },
         "weight": 1
