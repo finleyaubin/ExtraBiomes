@@ -7,7 +7,7 @@
         "components": {
             "minecraft:water_appearance": {
                 "surface_color": "#02B0E5",
-                "surface_transparency": 0.45
+                "surface_opacity": 0.55
             },
             "minecraft:foliage_appearance": {
                 "color": "#38b078"

@@ -1,23 +1,21 @@
 {
-	"grass_stone": {
-		"sound": "stone",
-		"textures": {
-			"down": "extrabiomes_grass_stone_bottom",
-			"east": "extrabiomes_grass_stone_side",
-			"north": "extrabiomes_grass_stone_side",
-			"south": "extrabiomes_grass_stone_side",
-			"up": "extrabiomes_grass_stone_top",
-			"west": "extrabiomes_grass_stone_side"
-		},
-		"isotropic": {
-			"up": true
-		}
+	"format_version": "1.1.0",
+	"extrabiomes:grass_stone": {
+		"sound": "stone"
 	},
 	"extrabiomes:goo": {
-		"sound": "slime",
-		"isotropic": true
+		"sound": "slime"
 	},
-	"extrabiomes:mystic_door": {
+	"extrabiomes:mystic_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_door_top_flipped": {
 		"sound": "wood"
 	},
 	"extrabiomes:mystic_trapdoor": {
@@ -41,12 +39,7 @@
 		"isotropic": true,
 		"textures": "extrabiomes_mystic_leaves"
 	},
-	"extrabiomes:mystic_decay_leaves": {
-		"sound": "grass",
-		"isotropic": true,
-		"textures": "extrabiomes_mystic_leaves"
-	},
-	"extrabiomes:mystic_sapling_block": {
+"extrabiomes:mystic_sapling_block": {
 		"sound": "grass"
 	},
 	"extrabiomes:stripped_mystic_wood": {
@@ -62,10 +55,18 @@
 		"sound": "wood"
 	},
 	"extrabiomes:mystic_fence": {
-		"sound": "wood",
-		"textures": "extrabiomes_mystic_planks"
+		"sound": "wood"
 	},
-	"extrabiomes:palm_door": {
+	"extrabiomes:palm_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_door_top_flipped": {
 		"sound": "wood"
 	},
 	"extrabiomes:palm_trapdoor": {
@@ -89,12 +90,7 @@
 		"isotropic": true,
 		"textures": "extrabiomes_palm_leaves"
 	},
-	"extrabiomes:palm_decay_leaves": {
-		"sound": "grass",
-		"isotropic": true,
-		"textures": "extrabiomes_palm_leaves"
-	},
-	"extrabiomes:palm_sapling_block": {
+"extrabiomes:palm_sapling_block": {
 		"sound": "grass"
 	},
 	"extrabiomes:stripped_palm_wood": {
@@ -112,7 +108,16 @@
 	"extrabiomes:palm_fence": {
 		"sound": "wood"
 	},
-	"extrabiomes:sky_door": {
+	"extrabiomes:sky_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_door_top_flipped": {
 		"sound": "wood"
 	},
 	"extrabiomes:sky_trapdoor": {
@@ -136,12 +141,7 @@
 		"isotropic": true,
 		"textures": "extrabiomes_sky_leaves"
 	},
-	"extrabiomes:sky_decay_leaves": {
-		"sound": "grass",
-		"isotropic": true,
-		"textures": "extrabiomes_sky_leaves"
-	},
-	"extrabiomes:sky_sapling_block": {
+"extrabiomes:sky_sapling_block": {
 		"sound": "grass"
 	},
 	"extrabiomes:stripped_sky_wood": {
@@ -157,8 +157,7 @@
 		"sound": "wood"
 	},
 	"extrabiomes:sky_fence": {
-		"sound": "wood",
-		"textures": "extrabiomes_sky_planks"
+		"sound": "wood"
 	},
 	"extrabiomes:dense_cloud": {
 		"sound": "cloth"
@@ -166,7 +165,16 @@
 	"extrabiomes:dense_cloud_brick": {
 		"sound": "cloth"
 	},
-	"extrabiomes:gilded_sky_door": {
+	"extrabiomes:gilded_sky_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_door_top_flipped": {
 		"sound": "wood"
 	},
 	"extrabiomes:gilded_sky_log": {

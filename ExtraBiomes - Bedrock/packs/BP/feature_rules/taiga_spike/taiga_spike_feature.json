@@ -2,7 +2,7 @@
   "format_version": "1.17.0",
   "minecraft:feature_rules": {
     "description": {
-      "identifier": "extrabiomes:taiga_spike/taiga_spike_feature.",
+      "identifier": "extrabiomes:taiga_spike_feature",
       "places_feature": "extrabiomes:taiga_spike/select_spike"
     },
     "conditions": {
