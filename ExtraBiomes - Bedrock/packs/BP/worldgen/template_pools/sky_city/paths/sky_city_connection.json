@@ -11,7 +11,7 @@
           "location": "extrabiomes/sky_city/paths/cross",
           "projection": "rigid"
         },
-        "weight": 10
+        "weight": 5
       },
       {
         "element": {
@@ -36,6 +36,38 @@
           "projection": "rigid"
         },
         "weight": 15
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/straight",
+          "projection": "rigid"
+        },
+        "weight": 10
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/curve",
+          "projection": "rigid"
+        },
+        "weight": 8
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/s_bend",
+          "projection": "rigid"
+        },
+        "weight": 8
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/paths/roundabout",
+          "projection": "rigid"
+        },
+        "weight": 4
       },
       {
         "element": {
