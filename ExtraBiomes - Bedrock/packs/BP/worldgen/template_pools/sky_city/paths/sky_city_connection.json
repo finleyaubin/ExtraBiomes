@@ -43,7 +43,7 @@
           "location": "extrabiomes/sky_city/paths/fountain",
           "projection": "rigid"
         },
-        "weight": 1
+        "weight": 3
       },
       {
         "element": {
