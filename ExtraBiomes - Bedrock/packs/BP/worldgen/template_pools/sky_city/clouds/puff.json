@@ -8,26 +8,10 @@
       {
         "element": {
           "element_type": "minecraft:single_pool_element",
-          "location": "extrabiomes/sky_city/clouds/puff_0",
-          "projection": "rigid"
-        },
-        "weight": 1
-      },
-      {
-        "element": {
-          "element_type": "minecraft:single_pool_element",
-          "location": "extrabiomes/sky_city/clouds/puff_1",
-          "projection": "rigid"
-        },
-        "weight": 1
-      },
-      {
-        "element": {
-          "element_type": "minecraft:single_pool_element",
           "location": "extrabiomes/sky_city/clouds/puff_2",
           "projection": "rigid"
         },
-        "weight": 1
+        "weight": 2
       },
       {
         "element": {
@@ -35,7 +19,7 @@
           "location": "extrabiomes/sky_city/clouds/puff_3",
           "projection": "rigid"
         },
-        "weight": 1
+        "weight": 4
       },
       {
         "element": {
@@ -43,12 +27,28 @@
           "location": "extrabiomes/sky_city/clouds/puff_4",
           "projection": "rigid"
         },
+        "weight": 3
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/islands/island_0",
+          "projection": "rigid"
+        },
         "weight": 1
       },
       {
         "element": {
           "element_type": "minecraft:single_pool_element",
-          "location": "extrabiomes/sky_city/clouds/puff_5",
+          "location": "extrabiomes/sky_city/islands/island_1",
+          "projection": "rigid"
+        },
+        "weight": 1
+      },
+      {
+        "element": {
+          "element_type": "minecraft:single_pool_element",
+          "location": "extrabiomes/sky_city/islands/island_2",
           "projection": "rigid"
         },
         "weight": 1
