@@ -30,9 +30,7 @@ jobs:
           rm -f "${{ steps.vars.outputs.REPO_NAME }}.mcaddon"
 
           # Zip the folder that bears the repo name
-          zip -r "${{ steps.vars.outputs.REPO_NAME }}.mcaddon" \
-              "${{ steps.vars.outputs.REPO_NAME }}" \
-              -x ".git/*" ".github/*"
+          zip -r "${{ steps.vars.outputs.REPO_NAME }}.mcaddon" BP RP \
 
 #keep the zip as an artifact
       - uses: actions/upload-artifact@v4
