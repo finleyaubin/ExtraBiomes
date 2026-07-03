@@ -1,48 +1,51 @@
 name: Zip & Publish MCAddon
 
-# Trigger manually or on push to a tag (e.g. v1.2.3)
 on:
-  workflow_dispatch:            # ← manual trigger from Actions tab
-  # push:
-  #   tags:
-  #     - 'v*'                    # ← uncomment to trigger on tag pushes
+  workflow_dispatch:   # manual trigger
+  push:
+    tags:
+      - 'v*'            # automatic release on a vX.Y.Z tag
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+
     steps:
-      # 1. Checkout the repo
-      - name: Checkout repository
-        uses: actions/checkout@v4
+# Get the repo
+      - uses: actions/checkout@v4
 
-      # 2. Get repo name for later use
-      - name: Set repo name variable
+#Store repo name (Extrabiomes) in a reusable variable
+      - name: Set repo name
         id: vars
-        run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
-
-      # 3. Build the .mcaddon file
-      - name: Zip the addon
         run: |
-          cd $GITHUB_WORKSPACE/ExtraBiomes\ -\ Bedrock/packs/
-          rm -f ${{ steps.vars.outputs.REPO_NAME }}.mcaddon  # remove old build
-          zip -r ${{ steps.vars.outputs.REPO_NAME }}.mcaddon \
-            ${{ steps.vars.outputs.REPO_NAME }} \
-            -x ".git/*" ".github/*"  # exclude repo metadata
+          echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
 
-      # 4. Store the file as an artifact (optional, but handy for debugging)
-      - name: Upload artifact (debug)
-        uses: actions/upload-artifact@v4
+#Build the .mcaddon – **inside the right directory**!
+      - name: Build the addon
+        run: |
+          # Path with the space in the folder name → quote it
+          cd "ExtraBiomes - Bedrock/packs/"
+
+          # Remove an old build if it exists (no‑error)
+          rm -f "${{ steps.vars.outputs.REPO_NAME }}.mcaddon"
+
+          # Zip the folder that bears the repo name
+          zip -r "${{ steps.vars.outputs.REPO_NAME }}.mcaddon" \
+              "${{ steps.vars.outputs.REPO_NAME }}" \
+              -x ".git/*" ".github/*"
+
+#keep the zip as an artifact
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.vars.outputs.REPO_NAME }}.mcaddon
-          path: ../${{ steps.vars.outputs.REPO_NAME }}ExtraBiomes\ -\ Bedrock/packs/${{ steps.vars.outputs.REPO_NAME }}.mcaddon
+          path: "ExtraBiomes - Bedrock/packs/${{ steps.vars.outputs.REPO_NAME }}.mcaddon"
 
-      # 5. Create or update the GitHub Release and attach the asset
-      - name: Release MCAddon
-        uses: softprops/action-gh-release@v1
+#Create or update a GitHub Release
+      - uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}      # tag name (e.g. v1.2.3) if triggered by tag
+          tag_name: ${{ github.ref_name }}          # e.g. v1.0.0
           release_name: ${{ steps.vars.outputs.REPO_NAME }} MCAddon ${{ github.ref_name }}
-          files: ../${{ steps.vars.outputs.REPO_NAME }}/packs/${{ steps.vars.outputs.REPO_NAME }}.mcaddon
+          files: "ExtraBiomes - Bedrock/packs/${{ steps.vars.outputs.REPO_NAME }}.mcaddon"
           draft: false
           prerelease: false
         env:
