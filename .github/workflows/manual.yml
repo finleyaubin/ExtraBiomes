@@ -23,7 +23,7 @@ jobs:
       # 3. Build the .mcaddon file
       - name: Zip the addon
         run: |
-          cd ../${{ steps.vars.outputs.REPO_NAME }}/ExtraBiomes\ -\ Bedrock/packs/
+          cd $GITHUB_WORKSPACE/ExtraBiomes\ -\ Bedrock/packs/
           rm -f ${{ steps.vars.outputs.REPO_NAME }}.mcaddon  # remove old build
           zip -r ${{ steps.vars.outputs.REPO_NAME }}.mcaddon \
             ${{ steps.vars.outputs.REPO_NAME }} \
@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.vars.outputs.REPO_NAME }}.mcaddon
-          path: ../${{ steps.vars.outputs.REPO_NAME }}/packs/${{ steps.vars.outputs.REPO_NAME }}.mcaddon
+          path: ../${{ steps.vars.outputs.REPO_NAME }}ExtraBiomes\ -\ Bedrock/packs/${{ steps.vars.outputs.REPO_NAME }}.mcaddon
 
       # 5. Create or update the GitHub Release and attach the asset
       - name: Release MCAddon
