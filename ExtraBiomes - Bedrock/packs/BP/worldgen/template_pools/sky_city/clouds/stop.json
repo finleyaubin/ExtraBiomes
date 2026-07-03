@@ -1,0 +1,9 @@
+{
+  "format_version": "1.26.10",
+  "minecraft:template_pool": {
+    "description": {
+      "identifier": "extrabiomes:sky_city_cloud_stop"
+    },
+    "elements": []
+  }
+}
