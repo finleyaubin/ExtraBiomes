@@ -79,4 +79,5 @@ jobs:
           game_endpoint: "minecraft"
           game_versions: "26.30"
           project_id: "918166"
+          release_type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           token: "${{ secrets.CF_API_TOKEN }}"
