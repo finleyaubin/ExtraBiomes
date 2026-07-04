@@ -1,82 +1,81 @@
 name: Build & Publish MCAddon
 
-#Triggers
 on:
-  workflow_dispatch:            # manual run
+  workflow_dispatch:
   push:
     tags:
-      - 'v*'                     # e.g. v3.0.0
-      - 'Bedrock-*'              # e.g. Bedrock-V3.0.0-beta2
+      - 'Bedrock-*'
   release:
-    types: [published]          # when you create/modify a release
+    types: [published]
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
 
-      # ──────────────────────────────────────────────────────
-      #Checkout the repo
       - uses: actions/checkout@v4
 
-      #Grab the repo name (Extrabiomes) – we’ll reuse it
       - name: Set repo name
         id: vars
         run: |
           echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
 
-      #Detect if the tag contains “beta” (or any other string)
+      # Extract a clean version string like "3.0.0-beta3" from either
+      # "v3.0.0" or "Bedrock-V3.0.0-beta2" style tags
+      - name: Extract version
+        id: version
+        run: |
+          TAG="${{ github.ref_name }}"
+          # strip "Bedrock-" prefix if present
+          TAG="${TAG#Bedrock-}"
+          # strip leading v/V
+          TAG="${TAG#v}"
+          TAG="${TAG#V}"
+          echo "VERSION=$TAG" >> $GITHUB_OUTPUT
+
       - name: Detect prerelease tag
         id: prerelease
         run: |
           TAG=${{ github.ref_name }}
-          # Strip the leading "refs/tags/" if you’re on the release event
           TAG=${TAG#refs/tags/}
-          echo "IS_PRERELEASE=${TAG#*-beta}" | grep -q $TAG && echo "IS_PRERELEASE=true" >> $GITHUB_OUTPUT || echo "IS_PRERELEASE=false" >> $GITHUB_OUTPUT
-        # (More compact alternative:)
-        #   echo "IS_PRERELEASE=${{ contains(github.ref_name, '-beta') }}" >> $GITHUB_OUTPUT
+          echo "IS_PRERELEASE=${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}" >> $GITHUB_OUTPUT
 
-      #Build the zip (BP + RP)
       - name: Build the MCAddon
+        id: build
         run: |
+          FILENAME="${{ steps.vars.outputs.REPO_NAME }}_${{ steps.version.outputs.VERSION }}.mcaddon"
+          echo "FILENAME=$FILENAME" >> $GITHUB_OUTPUT
+
           cd "ExtraBiomes - Bedrock/packs/"
-          # Create a clean temp folder
           mkdir -p ../tmp
           cp -r BP ../tmp/BP
           cp -r RP ../tmp/RP
-          # Zip *only* the two folders – keeps the required top‑level structure
           cd ../tmp
-          zip -r ../${{ steps.vars.outputs.REPO_NAME }}.mcaddon *
-          # Move the zip back into the working tree (optional)
-          mv ../${{ steps.vars.outputs.REPO_NAME }}.mcaddon $GITHUB_WORKSPACE
+          zip -r "../$FILENAME" *
+          mv "../$FILENAME" "$GITHUB_WORKSPACE"
 
-      #Upload the zip as an artifact (so you can download it from the run)
       - name: Upload MCAddon artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.vars.outputs.REPO_NAME }}.mcaddon
-          path: ${{ steps.vars.outputs.REPO_NAME }}.mcaddon
+          name: ${{ steps.build.outputs.FILENAME }}
+          path: ${{ steps.build.outputs.FILENAME }}
 
-      # ──────────────────────────────────────────────────────
-      #Publish the release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
-          files: ${{ steps.vars.outputs.REPO_NAME }}.mcaddon
+          files: ${{ steps.build.outputs.FILENAME }}
           draft: false
           prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
-
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ──────────────────────────────────────────────────────
-      # Upload to cursforge
       - name: "Upload to CurseForge"
         uses: itsmeow/curseforge-upload@v3
         with:
-          file_path: ${{ steps.vars.outputs.REPO_NAME }}.mcaddon
+          file_path: ${{ steps.build.outputs.FILENAME }}
+          display_name: ${{ steps.build.outputs.FILENAME }}
           game_endpoint: "minecraft"
           game_versions: "26.30"
           project_id: "918166"
