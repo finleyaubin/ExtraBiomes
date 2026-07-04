@@ -77,7 +77,7 @@ jobs:
         uses: itsmeow/curseforge-upload@v3
         with:
           file_path: ${{ steps.vars.outputs.REPO_NAME }}.mcaddon
-          game_endpoint: "minecraft bedrock"
+          game_endpoint: "minecraft"
           game_versions: "26.30"
           project_id: "918166"
           token: "${{ secrets.CF_API_TOKEN }}"
