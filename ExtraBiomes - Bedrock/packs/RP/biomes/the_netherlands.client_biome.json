@@ -9,10 +9,10 @@
                 "surface_color": "#90ADAD"
             },
             "minecraft:foliage_appearance": {
-                "color": "#D49E4A"
+                "color": "#D4912C"
             },
             "minecraft:grass_appearance": {
-                "color": "#b84030"
+                "color": "#7AAB35"
             }
         }
     }
