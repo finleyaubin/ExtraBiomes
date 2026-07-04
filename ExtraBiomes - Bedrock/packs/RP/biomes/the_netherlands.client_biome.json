@@ -6,10 +6,10 @@
         },
         "components": {
             "minecraft:water_appearance": {
-                "surface_color": "#962820"
+                "surface_color": "#90ADAD"
             },
             "minecraft:foliage_appearance": {
-                "color": "#a03020"
+                "color": "#D49E4A"
             },
             "minecraft:grass_appearance": {
                 "color": "#b84030"
