@@ -16,7 +16,7 @@ system.runInterval(() => {
     const distance = Math.min(40, Math.max(4, Math.floor(fallSpeed * 3)));
     
     const { x, y, z } = player.location;
-    if (y>256) continue;  
+    if (y-distance > 320|| y-distance < -64 || y > 320) continue;  
     const area = new BlockVolume(
       { x, y: y - distance, z },
       { x, y, z }
