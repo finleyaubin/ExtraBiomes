@@ -39,7 +39,7 @@
 		"isotropic": true,
 		"textures": "extrabiomes_mystic_leaves"
 	},
-"extrabiomes:mystic_sapling_block": {
+	"extrabiomes:mystic_sapling_block": {
 		"sound": "grass"
 	},
 	"extrabiomes:stripped_mystic_wood": {
@@ -90,7 +90,7 @@
 		"isotropic": true,
 		"textures": "extrabiomes_palm_leaves"
 	},
-"extrabiomes:palm_sapling_block": {
+	"extrabiomes:palm_sapling_block": {
 		"sound": "grass"
 	},
 	"extrabiomes:stripped_palm_wood": {
@@ -141,7 +141,7 @@
 		"isotropic": true,
 		"textures": "extrabiomes_sky_leaves"
 	},
-"extrabiomes:sky_sapling_block": {
+	"extrabiomes:sky_sapling_block": {
 		"sound": "grass"
 	},
 	"extrabiomes:stripped_sky_wood": {
