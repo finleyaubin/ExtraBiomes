@@ -52,7 +52,9 @@
           "desert",
           "monster",
           "overworld",
-          "rare"
+          "rare",
+          "spawns_warm_variant_farm_animals",
+          "spawns_warm_variant_frogs"
         ]
       }
     }

@@ -49,7 +49,10 @@
 					"cave",
 					"charred",
 					"monster",
-					"overworld"
+					"overworld",
+					"forest",
+					"spawns_warm_variant_farm_animals",
+					"spawns_warm_variant_frogs"
 				]
 			}
 		}

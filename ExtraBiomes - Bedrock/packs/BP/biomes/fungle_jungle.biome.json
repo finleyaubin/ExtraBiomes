@@ -62,7 +62,10 @@
           "jungle",
           "mooshroom_island",
           "overworld",
-          "rare"
+          "rare",
+          "spawns_jungle_mobs",
+          "spawns_warm_variant_farm_animals",
+          "spawns_without_patrols"
         ]
       }
     }

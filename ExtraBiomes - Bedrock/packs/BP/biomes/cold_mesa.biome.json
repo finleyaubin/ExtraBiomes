@@ -50,7 +50,11 @@
           "mesa",
           "minecraft:mesa_surface",
           "monster",
-          "overworld"
+          "overworld",
+          "spawns_cold_variant_farm_animals",
+          "spawns_cold_variant_frogs",
+          "spawns_snow_foxes",
+          "spawns_white_rabbits"
         ]
       }
     }
