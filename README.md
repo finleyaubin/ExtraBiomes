@@ -12,36 +12,37 @@ The Java port of extrabiomes is still in development, but can be compiled from s
 ### Biomes
 The biomes range from twists on vanilla terrain to stranger places:
 - **Charred Forest** — a burnt-out forest of blackened trees and lingering fires
-
-<img width="2563" height="1446" alt="Charred Forest" src="https://github.com/user-attachments/assets/a37e2d0c-5bab-48b9-95af-b511298f8f83" />
-  
 - **Mystic Forest** — a dark forest where the water is replaced with goo
-
-  
 - **Jellyfish Fields** — an ocean biome with drifting jellyfish and jellycoral growths
-
-<img width="2563" height="1446" alt="Jellyfish Fields" src="https://github.com/user-attachments/assets/24e1ca1e-77e0-4456-818b-085445e2c0a8" />
-
 - **Glacier** — packed ice, snow drifts, and frozen spires
-
-<img width="2563" height="1446" alt="Glacier" src="https://github.com/user-attachments/assets/00ea95fb-e94e-4706-946e-1d13ae3be8b2" />
-
 - **Grand Oasis** — pockets of water and palm trees hidden in hot deserts
-
-<img width="2563" height="1446" alt="Grand Oasis" src="https://github.com/user-attachments/assets/bc939897-99bf-45ba-a4a5-6fca7aeca888" />
-
 - **Deep Dark Green** — a deep dark / jungle hybrid, so ancient cities can generate beneath overgrown caverns
 - **The Netherlands** — a flat biome where nether ores surface in the overworld
 
 ...plus jungle marshes, floating jungles, cold mesas, taiga spikes, shattered swamps, moorlands, underground jungle/mesa/mushroom variants, and more.
 
-<img width="2563" height="1446" alt="Fungle Jungle" src="https://github.com/user-attachments/assets/0b5c0ed2-c45b-4252-b914-2a62bace8f64" />
-<img width="2563" height="1446" alt="Floating Jungle" src="https://github.com/user-attachments/assets/acd6077f-1977-48f6-9f02-e918274bd929" />
-<img width="2563" height="1446" alt="Desert Bryce" src="https://github.com/user-attachments/assets/ffd4c843-aa69-4fab-b176-daa3614c24d1" />
-<img width="2563" height="1446" alt="Cold Mesa" src="https://github.com/user-attachments/assets/820681b2-b5dc-42e1-8dd9-91ee2cee4210" />
-<img width="2563" height="1446" alt="Cold Mesa Plateau" src="https://github.com/user-attachments/assets/54740b3e-ef1a-4e1a-b849-f28b3caa433e" />
-<img width="2563" height="1446" alt="Cold Mesa Bryce" src="https://github.com/user-attachments/assets/d7de1b26-4cbe-40e6-a53c-8a4ea95d73f6" />
-<img width="2563" height="1446" alt="Future Desert" src="https://github.com/user-attachments/assets/d9f4b5ce-053e-4932-a324-9dc07f16891b" />
+<table>
+  <tr>
+    <td><img alt="Charred Forest" src="https://github.com/user-attachments/assets/a37e2d0c-5bab-48b9-95af-b511298f8f83" /></td>
+    <td><img alt="Jellyfish Fields" src="https://github.com/user-attachments/assets/24e1ca1e-77e0-4456-818b-085445e2c0a8" /></td>
+    <td><img alt="Glacier" src="https://github.com/user-attachments/assets/00ea95fb-e94e-4706-946e-1d13ae3be8b2" /></td>
+  </tr>
+  <tr>
+    <td><img alt="Grand Oasis" src="https://github.com/user-attachments/assets/bc939897-99bf-45ba-a4a5-6fca7aeca888" /></td>
+    <td><img alt="Fungle Jungle" src="https://github.com/user-attachments/assets/0b5c0ed2-c45b-4252-b914-2a62bace8f64" /></td>
+    <td><img alt="Floating Jungle" src="https://github.com/user-attachments/assets/acd6077f-1977-48f6-9f02-e918274bd929" /></td>
+  </tr>
+  <tr>
+    <td><img alt="Desert Bryce" src="https://github.com/user-attachments/assets/ffd4c843-aa69-4fab-b176-daa3614c24d1" /></td>
+    <td><img alt="Cold Mesa" src="https://github.com/user-attachments/assets/820681b2-b5dc-42e1-8dd9-91ee2cee4210" /></td>
+    <td><img alt="Cold Mesa Plateau" src="https://github.com/user-attachments/assets/54740b3e-ef1a-4e1a-b849-f28b3caa433e" /></td>
+  </tr>
+  <tr>
+    <td><img alt="Cold Mesa Bryce" src="https://github.com/user-attachments/assets/d7de1b26-4cbe-40e6-a53c-8a4ea95d73f6" /></td>
+    <td><img alt="Future Desert" src="https://github.com/user-attachments/assets/d9f4b5ce-053e-4932-a324-9dc07f16891b" /></td>
+    <td></td>
+  </tr>
+</table>
 
 
 ### Structures
