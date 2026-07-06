@@ -1,7 +1,7 @@
 # ExtraBiomes
 <img width="3840" height="2160" alt="fungal cover" src="https://github.com/user-attachments/assets/16c58209-0960-4c33-8919-c69a35c8329f" />
 
-Extra Biomes is the ultimate Minecraft expansion that redefines what's possible in Bedrock Edition! This extraordinary mod delivers an unlimited array of exotic environments, from mysterious underground worlds to floating cities among the clouds. With hundreds of new building blocks, rare treasures, and unique creatures, every play session becomes a thrilling new adventure. Get ready to experience Minecraft like never before with this incredible mod that brings endless excitement to your world!
+ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new biomes to the overworld, along with the mobs, blocks, and structures to fill them — from burnt forests and jellyfish-filled oceans to a floating Sky City above the mountains. All textures include PBR maps, so the addon works with RTX resource packs and the new shader system out of the box.
 ## Official downloads sources:
 ### Bedrock:
 - [Curseforge](https://www.curseforge.com/minecraft-bedrock/addons/extrabiomes)
@@ -10,6 +10,19 @@ Extra Biomes is the ultimate Minecraft expansion that redefines what's possible 
 The Java port of extrabiomes is still in development, but can be compiled from source by cloning this repo.
 ## Features
 ### Biomes
+The biomes range from twists on vanilla terrain to stranger places:
+- **Charred Forest** — a burnt-out forest of blackened trees and lingering fires
+- **Mystic Forest** — a dark forest where the water is replaced with goo
+- **Jellyfish Fields** — an ocean biome with drifting jellyfish and jellycoral growths
+- **Glacier** — packed ice, snow drifts, and frozen spires
+- **Grand Oasis** — pockets of water and palm trees hidden in hot deserts
+- **Deep Dark Green** — a deep dark / jungle hybrid, so ancient cities can generate beneath overgrown caverns
+- **The Netherlands** — a flat biome where nether ores surface in the overworld
+
+...plus jungle marshes, floating jungles, cold mesas, taiga spikes, shattered swamps, moorlands, underground jungle/mesa/mushroom variants, and more.
+### Structures
+#### Sky City
+High above the mountains (Y 209), Sky City generates as a jigsaw structure: floating islands connected by cloud paths, with houses, towers, and fountains built from sky wood and dense cloud brick — and harpies defending it.
 ### Mobs
 #### The Puckoo
    The Puckoo is a mob whose concept was submitted to me by a friend of mine (who wishes not to be named) in the concept art you see bellow. They can also be tamed, saddled and ridden like a horse. They are fast but have a hard time jumping.
@@ -40,3 +53,4 @@ Hopping spores are a mob that can be found around the mushroom island, fungal ju
 <img width="700" height="394" alt="image" src="https://github.com/user-attachments/assets/8242721b-5baa-4bcb-9cca-3728b71540b8" />
 
 ### Blocks
+Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky — each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
