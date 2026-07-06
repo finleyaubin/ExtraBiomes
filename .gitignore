@@ -1,5 +1,5 @@
 /build
 /ExtraBiomes\ -\ Bedrock/.regolith
 /.idea
-/tools/
+/tools/__pycache__/
 .claude/
