@@ -80,11 +80,12 @@ The Java port of extrabiomes is still in development, but can be compiled from s
     <td><img alt="Underground Mesa" src="https://github.com/user-attachments/assets/519f15d9-3894-46d2-bd1f-01960e3caf8b" /></td>
   </tr>
 </table>
+
 ### Overworld Aerospace Biomes
 #### Sky City
 High above the mountains (Y 209), Sky City generates as a jigsaw structure: floating islands connected by cloud paths, with houses, towers, and fountains built from sky wood and dense cloud brick — and harpies defending it.
 
-<img width="2563" height="1446" alt="Sky City" src="https://github.com/user-attachments/assets/ca1ea023-df90-4280-ab1e-0c569a10a671" />
+<img alt="Sky City" src="https://github.com/user-attachments/assets/ca1ea023-df90-4280-ab1e-0c569a10a671" />
 
 
 ### Mobs
