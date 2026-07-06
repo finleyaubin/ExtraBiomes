@@ -2,7 +2,7 @@
   "format_version": "1.8.0",
   "minecraft:spawn_rules": {
     "description": {
-      "identifier": "extrabiomes:hopping_spore",
+      "identifier": "extrabiomes:hoppleshroom",
       "population_control": "animal"
     },
     "conditions": [
