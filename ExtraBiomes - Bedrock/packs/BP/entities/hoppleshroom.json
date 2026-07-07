@@ -262,6 +262,25 @@
           ]
         }
       },
+      "extrabiomes:hoppleshroom_glow": {
+        "minecraft:variant": {
+          "value": 12
+        },
+        "minecraft:environment_sensor": {
+          "triggers": [
+            {
+              "filters": [
+                {
+                  "target": "self",
+                  "test": "on_ground",
+                  "value": true
+                }
+              ],
+              "event": "extrabiomes:glow_mushroom"
+            }
+          ]
+        }
+      },
       "extrabiomes:hoppleshroom_white": {
         "minecraft:variant": {
           "value": 10
@@ -479,20 +498,6 @@
               {
                 "add": {
                   "component_groups": [
-                    "extrabiomes:hoppleshroom_black"
-                  ]
-                }
-              },
-              {
-                "add": {
-                  "component_groups": [
-                    "extrabiomes:hoppleshroom_blue"
-                  ]
-                }
-              },
-              {
-                "add": {
-                  "component_groups": [
                     "extrabiomes:hoppleshroom_cyan"
                   ]
                 }
@@ -529,6 +534,13 @@
                 "add": {
                   "component_groups": [
                     "extrabiomes:hoppleshroom_yellow"
+                  ]
+                }
+              },
+              {
+                "add": {
+                  "component_groups": [
+                    "extrabiomes:hoppleshroom_glow"
                   ]
                 }
               }
@@ -717,6 +729,23 @@
               "target": "self",
               "command": [
                 "setblock ~~~ extrabiomes:yellow_mushroom_placed keep",
+                "particle minecraft:crop_growth_emitter ~~~"
+              ]
+            }
+          }
+        ]
+      },
+      "extrabiomes:glow_mushroom": {
+        "randomize": [
+          {
+            "weight": 100
+          },
+          {
+            "weight": 1,
+            "queue_command": {
+              "target": "self",
+              "command": [
+                "setblock ~~~ extrabiomes:glow_mushroom_placed keep",
                 "particle minecraft:crop_growth_emitter ~~~"
               ]
             }

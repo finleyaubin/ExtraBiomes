@@ -1,24 +1,25 @@
 {
 	"format_version": "1.16.0",
-	"minecraft:recipe_shapeless": {
+	"minecraft:recipe_shaped": {
 		"description": {
 			"identifier": "extrabiomes:gilded_sky_trapdoor"
 		},
 		"tags": [
 			"crafting_table"
 		],
-		"ingredients": [
-			{
-				"item": "extrabiomes:sky_trapdoor"
-			},
-			{
-				"item": "minecraft:gold_ingot"
-			}
+		"pattern": [
+			"~~~",
+			"~~~"
 		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:gilded_sky_planks"
+			}
+		},
 		"result": [
 			{
 				"item": "extrabiomes:gilded_sky_trapdoor",
-				"count": 1
+				"count": 2
 			}
 		]
 	}

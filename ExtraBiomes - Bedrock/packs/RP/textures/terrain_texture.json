@@ -191,6 +191,11 @@
 				"textures/blocks/gilded sky wood/log_gilded_sky"
 			]
 		},
+		"extrabiomes_gilded_sky_stripped_log": {
+			"textures": [
+				"textures/blocks/gilded sky wood/log_gilded_sky_stripped"
+			]
+		},
 		"extrabiomes_gilded_sky_planks": {
 			"textures": [
 				"textures/blocks/gilded sky wood/planks_gilded_sky"
@@ -345,6 +350,11 @@
 		"extrabiomes_nether_iron_ore": {
 			"textures": [
 				"textures/blocks/the_netherlands/nether_iron_ore"
+			]
+		},
+		"extrabiomes_nether_gold_ore": {
+			"textures": [
+				"textures/blocks/the_netherlands/nether_gold_ore"
 			]
 		},
 		"extrabiomes_nether_lapis_ore": {

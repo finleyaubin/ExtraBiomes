@@ -18,11 +18,12 @@
       },
       "minecraft:loot": "loot_tables/blocks/emerald_ore.json",
       "minecraft:destructible_by_mining": {
-        "seconds_to_destroy": 1
+        "seconds_to_destroy": 8
       },
       "minecraft:destructible_by_explosion": {
         "explosion_resistance": 3
       },
+      "tag:minecraft:is_pickaxe_item_destructible": {},
       "minecraft:light_dampening": 15,
       "extrabiomes:xp_reward_component": {}
     }

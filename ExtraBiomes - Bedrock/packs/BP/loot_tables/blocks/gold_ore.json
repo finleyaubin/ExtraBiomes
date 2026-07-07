@@ -1,10 +1,7 @@
-	{
+{
 	"pools": [
 		{
-			"rolls": {
-				"max": 9,
-				"min": 4
-			},
+			"rolls": 1,
 			"conditions": [
 				{
 					"condition": "match_tool",
@@ -15,7 +12,7 @@
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -35,13 +32,13 @@
 				}
 			],
 			"rolls": {
-				"max": 18,
-				"min": 4
+				"max": 2,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -61,13 +58,13 @@
 				}
 			],
 			"rolls": {
-				"max": 27,
-				"min": 4
+				"max": 3,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -87,21 +84,18 @@
 				}
 			],
 			"rolls": {
-				"max": 36,
-				"min": 4
+				"max": 4,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
 		{
-			"rolls": {
-				"max": 9,
-				"min": 4
-			},
+			"rolls": 1,
 			"conditions": [
 				{
 					"condition": "match_tool",
@@ -112,7 +106,7 @@
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -132,13 +126,13 @@
 				}
 			],
 			"rolls": {
-				"max": 18,
-				"min": 4
+				"max": 2,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -158,13 +152,13 @@
 				}
 			],
 			"rolls": {
-				"max": 27,
-				"min": 4
+				"max": 3,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -184,21 +178,18 @@
 				}
 			],
 			"rolls": {
-				"max": 36,
-				"min": 4
+				"max": 4,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
 		{
-			"rolls": {
-				"max": 9,
-				"min": 4
-			},
+			"rolls": 1,
 			"conditions": [
 				{
 					"condition": "match_tool",
@@ -209,7 +200,7 @@
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -229,13 +220,13 @@
 				}
 			],
 			"rolls": {
-				"max": 18,
-				"min": 4
+				"max": 2,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -255,13 +246,13 @@
 				}
 			],
 			"rolls": {
-				"max": 27,
-				"min": 4
+				"max": 3,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -281,21 +272,18 @@
 				}
 			],
 			"rolls": {
-				"max": 36,
-				"min": 4
+				"max": 4,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
 		{
-			"rolls": {
-				"max": 9,
-				"min": 4
-			},
+			"rolls": 1,
 			"conditions": [
 				{
 					"condition": "match_tool",
@@ -306,7 +294,7 @@
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -326,13 +314,13 @@
 				}
 			],
 			"rolls": {
-				"max": 18,
-				"min": 4
+				"max": 2,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -352,13 +340,13 @@
 				}
 			],
 			"rolls": {
-				"max": 27,
-				"min": 4
+				"max": 3,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -378,21 +366,18 @@
 				}
 			],
 			"rolls": {
-				"max": 36,
-				"min": 4
+				"max": 4,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
 		{
-			"rolls": {
-				"max": 9,
-				"min": 4
-			},
+			"rolls": 1,
 			"conditions": [
 				{
 					"condition": "match_tool",
@@ -403,7 +388,7 @@
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -423,13 +408,13 @@
 				}
 			],
 			"rolls": {
-				"max": 18,
-				"min": 4
+				"max": 2,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -449,13 +434,13 @@
 				}
 			],
 			"rolls": {
-				"max": 27,
-				"min": 4
+				"max": 3,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		},
@@ -475,13 +460,13 @@
 				}
 			],
 			"rolls": {
-				"max": 36,
-				"min": 4
+				"max": 4,
+				"min": 1
 			},
 			"entries": [
 				{
 					"type": "item",
-					"name": "minecraft:lapis_lazuli"
+					"name": "minecraft:raw_gold"
 				}
 			]
 		}

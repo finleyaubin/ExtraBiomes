@@ -18,8 +18,9 @@
       },
       "minecraft:loot": "loot_tables/blocks/diamond_ore.json",
       "minecraft:destructible_by_mining": {
-        "seconds_to_destroy": 1
+        "seconds_to_destroy": 8
       },
+      "tag:minecraft:is_pickaxe_item_destructible": {},
       "minecraft:destructible_by_explosion": {
         "explosion_resistance": 3
       },

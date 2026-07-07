@@ -18,7 +18,7 @@
         }
       },
       "minecraft:loot": "loot_tables/empty.json",
-      "minecraft:map_color": "#0000FF",
+      "minecraft:map_color": "#1A1A1A",
       "extrabiomes:mushroom_loot": {}
     }
   }
