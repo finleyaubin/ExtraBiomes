@@ -2,7 +2,7 @@
   "format_version": "1.17.0",
   "minecraft:feature_rules": {
     "description": {
-      "identifier": "extrabiomes:windmill_feature",
+      "identifier": "extrabiomes:windmill_feature_plains",
       "places_feature": "extrabiomes:windmill"
     },
     "conditions": {

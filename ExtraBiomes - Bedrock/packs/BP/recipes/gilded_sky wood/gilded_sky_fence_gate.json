@@ -2,23 +2,26 @@
 	"format_version": "1.16.0",
 	"minecraft:recipe_shaped": {
 		"description": {
-			"identifier": "extrabiomes:crafting_table_from_gilded_sky"
+			"identifier": "extrabiomes:gilded_sky_fence_gate"
 		},
 		"tags": [
 			"crafting_table"
 		],
 		"pattern": [
-			"~~",
-			"~~"
+			"#~#",
+			"#~#"
 		],
 		"key": {
 			"~": {
 				"item": "extrabiomes:gilded_sky_planks"
+			},
+			"#": {
+				"item": "minecraft:stick"
 			}
 		},
 		"result": [
 			{
-				"item": "minecraft:crafting_table",
+				"item": "extrabiomes:gilded_sky_fence_gate",
 				"count": 1
 			}
 		]

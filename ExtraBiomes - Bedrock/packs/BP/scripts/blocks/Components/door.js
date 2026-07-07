@@ -1,4 +1,11 @@
 import { BlockPermutation, ItemStack } from "@minecraft/server";
+
+const doorWoodTypes = ['gilded_sky', 'mystic', 'palm', 'sky'];
+
+function getWoodType(id) {
+    const [, rest] = id.split(':');
+    return doorWoodTypes.find((type) => rest.startsWith(type + '_'));
+}
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 export const DoorOpenComponent = {
     onPlayerInteract(event) {
@@ -39,8 +46,7 @@ export const DoorCloseComponent = {
 export const DoorOnPlace = {
     onPlace(event) {
         const { block } = event
-        const [, rest] = block.typeId.split(':');
-        const [type] = rest.split('_');
+        const type = getWoodType(block.typeId);
         switch (block.typeId) {
             case `extrabiomes:${type}_door_bottom`:
                 block.above(1).setPermutation(BlockPermutation.resolve(`extrabiomes:${type}_door_top`))
@@ -88,7 +94,5 @@ export const ResetBottom = {
 
 
 function getTypeFromId(blockId) {
-    const [, rest] = blockId.split(':');
-    const [type] = rest.split('_');
-    return type;
+    return getWoodType(blockId);
 }

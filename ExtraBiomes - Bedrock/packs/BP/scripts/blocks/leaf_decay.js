@@ -33,9 +33,13 @@ function isWithinRadiusOfAllowedBlock(block, maxDistance) {
 function recalculatePersistence(block) {
   const persistent = isWithinRadiusOfAllowedBlock(block, 6);
   const currentStates = block.permutation.getAllStates();
-  const newStates = { ...currentStates, 'extrabiomes:persist': persistent };
-  const newPermutation = BlockPermutation.resolve(block.typeId, newStates);
-  block.setPermutation(newPermutation);
+  const newStates = { ...currentStates, 'extrabiomes:persist': persistent ? 1 : 0 };
+  try {
+    const newPermutation = BlockPermutation.resolve(block.typeId, newStates);
+    block.setPermutation(newPermutation);
+  } catch (error) {
+    console.error("Failed to resolve/set persistence permutation:", error);
+  }
 
   if (!persistent && !block.permutation.getState('extrabiomes:placed')) {
     try {

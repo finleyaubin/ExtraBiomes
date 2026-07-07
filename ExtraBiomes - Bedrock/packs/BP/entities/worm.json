@@ -110,6 +110,13 @@
 			"minecraft:block_climber": {}
 		},
 		"events": {
+			"minecraft:entity_spawned": {
+				"add": {
+					"component_groups": [
+						"raincheck"
+					]
+				}
+			},
 			"spawned": {
 				"add": {
 					"component_groups": [

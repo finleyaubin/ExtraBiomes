@@ -27,6 +27,20 @@
 				"minecraft:is_baby": {},
 				"minecraft:scale": {
 					"value": 0.16
+				},
+				"minecraft:ageable": {
+					"duration": 1200,
+					"feed_items": [
+						"minecraft:seagrass"
+					],
+					"grow_up": {
+						"event": "minecraft:ageable_grow_up",
+						"target": "self"
+					}
+				},
+				"minecraft:behavior.follow_parent": {
+					"priority": 5,
+					"speed_multiplier": 1.1
 				}
 			},
 			"minecraft:adult": {
@@ -49,6 +63,24 @@
 				},
 				"minecraft:loot": {
 					"table": "loot_tables/entities/giant_tortoise.json"
+				},
+				"minecraft:behavior.breed": {
+					"priority": 4,
+					"speed_multiplier": 1.0
+				},
+				"minecraft:breedable": {
+					"require_tame": false,
+					"breed_items": [
+						"minecraft:seagrass"
+					],
+					"breeds_with": {
+						"mate_type": "extrabiomes:giant_tortoise",
+						"baby_type": "extrabiomes:giant_tortoise",
+						"breed_event": {
+							"event": "minecraft:entity_born",
+							"target": "baby"
+						}
+					}
 				},
 				"minecraft:behavior.move_to_land": {
 					"priority": 6,

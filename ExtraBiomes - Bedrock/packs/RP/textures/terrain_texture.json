@@ -347,6 +347,11 @@
 				"textures/blocks/the_netherlands/nether_iron_ore"
 			]
 		},
+		"extrabiomes_nether_gold_ore": {
+			"textures": [
+				"textures/blocks/the_netherlands/nether_gold_ore"
+			]
+		},
 		"extrabiomes_nether_lapis_ore": {
 			"textures": [
 				"textures/blocks/the_netherlands/nether_lapis_ore"

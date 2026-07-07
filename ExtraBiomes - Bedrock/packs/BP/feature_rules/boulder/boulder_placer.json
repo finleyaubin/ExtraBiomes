@@ -32,7 +32,13 @@
     "distribution": {
       "iterations": 1,
       "scatter_chance": 10,
-      "x": 0,
+      "x": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      },
       "y": {
         "distribution": "uniform",
         "extent": [
@@ -40,7 +46,13 @@
           "(query.heightmap(variable.worldx, variable.worldz))+1"
         ]
       },
-      "z": 0
+      "z": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      }
     }
   }
 }

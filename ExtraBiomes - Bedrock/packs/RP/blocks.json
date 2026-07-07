@@ -196,6 +196,15 @@
 	"extrabiomes:gilded_sky_wood": {
 		"sound": "wood"
 	},
+	"extrabiomes:gilded_sky_fence_gate": {
+		"sound": "wood"
+	},
+	"extrabiomes:stripped_gilded_sky_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:stripped_gilded_sky_wood": {
+		"sound": "wood"
+	},
 	"extrabiomes:blue_mushroom_block": {
 		"sound": "shroomlight"
 	},
@@ -260,6 +269,9 @@
 		"sound": "nether_gold_ore"
 	},
 	"extrabiomes:nether_iron_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_gold_ore": {
 		"sound": "nether_gold_ore"
 	},
 	"extrabiomes:nether_lapis_ore": {

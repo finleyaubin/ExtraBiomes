@@ -2,7 +2,7 @@
   "format_version": "1.20.20",
   "minecraft:feature_rules": {
     "description": {
-      "identifier": "extrabiomes:windmill_feature",
+      "identifier": "extrabiomes:windmill_feature_netherlands",
       "places_feature": "extrabiomes:windmill"
     },
     "conditions": {

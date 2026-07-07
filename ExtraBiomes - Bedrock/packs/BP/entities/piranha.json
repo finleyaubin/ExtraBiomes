@@ -243,7 +243,6 @@
 								"weight": 30,
 								"add": {
 									"component_groups": [
-										"adult",
 										"scale_small"
 									]
 								}
@@ -252,7 +251,6 @@
 								"weight": 50,
 								"add": {
 									"component_groups": [
-										"adult",
 										"scale_normal"
 									]
 								}
@@ -261,7 +259,6 @@
 								"weight": 15,
 								"add": {
 									"component_groups": [
-										"adult",
 										"scale_large"
 									]
 								}

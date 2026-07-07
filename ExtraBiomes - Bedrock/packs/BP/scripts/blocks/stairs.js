@@ -9,81 +9,100 @@ world.afterEvents.playerPlaceBlock.subscribe((event) => {
 })
 
 function update_stairs_around(block) {
+    let north = undefined;
+    try {
+        north = block.north(1);
+    } catch { }
+    let south = undefined;
+    try {
+        south = block.south(1);
+    } catch { }
+    let east = undefined;
+    try {
+        east = block.east(1);
+    } catch { }
+    let west = undefined;
+    try {
+        west = block.west(1);
+    } catch { }
 
     update_stair(block)
-    if (block.north(1).hasTag("extrabiomes:stairs")) {
-        update_stair(block.north(1))
+    if (north != undefined && north.hasTag("extrabiomes:stairs")) {
+        update_stair(north)
     }
-    if (block.south(1).hasTag("extrabiomes:stairs")) {
-        update_stair(block.south(1))
+    if (south != undefined && south.hasTag("extrabiomes:stairs")) {
+        update_stair(south)
     }
-    if (block.east(1).hasTag("extrabiomes:stairs")) {
-        update_stair(block.east(1))
+    if (east != undefined && east.hasTag("extrabiomes:stairs")) {
+        update_stair(east)
     }
-    if (block.west(1).hasTag("extrabiomes:stairs")) {
-        update_stair(block.west(1))
+    if (west != undefined && west.hasTag("extrabiomes:stairs")) {
+        update_stair(west)
     }
 }
 
 function update_stair(block) {
+    let north = undefined;
+    try {
+        north = block.north(1);
+    } catch { }
+    let south = undefined;
+    try {
+        south = block.south(1);
+    } catch { }
+    let east = undefined;
+    try {
+        east = block.east(1);
+    } catch { }
+    let west = undefined;
+    try {
+        west = block.west(1);
+    } catch { }
+
     //Inner Corners
-    if (block.north(1).hasTag("extrabiomes:stairs_east") && !(block.north(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (north != undefined && north.hasTag("extrabiomes:stairs_east") && !(north.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_north")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 6))
 
         }
     }
-    if (block.north(1).hasTag("extrabiomes:stairs_west") && !(block.north(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (north != undefined && north.hasTag("extrabiomes:stairs_west") && !(north.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_north")) {
 
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 7))
         }
     }
-    if (block.east(1).hasTag("extrabiomes:stairs_south") && !(block.north(1).hasTag("extrabiomes:stairs_inner"))) {
-        if (block.hasTag("extrabiomes:stairs_east")) {
-
-            block.setPermutation(block.permutation.withState('extrabiomes:direction', 4))
-        }
-    }
-
-    if (block.east(1).hasTag("extrabiomes:stairs_south") && !(block.east(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (east != undefined && east.hasTag("extrabiomes:stairs_south") && !(east.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_east")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 4))
 
         }
     }
-    if (block.east(1).hasTag("extrabiomes:stairs_north") && !(block.east(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (east != undefined && east.hasTag("extrabiomes:stairs_north") && !(east.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_east")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 6))
 
         }
     }
-    if (block.west(1).hasTag("extrabiomes:stairs_north") && !(block.west(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (west != undefined && west.hasTag("extrabiomes:stairs_north") && !(west.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_west")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 7))
 
         }
     }
-    if (block.west(1).hasTag("extrabiomes:stairs_south") && !(block.west(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (west != undefined && west.hasTag("extrabiomes:stairs_south") && !(west.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_west")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 5))
 
         }
     }
-    if (block.south(1).hasTag("extrabiomes:stairs_west") && !(block.south(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (south != undefined && south.hasTag("extrabiomes:stairs_west") && !(south.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_south")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 5))
 
         }
     }
-    if (block.south(1).hasTag("extrabiomes:stairs_east") && !(block.south(1).hasTag("extrabiomes:stairs_inner"))) {
-        if (block.hasTag("extrabiomes:stairs_south")) {
-            block.setPermutation(block.permutation.withState('extrabiomes:direction', 4))
-
-        }
-    }
-    //Extra
-    if (block.south(1).hasTag("extrabiomes:stairs_east") && !(block.south(1).hasTag("extrabiomes:stairs_inner"))) {
+    if (south != undefined && south.hasTag("extrabiomes:stairs_east") && !(south.hasTag("extrabiomes:stairs_inner"))) {
         if (block.hasTag("extrabiomes:stairs_south")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 4))
 
@@ -91,31 +110,31 @@ function update_stair(block) {
     }
     //Inner Corners
 
-    if (block.north(1).hasTag("extrabiomes:stairs_east")) {
+    if (north != undefined && north.hasTag("extrabiomes:stairs_east")) {
         if (block.hasTag("extrabiomes:stairs_south")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 8))
 
         }
     }
-    if (block.south(1).hasTag("extrabiomes:stairs_east")) {
+    if (south != undefined && south.hasTag("extrabiomes:stairs_east")) {
         if (block.hasTag("extrabiomes:stairs_north")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 11))
 
         }
     }
-    if (block.west(1).hasTag("extrabiomes:stairs_north")) {
+    if (west != undefined && west.hasTag("extrabiomes:stairs_north")) {
         if (block.hasTag("extrabiomes:stairs_east")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 11))
 
         }
     }
-    if (block.south(1).hasTag("extrabiomes:stairs_west")) {
+    if (south != undefined && south.hasTag("extrabiomes:stairs_west")) {
         if (block.hasTag("extrabiomes:stairs_north")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 10))
 
         }
     }
-    if (block.east(1).hasTag("extrabiomes:stairs_south")) {
+    if (east != undefined && east.hasTag("extrabiomes:stairs_south")) {
         if (block.hasTag("extrabiomes:stairs_west")) {
             block.setPermutation(block.permutation.withState('extrabiomes:direction', 9))
 

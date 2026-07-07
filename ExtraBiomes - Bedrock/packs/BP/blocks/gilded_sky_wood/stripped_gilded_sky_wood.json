@@ -1,0 +1,79 @@
+{
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:stripped_gilded_sky_wood",
+      "menu_category": {
+        "category": "nature",
+        "group": "itemGroup.name.wood"
+      },
+      "traits": {
+        "minecraft:placement_position": {
+          "enabled_states": [
+            "minecraft:block_face"
+          ]
+        }
+      }
+    },
+    "permutations": [
+      // X axis
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'west' || q.block_state('minecraft:block_face') == 'east'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              0,
+              90
+            ]
+          }
+        }
+      },
+      // Y axis
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'down' || q.block_state('minecraft:block_face') == 'up'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      // Z axis
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'north' || q.block_state('minecraft:block_face') == 'south'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              90,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    ],
+    "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "extrabiomes_gilded_sky_log",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:flammable": {
+        "burn_odds": 50,
+        "flame_odds": 50
+      },
+      "minecraft:map_color": "#ff78f8",
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2
+      },
+      "tag:wood": {},
+      "tag:minecraft:is_axe_item_destructible": {}
+    }
+  }
+}

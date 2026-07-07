@@ -99,10 +99,13 @@ tile.extrabiomes:gilded_sky_log.name= §eGilded sky log§r
 tile.extrabiomes:gilded_sky_door.name=§eGilded Sky Door§r
 tile.extrabiomes:gilded_sky_planks.name=§eGilded Sky Planks§r
 tile.extrabiomes:gilded_sky_fence.name=§eGilded Sky Fence§r
+tile.extrabiomes:gilded_sky_fence_gate.name=§eGilded Sky Fence Gate§r
 tile.extrabiomes:gilded_sky_slab.name=§eGilded Sky Slab§r
 tile.extrabiomes:gilded_sky_stairs.name=§eGilded Sky Stairs§r
 tile.extrabiomes:gilded_sky_trapdoor.name=§eGilded Sky Trapdoor§r
 tile.extrabiomes:gilded_sky_wood.name=§eGilded Sky Wood§r
+tile.extrabiomes:stripped_gilded_sky_log.name=§eStripped Gilded Sky Log§r
+tile.extrabiomes:stripped_gilded_sky_wood.name=§eStripped Gilded Sky Wood§r
 item.extrabiomes:gilded_sky_door=§eGilded Sky Door§r
 
 tile.extrabiomes:stick_pile.name=Stick Pile
@@ -110,17 +113,18 @@ tile.extrabiomes:stick_pile.name=Stick Pile
 tile.extrabiomes:nether_redstone_ore.name=Nether Redstone Ore
 tile.extrabiomes:nether_lapis_ore.name=Nether Lapis Ore
 tile.extrabiomes:nether_iron_ore.name=Nether Iron Ore
+tile.extrabiomes:nether_gold_ore.name=Nether Gold Ore
 tile.extrabiomes:nether_diamond_ore.name=Nether Diamond Ore
 tile.extrabiomes:nether_emerald_ore.name=Nether Emerald Ore
 tile.extrabiomes:nether_copper_ore.name=Nether Copper Ore
 
 tile.extrabiomes:blue_mushroom_block.name=Blue Mushroom Block
-tile.extrabiomes:Purple_mushroom_block.name=Purple Mushroom Block
-tile.extrabiomes:Yellow_mushroom_block.name=Yellow Mushroom Block
+tile.extrabiomes:purple_mushroom_block.name=Purple Mushroom Block
+tile.extrabiomes:yellow_mushroom_block.name=Yellow Mushroom Block
 
 item.extrabiomes:blue_mushroom=Blue Mushroom
-item.extrabiomes:Purple_mushroom=Purple Mushroom
-item.extrabiomes:Yellow_mushroom=Yellow Mushroom
+item.extrabiomes:purple_mushroom=Purple Mushroom
+item.extrabiomes:yellow_mushroom=Yellow Mushroom
 item.extrabiomes:green_mushroom=Green Mushroom
 tile.extrabiomes:green_mushroom_block.name=Green Mushroom Block
 item.extrabiomes:cyan_mushroom=Cyan Mushroom
