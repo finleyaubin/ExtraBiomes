@@ -137,7 +137,7 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
     <td>
       <b>Hoppleshroom</b><br/>
       <img width="100%" alt="Hoppleshroom" src="https://github.com/user-attachments/assets/8242721b-5baa-4bcb-9cca-3728b71540b8" /><br/>
-      <i>Hopping spores are a mob that can be found around the mushroom island, fungal jungle, underground mushroom island and a warped and crimson hopping spore will spawn in the warped and crimson biomes. the hopping spores are little mushrooms that come in 12 different colours, they will hop around the mushroom/fungus biomes making a squeaky sound and spreading a dusting of spores behind them, these spores then have a chance to grow a mushroom of the hopping spores type. the hopping spores also have baby versions and can be bred by feeding hopping spores any mushroom, however, they refuse to pathfind towards a mate so you may need to give them a nudge into another one.</i>
+      <i>Hoppleshrooms are mobs that can be found around the mushroom island, fungal jungle, underground mushroom island and a warped and crimson forests. the hoppleshrooms are little mushrooms that come in 12 different colours, they will hop around the mushroom/fungus biomes making a squeaky sound and spreading a dusting of spores behind them, these spores then have a chance to grow a mushroom of the hopping spores type. the hopping spores also have baby versions and can be breed by feeding hoppleshrooms any mushroom, however, they refuse to pathfind towards a mate so you may need to give them a nudge into another one.</i>
     </td>
   </tr>
 </table>
