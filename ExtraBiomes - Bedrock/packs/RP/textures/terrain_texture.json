@@ -191,6 +191,11 @@
 				"textures/blocks/gilded sky wood/log_gilded_sky"
 			]
 		},
+		"extrabiomes_gilded_sky_stripped_log": {
+			"textures": [
+				"textures/blocks/gilded sky wood/log_gilded_sky_stripped"
+			]
+		},
 		"extrabiomes_gilded_sky_planks": {
 			"textures": [
 				"textures/blocks/gilded sky wood/planks_gilded_sky"
