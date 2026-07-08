@@ -8,7 +8,6 @@ ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new b
 - [mcpedl](https://mcpedl.com/extrabiomes/)
 ### Java:
 The Java port of Extrabiomes is still in development, but can be compiled from source by cloning this repo.
-
 ## Overworld Surface Biomes
 <table> 
   <tr>
@@ -38,7 +37,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     <img width="100%" alt="Cold Mesa Bryce" src="https://github.com/user-attachments/assets/d7de1b26-4cbe-40e6-a53c-8a4ea95d73f6" />
     <br/>
     <i>
-    Just like the regular mesa has a plateau (the big flat hill on top) variant, the frozen mesa does too, which is just like the regular frozen mesa, but a plateau.
+    Also like the frozen mesa plateau, this is a variant of the frozen mesa, but instead of being a big flat hill, this is essentially the regular frozen mesa, but with the Bryce pillars.
     </i>
   </tr>
   
@@ -335,3 +334,7 @@ Around 100 new blocks and 30+ items, including three full wood sets (mystic, pal
 
 ## Experiments
 <img width="50%" alt="Required Experiments" src="https://github.com/user-attachments/assets/449765af-892a-45fe-ab0c-0705d6872ba0" />
+
+## credits
+All screenshots were taken using [prizma RTX](https://www.curseforge.com/minecraft-bedrock/texture-packs/prizma-pbr-deferred-pack) 
+All other credits can be found in the ExtraBiomes - Bedrock/credits.txt in the github repo
