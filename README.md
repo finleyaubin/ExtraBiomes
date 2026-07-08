@@ -8,9 +8,8 @@ ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new b
 - [mcpedl](https://mcpedl.com/extrabiomes/)
 ### Java:
 The Java port of Extrabiomes is still in development, but can be compiled from source by cloning this repo.
-## Features
-## Biomes
-### Overworld Surface Biomes
+
+## Overworld Surface Biomes
 <table> 
   <tr>
     <img width="100%" alt="Charred Forest" src="https://github.com/user-attachments/assets/a37e2d0c-5bab-48b9-95af-b511298f8f83" />
@@ -205,27 +204,67 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
 </table>
 
 
-### Overworld Subterra Biomes
-<div align="center">
-<img width="440" alt="Deep Dark Green" src="https://github.com/user-attachments/assets/5f077190-24fb-4633-93ae-b8a29d4f5fe0" />
-<img width="440" alt="Fungal Caves" src="https://github.com/user-attachments/assets/5657894a-a994-4334-abd4-82a3c58de211" />
-<img width="440" alt="Fungle Jungle Caves" src="https://github.com/user-attachments/assets/374323fc-91c8-43fd-b499-485341da61f6" />
-<img width="440" alt="Glacial Caves" src="https://github.com/user-attachments/assets/19e914f1-03df-4415-9752-d857c42980c9" />
-<img width="440" alt="Underground Jungle" src="https://github.com/user-attachments/assets/52bbdd41-c808-4059-807d-8115e110ad3f" />
-<img width="440" alt="Underground Lush Mesa" src="https://github.com/user-attachments/assets/0d385186-07e8-42ee-981e-e0187426b8f0" />
-<img width="440" alt="Underground Mesa" src="https://github.com/user-attachments/assets/519f15d9-3894-46d2-bd1f-01960e3caf8b" />
-</div>
+## Overworld Subterra Biomes
+<table>
+  <tr>
+    <img width="100%" alt="Deep Dark Green" src="https://github.com/user-attachments/assets/5f077190-24fb-4633-93ae-b8a29d4f5fe0" />
+    <br/>
+    <i>
+    This is a sub-biome to the deep dark, where the deep dark is competing with the underground jungle.
+    </i>
+  </tr>
 
-- **Deep Dark Green** - This is a sub-biome to the deep dark, where the deep dark is competing with the underground jungle.
-- **Fungal Caves** — the caves underneath the mushroom island have had an overhaul.
-- **Fungle Jungle Caves** — Jungle caves with giant mushrooms and Hoppleshrooms.
-- **Glacial Caves** — Ice caves beneath a glacier.
-- **Underground Jungle** — The Underground jungle and its variants are inspired by the underground jungles from Terraria and spawn under all types of jungle biomes.
-- **Underground Lush Mesa** — The underground lush mesa generates below lush mesa biomes, it is like the underground jungle, and like the underground mesa, the underground lush mesa is made from terracotta instead of stone.
-- **Underground Mesa** — the caves underneath the mesa now continue the terracotta downwards.
+  <tr>
+    <img width="100%" alt="Fungal Caves" src="https://github.com/user-attachments/assets/5657894a-a994-4334-abd4-82a3c58de211" />
+    <br/>
+    <i>
+    the caves underneath the mushroom island have had an overhaul.
+    </i>
+  </tr>
 
-### Overworld Aerospace Biomes
-#### Sky City
+  <tr>
+    <img width="100%" alt="Fungle Jungle Caves" src="https://github.com/user-attachments/assets/374323fc-91c8-43fd-b499-485341da61f6" />
+    <br/>
+    <i>
+    Jungle caves with giant mushrooms and Hoppleshrooms.
+    </i>
+  </tr>
+
+  <tr>
+    <img width="100%" alt="Glacial Caves" src="https://github.com/user-attachments/assets/19e914f1-03df-4415-9752-d857c42980c9" />
+    <br/>
+    <i>
+    Ice caves beneath a glacier.
+    </i>
+  </tr>
+
+  <tr>
+    <img width="100%" alt="Underground Jungle" src="https://github.com/user-attachments/assets/52bbdd41-c808-4059-807d-8115e110ad3f" />
+    <br/>
+    <i>
+    The Underground jungle and its variants are inspired by the underground jungles from Terraria and spawn under all types of jungle biomes.
+    </i>
+  </tr>
+
+  <tr>
+    <img width="100%" alt="Underground Lush Mesa" src="https://github.com/user-attachments/assets/0d385186-07e8-42ee-981e-e0187426b8f0" />
+    <br/>
+    <i>
+    The underground lush mesa generates below lush mesa biomes, it is like the underground jungle, and like the underground mesa, the underground lush mesa is made from terracotta instead of stone.
+    </i>
+  </tr>
+
+  <tr>
+     <img width="100%" alt="Underground Mesa" src="https://github.com/user-attachments/assets/519f15d9-3894-46d2-bd1f-01960e3caf8b" />
+     <br/>
+     <i>
+     the caves underneath the mesa now continue the terracotta downwards.
+     </i>
+  </tr>
+</table>
+
+## Overworld Aerospace Biomes
+### Sky City
 High above the mountains, the Sky City generates as a jigsaw structure: floating islands connected by cloud paths, with houses, towers, and fountains built from sky wood and with dense cloud brick that you float onto — and harpies defending it.
 
 <img alt="Sky City" src="https://github.com/user-attachments/assets/ca1ea023-df90-4280-ab1e-0c569a10a671" />
@@ -243,7 +282,7 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
     </td>
     <td>
       <b>Giant tortoise</b><br/>
-      <img width="100%" alt="Giant tortoise" src="https://github.com/user-attachments/assets/e34a1293-ae86-485e-100%b-a15aaeed3ab7" />
+      <img width="100%" alt="Giant tortoise" src="https://github.com/user-attachments/assets/e34a1293-ae86-485e-900b-a15aaeed3ab7" />
       <br/>
       <i>The giant tortoise is a mob that can be found in Jungle biomes, underground jungles, and lush mesas. This is a very tough mob to encounter, especially in the early game, so be careful when in the Jungles. The giant tortoise attacks by spinning a ball towards you and charging into you, using its sharp shell to do damage to the player. This mob can also jump up to 10 blocks in the air in a spinning mode. These mobs are also great swimmers and drop scutes when killed.</i>
     </td>
@@ -293,3 +332,5 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
 
 ### Blocks
 Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky — each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
+
+## requirements
