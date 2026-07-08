@@ -333,4 +333,5 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
 ### Blocks
 Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky — each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
 
-## requirements
+## Experiments
+<img width="50%" alt="Required Experiments" src="https://github.com/user-attachments/assets/449765af-892a-45fe-ab0c-0705d6872ba0" />
