@@ -40,6 +40,22 @@ jobs:
           TAG=${TAG#refs/tags/}
           echo "IS_PRERELEASE=${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}" >> $GITHUB_OUTPUT
 
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="Changelogs/${{ steps.version.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::warning::No changelog file found at $FILE, using placeholder"
+            echo "No changelog was provided for this release." > /tmp/changelog.md
+          fi
+          {
+            echo "content<<CHANGELOG_EOF"
+            cat /tmp/changelog.md
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Build the MCAddon
         id: build
         run: |
@@ -66,6 +82,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           files: ${{ steps.build.outputs.FILENAME }}
+          body_path: /tmp/changelog.md
           draft: false
           prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
         env:
@@ -80,4 +97,6 @@ jobs:
           game_versions: "26.30"
           project_id: "918166"
           release_type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
+          changelog: ${{ steps.changelog.outputs.content }}
+          changelog_type: "markdown"
           token: "${{ secrets.CF_API_TOKEN }}"
