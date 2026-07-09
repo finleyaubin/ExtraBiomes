@@ -43,7 +43,7 @@ jobs:
       - name: Load changelog
         id: changelog
         run: |
-          FILE="Changelogs/${{ steps.version.outputs.VERSION }}.md"
+          FILE="Changelogs/Bedrock-${{ steps.version.outputs.VERSION }}.md"
           if [ -f "$FILE" ]; then
             cp "$FILE" /tmp/changelog.md
           else
