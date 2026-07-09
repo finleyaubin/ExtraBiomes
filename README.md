@@ -53,7 +53,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     <img width="100%" alt="Floating Jungle" src="https://github.com/user-attachments/assets/acd6077f-1977-48f6-9f02-e918274bd929" />
     <br/>
     <i>
-    the floating jungle is a jungle biome on top of that can be found at the tallest peaks of the world
+    the floating jungle is a jungle biome that can be found at the tallest peaks of the world
     </i>
   </tr>
 
@@ -61,7 +61,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     <img width="100%" alt="Fungle Jungle" src="https://github.com/user-attachments/assets/0b5c0ed2-c45b-4252-b914-2a62bace8f64" />
     <br/>
     <i>
-     the fungal jungle emerges when a jungle meets a Mushroom Island, with patches of mycelium spread across the ground giving the hopping spores and mushrooms live here, and the dense jungle around their clearings contains large numbers of new mushrooms
+     the fungal jungle emerges when a jungle meets a Mushroom Island, with patches of mycelium spread across the ground letting hoppleshrooms and mushrooms live here, and the dense jungle around their clearings contains large numbers of new mushrooms
     </i>
   </tr>
 
@@ -141,7 +141,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     <img width="100%" alt="Mystic Forest" src="https://github.com/user-attachments/assets/2671bb52-9708-4bf4-be85-c76f6f331285" />
     <br/>
     <i>
-    The Mystic Swamp is a fantasy-style swamp biome, with a mystic tree which spawns there which is a custom wood type with a purple hue, and the leaves glow, there is also a purple fog in the biome, and there is a glowing purple goo on the floor.
+    The Mystic Forest is a fantasy-style swamp biome, with a mystic tree which spawns there which is a custom wood type with a purple hue, and the leaves glow, there is also a purple fog in the biome, and there is a glowing purple goo on the floor.
     </i>
   </tr>
 
@@ -173,7 +173,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     <img width="100%" alt="The Netherlands" src="https://github.com/user-attachments/assets/8e7191b1-aed9-4c4b-9487-70b068475db9" />
     <br/>
     <i>
-    The Netherlands I based on the Netherlands in real life on the surface, full of tulip fields, windmills and wheat fields, but underground is a mini nether in the overworld
+    The Netherlands is based on the real-life Netherlands on the surface, full of tulip fields, windmills and wheat fields, but underground is a mini nether in the overworld
     </i>
   </tr>
 
@@ -264,10 +264,10 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
 
 ## Overworld Aerospace Biomes
 ### Sky City
-High above the mountains, the Sky City generates as a jigsaw structure: floating islands connected by cloud paths, with houses, towers, and fountains built from sky wood and with dense cloud brick that you float onto — and harpies defending it.
-
 <img alt="Sky City" src="https://github.com/user-attachments/assets/ca1ea023-df90-4280-ab1e-0c569a10a671" />
-
+<i>
+High above the mountains, the Sky City generates as a jigsaw structure: floating islands connected by cloud paths, with houses, towers, and fountains built from sky wood and with dense cloud brick that you float onto — and harpies defending it.
+</i>
 
 ### Mobs
 <table>
@@ -324,7 +324,7 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
       <b>Hoppleshroom</b><br/>
       <img width="100%" alt="Hoppleshroom" src="https://github.com/user-attachments/assets/8242721b-5baa-4bcb-9cca-3728b71540b8" />
       <br/>
-      <i>Hoppleshrooms are mobs that can be found around the mushroom island, fungal jungle, underground mushroom island and a warped and crimson forests. the hoppleshrooms are little mushrooms that come in 12 different colours, they will hop around the mushroom/fungus biomes making a squeaky sound and spreading a dusting of spores behind them, these spores then have a chance to grow a mushroom of the hopping spores type. the hopping spores also have baby versions and can be breed by feeding hoppleshrooms any mushroom, however, they refuse to pathfind towards a mate so you may need to give them a nudge into another one.</i>
+      <i>Hoppleshrooms are mobs that can be found around the mushroom island, fungal jungle, underground mushroom island and a warped and crimson forests. the hoppleshrooms are little mushrooms that come in 12 different colours, they will hop around the mushroom/fungus biomes making a squeaky sound and spreading a dusting of spores behind them, these spores then have a chance to grow a mushroom. the hoppleshrooms also have baby versions and can be breed by feeding hoppleshrooms any mushroom, however, they refuse to pathfind towards a mate so you may need to give them a nudge into another one.</i>
     </td>
   </tr>
 </table>
