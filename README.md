@@ -230,7 +230,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
   </tr>
 
   <tr>
-    <img width="100%" alt="Glacial Caves" src="https://github.com/user-attachments/assets/19e914f1-03df-4415-9752-d857c42980c9" />
+    <img width="100%" alt="Glacial Caves" src="https://github.com/user-attachments/assets/bfa9304a-39a0-405d-9d6d-bd9327b3ee90" />
     <br/>
     <i>
     Ice caves beneath a glacier.
