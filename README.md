@@ -9,30 +9,22 @@ ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new b
 ### Java:
 The Java port of Extrabiomes is still in development, but can be compiled from source by cloning this repo.
 ## Overworld Surface Biomes
-<table> 
-  <tr>
-    <img width="100%" alt="Charred Forest" src="https://github.com/user-attachments/assets/a37e2d0c-5bab-48b9-95af-b511298f8f83" />
-    <br/>
-    <i>The Charred Forest is a biome found in warm climates where it was so hot that all of the vegetation was burnt to a smouldering pile of basalt. Very little has survived here, and there are still remnants of fire and smoke throughout the biome
-    </i>
-  </tr>
-  
-  <tr>
+<table>  
+ <tr>
     <img width="100%" alt="Cold Mesa" src="https://github.com/user-attachments/assets/820681b2-b5dc-42e1-8dd9-91ee2cee4210" />
     <br/>
     <i>
     Ever wondered what would happen to a mesa biome over the winter? well, this is it, the frozen mesa, and it is just that, in most ways, it is very similar to the regular mesa, just in a cooler climate, and also the underground mesa generates here.
     </i>
   </tr>
-  
+
   <tr>
     <img width="100%" alt="Cold Mesa Plateau" src="https://github.com/user-attachments/assets/54740b3e-ef1a-4e1a-b849-f28b3caa433e" />
     <br/>
-    <i>
-    Just like the regular mesa has a plateau (the big flat hill on top) variant, the frozen mesa does too, which is just like the regular frozen mesa, but a plateau.
+    <i>These frozen mountain biomes were once mesa plateau's but as glacial erosion wore them down they became stunning peaks.
     </i>
   </tr>
-  
+
   <tr>
     <img width="100%" alt="Cold Mesa Bryce" src="https://github.com/user-attachments/assets/d7de1b26-4cbe-40e6-a53c-8a4ea95d73f6" />
     <br/>
@@ -40,12 +32,44 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     Also like the frozen mesa plateau, this is a variant of the frozen mesa, but instead of being a big flat hill, this is essentially the regular frozen mesa, but with the Bryce pillars.
     </i>
   </tr>
-  
+
   <tr>
     <img width="100%" alt="Desert Bryce" src="https://github.com/user-attachments/assets/ffd4c843-aa69-4fab-b176-daa3614c24d1" />
     <br/>
     <i>
     A desert biome with towering Bryce pillars
+    </i>
+  </tr>
+
+  <tr>
+    <img width="100%" alt="Jungle Marsh" src="https://github.com/user-attachments/assets/0ae25be8-3c0b-4d26-862c-161f072a22a5" />
+    <br/>
+    <i>
+    the jungle marsh is a swamp-like biome found inside jungles, Mushrooms, and swamp trees will spawn here, as well as tiny jungle trees in shallow areas, tree stumps below the water level and lots of piranhas spawn here, so watch out in the water!
+    </i>
+  </tr>
+
+  <tr>
+    <img width="100%" alt="Jungle Pillars" src="https://github.com/user-attachments/assets/090ede40-8518-4ea0-989a-48dcab3ebb46" />
+    <br/>
+    <i>
+    This biome is a jungle with gigantic pillars of stone shooting up through the skyline
+    </i>
+  </tr>
+
+  <tr>
+    <img width="100%" alt="Lush Mesa" src="https://github.com/user-attachments/assets/e69bc456-c199-4618-b1a4-d91b3f5596fc" />
+    <br/>
+    <i>
+    When a mesa becomes humid enough to support a jungle biome, a jungle can start to spread over the mesa to form a lush mesa, In this biome, there is a lower section where a jungle spawns, however at higher levels, it is still too dry for a jungle to spread.
+    </i>
+  </tr>
+
+  <tr>
+    <img width="100%" alt="Lush Mesa Bryce" src="https://github.com/user-attachments/assets/36c129c0-9503-4045-8f8e-93c690c0bbf5" />
+    <br/>
+    <i>
+    the lush mesa Bryce is one of my favourite biome so far in Extrabiomes, it is very similar to the regular lush mesa, however, this has the Bryce pillars from mesa Bryce biomes, as well as lots of little lakes throughout the biome, which look really nice!
     </i>
   </tr>
 
@@ -98,38 +122,6 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
   </tr>
 
   <tr>
-    <img width="100%" alt="Jungle Marsh" src="https://github.com/user-attachments/assets/0ae25be8-3c0b-4d26-862c-161f072a22a5" />
-    <br/>
-    <i>
-    the jungle marsh is a swamp-like biome found inside jungles, Mushrooms, and swamp trees will spawn here, as well as tiny jungle trees in shallow areas, tree stumps below the water level and lots of piranhas spawn here, so watch out in the water!
-    </i>
-  </tr>
-
-  <tr>
-    <img width="100%" alt="Jungle Pillars" src="https://github.com/user-attachments/assets/090ede40-8518-4ea0-989a-48dcab3ebb46" />
-    <br/>
-    <i>
-    This biome is a jungle with gigantic pillars of stone shooting up through the skyline
-    </i>
-  </tr>
-
-  <tr>
-    <img width="100%" alt="Lush Mesa Bryce" src="https://github.com/user-attachments/assets/36c129c0-9503-4045-8f8e-93c690c0bbf5" />
-    <br/>
-    <i>
-    the lush mesa Bryce is my favourite biome so far in Extrabiomes, it is very similar to the regular lush mesa, however, this has the Bryce pillars from mesa Bryce biomes, as well as lots of little lakes throughout the biome, which look really nice!
-    </i>
-  </tr>
-
-  <tr>
-    <img width="100%" alt="Lush Mesa" src="https://github.com/user-attachments/assets/e69bc456-c199-4618-b1a4-d91b3f5596fc" />
-    <br/>
-    <i>
-    When a mesa becomes humid enough to support a jungle biome, a jungle can start to spread over the mesa to form a lush mesa, In this biome, there is a lower section where a jungle spawns, however at higher levels, it is still too dry for a jungle to spread.
-    </i>
-  </tr>
-
-  <tr>
     <img width="100%" alt="Moorlands" src="https://github.com/user-attachments/assets/47cf6939-09be-45c2-8a35-47614b1d7ca5" />
     <br/>
     <i>
@@ -157,7 +149,15 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     <img width="100%" alt="Shattered Swamp" src="https://github.com/user-attachments/assets/9b6aeb36-cfe6-4a0e-83f6-fb07a229e3ac" />
     <br/>
     <i>
-    The shattered swamp is a variant of the swamp, with terrain generation similar to that of a shattered savanna biome, there are patches of moss on the ground and bamboo throughout, and the new mushrooms.
+    The shattered swamp is a variant of the swamp, with terrain generation similar to that of a It once had generation similar to that of the shattered savanna biome, however now has stone and tuff pillars towering through, there are patches of moss on the ground and bamboo throughout, and the new mushrooms.
+    </i>
+  </tr>
+
+ <tr>
+    <img width="100%" alt="Taiga Spikes" src="https://github.com/user-attachments/assets/b08e14ef-1040-46e4-b62d-3ad507ac3b64" />
+    <br/>
+    <i>
+    The taiga spikes biome is a variation of the ice spikes biome that contains everything you would find in a snowy taiga biome, in my opinion, this is a massive upgrade to the vanilla ice spikes biome, giving it so much more life than the vanilla ice spikes.
     </i>
   </tr>
 
@@ -165,8 +165,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
     <img width="100%" alt="Shattered Taiga Spikes" src="https://github.com/user-attachments/assets/6c07a708-dbfd-4c12-8370-87f25b3df6b0" />
     <br/>
     <i>
-    These biomes are Taiga Spikes biomes, but with the terrain shaped like a shattered savannah biome with a ton of height difference, this makes it look really pretty but is extremely annoying to walk through on foot in survival, so good luck
-    </i>
+    This biomes is the Ice Spikes biome but with Tiaga trees, taller pillars and tuff and stone pillars.   </i>
   </tr>
 
   <tr>
@@ -186,10 +185,9 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
   </tr>
 
   <tr>
-    <img width="100%" alt="Taiga Spikes" src="https://github.com/user-attachments/assets/b08e14ef-1040-46e4-b62d-3ad507ac3b64" />
+    <img width="100%" alt="Charred Forest" src="https://github.com/user-attachments/assets/a37e2d0c-5bab-48b9-95af-b511298f8f83" />
     <br/>
-    <i>
-    The taiga spikes biome is a variation of the ice spikes biome that contains everything you would find in a snowy taiga biome, in my opinion, this is a massive upgrade to the vanilla ice spikes biome, giving it so much more life than the vanilla ice spikes.
+    <i>The Charred Forest is a biome found in warm climates where it was so hot that all of the vegetation was burnt to a smouldering pile of basalt. Very little has survived here, and there are still remnants of fire and smoke throughout the biome
     </i>
   </tr>
 
