@@ -59,13 +59,6 @@
           }
         ]
       },
-      "minecraft:overworld_generation_rules": {
-        "hills_transformation": "minecraft:mega_taiga_hills",
-        "mutate_transformation": "minecraft:redwood_taiga_mutated",
-        "generate_for_climates": [
-          [ "cold", 1 ]
-        ]
-      },
 
       "minecraft:tags": {
         "tags": [

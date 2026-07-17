@@ -18,6 +18,12 @@
 					"value": 2
 				}
 			},
+			"jellyfish_out_of_water_hitbox": {
+				"minecraft:collision_box": {
+					"width": 0.8,
+					"height": 0.1
+				}
+			},
 			"instant_despawn": {
 				"minecraft:instant_despawn": {}
 			},
@@ -92,6 +98,28 @@
 				"width": 0.8,
 				"height": 1
 			},
+			"minecraft:environment_sensor": {
+				"triggers": [
+					{
+						"filters": {
+							"test": "is_in_water",
+							"subject": "self",
+							"operator": "==",
+							"value": false
+						},
+						"event": "extrabiomes:leave_water"
+					},
+					{
+						"filters": {
+							"test": "is_in_water",
+							"subject": "self",
+							"operator": "==",
+							"value": true
+						},
+						"event": "extrabiomes:enter_water"
+					}
+				]
+			},
 			"minecraft:timer": {
 				"time": 2,
 				"time_down_event": {
@@ -122,12 +150,6 @@
 						"damage_per_tick": 4
 					}
 				]
-			},
-			"minecraft:breathable": {
-				"total_supply": 15,
-				"suffocate_time": 0,
-				"breathes_air": false,
-				"breathes_water": true
 			},
 			"minecraft:movement": {
 				"value": 0.15
@@ -313,6 +335,20 @@
 				"remove": {
 					"component_groups": [
 						"projectile"
+					]
+				}
+			},
+			"extrabiomes:leave_water": {
+				"add": {
+					"component_groups": [
+						"jellyfish_out_of_water_hitbox"
+					]
+				}
+			},
+			"extrabiomes:enter_water": {
+				"remove": {
+					"component_groups": [
+						"jellyfish_out_of_water_hitbox"
 					]
 				}
 			}

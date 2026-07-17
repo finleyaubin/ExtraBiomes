@@ -18,7 +18,8 @@
 				"animate": [
 					"swim",
 					"jiggle"
-				]
+				],
+				"scaleY": "v.target = !query.is_in_water ? 0.1 : 1.0; v.scale_y = v.scale_y ?? 1.0; v.step = 0.9 * query.delta_time / 8.0; v.scale_y = v.scale_y + math.clamp(v.target - v.scale_y, -v.step, v.step); return v.scale_y;"
 			},
 			"animations": {
 				"swim": "animation.jellyfish.swim",

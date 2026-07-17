@@ -30,6 +30,30 @@
             "value": "jellyfish"
           }
         ]
+      },
+      {
+        "minecraft:spawns_on_surface": {},
+        "minecraft:distance_filter": {
+          "min": 12,
+          "max": 32
+        },
+        "minecraft:weight": {
+          "default": 5
+        },
+        "minecraft:density_limit": {
+          "surface": 2
+        },
+        "minecraft:herd": {
+          "min_size": 1,
+          "max_size": 1
+        },
+        "minecraft:biome_filter": [
+          {
+            "test": "has_biome_tag",
+            "operator": "==",
+            "value": "beach"
+          }
+        ]
       }
     ]
   }
