@@ -1,0 +1,70 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:fog_settings": {
+        "description": {
+            "identifier": "extrabiomes:deep_dark_forest_fog"
+        },
+        "distance": {
+            "air": {
+                "fog_start": 0,
+                "fog_end": 8,
+                "fog_color": "#000000",
+                "render_distance_type": "fixed"
+            },
+            "water": {
+                "fog_start": 0,
+                "fog_end": 12,
+                "fog_color": "#000000",
+                "render_distance_type": "fixed"
+            },
+            "lava": {
+                "fog_start": 0,
+                "fog_end": 8,
+                "fog_color": "#000000",
+                "render_distance_type": "fixed"
+            }
+        },
+        "volumetric": {
+            "density": {
+                "air": {
+                    "max_density": 1,
+                    "uniform": true
+                },
+                "water": {
+                    "max_density": 0.002,
+                    "uniform": true
+                },
+                "lava": {
+                    "max_density": 0.08,
+                    "uniform": true
+                }
+            },
+            "media_coefficients": {
+                "air": {
+                    "scattering": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "absorption": [
+                        0.5,
+                        0.8,
+                        0.12
+                    ]
+                },
+                "water": {
+                    "scattering": [
+                        0.045,
+                        0.050,
+                        0.055
+                    ],
+                    "absorption": [
+                        0.002,
+                        0.003,
+                        0.004
+                    ]
+                }
+            }
+        }
+    }
+}

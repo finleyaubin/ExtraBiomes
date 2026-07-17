@@ -15,10 +15,14 @@
 				"default": "geometry.jellyfish"
 			},
 			"scripts": {
+				"pre_animation": [
+					"v.gray_amount = v.gray_amount ?? 0.0; v.target_gray = !query.is_in_water ? 1.0 : 0.0; v.step_gray = query.delta_time / 8.0; v.gray_amount = v.gray_amount + math.clamp(v.target_gray - v.gray_amount, -v.step_gray, v.step_gray);"
+				],
 				"animate": [
 					"swim",
 					"jiggle"
-				]
+				],
+				"scaleY": "v.target = !query.is_in_water ? 0.1 : 1.0; v.scale_y = v.scale_y ?? 1.0; v.step = 0.9 * query.delta_time / 8.0; v.scale_y = v.scale_y + math.clamp(v.target - v.scale_y, -v.step, v.step); return v.scale_y;"
 			},
 			"animations": {
 				"swim": "animation.jellyfish.swim",

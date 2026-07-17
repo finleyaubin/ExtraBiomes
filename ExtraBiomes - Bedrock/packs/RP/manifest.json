@@ -4,7 +4,7 @@
         "description": "the resource pack for extra biomes\nby Win Epic Fin",
         "name": "ExtraBiomes",
         "uuid": "4313ba2a-7cef-4fc6-a6e6-66022d8c8beb",
-        "version": [3,0,0],
+        "version": [3,1,0],
         "min_engine_version": [1,21,0]
     },
     "modules": [
@@ -12,7 +12,7 @@
             "description": "ExtraBiomes",
             "type": "resources",
             "uuid": "2c9251d0-c2b1-47e6-825a-31e1ab99c1a4",
-            "version": [3,0,0]
+            "version": [3,1,0]
         }
     ],
     "metadata": {

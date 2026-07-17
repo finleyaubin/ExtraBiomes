@@ -18,7 +18,13 @@
 			],
 			"textures": [
 				"array.skins[query.variant]"
-			]
+			],
+			"overlay_color": {
+				"r": "0.5",
+				"g": "0.5",
+				"b": "0.5",
+				"a": "v.gray_amount"
+			}
 		}
 	}
 }
