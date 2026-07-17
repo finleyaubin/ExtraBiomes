@@ -31,8 +31,8 @@
             "targets": [
               "minecraft:mega_taiga"
             ],
-            "amount": 0.5,
-            "noise_frequency_scale": 0.2
+            "amount": 0.15,
+            "noise_frequency_scale": 0.05
           }
         ]
       },
@@ -41,10 +41,7 @@
           {
             "materials": {
               "top_material": {
-                "name": "minecraft:dirt",
-                "states": {
-                  "dirt_type": "coarse"
-                }
+                "name": "minecraft:packed_mud"
               }
             },
             "noise_frequency_scale": 0.0625,
@@ -52,7 +49,7 @@
           },
           {
             "materials": {
-              "top_material": "minecraft:podzol"
+              "top_material": "minecraft:mud"
             },
             "noise_frequency_scale": 0.0625,
             "noise_range": [ -0.115, 0.212 ]
@@ -67,6 +64,8 @@
           "mega",
           "monster",
           "overworld",
+          "forest",
+          "roofed",
           "rare",
           "taiga",
           "has_structure_trail_ruins",
