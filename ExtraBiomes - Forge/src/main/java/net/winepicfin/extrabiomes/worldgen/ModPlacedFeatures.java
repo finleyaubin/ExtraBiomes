@@ -28,10 +28,12 @@ public class ModPlacedFeatures{
     public static final ResourceKey<PlacedFeature> PALM_PLACED_KEY = createKey("palm_placed");
     public static final ResourceKey<PlacedFeature> CHARRED_PLACED_KEY = createKey("charred_placed");
     public static final ResourceKey<PlacedFeature> LUSH_GRASS_PLACED_KEY = createKey("lush_grass_placed");
+    public static final ResourceKey<PlacedFeature> SKY_PLACED_KEY = createKey("sky_placed");
     public static void bootstrap(BootstapContext<PlacedFeature>context){
         HolderGetter<ConfiguredFeature<?, ?>>configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         register(context, MYSTIC_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.MYSTIC_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), ModBlocks.MYSTIC_SAPLING.get()));//first int div float must = an int not a float
         register(context, PALM_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.PALM_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.5f,2), ModBlocks.PALM_SAPLING.get()));//first int div float must = an int not a float
+        register(context, SKY_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.SKY_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), ModBlocks.SKY_SAPLING.get()));//first int div float must = an int not a float
         register(context, CHARRED_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.CHARRED_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), Blocks.OAK_SAPLING));//first int div float must = an int not a float
         register(context, LUSH_GRASS_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.LUSH_GRASS_KEY), ModOrePlacement.commonOrePlacement(15, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE)));
     }

@@ -17,14 +17,13 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
-public class ColdMesa {
+public class ColdMesaBryce {
 
     public Biome Register(BootstapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
         spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3));
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 4, 1, 2));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -36,7 +35,7 @@ public class ColdMesa {
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
         BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
         BiomeDefaultFeatures.addBlueIce(biomeBuilder);
-        // NOTE: bedrock snow_accumulation on this biome -> surface freezing already handled globally
+        // NOTE: 'bryce' variant - taller eroded spire terrain comes from noise settings, not features
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
@@ -49,8 +48,8 @@ public class ColdMesa {
                         .waterFogColor(0x113290)
                         .skyColor(0x84631263)
                         .fogColor(0x84631263)
-                        .foliageColorOverride(0x60a090)
-                        .grassColorOverride(0x80b0a0)
+                        .foliageColorOverride(0x5a9a8a)
+                        .grassColorOverride(0x7aaaa0)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

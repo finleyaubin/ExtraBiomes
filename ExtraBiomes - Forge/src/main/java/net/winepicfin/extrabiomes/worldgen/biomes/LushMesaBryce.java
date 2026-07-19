@@ -17,14 +17,11 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
-public class ColdMesa {
+public class LushMesaBryce {
 
     public Biome Register(BootstapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3));
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 4, 1, 2));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -32,25 +29,29 @@ public class ColdMesa {
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        BiomeDefaultFeatures.addExtraGold(biomeBuilder);
-        BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addBlueIce(biomeBuilder);
-        // NOTE: bedrock snow_accumulation on this biome -> surface freezing already handled globally
+        BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
+        BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addJungleVines(biomeBuilder);
+        BiomeDefaultFeatures.addJungleMelons(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.LUSH_GRASS_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(1.0f)
-                .temperature(0.0f)
+                .downfall(0.7f)
+                .temperature(2.0f)
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3d5cdb)
+                        .waterColor(0x1B9ED8)
                         .waterFogColor(0x113290)
-                        .skyColor(0x84631263)
-                        .fogColor(0x84631263)
-                        .foliageColorOverride(0x60a090)
-                        .grassColorOverride(0x80b0a0)
+                        .skyColor(0xd8c060)
+                        .fogColor(0xf8e6b4)
+                        .foliageColorOverride(0x50a830)
+                        .grassColorOverride(0x70bc40)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

@@ -17,14 +17,13 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
-public class ColdMesa {
+public class Glacier {
 
     public Biome Register(BootstapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3));
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 4, 1, 2));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.POLAR_BEAR, 1, 1, 2));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -32,11 +31,9 @@ public class ColdMesa {
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        BiomeDefaultFeatures.addExtraGold(biomeBuilder);
-        BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
+        //BiomeDefaultFeatures.addIcebergs(biomeBuilder);
         BiomeDefaultFeatures.addBlueIce(biomeBuilder);
-        // NOTE: bedrock snow_accumulation on this biome -> surface freezing already handled globally
+        BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
@@ -45,12 +42,12 @@ public class ColdMesa {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3d5cdb)
+                        .waterColor(0x2838c8)
                         .waterFogColor(0x113290)
-                        .skyColor(0x84631263)
-                        .fogColor(0x84631263)
-                        .foliageColorOverride(0x60a090)
-                        .grassColorOverride(0x80b0a0)
+                        .skyColor(0xc0e0f0)
+                        .fogColor(0xc0e0f0)
+                        .foliageColorOverride(0x60a0b0)
+                        .grassColorOverride(0x80b0c0)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

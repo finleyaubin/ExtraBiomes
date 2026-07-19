@@ -17,14 +17,13 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
-public class ColdMesa {
+public class Moorlands {
 
     public Biome Register(BootstapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3));
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 4, 1, 2));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.SHEEP, 8, 2, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -33,24 +32,22 @@ public class ColdMesa {
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        BiomeDefaultFeatures.addExtraGold(biomeBuilder);
-        BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addBlueIce(biomeBuilder);
-        // NOTE: bedrock snow_accumulation on this biome -> surface freezing already handled globally
+        BiomeDefaultFeatures.addPlainVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(1.0f)
-                .temperature(0.0f)
+                .downfall(0.5f)
+                .temperature(0.5f)
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3d5cdb)
+                        .waterColor(0x2846ea)
                         .waterFogColor(0x113290)
-                        .skyColor(0x84631263)
-                        .fogColor(0x84631263)
-                        .foliageColorOverride(0x60a090)
-                        .grassColorOverride(0x80b0a0)
+                        .skyColor(0xb0c8e0)
+                        .fogColor(0xb0c8e0)
+                        .foliageColorOverride(0x28962a)
+                        .grassColorOverride(0xbcbc2b)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

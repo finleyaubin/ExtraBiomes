@@ -17,14 +17,11 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 
-public class ColdMesa {
+public class FutureDesert {
 
     public Biome Register(BootstapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3));
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 4, 1, 2));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -33,25 +30,23 @@ public class ColdMesa {
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        BiomeDefaultFeatures.addExtraGold(biomeBuilder);
-        BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addBlueIce(biomeBuilder);
-        // NOTE: bedrock snow_accumulation on this biome -> surface freezing already handled globally
+        BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
+        // NOTE: bedrock top/mid material is an unspecified 'concretepowder' (defaults to white);
+        // surface rule below assumes LIGHT_GRAY_CONCRETE_POWDER to match the RP's cool grey tint.
 
         return new Biome.BiomeBuilder()
-                .hasPrecipitation(true)
-                .downfall(1.0f)
-                .temperature(0.0f)
+                .hasPrecipitation(false)
+                .downfall(0.0f)
+                .temperature(2.0f)
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3d5cdb)
+                        .waterColor(0x0858e0)
                         .waterFogColor(0x113290)
-                        .skyColor(0x84631263)
-                        .fogColor(0x84631263)
-                        .foliageColorOverride(0x60a090)
-                        .grassColorOverride(0x80b0a0)
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .skyColor(0xb8c0c8)
+                        .fogColor(0xb8c0c8)
+                        .foliageColorOverride(0x8898a8)
+                        .grassColorOverride(0xb8c0c8).build())
                 .build();
     }
 }
