@@ -1,5 +1,5 @@
 # ExtraBiomes
-<img width="1920" alt="fungal cover" src="https://github.com/user-attachments/assets/16c58209-0960-4c33-8919-c69a35c8329f" />
+<img width="100%" alt="fungal cover" src="https://github.com/user-attachments/assets/16c58209-0960-4c33-8919-c69a35c8329f" />
 
 ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new biomes to the overworld, along with the mobs, blocks, and structures to fill them — from burnt forests and jellyfish-filled oceans to a floating Sky City above the mountains. All textures include PBR maps, so the addon works with RTX resource packs and the new shader system out of the box.
 ## Official downloads sources:
