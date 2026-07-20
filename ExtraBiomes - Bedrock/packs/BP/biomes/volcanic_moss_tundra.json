@@ -1,0 +1,82 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:biome": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra"
+    },
+    "components": {
+      "minecraft:climate": {
+        "downfall": 0,
+        "snow_accumulation": [
+          0,
+          0.01
+        ],
+        "temperature": 1
+      },
+      "minecraft:overworld_height": {
+        "noise_params": [
+          6,
+          10
+        ]
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:ice_plains"
+            ],
+            "amount": 0.2,
+            "noise_frequency_scale": 0.2
+          }
+        ]
+      },
+      "minecraft:surface_material_adjustments": {
+        "adjustments": [
+          {
+            "materials": {
+              "top_material": "minecraft:magma"
+            },
+            "noise_frequency_scale": 0.03,
+            "noise_range": [
+              0.15,
+              0.3
+            ]
+          },
+          {
+            "materials": {
+              "top_material": "minecraft:mud"
+            },
+            "noise_frequency_scale": 0.06,
+            "noise_range": [
+              0.35,
+              0.58
+            ]
+          }
+        ]
+      },
+      "minecraft:surface_builder": {
+        "builder": {
+          "type": "minecraft:overworld",
+          "foundation_material": "minecraft:stone",
+          "mid_material": "minecraft:blackstone",
+          "top_material": "minecraft:blackstone",
+          "sea_floor_depth": 7,
+          "sea_floor_material": "minecraft:gravel",
+          "sea_material": "minecraft:water"
+        }
+      },
+      "minecraft:tags": {
+        "tags": [
+          "caves",
+          "hills",
+          "monster",
+          "overworld",
+          "cold",
+          "spawns_warm_variant_farm_animals",
+          "spawns_warm_variant_frogs"
+        ]
+      }
+    }
+  }
+}
