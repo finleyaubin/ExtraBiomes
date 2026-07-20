@@ -8,10 +8,10 @@
       "minecraft:climate": {
         "downfall": 0.9,
         "snow_accumulation": [
-          0.1,
-          0.5
+          0,
+          0
         ],
-        "temperature": 0.1
+        "temperature": 0.18
       },
       "minecraft:overworld_height": {
         "noise_params": [
@@ -24,10 +24,10 @@
           {
             "dimension": "minecraft:overworld",
             "targets": [
-              "extrabiomes:volcanic_moss_tundra"
+              "minecraft:ice_plains"
             ],
             "amount": 0.04,
-            "noise_frequency_scale": 0.9
+            "noise_frequency_scale": 0.85
           }
         ]
       },

@@ -9,9 +9,9 @@
         "downfall": 0.85,
         "snow_accumulation": [
           0,
-          0.3
+          0
         ],
-        "temperature": 0.15
+        "temperature": 0.2
       },
       "minecraft:overworld_height": {
         "noise_params": [
@@ -24,11 +24,10 @@
           {
             "dimension": "minecraft:overworld",
             "targets": [
-              "minecraft:beach",
-              "minecraft:stone_beach"
+              "minecraft:ice_plains"
             ],
-            "amount": 0.25,
-            "noise_frequency_scale": 0.4
+            "amount": 0.5,
+            "noise_frequency_scale": 0.01
           }
         ]
       },
@@ -70,7 +69,6 @@
       "minecraft:tags": {
         "tags": [
           "animal",
-          "beach",
           "caves",
           "cold",
           "monster",
