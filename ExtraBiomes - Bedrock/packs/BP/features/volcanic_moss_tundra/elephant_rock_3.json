@@ -1,0 +1,23 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:structure_template_feature": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra/elephant_rock_3"
+    },
+    "structure_name": "extrabiomes:volcanic_moss_tundra/elephant_rock_3",
+    "constraints": {
+      "block_intersection": {
+        "block_allowlist": [
+          "minecraft:air",
+          "minecraft:grass_block",
+          "minecraft:blackstone",
+          "minecraft:moss_block",
+          "minecraft:gravel",
+          "minecraft:dirt",
+          "minecraft:stone",
+          "minecraft:water"
+        ]
+      }
+    }
+  }
+}

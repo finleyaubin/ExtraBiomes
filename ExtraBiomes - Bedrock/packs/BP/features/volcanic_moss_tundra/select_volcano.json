@@ -1,0 +1,18 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra/select_volcano"
+    },
+    "features": [
+      [
+        "extrabiomes:volcanic_moss_tundra/volcano_1",
+        1
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/volcano_2",
+        1
+      ]
+    ]
+  }
+}
