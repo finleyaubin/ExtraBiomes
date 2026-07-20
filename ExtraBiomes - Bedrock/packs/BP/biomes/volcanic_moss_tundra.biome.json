@@ -1,0 +1,85 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:biome": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra"
+    },
+    "components": {
+      "minecraft:climate": {
+        "downfall": 0.85,
+        "snow_accumulation": [
+          0,
+          0.3
+        ],
+        "temperature": 0.15
+      },
+      "minecraft:overworld_height": {
+        "noise_params": [
+          -0.15,
+          0.15
+        ]
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:beach",
+              "minecraft:stone_beach"
+            ],
+            "amount": 0.25,
+            "noise_frequency_scale": 0.4
+          }
+        ]
+      },
+      "minecraft:surface_material_adjustments": {
+        "adjustments": [
+          {
+            "materials": {
+              "top_material": "minecraft:moss_block"
+            },
+            "noise_frequency_scale": 0.05,
+            "noise_range": [
+              0.4,
+              0.65
+            ]
+          },
+          {
+            "materials": {
+              "top_material": "minecraft:gravel"
+            },
+            "noise_frequency_scale": 0.08,
+            "noise_range": [
+              0.65,
+              0.8
+            ]
+          }
+        ]
+      },
+      "minecraft:surface_builder": {
+        "builder": {
+          "type": "minecraft:overworld",
+          "foundation_material": "minecraft:stone",
+          "mid_material": "minecraft:blackstone",
+          "top_material": "minecraft:blackstone",
+          "sea_floor_depth": 5,
+          "sea_floor_material": "minecraft:gravel",
+          "sea_material": "minecraft:water"
+        }
+      },
+      "minecraft:tags": {
+        "tags": [
+          "animal",
+          "beach",
+          "caves",
+          "cold",
+          "monster",
+          "overworld",
+          "volcanic_moss_tundra",
+          "spawns_cold_variant_farm_animals",
+          "spawns_cold_variant_frogs"
+        ]
+      }
+    }
+  }
+}

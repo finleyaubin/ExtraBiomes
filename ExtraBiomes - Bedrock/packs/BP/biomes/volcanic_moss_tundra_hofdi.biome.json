@@ -2,21 +2,21 @@
   "format_version": "1.21.110",
   "minecraft:biome": {
     "description": {
-      "identifier": "extrabiomes:volcanic_moss_tundra"
+      "identifier": "extrabiomes:volcanic_moss_tundra_hofdi"
     },
     "components": {
       "minecraft:climate": {
-        "downfall": 0,
+        "downfall": 0.9,
         "snow_accumulation": [
-          0,
-          0.01
+          0.1,
+          0.5
         ],
-        "temperature": 1
+        "temperature": 0.1
       },
       "minecraft:overworld_height": {
         "noise_params": [
-          6,
-          10
+          5,
+          4
         ]
       },
       "minecraft:replace_biomes": {
@@ -24,10 +24,10 @@
           {
             "dimension": "minecraft:overworld",
             "targets": [
-              "minecraft:ice_plains"
+              "extrabiomes:volcanic_moss_tundra"
             ],
-            "amount": 0.2,
-            "noise_frequency_scale": 0.2
+            "amount": 0.04,
+            "noise_frequency_scale": 0.9
           }
         ]
       },
@@ -35,22 +35,22 @@
         "adjustments": [
           {
             "materials": {
-              "top_material": "minecraft:magma"
+              "top_material": "minecraft:moss_block"
             },
-            "noise_frequency_scale": 0.03,
+            "noise_frequency_scale": 0.05,
             "noise_range": [
-              0.15,
-              0.3
+              0.3,
+              0.6
             ]
           },
           {
             "materials": {
-              "top_material": "minecraft:mud"
+              "top_material": "minecraft:gravel"
             },
-            "noise_frequency_scale": 0.06,
+            "noise_frequency_scale": 0.07,
             "noise_range": [
-              0.35,
-              0.58
+              0.75,
+              0.9
             ]
           }
         ]
@@ -60,8 +60,8 @@
           "type": "minecraft:overworld",
           "foundation_material": "minecraft:stone",
           "mid_material": "minecraft:blackstone",
-          "top_material": "minecraft:blackstone",
-          "sea_floor_depth": 7,
+          "top_material": "minecraft:grass_block",
+          "sea_floor_depth": 5,
           "sea_floor_material": "minecraft:gravel",
           "sea_material": "minecraft:water"
         }
@@ -69,12 +69,15 @@
       "minecraft:tags": {
         "tags": [
           "caves",
+          "cold",
           "hills",
           "monster",
+          "mountain",
           "overworld",
-          "cold",
-          "spawns_warm_variant_farm_animals",
-          "spawns_warm_variant_frogs"
+          "rare",
+          "volcanic_moss_tundra",
+          "spawns_cold_variant_farm_animals",
+          "spawns_cold_variant_frogs"
         ]
       }
     }
