@@ -16,8 +16,8 @@
       ]
     },
     "distribution": {
-      "iterations": 10,
-      "scatter_chance": "math.clamp((query.heightmap(variable.worldx, variable.worldz) - 80) / 60, 0, 1) * 100",
+      "iterations": 60,
+      "scatter_chance": "math.clamp((query.heightmap(variable.worldx, variable.worldz) - 75) / 35, 0, 1) * 100",
       "x": {
         "distribution": "uniform",
         "extent": [ 0, 16 ]

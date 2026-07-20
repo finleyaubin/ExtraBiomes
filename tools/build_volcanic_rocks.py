@@ -62,7 +62,7 @@ def base_palette():
     return [
         palette_block("minecraft:blackstone"),
         palette_block("minecraft:polished_blackstone"),
-        palette_block("minecraft:cracked_polished_blackstone"),
+        palette_block("minecraft:cracked_polished_blackstone_bricks"),
         palette_block("minecraft:moss_block"),
         palette_block("minecraft:magma"),
         palette_block("minecraft:lava", {"liquid_depth": T_int(0)}),
