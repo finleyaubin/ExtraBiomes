@@ -45,7 +45,7 @@ public class JunglePillars {
                         .waterColor(0x3f76e4)
                         .waterFogColor(0x113290)
                         .skyColor(0x8fce6e)
-                        .fogColor(0x8fce6e)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x30bb0b)
                         .grassColorOverride(0x59c93c)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

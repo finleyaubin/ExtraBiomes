@@ -59,7 +59,7 @@ public class ShatteredTiagaSpikes {
                         .waterColor(0x3a6edb)
                         .waterFogColor(0x113290)
                         .skyColor(0x9ec0dd)
-                        .fogColor(0x9ec0dd)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x5a9a78)
                         .grassColorOverride(0x80b497)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

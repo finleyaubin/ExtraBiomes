@@ -50,7 +50,7 @@ public class TheNetherlands {
                         .waterColor(0x90ADAD)
                         .waterFogColor(0x113290)
                         .skyColor(0xb0d0e0)
-                        .fogColor(0xb0d0e0)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0xD4912C)
                         .grassColorOverride(0x7AAB35)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

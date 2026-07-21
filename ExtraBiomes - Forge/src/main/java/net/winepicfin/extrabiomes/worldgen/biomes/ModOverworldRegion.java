@@ -82,14 +82,19 @@ public class ModOverworldRegion extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.DEEP_DARK_FOREST));
 
-        // Deep Dark Green - bedrock temp=0.8, downfall=0.4 (jungle-flavoured)
+        // Deep Dark Green - bedrock tags: caves, deep_dark, jungle; a cave variant of vanilla's Deep
+        // Dark, not a surface biome. Matches OverworldBiomeBuilder.addUndergroundBiomes' exact Deep Dark
+        // placement (full temp/humidity/continentalness range, erosion bands 0-1, depth=FLOOR i.e. the
+        // bottom-of-world point vanilla uses for Deep Dark), but only takes half of the weirdness range
+        // so vanilla deep_dark still generates in the other half - mirroring bedrock's
+        // "replace_biomes" amount of 0.5 rather than fully replacing vanilla Deep Dark everywhere.
         new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.NEUTRAL)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3))
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
+                .temperature(ParameterUtils.Temperature.FULL_RANGE)
+                .humidity(ParameterUtils.Humidity.FULL_RANGE)
+                .continentalness(ParameterUtils.Continentalness.FULL_RANGE)
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_1))
+                .depth(ParameterUtils.Depth.FLOOR)
+                .weirdness(Climate.Parameter.span(-1.0F, 0.0F))
                 .build().forEach(point -> builder.add(point, ModBiomes.DEEP_DARK_GREEN));
 
         // Desert Bryce - bedrock temp=2, downfall=0 ("rare" canyon desert)

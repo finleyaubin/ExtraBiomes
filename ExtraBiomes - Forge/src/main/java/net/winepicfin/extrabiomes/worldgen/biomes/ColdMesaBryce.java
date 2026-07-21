@@ -47,7 +47,7 @@ public class ColdMesaBryce {
                         .waterColor(0x3d5cdb)
                         .waterFogColor(0x113290)
                         .skyColor(0x84631263)
-                        .fogColor(0x84631263)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x5a9a8a)
                         .grassColorOverride(0x7aaaa0)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

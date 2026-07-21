@@ -44,7 +44,7 @@ public class FutureDesert {
                         .waterColor(0x0858e0)
                         .waterFogColor(0x113290)
                         .skyColor(0xb8c0c8)
-                        .fogColor(0xb8c0c8)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x8898a8)
                         .grassColorOverride(0xb8c0c8).build())
                 .build();

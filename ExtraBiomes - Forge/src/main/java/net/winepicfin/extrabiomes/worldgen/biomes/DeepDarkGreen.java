@@ -21,18 +21,26 @@ public class DeepDarkGreen {
 
     public Biome Register(BootstapContext<Biome> context)
     {
+        // NOTE: bedrock tags are "caves", "deep_dark", "overworld", "jungle" (plus
+        // spawns_cold_variant_farm_animals/frogs) with no "monster" tag - this is a cave variant of
+        // vanilla's Deep Dark (see ModOverworldRegion for its underground placement), not a surface
+        // biome, so it follows vanilla's deepDark() generation/spawn setup with a jungle-flavoured
+        // vegetation/color twist instead of Deep Dark's usual plain grass and pitch-black colors.
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
+        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FROG, 5, 2, 4));
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
-        BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addSculk(biomeBuilder);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
@@ -42,12 +50,13 @@ public class DeepDarkGreen {
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(0x3f76e4)
-                        .waterFogColor(0x113290)
-                        .skyColor(0x0d1a10)
-                        .fogColor(0x0d1a10)
+                        .waterFogColor(0x050533)
+                        .skyColor(0x78A7FF)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x1BB210)
                         .grassColorOverride(0x59c93c)
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
+                        .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DEEP_DARK)).build())
                 .build();
     }
 }

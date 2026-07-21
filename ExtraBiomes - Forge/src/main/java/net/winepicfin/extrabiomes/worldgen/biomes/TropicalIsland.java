@@ -47,7 +47,7 @@ public class TropicalIsland {
                         .waterColor(0x28c8e0)
                         .waterFogColor(0x50D8CE)
                         .skyColor(0x9fe8f0)
-                        .fogColor(0x9fe8f0)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x40b020)
                         .grassColorOverride(0x60c840)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

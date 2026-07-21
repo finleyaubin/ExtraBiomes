@@ -45,7 +45,7 @@ public class GrandOasis {
                         .waterColor(0x20c8a0)
                         .waterFogColor(0x113290)
                         .skyColor(0xffe29a)
-                        .fogColor(0xd6e8c9)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x58b028)
                         .grassColorOverride(0x80c040).build())
                 .build();

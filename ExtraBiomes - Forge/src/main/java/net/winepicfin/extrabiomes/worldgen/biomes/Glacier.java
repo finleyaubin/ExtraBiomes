@@ -45,7 +45,7 @@ public class Glacier {
                         .waterColor(0x2838c8)
                         .waterFogColor(0x113290)
                         .skyColor(0xc0e0f0)
-                        .fogColor(0xc0e0f0)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x60a0b0)
                         .grassColorOverride(0x80b0c0)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

@@ -49,7 +49,7 @@ public class FungleJungle {
                         .waterColor(0x3f76e4)
                         .waterFogColor(0x113290)
                         .skyColor(0x8fce6e)
-                        .fogColor(0x8fce6e)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x38a010)
                         .grassColorOverride(0x50aa30)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

@@ -45,7 +45,7 @@ public class DesertBryce {
                         .waterColor(0x30a8a0)
                         .waterFogColor(0x113290)
                         .skyColor(0xffbc6b)
-                        .fogColor(0xc9b28a)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0xaa8030)
                         .grassColorOverride(0xc8a040).build())
                 .build();

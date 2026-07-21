@@ -45,7 +45,7 @@ public class Moorlands {
                         .waterColor(0x2846ea)
                         .waterFogColor(0x113290)
                         .skyColor(0xb0c8e0)
-                        .fogColor(0xb0c8e0)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x28962a)
                         .grassColorOverride(0xbcbc2b)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())

@@ -46,7 +46,7 @@ public class JungleMarsh {
                         .waterColor(0x2a6830)
                         .waterFogColor(0x2a6830)
                         .skyColor(0x4a7a3a)
-                        .fogColor(0x4a7a3a)
+                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(0x386020)
                         .grassColorOverride(0x487030)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
