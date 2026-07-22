@@ -32,6 +32,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 ModBlocks.DENSE_CLOUD_BRICK.get(),
+                ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(),
+                ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get(),
                 ModBlocks.PEBBLE.get(),
                 ModBlocks.MOSSY_PEBBLE.get()

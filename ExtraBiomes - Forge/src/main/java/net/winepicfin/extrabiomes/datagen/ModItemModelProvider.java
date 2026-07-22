@@ -36,6 +36,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.RAZOR_FEATHER);
         simpleItem(ModItems.BUCKET_OF_GOO);
         trimmedArmorItem(ModItems.FROG_HELMET);
+        evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
+        evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_SLAB);
 
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);

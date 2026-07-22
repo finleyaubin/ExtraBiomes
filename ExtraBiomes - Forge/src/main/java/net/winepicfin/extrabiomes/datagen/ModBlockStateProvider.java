@@ -24,6 +24,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels(){
         blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
+        stairsBlock(((StairBlock) ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
+        slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         blockWithItem(ModBlocks.DENSE_CLOUD);
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
