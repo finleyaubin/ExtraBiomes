@@ -24,7 +24,7 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource RED_SAND = makeStateRule(Blocks.RED_SAND);
     private static final SurfaceRules.RuleSource SNOW_BLOCK = makeStateRule(Blocks.SNOW_BLOCK);
     private static final SurfaceRules.RuleSource ICE = makeStateRule(Blocks.ICE);
-    private static final SurfaceRules.RuleSource LIGHT_GRAY_CONCRETE_POWDER = makeStateRule(Blocks.LIGHT_GRAY_CONCRETE_POWDER);
+    private static final SurfaceRules.RuleSource WHITE_CONCRETE_POWDER = makeStateRule(Blocks.WHITE_CONCRETE_POWDER);
 
     public static SurfaceRules.RuleSource makeRules()
     {
@@ -64,8 +64,8 @@ public class ModSurfaceRules {
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GRAND_OASIS), SAND),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.TROPICAL_ISLAND), SAND),
 
-                // --- Future Desert: top=concretepowder (unspecified colour, assumed light grey) ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.FUTURE_DESERT), LIGHT_GRAY_CONCRETE_POWDER),
+                // --- Future Desert: top=white concretepowder ---
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.FUTURE_DESERT), WHITE_CONCRETE_POWDER),
 
                 // --- Glacier: top=snow, mid=ice ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GLACIER),
