@@ -38,6 +38,40 @@ BLOCK_FACE_AXIS = {
     "up": "y", "down": "y", "north": "z", "south": "z", "east": "x", "west": "x",
 }
 
+# The extrabiomes custom stair/trapdoor/door geometry (geometry.extrabiomes_stairs
+# etc.) is hand-built with an EAST/WEST-mirrored convention relative to Java:
+# a straight stair whose Bedrock `minecraft:cardinal_direction` == "east" has its
+# tall step physically on the WEST (verified from the .geo cube coordinates), i.e.
+# Java facing = west. North/south are unchanged. So converting a cardinal_direction
+# to a Java horizontal `facing` for these CUSTOM blocks requires swapping E<->W.
+# (Vanilla blocks that carry cardinal_direction -- chest/furnace/ender_chest -- are
+# NOT mirrored and map identity.)
+_EW_SWAP = {"north": "north", "south": "south", "east": "west", "west": "east"}
+
+
+def _facing_from_cardinal(states, default="north"):
+    """Java horizontal facing for a custom (mirrored-geometry) block."""
+    return _EW_SWAP.get(_s(states.get("minecraft:cardinal_direction", default)), default)
+
+
+# extrabiomes:direction int -> (Java stair facing, Java stair shape) for the
+# corner variants. Derived from the visible geometry bone's physical quadrant
+# (read from extrabiomes.stairs.geo cube coordinates) mapped to the vanilla Java
+# stair model convention (facing=east,outer_right occupies the NE quadrant):
+#   outer bone = the single filled quadrant; inner bone = the single notch quadrant.
+# Every entry is canonicalised to the "_right" shape (each physical corner has an
+# equivalent _left form at another facing; _right is picked for consistency).
+STAIR_CORNER = {
+    4: ("west", "outer_right"),   # southwest_outer  (filled SW)
+    5: ("south", "outer_right"),  # southeast_outer  (filled SE)
+    6: ("north", "outer_right"),  # northwest_outer  (filled NW)
+    7: ("east", "outer_right"),   # northeast_outer  (filled NE)
+    8: ("west", "inner_right"),   # northeast_inner  (notch NE)
+    9: ("south", "inner_right"),  # northwest_inner  (notch NW)
+    10: ("east", "inner_right"),  # southwest_inner  (notch SW)
+    11: ("north", "inner_right"), # southeast_inner  (notch SE)
+}
+
 # golden_rail rail_direction int -> Java rail shape.
 RAIL_SHAPE = {
     0: "north_south", 1: "east_west", 2: "ascending_east", 3: "ascending_west",
@@ -180,16 +214,23 @@ def map_block(name, states, be=None):
 
     if name in ("extrabiomes:dense_cloud_brick_stairs", "extrabiomes:gilded_sky_stairs",
                 "extrabiomes:sky_stairs"):
+        direction = int(states.get("extrabiomes:direction", 0))
+        half = _s(states.get("minecraft:vertical_half", "bottom"))
+        if direction in STAIR_CORNER:
+            facing, shape = STAIR_CORNER[direction]
+        else:
+            # straight: facing from cardinal_direction with the E<->W mirror.
+            facing, shape = _facing_from_cardinal(states), "straight"
         return name, {
-            "facing": _s(states.get("minecraft:cardinal_direction", "north")),
-            "half": _s(states.get("minecraft:vertical_half", "bottom")),
-            "shape": "straight",
+            "facing": facing,
+            "half": half,
+            "shape": shape,
             "waterlogged": "false",
         }
 
     if name == "extrabiomes:gilded_sky_trapdoor":
         return "extrabiomes:gilded_sky_trapdoor", {
-            "facing": _s(states.get("minecraft:cardinal_direction", "north")),
+            "facing": _facing_from_cardinal(states),
             "half": _s(states.get("minecraft:vertical_half", "bottom")),
             "open": _b(states.get("extrabiomes:is_open", 0)),
             "powered": "false",
@@ -199,7 +240,7 @@ def map_block(name, states, be=None):
     if name in ("extrabiomes:gilded_sky_door_bottom", "extrabiomes:gilded_sky_door_top"):
         half = "upper" if name.endswith("_top") else "lower"
         return "extrabiomes:gilded_sky_door", {
-            "facing": _s(states.get("minecraft:cardinal_direction", "north")),
+            "facing": _facing_from_cardinal(states),
             "half": half,
             # doubledoor is only present on the bottom half; upper defaults left.
             "hinge": "right" if states.get("extrabiomes:doubledoor") in (1, True) else "left",
