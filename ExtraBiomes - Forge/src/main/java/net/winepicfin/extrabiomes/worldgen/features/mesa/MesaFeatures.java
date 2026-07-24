@@ -153,9 +153,11 @@ public class MesaFeatures {
 
         // mesa_underground_terracota_feature.json: iterations 300, scatter_chance 100 (always
         // attempt), x/z uniform [0,16], y uniform [-64,60] -> reuse the shared ore placement helper.
+        // NOTE: CountPlacement's IntProvider codec caps at 256, so Bedrock's 300 iterations/chunk is
+        // clamped to the engine max (commonOrePlacement uses CountPlacement.of(pCount) internally).
         context.register(SELECT_TERRACOTTA_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_TERRACOTTA_KEY),
-                ModOrePlacement.commonOrePlacement(300, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)))
+                ModOrePlacement.commonOrePlacement(256, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)))
         ));
     }
 

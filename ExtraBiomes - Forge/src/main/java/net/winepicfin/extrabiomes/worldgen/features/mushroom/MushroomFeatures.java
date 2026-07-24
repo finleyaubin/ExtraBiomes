@@ -217,17 +217,24 @@ public class MushroomFeatures {
 
         // -- underground_mushroom/mycelium_floor_feature.json (vegetation_patch_feature) ---------------
         HolderGetter<PlacedFeature> placedFeatures4 = context.lookup(Registries.PLACED_FEATURE);
+        // VegetationPatchConfiguration field order is (replaceable, groundState, vegetationFeature,
+        // surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius,
+        // extraEdgeColumnChance) - a prior pass here had verticalRange/extraEdgeColumnChance swapped
+        // and zeroed, which fails datagen ("Value 0 outside of range [1:256]; Value 5.0 outside of
+        // range [0.0:1.0]"). Bedrock's mycelium_floor_feature.json: vertical_range 5, vegetation_chance
+        // 0.008, horizontal_radius 4-8, extra_edge_column_chance 0.3 (extraBottomBlockChance has no
+        // Bedrock equivalent, left at 0).
         register(context, MYCELIUM_FLOOR_KEY, Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 MYCELIUM_FLOOR_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.MYCELIUM),
                 placedFeatures4.getOrThrow(SELECT_MUSHROOM_PLACED_KEY),
                 CaveSurface.FLOOR,
                 ConstantInt.of(1),
-                0.3f,
-                0,
+                0.0f,
+                5,
                 0.008f,
                 UniformInt.of(4, 8),
-                5.0f
+                0.3f
         ));
     }
 
@@ -291,8 +298,10 @@ public class MushroomFeatures {
         // separate "snap_to_surface_feature" wrapper (vertical_search_range 12, surface floor) is folded
         // into VegetationPatchConfiguration.surface(CaveSurface.FLOOR) above - the patch feature already
         // searches for a valid floor itself, so no extra Java feature is needed for it.
+        // NOTE: CountPlacement's IntProvider codec caps at 256 - Bedrock's 400 iterations/chunk has no
+        // exact Java equivalent, so this is clamped to the engine max.
         register(context, MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY, configuredFeatures.getOrThrow(MYCELIUM_FLOOR_KEY),
-                CountPlacement.of(400),
+                CountPlacement.of(256),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
                 BiomeFilter.biome());

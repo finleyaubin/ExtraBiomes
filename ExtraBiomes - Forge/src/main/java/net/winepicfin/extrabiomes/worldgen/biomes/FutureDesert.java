@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.future.FutureTreeFeatures;
 
 public class FutureDesert {
 
@@ -33,6 +34,9 @@ public class FutureDesert {
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
         // NOTE: bedrock top/mid material is an unspecified 'concretepowder' (defaults to white);
         // surface rule below assumes LIGHT_GRAY_CONCRETE_POWDER to match the RP's cool grey tint.
+        // future_tree_feature_2 / future_tree_feature_3 (Bedrock: has_biome_tag "future")
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FutureTreeFeatures.FUTURE_TREE_2_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FutureTreeFeatures.FUTURE_TREE_3_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)

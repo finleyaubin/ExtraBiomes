@@ -103,13 +103,15 @@ public class GlacierFeatures {
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         // count 30/90/110 -> OreConfiguration vein size (mirrors LUSH_GRASS_KEY's grassBlob pattern
-        // in ModConfigureFeatures.java).
+        // in ModConfigureFeatures.java). NOTE: OreConfiguration's vein-size codec caps at 64, so the
+        // packed/top ice veins (originally 90/110, copied from Bedrock's per-chunk "count" which isn't
+        // actually the same quantity as a Java vein size) are clamped to the engine max.
         context.register(GLACIER_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 30, 0.0F)));
         context.register(GLACIER_PACKED_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
-                new OreConfiguration(iceTargets(Blocks.PACKED_ICE.defaultBlockState()), 90, 0.0F)));
+                new OreConfiguration(iceTargets(Blocks.PACKED_ICE.defaultBlockState()), 64, 0.0F)));
         context.register(GLACIER_TOP_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
-                new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 110, 0.0F)));
+                new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
 
         // Bedrock facing_direction wasn't specified for either snow-drift structure -> random
         // rotation (SingleStructureConfiguration's 1-arg ctor). Distribution y = [heightmap,

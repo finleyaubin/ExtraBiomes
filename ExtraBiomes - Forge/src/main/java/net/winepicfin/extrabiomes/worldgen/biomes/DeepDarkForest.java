@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 
 public class DeepDarkForest {
 
@@ -35,6 +36,9 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         // NOTE: bedrock tags include 'has_structure_trail_ruins' - Java Trail Ruins structure placement
         // is handled via structure_set/biome tags (see ModBiomeTagProvider), not here.
+
+        // shattered_swamp/swamp_huge_mushroom_feature.json applies to swamp OR roofed-forest tagged biomes
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

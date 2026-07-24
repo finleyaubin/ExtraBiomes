@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.OasisPuddleFeature;
 
 public class GrandOasis {
 
@@ -34,6 +35,9 @@ public class GrandOasis {
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.PALM_PLACED_KEY);
+
+        // oasis subsystem: scattered puddle structure_template (Bedrock oasis_puddle_placer)
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OasisPuddleFeature.OASIS_PUDDLE_SCATTER_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)

@@ -16,6 +16,8 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.shatteredswamp.ShatteredSwampFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 
 public class ShatteredSwamp {
 
@@ -34,6 +36,10 @@ public class ShatteredSwamp {
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addSwampVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
+        // shattered_swamp: bamboo feature
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ShatteredSwampFeatures.BAMBOO_PLACED_KEY);
+        // swamp huge mushroom (swamp-tagged biome)
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

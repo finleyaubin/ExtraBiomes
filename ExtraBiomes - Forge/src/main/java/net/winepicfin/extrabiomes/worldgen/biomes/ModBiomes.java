@@ -7,7 +7,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 
 /**
  * Java (Forge) registrations for every biome that exists in the Bedrock add-on
@@ -85,6 +87,11 @@ public class ModBiomes
         BiomeDefaultFeatures.addDefaultUndergroundVariety(builder);
         BiomeDefaultFeatures.addDefaultSprings(builder);
         BiomeDefaultFeatures.addSurfaceFreezing(builder);
+        // Bedrock's underground_mushroom/{glow_mushroom,huge_glow_mushroom}_feature.json rules apply to
+        // any_of overworld/overworld_generation (i.e. every overworld biome), so they're wired here
+        // rather than per-biome.
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.SELECT_MUSHROOM_PLACED_KEY);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY);
     }
 
 }

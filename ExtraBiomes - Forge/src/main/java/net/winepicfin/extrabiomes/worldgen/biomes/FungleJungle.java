@@ -16,6 +16,9 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 
 public class FungleJungle {
 
@@ -38,6 +41,22 @@ public class FungleJungle {
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         // NOTE: 'spawns_without_patrols' bedrock tag -> pillager patrol exclusion is handled via
         // biome tags (BiomeTags.WITHOUT_PATROL_SPAWNS), see ModBiomeTagProvider.
+
+        // mushroom_surface_mycelium_floor: ground-conversion feature (mooshroom_island-only), local modification step
+        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
+        // boulder: weighted boulder selection (with pebble scatter), local modification step
+        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
+        // boulder: weighted stick-pile selection, vegetal decoration step
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
+        // underground_jungle: moss-or-jungle-tree selection, vegetal decoration step
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY);
+        // underground_jungle: cave grass floors
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_UPPER_PLACED_KEY);
+        // mushroom_island_surface_huge_mushroom: mushroom-island-specific huge mushroom distribution
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
+        // underground_jungle: cave vines
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

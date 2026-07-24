@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.jellycoral.JellyCoralFeatures;
 
 public class JellyfishFields {
 
@@ -32,8 +33,12 @@ public class JellyfishFields {
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
 
         //BiomeDefaultFeatures.addWarmOceanVegetation(biomeBuilder);
-        // NOTE: bedrock feature_rules/jellycoral.json places a custom jellyfish-coral feature -
-        // no Java equivalent registered yet, using vanilla warm ocean coral/seagrass in the meantime.
+
+        // bedrock feature_rules/jellycoral.json
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, JellyCoralFeatures.JELLYCORAL_1_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, JellyCoralFeatures.JELLYCORAL_2_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, JellyCoralFeatures.JELLYCORAL_3_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, JellyCoralFeatures.JELLYCORAL_4_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

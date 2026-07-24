@@ -31,6 +31,7 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.Undergroun
 import net.winepicfin.extrabiomes.worldgen.features.charred.CharredForestFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.future.FutureTreeFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.shatteredswamp.ShatteredSwampFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.tropical.TropicalIslandFeatures;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -39,48 +40,61 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
     public ModWorldGenProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries,BUILDER, Set.of(ExtraBiomes.MOD_ID));
     }
+    // NOTE: RegistrySetBuilder.add() must only be called ONCE per registry - calling it repeatedly for
+    // the same registry (as this used to, ~17 times each for CONFIGURED_FEATURE/PLACED_FEATURE) makes
+    // RegistrySetBuilder.createState() insert that registry key more than once into its internal
+    // per-registry lookup map, which throws "Multiple entries with same key: minecraft:worldgen/..."
+    // the moment any datagen provider touches these registries (e.g. runData's biome tag provider).
+    // Each registry therefore gets exactly one .add() call below, with all of this mod's bootstrap
+    // methods for that registry chained together inside a single lambda.
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-            .add(Registries.CONFIGURED_FEATURE, ModConfigureFeatures::bootstrap)
-            .add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
-            .add(Registries.CONFIGURED_FEATURE, OasisPuddleFeature::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, OasisPuddleFeature::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, BoulderFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, BoulderFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, MushroomFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, MushroomFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, MossFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, MossFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, MoorlandFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, MoorlandFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, GlacierFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, GlacierFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, NetherlandsOreFeatures::bootstrapConfigured)
-            .add(Registries.CONFIGURED_FEATURE, NetherlandsTulipFeatures::bootstrapConfigured)
-            .add(Registries.CONFIGURED_FEATURE, NetherlandsWheatFeatures::bootstrapConfigured)
-            .add(Registries.CONFIGURED_FEATURE, NetherlandsWaterFeature::bootstrapConfigured)
-            .add(Registries.CONFIGURED_FEATURE, NetherlandsWindmillFeature::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, NetherlandsOreFeatures::bootstrapPlaced)
-            .add(Registries.PLACED_FEATURE, NetherlandsTulipFeatures::bootstrapPlaced)
-            .add(Registries.PLACED_FEATURE, NetherlandsWheatFeatures::bootstrapPlaced)
-            .add(Registries.PLACED_FEATURE, NetherlandsWaterFeature::bootstrapPlaced)
-            .add(Registries.PLACED_FEATURE, NetherlandsWindmillFeature::bootstrapPlaced)
+            .add(Registries.CONFIGURED_FEATURE, context -> {
+                ModConfigureFeatures.bootstrap(context);
+                OasisPuddleFeature.bootstrapConfigured(context);
+                BoulderFeatures.bootstrapConfigured(context);
+                MushroomFeatures.bootstrapConfigured(context);
+                MossFeatures.bootstrapConfigured(context);
+                MoorlandFeatures.bootstrapConfigured(context);
+                GlacierFeatures.bootstrapConfigured(context);
+                NetherlandsOreFeatures.bootstrapConfigured(context);
+                NetherlandsTulipFeatures.bootstrapConfigured(context);
+                NetherlandsWheatFeatures.bootstrapConfigured(context);
+                NetherlandsWaterFeature.bootstrapConfigured(context);
+                NetherlandsWindmillFeature.bootstrapConfigured(context);
+                JellyCoralFeatures.bootstrapConfigured(context);
+                StonePillarsFeature.bootstrapConfigured(context);
+                TaigaSpikeFeatures.bootstrapConfigured(context);
+                MesaFeatures.bootstrapConfigured(context);
+                UndergroundJungleFeatures.bootstrapConfigured(context);
+                CharredForestFeatures.bootstrapConfigured(context);
+                FutureTreeFeatures.bootstrapConfigured(context);
+                ShatteredSwampFeatures.bootstrapConfigured(context);
+                TropicalIslandFeatures.bootstrapConfigured(context);
+            })
+            .add(Registries.PLACED_FEATURE, context -> {
+                ModPlacedFeatures.bootstrap(context);
+                OasisPuddleFeature.bootstrapPlaced(context);
+                BoulderFeatures.bootstrapPlaced(context);
+                MushroomFeatures.bootstrapPlaced(context);
+                MossFeatures.bootstrapPlaced(context);
+                MoorlandFeatures.bootstrapPlaced(context);
+                GlacierFeatures.bootstrapPlaced(context);
+                NetherlandsOreFeatures.bootstrapPlaced(context);
+                NetherlandsTulipFeatures.bootstrapPlaced(context);
+                NetherlandsWheatFeatures.bootstrapPlaced(context);
+                NetherlandsWaterFeature.bootstrapPlaced(context);
+                NetherlandsWindmillFeature.bootstrapPlaced(context);
+                JellyCoralFeatures.bootstrapPlaced(context);
+                StonePillarsFeature.bootstrapPlaced(context);
+                TaigaSpikeFeatures.bootstrapPlaced(context);
+                MesaFeatures.bootstrapPlaced(context);
+                UndergroundJungleFeatures.bootstrapPlaced(context);
+                CharredForestFeatures.bootstrapPlaced(context);
+                FutureTreeFeatures.bootstrapPlaced(context);
+                ShatteredSwampFeatures.bootstrapPlaced(context);
+                TropicalIslandFeatures.bootstrapPlaced(context);
+            })
             .add(Registries.CONFIGURED_CARVER, NetherlandsCaveCarver::bootstrapCarver)
-            .add(Registries.CONFIGURED_FEATURE, JellyCoralFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, JellyCoralFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, StonePillarsFeature::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, StonePillarsFeature::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, TaigaSpikeFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, TaigaSpikeFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, MesaFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, MesaFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, UndergroundJungleFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, UndergroundJungleFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, CharredForestFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, CharredForestFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, FutureTreeFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, FutureTreeFeatures::bootstrapPlaced)
-            .add(Registries.CONFIGURED_FEATURE, ShatteredSwampFeatures::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, ShatteredSwampFeatures::bootstrapPlaced)
             .add(ForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap)
             .add(Registries.BIOME, ModBiomes::boostrap);
 }

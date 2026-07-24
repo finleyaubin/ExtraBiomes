@@ -16,6 +16,8 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.taigaspike.TaigaSpikeFeatures;
 
 public class TiagaSpikes {
 
@@ -29,12 +31,6 @@ public class TiagaSpikes {
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
-        Holder<PlacedFeature> iceSpike = placed.getOrThrow(
-                ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("minecraft", "ice_spike")));
-        Holder<PlacedFeature> icePatch = placed.getOrThrow(
-                ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("minecraft", "ice_patch")));
-
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
@@ -46,8 +42,8 @@ public class TiagaSpikes {
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
-        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, iceSpike);
-        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, icePatch);
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, TaigaSpikeFeatures.TAIGA_SPIKE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, GlacierFeatures.SELECT_SNOW_DRIFT_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

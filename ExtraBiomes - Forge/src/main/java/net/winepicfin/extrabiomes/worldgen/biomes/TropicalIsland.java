@@ -16,6 +16,8 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.moss.MossFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.tropical.TropicalIslandFeatures;
 
 public class TropicalIsland {
 
@@ -36,6 +38,14 @@ public class TropicalIsland {
         //BiomeDefaultFeatures.addWarmOceanVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.PALM_PLACED_KEY);
+        // island_grass_floor_feature.json (sand -> grass floor, no vegetation - see class docs)
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TropicalIslandFeatures.GRASS_FLOOR_PLACED_KEY);
+        // moss/growth chain (moorlands_scatter_tall_grass_feature.json, moss/scatter_carpet_feature.json, jungle_bush)
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MossFeatures.TALL_GRASS_SCATTER_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MossFeatures.MOSS_CARPET_SCATTER_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MossFeatures.JUNGLE_BUSH_PLACED_KEY);
+        // tropical_melon_feature.json
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TropicalIslandFeatures.MELON_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
