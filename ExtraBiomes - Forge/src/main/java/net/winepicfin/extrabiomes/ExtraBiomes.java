@@ -28,6 +28,9 @@ import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.util.ModVanillaCompat;
 import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
+import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
@@ -54,6 +57,9 @@ public class ExtraBiomes
         ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModTrunkPlacerTypes.register(modEventBus);
+        ModStructureScatterFeatures.register(modEventBus);
+        MoorlandFeatures.register(modEventBus);
+        UndergroundJungleFeatures.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::addCreative);

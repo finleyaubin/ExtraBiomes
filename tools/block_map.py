@@ -126,6 +126,29 @@ def map_block(name, states, be=None):
     if name == "minecraft:iron_chain":
         return "minecraft:chain", {"axis": _s(states.get("pillar_axis", "y"))}
 
+    if name in ("minecraft:ice", "minecraft:blue_ice", "minecraft:packed_ice"):
+        return name, {}
+
+    if name == "minecraft:stone":
+        # Bedrock pre-flattening "stone_type" state selects the actual variant.
+        STONE_TYPE = {
+            "stone": "minecraft:stone",
+            "granite": "minecraft:granite",
+            "granite_smooth": "minecraft:polished_granite",
+            "diorite": "minecraft:diorite",
+            "diorite_smooth": "minecraft:polished_diorite",
+            "andesite": "minecraft:andesite",
+            "andesite_smooth": "minecraft:polished_andesite",
+        }
+        return STONE_TYPE.get(_s(states.get("stone_type", "stone")), "minecraft:stone"), {}
+    if name == "minecraft:snow":
+        # Bedrock "minecraft:snow" is the full solid snow block.
+        return "minecraft:snow_block", {}
+    if name == "minecraft:snow_layer":
+        # Bedrock height 0..7 -> Java "layers" 1..8.
+        height = int(states.get("height", 0))
+        return "minecraft:snow", {"layers": _s(max(1, min(8, height + 1)))}
+
     if name == "minecraft:water":
         depth = int(states.get("liquid_depth", 0))
         return "minecraft:water", {"level": _s(max(0, min(15, depth)))}
@@ -198,6 +221,17 @@ def map_block(name, states, be=None):
     if name == "minecraft:jigsaw":
         # Orientation is computed by the converter from facing_direction+rotation.
         return "minecraft:jigsaw", {"orientation": "north_up"}
+
+    if name == "minecraft:azalea_leaves":
+        return "minecraft:azalea_leaves", {
+            "persistent": _b(states.get("persistent_bit", 0)),
+            "distance": "7",
+            "waterlogged": "false",
+        }
+    if name == "minecraft:end_rod":
+        return "minecraft:end_rod", {
+            "facing": FACING_DIRECTION.get(int(states.get("facing_direction", 1)), "up"),
+        }
 
     # -- extrabiomes custom blocks ------------------------------------------
     if name in ("extrabiomes:dense_cloud", "extrabiomes:dense_cloud_brick",
@@ -280,8 +314,74 @@ def map_block(name, states, be=None):
             "waterlogged": "false",
         }
 
+    # boulder/pebble subsystem: extrabiomes:{small,medium,large}[_mossy]_pebble ->
+    # extrabiomes:pebble_block / extrabiomes:mossy_pebble_block with integer "size" (1-3).
+    PEBBLE_SIZE = {"small": 1, "medium": 2, "large": 3}
+    if name in ("extrabiomes:small_pebble", "extrabiomes:medium_pebble", "extrabiomes:large_pebble"):
+        size = name.split(":")[1].split("_")[0]
+        return "extrabiomes:pebble_block", {"size": _s(PEBBLE_SIZE[size])}
+    if name in ("extrabiomes:small_mossy_pebble", "extrabiomes:medium_mossy_pebble", "extrabiomes:large_mossy_pebble"):
+        size = name.split(":")[1].split("_")[0]
+        return "extrabiomes:mossy_pebble_block", {"size": _s(PEBBLE_SIZE[size])}
+
+    # boulder/stick_pile subsystem: extrabiomes:stick_pile has no Java-side block yet
+    # (no StickPileBlock has been implemented in the Forge port). Drop it to air rather
+    # than emit a reference to a nonexistent registry name; see worldgen boulder subsystem
+    # notes for the follow-up needed to restore the stick visuals.
+    if name == "extrabiomes:stick_pile":
+        return "minecraft:air", {}
+
+    # plain (unpowered) rail -> Java minecraft:rail. Unlike golden/detector/activator
+    # rails, plain rails also support diagonal "shape" values, but this converter only
+    # ever sees straight/ascending forms (0-5) in practice, so the same table applies.
+    if name == "minecraft:rail":
+        return "minecraft:rail", {"shape": RAIL_SHAPE.get(int(states.get("rail_direction", 0)), "north_south")}
+
+    # huge mushroom blocks (red/brown vanilla + extrabiomes colored variants).
+    # Bedrock's "huge_mushroom_bits" (0-15) is the pre-flattening Java data
+    # value for these blocks; Java 1.20.1 exposes the same information as six
+    # per-face booleans (up/down/north/south/east/west = show cap texture).
+    if name in ("minecraft:red_mushroom_block", "minecraft:brown_mushroom_block") or (
+        name.startswith("extrabiomes:") and name.endswith("_mushroom_block")
+    ):
+        return name, _mushroom_bits(int(states.get("huge_mushroom_bits", 14)))
+
+    if name == "minecraft:mushroom_stem":
+        return name, _mushroom_bits(int(states.get("huge_mushroom_bits", 10)))
+
     # -- unmapped -----------------------------------------------------------
     return None, None
+
+
+# Pre-flattening data value -> which faces show the "cap"/bark texture.
+# (Same table used by red_mushroom_block, brown_mushroom_block, mushroom_stem,
+# and every extrabiomes:<color>_mushroom_block, which all share this shape.)
+_MUSHROOM_BITS_FACES = {
+    0: (),
+    1: ("up", "north", "west"),
+    2: ("up", "north"),
+    3: ("up", "north", "east"),
+    4: ("up", "west"),
+    5: ("up",),
+    6: ("up", "east"),
+    7: ("up", "west", "south"),
+    8: ("up", "south"),
+    9: ("up", "south", "east"),
+    10: ("north", "south", "east", "west"),
+    11: ("up", "down", "north", "south", "east", "west"),
+    12: ("up", "down", "north", "south", "east", "west"),
+    13: ("up", "down", "north", "south", "east", "west"),
+    14: ("up", "down", "north", "south", "east", "west"),
+    15: (),
+}
+
+
+def _mushroom_bits(bits):
+    faces = _MUSHROOM_BITS_FACES.get(int(bits) & 0xF, ())
+    return {
+        face: ("true" if face in faces else "false")
+        for face in ("up", "down", "north", "south", "east", "west")
+    }
 
 
 def map_final_state(bare_id):

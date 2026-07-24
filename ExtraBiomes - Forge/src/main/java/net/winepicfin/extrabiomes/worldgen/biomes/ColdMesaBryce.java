@@ -16,6 +16,8 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
 
 public class ColdMesaBryce {
 
@@ -33,8 +35,10 @@ public class ColdMesaBryce {
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MesaFeatures.SELECT_TERRACOTTA_PLACED_KEY);
         BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
         BiomeDefaultFeatures.addBlueIce(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, GlacierFeatures.SELECT_SNOW_DRIFT_PLACED_KEY);
         // NOTE: 'bryce' variant - taller eroded spire terrain comes from noise settings, not features
 
         return new Biome.BiomeBuilder()

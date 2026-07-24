@@ -16,6 +16,10 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsCaveCarver;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindmillFeature;
 
 public class TheNetherlands {
 
@@ -32,13 +36,28 @@ public class TheNetherlands {
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COAL_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COPPER_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.DIAMOND_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.EMERALD_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.GOLD_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.IRON_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.LAPIS_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.QUARTZ_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.REDSTONE_ORE_PLACED_KEY);
         BiomeDefaultFeatures.addPlainVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         // NOTE: despite bedrock's 'nether'/'nether_wastes' spawn-category tags, this biome is
         // themed after the real-world Netherlands (tulip fields, windmills, wheat, canals -
         // see bedrock feature_rules/the_netherlands/*). It generates in the OVERWORLD.
-        // TODO: port netherlands_windmill_feature (windmill.mcstructure) as a Java structure,
-        // and netherlands_wheat_feature / tulip features as custom vegetation patches.
+        // Base (non-mutated) TheNetherlands gets tulip fields (feature_rules gate on
+        // has_biome_tag != "mutated"); TheNetherlandsMutated gets wheat/canal instead.
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.ORANGE_TULIP_FLOOR_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.PINK_TULIP_FLOOR_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.RED_TULIP_FLOOR_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.WHITE_TULIP_FLOOR_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
+        biomeBuilder.addCarver(GenerationStep.Carving.AIR, NetherlandsCaveCarver.NETHERLANDS_CAVE_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
