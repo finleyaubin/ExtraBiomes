@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.mushroom;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
@@ -294,10 +297,20 @@ public class MushroomFeatures {
         // structures uniformly across nearly the entire world height, mostly in open sky above the
         // actual terrain. Bounded to a fixed absolute height instead, matching the same underground-ish
         // range used by MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY below.
+        //
+        // EnvironmentScanPlacement then snaps the picked Y down onto the nearest solid floor (scanning
+        // through air/cave_air, same mechanism vanilla uses for glow lichen/amethyst clusters), so the
+        // structure lands grounded inside a cave/cavity instead of floating wherever the raw random Y
+        // happened to fall. If no floor is found within range for that attempt, placement is skipped.
         register(context, HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_GLOW_MUSHROOM_KEY),
                 CountPlacement.of(25),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
+                EnvironmentScanPlacement.scanningFor(
+                        Direction.DOWN,
+                        BlockPredicate.solid(),
+                        BlockPredicate.matchesBlocks(Blocks.AIR, Blocks.CAVE_AIR),
+                        12),
                 BiomeFilter.biome());
 
         // select_mushroom (underground_mushroom/select_mushroom_feature.json), generic - fed as the
