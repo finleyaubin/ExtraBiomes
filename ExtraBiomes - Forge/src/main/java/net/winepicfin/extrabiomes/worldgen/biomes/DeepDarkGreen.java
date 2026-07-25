@@ -49,9 +49,11 @@ public class DeepDarkGreen {
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_UPPER_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY);
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
+
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY);
+
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

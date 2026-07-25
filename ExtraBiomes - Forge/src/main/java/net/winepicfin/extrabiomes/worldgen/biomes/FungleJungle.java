@@ -46,13 +46,15 @@ public class FungleJungle {
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
-        // boulder: weighted stick-pile selection, vegetal decoration step
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
-        // underground_jungle: moss-or-jungle-tree selection, vegetal decoration step
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY);
+
+
         // underground_jungle: cave grass floors
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_UPPER_PLACED_KEY);
+        // underground_jungle: moss-or-jungle-tree selection, vegetal decoration step
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY);
+        // boulder: weighted stick-pile selection, vegetal decoration step
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
         // mushroom_island_surface_huge_mushroom: mushroom-island-specific huge mushroom distribution
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
         // underground_jungle: cave vines
