@@ -257,7 +257,7 @@ public class UndergroundJungleFeatures {
                 placedFeatures.getOrThrow(CUSTOM_MOSS_PATCH_PLACED_KEY)
         ))));
 
-        // -- grass_floor_feature.json: depth 1, vertical_range 5, vegetation_chance 0.4, horizontal_radius 32. --
+        // -- grass_floor_feature.json: depth 1, vertical_range 5, vegetation_chance 0.4, horizontal_radius 8. --
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 GRASS_FLOOR_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.GRASS_BLOCK),
@@ -267,12 +267,12 @@ public class UndergroundJungleFeatures {
                 0.0F,
                 5,
                 0.4F,
-                ConstantInt.of(32),
+                ConstantInt.of(8),
                 0.3F
         )));
 
         // -- grass_floor_upper_feature.json: depth 1, vertical_range 5, vegetation_chance 0 (never
-        //    actually grows anything - see class docs), horizontal_radius 16. -------------------------
+        //    actually grows anything - see class docs), horizontal_radius 8. -------------------------
         context.register(GRASS_FLOOR_UPPER_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 GRASS_FLOOR_UPPER_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.GRASS_BLOCK),
@@ -282,7 +282,7 @@ public class UndergroundJungleFeatures {
                 0.0F,
                 5,
                 0.0F,
-                ConstantInt.of(16),
+                ConstantInt.of(8),
                 0.0F
         )));
     }

@@ -56,6 +56,6 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
 
         BlockPos origin = context.origin().offset(0, config.groundOffset(), 0);
 
-        return template.placeInWorld(serverLevel, origin, origin, settings, random, Block.UPDATE_CLIENTS);
+        return template.placeInWorld(level, origin, origin, settings, random, Block.UPDATE_CLIENTS);
     }
 }
