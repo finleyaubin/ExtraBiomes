@@ -264,6 +264,10 @@ public class MushroomFeatures {
 
         // select_huge_mushroom, generic (no distribution baked in) - use as a vegetation_feature input
         // or wrap again (see MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY) for a specific distribution.
+        // NOTE: no BiomeFilter here - this is only ever referenced as a nested ingredient (inside
+        // SELECT_MUSHROOM_KEY's RandomFeatureConfiguration), never added directly to a biome. A
+        // BiomeFilter on a nested/ingredient feature causes "Tried to biome check an unregistered
+        // feature" at runtime, since FeatureSorter only indexes top-level per-biome features.
         register(context, SELECT_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY));
 
         // mushroom_island_surface_huge_mushroom_feature.json: iterations 1, x/z uniform [0,16],
@@ -271,7 +275,8 @@ public class MushroomFeatures {
         register(context, MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY),
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG));
+                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                BiomeFilter.biome());
 
         // shattered_swamp/swamp_huge_mushroom_feature.json: iterations 1, scatter_chance 1/4,
         // y = query.above_top_solid(...) -> once per chunk (25% of the time), on the surface.
@@ -279,16 +284,27 @@ public class MushroomFeatures {
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                net.minecraft.world.level.levelgen.placement.RarityFilter.onAverageOnceEvery(4));
+                net.minecraft.world.level.levelgen.placement.RarityFilter.onAverageOnceEvery(4),
+                BiomeFilter.biome());
 
         // underground_mushroom/huge_glow_mushroom_feature.json: iterations 25, y in [-64, heightmap-10].
+        // NOTE: was VerticalAnchor.belowTop(10), which is 10 blocks below the world's build-height
+        // ceiling (~y310) - not "10 below the terrain surface" as the comment/Bedrock intended. Java's
+        // VerticalAnchor has no heightmap-relative variant, so this was scattering huge mushroom
+        // structures uniformly across nearly the entire world height, mostly in open sky above the
+        // actual terrain. Bounded to a fixed absolute height instead, matching the same underground-ish
+        // range used by MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY below.
         register(context, HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_GLOW_MUSHROOM_KEY),
                 CountPlacement.of(25),
                 InSquarePlacement.spread(),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.belowTop(10)));
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
+                BiomeFilter.biome());
 
         // select_mushroom (underground_mushroom/select_mushroom_feature.json), generic - fed as the
         // vegetation_feature of the mycelium floor patch below.
+        // NOTE: no BiomeFilter here either, for the same reason as SELECT_HUGE_MUSHROOM_PLACED_KEY above -
+        // this is only ever referenced nested (as MYCELIUM_FLOOR_KEY's vegetationFeature), never added
+        // directly to a biome.
         register(context, SELECT_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MUSHROOM_KEY));
 
         // mushroom_surface_mycelium_floor_feature.json: iterations 400, y uniform [-64,60]. Bedrock's
@@ -300,7 +316,8 @@ public class MushroomFeatures {
         register(context, MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY, configuredFeatures.getOrThrow(MYCELIUM_FLOOR_KEY),
                 CountPlacement.of(256),
                 InSquarePlacement.spread(),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)));
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
+                BiomeFilter.biome());
     }
 
     private static void registerStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {

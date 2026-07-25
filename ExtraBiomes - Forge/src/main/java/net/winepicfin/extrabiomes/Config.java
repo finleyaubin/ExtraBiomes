@@ -12,8 +12,8 @@ public class Config
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.IntValue BIOMEWEIGHT = BUILDER
-            .comment("The Weight of ExtraBiomes biomes, the default value is 5.")
-            .defineInRange("Biome Weight", 5, 0, Integer.MAX_VALUE);
+            .comment("The Weight of ExtraBiomes biomes, the default value is 15")
+            .defineInRange("Biome Weight", 35, 0, Integer.MAX_VALUE);
 
 
     static final ForgeConfigSpec SPEC = BUILDER.build();

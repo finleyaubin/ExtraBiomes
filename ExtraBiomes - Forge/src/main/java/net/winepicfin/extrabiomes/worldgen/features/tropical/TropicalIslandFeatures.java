@@ -86,7 +86,7 @@ public class TropicalIslandFeatures {
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MELON.defaultBlockState()))));
 
         // island_grass_floor_feature.json: depth 1, vertical_range 5, vegetation_chance 0,
-        // horizontal_radius 32-32, extra_edge_column_chance 0.3.
+        // horizontal_radius 8, extra_edge_column_chance 0.3.
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH,
                 new VegetationPatchConfiguration(
@@ -98,7 +98,7 @@ public class TropicalIslandFeatures {
                         0.0F,
                         5,
                         0.0F,
-                        ConstantInt.of(32),
+                        ConstantInt.of(8),
                         0.3F
                 )));
     }

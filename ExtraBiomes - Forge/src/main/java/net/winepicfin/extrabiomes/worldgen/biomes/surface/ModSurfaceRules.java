@@ -4,6 +4,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
 /**
@@ -59,13 +60,23 @@ public class ModSurfaceRules {
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), GRASS_BLOCK)),
                                 SurfaceRules.bandlands())),
 
-                // --- Sandy biomes: top=sand, mid=sand ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.DESERT_BRYCE), SAND),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GRAND_OASIS), SAND),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.TROPICAL_ISLAND), SAND),
+                // --- Sandy biomes: top=sand, mid=sand for a few blocks, then fall through to the
+                //     normal stone base. NOTE: these rules previously had no depth guard at all
+                //     (just isBiome(X) -> SAND), which matches at every Y-level the surface pass
+                //     visits - not just near the surface - so it replaced the ENTIRE column,
+                //     stone and all, with sand. With nothing solid left to rest on, the whole
+                //     column collapsed as soon as the chunk loaded. stoneDepthCheck bounds the
+                //     sand to a shallow band like vanilla's own desert rule. ---
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.DESERT_BRYCE),
+                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GRAND_OASIS),
+                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.TROPICAL_ISLAND),
+                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
 
                 // --- Future Desert: top=white concretepowder ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.FUTURE_DESERT), WHITE_CONCRETE_POWDER),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.FUTURE_DESERT),
+                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), WHITE_CONCRETE_POWDER)),
 
                 // --- Glacier: top=snow, mid=ice ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GLACIER),
