@@ -264,7 +264,7 @@ public class MushroomFeatures {
 
         // select_huge_mushroom, generic (no distribution baked in) - use as a vegetation_feature input
         // or wrap again (see MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY) for a specific distribution.
-        register(context, SELECT_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY), BiomeFilter.biome());
+        register(context, SELECT_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY));
 
         // mushroom_island_surface_huge_mushroom_feature.json: iterations 1, x/z uniform [0,16],
         // y = query.above_top_solid(...) -> once per chunk, spread across it, one above the surface.
@@ -292,7 +292,7 @@ public class MushroomFeatures {
 
         // select_mushroom (underground_mushroom/select_mushroom_feature.json), generic - fed as the
         // vegetation_feature of the mycelium floor patch below.
-        register(context, SELECT_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MUSHROOM_KEY), BiomeFilter.biome());
+        register(context, SELECT_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MUSHROOM_KEY));
 
         // mushroom_surface_mycelium_floor_feature.json: iterations 400, y uniform [-64,60]. Bedrock's
         // separate "snap_to_surface_feature" wrapper (vertical_search_range 12, surface floor) is folded
