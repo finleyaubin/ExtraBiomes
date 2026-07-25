@@ -271,8 +271,7 @@ public class MushroomFeatures {
         register(context, MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY),
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                BiomeFilter.biome());
+                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG));
 
         // shattered_swamp/swamp_huge_mushroom_feature.json: iterations 1, scatter_chance 1/4,
         // y = query.above_top_solid(...) -> once per chunk (25% of the time), on the surface.
@@ -280,15 +279,13 @@ public class MushroomFeatures {
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                net.minecraft.world.level.levelgen.placement.RarityFilter.onAverageOnceEvery(4),
-                BiomeFilter.biome());
+                net.minecraft.world.level.levelgen.placement.RarityFilter.onAverageOnceEvery(4));
 
         // underground_mushroom/huge_glow_mushroom_feature.json: iterations 25, y in [-64, heightmap-10].
         register(context, HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_GLOW_MUSHROOM_KEY),
                 CountPlacement.of(25),
                 InSquarePlacement.spread(),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.belowTop(10)),
-                BiomeFilter.biome());
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.belowTop(10)));
 
         // select_mushroom (underground_mushroom/select_mushroom_feature.json), generic - fed as the
         // vegetation_feature of the mycelium floor patch below.
@@ -303,8 +300,7 @@ public class MushroomFeatures {
         register(context, MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY, configuredFeatures.getOrThrow(MYCELIUM_FLOOR_KEY),
                 CountPlacement.of(256),
                 InSquarePlacement.spread(),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
-                BiomeFilter.biome());
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)));
     }
 
     private static void registerStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {
