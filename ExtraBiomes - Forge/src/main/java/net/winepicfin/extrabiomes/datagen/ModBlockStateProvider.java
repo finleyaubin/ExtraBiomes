@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.datagen;
 
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
@@ -29,6 +30,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.DENSE_CLOUD);
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
+        stickPileBlock(ModBlocks.STICK_PILE.get());
         //~~~~~~~~~mystic wood~~~~~~~~\\
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
@@ -159,6 +161,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .build();
             }
         );
+    }
+
+    private void stickPileBlock(Block stickPile){
+        getVariantBuilder(stickPile).forAllStates(blockState -> {
+            Direction.Axis axis = blockState.getValue(RotatedPillarBlock.AXIS);
+            String suffix = axis == Direction.Axis.X ? "x" : axis == Direction.Axis.Z ? "z" : "y";
+            return ConfiguredModel.builder()
+                    .modelFile(new ModelFile.UncheckedModelFile(modLoc("block/stick_pile_" + suffix)))
+                    .build();
+        });
+        simpleBlockItem(stickPile, new ModelFile.UncheckedModelFile(modLoc("block/stick_pile_y")));
     }
 
     private String name(Block block){

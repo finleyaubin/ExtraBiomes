@@ -7,6 +7,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 
 public class ModVanillaCompat {
     public static void register(){
+        registerFlammable(ModBlocks.STICK_PILE.get(),50,50);
         //~~~~~~~~~~~~Mystic Wood~~~~~~~~~~~~\\
         registerFlammable(ModBlocks.MYSTIC_PLANKS.get(),5,5);
         registerFlammable(ModBlocks.MYSTIC_LOG.get(),5,20);

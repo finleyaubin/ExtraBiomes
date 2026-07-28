@@ -2,79 +2,77 @@
   "type": "minecraft:block",
   "pools": [
     {
+      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
+          "type": "minecraft:item",
+          "name": "extrabiomes:pebble",
+          "count": 1,
           "conditions": [
             {
-              "condition": "minecraft:survives_explosion"
+              "condition": "minecraft:block_state_property",
+              "block": "extrabiomes:pebble_block",
+              "properties": {
+                "size": "1"
+              }
             }
-          ],
-          "entries": [
-            {
-              "type": "minecraft:item",
-              "name": "extrabiomes:pebble",
-              "count":1,
-              "conditions": [
-                {
-                  "block": "extrabiomes:pebble_block",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
-                    "SIZE": 1
-                  }
-                }
-              ]
-            }
-          ],
-          "rolls": 1.0
-        },
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
         {
-          "conditions": [
-            {
-              "condition": "minecraft:survives_explosion"
-            }
-          ],
-          "entries": [
-            {
-              "type": "minecraft:item",
-              "name": "extrabiomes:pebble",
-              "count":2,
-              "conditions": [
-                {
-                  "block": "extrabiomes:pebble_block",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
-                    "SIZE": 2
-                  }
-                }
-              ]
-            }
-          ],
-          "rolls": 1.0
-        },
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
         {
+          "type": "minecraft:item",
+          "name": "extrabiomes:pebble",
+          "count": 2,
           "conditions": [
             {
-              "condition": "minecraft:survives_explosion"
+              "condition": "minecraft:block_state_property",
+              "block": "extrabiomes:pebble_block",
+              "properties": {
+                "size": "2"
+              }
             }
-          ],
-          "entries": [
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "extrabiomes:pebble",
+          "count": 3,
+          "conditions": [
             {
-              "type": "minecraft:item",
-              "name": "extrabiomes:pebble",
-              "count":3,
-              "conditions": [
-                {
-                  "block": "extrabiomes:pebble_block",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
-                    "SIZE": 3
-                  }
-                }
-              ]
+              "condition": "minecraft:block_state_property",
+              "block": "extrabiomes:pebble_block",
+              "properties": {
+                "size": "3"
+              }
             }
-          ],
-          "rolls": 1.0
+          ]
         }
       ]
     }

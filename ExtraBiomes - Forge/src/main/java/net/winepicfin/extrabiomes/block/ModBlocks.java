@@ -43,6 +43,7 @@ public class ModBlocks {
     public static final RegistryObject<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> new LiquidBlock(ModFluids.SOURCE_GOO, BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
     public static final RegistryObject<PebbleBlock> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistryObject<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
+    public static final RegistryObject<StickPileBlock> STICK_PILE = registerBlock("stick_pile", () -> new StickPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion().strength(2.5f)));
 
     //~~~~~~~~~mystic wood~~~~~~~~\\
     public static final RegistryObject<Block> MYSTIC_PLANKS = registerBlock("mystic_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));

@@ -78,6 +78,26 @@ RAIL_SHAPE = {
     4: "ascending_north", 5: "ascending_south",
 }
 
+# Legacy (pre-flattening) stairs `weirdo_direction` int -> Java horizontal
+# facing. This is the old Java data-value stair convention (0-3 bits of the
+# pre-1.13 metadata) and is a DIFFERENT enum from the generic Bedrock
+# `direction` field used by beds/doors/trapdoors/grindstones (see
+# BED_DIRECTION above).
+STAIR_WEIRDO_DIRECTION = {0: "east", 1: "west", 2: "south", 3: "north"}
+
+# Legacy stonebrick `stone_brick_type` -> modern Java block id.
+STONEBRICK_TYPE = {
+    "default": "minecraft:stone_bricks",
+    "mossy": "minecraft:mossy_stone_bricks",
+    "cracked": "minecraft:cracked_stone_bricks",
+    "chiseled": "minecraft:chiseled_stone_bricks",
+}
+
+# Legacy grindstone `attachment` string -> Java `face`.
+GRINDSTONE_ATTACHMENT_FACE = {
+    "standing": "floor", "hanging": "ceiling", "side": "wall", "multiple": "wall",
+}
+
 
 def _b(v):
     """Bedrock int/bool -> Java boolean string."""
@@ -324,12 +344,13 @@ def map_block(name, states, be=None):
         size = name.split(":")[1].split("_")[0]
         return "extrabiomes:mossy_pebble_block", {"size": _s(PEBBLE_SIZE[size])}
 
-    # boulder/stick_pile subsystem: extrabiomes:stick_pile has no Java-side block yet
-    # (no StickPileBlock has been implemented in the Forge port). Drop it to air rather
-    # than emit a reference to a nonexistent registry name; see worldgen boulder subsystem
-    # notes for the follow-up needed to restore the stick visuals.
+    # boulder/stick_pile subsystem: extrabiomes:stick_pile -> extrabiomes:stick_pile (a
+    # RotatedPillarBlock, see block/custom/StickPileBlock.java). Bedrock's permutations only
+    # ever depend on the block_face's axis (identical rotation within each opposite-face
+    # pair), so the int-valued "extrabiomes:facing" state collapses onto Java's 3-way "axis".
     if name == "extrabiomes:stick_pile":
-        return "minecraft:air", {}
+        facing = FACING_DIRECTION.get(int(states.get("extrabiomes:facing", 2)), "north")
+        return "extrabiomes:stick_pile", {"axis": BLOCK_FACE_AXIS[facing]}
 
     # plain (unpowered) rail -> Java minecraft:rail. Unlike golden/detector/activator
     # rails, plain rails also support diagonal "shape" values, but this converter only
@@ -348,6 +369,158 @@ def map_block(name, states, be=None):
 
     if name == "minecraft:mushroom_stem":
         return name, _mushroom_bits(int(states.get("huge_mushroom_bits", 10)))
+
+    # -- legacy (pre-flattening) block ids -----------------------------------
+    # Simple stateless identity passthroughs.
+    if name in ("minecraft:cobblestone", "minecraft:mossy_cobblestone",
+                "minecraft:smithing_table"):
+        return name, {}
+
+    if name == "minecraft:web":
+        # Java's cobweb kept its pre-flattening name "web" on Bedrock only;
+        # the Java registry id is "cobweb".
+        return "minecraft:cobweb", {}
+
+    if name == "minecraft:wool":
+        # Bedrock's legacy wool "color" state is already the plain colour
+        # string (e.g. "white"), so it maps straight onto the Java id.
+        return "minecraft:%s_wool" % _s(states.get("color", "white")), {}
+
+    if name == "minecraft:stonebrick":
+        stype = _s(states.get("stone_brick_type", "default"))
+        return STONEBRICK_TYPE.get(stype, "minecraft:stone_bricks"), {}
+
+    # minecraft:log ("old_log_type": oak/spruce/birch/jungle) and
+    # minecraft:log2 ("new_log_type": acacia/dark_oak) are the two
+    # pre-flattening log ids split by species; the Bedrock value string
+    # already matches the modern Java species name, so it's a direct
+    # rename of pillar_axis -> axis onto "<species>_log".
+    if name == "minecraft:log":
+        species = _s(states.get("old_log_type", "oak"))
+        return "minecraft:%s_log" % species, {"axis": _s(states.get("pillar_axis", "y"))}
+    if name == "minecraft:log2":
+        species = _s(states.get("new_log_type", "acacia"))
+        return "minecraft:%s_log" % species, {"axis": _s(states.get("pillar_axis", "y"))}
+
+    # minecraft:wood ("wood_type" + "stripped_bit") -> modern "<species>_wood"
+    # / "stripped_<species>_wood".
+    if name == "minecraft:wood":
+        species = _s(states.get("wood_type", "oak"))
+        prefix = "stripped_" if states.get("stripped_bit") in (1, True) else ""
+        return "minecraft:%s%s_wood" % (prefix, species), {"axis": _s(states.get("pillar_axis", "y"))}
+
+    # Already-modern stripped log ids that Bedrock still carries under the
+    # legacy "pillar_axis" state key instead of Java's "axis".
+    if name.startswith("minecraft:stripped_") and name.endswith("_log"):
+        return name, {"axis": _s(states.get("pillar_axis", "y"))}
+
+    # minecraft:wooden_slab ("wood_type" + "top_slot_bit") -> "<species>_slab".
+    if name == "minecraft:wooden_slab":
+        species = _s(states.get("wood_type", "oak"))
+        return "minecraft:%s_slab" % species, {
+            "type": "top" if states.get("top_slot_bit") in (1, True) else "bottom",
+            "waterlogged": "false",
+        }
+    # minecraft:double_wooden_slab has no Java equivalent block; two stacked
+    # full-height slabs of the same species are visually a solid planks block.
+    if name == "minecraft:double_wooden_slab":
+        species = _s(states.get("wood_type", "oak"))
+        return "minecraft:%s_planks" % species, {}
+
+    # Legacy stairs ids (weirdo_direction 0-3 + upside_down_bit). Only the
+    # "normal_stone_stairs" id renamed on the Java side ("stone_stairs");
+    # the others already use their modern Java block id.
+    LEGACY_STAIRS_ID = {
+        "minecraft:dark_oak_stairs": "minecraft:dark_oak_stairs",
+        "minecraft:spruce_stairs": "minecraft:spruce_stairs",
+        "minecraft:normal_stone_stairs": "minecraft:stone_stairs",
+        "minecraft:stone_brick_stairs": "minecraft:stone_brick_stairs",
+    }
+    if name in LEGACY_STAIRS_ID:
+        direction = int(states.get("weirdo_direction", 0))
+        return LEGACY_STAIRS_ID[name], {
+            "facing": STAIR_WEIRDO_DIRECTION.get(direction, "east"),
+            "half": "top" if states.get("upside_down_bit") in (1, True) else "bottom",
+            "shape": "straight",
+            "waterlogged": "false",
+        }
+
+    if name == "minecraft:spruce_trapdoor":
+        direction = int(states.get("direction", 0))
+        return "minecraft:spruce_trapdoor", {
+            "facing": BED_DIRECTION.get(direction, "south"),
+            "open": _b(states.get("open_bit", 0)),
+            "half": "top" if states.get("upside_down_bit") in (1, True) else "bottom",
+            "waterlogged": "false",
+        }
+
+    if name == "minecraft:spruce_door":
+        direction = int(states.get("direction", 0))
+        return "minecraft:spruce_door", {
+            "facing": BED_DIRECTION.get(direction, "south"),
+            "hinge": "right" if states.get("door_hinge_bit") in (1, True) else "left",
+            "open": _b(states.get("open_bit", 0)),
+            "half": "upper" if states.get("upper_block_bit") in (1, True) else "lower",
+            "powered": "false",
+        }
+
+    # Legacy 6-directional wall/floor/ceiling buttons (facing_direction 0-5 +
+    # button_pressed_bit) -> modern face/facing/powered states. Only the
+    # wood-species part of the id changes across Bedrock buttons; the id
+    # itself ("jungle_button" etc.) is already the modern Java id.
+    if name.endswith("_button") and name.startswith("minecraft:"):
+        direction = FACING_DIRECTION.get(int(states.get("facing_direction", 2)), "north")
+        if direction == "up":
+            face, facing = "ceiling", "north"
+        elif direction == "down":
+            face, facing = "floor", "north"
+        else:
+            face, facing = "wall", direction
+        return name, {
+            "face": face,
+            "facing": facing,
+            "powered": _b(states.get("button_pressed_bit", 0)),
+        }
+
+    # minecraft:fence ("wood_type") -> "<species>_fence". Bedrock's legacy
+    # fence has no connection-state bits (those are computed on placement,
+    # like glass_pane above), so only waterlogged needs to default.
+    if name == "minecraft:fence":
+        species = _s(states.get("wood_type", "oak"))
+        return "minecraft:%s_fence" % species, {"waterlogged": "false"}
+
+    if name == "minecraft:hay_block":
+        # "deprecated" is an unused leftover state; only pillar_axis matters.
+        return "minecraft:hay_block", {"axis": _s(states.get("pillar_axis", "y"))}
+
+    if name == "minecraft:chain":
+        return "minecraft:chain", {
+            "axis": _s(states.get("pillar_axis", "y")),
+            "waterlogged": "false",
+        }
+
+    if name == "minecraft:composter":
+        return "minecraft:composter", {"level": _s(int(states.get("composter_fill_level", 0)))}
+
+    if name == "minecraft:barrel":
+        return "minecraft:barrel", {
+            "facing": FACING_DIRECTION.get(int(states.get("facing_direction", 2)), "north"),
+            "open": _b(states.get("open_bit", 0)),
+        }
+
+    if name == "minecraft:grindstone":
+        direction = int(states.get("direction", 0))
+        return "minecraft:grindstone", {
+            "face": GRINDSTONE_ATTACHMENT_FACE.get(_s(states.get("attachment", "standing")), "floor"),
+            "facing": BED_DIRECTION.get(direction, "south"),
+        }
+
+    # minecraft:frame is Bedrock's item frame, which Java implements as an
+    # ENTITY (minecraft:item_frame), not a block. This converter only
+    # produces block palettes, so item frames can't be placed here; leave
+    # unmapped rather than fabricating fake block-entity placement support.
+    if name == "minecraft:frame":
+        return None, None
 
     # -- unmapped -----------------------------------------------------------
     return None, None

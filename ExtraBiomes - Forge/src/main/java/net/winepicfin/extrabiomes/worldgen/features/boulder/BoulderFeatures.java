@@ -93,17 +93,16 @@ import java.util.Optional;
  *       {@code stick_pile_placer.json} is approximated with {@link RarityFilter#onAverageOnceEvery(int)}
  *       (an average 1-in-10 chance per chunk column attempt), combined with
  *       {@link InSquarePlacement#spread()} for the x/z 0-16 uniform spread (iterations: 1).</li>
- *   <li><b>Known gap:</b> the Bedrock stick-pile structures place a custom
- *       {@code extrabiomes:stick_pile} block (with a {@code extrabiomes:facing} state) that has no
- *       Java-side block registered anywhere in this mod yet. The structure converter
- *       (tools/block_map.py) now recognises that id and drops it to {@code minecraft:air} rather
- *       than emitting a reference to a nonexistent registry entry, so the converted
- *       big_stick_pile0/1 structures currently place only their incidental
- *       {@code minecraft:rail} blocks (also newly mapped) plus air where the sticks were. A real
- *       {@code StickPileBlock} (analogous to {@link net.winepicfin.extrabiomes.block.custom.PebbleBlock})
- *       needs to be modeled and registered separately to restore the visuals; this subsystem wires
- *       the placement/selection logic faithfully and will "just work" once that block exists and
- *       the structures are reconverted.</li>
+ *   <li>The Bedrock stick-pile structures place a custom {@code extrabiomes:stick_pile} block
+ *       (with a {@code extrabiomes:facing}/block_face state). Bedrock's permutations only ever
+ *       apply an identical rotation within each opposite-face pair (north/south, east/west,
+ *       up/down), i.e. the visual only depends on {@link net.minecraft.core.Direction#getAxis()}
+ *       - exactly like a log - so it is ported as {@link net.winepicfin.extrabiomes.block.custom.StickPileBlock},
+ *       a {@link net.minecraft.world.level.block.RotatedPillarBlock} with three baked per-axis
+ *       models (see tools/convert_stick_pile_model.py, which converts the Bedrock geometry
+ *       directly since its bones carry no rotations of their own). tools/block_map.py maps
+ *       {@code extrabiomes:stick_pile} to it directly (collapsing the 6-way block_face onto the
+ *       3-way axis via {@code BLOCK_FACE_AXIS}) instead of dropping to {@code minecraft:air}.</li>
  * </ul>
  */
 public class BoulderFeatures {

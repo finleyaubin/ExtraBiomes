@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
@@ -41,8 +42,13 @@ import java.util.List;
  * SingleStructureFeature/SingleStructureConfiguration infra - see that subsystem's own summary for the general
  * mapping rules) with a FIXED rotation (Bedrock's facing_direction "south" is not random, so
  * {@code Optional.of(Rotation.NONE)} is used, treating the structure's captured orientation as already "south").
- * {@code y: query.above_top_solid(...)} -> HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG), groundOffset 0.
- * {@code x/z uniform[0,16]} -> InSquarePlacement.spread().
+ * {@code y: query.above_top_solid(...)} - the top SOLID block, ignoring water/liquid on top of it - ->
+ * HeightmapPlacement.onHeightmap(OCEAN_FLOOR_WG) (NOT WORLD_SURFACE_WG, which counts water as non-air and would
+ * place the windmill floating on the water surface instead of on the ground/seafloor below it), groundOffset 0.
+ * {@code x/z uniform[0,16]} -> InSquarePlacement.spread(). {@link SurfaceWaterDepthFilter#forMaxDepth(int)} with
+ * maxDepth 0 is an ADDITION beyond the literal Bedrock port (Bedrock has no equivalent check here) - it rejects any
+ * column with water above the OCEAN_FLOOR_WG surface outright, so windmills never generate on/in water at all,
+ * rather than merely resting on the seafloor beneath it.
  * {@code block_intersection.block_allowlist: [air, wheat, red_flower, orange_tulip, pink_tulip, white_tulip, red_tulip]}
  * -> BlockPredicateFilter tested at the placement origin against the matching vanilla blocks (air, wheat, and all
  * four tulip colours - Bedrock's legacy "red_flower" base id plus its four tulip variants collapse onto the same
@@ -73,7 +79,8 @@ public class NetherlandsWindmillFeature {
                 List.of(
                         RarityFilter.onAverageOnceEvery(10),
                         InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        SurfaceWaterDepthFilter.forMaxDepth(0),
                         allowedGround,
                         BiomeFilter.biome()
                 )
@@ -83,7 +90,8 @@ public class NetherlandsWindmillFeature {
                 List.of(
                         RarityFilter.onAverageOnceEvery(50),
                         InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        SurfaceWaterDepthFilter.forMaxDepth(0),
                         allowedGround,
                         BiomeFilter.biome()
                 )
