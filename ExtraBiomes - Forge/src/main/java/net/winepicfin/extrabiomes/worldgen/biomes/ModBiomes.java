@@ -40,10 +40,10 @@ public class ModBiomes
     public static final ResourceKey<Biome> MOORLANDS = register("moorlands");
     public static final ResourceKey<Biome> MYSTIC_FOREST = register("mystic_forest");
     public static final ResourceKey<Biome> SHATTERED_SWAMP = register("shattered_swamp");
-    public static final ResourceKey<Biome> SHATTERED_TIAGA_SPIKES = register("shattered_tiaga_spikes");
+    public static final ResourceKey<Biome> SHATTERED_TAIGA_SPIKES = register("shattered_taiga_spikes");
     public static final ResourceKey<Biome> THE_NETHERLANDS = register("the_netherlands");
     public static final ResourceKey<Biome> THE_NETHERLANDS_MUTATED = register("the_netherlands_mutated");
-    public static final ResourceKey<Biome> TIAGA_SPIKES = register("tiaga_spikes");
+    public static final ResourceKey<Biome> TAIGA_SPIKES = register("taiga_spikes");
     public static final ResourceKey<Biome> TROPICAL_ISLAND = register("tropical_island");
 
 
@@ -73,10 +73,10 @@ public class ModBiomes
         context.register(MOORLANDS, new Moorlands().Register(context));
         context.register(MYSTIC_FOREST, new MysticForest().Register(context));
         context.register(SHATTERED_SWAMP, new ShatteredSwamp().Register(context));
-        context.register(SHATTERED_TIAGA_SPIKES, new ShatteredTiagaSpikes().Register(context));
+        context.register(SHATTERED_TAIGA_SPIKES, new ShatteredTiagaSpikes().Register(context));
         context.register(THE_NETHERLANDS, new TheNetherlands().Register(context));
         context.register(THE_NETHERLANDS_MUTATED, new TheNetherlandsMutated().Register(context));
-        context.register(TIAGA_SPIKES, new TiagaSpikes().Register(context));
+        context.register(TAIGA_SPIKES, new TiagaSpikes().Register(context));
         context.register(TROPICAL_ISLAND, new TropicalIsland().Register(context));
     }
 

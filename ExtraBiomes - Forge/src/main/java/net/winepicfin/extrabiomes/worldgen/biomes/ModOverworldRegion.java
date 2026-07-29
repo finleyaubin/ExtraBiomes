@@ -245,7 +245,7 @@ public class ModOverworldRegion extends Region {
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.SHATTERED_TIAGA_SPIKES));
+                .build().forEach(point -> builder.add(point, ModBiomes.SHATTERED_TAIGA_SPIKES));
 
         // The Netherlands - bedrock temp=0.5, downfall=0.5 (Dutch tulip fields/windmills, overworld)
         new ParameterUtils.ParameterPointListBuilder()
@@ -275,7 +275,7 @@ public class ModOverworldRegion extends Region {
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.TIAGA_SPIKES));
+                .build().forEach(point -> builder.add(point, ModBiomes.TAIGA_SPIKES));
 
         // Tropical Island - bedrock temp=1, downfall=0.9, beach/ocean/warm tags
         new ParameterUtils.ParameterPointListBuilder()

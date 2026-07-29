@@ -6,9 +6,7 @@ import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -35,13 +33,13 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
                         ModBiomes.FUNGLE_JUNGLE, ModBiomes.FUTURE_DESERT, ModBiomes.GLACIER, ModBiomes.GRAND_OASIS,
                         ModBiomes.JELLYFISH_FIELDS, ModBiomes.JUNGLE_MARSH, ModBiomes.JUNGLE_PILLARS, ModBiomes.LUSH_MESA,
                         ModBiomes.LUSH_MESA_BRYCE, ModBiomes.MOORLANDS, ModBiomes.MYSTIC_FOREST, ModBiomes.SHATTERED_SWAMP,
-                        ModBiomes.SHATTERED_TIAGA_SPIKES, ModBiomes.THE_NETHERLANDS, ModBiomes.THE_NETHERLANDS_MUTATED,
-                        ModBiomes.TIAGA_SPIKES, ModBiomes.TROPICAL_ISLAND);
+                        ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.THE_NETHERLANDS, ModBiomes.THE_NETHERLANDS_MUTATED,
+                        ModBiomes.TAIGA_SPIKES, ModBiomes.TROPICAL_ISLAND);
 
         this.tag(BiomeTags.IS_FOREST).add(ModBiomes.CHARRED_FOREST, ModBiomes.DEEP_DARK_FOREST);
         this.tag(BiomeTags.IS_JUNGLE).add(ModBiomes.DEEP_DARK_GREEN, ModBiomes.FLOATING_JUNGLE, ModBiomes.FUNGLE_JUNGLE,
                 ModBiomes.JUNGLE_MARSH, ModBiomes.JUNGLE_PILLARS, ModBiomes.LUSH_MESA, ModBiomes.LUSH_MESA_BRYCE);
-        this.tag(BiomeTags.IS_TAIGA).add(ModBiomes.DEEP_DARK_FOREST, ModBiomes.SHATTERED_TIAGA_SPIKES, ModBiomes.TIAGA_SPIKES);
+        this.tag(BiomeTags.IS_TAIGA).add(ModBiomes.DEEP_DARK_FOREST, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES);
         this.tag(BiomeTags.IS_BADLANDS).add(ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,
                 ModBiomes.LUSH_MESA, ModBiomes.LUSH_MESA_BRYCE);
         this.tag(BiomeTags.IS_OCEAN).add(ModBiomes.JELLYFISH_FIELDS, ModBiomes.TROPICAL_ISLAND);
@@ -55,12 +53,12 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         this.tag(BiomeTags.WITHOUT_PATROL_SPAWNS).add(ModBiomes.FUNGLE_JUNGLE);
 
         this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).add(ModBiomes.DEEP_DARK_GREEN, ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE,
-                ModBiomes.COLD_MESA_PLATEAU, ModBiomes.GLACIER, ModBiomes.SHATTERED_TIAGA_SPIKES, ModBiomes.TIAGA_SPIKES);
+                ModBiomes.COLD_MESA_PLATEAU, ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES);
         this.tag(BiomeTags.SPAWNS_WARM_VARIANT_FROGS).add(ModBiomes.CHARRED_FOREST, ModBiomes.DESERT_BRYCE, ModBiomes.FUTURE_DESERT,
                 ModBiomes.GRAND_OASIS, ModBiomes.JELLYFISH_FIELDS, ModBiomes.TROPICAL_ISLAND);
         this.tag(BiomeTags.SPAWNS_SNOW_FOXES).add(ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,
-                ModBiomes.GLACIER, ModBiomes.SHATTERED_TIAGA_SPIKES);
+                ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES);
         this.tag(BiomeTags.SPAWNS_WHITE_RABBITS).add(ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,
-                ModBiomes.GLACIER, ModBiomes.SHATTERED_TIAGA_SPIKES, ModBiomes.TIAGA_SPIKES);
+                ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES);
     }
 }
