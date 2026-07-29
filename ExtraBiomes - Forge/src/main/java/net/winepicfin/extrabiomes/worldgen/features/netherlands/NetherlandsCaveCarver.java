@@ -58,7 +58,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
  */
 public class NetherlandsCaveCarver {
     public static final ResourceKey<ConfiguredWorldCarver<?>> NETHERLANDS_CAVE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_CARVER, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_cave"));
+            ResourceKey.create(Registries.CONFIGURED_CARVER, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "netherlands_cave"));
 
     public static void bootstrapCarver(BootstapContext<ConfiguredWorldCarver<?>> context) {
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);

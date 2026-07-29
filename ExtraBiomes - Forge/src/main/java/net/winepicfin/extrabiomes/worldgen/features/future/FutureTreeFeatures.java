@@ -69,24 +69,24 @@ import java.util.List;
  */
 public class FutureTreeFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> FUTURE_TREE_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "future_tree_2"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_2"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> FUTURE_TREE_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "future_tree_3"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_3"));
 
     /** These are the keys the biome-wiring pass should addFeature(...) with. */
     public static final ResourceKey<PlacedFeature> FUTURE_TREE_2_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "future_tree_2"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_2"));
     public static final ResourceKey<PlacedFeature> FUTURE_TREE_3_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "future_tree_3"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_3"));
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(FUTURE_TREE_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "future/2_tall_white_tree"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/2_tall_white_tree"))
         ));
         context.register(FUTURE_TREE_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "future/3_tall_white_tree"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/3_tall_white_tree"))
         ));
     }
 

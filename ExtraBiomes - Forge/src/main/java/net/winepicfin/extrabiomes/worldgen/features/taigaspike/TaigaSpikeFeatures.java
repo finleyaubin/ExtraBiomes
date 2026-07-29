@@ -80,36 +80,36 @@ import java.util.List;
  */
 public class TaigaSpikeFeatures {
     private static final ResourceKey<ConfiguredFeature<?, ?>> SPIKE_1_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "taiga_spike_1"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_1"));
     private static final ResourceKey<ConfiguredFeature<?, ?>> SPIKE_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "taiga_spike_2"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_2"));
     private static final ResourceKey<ConfiguredFeature<?, ?>> SPIKE_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "taiga_spike_3"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_3"));
 
     private static final ResourceKey<PlacedFeature> SPIKE_1_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "taiga_spike_1"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_1"));
     private static final ResourceKey<PlacedFeature> SPIKE_2_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "taiga_spike_2"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_2"));
     private static final ResourceKey<PlacedFeature> SPIKE_3_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "taiga_spike_3"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_3"));
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_TAIGA_SPIKE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_taiga_spike"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_taiga_spike"));
     public static final ResourceKey<PlacedFeature> TAIGA_SPIKE_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_taiga_spike"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_taiga_spike"));
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(SPIKE_1_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "taigaspike/spike_1"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_1"))
         ));
         context.register(SPIKE_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "taigaspike/spike_2"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_2"))
         ));
         context.register(SPIKE_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "taigaspike/spike_3"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_3"))
         ));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);

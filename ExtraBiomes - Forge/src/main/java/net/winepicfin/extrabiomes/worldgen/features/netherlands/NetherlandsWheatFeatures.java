@@ -55,7 +55,7 @@ import java.util.List;
  * ground near the heightmap placement point), so the PlacedFeature itself places on HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG).
  */
 public class NetherlandsWheatFeatures {
-    public static final TagKey<Block> WHEAT_REPLACEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_wheat_replaceable"));
+    public static final TagKey<Block> WHEAT_REPLACEABLE = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "netherlands_wheat_replaceable"));
 
     private static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_BIG_KEY = key("netherlands_wheat_big");
     private static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_SMALL_KEY = key("netherlands_wheat_small");
@@ -95,10 +95,10 @@ public class NetherlandsWheatFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

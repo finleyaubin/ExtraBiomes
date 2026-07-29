@@ -41,14 +41,14 @@ import java.util.List;
  */
 public class NetherlandsWaterFeature {
     public static final ResourceKey<ConfiguredFeature<?, ?>> WATER_FEATURE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_water_feature"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "netherlands_water_feature"));
     public static final ResourceKey<PlacedFeature> WATER_FEATURE_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_water_feature"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "netherlands_water_feature"));
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(WATER_FEATURE_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "the_netherlands/farm_water"), -2)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "the_netherlands/farm_water"), -2)
         ));
     }
 

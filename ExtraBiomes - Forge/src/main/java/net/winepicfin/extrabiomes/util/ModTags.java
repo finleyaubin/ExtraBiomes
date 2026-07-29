@@ -15,17 +15,17 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 public class ModTags {
     public static class Blocks{
         public static TagKey<Block> tag(String name){
-            return BlockTags.create(new ResourceLocation(ExtraBiomes.MOD_ID, name));        }
+            return BlockTags.create(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));        }
     }
     public static class Items{
         public static TagKey<Item> tag(String name){
-            return ItemTags.create(new ResourceLocation(ExtraBiomes.MOD_ID, name));        }
+            return ItemTags.create(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));        }
     }
     public static class Biomes{
         public static final TagKey<Biome> LUSH_MESA = tag("lush_mesa");
         public static final TagKey<Biome> MYSTIC_FOREST = tag("mystic_forest");
         public static TagKey<Biome> tag(String name){
-           return TagKey.create(Registries.BIOME, new ResourceLocation(ExtraBiomes.MOD_ID,name));
+           return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,name));
         }
     }
 

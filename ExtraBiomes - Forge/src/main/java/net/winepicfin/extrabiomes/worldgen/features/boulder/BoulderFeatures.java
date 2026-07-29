@@ -111,7 +111,7 @@ public class BoulderFeatures {
     // shared tag
     // -----------------------------------------------------------------
     public static final TagKey<Block> BOULDER_REPLACEABLE =
-            TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "boulder_replaceable"));
+            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder_replaceable"));
 
     // -----------------------------------------------------------------
     // pebble sub-features (boulder/pebble.json + its 6 structure_template_feature variants)
@@ -254,7 +254,7 @@ public class BoulderFeatures {
     }
 
     private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation) {
-        ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, structurePath);
+        ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
         SingleStructureConfiguration config = rotation
                 .map(r -> new SingleStructureConfiguration(structure, r))
                 .orElseGet(() -> new SingleStructureConfiguration(structure));
@@ -345,10 +345,10 @@ public class BoulderFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "boulder/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "boulder/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder/" + name));
     }
 }

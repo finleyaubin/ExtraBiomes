@@ -7,7 +7,7 @@ import terrablender.api.Regions;
 
 public class ModTerrablender {
     public static void registerBiomes(){
-        Regions.register(new ModOverworldRegion(new ResourceLocation(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
+        Regions.register(new ModOverworldRegion(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
         System.out.println(Config.biomeWeight+" is the biome weight On registerBiomes");
     }
 }

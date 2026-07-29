@@ -48,9 +48,12 @@ public final class FrogHelmetItem extends ArmorItem implements GeoItem {
         super(p_40386_, p_266831_, p_40388_);
     }
 
+    // IForgeItem.onArmorTick is deprecated for removal - vanilla's Item.inventoryTick is the
+    // replacement. It fires for every inventory slot, not just armor, so we only act on the helmet
+    // slot (36=boots, 37=leggings, 38=chestplate, 39=helmet - fixed indices per Forge's migration notes).
     @Override
-    public void onArmorTick(ItemStack stack, Level world, Player player) {
-        if (!world.isClientSide()) {
+    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slotId, boolean isSelected) {
+        if (!world.isClientSide() && slotId == 39 && entity instanceof Player player) {
             if (hasHelmetOn(player)) {
                 evaluateArmorEffects(player);
             }

@@ -6,9 +6,9 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 
 public class PuckooBaseModelLayers {
     public static final ModelLayerLocation PUCKOO_BASE_LAYER= new ModelLayerLocation(
-            new ResourceLocation(ExtraBiomes.MOD_ID,"puckoo_base_layer"), "main");
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"puckoo_base_layer"), "main");
     public static final ModelLayerLocation PUCKOO_KOI_LAYER= new ModelLayerLocation(
-            new ResourceLocation(ExtraBiomes.MOD_ID,"puckoo_koi_layer"), "main");
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"puckoo_koi_layer"), "main");
     public static final ModelLayerLocation PUCKOO_SADDLE_LAYER= new ModelLayerLocation(
-            new ResourceLocation(ExtraBiomes.MOD_ID,"puckoo_saddle_layer"), "main");
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"puckoo_saddle_layer"), "main");
 }

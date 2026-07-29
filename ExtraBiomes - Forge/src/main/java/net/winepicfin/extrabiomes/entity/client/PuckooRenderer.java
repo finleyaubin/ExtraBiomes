@@ -28,10 +28,10 @@ public class PuckooRenderer extends MobRenderer<PuckooEntity, PuckooModel<Puckoo
     @Override
     public @NotNull ResourceLocation getTextureLocation(PuckooEntity entity) {
         return switch (entity.getVariant()) {
-            default -> new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_0.png");
-            case BROWN -> new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_1.png");
-            case PINK -> new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_2.png");
-            case YELLOW -> new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_3.png");
+            default -> ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_0.png");
+            case BROWN -> ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_1.png");
+            case PINK -> ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_2.png");
+            case YELLOW -> ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/puckoo/puckoo_base_3.png");
         };
     }
 }

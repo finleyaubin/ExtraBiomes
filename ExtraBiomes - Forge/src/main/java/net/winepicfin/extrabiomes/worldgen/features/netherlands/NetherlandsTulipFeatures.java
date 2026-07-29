@@ -53,7 +53,7 @@ import java.util.List;
  * losing the striped-row visual pattern.
  */
 public class NetherlandsTulipFeatures {
-    public static final TagKey<Block> TULIP_REPLACEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_tulip_replaceable"));
+    public static final TagKey<Block> TULIP_REPLACEABLE = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "netherlands_tulip_replaceable"));
 
     private static final ResourceKey<ConfiguredFeature<?, ?>> ORANGE_TULIP_KEY = key("netherlands_orange_tulip");
     private static final ResourceKey<ConfiguredFeature<?, ?>> PINK_TULIP_KEY = key("netherlands_pink_tulip");
@@ -117,10 +117,10 @@ public class NetherlandsTulipFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

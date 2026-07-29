@@ -57,14 +57,14 @@ import java.util.List;
  */
 public class OasisPuddleFeature {
     public static final ResourceKey<ConfiguredFeature<?, ?>> OASIS_PUDDLE_SCATTER_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
     public static final ResourceKey<PlacedFeature> OASIS_PUDDLE_SCATTER_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(OASIS_PUDDLE_SCATTER_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "structurescatter/oasis_puddle"), -4)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "structurescatter/oasis_puddle"), -4)
         ));
     }
 
