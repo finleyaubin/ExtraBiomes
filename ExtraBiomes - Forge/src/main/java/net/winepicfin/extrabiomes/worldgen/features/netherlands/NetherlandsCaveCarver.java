@@ -33,8 +33,10 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
  * HolderSet<Block> replaceable, FloatProvider horizontalRadiusMultiplier, FloatProvider verticalRadiusMultiplier,
  * FloatProvider floorLevel)} - the debug-settings overload defaults to {@code CarverDebugSettings.DEFAULT}):
  * <ul>
- *   <li>{@code skip_carve_chance: 15} - Bedrock semantics is "1-in-15 chance the carver is SKIPPED", i.e. Java's
- *       {@code probability} (chance it actually RUNS) is the complement: 14/15 &#8776; 0.9333F.</li>
+ *   <li>{@code skip_carve_chance: 15} - Bedrock semantics is "1-in-15 chance the carver actually RUNS" (same value
+ *       used by vanilla Bedrock's own overworld cave carvers), i.e. Java's {@code probability} is 1/15 &#8776; 0.0667F,
+ *       not its complement. Using the complement (14/15) caused the carver to run on ~93% of positions instead of
+ *       ~6.7%, hollowing out nearly the entire underground area under this biome.</li>
  *   <li>{@code y_scale: [0.5, 0.5]} -&gt; {@code ConstantFloat.of(0.5F)}.</li>
  *   <li>{@code height_limit: 120} -&gt; the carve height range's upper bound: {@code UniformHeight.of(VerticalAnchor.absolute(0), VerticalAnchor.absolute(120))}.
  *       SIMPLIFICATION: Bedrock gives only a single upper limit with no lower bound, so {@code VerticalAnchor.absolute(0)}
@@ -62,7 +64,7 @@ public class NetherlandsCaveCarver {
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
         HolderSet<Block> replaceable = blocks.getOrThrow(BlockTags.OVERWORLD_CARVER_REPLACEABLES);
         context.register(NETHERLANDS_CAVE_KEY, new ConfiguredWorldCarver<>(WorldCarver.CAVE, new CaveCarverConfiguration(
-                14F / 15F,
+                1F / 15F,
                 UniformHeight.of(VerticalAnchor.absolute(0), VerticalAnchor.absolute(120)),
                 ConstantFloat.of(0.5F),
                 VerticalAnchor.absolute(-54),

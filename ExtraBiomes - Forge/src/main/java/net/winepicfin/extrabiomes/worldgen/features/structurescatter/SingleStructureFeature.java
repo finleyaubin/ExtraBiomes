@@ -4,12 +4,14 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -28,6 +30,15 @@ import java.util.Optional;
  * {@link OasisPuddleFeature} for a complete worked example.
  */
 public class SingleStructureFeature extends Feature<SingleStructureConfiguration> {
+    /**
+     * Vanilla's FEATURES chunk status only lets a Feature safely write into the chunk currently
+     * decorating plus one chunk of buffer on every side (a 3x3-chunk / 48-block-wide window). Any
+     * template wider than that in X/Z (e.g. the 22x30x16 windmill) can have its randomized origin
+     * land close enough to a chunk edge that part of it falls outside that window; vanilla then
+     * silently drops those blocks (logged as "Detected setBlock in a far chunk"), producing a
+     * visibly clipped structure instead of a clean skip.
+     */
+    private static final int WRITE_RADIUS_CHUNKS = 1;
 
     public SingleStructureFeature(Codec<SingleStructureConfiguration> codec) {
         super(codec);
@@ -56,6 +67,26 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
 
         BlockPos origin = context.origin().offset(0, config.groundOffset(), 0);
 
+        if (!fitsWithinSafeWriteArea(template, settings, origin, context.origin())) {
+            return false;
+        }
+
         return template.placeInWorld(level, origin, origin, settings, random, Block.UPDATE_CLIENTS);
+    }
+
+    /**
+     * Checks the template's true rotated/mirrored footprint (via {@link StructureTemplate#getBoundingBox})
+     * against the chunk-column window vanilla actually allows Feature writes into, so oversized
+     * templates skip cleanly instead of getting clipped at the edge.
+     */
+    private static boolean fitsWithinSafeWriteArea(StructureTemplate template, StructurePlaceSettings settings, BlockPos origin, BlockPos decoratingColumn) {
+        BoundingBox structureBox = template.getBoundingBox(settings, origin);
+        ChunkPos chunk = new ChunkPos(decoratingColumn);
+        int minX = chunk.getMinBlockX() - (WRITE_RADIUS_CHUNKS * 16);
+        int maxX = chunk.getMaxBlockX() + (WRITE_RADIUS_CHUNKS * 16);
+        int minZ = chunk.getMinBlockZ() - (WRITE_RADIUS_CHUNKS * 16);
+        int maxZ = chunk.getMaxBlockZ() + (WRITE_RADIUS_CHUNKS * 16);
+        return structureBox.minX() >= minX && structureBox.maxX() <= maxX
+                && structureBox.minZ() >= minZ && structureBox.maxZ() <= maxZ;
     }
 }

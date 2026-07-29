@@ -32,7 +32,8 @@ import java.util.List;
  * odds sharing the same underlying feature identifier "extrabiomes:windmill":
  * <ul>
  *   <li>feature_rules/the_netherlands/netherlands_windmill_feature.json - biome_tag "the_netherlands", scatter_chance
- *       5/50 (10%), iterations 1 -> {@link #WINDMILL_NETHERLANDS_PLACED_KEY}, RarityFilter.onAverageOnceEvery(10).</li>
+ *       5/50 (10%), iterations 1 -> {@link #WINDMILL_NETHERLANDS_PLACED_KEY}. Deliberately detuned from that 10%
+ *       Bedrock rate to RarityFilter.onAverageOnceEvery(30) (~3.3%) - felt too frequent in-game.</li>
  *   <li>feature_rules/windmill_feature.json (repo root, NOT under the_netherlands/) - biome_tag "plains", scatter_chance
  *       1/50 (2%), iterations 1 -> {@link #WINDMILL_PLAINS_PLACED_KEY}, RarityFilter.onAverageOnceEvery(50). This is
  *       the SAME windmill feature Moorlands.java also needs (see wiringInstructions) since Bedrock's plains
@@ -77,7 +78,9 @@ public class NetherlandsWindmillFeature {
         context.register(WINDMILL_NETHERLANDS_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(WINDMILL_KEY),
                 List.of(
-                        RarityFilter.onAverageOnceEvery(10),
+                        // Bumped up from the Bedrock-matching onAverageOnceEvery(10) (10% per chunk) -
+                        // that felt too frequent in practice; tuned down to ~3.3%.
+                        RarityFilter.onAverageOnceEvery(30),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
                         SurfaceWaterDepthFilter.forMaxDepth(0),

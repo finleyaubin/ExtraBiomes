@@ -26,6 +26,7 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource SNOW_BLOCK = makeStateRule(Blocks.SNOW_BLOCK);
     private static final SurfaceRules.RuleSource ICE = makeStateRule(Blocks.ICE);
     private static final SurfaceRules.RuleSource WHITE_CONCRETE_POWDER = makeStateRule(Blocks.WHITE_CONCRETE_POWDER);
+    private static final SurfaceRules.RuleSource NETHERRACK = makeStateRule(Blocks.NETHERRACK);
 
     public static SurfaceRules.RuleSource makeRules()
     {
@@ -90,14 +91,19 @@ public class ModSurfaceRules {
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JUNGLE_PILLARS), grassOverStone),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.MOORLANDS), grassOverStone),
 
-                // --- The Netherlands (mutated): top=dirt, no grass cap. The base (non-mutated)
-                //     variant already matches the vanilla default (grass_block/dirt), so it has
-                //     no explicit rule here. Both variants have a netherrack foundation instead
-                //     of stone at depth; TODO: port with a stoneDepthCheck-based rule once the
-                //     windmill/wheat/tulip features are ported (see TheNetherlands.java). ---
+                // --- The Netherlands: top=grass/dirt (base) or dirt with no grass cap (mutated),
+                //     but both variants have a netherrack foundation instead of stone at depth
+                //     ("nethrack" pun) - stoneDepthCheck bounds the top layer to a shallow band,
+                //     same pattern as the sandy biomes above, then netherrack fills the rest. ---
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS),
+                        SurfaceRules.sequence(
+                                grassOverDirt,
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
-                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT))),
+                        SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT)),
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
 
                 // --- Reference vanilla jungle rule kept from the original file ---
                 SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.isBiome(Biomes.JUNGLE),

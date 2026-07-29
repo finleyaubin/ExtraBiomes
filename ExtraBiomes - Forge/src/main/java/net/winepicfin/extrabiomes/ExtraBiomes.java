@@ -32,6 +32,7 @@ import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
 
@@ -57,6 +58,7 @@ public class ExtraBiomes
         ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModTrunkPlacerTypes.register(modEventBus);
+        ModTreeDecoratorTypes.register(modEventBus);
         ModStructureScatterFeatures.register(modEventBus);
         MoorlandFeatures.register(modEventBus);
         UndergroundJungleFeatures.register(modEventBus);
