@@ -8,6 +8,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
+import net.winepicfin.extrabiomes.entity.client.GiantTortoiseModel;
+import net.winepicfin.extrabiomes.entity.client.HarpyModel;
+import net.winepicfin.extrabiomes.entity.client.HoppleshroomModel;
+import net.winepicfin.extrabiomes.entity.client.JellyfishModel;
+import net.winepicfin.extrabiomes.entity.client.ModModelLayers;
+import net.winepicfin.extrabiomes.entity.client.PiranhaModel;
+import net.winepicfin.extrabiomes.entity.client.TreefrogModel;
+import net.winepicfin.extrabiomes.entity.client.WormModel;
 import net.winepicfin.extrabiomes.entity.client.layers.PuckooBaseModelLayers;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 
@@ -18,8 +26,16 @@ public class ModEventBusClientEvents {
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
     }
+
     @SubscribeEvent
-    public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event){
+    public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(PuckooBaseModelLayers.PUCKOO_BASE_LAYER, PuckooModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.WORM, WormModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.TREEFROG, TreefrogModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.HOPPLESHROOM, HoppleshroomModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.GIANT_TORTOISE, GiantTortoiseModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.JELLYFISH, JellyfishModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
     }
 }

@@ -88,6 +88,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.GILDED_SKY_HANGING_SIGN);
         //~~~~~~~~~Spawn Eggs~~~~~~~~\\
         withExistingParent(ModItems.PUCKOO_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.WORM_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.TREEFROG_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.HOPPLESHROOM_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.GIANT_TORTOISE_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.JELLYFISH_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.PIRANHA_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(ModItems.HARPY_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
 
 

@@ -33,6 +33,13 @@ public class ModItems {
     public static final RegistryObject<Item> GILDED_SKY_SIGN = ITEMS.register("gilded_sky_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get()));
     public static final RegistryObject<Item> GILDED_SKY_HANGING_SIGN = ITEMS.register("gilded_sky_hanging_sign",()-> new HangingSignItem(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> PUCKOO_SPAWN_EGG= ITEMS.register("puckoo_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.PUCKOO,0xffffff, 0xea7630,new Item.Properties()));
+    public static final RegistryObject<Item> WORM_SPAWN_EGG = ITEMS.register("worm_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.WORM,0xd98b7b, 0xb35a4a,new Item.Properties()));
+    public static final RegistryObject<Item> TREEFROG_SPAWN_EGG = ITEMS.register("treefrog_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.TREEFROG,0x5aa63c, 0xe0d84a,new Item.Properties()));
+    public static final RegistryObject<Item> HOPPLESHROOM_SPAWN_EGG = ITEMS.register("hoppleshroom_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.HOPPLESHROOM,0xc94b4b, 0xe6d2b5,new Item.Properties()));
+    public static final RegistryObject<Item> GIANT_TORTOISE_SPAWN_EGG = ITEMS.register("giant_tortoise_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.GIANT_TORTOISE,0x3e6b3a, 0x8a6b3f,new Item.Properties()));
+    public static final RegistryObject<Item> JELLYFISH_SPAWN_EGG = ITEMS.register("jellyfish_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.JELLYFISH,0xe57fb0, 0x9b5ac2,new Item.Properties()));
+    public static final RegistryObject<Item> PIRANHA_SPAWN_EGG = ITEMS.register("piranha_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.PIRANHA,0x556b2f, 0xc23b2b,new Item.Properties()));
+    public static final RegistryObject<Item> HARPY_SPAWN_EGG = ITEMS.register("harpy_spawn_egg",()->new ForgeSpawnEggItem(ModEntities.HARPY,0x8a7b6b, 0x4a3f34,new Item.Properties()));
 
 
     public static void  register(IEventBus eventBus){

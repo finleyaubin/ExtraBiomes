@@ -20,7 +20,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.entity.client.GiantTortoiseRenderer;
+import net.winepicfin.extrabiomes.entity.client.HarpyRenderer;
+import net.winepicfin.extrabiomes.entity.client.HoppleshroomRenderer;
+import net.winepicfin.extrabiomes.entity.client.JellyfishRenderer;
+import net.winepicfin.extrabiomes.entity.client.PiranhaRenderer;
 import net.winepicfin.extrabiomes.entity.client.PuckooRenderer;
+import net.winepicfin.extrabiomes.entity.client.TreefrogRenderer;
+import net.winepicfin.extrabiomes.entity.client.WormRenderer;
 import net.winepicfin.extrabiomes.fluid.ModFluidTypes;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
@@ -100,7 +107,19 @@ private void addCreative(BuildCreativeModeTabContentsEvent event){
             ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
             EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
+            EntityRenderers.register(ModEntities.WORM.get(), WormRenderer::new);
+            EntityRenderers.register(ModEntities.TREEFROG.get(), TreefrogRenderer::new);
+            EntityRenderers.register(ModEntities.HOPPLESHROOM.get(), HoppleshroomRenderer::new);
+            EntityRenderers.register(ModEntities.GIANT_TORTOISE.get(), GiantTortoiseRenderer::new);
+            EntityRenderers.register(ModEntities.JELLYFISH.get(), JellyfishRenderer::new);
+            EntityRenderers.register(ModEntities.PIRANHA.get(), PiranhaRenderer::new);
+            EntityRenderers.register(ModEntities.HARPY.get(), HarpyRenderer::new);
             EntityRenderers.register(ModEntities.PEBBLE_PROJECTILE.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.MOSSY_PEBBLE_PROJECTILE.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.RAZOR_FEATHER.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.DIAMOND_RAZOR_FEATHER.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.NETHERITE_RAZOR_FEATHER.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.BAIT_PROJECTILE.get(), ThrownItemRenderer::new);
         }
     }
 }

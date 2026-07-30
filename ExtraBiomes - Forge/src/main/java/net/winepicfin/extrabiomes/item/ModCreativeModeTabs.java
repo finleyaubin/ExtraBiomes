@@ -107,6 +107,13 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get());
                 //~~~~~~~~~Spawn Eggs~~~~~~~~\\
                 pOutput.accept(ModItems.PUCKOO_SPAWN_EGG.get());
+                pOutput.accept(ModItems.WORM_SPAWN_EGG.get());
+                pOutput.accept(ModItems.TREEFROG_SPAWN_EGG.get());
+                pOutput.accept(ModItems.HOPPLESHROOM_SPAWN_EGG.get());
+                pOutput.accept(ModItems.GIANT_TORTOISE_SPAWN_EGG.get());
+                pOutput.accept(ModItems.JELLYFISH_SPAWN_EGG.get());
+                pOutput.accept(ModItems.PIRANHA_SPAWN_EGG.get());
+                pOutput.accept(ModItems.HARPY_SPAWN_EGG.get());
 
 
             })

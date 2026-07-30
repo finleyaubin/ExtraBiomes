@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.winepicfin.extrabiomes.Projectile.Razor_Feather_Projectile;
+import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectileEntity;
 
 public class RazorFeatherItem extends Item {
     public RazorFeatherItem(Properties properties){
@@ -19,8 +19,8 @@ public class RazorFeatherItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand){
         ItemStack itemStack = player.getItemInHand(hand);
         level.playSound(null, player.getX(),player.getY(),player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.5F,0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
-        if (!level.isClientSide) {       //TODO change to razor feather
-            Razor_Feather_Projectile razorFeatherProjectile = new Razor_Feather_Projectile(level, player);
+        if (!level.isClientSide) {
+            RazorFeatherProjectileEntity razorFeatherProjectile = new RazorFeatherProjectileEntity(level, player);
             razorFeatherProjectile.setItem(itemStack);
             razorFeatherProjectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             level.addFreshEntity(razorFeatherProjectile);
