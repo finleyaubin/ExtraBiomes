@@ -21,6 +21,12 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModItems.RAZOR_FEATHER.get());
                 pOutput.accept(ModItems.FROGS_LEGS.get());
                 pOutput.accept(ModItems.COOKED_FROGS_LEGS.get());
+                pOutput.accept(ModItems.PIRANHA.get());
+                pOutput.accept(ModItems.COOKED_PIRANHA.get());
+                pOutput.accept(ModItems.WORM.get());
+                pOutput.accept(ModItems.JELLYFISH_JAM_BOTTLE.get());
+                pOutput.accept(ModItems.JELLYFISHING_NET_EMPTY.get());
+                pOutput.accept(ModItems.JELLYFISHING_NET_FULL.get());
                 pOutput.accept(ModItems.BUCKET_OF_GOO.get());
                 pOutput.accept(ModItems.FROG_HELMET.get());
                 //~~~~~~~~~~~~~Blocks~~~~~~~~~~~~\\

@@ -46,17 +46,14 @@ import java.util.List;
  * STONE_TYPE table mapping stone/granite/diorite/andesite (+ their "smooth"/polished variants)
  * was added so these pillars - which are ~100% minecraft:stone - convert correctly).
  * <p>
- * The weighted random pick reuses the shared {@link SingleStructureFeature}/
+ * The weighted random pick reuses the shared {@code SingleStructureFeature}/
  * {@link SingleStructureConfiguration} infra (one ConfiguredFeature per pillar variant, each with
  * random rotation since Bedrock's structure_template_feature entries specify no fixed
  * facing_direction, and groundOffset -5 matching "above_top_solid - 5"), wrapped in a single
  * vanilla {@link Feature#RANDOM_SELECTOR} ConfiguredFeature for the equal 1:1:1 weighting.
  * <p>
- * Applies only to the JunglePillars Java biome (see the TODO comment there: "TODO: bedrock
- * feature_rules/stone_pillars.json spawns tall stone pillar structures; port this as a custom
- * Feature<NoneFeatureConfiguration> and add it here." - the biome-wiring pass should remove that
- * comment and call biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES,
- * STONE_PILLARS_PLACED_KEY) instead).
+ * Applies only to the JunglePillars Java biome, which wires it in via
+ * {@code biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, STONE_PILLARS_PLACED_KEY)}.
  */
 public class StonePillarsFeature {
     private static final ResourceKey<ConfiguredFeature<?, ?>> STONE_PILLAR_1_KEY =

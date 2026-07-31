@@ -7,13 +7,18 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart root;
+	private final ModelPart modelRoot;
+	private final ModelPart leg;
+	private final ModelPart hat;
 
 	public HoppleshroomModel(ModelPart root) {
-		this.root = root;
+		this.modelRoot = root;
+		this.leg = root.getChild("leg");
+		this.hat = root.getChild("hat");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -29,15 +34,18 @@ public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float sway = Mth.sin(ageInTicks * 0.1F) * 0.08F;
+		this.hat.zRot += sway;
+		this.hat.xRot += Mth.cos(ageInTicks * 0.1F) * 0.08F;
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public ModelPart root() {
-		return this.root;
+		return this.modelRoot;
 	}
 }

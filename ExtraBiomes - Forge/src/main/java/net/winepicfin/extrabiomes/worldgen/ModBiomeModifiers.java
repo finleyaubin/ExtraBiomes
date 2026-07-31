@@ -6,18 +6,25 @@ import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.FeatureSorter;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+
+import java.util.List;
 
 public class ModBiomeModifiers {
 
@@ -28,6 +35,22 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_UNDERGROUND_JUNGLE_CAVE_VINES = registerKey("add_underground_jungle_cave_vines");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS = registerKey("add_mushroom_fields_huge_mushrooms");
     public static final ResourceKey<BiomeModifier> ADD_DARK_FOREST_HUGE_MUSHROOMS = registerKey("add_dark_forest_huge_mushrooms");
+
+    // Mob spawns ported from the Bedrock spawn_rules biome tags, applied to the matching vanilla
+    // (and mod) biomes. Uses the vanilla biome tags, which this mod's datagen already folds its own
+    // jungle/beach/etc. biomes into, so these cover both vanilla and ExtraBiomes biomes at once.
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_GIANT_TORTOISE = registerKey("add_spawn_giant_tortoise");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_PIRANHA_JUNGLE = registerKey("add_spawn_piranha_jungle");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_PIRANHA_SWAMP = registerKey("add_spawn_piranha_swamp");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_TREEFROG_JUNGLE = registerKey("add_spawn_treefrog_jungle");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_TREEFROG_SWAMP = registerKey("add_spawn_treefrog_swamp");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_HOPPLESHROOM = registerKey("add_spawn_hoppleshroom");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_JELLYFISH = registerKey("add_spawn_jellyfish");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_JELLYFISH_BEACH = registerKey("add_spawn_jellyfish_beach");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_HARPY = registerKey("add_spawn_harpy");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_WORM = registerKey("add_spawn_worm");
+
+    private static final TagKey<Biome> IS_OVERWORLD = TagKey.create(Registries.BIOME, ResourceLocation.parse("minecraft:is_overworld"));
 
     public static void bootstrap(BootstapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -61,6 +84,45 @@ public class ModBiomeModifiers {
             HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST)),
             HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
             GenerationStep.Decoration.VEGETAL_DECORATION));
+
+    // ~~~~~~~~~ Mob spawns (Bedrock spawn_rules -> vanilla + mod biomes) ~~~~~~~~~ \\
+    // jungle tag: giant_tortoise, piranha, treefrog
+    context.register(ADD_SPAWN_GIANT_TORTOISE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            biomes.getOrThrow(BiomeTags.IS_JUNGLE),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.GIANT_TORTOISE.get(), 15, 1, 2))));
+    context.register(ADD_SPAWN_PIRANHA_JUNGLE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            biomes.getOrThrow(BiomeTags.IS_JUNGLE),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), 35, 6, 10))));
+    context.register(ADD_SPAWN_PIRANHA_SWAMP, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            HolderSet.direct(biomes.getOrThrow(Biomes.MANGROVE_SWAMP), biomes.getOrThrow(ModBiomes.SHATTERED_SWAMP)),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), 35, 2, 5))));
+    context.register(ADD_SPAWN_TREEFROG_JUNGLE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            biomes.getOrThrow(BiomeTags.IS_JUNGLE),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), 25, 2, 3))));
+    context.register(ADD_SPAWN_TREEFROG_SWAMP, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            HolderSet.direct(biomes.getOrThrow(Biomes.SWAMP), biomes.getOrThrow(Biomes.MANGROVE_SWAMP),
+                    biomes.getOrThrow(ModBiomes.SHATTERED_SWAMP), biomes.getOrThrow(ModBiomes.MOORLANDS)),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), 25, 2, 3))));
+    // crimson / warped / mushroom + this mod's nether biomes
+    context.register(ADD_SPAWN_HOPPLESHROOM, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS), biomes.getOrThrow(Biomes.CRIMSON_FOREST),
+                    biomes.getOrThrow(Biomes.WARPED_FOREST), biomes.getOrThrow(ModBiomes.THE_NETHERLANDS),
+                    biomes.getOrThrow(ModBiomes.THE_NETHERLANDS_MUTATED)),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOPPLESHROOM.get(), 35, 1, 5))));
+    // jellyfish: dense in JellyfishFields, rare on beaches
+    context.register(ADD_SPAWN_JELLYFISH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            HolderSet.direct(biomes.getOrThrow(ModBiomes.JELLYFISH_FIELDS)),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), 25, 3, 8))));
+    context.register(ADD_SPAWN_JELLYFISH_BEACH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            biomes.getOrThrow(BiomeTags.IS_BEACH),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), 5, 1, 1))));
+    // harpy (no Bedrock biome filter) and worm ("animal" tag): overworld-wide
+    context.register(ADD_SPAWN_HARPY, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            biomes.getOrThrow(IS_OVERWORLD),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.HARPY.get(), 20, 1, 1))));
+    context.register(ADD_SPAWN_WORM, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+            biomes.getOrThrow(IS_OVERWORLD),
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.WORM.get(), 25, 1, 3))));
 }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {

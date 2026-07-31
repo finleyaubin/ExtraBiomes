@@ -7,13 +7,42 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart root;
+	private final ModelPart modelRoot;
+	private final ModelPart body;
+	private final ModelPart body2;
+	private final ModelPart spikes;
+	private final ModelPart spike1;
+	private final ModelPart spike2;
+	private final ModelPart spike3;
+	private final ModelPart spike4;
+	private final ModelPart spike5;
+	private final ModelPart spike6;
+	private final ModelPart head;
+	private final ModelPart leg0;
+	private final ModelPart leg1;
+	private final ModelPart leg2;
+	private final ModelPart leg3;
 
 	public GiantTortoiseModel(ModelPart root) {
-		this.root = root;
+		this.modelRoot = root;
+		this.body = root.getChild("body");
+		this.body2 = this.body.getChild("body2");
+		this.spikes = this.body2.getChild("spikes");
+		this.spike1 = this.spikes.getChild("spike1");
+		this.spike2 = this.spikes.getChild("spike2");
+		this.spike3 = this.spikes.getChild("spike3");
+		this.spike4 = this.spikes.getChild("spike4");
+		this.spike5 = this.spikes.getChild("spike5");
+		this.spike6 = this.spikes.getChild("spike6");
+		this.head = this.body.getChild("head");
+		this.leg0 = this.body.getChild("leg0");
+		this.leg1 = this.body.getChild("leg1");
+		this.leg2 = this.body.getChild("leg2");
+		this.leg3 = this.body.getChild("leg3");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -41,15 +70,23 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float swing = Mth.cos(limbSwing * 0.5F) * 0.8F * limbSwingAmount;
+		float swingOpp = Mth.cos(limbSwing * 0.5F + (float) Math.PI) * 0.8F * limbSwingAmount;
+		this.leg0.yRot += swing;
+		this.leg3.yRot += swing;
+		this.leg1.yRot += swingOpp;
+		this.leg2.yRot += swingOpp;
+		this.head.xRot += headPitch * ((float) Math.PI / 180F) * 0.4F;
+		this.head.yRot += netHeadYaw * ((float) Math.PI / 180F) * 0.4F;
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public ModelPart root() {
-		return this.root;
+		return this.modelRoot;
 	}
 }

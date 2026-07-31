@@ -7,13 +7,64 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
+	private final ModelPart modelRoot;
 	private final ModelPart root;
+	private final ModelPart waist;
+	private final ModelPart wings;
+	private final ModelPart right_wing;
+	private final ModelPart support1;
+	private final ModelPart bone3;
+	private final ModelPart right_spike;
+	private final ModelPart support2;
+	private final ModelPart bone;
+	private final ModelPart support3;
+	private final ModelPart bone2;
+	private final ModelPart left_wing;
+	private final ModelPart support4;
+	private final ModelPart bone4;
+	private final ModelPart left_spike;
+	private final ModelPart support5;
+	private final ModelPart bone5;
+	private final ModelPart support6;
+	private final ModelPart bone6;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart leftArm;
+	private final ModelPart rightArm;
+	private final ModelPart rightLeg;
+	private final ModelPart leftLeg;
 
 	public HarpyModel(ModelPart root) {
-		this.root = root;
+		this.modelRoot = root;
+		this.root = root.getChild("root");
+		this.waist = this.root.getChild("waist");
+		this.wings = this.waist.getChild("wings");
+		this.right_wing = this.wings.getChild("right_wing");
+		this.support1 = this.right_wing.getChild("support1");
+		this.bone3 = this.support1.getChild("bone3");
+		this.right_spike = this.support1.getChild("right_spike");
+		this.support2 = this.support1.getChild("support2");
+		this.bone = this.support2.getChild("bone");
+		this.support3 = this.support2.getChild("support3");
+		this.bone2 = this.support3.getChild("bone2");
+		this.left_wing = this.wings.getChild("left_wing");
+		this.support4 = this.left_wing.getChild("support4");
+		this.bone4 = this.support4.getChild("bone4");
+		this.left_spike = this.support4.getChild("left_spike");
+		this.support5 = this.support4.getChild("support5");
+		this.bone5 = this.support5.getChild("bone5");
+		this.support6 = this.support5.getChild("support6");
+		this.bone6 = this.support6.getChild("bone6");
+		this.body = this.waist.getChild("body");
+		this.head = this.body.getChild("head");
+		this.leftArm = this.body.getChild("leftArm");
+		this.rightArm = this.body.getChild("rightArm");
+		this.rightLeg = this.root.getChild("rightLeg");
+		this.leftLeg = this.root.getChild("leftLeg");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -52,15 +103,20 @@ public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float flap = Mth.cos(ageInTicks * 0.5F) * 0.6F;
+		this.right_wing.zRot += flap;
+		this.left_wing.zRot -= flap;
+		this.head.yRot += netHeadYaw * ((float) Math.PI / 180F);
+		this.head.xRot += headPitch * ((float) Math.PI / 180F);
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public ModelPart root() {
-		return this.root;
+		return this.modelRoot;
 	}
 }

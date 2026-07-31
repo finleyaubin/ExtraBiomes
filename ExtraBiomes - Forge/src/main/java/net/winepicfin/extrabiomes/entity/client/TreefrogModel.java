@@ -7,13 +7,52 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart root;
+	private final ModelPart modelRoot;
+	private final ModelPart treefrog;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart leg1;
+	private final ModelPart leglow1;
+	private final ModelPart bottom1;
+	private final ModelPart foot1;
+	private final ModelPart leg2;
+	private final ModelPart leglow2;
+	private final ModelPart bottom2;
+	private final ModelPart foot2;
+	private final ModelPart leg4;
+	private final ModelPart leglow4;
+	private final ModelPart bottom4;
+	private final ModelPart foot4;
+	private final ModelPart leg3;
+	private final ModelPart leglow3;
+	private final ModelPart bottom3;
+	private final ModelPart foot3;
 
 	public TreefrogModel(ModelPart root) {
-		this.root = root;
+		this.modelRoot = root;
+		this.treefrog = root.getChild("treefrog");
+		this.body = this.treefrog.getChild("body");
+		this.head = this.body.getChild("head");
+		this.leg1 = this.body.getChild("leg1");
+		this.leglow1 = this.leg1.getChild("leglow1");
+		this.bottom1 = this.leglow1.getChild("bottom1");
+		this.foot1 = this.bottom1.getChild("foot1");
+		this.leg2 = this.body.getChild("leg2");
+		this.leglow2 = this.leg2.getChild("leglow2");
+		this.bottom2 = this.leglow2.getChild("bottom2");
+		this.foot2 = this.bottom2.getChild("foot2");
+		this.leg4 = this.body.getChild("leg4");
+		this.leglow4 = this.leg4.getChild("leglow4");
+		this.bottom4 = this.leglow4.getChild("bottom4");
+		this.foot4 = this.bottom4.getChild("foot4");
+		this.leg3 = this.body.getChild("leg3");
+		this.leglow3 = this.leg3.getChild("leglow3");
+		this.bottom3 = this.leglow3.getChild("bottom3");
+		this.foot3 = this.bottom3.getChild("foot3");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -54,15 +93,18 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		this.body.y += Mth.sin(ageInTicks * 0.15F) * 0.3F;
+		this.head.yRot += netHeadYaw * ((float) Math.PI / 180F);
+		this.head.xRot += headPitch * ((float) Math.PI / 180F);
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public ModelPart root() {
-		return this.root;
+		return this.modelRoot;
 	}
 }

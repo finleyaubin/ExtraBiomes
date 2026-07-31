@@ -4,7 +4,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -22,8 +26,13 @@ import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.winepicfin.extrabiomes.item.ModItems;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -105,6 +114,30 @@ public class JellyfishEntity extends WaterAnimal {
                 }
             }
         }
+    }
+
+    @Override
+    public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack held = player.getItemInHand(hand);
+        // Milk the jellyfish with a glass bottle -> jellyfish jam.
+        if (held.is(Items.GLASS_BOTTLE) && this.isAlive()) {
+            player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
+            ItemStack jam = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISH_JAM_BOTTLE.get()));
+            player.setItemInHand(hand, jam);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        // Scoop the jellyfish into an empty jellyfishing net -> full net, remove the jellyfish.
+        if (held.is(ModItems.JELLYFISHING_NET_EMPTY.get())) {
+            if (!this.level().isClientSide) {
+                player.playSound(SoundEvents.BUCKET_FILL_FISH, 1.0F, 1.0F);
+                ItemStack fullNet = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISHING_NET_FULL.get()));
+                player.setItemInHand(hand, fullNet);
+                this.playSound(SoundEvents.GENERIC_SPLASH, 1.0F, 1.0F);
+                this.discard();
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        return super.mobInteract(player, hand);
     }
 
     // 1.2x scale in Bedrock; applied in the renderer.

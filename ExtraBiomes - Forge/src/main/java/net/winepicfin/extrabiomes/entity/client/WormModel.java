@@ -7,13 +7,28 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class WormModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart root;
+	private final ModelPart modelRoot;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart head1;
+	private final ModelPart head2;
+	private final ModelPart head3;
+	private final ModelPart body2;
+	private final ModelPart Archie;
 
 	public WormModel(ModelPart root) {
-		this.root = root;
+		this.modelRoot = root;
+		this.body = root.getChild("body");
+		this.head = this.body.getChild("head");
+		this.head1 = this.head.getChild("head1");
+		this.head2 = this.head1.getChild("head2");
+		this.head3 = this.head2.getChild("head3");
+		this.body2 = this.head3.getChild("body2");
+		this.Archie = this.body2.getChild("Archie");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -34,15 +49,22 @@ public class WormModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float t = ageInTicks * 0.25F + limbSwing * 0.6F;
+		float wiggle = 0.25F;
+		this.head.yRot += Mth.sin(t) * wiggle;
+		this.head1.yRot += Mth.sin(t - 0.6F) * wiggle;
+		this.head2.yRot += Mth.sin(t - 1.2F) * wiggle;
+		this.head3.yRot += Mth.sin(t - 1.8F) * wiggle;
+		this.body2.yRot += Mth.sin(t - 2.4F) * wiggle;
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public ModelPart root() {
-		return this.root;
+		return this.modelRoot;
 	}
 }

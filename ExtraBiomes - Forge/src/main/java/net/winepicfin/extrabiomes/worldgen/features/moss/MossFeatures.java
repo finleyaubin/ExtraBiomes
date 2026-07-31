@@ -68,7 +68,7 @@ import java.util.List;
  *       identical placement 10 times. Bedrock's {@code enforce_survivability_rules}/
  *       {@code enforce_placement_rules} (the carpet needs a solid block below it) has no separate
  *       Java placement-modifier equivalent, but is naturally enforced by the engine anyway: setting
- *       a {@link net.minecraft.world.level.block.MossCarpetBlock} triggers a neighbor shape update
+ *       a {@code moss_carpet} block triggers a neighbor shape update
  *       that pops it back off immediately if unsupported, same end result.</li>
  *   <li>{@code minecraft:jungle_bush_feature} is reused as literally vanilla's own feature - no new
  *       Java feature is registered for it. {@link #JUNGLE_BUSH_PLACED_KEY} is just a convenience

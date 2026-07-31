@@ -15,7 +15,7 @@ import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
  * Java (Forge) registrations for every biome that exists in the Bedrock add-on
  * (ExtraBiomes - Bedrock/packs/BP/biomes and packs/RP/biomes).
  *
- * Each ResourceKey below maps 1:1 to a "extrabiomes:<name>" identifier used by the
+ * Each ResourceKey below maps 1:1 to an {@code extrabiomes:<name>} identifier used by the
  * Bedrock biome json files, so the two versions stay in sync.
  */
 public class ModBiomes

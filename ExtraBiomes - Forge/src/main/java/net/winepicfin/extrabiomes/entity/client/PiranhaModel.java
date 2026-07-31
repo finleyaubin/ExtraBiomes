@@ -7,13 +7,28 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class PiranhaModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart root;
+	private final ModelPart modelRoot;
+	private final ModelPart body;
+	private final ModelPart head;
+	private final ModelPart jaw;
+	private final ModelPart leftFin;
+	private final ModelPart rightFin;
+	private final ModelPart tailfin;
+	private final ModelPart waist;
 
 	public PiranhaModel(ModelPart root) {
-		this.root = root;
+		this.modelRoot = root;
+		this.body = root.getChild("body");
+		this.head = this.body.getChild("head");
+		this.jaw = this.head.getChild("jaw");
+		this.leftFin = this.body.getChild("leftFin");
+		this.rightFin = this.body.getChild("rightFin");
+		this.tailfin = this.body.getChild("tailfin");
+		this.waist = this.body.getChild("waist");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -34,15 +49,20 @@ public class PiranhaModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float speed = entity.isInWater() ? 0.9F : 1.6F;
+		float amount = entity.isInWater() ? 0.28F : 0.5F;
+		this.tailfin.yRot = -amount * Mth.sin(speed * 0.4F * ageInTicks);
+		this.waist.yRot = 0.5F * amount * Mth.sin(speed * 0.4F * ageInTicks);
+		this.head.yRot = netHeadYaw * ((float) Math.PI / 180F) * 0.5F;
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public ModelPart root() {
-		return this.root;
+		return this.modelRoot;
 	}
 }

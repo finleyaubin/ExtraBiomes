@@ -112,9 +112,11 @@ def convert(geo_path, class_name, package):
     for b in bones:
         visit(b)
 
-    used_vars = set()
+    used_vars = {"modelRoot"}
     var_of = {}
     lines = []
+    field_decls = []
+    field_inits = []
     rcounter = [0]
 
     for b in ordered:
@@ -124,6 +126,12 @@ def convert(geo_path, class_name, package):
         var = sanitize(name, used_vars)
         var_of[name] = var
         parent_var = var_of.get(parent, "partdefinition")
+
+        field_decls.append(f"\tprivate final ModelPart {var};\n")
+        if parent and parent in by_name:
+            field_inits.append(f"\t\tthis.{var} = this.{var_of[parent]}.getChild(\"{name}\");\n")
+        else:
+            field_inits.append(f"\t\tthis.{var} = root.getChild(\"{name}\");\n")
 
         if parent and parent in by_name:
             pp = by_name[parent].get("pivot", [0, 0, 0])
@@ -160,6 +168,8 @@ def convert(geo_path, class_name, package):
             lines.append(f"\t\tPartDefinition {rn} = {var}.addOrReplaceChild(\"{rn}\", {clb2}, {cpose});\n")
 
     body = "".join(lines)
+    decls = "".join(field_decls)
+    inits = "".join(field_inits)
     return f"""package {package};
 // Generated from {os.path.basename(geo_path)} by tools/geo2java.py
 
@@ -172,11 +182,11 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
 
 public class {class_name}<T extends Entity> extends HierarchicalModel<T> {{
-\tprivate final ModelPart root;
-
+\tprivate final ModelPart modelRoot;
+{decls}
 \tpublic {class_name}(ModelPart root) {{
-\t\tthis.root = root;
-\t}}
+\t\tthis.modelRoot = root;
+{inits}\t}}
 
 \tpublic static LayerDefinition createBodyLayer() {{
 \t\tMeshDefinition meshdefinition = new MeshDefinition();
@@ -193,12 +203,12 @@ public class {class_name}<T extends Entity> extends HierarchicalModel<T> {{
 
 \t@Override
 \tpublic void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {{
-\t\troot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+\t\tmodelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 \t}}
 
 \t@Override
 \tpublic ModelPart root() {{
-\t\treturn this.root;
+\t\treturn this.modelRoot;
 \t}}
 }}
 """

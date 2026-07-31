@@ -7,13 +7,56 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart root;
+	private final ModelPart modelRoot;
+	private final ModelPart body;
+	private final ModelPart tentacles;
+	private final ModelPart tentacle2;
+	private final ModelPart upper2;
+	private final ModelPart lower2;
+	private final ModelPart tentacle1;
+	private final ModelPart upper;
+	private final ModelPart lower;
+	private final ModelPart tentacle4;
+	private final ModelPart upper4;
+	private final ModelPart lower4;
+	private final ModelPart tentacle5;
+	private final ModelPart upper5;
+	private final ModelPart lower5;
+	private final ModelPart tentacle3;
+	private final ModelPart upper3;
+	private final ModelPart lower3;
+	private final ModelPart tentacle6;
+	private final ModelPart upper6;
+	private final ModelPart lower6;
+	private final ModelPart head;
 
 	public JellyfishModel(ModelPart root) {
-		this.root = root;
+		this.modelRoot = root;
+		this.body = root.getChild("body");
+		this.tentacles = this.body.getChild("tentacles");
+		this.tentacle2 = this.tentacles.getChild("tentacle2");
+		this.upper2 = this.tentacle2.getChild("upper2");
+		this.lower2 = this.upper2.getChild("lower2");
+		this.tentacle1 = this.tentacles.getChild("tentacle1");
+		this.upper = this.tentacle1.getChild("upper");
+		this.lower = this.upper.getChild("lower");
+		this.tentacle4 = this.tentacles.getChild("tentacle4");
+		this.upper4 = this.tentacle4.getChild("upper4");
+		this.lower4 = this.upper4.getChild("lower4");
+		this.tentacle5 = this.tentacles.getChild("tentacle5");
+		this.upper5 = this.tentacle5.getChild("upper5");
+		this.lower5 = this.upper5.getChild("lower5");
+		this.tentacle3 = this.tentacles.getChild("tentacle3");
+		this.upper3 = this.tentacle3.getChild("upper3");
+		this.lower3 = this.upper3.getChild("lower3");
+		this.tentacle6 = this.tentacle3.getChild("tentacle6");
+		this.upper6 = this.tentacle6.getChild("upper6");
+		this.lower6 = this.upper6.getChild("lower6");
+		this.head = this.body.getChild("head");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -52,15 +95,19 @@ public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float drift = Mth.sin(ageInTicks * 0.12F) * 0.12F;
+		float drift2 = Mth.cos(ageInTicks * 0.12F) * 0.12F;
+		this.tentacles.xRot += drift;
+		this.tentacles.zRot += drift2;
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
 	public ModelPart root() {
-		return this.root;
+		return this.modelRoot;
 	}
 }

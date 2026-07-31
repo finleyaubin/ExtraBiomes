@@ -11,6 +11,8 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.custom.FrogHelmetItem;
+import net.winepicfin.extrabiomes.item.custom.JellyfishJamBottleItem;
+import net.winepicfin.extrabiomes.item.custom.JellyfishingNetItem;
 import net.winepicfin.extrabiomes.item.custom.PebbleItem;
 import net.winepicfin.extrabiomes.item.custom.RazorFeatherItem;
 
@@ -23,6 +25,12 @@ public class ModItems {
     public static final RegistryObject<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
     public static final RegistryObject<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS)));
     public static final RegistryObject<Item> COOKED_FROGS_LEGS = ITEMS.register("cooked_frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.COOKED_FROGS_LEGS)));
+    public static final RegistryObject<Item> PIRANHA = ITEMS.register("piranha",()-> new Item(new Item.Properties().food(ModFoods.PIRANHA)));
+    public static final RegistryObject<Item> COOKED_PIRANHA = ITEMS.register("cooked_piranha",()-> new Item(new Item.Properties().food(ModFoods.COOKED_PIRANHA)));
+    public static final RegistryObject<Item> WORM = ITEMS.register("worm",()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> JELLYFISH_JAM_BOTTLE = ITEMS.register("jellyfish_jam_bottle",()-> new JellyfishJamBottleItem(new Item.Properties().food(ModFoods.JELLYFISH_JAM).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
+    public static final RegistryObject<Item> JELLYFISHING_NET_EMPTY = ITEMS.register("jellyfishing_net_empty",()-> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> JELLYFISHING_NET_FULL = ITEMS.register("jellyfishing_net_full",()-> new JellyfishingNetItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> new FrogHelmetItem(ModItemMaterials.FROG, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> MYSTIC_SIGN = ITEMS.register("mystic_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.MYSTIC_SIGN.get(),ModBlocks.MYSTIC_WALL_SIGN.get()));
     public static final RegistryObject<Item> MYSTIC_HANGING_SIGN = ITEMS.register("mystic_hanging_sign",()-> new HangingSignItem(ModBlocks.MYSTIC_HANGING_SIGN.get(),ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));

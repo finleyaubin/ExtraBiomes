@@ -34,6 +34,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.COOKED_FROGS_LEGS);
         simpleItem(ModItems.FROGS_LEGS);
         simpleItem(ModItems.RAZOR_FEATHER);
+        simpleItem(ModItems.PIRANHA);
+        simpleItem(ModItems.COOKED_PIRANHA);
+        simpleItem(ModItems.WORM);
+        simpleItem(ModItems.JELLYFISH_JAM_BOTTLE);
+        simpleItem(ModItems.JELLYFISHING_NET_EMPTY);
+        simpleItem(ModItems.JELLYFISHING_NET_FULL);
         simpleItem(ModItems.BUCKET_OF_GOO);
         trimmedArmorItem(ModItems.FROG_HELMET);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
