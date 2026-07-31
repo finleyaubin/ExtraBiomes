@@ -49,11 +49,11 @@ public class PiranhaModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float speed = entity.isInWater() ? 0.9F : 1.6F;
-		float amount = entity.isInWater() ? 0.28F : 0.5F;
-		this.tailfin.yRot = -amount * Mth.sin(speed * 0.4F * ageInTicks);
-		this.waist.yRot = 0.5F * amount * Mth.sin(speed * 0.4F * ageInTicks);
-		this.head.yRot = netHeadYaw * ((float) Math.PI / 180F) * 0.5F;
+		// animation.piranha.swim
+		this.body.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * 2f)) * 0.017453292f;
+		this.head.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * 4f)) * 0.017453292f;
+		this.tailfin.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * (-25.75f))) * 0.017453292f;
+
 	}
 
 	@Override

@@ -20,8 +20,14 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.treedecorators.LeaveVineDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TrunkVineDecorator;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -183,6 +189,15 @@ public class UndergroundJungleFeatures {
     public static final ResourceKey<PlacedFeature> MEGA_JUNGLE_TREE_PLACED_KEY = pfKey("mega_jungle_tree");
     public static final ResourceKey<PlacedFeature> JUNGLE_TREE_WITH_COCOA_PLACED_KEY = pfKey("jungle_tree_with_cocoa");
     public static final ResourceKey<PlacedFeature> BAMBOO_PLACED_KEY = pfKey("bamboo");
+    /**
+     * A jungle tree matching vanilla {@link TreeFeatures#JUNGLE_TREE} but with the {@code CocoaDecorator}
+     * removed. Vanilla's cocoa decorator does {@code logs.get(0)} on the placed trunk; when this tree is
+     * nested inside {@code grass_floor}'s {@link net.minecraft.world.level.levelgen.feature.VegetationPatchFeature}
+     * and lands underground with no room to grow, the log list is empty and it throws
+     * {@code IndexOutOfBoundsException}, crashing chunk generation. Dropping cocoa (a purely cosmetic
+     * fruit) makes the underground placement safe; the trunk/leaf vines are kept.
+     */
+    public static final ResourceKey<ConfiguredFeature<?, ?>> JUNGLE_TREE_NO_COCOA_KEY = cfKey("jungle_tree_no_cocoa");
 
     // -----------------------------------------------------------------
     // select_moss_or_jungle_tree_feature.json / _upper
@@ -211,6 +226,17 @@ public class UndergroundJungleFeatures {
         // -- building blocks --------------------------------------------------------------------------
         context.register(FALLEN_JUNGLE_TREE_KEY, new ConfiguredFeature<>(FALLEN_JUNGLE_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
         context.register(CAVE_VINE_KEY, new ConfiguredFeature<>(CAVE_VINE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+
+        // -- cocoa-free jungle tree (vanilla JUNGLE_TREE minus the crash-prone CocoaDecorator) ---------
+        context.register(JUNGLE_TREE_NO_COCOA_KEY, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(Blocks.JUNGLE_LOG),
+                new StraightTrunkPlacer(4, 8, 0),
+                BlockStateProvider.simple(Blocks.JUNGLE_LEAVES),
+                new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+                new TwoLayersFeatureSize(1, 0, 1))
+                .decorators(List.of(TrunkVineDecorator.INSTANCE, new LeaveVineDecorator(0.25F)))
+                .ignoreVines()
+                .build()));
 
         // -- custom_moss_select_feature.json: tall grass scatter + moss carpet + jungle bush, all run
         //    unconditionally at the chosen column (see class docs for why this can't reuse MossFeatures'
@@ -257,7 +283,10 @@ public class UndergroundJungleFeatures {
                 placedFeatures.getOrThrow(CUSTOM_MOSS_PATCH_PLACED_KEY)
         ))));
 
-        // -- grass_floor_feature.json: depth 1, vertical_range 5, vegetation_chance 0.4, horizontal_radius 8. --
+        // -- grass_floor_feature.json: depth 1, vertical_range 5, vegetation_chance 0.4, horizontal_radius 4.
+        //    (Bedrock uses radius 8, but Java's feature-write bounds check rejects blocks a radius-8 patch
+        //    - compounded with its nested moss patch and trees - pushes into far chunks; 4 keeps writes in
+        //    the legal region while still reading as a sizeable jungle floor patch.) ---------------------
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 GRASS_FLOOR_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.GRASS_BLOCK),
@@ -267,7 +296,7 @@ public class UndergroundJungleFeatures {
                 0.0F,
                 5,
                 0.4F,
-                ConstantInt.of(8),
+                ConstantInt.of(4),
                 0.3F
         )));
 
@@ -282,7 +311,7 @@ public class UndergroundJungleFeatures {
                 0.0F,
                 5,
                 0.0F,
-                ConstantInt.of(8),
+                ConstantInt.of(4),
                 0.0F
         )));
     }
@@ -297,7 +326,9 @@ public class UndergroundJungleFeatures {
         //    wrapping RANDOM_SELECTOR/MultiFeature/VegetationPatchConfiguration. ------------------------
         registerNoModifiers(context, FALLEN_JUNGLE_TREE_PLACED_KEY, configuredFeatures.getOrThrow(FALLEN_JUNGLE_TREE_KEY));
         registerNoModifiers(context, MEGA_JUNGLE_TREE_PLACED_KEY, configuredFeatures.getOrThrow(TreeFeatures.MEGA_JUNGLE_TREE));
-        registerNoModifiers(context, JUNGLE_TREE_WITH_COCOA_PLACED_KEY, configuredFeatures.getOrThrow(TreeFeatures.JUNGLE_TREE));
+        // Use the cocoa-free jungle tree: vanilla JUNGLE_TREE's CocoaDecorator crashes when this tree is
+        // nested in a VegetationPatch and lands underground with no logs (see JUNGLE_TREE_NO_COCOA_KEY).
+        registerNoModifiers(context, JUNGLE_TREE_WITH_COCOA_PLACED_KEY, configuredFeatures.getOrThrow(JUNGLE_TREE_NO_COCOA_KEY));
         registerNoModifiers(context, BAMBOO_PLACED_KEY, configuredFeatures.getOrThrow(VegetationFeatures.BAMBOO_NO_PODZOL));
 
         // custom_moss_select_feature.json members: tall grass scatter (reuses MossFeatures' own

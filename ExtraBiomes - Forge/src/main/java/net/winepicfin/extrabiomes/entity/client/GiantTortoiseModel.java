@@ -70,14 +70,17 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float swing = Mth.cos(limbSwing * 0.5F) * 0.8F * limbSwingAmount;
-		float swingOpp = Mth.cos(limbSwing * 0.5F + (float) Math.PI) * 0.8F * limbSwingAmount;
-		this.leg0.yRot += swing;
-		this.leg3.yRot += swing;
-		this.leg1.yRot += swingOpp;
-		this.leg2.yRot += swingOpp;
-		this.head.xRot += headPitch * ((float) Math.PI / 180F) * 0.4F;
-		this.head.yRot += netHeadYaw * ((float) Math.PI / 180F) * 0.4F;
+		float hasTarget = (entity instanceof net.minecraft.world.entity.Mob __m && __m.getTarget() != null) ? 1.0f : 0.0f;
+
+		// animation.giant_tortoise.general
+		this.body.xRot += (((hasTarget == 1f) ? (0f + (limbSwing * 30f)) : 0f)) * 0.017453292f;
+
+		// animation.giant_tortoise.move
+		this.leg0.xRot += ((Mth.clamp((float)(((Mth.cos(((limbSwing * 22.92f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
+		this.leg1.xRot += ((Mth.clamp((float)(((Mth.cos((((limbSwing * 22.92f) + 180f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
+		this.leg2.zRot += ((Mth.clamp((float)(((Mth.cos((((limbSwing * 22.92f) + 180f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
+		this.leg3.zRot += ((Mth.clamp((float)(((Mth.cos(((limbSwing * 22.92f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
+
 	}
 
 	@Override

@@ -49,13 +49,16 @@ public class WormModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float t = ageInTicks * 0.25F + limbSwing * 0.6F;
-		float wiggle = 0.25F;
-		this.head.yRot += Mth.sin(t) * wiggle;
-		this.head1.yRot += Mth.sin(t - 0.6F) * wiggle;
-		this.head2.yRot += Mth.sin(t - 1.2F) * wiggle;
-		this.head3.yRot += Mth.sin(t - 1.8F) * wiggle;
-		this.body2.yRot += Mth.sin(t - 2.4F) * wiggle;
+		// "Archie" easter egg: the long extra tail (Bedrock part_visibility "q.get_name == 'Archie'")
+		// only shows when the worm is renamed to Archie.
+		this.Archie.visible = entity.hasCustomName() && "Archie".equals(entity.getCustomName().getString());
+		// animation.worm.move
+		this.head1.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;
+		this.head2.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * (-45f))) * 0.017453292f;
+		this.head3.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * (-45f))) * 0.017453292f;
+		this.body2.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;
+		this.body.z += (((((Mth.sin(((limbSwing * 32f)) * 0.017453292f) * 2f)) <= 0f) ? 0f : ((Mth.sin(((limbSwing * 64f)) * 0.017453292f) * 2f))));
+
 	}
 
 	@Override

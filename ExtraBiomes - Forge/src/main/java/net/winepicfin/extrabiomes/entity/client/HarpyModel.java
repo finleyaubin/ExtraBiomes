@@ -103,11 +103,15 @@ public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float flap = Mth.cos(ageInTicks * 0.5F) * 0.6F;
-		this.right_wing.zRot += flap;
-		this.left_wing.zRot -= flap;
-		this.head.yRot += netHeadYaw * ((float) Math.PI / 180F);
-		this.head.xRot += headPitch * ((float) Math.PI / 180F);
+		// animation.harpy.fly
+		this.left_wing.yRot += ((((Mth.sin(((limbSwing * 15f)) * 0.017453292f) * 20f)) + 1.5f)) * 0.017453292f;
+		this.right_wing.yRot += ((((((-1f) * Mth.sin(((limbSwing * 15f)) * 0.017453292f)) * 20f)) + 1.5f)) * 0.017453292f;
+		this.support5.yRot += ((((Mth.sin(((limbSwing * 15f)) * 0.017453292f) * 20f)) + 1.5f)) * 0.017453292f;
+		this.support2.yRot += ((((((-1f) * Mth.sin(((limbSwing * 15f)) * 0.017453292f)) * 20f)) + 1.5f)) * 0.017453292f;
+
+		// animation.harpy.tilt
+		this.root.xRot += ((((limbSwingAmount / 1f)) * 45f)) * 0.017453292f;
+
 	}
 
 	@Override

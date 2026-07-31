@@ -95,10 +95,25 @@ public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float drift = Mth.sin(ageInTicks * 0.12F) * 0.12F;
-		float drift2 = Mth.cos(ageInTicks * 0.12F) * 0.12F;
-		this.tentacles.xRot += drift;
-		this.tentacles.zRot += drift2;
+		// animation.jellyfish.swim
+		this.head.xScale = (((Mth.sin(((limbSwing * 15f)) * 0.017453292f) / 3.5f)) + 1.5f);
+		this.head.yScale = (((Mth.sin(((limbSwing * 15f)) * 0.017453292f) / 3.5f)) + 1.5f);
+		this.head.zScale = (((Mth.sin(((limbSwing * 15f)) * 0.017453292f) / 3.5f)) + 1.5f);
+
+		// animation.jellyfish.jiggle
+		this.upper.xRot += ((Mth.sin(((((ageInTicks / 20.0f) * 30f))) * 0.017453292f) * (-45f))) * 0.017453292f;
+		this.lower.xRot += ((Mth.sin(((((ageInTicks / 20.0f) * 30f))) * 0.017453292f) * 45f)) * 0.017453292f;
+		this.upper2.xRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 60f)) * 0.017453292f) * (-45f))) * 0.017453292f;
+		this.lower2.xRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 60f)) * 0.017453292f) * 45f)) * 0.017453292f;
+		this.upper3.xRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 90f)) * 0.017453292f) * (-45f))) * 0.017453292f;
+		this.lower3.xRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 120f)) * 0.017453292f) * 45f)) * 0.017453292f;
+		this.upper4.xRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 120f)) * 0.017453292f) * (-45f))) * 0.017453292f;
+		this.lower4.xRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 120f)) * 0.017453292f) * 45f)) * 0.017453292f;
+		this.upper5.zRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 150f)) * 0.017453292f) * 45f)) * 0.017453292f;
+		this.lower5.zRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 150f)) * 0.017453292f) * 45f)) * 0.017453292f;
+		this.upper6.zRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 180f)) * 0.017453292f) * 45f)) * 0.017453292f;
+		this.lower6.zRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 180f)) * 0.017453292f) * 45f)) * 0.017453292f;
+
 	}
 
 	@Override

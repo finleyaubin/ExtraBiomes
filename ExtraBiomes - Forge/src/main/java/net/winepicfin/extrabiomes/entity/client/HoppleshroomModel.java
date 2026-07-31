@@ -34,9 +34,14 @@ public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float sway = Mth.sin(ageInTicks * 0.1F) * 0.08F;
-		this.hat.zRot += sway;
-		this.hat.xRot += Mth.cos(ageInTicks * 0.1F) * 0.08F;
+		float vspeed = (float) entity.getDeltaMovement().y;
+
+		// animation.hoppleshroom.jump
+		this.leg.xScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed)))));
+		this.leg.yScale = (1f + ((0.1f * (((vspeed < 0f) ? 0f : vspeed)))));
+		this.leg.zScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed)))));
+		this.hat.y += -((1f + ((0.1f * (((vspeed < 0f) ? 0f : vspeed))))));
+
 	}
 
 	@Override

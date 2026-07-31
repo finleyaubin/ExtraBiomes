@@ -93,9 +93,32 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		this.body.y += Mth.sin(ageInTicks * 0.15F) * 0.3F;
-		this.head.yRot += netHeadYaw * ((float) Math.PI / 180F);
-		this.head.xRot += headPitch * ((float) Math.PI / 180F);
+		float vspeed = (float) entity.getDeltaMovement().y;
+
+		// animation.treefrog.jump
+		this.body.xRot += ((vspeed * (-5f))) * 0.017453292f;
+		this.leg1.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 142.5f)) * 0.017453292f;
+		this.leg1.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-152.5f))) * 0.017453292f;
+		this.leg1.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 145f)) * 0.017453292f;
+		this.leglow1.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-10f))) * 0.017453292f;
+		this.leglow1.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-140f))) * 0.017453292f;
+		this.bottom1.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 105f)) * 0.017453292f;
+		this.leg4.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 47.5f)) * 0.017453292f;
+		this.leg4.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-87.5f))) * 0.017453292f;
+		this.leg4.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 17.5f)) * 0.017453292f;
+		this.leglow4.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 82.5f)) * 0.017453292f;
+		this.leg2.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-37.5f))) * 0.017453292f;
+		this.leg2.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-200f))) * 0.017453292f;
+		this.leg2.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 42.5f)) * 0.017453292f;
+		this.leglow2.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 132.5f)) * 0.017453292f;
+		this.bottom2.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-102.5f))) * 0.017453292f;
+		this.leg3.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 157.5f)) * 0.017453292f;
+		this.leg3.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 147.5f)) * 0.017453292f;
+		this.leg3.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 82.5f)) * 0.017453292f;
+		this.leglow3.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-2.5f))) * 0.017453292f;
+		this.leglow3.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-17.5f))) * 0.017453292f;
+		this.leglow3.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-10f))) * 0.017453292f;
+
 	}
 
 	@Override
