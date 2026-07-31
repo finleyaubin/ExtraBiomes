@@ -24,7 +24,8 @@ public class WormEntity extends Animal {
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 2)
-                .add(Attributes.MOVEMENT_SPEED, 0.1);
+                .add(Attributes.MOVEMENT_SPEED, 0.1)
+                .add(Attributes.FOLLOW_RANGE, 16);
     }
 
     @Override

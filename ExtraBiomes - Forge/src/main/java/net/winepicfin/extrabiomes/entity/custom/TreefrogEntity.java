@@ -28,7 +28,8 @@ public class TreefrogEntity extends Animal {
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 4)
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
-                .add(Attributes.JUMP_STRENGTH, 0.5);
+                .add(Attributes.JUMP_STRENGTH, 0.5)
+                .add(Attributes.FOLLOW_RANGE, 16);
     }
 
     @Override
