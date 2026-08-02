@@ -35,7 +35,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<HoppleshroomEntity>> HOPPLESHROOM = ENTITIES.register("hoppleshroom",
             () -> EntityType.Builder.of(HoppleshroomEntity::new, MobCategory.CREATURE).sized(0.6f, 0.8f).build("hoppleshroom"));
     public static final RegistryObject<EntityType<GiantTortoiseEntity>> GIANT_TORTOISE = ENTITIES.register("giant_tortoise",
-            () -> EntityType.Builder.of(GiantTortoiseEntity::new, MobCategory.CREATURE).sized(2.0f, 1.0f).build("giant_tortoise"));
+            () -> EntityType.Builder.of(GiantTortoiseEntity::new, MobCategory.MONSTER).sized(1.6f, 1.0f).build("giant_tortoise"));
     public static final RegistryObject<EntityType<JellyfishEntity>> JELLYFISH = ENTITIES.register("jellyfish",
             () -> EntityType.Builder.of(JellyfishEntity::new, MobCategory.WATER_CREATURE).sized(0.8f, 1.0f).build("jellyfish"));
     public static final RegistryObject<EntityType<PiranhaEntity>> PIRANHA = ENTITIES.register("piranha",

@@ -72,14 +72,24 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		float hasTarget = (entity instanceof net.minecraft.world.entity.Mob __m && __m.getTarget() != null) ? 1.0f : 0.0f;
 
-		// animation.giant_tortoise.general
-		this.body.xRot += (((hasTarget == 1f) ? (0f + (limbSwing * 30f)) : 0f)) * 0.017453292f;
+		// animation.giant_tortoise.jumping (airborne variant of the roll)
+		if (hasTarget == 1f && !entity.onGround()) {
+			float verticalSpeed = (float) entity.getDeltaMovement().y;
+			this.body.xRot += (limbSwing + verticalSpeed * 30f) * 0.017453292f;
+		}
+
+		if (hasTarget == 1f) {
+			float roll = entity.onGround()
+					? limbSwing * 30f
+					: limbSwing + (float) entity.getDeltaMovement().y * 30f;
+			this.body.xRot += roll * 0.017453292f;
+		}
 
 		// animation.giant_tortoise.move
-		this.leg0.xRot += ((Mth.clamp((float)(((Mth.cos(((limbSwing * 22.92f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
-		this.leg1.xRot += ((Mth.clamp((float)(((Mth.cos((((limbSwing * 22.92f) + 180f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
-		this.leg2.zRot += ((Mth.clamp((float)(((Mth.cos((((limbSwing * 22.92f) + 180f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
-		this.leg3.zRot += ((Mth.clamp((float)(((Mth.cos(((limbSwing * 22.92f)) * 0.017453292f) * limbSwingAmount) * 28.65f)), (float)((-90f)), (float)(90f)) - 0f)) * 0.017453292f;
+		this.leg0.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.leg1.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+		this.leg2.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.leg3.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 
 	}
 
