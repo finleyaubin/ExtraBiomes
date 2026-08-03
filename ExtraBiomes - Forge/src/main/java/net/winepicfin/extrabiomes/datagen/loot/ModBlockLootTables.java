@@ -101,6 +101,15 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.GILDED_SKY_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.GILDED_SKY_SIGN.get()));
         this.add(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.GILDED_SKY_HANGING_SIGN.get()));
         this.add(ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.GILDED_SKY_HANGING_SIGN.get()));
+        //~~~~~~~~~Small Mushrooms~~~~~~~~\\
+        this.dropSelf(ModBlocks.BLACK_MUSHROOM.get());
+        this.dropSelf(ModBlocks.BLUE_MUSHROOM.get());
+        this.dropSelf(ModBlocks.CYAN_MUSHROOM.get());
+        this.dropSelf(ModBlocks.GREEN_MUSHROOM.get());
+        this.dropSelf(ModBlocks.ORANGE_MUSHROOM.get());
+        this.dropSelf(ModBlocks.PURPLE_MUSHROOM.get());
+        this.dropSelf(ModBlocks.WHITE_MUSHROOM.get());
+        this.dropSelf(ModBlocks.YELLOW_MUSHROOM.get());
         //~~~~~~~~~Mushrooms~~~~~~~~\\
         this.dropSelf(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
         this.dropSelf(ModBlocks.BLUE_MUSHROOM_BLOCK.get());

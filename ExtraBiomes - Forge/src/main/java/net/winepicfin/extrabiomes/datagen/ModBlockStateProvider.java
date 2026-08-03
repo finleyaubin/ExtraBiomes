@@ -113,6 +113,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.GILDED_SKY_TRAPDOOR.get()), modLoc("block/gilded_sky_trapdoor"),true,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.GILDED_SKY_SIGN.get()),((WallSignBlock) ModBlocks.GILDED_SKY_WALL_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         hangingSignBlock((ModBlocks.GILDED_SKY_HANGING_SIGN.get()),( ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        //~~~~~~~~~Small Mushrooms~~~~~~~~\\
+        saplingBlock(ModBlocks.BLACK_MUSHROOM);
+        saplingBlock(ModBlocks.BLUE_MUSHROOM);
+        saplingBlock(ModBlocks.CYAN_MUSHROOM);
+        saplingBlock(ModBlocks.GREEN_MUSHROOM);
+        saplingBlock(ModBlocks.ORANGE_MUSHROOM);
+        saplingBlock(ModBlocks.PURPLE_MUSHROOM);
+        saplingBlock(ModBlocks.WHITE_MUSHROOM);
+        saplingBlock(ModBlocks.YELLOW_MUSHROOM);
         //~~~~~~~~~Mushrooms~~~~~~~~\\
         blockWithItem(ModBlocks.BLACK_MUSHROOM_BLOCK);
         blockWithItem(ModBlocks.BLUE_MUSHROOM_BLOCK);

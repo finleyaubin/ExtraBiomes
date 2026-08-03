@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.structurescatter;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
@@ -65,13 +66,25 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 .setMirror(Mirror.NONE)
                 .setIgnoreEntities(false);
 
-        BlockPos origin = context.origin().offset(0, config.groundOffset(), 0);
+        BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
+        BlockPos origin = anchor;
+        if (config.centered()) {
+            // StructurePlaceSettings' rotation pivot defaults to the template's local (0,0,0)
+            // corner, not its footprint center, and rotation is applied in that local space
+            // BEFORE translating by `origin` - so the footprint's center must be rotated the
+            // same way here to find how far it lands from that corner, then subtracted back out
+            // so the center (not the corner) ends up sitting on `anchor` regardless of rotation.
+            Vec3i size = template.getSize();
+            BlockPos localCenter = new BlockPos(size.getX() / 2, 0, size.getZ() / 2);
+            BlockPos rotatedCenter = StructureTemplate.transform(localCenter, Mirror.NONE, rotation, BlockPos.ZERO);
+            origin = anchor.subtract(rotatedCenter);
+        }
 
         if (!fitsWithinSafeWriteArea(template, settings, origin, context.origin())) {
             return false;
         }
 
-        return template.placeInWorld(level, origin, origin, settings, random, Block.UPDATE_CLIENTS);
+        return template.placeInWorld(level, origin, anchor, settings, random, Block.UPDATE_CLIENTS);
     }
 
     /**

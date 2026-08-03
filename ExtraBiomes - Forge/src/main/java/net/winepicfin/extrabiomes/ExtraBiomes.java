@@ -20,6 +20,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseRenderer;
 import net.winepicfin.extrabiomes.entity.client.HarpyRenderer;
 import net.winepicfin.extrabiomes.entity.client.HoppleshroomRenderer;
@@ -64,6 +65,7 @@ public class ExtraBiomes
         ModFluidTypes.register(modEventBus);
         ModEntities.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModSounds.register(modEventBus);
         ModTrunkPlacerTypes.register(modEventBus);
         ModTreeDecoratorTypes.register(modEventBus);
         ModStructureScatterFeatures.register(modEventBus);

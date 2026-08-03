@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.custom.HoppleshroomEntity;
 
 public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart modelRoot;
@@ -35,12 +36,13 @@ public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		float vspeed = (float) entity.getDeltaMovement().y;
+		float squish = (entity instanceof HoppleshroomEntity hoppleshroom) ? hoppleshroom.squish : 0f;
 
-		// animation.hoppleshroom.jump
-		this.leg.xScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed)))));
-		this.leg.yScale = (1f + ((0.1f * (((vspeed < 0f) ? 0f : vspeed)))));
-		this.leg.zScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed)))));
-		this.hat.y += -((1f + ((0.1f * (((vspeed < 0f) ? 0f : vspeed))))));
+		// animation.hoppleshroom.jump, plus a landing squash/stretch on top driven by `squish`
+		this.leg.xScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed))))) + squish * 0.3f;
+		this.leg.yScale = (1f + ((0.1f * (((vspeed < 0f) ? 0f : vspeed))))) - squish * 0.5f;
+		this.leg.zScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed))))) + squish * 0.3f;
+		this.hat.y += -((1f + ((0.1f * (((vspeed < 0f) ? 0f : vspeed)))))) + squish * 1.5f;
 
 	}
 

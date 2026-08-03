@@ -32,6 +32,7 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
 import net.minecraft.world.level.block.Rotation;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
@@ -275,10 +276,18 @@ public class MushroomFeatures {
 
         // mushroom_island_surface_huge_mushroom_feature.json: iterations 1, x/z uniform [0,16],
         // y = query.above_top_solid(...) -> once per chunk, spread across it, one above the surface.
+        // Was anchored on WORLD_SURFACE_WG, which treats fluids as "surface" too, so with no
+        // water-depth check it stamped the structure onto the TOP of any lake/pond/ocean in the
+        // column - the "floating on water" bug - since SingleStructureFeature places blocks
+        // unconditionally with no per-block survive check to self-correct. Anchoring on
+        // OCEAN_FLOOR_WG instead places it on the true floor beneath any water, and
+        // SurfaceWaterDepthFilter still allows shallow sea-floor spots (<=3 blocks of water over
+        // that floor) while rejecting placement entirely in deeper water/lakes.
         register(context, MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY),
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                SurfaceWaterDepthFilter.forMaxDepth(3),
                 BiomeFilter.biome());
 
         // shattered_swamp/swamp_huge_mushroom_feature.json: iterations 1, scatter_chance 1/4,
@@ -286,7 +295,8 @@ public class MushroomFeatures {
         register(context, SWAMP_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY),
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                SurfaceWaterDepthFilter.forMaxDepth(3),
                 net.minecraft.world.level.levelgen.placement.RarityFilter.onAverageOnceEvery(4),
                 BiomeFilter.biome());
 
@@ -334,10 +344,16 @@ public class MushroomFeatures {
     }
 
     private static void registerStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {
+        // centered=true: every huge mushroom's stem sits dead-center in its footprint (e.g. the
+        // black mushroom's stem is at local (6,0,6) inside a 13x13 base), not at the local (0,0,0)
+        // corner - without centering, the stem/trunk lands several blocks away from wherever this
+        // feature's origin actually is (visibly wrong when a Hoppleshroom or bonemeal grows one
+        // from a specific small-mushroom block).
         SingleStructureConfiguration config = new SingleStructureConfiguration(
                 ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
                 fixedRotation,
-                0
+                0,
+                true
         );
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }

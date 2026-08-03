@@ -25,6 +25,7 @@ import net.winepicfin.extrabiomes.block.custom.*;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.util.ModWoodTypes;
+import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.MysticTreeGrower;
 import net.winepicfin.extrabiomes.worldgen.tree.PalmTreeGrower;
 import net.winepicfin.extrabiomes.worldgen.tree.SkyTreeGrower;
@@ -121,6 +122,16 @@ public class ModBlocks {
     public static final RegistryObject<Block> GILDED_SKY_WALL_SIGN = BLOCKS.register("gilded_sky_wall_sign",()->new ModWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), ModWoodTypes.GILDED_SKY));
     public static final RegistryObject<Block> GILDED_SKY_HANGING_SIGN = BLOCKS.register("gilded_sky_hanging_sign",()->new ModHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), ModWoodTypes.GILDED_SKY));
     public static final RegistryObject<Block> GILDED_SKY_WALL_HANGING_SIGN = BLOCKS.register("gilded_sky_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.GILDED_SKY));
+//~~~~~~~~~Small Mushrooms~~~~~~~~\\
+    // Bonemeal on each grows that colour's own huge mushroom structure (MushroomFeatures).
+    public static final RegistryObject<Block>  BLACK_MUSHROOM= registerBlock("black_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_BLACK_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  BLUE_MUSHROOM= registerBlock("blue_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_BLUE_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  CYAN_MUSHROOM= registerBlock("cyan_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_CYAN_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  GREEN_MUSHROOM= registerBlock("green_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_GREEN_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  ORANGE_MUSHROOM= registerBlock("orange_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_ORANGE_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  PURPLE_MUSHROOM= registerBlock("purple_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_PURPLE_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  WHITE_MUSHROOM= registerBlock("white_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_WHITE_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  YELLOW_MUSHROOM= registerBlock("yellow_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_YELLOW_MUSHROOM_KEY));
 //~~~~~~~~~Mushroom Blocks~~~~~~~~\\
     public static final RegistryObject<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
     public static final RegistryObject<Block>  BLUE_MUSHROOM_BLOCK= registerBlock("blue_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));

@@ -38,6 +38,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.COOKED_PIRANHA);
         simpleItem(ModItems.WORM);
         simpleItem(ModItems.JELLYFISH_JAM_BOTTLE);
+        //~~~~~~~~~Small Mushrooms~~~~~~~~\\
+        saplingItem(ModBlocks.BLACK_MUSHROOM);
+        saplingItem(ModBlocks.BLUE_MUSHROOM);
+        saplingItem(ModBlocks.CYAN_MUSHROOM);
+        saplingItem(ModBlocks.GREEN_MUSHROOM);
+        saplingItem(ModBlocks.ORANGE_MUSHROOM);
+        saplingItem(ModBlocks.PURPLE_MUSHROOM);
+        saplingItem(ModBlocks.WHITE_MUSHROOM);
+        saplingItem(ModBlocks.YELLOW_MUSHROOM);
         simpleItem(ModItems.JELLYFISHING_NET_EMPTY);
         simpleItem(ModItems.JELLYFISHING_NET_FULL);
         simpleItem(ModItems.BUCKET_OF_GOO);
