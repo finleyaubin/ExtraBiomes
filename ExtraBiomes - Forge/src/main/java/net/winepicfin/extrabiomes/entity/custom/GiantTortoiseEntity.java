@@ -1,5 +1,8 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -21,10 +24,26 @@ import net.winepicfin.extrabiomes.entity.ai.GiantTortoiseChargeGoal;
 // Ported from Bedrock extrabiomes:giant_tortoise — large, slow, amphibious monster that
 // charges (ram_attack) and melees (attack: 10 damage) players, golems and the warden on sight.
 public class GiantTortoiseEntity extends Monster {
+    private static final EntityDataAccessor<Boolean> DATA_CHARGING =
+            SynchedEntityData.defineId(GiantTortoiseEntity.class, EntityDataSerializers.BOOLEAN);
+
     public GiantTortoiseEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
-        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.1F, 0.5F, false);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_CHARGING, false);
+    }
+
+    public boolean isCharging() {
+        return this.entityData.get(DATA_CHARGING);
+    }
+
+    public void setCharging(boolean charging) {
+        this.entityData.set(DATA_CHARGING, charging);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -32,6 +51,7 @@ public class GiantTortoiseEntity extends Monster {
                 .add(Attributes.MAX_HEALTH, 70)
                 .add(Attributes.MOVEMENT_SPEED, 0.15)
                 .add(Attributes.ATTACK_DAMAGE, 10)
+                .add(Attributes.ATTACK_KNOCKBACK, 1.5)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
                 .add(Attributes.FOLLOW_RANGE, 25);
     }

@@ -11,16 +11,25 @@ import java.util.UUID;
 
 // Ported from Bedrock minecraft:behavior.ram_attack (min_ram_distance: 4, ram_distance: 7,
 // ram_speed: 2 vs run_speed: 1) — beelines at the target and doubles movement speed while
-// within charging range. The body-roll spin in GiantTortoiseModel reacts automatically since
-// it's driven by actual distance moved, so no animation triggering is needed here.
+// within charging range. Unlike a one-shot dash, this runs the whole ram cycle itself: charge in,
+// hit on contact, back off for another run-up, then charge again — so it keeps rolling (and
+// dealing damage) for as long as the target stays engaged, instead of handing off to a separate
+// melee goal once it closes the distance.
 public class GiantTortoiseChargeGoal extends Goal {
     private static final UUID CHARGE_SPEED_MODIFIER_ID = UUID.fromString("23a748af-3d91-45e8-b502-545165bdedc4");
     private static final double MIN_RAM_DISTANCE = 4.0D;
     private static final double RAM_DISTANCE = 7.0D;
     private static final double RAM_SPEED_MULTIPLIER = 1.0D; // +100% => 2x base, matches ram_speed:2 vs run_speed:1
+    private static final double ATTACK_RANGE = 3.0D;
+    private static final int ATTACK_COOLDOWN_TICKS = 30;
+    private static final int MAX_RETREAT_TICKS = 40;
+
+    private enum State { CHARGE, RETREAT }
 
     private final GiantTortoiseEntity tortoise;
-    private boolean charging;
+    private State state;
+    private int attackCooldown;
+    private int retreatTicks;
 
     public GiantTortoiseChargeGoal(GiantTortoiseEntity tortoise) {
         this.tortoise = tortoise;
@@ -34,30 +43,28 @@ public class GiantTortoiseChargeGoal extends Goal {
             return false;
         }
         double distSqr = this.tortoise.distanceToSqr(target);
-        return distSqr <= RAM_DISTANCE * RAM_DISTANCE && distSqr >= MIN_RAM_DISTANCE * MIN_RAM_DISTANCE
-                && this.tortoise.getSensing().hasLineOfSight(target);
+        boolean inRange = distSqr <= RAM_DISTANCE * RAM_DISTANCE && distSqr >= MIN_RAM_DISTANCE * MIN_RAM_DISTANCE;
+        boolean canSee = this.tortoise.getSensing().hasLineOfSight(target);
+        return inRange && canSee;
     }
 
     @Override
     public boolean canContinueToUse() {
         LivingEntity target = this.tortoise.getTarget();
-        if (target == null || !target.isAlive()) {
-            return false;
-        }
-        double distSqr = this.tortoise.distanceToSqr(target);
-        // keep charging a little past min_ram_distance so it doesn't flicker on/off at the boundary
-        return distSqr <= RAM_DISTANCE * RAM_DISTANCE * 1.5 && distSqr > 1.0;
+        return target != null && target.isAlive();
     }
 
     @Override
     public void start() {
-        this.charging = true;
+        this.state = State.CHARGE;
+        this.attackCooldown = 0;
+        this.tortoise.setCharging(true);
         applySpeedBoost();
     }
 
     @Override
     public void stop() {
-        this.charging = false;
+        this.tortoise.setCharging(false);
         removeSpeedBoost();
         this.tortoise.getNavigation().stop();
     }
@@ -68,10 +75,34 @@ public class GiantTortoiseChargeGoal extends Goal {
         if (target == null) {
             return;
         }
-        this.tortoise.getLookControl().setLookAt(target, 30.0F, 30.0F);
-        // base speed value is irrelevant here since the AttributeModifier scales the entity's
-        // real movement speed attribute directly, keeping the ram consistent with normal walk speed
-        this.tortoise.getNavigation().moveTo(target, 1.0D);
+        if (this.attackCooldown > 0) {
+            this.attackCooldown--;
+        }
+        double distSqr = this.tortoise.distanceToSqr(target);
+
+        if (this.state == State.CHARGE) {
+            this.tortoise.getLookControl().setLookAt(target, 30.0F, 30.0F);
+            this.tortoise.getNavigation().moveTo(target, 1.0D);
+            if (distSqr <= ATTACK_RANGE * ATTACK_RANGE && this.attackCooldown <= 0) {
+                this.tortoise.doHurtTarget(target);
+                this.attackCooldown = ATTACK_COOLDOWN_TICKS;
+                this.state = State.RETREAT;
+                this.retreatTicks = MAX_RETREAT_TICKS;
+            }
+        } else {
+            double dx = this.tortoise.getX() - target.getX();
+            double dz = this.tortoise.getZ() - target.getZ();
+            double len = Math.sqrt(dx * dx + dz * dz);
+            if (len > 1.0E-4) {
+                double retreatX = this.tortoise.getX() + (dx / len) * RAM_DISTANCE;
+                double retreatZ = this.tortoise.getZ() + (dz / len) * RAM_DISTANCE;
+                this.tortoise.getNavigation().moveTo(retreatX, this.tortoise.getY(), retreatZ, 1.0D);
+            }
+            this.retreatTicks--;
+            if (this.retreatTicks <= 0 || distSqr >= RAM_DISTANCE * RAM_DISTANCE) {
+                this.state = State.CHARGE;
+            }
+        }
     }
 
     private void applySpeedBoost() {
@@ -87,9 +118,5 @@ public class GiantTortoiseChargeGoal extends Goal {
         if (attr != null) {
             attr.removeModifier(CHARGE_SPEED_MODIFIER_ID);
         }
-    }
-
-    public boolean isCharging() {
-        return this.charging;
     }
 }

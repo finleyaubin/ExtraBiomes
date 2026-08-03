@@ -9,8 +9,15 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.custom.GiantTortoiseEntity;
 
 public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
+	// Approximate center of the shell mesh (body2's boxes) relative to `body`'s own pivot,
+	// derived from the box coordinates in createBodyLayer(). Tune by eye if the roll still wobbles.
+	private static final float SHELL_PIVOT_DY = 6.3F;
+	private static final float SHELL_PIVOT_DZ = -2.5F;
+	private static final float TUCK_ANGLE = -100F * 0.017453292F;
+
 	private final ModelPart modelRoot;
 	private final ModelPart body;
 	private final ModelPart body2;
@@ -70,26 +77,41 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float hasTarget = (entity instanceof net.minecraft.world.entity.Mob __m && __m.getTarget() != null) ? 1.0f : 0.0f;
+		boolean charging = entity instanceof GiantTortoiseEntity tortoise && tortoise.isCharging();
 
-		// animation.giant_tortoise.jumping (airborne variant of the roll)
-		if (hasTarget == 1f && !entity.onGround()) {
-			float verticalSpeed = (float) entity.getDeltaMovement().y;
-			this.body.xRot += (limbSwing + verticalSpeed * 30f) * 0.017453292f;
+		if (charging) {
+			// Rolling state (Terraria Giant Tortoise: retracts into its shell and spins toward
+			// the player). Legs tuck up under the shell rather than disappearing, and the spin
+			// runs at a constant rate off ageInTicks rather than off actual distance moved, so it
+			// reads as a fast continuous tumble regardless of how slowly the entity's real
+			// movement speed is closing the gap.
+			this.leg0.xRot = TUCK_ANGLE;
+			this.leg1.xRot = TUCK_ANGLE;
+			this.leg2.xRot = TUCK_ANGLE;
+			this.leg3.xRot = TUCK_ANGLE;
+
+			float theta = (ageInTicks * 25f) * 0.017453292f; // tune degrees/tick to taste
+			this.body.xRot += theta;
+
+			// `body`'s own pivot (PartPose.offset) sits at leg-mount height near the bottom of the
+			// shell, not the shell's visual center, so spinning it in place swings the shell on an
+			// arc rather than turning it on its own axis. Counter-translate so it rotates around
+			// SHELL_PIVOT_DY/DZ (the shell's approximate center relative to that pivot) instead.
+			float cos = Mth.cos(theta);
+			float sin = Mth.sin(theta);
+			this.body.y += SHELL_PIVOT_DY * (cos - 1f) - SHELL_PIVOT_DZ * sin;
+			this.body.z += SHELL_PIVOT_DY * sin + SHELL_PIVOT_DZ * (cos - 1f);
+		} else {
+			// animation.giant_tortoise.move (normal walking gait)
+			this.leg0.visible = true;
+			this.leg1.visible = true;
+			this.leg2.visible = true;
+			this.leg3.visible = true;
+			this.leg0.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+			this.leg1.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+			this.leg2.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+			this.leg3.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 		}
-
-		if (hasTarget == 1f) {
-			float roll = entity.onGround()
-					? limbSwing * 30f
-					: limbSwing + (float) entity.getDeltaMovement().y * 30f;
-			this.body.xRot += roll * 0.017453292f;
-		}
-
-		// animation.giant_tortoise.move
-		this.leg0.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.leg1.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-		this.leg2.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.leg3.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
 
 	}
 
