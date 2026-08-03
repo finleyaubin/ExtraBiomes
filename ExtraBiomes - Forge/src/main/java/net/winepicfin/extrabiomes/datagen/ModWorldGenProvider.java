@@ -8,10 +8,12 @@ import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
+import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModNoiseParameters;
 import net.winepicfin.extrabiomes.worldgen.ModBiomeModifiers;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.ModConfigureFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.OasisPuddleFeature;
+import net.winepicfin.extrabiomes.worldgen.features.oasis.OasisFossilFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moss.MossFeatures;
@@ -51,6 +53,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.CONFIGURED_FEATURE, context -> {
                 ModConfigureFeatures.bootstrap(context);
                 OasisPuddleFeature.bootstrapConfigured(context);
+                OasisFossilFeatures.bootstrapConfigured(context);
                 BoulderFeatures.bootstrapConfigured(context);
                 MushroomFeatures.bootstrapConfigured(context);
                 MossFeatures.bootstrapConfigured(context);
@@ -74,6 +77,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.PLACED_FEATURE, context -> {
                 ModPlacedFeatures.bootstrap(context);
                 OasisPuddleFeature.bootstrapPlaced(context);
+                OasisFossilFeatures.bootstrapPlaced(context);
                 BoulderFeatures.bootstrapPlaced(context);
                 MushroomFeatures.bootstrapPlaced(context);
                 MossFeatures.bootstrapPlaced(context);
@@ -95,6 +99,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 TropicalIslandFeatures.bootstrapPlaced(context);
             })
             .add(Registries.CONFIGURED_CARVER, NetherlandsCaveCarver::bootstrapCarver)
+            .add(Registries.NOISE, ModNoiseParameters::bootstrap)
             .add(ForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap)
             .add(Registries.BIOME, ModBiomes::boostrap);
 }

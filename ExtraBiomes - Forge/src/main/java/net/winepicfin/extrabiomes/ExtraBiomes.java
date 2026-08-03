@@ -21,6 +21,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.sound.ModSounds;
+import net.winepicfin.extrabiomes.entity.client.BaitRenderer;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseRenderer;
 import net.winepicfin.extrabiomes.entity.client.HarpyRenderer;
 import net.winepicfin.extrabiomes.entity.client.HoppleshroomRenderer;
@@ -121,7 +122,7 @@ private void addCreative(BuildCreativeModeTabContentsEvent event){
             EntityRenderers.register(ModEntities.RAZOR_FEATHER.get(), ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.DIAMOND_RAZOR_FEATHER.get(), ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.NETHERITE_RAZOR_FEATHER.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntities.BAIT_PROJECTILE.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.BAIT_PROJECTILE.get(), BaitRenderer::new);
         }
     }
 }

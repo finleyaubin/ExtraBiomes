@@ -34,7 +34,7 @@ public class WaterLilyFixupFeature extends Feature<NoneFeatureConfiguration> {
             BlockState state = level.getBlockState(pos);
             BlockState above = level.getBlockState(pos.above());
             if (state.is(Blocks.WATER) && above.isAir()) {
-                level.setBlock(pos, Blocks.LILY_PAD.defaultBlockState(), 2);
+                level.setBlock(pos.above(), Blocks.LILY_PAD.defaultBlockState(), 2);
                 return true;
             }
             pos.move(0, -1, 0);

@@ -16,6 +16,12 @@ import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
  * is only added below when a biome's top/mid materials differ from vanilla's default
  * grass_block-over-dirt. Biomes whose Bedrock top/mid already match that default (dirt
  * forests, jungles, plains-like biomes, etc.) intentionally have no entry here.
+ * <p>
+ * Some biomes additionally have a "minecraft:surface_material_adjustments" component: one or
+ * more patchy top/mid/sea_floor material overrides gated by a Perlin noise band. Those are
+ * layered on top of (checked before, in the same SurfaceRules.sequence) the base material rule
+ * above, using {@link ModNoiseParameters}'s shared noises to control patch size - see that
+ * class's javadoc for how Bedrock's per-adjustment noise_frequency_scale maps onto them.
  */
 public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource DIRT = makeStateRule(Blocks.DIRT);
@@ -27,6 +33,11 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource ICE = makeStateRule(Blocks.ICE);
     private static final SurfaceRules.RuleSource WHITE_CONCRETE_POWDER = makeStateRule(Blocks.WHITE_CONCRETE_POWDER);
     private static final SurfaceRules.RuleSource NETHERRACK = makeStateRule(Blocks.NETHERRACK);
+    private static final SurfaceRules.RuleSource MUD = makeStateRule(Blocks.MUD);
+    private static final SurfaceRules.RuleSource PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
+    private static final SurfaceRules.RuleSource MYCELIUM = makeStateRule(Blocks.MYCELIUM);
+    private static final SurfaceRules.RuleSource MOSS_BLOCK = makeStateRule(Blocks.MOSS_BLOCK);
+    private static final SurfaceRules.RuleSource SANDSTONE = makeStateRule(Blocks.SANDSTONE);
 
     public static SurfaceRules.RuleSource makeRules()
     {
@@ -70,8 +81,18 @@ public class ModSurfaceRules {
                 //     sand to a shallow band like vanilla's own desert rule. ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.DESERT_BRYCE),
                         SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
+                // Grand Oasis also has two surface_material_adjustments patches layered inside that
+                // same shallow band: top_material -> red_sand in one noise band (checked only at
+                // the very top block, matching Bedrock's top_material scope), and
+                // mid_material -> sandstone in another (applies anywhere in the band, matching
+                // Bedrock's mid_material filling everything below/around the top).
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GRAND_OASIS),
-                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
+                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR),
+                                SurfaceRules.sequence(
+                                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.15, 0.3), RED_SAND)),
+                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.45, 0.58), SANDSTONE),
+                                        SAND))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.TROPICAL_ISLAND),
                         SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
 
@@ -87,9 +108,40 @@ public class ModSurfaceRules {
 
                 // --- Biomes whose Bedrock mid_material is bare stone instead of dirt:
                 //     grass caps directly on stone, no dirt layer ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JELLYFISH_FIELDS), grassOverStone),
+                // Jellyfish Fields also has a "minecraft:surface_material_adjustments" patch:
+                // sea_floor_material -> moss_block in a noise band, layered as a higher-priority
+                // override on top of the submerged-floor case that would otherwise apply here.
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JELLYFISH_FIELDS),
+                        SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                        SurfaceRules.ifTrue(isAtOrBelowWaterLevel,
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.1, 0.3), MOSS_BLOCK))),
+                                grassOverStone)),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JUNGLE_PILLARS), grassOverStone),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.MOORLANDS), grassOverStone),
+                // Moorlands also has a surface_material_adjustments patch: top_material -> mud in a
+                // noise band, overriding the grass cap wherever the noise matches.
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.MOORLANDS),
+                        SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.LARGE_PATCH, 0.50, 0.6), MUD)),
+                                grassOverStone)),
+
+                // --- Fungle Jungle: no base entry needed (Bedrock top/mid already match vanilla's
+                //     default grass/dirt), but it has a surface_material_adjustments patch:
+                //     top_material -> mycelium in a noise band. ---
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.FUNGLE_JUNGLE),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.SMALL_PATCH, 0.2, 0.4), MYCELIUM))),
+
+                // --- Deep Dark Forest: no base entry needed (top/mid already match vanilla's
+                //     default grass/dirt), but it has two surface_material_adjustments patches
+                //     covering nearly the whole noise range between them: top_material -> packed_mud
+                //     for the majority band, top_material -> mud for the rest. ---
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.DEEP_DARK_FOREST),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                SurfaceRules.sequence(
+                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, 0.212, 1.0), PACKED_MUD),
+                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, -0.115, 0.212), MUD)))),
 
                 // --- The Netherlands: top=grass/dirt (base) or dirt with no grass cap (mutated),
                 //     but both variants have a netherrack foundation instead of stone at depth

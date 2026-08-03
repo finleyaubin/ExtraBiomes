@@ -37,6 +37,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.PIRANHA);
         simpleItem(ModItems.COOKED_PIRANHA);
         simpleItem(ModItems.WORM);
+        simpleItem(ModItems.BAIT);
         simpleItem(ModItems.JELLYFISH_JAM_BOTTLE);
         //~~~~~~~~~Small Mushrooms~~~~~~~~\\
         saplingItem(ModBlocks.BLACK_MUSHROOM);

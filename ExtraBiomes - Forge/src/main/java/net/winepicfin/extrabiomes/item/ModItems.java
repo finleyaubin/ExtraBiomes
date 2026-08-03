@@ -10,6 +10,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.fluid.ModFluids;
+import net.winepicfin.extrabiomes.item.custom.BaitItem;
 import net.winepicfin.extrabiomes.item.custom.FrogHelmetItem;
 import net.winepicfin.extrabiomes.item.custom.JellyfishJamBottleItem;
 import net.winepicfin.extrabiomes.item.custom.JellyfishingNetItem;
@@ -23,6 +24,7 @@ public class ModItems {
     public  static final RegistryObject<Item> MOSSY_PEBBLE = ITEMS.register("mossy_pebble",()-> new PebbleItem(new Item.Properties()));
     public static final RegistryObject<Item> BUCKET_OF_GOO = ITEMS.register("bucket_of_goo",()-> new BucketItem(ModFluids.SOURCE_GOO, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     public static final RegistryObject<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
+    public static final RegistryObject<Item> BAIT = ITEMS.register("bait",()-> new BaitItem(new Item.Properties().stacksTo(16)));
     public static final RegistryObject<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS)));
     public static final RegistryObject<Item> COOKED_FROGS_LEGS = ITEMS.register("cooked_frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.COOKED_FROGS_LEGS)));
     public static final RegistryObject<Item> PIRANHA = ITEMS.register("piranha",()-> new Item(new Item.Properties().food(ModFoods.PIRANHA)));

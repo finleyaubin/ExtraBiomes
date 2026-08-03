@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -39,7 +40,12 @@ import java.util.List;
  *   <li>{@code structure_name} -> the converted .nbt at
  *       data/extrabiomes/structures/structurescatter/oasis_puddle.nbt, referenced here as
  *       "extrabiomes:structurescatter/oasis_puddle".</li>
- *   <li>{@code iterations: 1} + {@code scatter_chance: 1} (always run once) -> {@link CountPlacement#of(int)} with 1.</li>
+ *   <li>{@code iterations: 1} + {@code scatter_chance: 1} (always run once) -> {@link CountPlacement#of(int)} with 1,
+ *       thinned further by a {@link RarityFilter} not present in the Bedrock source. Bedrock also runs this
+ *       placement pass "before_surface_pass" (before its surface/sand texturing finalizes), which lets the
+ *       terrain conform around the puddle; Java's decoration step runs after surface rules are already baked
+ *       in, so stamping one of these into every single chunk reads as far more common in practice than in
+ *       Bedrock - hence the added rarity.</li>
  *   <li>{@code x/z uniform [0,16]} (once per chunk, spread across it) -> {@link InSquarePlacement#spread()}.</li>
  *   <li>{@code y = heightmap - 4} -> {@link HeightmapPlacement} on WORLD_SURFACE_WG (offset 0) combined with
  *       {@code groundOffset = -4} in the {@link SingleStructureConfiguration}, which is applied inside
@@ -48,7 +54,10 @@ import java.util.List;
  *       sand/red sand) -> a {@link BlockPredicateFilter} testing the block one below the (pre-groundOffset)
  *       heightmap surface position against {@link BlockPredicate#matchesBlocks}, i.e. this is expressed as a
  *       PlacementModifier rather than as feature configuration, exactly as Bedrock's "constraints" block is
- *       itself a placement-time constraint, not part of the structure feature's own definition.</li>
+ *       itself a placement-time constraint, not part of the structure feature's own definition. This check is
+ *       also repeated at the far corner of the 11x11 footprint in every rotation direction (not just the
+ *       center), since a single-point check lets the flat template land across uneven sand and appear to
+ *       float above dips or get buried under rises.</li>
  *   <li>{@code has_biome_tag "oasis"} -> intentionally NOT included here; per project convention the biome
  *       wiring pass adds this PlacedFeature to the relevant biome(s) directly via
  *       biomeBuilder.addFeature(...), and {@link BiomeFilter#biome()} (last modifier below) is what makes
@@ -74,9 +83,22 @@ public class OasisPuddleFeature {
                 configuredFeatures.getOrThrow(OASIS_PUDDLE_SCATTER_KEY),
                 List.of(
                         CountPlacement.of(1),
+                        RarityFilter.onAverageOnceEvery(5),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.SAND, Blocks.RED_SAND)),
+                        // The 11x11 template is stamped down at a random rotation around this
+                        // single sampled point, so its footprint can land in any of the four
+                        // quadrants relative to it. Requiring sand at the far corner in every
+                        // direction (not just the center) rejects sites where the sand dips or
+                        // rises across that span - otherwise part of the puddle ends up floating
+                        // above a dip or buried under a rise instead of sitting flush with the ground.
+                        BlockPredicateFilter.forPredicate(BlockPredicate.allOf(
+                                BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.SAND, Blocks.RED_SAND),
+                                BlockPredicate.matchesBlocks(new BlockPos(10, -1, 10), Blocks.SAND, Blocks.RED_SAND),
+                                BlockPredicate.matchesBlocks(new BlockPos(-10, -1, 10), Blocks.SAND, Blocks.RED_SAND),
+                                BlockPredicate.matchesBlocks(new BlockPos(10, -1, -10), Blocks.SAND, Blocks.RED_SAND),
+                                BlockPredicate.matchesBlocks(new BlockPos(-10, -1, -10), Blocks.SAND, Blocks.RED_SAND)
+                        )),
                         BiomeFilter.biome()
                 )
         ));

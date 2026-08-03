@@ -34,9 +34,9 @@ import java.util.List;
  * by the underground-jungle/moss ports:
  * <pre>
  * features/tropical_island/tropical_melon_feature.json (minecraft:single_block_feature -> minecraft:melon_block,
- *   enforce_survivability_rules false, enforce_placement_rules false, may_attach_to.bottom = [grass, moss_block])
+ *   enforce_survivability_rules false, enforce_placement_rules false, may_attach_to.bottom = [grass_block, moss_block])
  * features/tropical_island/island_grass_floor_feature.json (minecraft:vegetation_patch_feature,
- *   replaceable_blocks=[sand], ground_block=grass, surface floor, depth 1-1, vertical_range 5,
+ *   replaceable_blocks=[sand], ground_block=grass_block, surface floor, depth 1-1, vertical_range 5,
  *   vegetation_chance 0, horizontal_radius 32-32, extra_edge_column_chance 0.3)
  * </pre>
  * <p>
@@ -59,7 +59,7 @@ public class TropicalIslandFeatures {
 
     /**
      * extrabiomes:tropical/tropical_melon - places a single {@link Blocks#MELON} where the block
-     * below is grass or moss (Bedrock's {@code may_attach_to.bottom} allowlist). Register via
+     * below is grass block or moss block (Bedrock's {@code may_attach_to.bottom} allowlist). Register via
      * {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TropicalIslandFeatures.MELON_PLACED_KEY)}.
      */
     public static final ResourceKey<PlacedFeature> MELON_PLACED_KEY = placedKey("tropical_melon");
@@ -72,7 +72,7 @@ public class TropicalIslandFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRASS_FLOOR_KEY = configuredKey("island_grass_floor");
 
     /**
-     * extrabiomes:tropical/island_grass_floor - converts sand to grass on the surface (with the
+     * extrabiomes:tropical/island_grass_floor - converts sand to grass block on the surface (with the
      * vegetation ingredient disabled to match Bedrock's {@code vegetation_chance: 0}). Register via
      * {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TropicalIslandFeatures.GRASS_FLOOR_PLACED_KEY)}.
      */
@@ -91,7 +91,7 @@ public class TropicalIslandFeatures {
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH,
                 new VegetationPatchConfiguration(
                         ISLAND_GRASS_FLOOR_REPLACEABLE,
-                        BlockStateProvider.simple(Blocks.GRASS.defaultBlockState()),
+                        BlockStateProvider.simple(Blocks.GRASS_BLOCK.defaultBlockState()),
                         placedFeatures.getOrThrow(UndergroundJungleFeatures.SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY),
                         CaveSurface.FLOOR,
                         ConstantInt.of(1),
@@ -113,7 +113,7 @@ public class TropicalIslandFeatures {
         context.register(MELON_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(MELON_KEY),
                 List.of(
-                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.GRASS, Blocks.MOSS_BLOCK)),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK)),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome()

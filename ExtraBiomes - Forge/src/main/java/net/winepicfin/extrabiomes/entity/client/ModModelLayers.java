@@ -13,6 +13,7 @@ public class ModModelLayers {
     public static final ModelLayerLocation JELLYFISH = layer("jellyfish");
     public static final ModelLayerLocation PIRANHA = layer("piranha");
     public static final ModelLayerLocation HARPY = layer("harpy");
+    public static final ModelLayerLocation BAIT = layer("bait");
 
     private static ModelLayerLocation layer(String name) {
         return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name), "main");

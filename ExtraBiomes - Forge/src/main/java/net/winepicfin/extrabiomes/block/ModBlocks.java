@@ -93,7 +93,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> STRIPED_PALM_LOG = registerBlock("striped_palm_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(5f)));
     public static final RegistryObject<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)) );
     public static final RegistryObject<Block> STRIPED_PALM_WOOD = registerBlock("striped_palm_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(5f)));
-    public static final RegistryObject<Block> PALM_SAPLING = registerBlock("palm_sapling", () -> new SaplingBlock(new PalmTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
+    public static final RegistryObject<Block> PALM_SAPLING = registerBlock("palm_sapling", () -> new PalmSaplingBlock(new PalmTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistryObject<Block> PALM_STAIRS = registerBlock("palm_stairs", () -> new StairBlock(() -> ModBlocks.PALM_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> PALM_SLAB = registerBlock("palm_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> PALM_BUTTON = registerBlock("palm_button", () -> new ButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON), BlockSetType.OAK, 10, true));

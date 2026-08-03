@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.OasisPuddleFeature;
+import net.winepicfin.extrabiomes.worldgen.features.oasis.OasisFossilFeatures;
 
 public class GrandOasis {
 
@@ -38,6 +39,9 @@ public class GrandOasis {
 
         // oasis subsystem: scattered puddle structure_template (Bedrock oasis_puddle_placer)
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OasisPuddleFeature.OASIS_PUDDLE_SCATTER_PLACED_KEY);
+        // exposed surface fossils in the style of Soul Sand Valley's bone piles, rather than
+        // vanilla desert's buried-underground Feature.FOSSIL (see OasisFossilFeatures)
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OasisFossilFeatures.SELECT_FOSSIL_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)

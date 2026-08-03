@@ -24,6 +24,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModItems.PIRANHA.get());
                 pOutput.accept(ModItems.COOKED_PIRANHA.get());
                 pOutput.accept(ModItems.WORM.get());
+                pOutput.accept(ModItems.BAIT.get());
                 pOutput.accept(ModItems.JELLYFISH_JAM_BOTTLE.get());
                 pOutput.accept(ModItems.JELLYFISHING_NET_EMPTY.get());
                 pOutput.accept(ModItems.JELLYFISHING_NET_FULL.get());

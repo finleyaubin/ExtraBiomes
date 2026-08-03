@@ -8,9 +8,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.custom.PiranhaEntity;
 
-public class PiranhaModel<T extends Entity> extends HierarchicalModel<T> {
+public class PiranhaModel<T extends PiranhaEntity> extends HierarchicalModel<T> {
 	private final ModelPart modelRoot;
 	private final ModelPart body;
 	private final ModelPart head;
@@ -54,6 +54,15 @@ public class PiranhaModel<T extends Entity> extends HierarchicalModel<T> {
 		this.head.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * 4f)) * 0.017453292f;
 		this.tailfin.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * (-25.75f))) * 0.017453292f;
 
+		// animation.piranha.bite — plays whenever the piranha has a target (query.has_target).
+		// Bedrock drives this off sin(life_time)^2*40, but life_time in raw seconds gives a
+		// multi-second period that reads as barely moving; scaled up here into a quick,
+		// clearly visible chomp (roughly two full snaps per second).
+		if (entity.isBiting()) {
+			float t = ageInTicks * 0.3f;
+			float bite = Mth.sin(t) * Mth.sin(t) * 40f;
+			this.jaw.xRot += bite * 0.017453292f;
+		}
 	}
 
 	@Override

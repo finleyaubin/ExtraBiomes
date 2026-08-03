@@ -11,11 +11,11 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.winepicfin.extrabiomes.entity.ai.TreefrogHopGoal;
 import org.jetbrains.annotations.Nullable;
 
 // Ported from Bedrock extrabiomes:treefrog — small hopping passive frog. Drops frogs_legs.
@@ -28,7 +28,7 @@ public class TreefrogEntity extends Animal {
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 4)
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
-                .add(Attributes.JUMP_STRENGTH, 0.5)
+                .add(Attributes.JUMP_STRENGTH, 0.7)
                 .add(Attributes.FOLLOW_RANGE, 16);
     }
 
@@ -36,9 +36,21 @@ public class TreefrogEntity extends Animal {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(2, new TreefrogHopGoal(this));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+    }
+
+    // JUMP_STRENGTH only affects horses by default — read it directly so the attribute set in
+    // createAttributes() actually controls how high each hop launches.
+    @Override
+    protected float getJumpPower() {
+        return (float) this.getAttributeValue(Attributes.JUMP_STRENGTH);
+    }
+
+    public void hop(double vx, double vz) {
+        this.setDeltaMovement(vx, this.getJumpPower(), vz);
+        this.hasImpulse = true;
     }
 
     @Nullable

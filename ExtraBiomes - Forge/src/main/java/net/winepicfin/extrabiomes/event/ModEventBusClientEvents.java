@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
+import net.winepicfin.extrabiomes.entity.client.BaitModel;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseModel;
 import net.winepicfin.extrabiomes.entity.client.HarpyModel;
 import net.winepicfin.extrabiomes.entity.client.HoppleshroomModel;
@@ -37,5 +38,6 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModModelLayers.JELLYFISH, JellyfishModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.BAIT, BaitModel::createBodyLayer);
     }
 }

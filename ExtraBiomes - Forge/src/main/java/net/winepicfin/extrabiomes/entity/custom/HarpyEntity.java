@@ -1,9 +1,12 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -19,6 +22,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectileEntity;
 
 // Ported from Bedrock extrabiomes:harpy — a flying monster that circles and shoots razor feathers.
@@ -35,6 +39,12 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
                 .add(Attributes.MOVEMENT_SPEED, 0.25)
                 .add(Attributes.FLYING_SPEED, 0.6)
                 .add(Attributes.FOLLOW_RANGE, 24);
+    }
+
+    // Harpies only nest near the top of the world, not on the surface.
+    public static boolean checkHarpySpawnRules(EntityType<HarpyEntity> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        int worldTop = level.getMaxBuildHeight();
+        return pos.getY() >= worldTop - 20 && Monster.checkAnyLightMonsterSpawnRules(type, level, spawnType, pos, random);
     }
 
     @Override

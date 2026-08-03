@@ -16,7 +16,9 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
@@ -59,14 +61,21 @@ import java.util.List;
  *   <li>minecraft:optional_podzol_feature -> {@link PodzolConversionFeature}: converts the surface
  *       block to podzol if it's grass/dirt/coarse dirt, no-op otherwise.</li>
  *   <li>minecraft:tall_grass_feature -> Feature.SIMPLE_BLOCK placing {@link Blocks#GRASS} (the short
- *       grass tuft block in 1.20.1, renamed short_grass in later versions).</li>
+ *       grass tuft block in 1.20.1, renamed short_grass in later versions), gated by a
+ *       {@code BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)} - the same
+ *       guard vanilla's own grass patches use - so each of the up to 900 (30 outer x 30 inner)
+ *       attempts only actually places where nothing already stands, instead of unconditionally
+ *       overwriting whatever block a given attempt happens to land on. Omitting that guard is what
+ *       made the four grass/dry-grass layers stack on top of each other into an unnaturally dense
+ *       mass.</li>
  *   <li>minecraft:grass_double_plant_patch_feature -> {@link DoubleTallGrassFeature} placing both
  *       halves of {@link Blocks#TALL_GRASS}.</li>
  *   <li>minecraft:short_dry_grass_feature and minecraft:random_dry_grass_block_feature -> Bedrock's
  *       dry-grass tuft blocks (with color variants for the "random" one) have no Java 1.20.1
  *       equivalent block at all (dry grass blocks were only added to Java in a later version), so
- *       both are approximated with {@link Blocks#DEAD_BUSH} scatters. This loses the color-variant
- *       aspect of the "random" variant entirely - noted here as an accepted simplification.</li>
+ *       both are approximated with {@link Blocks#DEAD_BUSH} scatters, same air-only guard as above.
+ *       This loses the color-variant aspect of the "random" variant entirely - noted here as an
+ *       accepted simplification.</li>
  *   <li>minecraft:fixup_waterlily_position_feature -> {@link WaterLilyFixupFeature}: searches
  *       downward from the placement column for a water surface and places a lily pad.</li>
  * </ul>
@@ -112,7 +121,8 @@ public class MoorlandFeatures {
         // iterations with x/z extent +/-8 and y extent +/-4 around the outer placement position.
         context.register(MOORLAND_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.GRASS))))));
+                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.GRASS)),
+                                BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
 
         context.register(MOORLAND_DOUBLE_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
@@ -120,11 +130,13 @@ public class MoorlandFeatures {
 
         context.register(MOORLAND_SHORT_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH))))));
+                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)),
+                                BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
 
         context.register(MOORLAND_TALL_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH))))));
+                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)),
+                                BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
 
         // "moorlands_surface_waterlily_feature" -> minecraft:fixup_waterlily_position_feature
         context.register(MOORLAND_WATERLILY_KEY, new ConfiguredFeature<>(WATERLILY_FIXUP_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
