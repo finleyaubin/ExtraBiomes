@@ -24,7 +24,9 @@ public class JellyfishFields {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        BiomeDefaultFeatures.farmAnimals(spawnBuilder);
+        // Ocean biome - no land farm animals. Jellyfish itself is added via the
+        // add_spawn_jellyfish biome modifier; these mirror vanilla's warm ocean ambience.
+        BiomeDefaultFeatures.warmOceanSpawns(spawnBuilder, 10, 4);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));

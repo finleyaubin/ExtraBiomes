@@ -98,6 +98,11 @@ GRINDSTONE_ATTACHMENT_FACE = {
     "standing": "floor", "hanging": "ceiling", "side": "wall", "multiple": "wall",
 }
 
+# Bedrock coral "coral_color" -> Java coral type name.
+CORAL_COLOR = {
+    "blue": "tube", "pink": "brain", "purple": "bubble", "red": "fire", "yellow": "horn",
+}
+
 
 def _b(v):
     """Bedrock int/bool -> Java boolean string."""
@@ -191,6 +196,45 @@ def map_block(name, states, be=None):
         return "minecraft:furnace", {
             "facing": _s(states.get("minecraft:cardinal_direction", "north")),
             "lit": "false",
+        }
+
+    if name == "minecraft:coral_block":
+        coral = CORAL_COLOR.get(_s(states.get("coral_color", "blue")), "tube")
+        prefix = "dead_" if states.get("dead_bit") in (1, True) else ""
+        return "minecraft:%s%s_coral_block" % (prefix, coral), {}
+
+    # Bedrock's three "hanging" fan ids each cover two colors, selected by
+    # coral_hang_type_bit: coral_fan_hang=blue(0)/pink(1), coral_fan_hang2=purple(0)/red(1),
+    # coral_fan_hang3=yellow(0, only color). Java's equivalent is the wall-mounted fan.
+    if name in ("minecraft:coral_fan_hang", "minecraft:coral_fan_hang2", "minecraft:coral_fan_hang3"):
+        hang_type = int(states.get("coral_hang_type_bit", 0))
+        colors = {
+            "minecraft:coral_fan_hang": ("blue", "pink"),
+            "minecraft:coral_fan_hang2": ("purple", "red"),
+            "minecraft:coral_fan_hang3": ("yellow", "yellow"),
+        }[name]
+        coral = CORAL_COLOR.get(colors[hang_type & 1], "tube")
+        prefix = "dead_" if states.get("dead_bit") in (1, True) else ""
+        facing = BED_DIRECTION.get(int(states.get("coral_direction", 0)), "south")
+        return "minecraft:%s%s_coral_wall_fan" % (prefix, coral), {
+            "facing": facing, "waterlogged": "true",
+        }
+
+    # Floor-standing coral fan (as opposed to the wall-mounted "hang" variants
+    # above): Bedrock encodes color directly via coral_color, no hang_type_bit.
+    if name == "minecraft:coral_fan":
+        coral = CORAL_COLOR.get(_s(states.get("coral_color", "blue")), "tube")
+        return "minecraft:%s_coral_fan" % coral, {"waterlogged": "true"}
+
+    if name == "minecraft:kelp":
+        age = max(0, min(25, int(states.get("kelp_age", 0))))
+        return "minecraft:kelp", {"age": _s(age)}
+
+    if name == "minecraft:sea_pickle":
+        count = max(0, min(3, int(states.get("cluster_count", 0))))
+        return "minecraft:sea_pickle", {
+            "pickles": _s(count + 1),
+            "waterlogged": "false" if states.get("dead_bit") in (1, True) else "true",
         }
 
     if name == "minecraft:cave_vines":

@@ -201,10 +201,11 @@ public class ModOverworldRegion extends Region {
                 .build().forEach(point -> builder.add(point, ModBiomes.GRAND_OASIS));
 
         // Jellyfish Fields - bedrock temp=0.5, downfall=0.5, ocean/warm tags
+        // Confined to DEEP_OCEAN..OCEAN so it doesn't bleed into the COAST band (which is land/beach transition).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.NEUTRAL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.OCEAN, ParameterUtils.Continentalness.COAST))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.DEEP_OCEAN, ParameterUtils.Continentalness.OCEAN))
                 .erosion(ParameterUtils.Erosion.FULL_RANGE)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)

@@ -42,6 +42,9 @@ public class ModSurfaceRules {
     public static SurfaceRules.RuleSource makeRules()
     {
         SurfaceRules.ConditionSource isAtOrBelowWaterLevel = SurfaceRules.waterBlockCheck(-1, 0);
+        // waterBlockCheck is true when the position is AT/ABOVE the water table (dry), false when
+        // genuinely submerged - so "submerged" needs the negation, not the check itself.
+        SurfaceRules.ConditionSource isSubmerged = SurfaceRules.not(SurfaceRules.waterBlockCheck(0, 0));
 
         // grass on exposed land, dirt underwater -> used by biomes with a dirt mid layer (default vanilla behaviour)
         SurfaceRules.RuleSource grassOverDirt = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK), DIRT);
@@ -114,7 +117,7 @@ public class ModSurfaceRules {
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JELLYFISH_FIELDS),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                        SurfaceRules.ifTrue(isAtOrBelowWaterLevel,
+                                        SurfaceRules.ifTrue(isSubmerged,
                                                 SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.1, 0.3), MOSS_BLOCK))),
                                 grassOverStone)),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JUNGLE_PILLARS), grassOverStone),
