@@ -26,10 +26,10 @@ public class TreefrogEntity extends Animal {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 4)
-                .add(Attributes.MOVEMENT_SPEED, 0.3)
-                .add(Attributes.JUMP_STRENGTH, 0.7)
-                .add(Attributes.FOLLOW_RANGE, 16);
+                .add(Attributes.MAX_HEALTH, TreefrogTuning.MAX_HEALTH)
+                .add(Attributes.MOVEMENT_SPEED, TreefrogTuning.MOVEMENT_SPEED)
+                .add(Attributes.JUMP_STRENGTH, TreefrogTuning.JUMP_STRENGTH)
+                .add(Attributes.FOLLOW_RANGE, TreefrogTuning.FOLLOW_RANGE);
     }
 
     @Override

@@ -48,12 +48,12 @@ public class GiantTortoiseEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 70)
-                .add(Attributes.MOVEMENT_SPEED, 0.15)
-                .add(Attributes.ATTACK_DAMAGE, 10)
-                .add(Attributes.ATTACK_KNOCKBACK, 1.5)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
-                .add(Attributes.FOLLOW_RANGE, 25);
+                .add(Attributes.MAX_HEALTH, GiantTortoiseTuning.MAX_HEALTH)
+                .add(Attributes.MOVEMENT_SPEED, GiantTortoiseTuning.MOVEMENT_SPEED)
+                .add(Attributes.ATTACK_DAMAGE, GiantTortoiseTuning.ATTACK_DAMAGE)
+                .add(Attributes.ATTACK_KNOCKBACK, GiantTortoiseTuning.ATTACK_KNOCKBACK)
+                .add(Attributes.KNOCKBACK_RESISTANCE, GiantTortoiseTuning.KNOCKBACK_RESISTANCE)
+                .add(Attributes.FOLLOW_RANGE, GiantTortoiseTuning.FOLLOW_RANGE);
     }
 
     @Override

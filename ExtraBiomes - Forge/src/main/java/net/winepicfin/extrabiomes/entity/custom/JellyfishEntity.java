@@ -44,9 +44,6 @@ public class JellyfishEntity extends WaterAnimal {
     private static final EntityDataAccessor<Integer> DATA_VARIANT =
             SynchedEntityData.defineId(JellyfishEntity.class, EntityDataSerializers.INT);
 
-    // Mirrors Bedrock's v.gray_amount / v.scale_y pre_animation lerps: full transition over ~8 seconds (160 ticks).
-    private static final float GRAY_STEP_PER_TICK = 1.0F / 160.0F;
-    private static final float SCALE_Y_STEP_PER_TICK = 0.9F / 160.0F;
     private float grayAmount;
     private float scaleY = 1.0F;
 
@@ -58,8 +55,8 @@ public class JellyfishEntity extends WaterAnimal {
 
     public static AttributeSupplier.Builder createAttributes() {
         return WaterAnimal.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 6)
-                .add(Attributes.MOVEMENT_SPEED, 0.15);
+                .add(Attributes.MAX_HEALTH, JellyfishTuning.MAX_HEALTH)
+                .add(Attributes.MOVEMENT_SPEED, JellyfishTuning.MOVEMENT_SPEED);
     }
 
     @Override
@@ -120,8 +117,8 @@ public class JellyfishEntity extends WaterAnimal {
         super.tick();
 
         boolean inWater = this.isInWater();
-        this.grayAmount = Mth.clamp(this.grayAmount + Mth.clamp((inWater ? 0.0F : 1.0F) - this.grayAmount, -GRAY_STEP_PER_TICK, GRAY_STEP_PER_TICK), 0.0F, 1.0F);
-        this.scaleY = Mth.clamp(this.scaleY + Mth.clamp((inWater ? 1.0F : 0.1F) - this.scaleY, -SCALE_Y_STEP_PER_TICK, SCALE_Y_STEP_PER_TICK), 0.1F, 1.0F);
+        this.grayAmount = Mth.clamp(this.grayAmount + Mth.clamp((inWater ? 0.0F : 1.0F) - this.grayAmount, -JellyfishTuning.GRAY_STEP_PER_TICK, JellyfishTuning.GRAY_STEP_PER_TICK), 0.0F, 1.0F);
+        this.scaleY = Mth.clamp(this.scaleY + Mth.clamp((inWater ? 1.0F : 0.1F) - this.scaleY, -JellyfishTuning.SCALE_Y_STEP_PER_TICK, JellyfishTuning.SCALE_Y_STEP_PER_TICK), 0.1F, 1.0F);
 
         if (!this.level().isClientSide && this.tickCount % 10 == 0) {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.2D));

@@ -26,11 +26,11 @@ public class StickPileBlock extends RotatedPillarBlock {
 
     @Override
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 50;
+        return StickPileTuning.FLAMMABILITY;
     }
 
     @Override
     public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 50;
+        return StickPileTuning.FIRE_SPREAD_SPEED;
     }
 }
