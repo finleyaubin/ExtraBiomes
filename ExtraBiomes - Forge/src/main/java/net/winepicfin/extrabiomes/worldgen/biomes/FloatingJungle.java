@@ -44,8 +44,8 @@ public class FloatingJungle {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.9f)
-                .temperature(0.95f)
+                .downfall(BiomeClimateTuning.FLOATING_JUNGLE.downfall())
+                .temperature(BiomeClimateTuning.FLOATING_JUNGLE.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

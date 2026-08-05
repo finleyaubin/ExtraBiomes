@@ -44,8 +44,8 @@ public class ColdMesa {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(1.0f)
-                .temperature(0.0f)
+                .downfall(BiomeClimateTuning.COLD_MESA.downfall())
+                .temperature(BiomeClimateTuning.COLD_MESA.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

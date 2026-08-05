@@ -51,8 +51,8 @@ public class DeepDarkGreen {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.4f)
-                .temperature(0.8f)
+                .downfall(BiomeClimateTuning.DEEP_DARK_GREEN.downfall())
+                .temperature(BiomeClimateTuning.DEEP_DARK_GREEN.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

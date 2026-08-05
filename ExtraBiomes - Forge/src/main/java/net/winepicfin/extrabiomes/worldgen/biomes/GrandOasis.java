@@ -45,8 +45,8 @@ public class GrandOasis {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)
-                .downfall(0.0f)
-                .temperature(2.0f)
+                .downfall(BiomeClimateTuning.GRAND_OASIS.downfall())
+                .temperature(BiomeClimateTuning.GRAND_OASIS.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

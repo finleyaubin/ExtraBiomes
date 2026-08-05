@@ -42,8 +42,8 @@ public class Glacier {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(1.0f)
-                .temperature(0.0f)
+                .downfall(BiomeClimateTuning.GLACIER.downfall())
+                .temperature(BiomeClimateTuning.GLACIER.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

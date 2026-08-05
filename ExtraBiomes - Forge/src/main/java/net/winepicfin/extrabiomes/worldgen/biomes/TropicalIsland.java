@@ -49,8 +49,8 @@ public class TropicalIsland {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.9f)
-                .temperature(1.0f)
+                .downfall(BiomeClimateTuning.TROPICAL_ISLAND.downfall())
+                .temperature(BiomeClimateTuning.TROPICAL_ISLAND.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

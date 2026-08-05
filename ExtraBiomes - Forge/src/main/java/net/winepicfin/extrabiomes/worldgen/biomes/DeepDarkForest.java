@@ -42,8 +42,8 @@ public class DeepDarkForest {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.8f)
-                .temperature(0.3f)
+                .downfall(BiomeClimateTuning.DEEP_DARK_FOREST.downfall())
+                .temperature(BiomeClimateTuning.DEEP_DARK_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

@@ -44,8 +44,8 @@ public class JellyfishFields {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.5f)
-                .temperature(0.5f)
+                .downfall(BiomeClimateTuning.JELLYFISH_FIELDS.downfall())
+                .temperature(BiomeClimateTuning.JELLYFISH_FIELDS.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

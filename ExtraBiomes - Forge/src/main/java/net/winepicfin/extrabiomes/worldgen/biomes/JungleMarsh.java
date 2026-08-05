@@ -47,8 +47,8 @@ public class JungleMarsh {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.9f)
-                .temperature(0.95f)
+                .downfall(BiomeClimateTuning.JUNGLE_MARSH.downfall())
+                .temperature(BiomeClimateTuning.JUNGLE_MARSH.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

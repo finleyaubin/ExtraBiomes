@@ -47,8 +47,8 @@ public class LushMesaBryce {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.7f)
-                .temperature(2.0f)
+                .downfall(BiomeClimateTuning.LUSH_MESA_BRYCE.downfall())
+                .temperature(BiomeClimateTuning.LUSH_MESA_BRYCE.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

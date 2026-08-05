@@ -37,8 +37,8 @@ public class DesertBryce {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)
-                .downfall(0.0f)
-                .temperature(2.0f)
+                .downfall(BiomeClimateTuning.DESERT_BRYCE.downfall())
+                .temperature(BiomeClimateTuning.DESERT_BRYCE.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

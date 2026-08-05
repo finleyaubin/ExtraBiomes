@@ -62,8 +62,8 @@ public class Moorlands {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.5f)
-                .temperature(0.5f)
+                .downfall(BiomeClimateTuning.MOORLANDS.downfall())
+                .temperature(BiomeClimateTuning.MOORLANDS.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

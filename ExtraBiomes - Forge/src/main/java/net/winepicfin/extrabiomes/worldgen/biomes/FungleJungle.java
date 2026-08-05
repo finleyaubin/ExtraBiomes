@@ -52,8 +52,8 @@ public class FungleJungle {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.9f)
-                .temperature(0.95f)
+                .downfall(BiomeClimateTuning.FUNGLE_JUNGLE.downfall())
+                .temperature(BiomeClimateTuning.FUNGLE_JUNGLE.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

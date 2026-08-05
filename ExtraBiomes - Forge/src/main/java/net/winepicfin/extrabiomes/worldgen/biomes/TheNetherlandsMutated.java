@@ -58,8 +58,8 @@ public class TheNetherlandsMutated {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.5f)
-                .temperature(0.5f)
+                .downfall(BiomeClimateTuning.THE_NETHERLANDS_MUTATED.downfall())
+                .temperature(BiomeClimateTuning.THE_NETHERLANDS_MUTATED.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

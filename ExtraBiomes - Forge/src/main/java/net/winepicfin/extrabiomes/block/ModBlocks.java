@@ -48,11 +48,11 @@ public class ModBlocks {
 
     //~~~~~~~~~mystic wood~~~~~~~~\\
     public static final RegistryObject<Block> MYSTIC_PLANKS = registerBlock("mystic_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-    public static final RegistryObject<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
-    public static final RegistryObject<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
-    public static final RegistryObject<Block> STRIPED_MYSTIC_LOG = registerBlock("striped_mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(5f)));
+    public static final RegistryObject<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistryObject<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistryObject<Block> STRIPED_MYSTIC_LOG = registerBlock("striped_mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistryObject<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)));
-    public static final RegistryObject<Block> STRIPED_MYSTIC_WOOD = registerBlock("striped_mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(5f)));
+    public static final RegistryObject<Block> STRIPED_MYSTIC_WOOD = registerBlock("striped_mystic_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistryObject<Block> MYSTIC_SAPLING = registerBlock("mystic_sapling", () -> new SaplingBlock(new MysticTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistryObject<Block> MYSTIC_STAIRS = registerBlock("mystic_stairs", () -> new StairBlock(() -> ModBlocks.MYSTIC_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> MYSTIC_SLAB = registerBlock("mystic_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
@@ -68,11 +68,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> MYSTIC_WALL_HANGING_SIGN = BLOCKS.register("mystic_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_WALL_HANGING_SIGN), ModWoodTypes.MYSTIC));
     //~~~~~~~~~sky wood~~~~~~~~\\
     public static final RegistryObject<Block> SKY_PLANKS = registerBlock("sky_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-    public static final RegistryObject<Block> SKY_LOG = registerBlock("sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
-    public static final RegistryObject<Block> SKY_WOOD = registerBlock("sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
-    public static final RegistryObject<Block> STRIPED_SKY_LOG = registerBlock("striped_sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(5f)));
+    public static final RegistryObject<Block> SKY_LOG = registerBlock("sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistryObject<Block> SKY_WOOD = registerBlock("sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistryObject<Block> STRIPED_SKY_LOG = registerBlock("striped_sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistryObject<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)) );
-    public static final RegistryObject<Block> STRIPED_SKY_WOOD = registerBlock("striped_sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(5f)));
+    public static final RegistryObject<Block> STRIPED_SKY_WOOD = registerBlock("striped_sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistryObject<Block> SKY_SAPLING = registerBlock("sky_sapling", () -> new SaplingBlock(new SkyTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistryObject<Block> SKY_STAIRS = registerBlock("sky_stairs", () -> new StairBlock(() -> ModBlocks.SKY_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> SKY_SLAB = registerBlock("sky_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
@@ -88,11 +88,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> SKY_WALL_HANGING_SIGN = BLOCKS.register("sky_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.SKY));
     //~~~~~~~~~Palm wood~~~~~~~~\\
     public static final RegistryObject<Block> PALM_PLANKS = registerBlock("palm_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-    public static final RegistryObject<Block> PALM_LOG = registerBlock("palm_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
-    public static final RegistryObject<Block> PALM_WOOD = registerBlock("palm_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
-    public static final RegistryObject<Block> STRIPED_PALM_LOG = registerBlock("striped_palm_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(5f)));
+    public static final RegistryObject<Block> PALM_LOG = registerBlock("palm_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistryObject<Block> PALM_WOOD = registerBlock("palm_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistryObject<Block> STRIPED_PALM_LOG = registerBlock("striped_palm_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistryObject<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)) );
-    public static final RegistryObject<Block> STRIPED_PALM_WOOD = registerBlock("striped_palm_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(5f)));
+    public static final RegistryObject<Block> STRIPED_PALM_WOOD = registerBlock("striped_palm_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistryObject<Block> PALM_SAPLING = registerBlock("palm_sapling", () -> new PalmSaplingBlock(new PalmTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistryObject<Block> PALM_STAIRS = registerBlock("palm_stairs", () -> new StairBlock(() -> ModBlocks.PALM_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> PALM_SLAB = registerBlock("palm_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
@@ -108,8 +108,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> PALM_WALL_HANGING_SIGN = BLOCKS.register("palm_wall_hanging_sign",()->new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), ModWoodTypes.PALM));
     //~~~~~~~~~Gilded sky wood~~~~~~~~\\
     public static final RegistryObject<Block> GILDED_SKY_PLANKS = registerBlock("gilded_sky_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
-    public static final RegistryObject<Block> GILDED_SKY_LOG = registerBlock("gilded_sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(5f)));
-    public static final RegistryObject<Block> GILDED_SKY_WOOD = registerBlock("gilded_sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(5f)));
+    public static final RegistryObject<Block> GILDED_SKY_LOG = registerBlock("gilded_sky_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistryObject<Block> GILDED_SKY_WOOD = registerBlock("gilded_sky_wood", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistryObject<Block> GILDED_SKY_STAIRS = registerBlock("gilded_sky_stairs", () -> new StairBlock(() -> ModBlocks.GILDED_SKY_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> GILDED_SKY_SLAB = registerBlock("gilded_sky_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> GILDED_SKY_BUTTON = registerBlock("gilded_sky_button", () -> new ButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON), BlockSetType.OAK, 10, true));

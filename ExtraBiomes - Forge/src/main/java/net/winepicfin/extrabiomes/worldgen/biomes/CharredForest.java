@@ -47,8 +47,8 @@ public class CharredForest {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)
-                .downfall(0.5f)
-                .temperature(2.0f)
+                .downfall(BiomeClimateTuning.CHARRED_FOREST.downfall())
+                .temperature(BiomeClimateTuning.CHARRED_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

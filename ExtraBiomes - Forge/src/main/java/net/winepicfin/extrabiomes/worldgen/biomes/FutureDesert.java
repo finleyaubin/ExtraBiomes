@@ -40,8 +40,8 @@ public class FutureDesert {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)
-                .downfall(0.0f)
-                .temperature(2.0f)
+                .downfall(BiomeClimateTuning.FUTURE_DESERT.downfall())
+                .temperature(BiomeClimateTuning.FUTURE_DESERT.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

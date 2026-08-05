@@ -39,8 +39,8 @@ public class MysticForest {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(0.9f)
-                .temperature(0.95f)
+                .downfall(BiomeClimateTuning.MYSTIC_FOREST.downfall())
+                .temperature(BiomeClimateTuning.MYSTIC_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

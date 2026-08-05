@@ -47,8 +47,8 @@ public class ShatteredTiagaSpikes {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(1.0f)
-                .temperature(0.0f)
+                .downfall(BiomeClimateTuning.SHATTERED_TIAGA_SPIKES.downfall())
+                .temperature(BiomeClimateTuning.SHATTERED_TIAGA_SPIKES.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
