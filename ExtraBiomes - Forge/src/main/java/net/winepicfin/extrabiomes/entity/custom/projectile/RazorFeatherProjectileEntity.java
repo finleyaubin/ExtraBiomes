@@ -4,6 +4,8 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -55,11 +57,20 @@ public class RazorFeatherProjectileEntity extends ThrowableItemProjectile {
         result.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), this.getDamage());
     }
 
+    // Fires for both onHitBlock (landing) and onHitEntity (striking a target) since Projectile.onHit
+    // dispatches to those before returning here. Player-thrown feathers drop as a pickupable item on
+    // either outcome, matching Bedrock's player_razor_feather component group; feathers thrown by mobs
+    // (e.g. HarpyEntity) just vanish like before.
     @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (!this.level().isClientSide) {
             this.level().broadcastEntityEvent(this, (byte) 3);
+            if (this.getOwner() instanceof Player) {
+                ItemEntity drop = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItem().copy());
+                drop.setDefaultPickUpDelay();
+                this.level().addFreshEntity(drop);
+            }
             this.discard();
         }
     }

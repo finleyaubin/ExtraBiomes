@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
@@ -82,5 +83,19 @@ public class MossyPebbleBlock extends Block {
 
         return InteractionResult.PASS;
 
+    }
+
+    @Override
+    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+        BlockState below = pLevel.getBlockState(pPos.below());
+        return !below.isAir() && !(below.getBlock() instanceof PebbleBlock) && !(below.getBlock() instanceof MossyPebbleBlock);
+    }
+
+    @Override
+    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
+        if (!pIsMoving && !this.canSurvive(pState, pLevel, pPos)) {
+            pLevel.destroyBlock(pPos, true);
+        }
+        super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
     }
 }

@@ -9,8 +9,10 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.custom.JellyfishEntity;
 
 public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
+	private float grayAmount;
 	private final ModelPart modelRoot;
 	private final ModelPart body;
 	private final ModelPart tentacles;
@@ -114,11 +116,23 @@ public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
 		this.upper6.zRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 180f)) * 0.017453292f) * 45f)) * 0.017453292f;
 		this.lower6.zRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 180f)) * 0.017453292f) * 45f)) * 0.017453292f;
 
+		// Ported from Bedrock's scaleY/gray_amount pre_animation scripts (flatten + desaturate out of water).
+		if (entity instanceof JellyfishEntity jellyfish) {
+			this.body.yScale = jellyfish.getBodyScaleY();
+			this.grayAmount = jellyfish.getGrayAmount();
+		} else {
+			this.body.yScale = 1.0f;
+			this.grayAmount = 0.0f;
+		}
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		float gray = this.grayAmount;
+		float r = red + (0.5f - red) * gray;
+		float g = green + (0.5f - green) * gray;
+		float b = blue + (0.5f - blue) * gray;
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, r, g, b, alpha);
 	}
 
 	@Override

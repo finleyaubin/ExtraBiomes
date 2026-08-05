@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -43,6 +44,12 @@ public class JellyfishEntity extends WaterAnimal {
     private static final EntityDataAccessor<Integer> DATA_VARIANT =
             SynchedEntityData.defineId(JellyfishEntity.class, EntityDataSerializers.INT);
 
+    // Mirrors Bedrock's v.gray_amount / v.scale_y pre_animation lerps: full transition over ~8 seconds (160 ticks).
+    private static final float GRAY_STEP_PER_TICK = 1.0F / 160.0F;
+    private static final float SCALE_Y_STEP_PER_TICK = 0.9F / 160.0F;
+    private float grayAmount;
+    private float scaleY = 1.0F;
+
     public JellyfishEntity(EntityType<? extends WaterAnimal> type, Level level) {
         super(type, level);
         this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
@@ -79,6 +86,15 @@ public class JellyfishEntity extends WaterAnimal {
         this.entityData.set(DATA_VARIANT, variant);
     }
 
+    // Ported from Bedrock's pre_animation gray_amount/scale_y molang lerps (jellyfish.entity.json).
+    public float getGrayAmount() {
+        return this.grayAmount;
+    }
+
+    public float getBodyScaleY() {
+        return this.scaleY;
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
@@ -102,6 +118,11 @@ public class JellyfishEntity extends WaterAnimal {
     @Override
     public void tick() {
         super.tick();
+
+        boolean inWater = this.isInWater();
+        this.grayAmount = Mth.clamp(this.grayAmount + Mth.clamp((inWater ? 0.0F : 1.0F) - this.grayAmount, -GRAY_STEP_PER_TICK, GRAY_STEP_PER_TICK), 0.0F, 1.0F);
+        this.scaleY = Mth.clamp(this.scaleY + Mth.clamp((inWater ? 1.0F : 0.1F) - this.scaleY, -SCALE_Y_STEP_PER_TICK, SCALE_Y_STEP_PER_TICK), 0.1F, 1.0F);
+
         if (!this.level().isClientSide && this.tickCount % 10 == 0) {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.2D));
             for (LivingEntity target : targets) {

@@ -2,6 +2,9 @@ package net.winepicfin.extrabiomes.event;
 
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.WolfRenderer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +22,7 @@ import net.winepicfin.extrabiomes.entity.client.TreefrogModel;
 import net.winepicfin.extrabiomes.entity.client.WormModel;
 import net.winepicfin.extrabiomes.entity.client.layers.PuckooBaseModelLayers;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
+import net.winepicfin.extrabiomes.entity.client.layers.WolfFrogHatLayer;
 
 @Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
@@ -39,5 +43,13 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.BAIT, BaitModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        EntityRenderer<?> wolfRenderer = event.getRenderer(EntityType.WOLF);
+        if (wolfRenderer instanceof WolfRenderer renderer) {
+            renderer.addLayer(new WolfFrogHatLayer(renderer));
+        }
     }
 }

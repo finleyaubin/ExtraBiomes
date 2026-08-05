@@ -34,6 +34,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.COOKED_FROGS_LEGS);
         simpleItem(ModItems.FROGS_LEGS);
         simpleItem(ModItems.RAZOR_FEATHER);
+        simpleItem(ModItems.DIAMOND_RAZOR_FEATHER);
+        simpleItem(ModItems.NETHERITE_RAZOR_FEATHER);
         simpleItem(ModItems.PIRANHA);
         simpleItem(ModItems.COOKED_PIRANHA);
         simpleItem(ModItems.WORM);

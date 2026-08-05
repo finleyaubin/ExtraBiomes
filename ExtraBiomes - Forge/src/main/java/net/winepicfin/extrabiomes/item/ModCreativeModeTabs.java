@@ -19,6 +19,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModItems.PEBBLE.get());
                 pOutput.accept(ModItems.MOSSY_PEBBLE.get());
                 pOutput.accept(ModItems.RAZOR_FEATHER.get());
+                pOutput.accept(ModItems.DIAMOND_RAZOR_FEATHER.get());
+                pOutput.accept(ModItems.NETHERITE_RAZOR_FEATHER.get());
                 pOutput.accept(ModItems.FROGS_LEGS.get());
                 pOutput.accept(ModItems.COOKED_FROGS_LEGS.get());
                 pOutput.accept(ModItems.PIRANHA.get());

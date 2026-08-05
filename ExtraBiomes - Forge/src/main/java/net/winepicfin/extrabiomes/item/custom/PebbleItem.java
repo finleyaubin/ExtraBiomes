@@ -53,12 +53,15 @@ public class PebbleItem extends Item {
             BlockState blockstate = level.getBlockState(blockpos);
             BlockState blockstate1;
             BlockPos blockpos1 = blockpos.relative(p_41297_.getClickedFace());
-            level.playSound(player, blockpos1, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
             if (player.getItemInHand(p_41297_.getHand()).getItem()== ModItems.PEBBLE.get()){
                 blockstate1 = ModBlocks.PEBBLE.get().getStateForThrowing();
             }else {
                 blockstate1 = ModBlocks.MOSSY_PEBBLE.get().getStateForThrowing();
             }
+            if (!blockstate1.canSurvive(level, blockpos1)) {
+                return InteractionResult.FAIL;
+            }
+            level.playSound(player, blockpos1, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
             level.setBlock(blockpos1, blockstate1, 11);
             level.gameEvent(player, GameEvent.BLOCK_PLACE, blockpos);
             ItemStack itemstack = p_41297_.getItemInHand();

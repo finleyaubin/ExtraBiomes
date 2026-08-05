@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -8,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.custom.JellyfishEntity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class JellyfishRenderer extends MobRenderer<JellyfishEntity, JellyfishModel<JellyfishEntity>> {
     private static final ResourceLocation[] TEXTURES = {
@@ -27,5 +29,11 @@ public class JellyfishRenderer extends MobRenderer<JellyfishEntity, JellyfishMod
     @Override
     public @NotNull ResourceLocation getTextureLocation(JellyfishEntity entity) {
         return TEXTURES[Mth.clamp(entity.getVariant(), 0, TEXTURES.length - 1)];
+    }
+
+    @Override
+    @Nullable
+    protected RenderType getRenderType(JellyfishEntity entity, boolean bodyVisible, boolean translucent, boolean glowing) {
+        return RenderType.entityTranslucent(getTextureLocation(entity));
     }
 }

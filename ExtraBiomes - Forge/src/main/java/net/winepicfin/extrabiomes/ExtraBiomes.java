@@ -28,6 +28,7 @@ import net.winepicfin.extrabiomes.entity.client.HoppleshroomRenderer;
 import net.winepicfin.extrabiomes.entity.client.JellyfishRenderer;
 import net.winepicfin.extrabiomes.entity.client.PiranhaRenderer;
 import net.winepicfin.extrabiomes.entity.client.PuckooRenderer;
+import net.winepicfin.extrabiomes.entity.client.RazorFeatherRenderer;
 import net.winepicfin.extrabiomes.entity.client.TreefrogRenderer;
 import net.winepicfin.extrabiomes.entity.client.WormRenderer;
 import net.winepicfin.extrabiomes.fluid.ModFluidTypes;
@@ -119,9 +120,9 @@ private void addCreative(BuildCreativeModeTabContentsEvent event){
             EntityRenderers.register(ModEntities.HARPY.get(), HarpyRenderer::new);
             EntityRenderers.register(ModEntities.PEBBLE_PROJECTILE.get(), ThrownItemRenderer::new);
             EntityRenderers.register(ModEntities.MOSSY_PEBBLE_PROJECTILE.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntities.RAZOR_FEATHER.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntities.DIAMOND_RAZOR_FEATHER.get(), ThrownItemRenderer::new);
-            EntityRenderers.register(ModEntities.NETHERITE_RAZOR_FEATHER.get(), ThrownItemRenderer::new);
+            EntityRenderers.register(ModEntities.RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
+            EntityRenderers.register(ModEntities.DIAMOND_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
+            EntityRenderers.register(ModEntities.NETHERITE_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
             EntityRenderers.register(ModEntities.BAIT_PROJECTILE.get(), BaitRenderer::new);
         }
     }

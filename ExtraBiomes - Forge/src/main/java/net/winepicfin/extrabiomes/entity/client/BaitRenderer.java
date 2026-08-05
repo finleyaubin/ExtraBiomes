@@ -30,7 +30,7 @@ public class BaitRenderer extends EntityRenderer<BaitProjectileEntity> {
     }
 
     private static ResourceLocation texture(String name) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/" + name);
+        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/" + name + ".png");
     }
 
     @Override
