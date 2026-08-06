@@ -49,16 +49,22 @@ public class ModOverworldRegion extends Region {
         // Shared low-erosion band bryce/pillar biomes claim, split by weirdness sign - see class
         // javadoc. normalWeirdness = vanilla's negative-weirdness half (rugged, not spired).
         // variantWeirdness = vanilla's positive-weirdness half (the half vanilla renders as spires).
-        Climate.Parameter lowErosion = ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2);
+        Climate.Parameter lowErosion = ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4);
         Climate.Parameter normalWeirdness = ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_NORMAL_ASCENDING, ParameterUtils.Weirdness.LOW_SLICE_NORMAL_DESCENDING);
         Climate.Parameter variantWeirdness = ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.LOW_SLICE_VARIANT_ASCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING);
 
         // Charred Forest - bedrock temp=2, downfall=0.5 (hot, replaces pale garden/birch forest)
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.HOT)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.DRY))
-                .continentalness(ParameterUtils.Continentalness.INLAND)
-                .erosion(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_1)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.NEUTRAL))
+                // NEAR_INLAND alone (not spanned with FAR_INLAND/INLAND, which are numerically identical
+                // wide aliases - NEAR_INLAND=[-0.11,0.03], MID_INLAND=[0.03,0.3], FAR_INLAND=[0.3,1.0] are
+                // the actual disjoint sub-bands). Kept to this exclusive low-continentalness band so Future
+                // Desert below (which claims MID_INLAND..FAR_INLAND) can never swallow Charred Forest -
+                // normalWeirdness fully contains Charred Forest's weirdness slice with no gap available
+                // there, so continentalness is this biome's only viable source of exclusive territory.
+                .continentalness(ParameterUtils.Continentalness.NEAR_INLAND)
+                .erosion(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3)
                 .depth(ParameterUtils.Depth.span(ParameterUtils.Depth.SURFACE, ParameterUtils.Depth.FLOOR))
                 .weirdness(ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.PEAK_NORMAL, ParameterUtils.Weirdness.MID_SLICE_NORMAL_DESCENDING))
                 .build().forEach(point -> builder.add(point, ModBiomes.CHARRED_FOREST));
@@ -91,7 +97,7 @@ public class ModOverworldRegion extends Region {
         // the same territory; each now gets its own continentalness slice.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.MID_INLAND)
                 .erosion(lowErosion)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
@@ -101,9 +107,9 @@ public class ModOverworldRegion extends Region {
         // Cold Mesa Plateau - "rare"/flat variant of Cold Mesa
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.FAR_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_1)
+                .erosion(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA_PLATEAU));
@@ -138,8 +144,8 @@ public class ModOverworldRegion extends Region {
         // reclaims the rest of this climate cell, which fits its Bedrock "rare" tag.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.HOT)
-                .humidity(ParameterUtils.Humidity.ARID)
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.NEUTRAL))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
                 .erosion(lowErosion)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(variantWeirdness)
@@ -148,9 +154,9 @@ public class ModOverworldRegion extends Region {
         // Floating Jungle - bedrock temp=0.95, downfall=0.9 ("rare")
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
-                .humidity(ParameterUtils.Humidity.HUMID)
-                .continentalness(ParameterUtils.Continentalness.FAR_INLAND)
-                .erosion(ParameterUtils.Erosion.EROSION_6, ParameterUtils.Erosion.EROSION_6)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.MID_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .erosion(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.FLOATING_JUNGLE));
@@ -158,7 +164,7 @@ public class ModOverworldRegion extends Region {
         // Fungle Jungle - bedrock temp=0.95, downfall=0.9, mushroom_island tag ("rare")
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
-                .humidity(ParameterUtils.Humidity.HUMID)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.INLAND))
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
@@ -171,11 +177,15 @@ public class ModOverworldRegion extends Region {
         // class javadoc) - the two boxes were previously identical except for weirdness, and since
         // Future Desert's was FULL_RANGE it entirely contained Desert Bryce's, making Desert Bryce
         // unreachable.
+        // Continentalness restricted to MID_INLAND..FAR_INLAND (excludes NEAR_INLAND, Charred Forest's
+        // exclusive band above) rather than via a humidity split - normalWeirdness fully contains
+        // Charred Forest's weirdness slice with no gap available there, so continentalness had to be
+        // the split axis instead.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.HOT)
-                .humidity(ParameterUtils.Humidity.ARID)
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.NEUTRAL))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.MID_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .erosion(ParameterUtils.Erosion.FULL_RANGE)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.FUTURE_DESERT));
@@ -214,7 +224,7 @@ public class ModOverworldRegion extends Region {
         // Jungle Marsh - bedrock temp=0.95, downfall=0.9, jungle+swamp tags ("rare")
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
-                .humidity(ParameterUtils.Humidity.HUMID)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.NEAR_INLAND))
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
@@ -225,7 +235,7 @@ public class ModOverworldRegion extends Region {
         // erosion, positive-weirdness half only (see class javadoc).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
-                .humidity(ParameterUtils.Humidity.HUMID)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
                 .erosion(lowErosion)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
@@ -257,7 +267,7 @@ public class ModOverworldRegion extends Region {
         // javadoc)
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.HUMID, ParameterUtils.Humidity.WET))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.INLAND))
                 .erosion(lowErosion)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
@@ -306,7 +316,7 @@ public class ModOverworldRegion extends Region {
         // Cold Mesa Bryce comment above.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.FAR_INLAND)
                 .erosion(lowErosion)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
