@@ -6,7 +6,7 @@ package net.winepicfin.extrabiomes.block.custom;
 // across all four. Deliberately has no Minecraft imports so tests can read the current Java
 // value without needing a bootstrapped registry to construct a Block.
 public final class ModLogsTuning {
-    public static final float DESTROY_SECONDS = 5.0f;
+    public static final float DESTROY_SECONDS = 2.0f;
 
     private ModLogsTuning() {
     }

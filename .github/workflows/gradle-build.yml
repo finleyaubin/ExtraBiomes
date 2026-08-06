@@ -31,6 +31,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Generate data
+        run: ./gradlew runData
+
       - name: Run unit tests
         run: ./gradlew test
 
@@ -42,8 +45,17 @@ jobs:
           path: "ExtraBiomes - Forge/build/reports/tests/test/"
           if-no-files-found: ignore
 
-      - name: Generate data
-        run: ./gradlew runData
+      - name: Run GameTests
+        run: ./gradlew runGameTestServer | tee gametest.log
+        shell: bash
+
+      - name: Upload GameTest log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-forge-gametest-log
+          path: "ExtraBiomes - Forge/gametest.log"
+          if-no-files-found: ignore
 
       - name: Build with Gradle
         run: ./gradlew build

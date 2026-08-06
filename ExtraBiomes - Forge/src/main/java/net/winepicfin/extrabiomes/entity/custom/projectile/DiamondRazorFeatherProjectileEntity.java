@@ -16,8 +16,7 @@ public class DiamondRazorFeatherProjectileEntity extends RazorFeatherProjectileE
     }
 
     public DiamondRazorFeatherProjectileEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.DIAMOND_RAZOR_FEATHER.get(), level);
-        this.setOwner(shooter);
+        super(ModEntities.DIAMOND_RAZOR_FEATHER.get(), shooter, level);
     }
 
     @Override

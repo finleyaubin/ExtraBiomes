@@ -89,40 +89,40 @@ public class ModBiomeModifiers {
     // jungle tag: giant_tortoise, piranha, treefrog
     context.register(ADD_SPAWN_GIANT_TORTOISE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.GIANT_TORTOISE.get(), 15, 1, 2))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.GIANT_TORTOISE.get(), MobSpawnWeightTuning.GIANT_TORTOISE, 1, 2))));
     context.register(ADD_SPAWN_PIRANHA_JUNGLE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), 35, 6, 10))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE, 6, 10))));
     context.register(ADD_SPAWN_PIRANHA_SWAMP, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             HolderSet.direct(biomes.getOrThrow(Biomes.MANGROVE_SWAMP), biomes.getOrThrow(ModBiomes.SHATTERED_SWAMP)),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), 35, 2, 5))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_SWAMP, 2, 5))));
     context.register(ADD_SPAWN_TREEFROG_JUNGLE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), 25, 2, 3))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_JUNGLE, 2, 3))));
     context.register(ADD_SPAWN_TREEFROG_SWAMP, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             HolderSet.direct(biomes.getOrThrow(Biomes.SWAMP), biomes.getOrThrow(Biomes.MANGROVE_SWAMP),
                     biomes.getOrThrow(ModBiomes.SHATTERED_SWAMP), biomes.getOrThrow(ModBiomes.MOORLANDS)),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), 25, 2, 3))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_SWAMP, 2, 3))));
     // crimson / warped / mushroom + this mod's nether biomes
     context.register(ADD_SPAWN_HOPPLESHROOM, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS), biomes.getOrThrow(Biomes.CRIMSON_FOREST),
                     biomes.getOrThrow(Biomes.WARPED_FOREST), biomes.getOrThrow(ModBiomes.THE_NETHERLANDS),
                     biomes.getOrThrow(ModBiomes.THE_NETHERLANDS_MUTATED)),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOPPLESHROOM.get(), 35, 1, 5))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOPPLESHROOM.get(), MobSpawnWeightTuning.HOPPLESHROOM, 1, 5))));
     // jellyfish: dense in JellyfishFields, rare on beaches
     context.register(ADD_SPAWN_JELLYFISH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             HolderSet.direct(biomes.getOrThrow(ModBiomes.JELLYFISH_FIELDS)),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), 25, 3, 8))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH, 3, 8))));
     context.register(ADD_SPAWN_JELLYFISH_BEACH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             biomes.getOrThrow(BiomeTags.IS_BEACH),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), 5, 1, 1))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH_BEACH, 1, 1))));
     // harpy (no Bedrock biome filter) and worm ("animal" tag): overworld-wide
     context.register(ADD_SPAWN_HARPY, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             biomes.getOrThrow(IS_OVERWORLD),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.HARPY.get(), 20, 1, 1))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.HARPY.get(), MobSpawnWeightTuning.HARPY, 1, 1))));
     context.register(ADD_SPAWN_WORM, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             biomes.getOrThrow(IS_OVERWORLD),
-            List.of(new MobSpawnSettings.SpawnerData(ModEntities.WORM.get(), 25, 1, 3))));
+            List.of(new MobSpawnSettings.SpawnerData(ModEntities.WORM.get(), MobSpawnWeightTuning.WORM, 1, 3))));
 }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {

@@ -7,7 +7,7 @@ package net.winepicfin.extrabiomes.entity.custom;
 // provide).
 public final class GiantTortoiseTuning {
     public static final double MAX_HEALTH = 70;
-    public static final double MOVEMENT_SPEED = 0.15;
+    public static final double MOVEMENT_SPEED = 0.3;
     public static final double ATTACK_DAMAGE = 10;
     public static final double ATTACK_KNOCKBACK = 1.5;
     public static final double KNOCKBACK_RESISTANCE = 0.8;

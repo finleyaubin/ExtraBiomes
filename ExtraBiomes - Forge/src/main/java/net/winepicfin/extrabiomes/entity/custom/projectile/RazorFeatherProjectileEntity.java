@@ -29,6 +29,10 @@ public class RazorFeatherProjectileEntity extends ThrowableItemProjectile {
         super(ModEntities.RAZOR_FEATHER.get(), shooter, level);
     }
 
+    protected RazorFeatherProjectileEntity(EntityType<? extends ThrowableItemProjectile> type, LivingEntity shooter, Level level) {
+        super(type, shooter, level);
+    }
+
     @Override
     protected @NotNull Item getDefaultItem() {
         return ModItems.RAZOR_FEATHER.get();

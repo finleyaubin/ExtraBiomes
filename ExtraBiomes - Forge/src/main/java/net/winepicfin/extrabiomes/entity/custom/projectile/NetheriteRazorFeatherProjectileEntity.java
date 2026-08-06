@@ -16,8 +16,7 @@ public class NetheriteRazorFeatherProjectileEntity extends RazorFeatherProjectil
     }
 
     public NetheriteRazorFeatherProjectileEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.NETHERITE_RAZOR_FEATHER.get(), level);
-        this.setOwner(shooter);
+        super(ModEntities.NETHERITE_RAZOR_FEATHER.get(), shooter, level);
     }
 
     @Override

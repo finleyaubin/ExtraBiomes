@@ -8,7 +8,7 @@ package net.winepicfin.extrabiomes.entity.custom;
 public final class TreefrogTuning {
     public static final double MAX_HEALTH = 4;
     public static final double MOVEMENT_SPEED = 0.3;
-    public static final double JUMP_STRENGTH = 0.7;
+    public static final double JUMP_STRENGTH = 0.8;
     public static final double FOLLOW_RANGE = 16;
 
     private TreefrogTuning() {

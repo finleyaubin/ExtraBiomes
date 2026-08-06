@@ -28,6 +28,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         stairsBlock(((StairBlock) ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         blockWithItem(ModBlocks.DENSE_CLOUD);
+        fluidBlock(ModBlocks.GOO.get());
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
         stickPileBlock(ModBlocks.STICK_PILE.get());
@@ -170,6 +171,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .build();
             }
         );
+        simpleBlockItem(pebbleBlock, new ModelFile.UncheckedModelFile(modLoc("block/small_"+type)));
+    }
+
+    private void fluidBlock(Block fluidBlock){
+        getVariantBuilder(fluidBlock).partialState().setModels(new ConfiguredModel(models().getExistingFile(mcLoc("block/water"))));
     }
 
     private void stickPileBlock(Block stickPile){

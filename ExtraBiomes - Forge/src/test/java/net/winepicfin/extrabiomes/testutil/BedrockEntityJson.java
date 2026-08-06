@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.testutil;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -37,6 +38,12 @@ public final class BedrockEntityJson {
         }
     }
 
+    // Escape hatch for callers (e.g. LootTableParity) that need to walk the whole document rather
+    // than a single known path.
+    public JsonObject root() {
+        return root;
+    }
+
     public double getDouble(String... path) {
         return get(path).getAsDouble();
     }
@@ -45,15 +52,25 @@ public final class BedrockEntityJson {
         return get(path).getAsFloat();
     }
 
+    // A numeric segment indexes into a JSON array (e.g. "conditions", "0", "minecraft:weight");
+    // any other segment looks up an object key.
     public JsonElement get(String... path) {
         JsonElement current = root;
         StringBuilder trail = new StringBuilder();
         for (String key : path) {
             trail.append('/').append(key);
-            if (current == null || !current.isJsonObject() || !current.getAsJsonObject().has(key)) {
+            if (current != null && current.isJsonArray() && key.matches("\\d+")) {
+                JsonArray array = current.getAsJsonArray();
+                int index = Integer.parseInt(key);
+                current = index < array.size() ? array.get(index) : null;
+            } else if (current != null && current.isJsonObject() && current.getAsJsonObject().has(key)) {
+                current = current.getAsJsonObject().get(key);
+            } else {
+                current = null;
+            }
+            if (current == null) {
                 throw new IllegalArgumentException("Missing JSON path " + trail + " in Bedrock source file");
             }
-            current = current.getAsJsonObject().get(key);
         }
         return current;
     }
