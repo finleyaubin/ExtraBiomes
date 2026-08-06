@@ -6,12 +6,12 @@ package net.winepicfin.extrabiomes.block;
 // bootstrapped registry.
 public final class MiscBlockTuning {
     // blocks/dense_cloud.json, blocks/dense_cloud_brick.json: minecraft:destructible_by_mining.seconds_to_destroy.
-    public static final float DENSE_CLOUD_DESTROY_SECONDS = 0.3f;
-    public static final float DENSE_CLOUD_BRICK_DESTROY_SECONDS = 0.5f;
+    public static final float DENSE_CLOUD_DESTROY_SECONDS = 0.2f;
+    public static final float DENSE_CLOUD_BRICK_DESTROY_SECONDS = 0.2f;
 
     // blocks/mushrooms/glow_mushroom_block.json: minecraft:light_emission (same 0-15 scale as
     // Java's light level).
-    public static final int GLOW_MUSHROOM_BLOCK_LIGHT_EMISSION = 15;
+    public static final int GLOW_MUSHROOM_BLOCK_LIGHT_EMISSION = 13;
 
     private MiscBlockTuning() {
     }

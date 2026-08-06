@@ -2,7 +2,7 @@
     "format_version": "1.21.110",
     "minecraft:client_biome": {
         "description": {
-            "identifier": "extrabiomes:shattered_tiaga_spikes"
+            "identifier": "extrabiomes:taiga_spikes"
         },
         "components": {
             "minecraft:water_appearance": {

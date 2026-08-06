@@ -13,7 +13,7 @@ public final class MobSpawnWeightTuning {
     public static final int HOPPLESHROOM = 35;
     public static final int JELLYFISH = 25;
     public static final int JELLYFISH_BEACH = 5;
-    public static final int HARPY = 20;
+    public static final int HARPY = 50;
     public static final int WORM = 25;
 
     private MobSpawnWeightTuning() {

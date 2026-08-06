@@ -47,8 +47,8 @@ public class TiagaSpikes {
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
-                .downfall(BiomeClimateTuning.TIAGA_SPIKES.downfall())
-                .temperature(BiomeClimateTuning.TIAGA_SPIKES.temperature())
+                .downfall(BiomeClimateTuning.TAIGA_SPIKES.downfall())
+                .temperature(BiomeClimateTuning.TAIGA_SPIKES.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())

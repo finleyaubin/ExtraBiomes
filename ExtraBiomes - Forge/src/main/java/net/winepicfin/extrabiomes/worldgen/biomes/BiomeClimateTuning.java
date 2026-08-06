@@ -39,10 +39,10 @@ public final class BiomeClimateTuning {
     public static final Climate MOORLANDS = register("moorlands", 0.5f, 0.5f);
     public static final Climate MYSTIC_FOREST = register("mystic_forest", 0.95f, 0.9f);
     public static final Climate SHATTERED_SWAMP = register("shattered_swamp", 0.8f, 0.5f);
-    public static final Climate SHATTERED_TIAGA_SPIKES = register("shattered_tiaga_spikes", 0.0f, 1.0f);
+    public static final Climate SHATTERED_TAIGA_SPIKES = register("shattered_taiga_spikes", 0.0f, 1.0f);
     public static final Climate THE_NETHERLANDS = register("the_netherlands", 0.5f, 0.5f);
     public static final Climate THE_NETHERLANDS_MUTATED = register("the_netherlands_mutated", 0.5f, 0.5f);
-    public static final Climate TIAGA_SPIKES = register("tiaga_spikes", 0.0f, 1.0f);
+    public static final Climate TAIGA_SPIKES = register("taiga_spikes", 0.0f, 1.0f);
     public static final Climate TROPICAL_ISLAND = register("tropical_island", 1.0f, 0.9f);
 
     private BiomeClimateTuning() {
