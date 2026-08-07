@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
 public class DesertBryce {
 
@@ -32,8 +33,9 @@ public class DesertBryce {
         //BiomeDefaultFeatures.addFossilDecoration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
-
-
+        // reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps
+        // (packs/BP/biomes/desert_bryce.biome.json "bryce_pillars": true).
+        biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.SAND_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)

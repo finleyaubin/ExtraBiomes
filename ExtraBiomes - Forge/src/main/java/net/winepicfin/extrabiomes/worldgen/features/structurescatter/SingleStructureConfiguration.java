@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.structurescatter;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -34,29 +35,45 @@ import java.util.Optional;
  *                     (e.g. a huge mushroom's stem) rather than at a corner. Rotation-safe: the
  *                     centering offset is computed in the template's rotated space so the focal
  *                     point lands on the origin regardless of which {@link Rotation} is picked.
+ *                     Ignored when {@code anchor} is present.
+ * @param anchor       when present, this exact local (unrotated, pre-transform) point in the
+ *                     template is what lands on the placement origin, instead of the local (0,0,0)
+ *                     corner or the footprint center - for structures whose focal point is neither
+ *                     (e.g. a leaning tree trunk whose base isn't at the bounding box's corner or
+ *                     center). Rotation-safe like {@code centered}. Takes priority over
+ *                     {@code centered} when both are set.
  */
-public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered) implements FeatureConfiguration {
+public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor) implements FeatureConfiguration {
 
     public SingleStructureConfiguration(ResourceLocation structure) {
-        this(structure, Optional.empty(), 0, false);
+        this(structure, Optional.empty(), 0, false, Optional.empty());
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Rotation fixedRotation) {
-        this(structure, Optional.of(fixedRotation), 0, false);
+        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty());
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, int groundOffset) {
-        this(structure, Optional.empty(), groundOffset, false);
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty());
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset) {
-        this(structure, rotation, groundOffset, false);
+        this(structure, rotation, groundOffset, false, Optional.empty());
+    }
+
+    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
+        this(structure, rotation, groundOffset, centered, Optional.empty());
+    }
+
+    public SingleStructureConfiguration(ResourceLocation structure, BlockPos anchor) {
+        this(structure, Optional.empty(), 0, false, Optional.of(anchor));
     }
 
     public static final Codec<SingleStructureConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("structure").forGetter(SingleStructureConfiguration::structure),
             Codec.STRING.xmap(Rotation::valueOf, Rotation::name).optionalFieldOf("rotation").forGetter(SingleStructureConfiguration::rotation),
             Codec.INT.optionalFieldOf("ground_offset", 0).forGetter(SingleStructureConfiguration::groundOffset),
-            Codec.BOOL.optionalFieldOf("centered", false).forGetter(SingleStructureConfiguration::centered)
+            Codec.BOOL.optionalFieldOf("centered", false).forGetter(SingleStructureConfiguration::centered),
+            BlockPos.CODEC.optionalFieldOf("anchor").forGetter(SingleStructureConfiguration::anchor)
     ).apply(instance, SingleStructureConfiguration::new));
 }

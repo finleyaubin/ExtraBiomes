@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
 public class ColdMesaBryce {
 
@@ -39,7 +40,11 @@ public class ColdMesaBryce {
         BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
         BiomeDefaultFeatures.addBlueIce(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, GlacierFeatures.SELECT_SNOW_DRIFT_PLACED_KEY);
-        // NOTE: 'bryce' variant - taller eroded spire terrain comes from noise settings, not features
+        // 'bryce' variant: reconstructs the pre-1.18 mesa surface builder's noise-gated pillar
+        // bumps (packs/BP/biomes/cold_mesa_bryce.biome.json "bryce_pillars": true), since this
+        // biome is grafted onto vanilla's Overworld density functions rather than shipping its
+        // own erosion-spire noise settings.
+        biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.TERRACOTTA_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

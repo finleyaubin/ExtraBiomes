@@ -19,6 +19,7 @@ import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
+import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
 public class JunglePillars {
 
@@ -41,6 +42,11 @@ public class JunglePillars {
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
         // stone_pillars: single pillar structure placed once per chunk (Bedrock feature_rules/stone_pillars.json, first_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, StonePillarsFeature.STONE_PILLARS_PLACED_KEY);
+        // Bedrock layers TWO independent pillar mechanics on jungle_pillars: the hand-authored
+        // stone_pillar_{1,2,3} structures above, AND its "minecraft:mesa" surface builder's own
+        // "bryce_pillars": true terrain-noise bumps (packs/BP/biomes/jungle_pillars.biome.json) -
+        // this reconstructs that second mechanic.
+        biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.STONE_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

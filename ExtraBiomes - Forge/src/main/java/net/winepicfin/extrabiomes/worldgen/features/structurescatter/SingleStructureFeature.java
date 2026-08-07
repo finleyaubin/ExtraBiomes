@@ -68,7 +68,14 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
 
         BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
-        if (config.centered()) {
+        if (config.anchor().isPresent()) {
+            // Same rotation-pivot trick as the centered case below, but for an arbitrary local
+            // point instead of the footprint center - lets a structure's actual focal point (e.g.
+            // a leaning tree's trunk base, which isn't at the bounding box's corner OR center) be
+            // what lands on `anchor` regardless of rotation.
+            BlockPos rotatedPoint = StructureTemplate.transform(config.anchor().get(), Mirror.NONE, rotation, BlockPos.ZERO);
+            origin = anchor.subtract(rotatedPoint);
+        } else if (config.centered()) {
             // StructurePlaceSettings' rotation pivot defaults to the template's local (0,0,0)
             // corner, not its footprint center, and rotation is applied in that local space
             // BEFORE translating by `origin` - so the footprint's center must be rotated the

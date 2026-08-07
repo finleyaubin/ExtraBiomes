@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.shatteredswamp.ShatteredSwampFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
 public class ShatteredSwamp {
 
@@ -40,6 +41,10 @@ public class ShatteredSwamp {
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ShatteredSwampFeatures.BAMBOO_PLACED_KEY);
         // swamp huge mushroom (swamp-tagged biome)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
+        // reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps
+        // (packs/BP/biomes/shattered_swamp.biome.json "bryce_pillars": true - mesa builder reused
+        // here just for the pillar shaping, not for a mesa-like look).
+        biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.TUFF_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

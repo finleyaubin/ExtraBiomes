@@ -34,6 +34,8 @@ import net.winepicfin.extrabiomes.worldgen.features.charred.CharredForestFeature
 import net.winepicfin.extrabiomes.worldgen.features.future.FutureTreeFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.shatteredswamp.ShatteredSwampFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.tropical.TropicalIslandFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.palm.PalmTreeFeatures;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -73,6 +75,8 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 FutureTreeFeatures.bootstrapConfigured(context);
                 ShatteredSwampFeatures.bootstrapConfigured(context);
                 TropicalIslandFeatures.bootstrapConfigured(context);
+                BryceMesaPillarFeatures.bootstrapConfigured(context);
+                PalmTreeFeatures.bootstrapConfigured(context);
             })
             .add(Registries.PLACED_FEATURE, context -> {
                 ModPlacedFeatures.bootstrap(context);
@@ -97,6 +101,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 FutureTreeFeatures.bootstrapPlaced(context);
                 ShatteredSwampFeatures.bootstrapPlaced(context);
                 TropicalIslandFeatures.bootstrapPlaced(context);
+                BryceMesaPillarFeatures.bootstrapPlaced(context);
             })
             .add(Registries.CONFIGURED_CARVER, NetherlandsCaveCarver::bootstrapCarver)
             .add(Registries.NOISE, ModNoiseParameters::bootstrap)

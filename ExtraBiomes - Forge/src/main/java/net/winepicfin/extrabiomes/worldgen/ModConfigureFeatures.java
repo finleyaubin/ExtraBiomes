@@ -1,8 +1,11 @@
 package net.winepicfin.extrabiomes.worldgen;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -18,6 +21,8 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
@@ -42,7 +47,6 @@ import java.util.List;
 public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_KEY = registerKey("mystic");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SKY_KEY = registerKey("sky");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> PALM_KEY = registerKey("palm");
     public static final ResourceKey<ConfiguredFeature<?, ?>> CHARRED_KEY = registerKey("charred");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> LUSH_GRASS_KEY = registerKey("lush_grass");
@@ -73,20 +77,11 @@ public class ModConfigureFeatures {
                 new SpruceFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(3, 5)),
                 new TwoLayersFeatureSize(4, 10, 6)).build()
         );
-        // The four palm_tree_*.mcstructure variants are a mostly-bare trunk (height varies 4-15
-        // across variants) topped with a compact frond crown concentrated in the top 2 layers rather
-        // than a canopy wrapped down the trunk - hence a low-height BlobFoliagePlacer (height 2,
-        // instead of the previous 3-layer blob copied from the sky tree) so the crown stays
-        // concentrated near the trunk top. offset must stay >= 0: FoliagePlacer's codec
-        // (IntProvider.codec(0, 16)) rejects negative offsets, which silently dropped this
-        // configured feature's generated JSON (palm.json) the first time this used offset -1.
-        register(context, PALM_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
-                BlockStateProvider.simple(ModBlocks.PALM_LOG.get()),
-                new StraightTrunkPlacer(6, 4, 0),
-                BlockStateProvider.simple(ModBlocks.PALM_LEAVES.get()),
-                new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 2),
-                new TwoLayersFeatureSize(4, 10, 6)).build()
-        );
+        // Palm trees are no longer a procedural Feature.TREE - see PalmTreeFeatures for why (the
+        // real palm_tree_*.mcstructure trunks lean/kink sideways and their crowns are an irregular
+        // frond spray, not anything a TrunkPlacer/FoliagePlacer pair can reproduce) and its
+        // SELECT_PALM_KEY, which is what PalmTreeGrower/ModPlacedFeatures now reference instead of
+        // a key from this class.
         register(context, CHARRED_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.BASALT),
                 new FancyTrunkPlacer(5, 2, 0),

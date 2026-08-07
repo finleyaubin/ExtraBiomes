@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.taigaspike.TaigaSpikeFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
 public class ShatteredTiagaSpikes {
 
@@ -44,6 +45,10 @@ public class ShatteredTiagaSpikes {
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, TaigaSpikeFeatures.TAIGA_SPIKE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, GlacierFeatures.SELECT_SNOW_DRIFT_PLACED_KEY);
+        // reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps
+        // (packs/BP/biomes/shattered_taiga_spikes.biome.json "bryce_pillars": true - the "spikes"
+        // this biome is named for; separate from the taiga_spike structure feature above).
+        biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.TUFF_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
