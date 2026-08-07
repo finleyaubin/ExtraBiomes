@@ -19,7 +19,7 @@ import java.util.List;
 // actually spins up a real dedicated server (via `./gradlew runGameTestServer`) and searches the
 // live, fully-loaded overworld chunk generator for each biome via
 // ServerLevel#findClosestBiome3d - the exact same method the vanilla `/locate biome` command
-// uses (LocateCommand, radius/increment/searchStep 6400/32/64). That's the difference in
+// uses (LocateCommand, radius/increment/searchStep 15000/32/64). That's the difference in
 // confidence versus the JUnit checks: those assert wiring exists and constants match; this
 // asserts the actual generator picks each biome at all within a normal exploration distance,
 // which would catch e.g. a TerraBlender region/weight misconfiguration that leaves a biome
@@ -41,8 +41,7 @@ public class BiomeGenerationGameTests {
 
         List<String> missing = new ArrayList<>();
         for (String expectedPath : BiomeClimateTuning.BY_BEDROCK_KEY.keySet()) {
-            Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(holder -> matchesPath(holder, expectedPath), origin,
-                    SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS);
+            Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(holder -> matchesPath(holder, expectedPath), origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS);
             if (found == null) {
                 missing.add(expectedPath);
             }

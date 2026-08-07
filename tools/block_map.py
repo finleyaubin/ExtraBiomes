@@ -378,6 +378,23 @@ def map_block(name, states, be=None):
             "waterlogged": "false",
         }
 
+    # palm_tree_*.mcstructure: RotatedPillarBlock log + LeavesBlock. Bedrock carries the log's
+    # facing as either the legacy "extrabiomes:direction" int or (palm_tree_4) the newer
+    # "minecraft:block_face" string - both collapse onto Java's 3-way "axis".
+    if name == "extrabiomes:palm_log":
+        if "minecraft:block_face" in states:
+            face = states.get("minecraft:block_face", "up")
+        else:
+            face = FACING_DIRECTION.get(int(states.get("extrabiomes:direction", 0)), "down")
+        return "extrabiomes:palm_log", {"axis": BLOCK_FACE_AXIS.get(face, "y")}
+
+    if name == "extrabiomes:palm_leaves":
+        return "extrabiomes:palm_leaves", {
+            "distance": "7",
+            "persistent": _b(states.get("extrabiomes:can_despawn", 1) == 0),
+            "waterlogged": "false",
+        }
+
     # boulder/pebble subsystem: extrabiomes:{small,medium,large}[_mossy]_pebble ->
     # extrabiomes:pebble_block / extrabiomes:mossy_pebble_block with integer "size" (1-3).
     PEBBLE_SIZE = {"small": 1, "medium": 2, "large": 3}

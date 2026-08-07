@@ -24,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectileEntity;
+import org.jetbrains.annotations.NotNull;
 
 // Ported from Bedrock extrabiomes:harpy — a flying monster that circles and shoots razor feathers.
 public class HarpyEntity extends Monster implements RangedAttackMob {
@@ -58,7 +59,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
+    protected @NotNull PathNavigation createNavigation(@NotNull Level level) {
         FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
         navigation.setCanOpenDoors(false);
         navigation.setCanFloat(true);
@@ -79,12 +80,12 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(float distance, float multiplier, @NotNull DamageSource source) {
         return false;
     }
 
     @Override
-    protected void checkFallDamage(double y, boolean onGround, net.minecraft.world.level.block.state.BlockState state, net.minecraft.core.BlockPos pos) {
+    protected void checkFallDamage(double y, boolean onGround, net.minecraft.world.level.block.state.@NotNull BlockState state, net.minecraft.core.@NotNull BlockPos pos) {
         // flying mob — no fall handling
     }
 

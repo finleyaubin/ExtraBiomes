@@ -28,7 +28,7 @@ public record BrycePillarsConfiguration(BlockStateProvider hardClayMaterial, Blo
     // erosionStrength perturbs that cone's radius with a separate noise field so the outline is a
     // weathered, fluted silhouette instead of a perfect circle at every layer.
     public BrycePillarsConfiguration(BlockStateProvider hardClayMaterial, BlockStateProvider clayMaterial) {
-        this(hardClayMaterial, clayMaterial, 5, 48, 0.8F, 4, 1.5F);
+        this(hardClayMaterial, clayMaterial, 5, 48, 0.97F, 4, 1.5F);
     }
 
     public static final Codec<BrycePillarsConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -36,7 +36,7 @@ public record BrycePillarsConfiguration(BlockStateProvider hardClayMaterial, Blo
             BlockStateProvider.CODEC.fieldOf("clay_material").forGetter(BrycePillarsConfiguration::clayMaterial),
             Codec.intRange(0, 96).optionalFieldOf("min_height", 5).forGetter(BrycePillarsConfiguration::minHeight),
             Codec.intRange(0, 96).optionalFieldOf("max_height", 48).forGetter(BrycePillarsConfiguration::maxHeight),
-            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("threshold", 0.8F).forGetter(BrycePillarsConfiguration::threshold),
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("threshold", 0.97F).forGetter(BrycePillarsConfiguration::threshold),
             Codec.intRange(0, 16).optionalFieldOf("max_radius", 4).forGetter(BrycePillarsConfiguration::maxRadius),
             Codec.floatRange(0.0F, 8.0F).optionalFieldOf("erosion_strength", 1.5F).forGetter(BrycePillarsConfiguration::erosionStrength)
     ).apply(instance, BrycePillarsConfiguration::new));

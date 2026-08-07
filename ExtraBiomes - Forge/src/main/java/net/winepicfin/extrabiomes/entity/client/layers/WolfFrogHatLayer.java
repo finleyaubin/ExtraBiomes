@@ -41,9 +41,9 @@ public class WolfFrogHatLayer extends RenderLayer<Wolf, WolfModel<Wolf>> {
 
         poseStack.pushPose();
         this.getParentModel().head.translateAndRotate(poseStack);
-        poseStack.translate(0.0D, -0.35D, -0.02D);
-        poseStack.scale(0.7F, 0.7F, 0.7F);
-        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+        poseStack.translate(0.05D, -0.6D, -0.02D);
+        poseStack.scale(1F, 1F, 1F);
+        poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
         this.renderer.prepForRender(wolf, headItem, EquipmentSlot.HEAD, this.baseModel);
         this.renderer.renderToBuffer(poseStack, null, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         poseStack.popPose();
