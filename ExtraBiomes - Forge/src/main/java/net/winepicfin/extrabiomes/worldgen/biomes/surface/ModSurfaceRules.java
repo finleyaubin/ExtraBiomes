@@ -47,9 +47,11 @@ public class ModSurfaceRules {
         SurfaceRules.ConditionSource isSubmerged = SurfaceRules.not(SurfaceRules.waterBlockCheck(0, 0));
 
         // grass on exposed land, dirt underwater -> used by biomes with a dirt mid layer (default vanilla behaviour)
-        SurfaceRules.RuleSource grassOverDirt = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK), DIRT);
+        SurfaceRules.RuleSource grassOverDirt = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK), DIRT));
         // grass on exposed land, bare stone underneath -> used by biomes whose Bedrock mid_material is stone (no dirt layer)
-        SurfaceRules.RuleSource grassOverStone = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK), STONE);
+        SurfaceRules.RuleSource grassOverStone = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK), STONE));
 
         return SurfaceRules.sequence(
                 // --- Charred Forest: top=dirt, mid=dirt (burnt, grassless ground) ---
@@ -107,7 +109,7 @@ public class ModSurfaceRules {
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GLACIER),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SNOW_BLOCK),
-                                ICE)),
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), ICE))),
 
                 // --- Biomes whose Bedrock mid_material is bare stone instead of dirt:
                 //     grass caps directly on stone, no dirt layer ---
@@ -115,11 +117,11 @@ public class ModSurfaceRules {
                 // sea_floor_material -> moss_block in a noise band, layered as a higher-priority
                 // override on top of the submerged-floor case that would otherwise apply here.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JELLYFISH_FIELDS),
-                        SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                        SurfaceRules.sequence(
                                         SurfaceRules.ifTrue(isSubmerged,
-                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.1, 0.3), MOSS_BLOCK))),
-                                grassOverStone)),
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.1, 0.3), MOSS_BLOCK)),
+                                grassOverStone))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JUNGLE_PILLARS), grassOverStone),
                 // Moorlands also has a surface_material_adjustments patch: top_material -> mud in a
                 // noise band, overriding the grass cap wherever the noise matches.
@@ -150,10 +152,12 @@ public class ModSurfaceRules {
                 //     but both variants have a netherrack foundation instead of stone at depth
                 //     ("nethrack" pun) - stoneDepthCheck bounds the top layer to a shallow band,
                 //     same pattern as the sandy biomes above, then netherrack fills the rest. ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
                         SurfaceRules.sequence(
-                                grassOverDirt,
+                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT)),
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
+
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
