@@ -46,7 +46,7 @@ public class MysticForest {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.MYSTIC_FOREST.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x4F126389)
+                        .skyColor(BiomeAppearanceTuning.MYSTIC_FOREST.skyColor())
                         .fogColor(0x4F126384)
                         .foliageColorOverride(BiomeAppearanceTuning.MYSTIC_FOREST.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.MYSTIC_FOREST.grassColor())

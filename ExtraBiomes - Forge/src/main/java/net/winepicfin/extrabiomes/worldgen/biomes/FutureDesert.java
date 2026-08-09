@@ -47,7 +47,7 @@ public class FutureDesert {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.FUTURE_DESERT.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0xb8c0c8)
+                        .skyColor(BiomeAppearanceTuning.FUTURE_DESERT.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.grassColor()).build())

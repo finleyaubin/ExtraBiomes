@@ -57,7 +57,7 @@ public class JunglePillars {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.JUNGLE_PILLARS.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x8fce6e)
+                        .skyColor(BiomeAppearanceTuning.JUNGLE_PILLARS.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.JUNGLE_PILLARS.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.JUNGLE_PILLARS.grassColor())

@@ -51,7 +51,7 @@ public class ColdMesa {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.COLD_MESA.waterColor())
                         .waterFogColor(0x113290)
-                        //.skyColor(0x84631263)
+                        .skyColor(BiomeAppearanceTuning.COLD_MESA.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.COLD_MESA.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.COLD_MESA.grassColor())

@@ -49,7 +49,7 @@ public class Glacier {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.GLACIER.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0xc0e0f0)
+                        .skyColor(BiomeAppearanceTuning.GLACIER.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.GLACIER.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.GLACIER.grassColor())

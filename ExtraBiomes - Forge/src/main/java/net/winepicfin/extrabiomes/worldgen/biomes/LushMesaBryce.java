@@ -58,7 +58,7 @@ public class LushMesaBryce {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.LUSH_MESA_BRYCE.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0xd8c060)
+                        .skyColor(BiomeAppearanceTuning.LUSH_MESA_BRYCE.skyColor())
                         .fogColor(0xf8e6b4)
                         .foliageColorOverride(BiomeAppearanceTuning.LUSH_MESA_BRYCE.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.LUSH_MESA_BRYCE.grassColor())

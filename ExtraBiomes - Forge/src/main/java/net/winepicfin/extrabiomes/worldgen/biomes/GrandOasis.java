@@ -52,7 +52,7 @@ public class GrandOasis {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.GRAND_OASIS.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0xffe29a)
+                        .skyColor(BiomeAppearanceTuning.GRAND_OASIS.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.GRAND_OASIS.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.GRAND_OASIS.grassColor()).build())

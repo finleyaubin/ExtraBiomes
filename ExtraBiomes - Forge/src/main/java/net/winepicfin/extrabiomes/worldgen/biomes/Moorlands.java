@@ -69,7 +69,7 @@ public class Moorlands {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.MOORLANDS.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0xb0c8e0)
+                        .skyColor(BiomeAppearanceTuning.MOORLANDS.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.MOORLANDS.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.MOORLANDS.grassColor())

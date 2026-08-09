@@ -55,7 +55,7 @@ public class ShatteredSwamp {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.SHATTERED_SWAMP.waterColor())
                         .waterFogColor(0x2b5636)
-                        .skyColor(0x4b5e4a)
+                        .skyColor(BiomeAppearanceTuning.SHATTERED_SWAMP.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.SHATTERED_SWAMP.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.SHATTERED_SWAMP.grassColor())

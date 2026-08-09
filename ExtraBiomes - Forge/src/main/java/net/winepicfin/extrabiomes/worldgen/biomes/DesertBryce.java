@@ -46,7 +46,7 @@ public class DesertBryce {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DESERT_BRYCE.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0xffbc6b)
+                        .skyColor(BiomeAppearanceTuning.DESERT_BRYCE.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.grassColor()).build())

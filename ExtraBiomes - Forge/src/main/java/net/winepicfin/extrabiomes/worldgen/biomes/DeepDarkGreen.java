@@ -58,7 +58,7 @@ public class DeepDarkGreen {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DEEP_DARK_GREEN.waterColor())
                         .waterFogColor(0x050533)
-                        .skyColor(0x78A7FF)
+                        .skyColor(BiomeAppearanceTuning.DEEP_DARK_GREEN.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.DEEP_DARK_GREEN.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_GREEN.grassColor())

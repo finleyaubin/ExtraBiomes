@@ -54,7 +54,7 @@ public class CharredForest {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.CHARRED_FOREST.waterColor())
                         .waterFogColor(0x3f76e4)
-                        .skyColor(0x251e2b)
+                        .skyColor(BiomeAppearanceTuning.CHARRED_FOREST.skyColor())
                         .fogColor(0x6b5327)
                         .foliageColorOverride(BiomeAppearanceTuning.CHARRED_FOREST.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.CHARRED_FOREST.grassColor())

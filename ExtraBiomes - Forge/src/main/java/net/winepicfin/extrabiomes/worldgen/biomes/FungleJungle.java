@@ -60,7 +60,7 @@ public class FungleJungle {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.FUNGLE_JUNGLE.waterColor())
                         .waterFogColor(0x113290)
-                        //.skyColor(0x8fce6e)
+                        .skyColor(BiomeAppearanceTuning.FUNGLE_JUNGLE.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.FUNGLE_JUNGLE.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.FUNGLE_JUNGLE.grassColor())

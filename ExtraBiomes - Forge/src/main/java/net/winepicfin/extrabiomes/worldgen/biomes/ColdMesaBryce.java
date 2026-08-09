@@ -55,7 +55,7 @@ public class ColdMesaBryce {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.COLD_MESA_BRYCE.waterColor())
                         .waterFogColor(0x113290)
-                        //.skyColor(0x84631263)
+                        .skyColor(BiomeAppearanceTuning.COLD_MESA_BRYCE.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.COLD_MESA_BRYCE.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.COLD_MESA_BRYCE.grassColor())

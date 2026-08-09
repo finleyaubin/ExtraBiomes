@@ -49,7 +49,7 @@ public class DeepDarkForest {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DEEP_DARK_FOREST.waterColor())
                         .waterFogColor(0x050533)
-                        .skyColor(0x1a1a2e)
+                        .skyColor(BiomeAppearanceTuning.DEEP_DARK_FOREST.skyColor())
                         .fogColor(0x0d0d17)
                         .foliageColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.grassColor())

@@ -51,7 +51,7 @@ public class FloatingJungle {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.FLOATING_JUNGLE.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x9ad1e0)
+                        .skyColor(BiomeAppearanceTuning.FLOATING_JUNGLE.skyColor())
                         .fogColor(0x9ad1e0)
                         .foliageColorOverride(BiomeAppearanceTuning.FLOATING_JUNGLE.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.FLOATING_JUNGLE.grassColor())

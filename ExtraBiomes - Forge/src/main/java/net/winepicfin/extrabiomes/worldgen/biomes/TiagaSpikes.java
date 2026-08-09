@@ -54,7 +54,7 @@ public class TiagaSpikes {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.TAIGA_SPIKES.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x9ec0dd)
+                        .skyColor(BiomeAppearanceTuning.TAIGA_SPIKES.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.TAIGA_SPIKES.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.TAIGA_SPIKES.grassColor())

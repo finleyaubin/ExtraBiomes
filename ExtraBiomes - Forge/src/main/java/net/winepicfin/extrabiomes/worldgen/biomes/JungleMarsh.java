@@ -54,7 +54,7 @@ public class JungleMarsh {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.JUNGLE_MARSH.waterColor())
                         .waterFogColor(0x2a6830)
-                        .skyColor(0x4a7a3a)
+                        .skyColor(BiomeAppearanceTuning.JUNGLE_MARSH.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.JUNGLE_MARSH.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.JUNGLE_MARSH.grassColor())

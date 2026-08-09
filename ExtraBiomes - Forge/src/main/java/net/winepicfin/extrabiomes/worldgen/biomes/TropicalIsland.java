@@ -56,7 +56,7 @@ public class TropicalIsland {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.TROPICAL_ISLAND.waterColor())
                         .waterFogColor(0x50D8CE)
-                        .skyColor(0x9fe8f0)
+                        .skyColor(BiomeAppearanceTuning.TROPICAL_ISLAND.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.grassColor())

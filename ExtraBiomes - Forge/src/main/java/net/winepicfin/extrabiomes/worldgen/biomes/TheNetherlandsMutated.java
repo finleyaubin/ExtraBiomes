@@ -65,7 +65,7 @@ public class TheNetherlandsMutated {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0xb0d0e0)
+                        .skyColor(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.grassColor())

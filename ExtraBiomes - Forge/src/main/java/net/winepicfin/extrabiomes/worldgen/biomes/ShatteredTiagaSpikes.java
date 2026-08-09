@@ -59,7 +59,7 @@ public class ShatteredTiagaSpikes {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.SHATTERED_TAIGA_SPIKES.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x9ec0dd)
+                        .skyColor(BiomeAppearanceTuning.SHATTERED_TAIGA_SPIKES.skyColor())
                         .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.SHATTERED_TAIGA_SPIKES.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.SHATTERED_TAIGA_SPIKES.grassColor())

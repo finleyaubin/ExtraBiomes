@@ -51,7 +51,7 @@ public class JellyfishFields {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.JELLYFISH_FIELDS.waterColor())
                         .waterFogColor(0x50D8CE)
-                        .skyColor(0x8fe0e8)
+                        .skyColor(BiomeAppearanceTuning.JELLYFISH_FIELDS.skyColor())
                         .fogColor(0x8fe0e8)
                         .foliageColorOverride(BiomeAppearanceTuning.JELLYFISH_FIELDS.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.JELLYFISH_FIELDS.grassColor())
