@@ -39,6 +39,7 @@ import net.winepicfin.extrabiomes.util.ModVanillaCompat;
 import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
@@ -74,6 +75,7 @@ public class ExtraBiomes
         ModStructureScatterFeatures.register(modEventBus);
         ModBrycePillarsFeatures.register(modEventBus);
         MoorlandFeatures.register(modEventBus);
+        MysticFeatures.register(modEventBus);
         UndergroundJungleFeatures.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);

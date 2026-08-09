@@ -16,6 +16,7 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 
 public class MysticForest {
 
@@ -36,6 +37,10 @@ public class MysticForest {
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.MYSTIC_PLACED_KEY);
+        // mystic_forest.biome.json's "sea_material": "extrabiomes:goo" - see GooConversionFeature
+        // for why this needs a TOP_LAYER_MODIFICATION feature (run after lakes/aquifers already
+        // exist) rather than a direct fluid swap.
+        biomeBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MysticFeatures.MYSTIC_GOO_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

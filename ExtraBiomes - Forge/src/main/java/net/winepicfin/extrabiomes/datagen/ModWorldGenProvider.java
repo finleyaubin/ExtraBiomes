@@ -18,6 +18,7 @@ import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moss.MossFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFeatures;
@@ -60,6 +61,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 MushroomFeatures.bootstrapConfigured(context);
                 MossFeatures.bootstrapConfigured(context);
                 MoorlandFeatures.bootstrapConfigured(context);
+                MysticFeatures.bootstrapConfigured(context);
                 GlacierFeatures.bootstrapConfigured(context);
                 NetherlandsOreFeatures.bootstrapConfigured(context);
                 NetherlandsTulipFeatures.bootstrapConfigured(context);
@@ -86,6 +88,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 MushroomFeatures.bootstrapPlaced(context);
                 MossFeatures.bootstrapPlaced(context);
                 MoorlandFeatures.bootstrapPlaced(context);
+                MysticFeatures.bootstrapPlaced(context);
                 GlacierFeatures.bootstrapPlaced(context);
                 NetherlandsOreFeatures.bootstrapPlaced(context);
                 NetherlandsTulipFeatures.bootstrapPlaced(context);
