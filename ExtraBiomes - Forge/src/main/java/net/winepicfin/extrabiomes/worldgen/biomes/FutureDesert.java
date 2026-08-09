@@ -45,12 +45,12 @@ public class FutureDesert {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x0858e0)
+                        .waterColor(BiomeAppearanceTuning.FUTURE_DESERT.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0xb8c0c8)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x8898a8)
-                        .grassColorOverride(0xb8c0c8).build())
+                        .foliageColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.grassColor()).build())
                 .build();
     }
 }

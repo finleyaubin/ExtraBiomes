@@ -47,12 +47,12 @@ public class Glacier {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x2838c8)
+                        .waterColor(BiomeAppearanceTuning.GLACIER.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0xc0e0f0)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x60a0b0)
-                        .grassColorOverride(0x80b0c0)
+                        .foliageColorOverride(BiomeAppearanceTuning.GLACIER.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.GLACIER.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

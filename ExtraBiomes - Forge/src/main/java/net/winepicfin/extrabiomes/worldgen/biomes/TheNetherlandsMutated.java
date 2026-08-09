@@ -63,12 +63,12 @@ public class TheNetherlandsMutated {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x9EB0B0)
+                        .waterColor(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0xb0d0e0)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0xE3B56D)
-                        .grassColorOverride(0x51AD07)
+                        .foliageColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

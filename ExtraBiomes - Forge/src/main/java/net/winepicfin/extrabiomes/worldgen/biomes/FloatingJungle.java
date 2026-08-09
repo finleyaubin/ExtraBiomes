@@ -49,12 +49,12 @@ public class FloatingJungle {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x1B9ED8)
+                        .waterColor(BiomeAppearanceTuning.FLOATING_JUNGLE.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0x9ad1e0)
                         .fogColor(0x9ad1e0)
-                        .foliageColorOverride(0x30bb0b)
-                        .grassColorOverride(0x59c93c)
+                        .foliageColorOverride(BiomeAppearanceTuning.FLOATING_JUNGLE.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.FLOATING_JUNGLE.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

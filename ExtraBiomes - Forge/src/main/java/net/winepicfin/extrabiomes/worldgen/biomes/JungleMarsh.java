@@ -52,12 +52,12 @@ public class JungleMarsh {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x2a6830)
+                        .waterColor(BiomeAppearanceTuning.JUNGLE_MARSH.waterColor())
                         .waterFogColor(0x2a6830)
                         .skyColor(0x4a7a3a)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x386020)
-                        .grassColorOverride(0x487030)
+                        .foliageColorOverride(BiomeAppearanceTuning.JUNGLE_MARSH.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.JUNGLE_MARSH.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

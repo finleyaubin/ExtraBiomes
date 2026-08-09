@@ -53,12 +53,12 @@ public class ColdMesaBryce {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3d5cdb)
+                        .waterColor(BiomeAppearanceTuning.COLD_MESA_BRYCE.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x84631263)
+                        //.skyColor(0x84631263)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x5a9a8a)
-                        .grassColorOverride(0x7aaaa0)
+                        .foliageColorOverride(BiomeAppearanceTuning.COLD_MESA_BRYCE.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.COLD_MESA_BRYCE.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

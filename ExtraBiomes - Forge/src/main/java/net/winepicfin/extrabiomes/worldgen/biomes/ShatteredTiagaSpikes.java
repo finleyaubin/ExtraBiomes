@@ -57,12 +57,12 @@ public class ShatteredTiagaSpikes {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3a6edb)
+                        .waterColor(BiomeAppearanceTuning.SHATTERED_TAIGA_SPIKES.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0x9ec0dd)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x5a9a78)
-                        .grassColorOverride(0x80b497)
+                        .foliageColorOverride(BiomeAppearanceTuning.SHATTERED_TAIGA_SPIKES.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.SHATTERED_TAIGA_SPIKES.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

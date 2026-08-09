@@ -44,12 +44,12 @@ public class DesertBryce {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x30a8a0)
+                        .waterColor(BiomeAppearanceTuning.DESERT_BRYCE.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0xffbc6b)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0xaa8030)
-                        .grassColorOverride(0xc8a040).build())
+                        .foliageColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.grassColor()).build())
                 .build();
     }
 }

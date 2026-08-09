@@ -47,12 +47,12 @@ public class DeepDarkForest {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3f76e4)
+                        .waterColor(BiomeAppearanceTuning.DEEP_DARK_FOREST.waterColor())
                         .waterFogColor(0x050533)
                         .skyColor(0x1a1a2e)
                         .fogColor(0x0d0d17)
-                        .foliageColorOverride(0x1BB210)
-                        .grassColorOverride(0x59c93c)
+                        .foliageColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

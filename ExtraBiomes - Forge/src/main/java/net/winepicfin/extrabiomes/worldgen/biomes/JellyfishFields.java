@@ -49,12 +49,12 @@ public class JellyfishFields {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x02B0E5)
+                        .waterColor(BiomeAppearanceTuning.JELLYFISH_FIELDS.waterColor())
                         .waterFogColor(0x50D8CE)
                         .skyColor(0x8fe0e8)
                         .fogColor(0x8fe0e8)
-                        .foliageColorOverride(0x38b078)
-                        .grassColorOverride(0x58c898)
+                        .foliageColorOverride(BiomeAppearanceTuning.JELLYFISH_FIELDS.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.JELLYFISH_FIELDS.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

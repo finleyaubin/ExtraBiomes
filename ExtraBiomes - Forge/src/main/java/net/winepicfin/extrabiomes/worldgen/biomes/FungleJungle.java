@@ -58,12 +58,12 @@ public class FungleJungle {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3f76e4)
+                        .waterColor(BiomeAppearanceTuning.FUNGLE_JUNGLE.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x8fce6e)
+                        //.skyColor(0x8fce6e)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x38a010)
-                        .grassColorOverride(0x50aa30)
+                        .foliageColorOverride(BiomeAppearanceTuning.FUNGLE_JUNGLE.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.FUNGLE_JUNGLE.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

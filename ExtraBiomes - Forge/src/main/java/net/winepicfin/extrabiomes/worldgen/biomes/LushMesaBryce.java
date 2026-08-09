@@ -56,12 +56,12 @@ public class LushMesaBryce {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x1B9ED8)
+                        .waterColor(BiomeAppearanceTuning.LUSH_MESA_BRYCE.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0xd8c060)
                         .fogColor(0xf8e6b4)
-                        .foliageColorOverride(0x50a830)
-                        .grassColorOverride(0x70bc40)
+                        .foliageColorOverride(BiomeAppearanceTuning.LUSH_MESA_BRYCE.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.LUSH_MESA_BRYCE.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

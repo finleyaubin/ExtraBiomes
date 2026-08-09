@@ -54,12 +54,12 @@ public class TropicalIsland {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x28c8e0)
+                        .waterColor(BiomeAppearanceTuning.TROPICAL_ISLAND.waterColor())
                         .waterFogColor(0x50D8CE)
                         .skyColor(0x9fe8f0)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x40b020)
-                        .grassColorOverride(0x60c840)
+                        .foliageColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

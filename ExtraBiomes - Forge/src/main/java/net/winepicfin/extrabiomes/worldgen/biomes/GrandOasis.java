@@ -50,12 +50,12 @@ public class GrandOasis {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x20c8a0)
+                        .waterColor(BiomeAppearanceTuning.GRAND_OASIS.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0xffe29a)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x58b028)
-                        .grassColorOverride(0x80c040).build())
+                        .foliageColorOverride(BiomeAppearanceTuning.GRAND_OASIS.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.GRAND_OASIS.grassColor()).build())
                 .build();
     }
 }

@@ -66,12 +66,12 @@ public class TheNetherlands {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x90ADAD)
+                        .waterColor(BiomeAppearanceTuning.THE_NETHERLANDS.waterColor())
                         .waterFogColor(0x113290)
                         .skyColor(0xb0d0e0)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0xD4912C)
-                        .grassColorOverride(0x7AAB35)
+                        .foliageColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

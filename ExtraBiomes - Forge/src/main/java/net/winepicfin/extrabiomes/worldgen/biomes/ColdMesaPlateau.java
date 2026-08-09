@@ -48,12 +48,12 @@ public class ColdMesaPlateau {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3d5cdb)
+                        .waterColor(BiomeAppearanceTuning.COLD_MESA_PLATEAU.waterColor())
                         .waterFogColor(0x113290)
-                        .skyColor(0x84631263)
+                        //.skyColor(0x84631263)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x5898a0)
-                        .grassColorOverride(0x78a8a0)
+                        .foliageColorOverride(BiomeAppearanceTuning.COLD_MESA_PLATEAU.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.COLD_MESA_PLATEAU.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

@@ -53,12 +53,12 @@ public class ShatteredSwamp {
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects((new BiomeSpecialEffects.Builder())
-                        .waterColor(0x3a642c)
+                        .waterColor(BiomeAppearanceTuning.SHATTERED_SWAMP.waterColor())
                         .waterFogColor(0x2b5636)
                         .skyColor(0x4b5e4a)
                         .fogColor(0xC0D8FF)
-                        .foliageColorOverride(0x4b5e14)
-                        .grassColorOverride(0x4e5f42)
+                        .foliageColorOverride(BiomeAppearanceTuning.SHATTERED_SWAMP.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.SHATTERED_SWAMP.grassColor())
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
                 .build();
     }

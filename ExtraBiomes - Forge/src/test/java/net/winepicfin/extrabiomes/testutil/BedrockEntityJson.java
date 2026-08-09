@@ -52,6 +52,16 @@ public final class BedrockEntityJson {
         return get(path).getAsFloat();
     }
 
+    // Parses a Bedrock "#RRGGBB" color string (as used by e.g. minecraft:water_appearance's
+    // surface_color) into the same 0xRRGGBB int form Biome.BiomeBuilder color setters take.
+    public int getColor(String... path) {
+        String hex = get(path).getAsString();
+        if (hex.startsWith("#")) {
+            hex = hex.substring(1);
+        }
+        return Integer.parseInt(hex, 16);
+    }
+
     // A numeric segment indexes into a JSON array (e.g. "conditions", "0", "minecraft:weight");
     // any other segment looks up an object key.
     public JsonElement get(String... path) {
