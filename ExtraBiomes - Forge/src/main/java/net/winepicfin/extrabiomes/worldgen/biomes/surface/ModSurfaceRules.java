@@ -152,10 +152,9 @@ public class ModSurfaceRules {
                 //     but both variants have a netherrack foundation instead of stone at depth
                 //     ("nethrack" pun) - stoneDepthCheck bounds the top layer to a shallow band,
                 //     same pattern as the sandy biomes above, then netherrack fills the rest. ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS),
                         SurfaceRules.sequence(
-                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT)),
+                                grassOverDirt,
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),

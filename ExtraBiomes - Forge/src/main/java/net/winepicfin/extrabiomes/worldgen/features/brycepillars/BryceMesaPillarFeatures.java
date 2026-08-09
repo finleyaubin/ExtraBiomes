@@ -5,12 +5,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -32,9 +29,15 @@ import java.util.List;
  *   hard_clay_material: stone,         clay_material: stone                -> STONE_KEY
  * </pre>
  * Bedrock's "stained_hardened_clay" has no single Java block equivalent (it's Bedrock's whole
- * colour-banded terracotta family) - TERRACOTTA_KEY approximates it with a weighted palette of
- * the same terracotta colours vanilla's own {@code SurfaceRules.bandlands()} cycles through,
- * rather than one flat colour.
+ * colour-banded terracotta family) - TERRACOTTA_KEY approximates it with the same terracotta
+ * colours vanilla's own {@code SurfaceRules.bandlands()} cycles through. Each entry below is a
+ * background + streak-palette RECIPE - {@link BrycePillarsFeature} builds the actual 192-layer,
+ * world-seed-derived array from that recipe (per the wiki's own description of vanilla's
+ * badlands banding), rather than these being a fixed colour list or a per-block random pick.
+ * That's what keeps a pillar's colouring consistent with the real terracotta banding at whatever
+ * height it's standing at, instead of jumping between unrelated colours as height changes. The
+ * same mechanism now also backs TUFF_KEY and STONE_KEY (previously flat single materials) for the
+ * same reason.
  */
 public class BryceMesaPillarFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> TERRACOTTA_KEY = registerKey("bryce_pillars_terracotta");
@@ -48,22 +51,30 @@ public class BryceMesaPillarFeatures {
     public static final ResourceKey<PlacedFeature> STONE_PLACED_KEY = placedKey("bryce_pillars_stone");
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        BlockStateProvider terracottaPalette = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-                .add(Blocks.ORANGE_TERRACOTTA.defaultBlockState(), 3)
-                .add(Blocks.RED_TERRACOTTA.defaultBlockState(), 2)
-                .add(Blocks.YELLOW_TERRACOTTA.defaultBlockState(), 2)
-                .add(Blocks.BROWN_TERRACOTTA.defaultBlockState(), 1)
-                .add(Blocks.WHITE_TERRACOTTA.defaultBlockState(), 1)
-                .add(Blocks.LIGHT_GRAY_TERRACOTTA.defaultBlockState(), 1));
+        // Background: plain TERRACOTTA, matching vanilla bandlands()'s own mostly-plain
+        // background. streakPalette supplies the occasional colour bands scattered through it -
+        // see generateBands() in BrycePillarsFeature for how these get distributed across the
+        // 192-layer array (short random-length runs, not an even/independent colour per layer).
+        List<BlockState> terracottaStreaks = List.of(
+                Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
+                Blocks.YELLOW_TERRACOTTA.defaultBlockState(),
+                Blocks.RED_TERRACOTTA.defaultBlockState(),
+                Blocks.WHITE_TERRACOTTA.defaultBlockState(),
+                Blocks.LIGHT_GRAY_TERRACOTTA.defaultBlockState(),
+                Blocks.BROWN_TERRACOTTA.defaultBlockState()
+        );
 
         context.register(TERRACOTTA_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(BlockStateProvider.simple(Blocks.TERRACOTTA), terracottaPalette)));
+                new BrycePillarsConfiguration(Blocks.TERRACOTTA.defaultBlockState(), terracottaStreaks)));
         context.register(SAND_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(BlockStateProvider.simple(Blocks.SAND), BlockStateProvider.simple(Blocks.SAND))));
+                new BrycePillarsConfiguration(Blocks.SAND.defaultBlockState(), List.of())));
         context.register(TUFF_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(BlockStateProvider.simple(Blocks.STONE), BlockStateProvider.simple(Blocks.TUFF))));
+                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(Blocks.TUFF.defaultBlockState()))));
+        // Bedrock's jungle_pillars config is flat stone/stone - an empty streak palette collapses
+        // the 192-layer array to one repeated colour, still running through the same banding code
+        // path rather than a separate flat-material branch.
         context.register(STONE_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(BlockStateProvider.simple(Blocks.STONE), BlockStateProvider.simple(Blocks.STONE))));
+                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of())));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {

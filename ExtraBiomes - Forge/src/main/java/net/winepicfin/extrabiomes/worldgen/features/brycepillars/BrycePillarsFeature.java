@@ -4,13 +4,16 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Dynamically reconstructs the "bryce pillar" terrain bumps that Bedrock's "minecraft:mesa"
@@ -54,10 +57,22 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
     // Finer-grained than PILLAR_NOISE on purpose - the mask/roof fields decide where a pillar
     // exists and how tall it grows, this one just roughs up the resulting cone's surface.
     private static final PerlinSimplexNoise EROSION_NOISE = new PerlinSimplexNoise(RandomSource.create(9876L), List.of(0));
+    // The wiki's "noiseValue" that shifts which of the 192 layers a given (x, y, z) reads from -
+    // "each layer may shift up and down by at most +-7 blocks based on noise". This is what makes
+    // the bands read as wavy/organic instead of perfectly flat horizontal slabs.
+    private static final PerlinSimplexNoise BAND_OFFSET_NOISE = new PerlinSimplexNoise(RandomSource.create(1357L), List.of(0));
     private static final double NOISE_SCALE = 0.25D;
     private static final double EROSION_SCALE = 0.6D;
+    private static final double BAND_OFFSET_COORD_SCALE = 0.15D;
+    private static final double BAND_OFFSET_MAX = 7.0D;
     private static final double ROOF_INFLUENCE = 0.25D;
-    private static final double HARD_CLAY_FRACTION = 0.7D;
+    // "Each world seed generates 192 layers of terracotta for each Y-coordinate to pick from"
+    // (minecraft.wiki, badlands biome article) - layers[(noiseValue + Y + 192) % 192]. Built once
+    // per (world seed, material recipe) and cached, mirroring how vanilla's own array is generated
+    // once per world and shared by every badlands column in it - NOT re-rolled per pillar or per
+    // chunk, which is what actually makes "the same Y = the same colour everywhere" true.
+    private static final int BAND_LAYER_COUNT = 192;
+    private static final Map<BandCacheKey, List<BlockState>> BAND_CACHE = new ConcurrentHashMap<>();
 
     public BrycePillarsFeature(Codec<BrycePillarsConfiguration> codec) {
         super(codec);
@@ -68,7 +83,12 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
         WorldGenLevel level = context.level();
         BrycePillarsConfiguration config = context.config();
         BlockPos origin = context.origin();
-        RandomSource random = context.random();
+        // Materials are now chosen deterministically by absolute Y (getBandedMaterial), so this
+        // feature no longer needs the placement RandomSource at all.
+        // One array per (world seed, biome's material recipe), built once and reused for every
+        // pillar in every chunk of this biome - never regenerated per column, since that's what
+        // keeps a given Y the same colour everywhere.
+        List<BlockState> bands = getOrBuildBands(level.getSeed(), config);
         // Normalize to the chunk's corner regardless of what x/z the placement modifiers picked -
         // this feature scans the whole 16x16 column grid itself rather than placing at one point.
         int chunkX = origin.getX() & ~15;
@@ -109,9 +129,15 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                 if (height <= 0) continue;
 
                 int baseY = floorY;
-                int hardClayTop = baseY + (int) (height * HARD_CLAY_FRACTION);
                 int maxRadius = Math.max(0, Math.min(config.maxRadius(), (int) Math.round(config.maxRadius() * strength)));
                 BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+                // Read whatever's already sitting one block below the pillar's own base - since
+                // this feature runs after surface rules, that's the real bandlands()-generated
+                // terracotta colour (or real tuff/stone) already placed for this exact column.
+                // Used only for the single bottommost row (below), so the pillar's footing joins
+                // seamlessly with the ground - everything above uses pure global Y-indexing so
+                // "same Y = same colour everywhere" isn't broken by rotating per pillar.
+                BlockState anchorState = level.getBlockState(pos.set(x, baseY - 1, z));
                 for (int y = baseY; y < baseY + height; y++) {
                     // Linear taper: full maxRadius at the base, shrinking to a single-block point
                     // by the pillar's own top, so each spire is wide-footed rather than a uniform
@@ -126,7 +152,8 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                     // loose at the ground.
                     double erosionScale = config.erosionStrength() * (0.4D + 0.6D * heightFraction);
                     int maxScan = radius + (int) Math.ceil(erosionScale);
-                    BlockStateProvider material = y < hardClayTop ? config.hardClayMaterial() : config.clayMaterial();
+                    boolean isBaseRow = y == baseY;
+                    BlockState material = getBandedMaterial(bands, x, y, z, isBaseRow, anchorState);
                     for (int rx = -maxScan; rx <= maxScan; rx++) {
                         for (int rz = -maxScan; rz <= maxScan; rz++) {
                             // The pillar's own core column always survives erosion, no matter how
@@ -139,7 +166,7 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                                 if (dist > radius + erosion * erosionScale) continue;
                             }
                             pos.set(x + rx, y, z + rz);
-                            level.setBlock(pos, material.getState(random, pos), 2);
+                            level.setBlock(pos, material, 2);
                             placedAny = true;
                         }
                     }
@@ -154,5 +181,67 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                 && mask >= Math.abs(PILLAR_NOISE.getValue((x - 1) * NOISE_SCALE, z * NOISE_SCALE, false))
                 && mask >= Math.abs(PILLAR_NOISE.getValue(x * NOISE_SCALE, (z + 1) * NOISE_SCALE, false))
                 && mask >= Math.abs(PILLAR_NOISE.getValue(x * NOISE_SCALE, (z - 1) * NOISE_SCALE, false));
+    }
+
+    /**
+     * Picks this column's block for world-height {@code y}, following the Minecraft Wiki's own
+     * description of vanilla badlands banding: {@code layers[(noiseValue + Y + 192) % 192]}.
+     * {@code bands} is the (cached, world-seed-derived) 192-entry array - see
+     * {@link #getOrBuildBands}. Because the index depends only on {@code y} (offset by a smooth
+     * per-column noise wobble, capped at the wiki's stated &#177;7 blocks) and never on this
+     * particular pillar's own base or height, the same world Y always resolves to the same
+     * colour everywhere this feature runs - matching how vanilla's real terracotta bands work,
+     * not just within one pillar.
+     * <p>
+     * The single exception is the bottommost row ({@code isBaseRow}): when the real block one
+     * below the pillar's base ({@code anchorState}, read in {@link #place}) is a colour that
+     * exists in this biome's palette, that exact colour is used directly instead of whatever the
+     * formula would have picked - so the pillar's footing joins seamlessly with the real
+     * {@code SurfaceRules.bandlands()} terrain it's standing on, without that one row breaking
+     * the "same Y = same colour everywhere" property for every row above it.
+     */
+    private static BlockState getBandedMaterial(List<BlockState> bands, int x, int y, int z, boolean isBaseRow, BlockState anchorState) {
+        if (isBaseRow && bands.contains(anchorState)) {
+            return anchorState;
+        }
+        double noiseValue = BAND_OFFSET_NOISE.getValue(x * BAND_OFFSET_COORD_SCALE, z * BAND_OFFSET_COORD_SCALE, false) * BAND_OFFSET_MAX;
+        int index = Math.floorMod((int) Math.round(y + noiseValue), bands.size());
+        return bands.get(index);
+    }
+
+    private static List<BlockState> getOrBuildBands(long seed, BrycePillarsConfiguration config) {
+        return BAND_CACHE.computeIfAbsent(new BandCacheKey(seed, config),
+                key -> generateBands(RandomSource.create(key.seed() ^ key.config().hashCode()), key.config()));
+    }
+
+    /**
+     * Builds one world's worth of the 192-layer array from a biome's background/streak recipe.
+     * Not a byte-for-byte reimplementation of vanilla's own (private, inaccessible without
+     * hooking internal generator classes) badlands array - this is an equivalent in spirit:
+     * mostly {@code backgroundMaterial} punctuated by short random-length streaks drawn from
+     * {@code streakPalette}, rather than an independent random colour per layer (which would
+     * read as speckled noise rather than banding). A biome with an empty streak palette (e.g.
+     * jungle_pillars' flat stone) collapses this to one repeated colour, which still runs through
+     * the exact same indexing logic as the terracotta biomes.
+     */
+    private static List<BlockState> generateBands(RandomSource random, BrycePillarsConfiguration config) {
+        BlockState[] layers = new BlockState[BAND_LAYER_COUNT];
+        Arrays.fill(layers, config.backgroundMaterial());
+        List<BlockState> streakPalette = config.streakPalette();
+        if (!streakPalette.isEmpty()) {
+            int streakCount = 24 + random.nextInt(16);
+            for (int i = 0; i < streakCount; i++) {
+                int center = random.nextInt(BAND_LAYER_COUNT);
+                int radius = random.nextInt(3) + 1;
+                BlockState streak = streakPalette.get(random.nextInt(streakPalette.size()));
+                for (int layerY = center - radius; layerY <= center + radius; layerY++) {
+                    layers[Math.floorMod(layerY, BAND_LAYER_COUNT)] = streak;
+                }
+            }
+        }
+        return List.of(layers);
+    }
+
+    private record BandCacheKey(long seed, BrycePillarsConfiguration config) {
     }
 }

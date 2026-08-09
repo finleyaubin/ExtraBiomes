@@ -157,7 +157,7 @@ public class MesaFeatures {
         // clamped to the engine max (commonOrePlacement uses CountPlacement.of(pCount) internally).
         context.register(SELECT_TERRACOTTA_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_TERRACOTTA_KEY),
-                ModOrePlacement.commonOrePlacement(256, HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)))
+                ModOrePlacement.commonOrePlacement(256, HeightRangePlacement.uniform(VerticalAnchor.absolute(-59), VerticalAnchor.absolute(60)))
         ));
     }
 

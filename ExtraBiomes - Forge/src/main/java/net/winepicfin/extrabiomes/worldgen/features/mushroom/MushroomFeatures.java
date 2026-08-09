@@ -313,14 +313,14 @@ public class MushroomFeatures {
         // structure lands grounded inside a cave/cavity instead of floating wherever the raw random Y
         // happened to fall. If no floor is found within range for that attempt, placement is skipped.
         register(context, HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_GLOW_MUSHROOM_KEY),
-                CountPlacement.of(25),
+                CountPlacement.of(1),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
                 EnvironmentScanPlacement.scanningFor(
                         Direction.DOWN,
                         BlockPredicate.solid(),
                         BlockPredicate.matchesBlocks(Blocks.AIR, Blocks.CAVE_AIR),
-                        12),
+                        2),
                 BiomeFilter.biome());
 
         // select_mushroom (underground_mushroom/select_mushroom_feature.json), generic - fed as the
