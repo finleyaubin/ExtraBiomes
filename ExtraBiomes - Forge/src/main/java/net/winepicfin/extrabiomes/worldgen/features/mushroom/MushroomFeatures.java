@@ -353,7 +353,8 @@ public class MushroomFeatures {
                 ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
                 fixedRotation,
                 0,
-                true
+                true,
+                0.9F
         );
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }

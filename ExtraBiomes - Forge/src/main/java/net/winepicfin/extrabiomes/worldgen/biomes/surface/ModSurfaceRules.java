@@ -4,6 +4,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
@@ -53,6 +54,17 @@ public class ModSurfaceRules {
         SurfaceRules.RuleSource grassOverStone = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                 SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK), STONE));
 
+        // SurfaceRules.bandlands() (vanilla's own badlands terracotta banding) has no built-in
+        // depth guard - like the earlier unguarded ICE/grassOverStone bugs, it can match at every
+        // Y the surface pass scans in a mesa biome, including right down into the world's bottom,
+        // randomized 1-5-block bedrock layer (starts at y=-64). verticalGradient gives a smooth
+        // noise-blended transition rather than a razor-flat cutoff (matching how vanilla itself
+        // blends its own stone/deepslate transition), with the blend band placed just above the
+        // guaranteed-safe threshold so no part of it dips into where bedrock actually generates.
+        SurfaceRules.ConditionSource clearOfBedrock = SurfaceRules.not(SurfaceRules.verticalGradient(
+                "extrabiomes_mesa_bedrock_margin",
+                VerticalAnchor.absolute(-61), VerticalAnchor.absolute(-59)));
+
         return SurfaceRules.sequence(
                 // --- Charred Forest: top=dirt, mid=dirt (burnt, grassless ground) ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.CHARRED_FOREST),
@@ -60,22 +72,25 @@ public class ModSurfaceRules {
                                 SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT))),
 
                 // --- Mesa / Badlands family: top=red_sand, mid=hardened_clay -> vanilla banded terracotta ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA), SurfaceRules.bandlands()),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA_BRYCE), SurfaceRules.bandlands()),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA_PLATEAU), SurfaceRules.bandlands()),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA),
+                        SurfaceRules.ifTrue(clearOfBedrock, SurfaceRules.bandlands())),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA_BRYCE),
+                        SurfaceRules.ifTrue(clearOfBedrock, SurfaceRules.bandlands())),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.COLD_MESA_PLATEAU),
+                        SurfaceRules.ifTrue(clearOfBedrock, SurfaceRules.bandlands())),
 
                 // --- Lush Mesa family: top=grass over hardened_clay/stained_hardened_clay ->
                 //     grass cap over the vanilla badlands terracotta banding ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.LUSH_MESA),
-                        SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(clearOfBedrock, SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), GRASS_BLOCK)),
-                                SurfaceRules.bandlands())),
+                                SurfaceRules.bandlands()))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.LUSH_MESA_BRYCE),
-                        SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(clearOfBedrock, SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), GRASS_BLOCK)),
-                                SurfaceRules.bandlands())),
+                                SurfaceRules.bandlands()))),
 
                 // --- Sandy biomes: top=sand, mid=sand for a few blocks, then fall through to the
                 //     normal stone base. NOTE: these rules previously had no depth guard at all

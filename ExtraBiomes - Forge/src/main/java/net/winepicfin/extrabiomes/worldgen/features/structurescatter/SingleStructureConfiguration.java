@@ -42,31 +42,45 @@ import java.util.Optional;
  *                     (e.g. a leaning tree trunk whose base isn't at the bounding box's corner or
  *                     center). Rotation-safe like {@code centered}. Takes priority over
  *                     {@code centered} when both are set.
+ * @param minClearFraction the minimum fraction (0.0-1.0) of the structure's rotated bounding box
+ *                     that must already be air before placement is allowed; {@code 0.0F} (the
+ *                     default for every existing convenience constructor) disables the check
+ *                     entirely, preserving this feature's original "place unconditionally"
+ *                     behaviour. Opt in for scatter-heavy subsystems (huge mushrooms, packed
+ *                     tightly enough that one attempt's cap can otherwise land squarely inside an
+ *                     already-placed neighbour's cap/stem) where two placements landing on top of
+ *                     each other reads as broken rather than as dense/lush.
  */
-public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor) implements FeatureConfiguration {
+public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction) implements FeatureConfiguration {
 
     public SingleStructureConfiguration(ResourceLocation structure) {
-        this(structure, Optional.empty(), 0, false, Optional.empty());
+        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Rotation fixedRotation) {
-        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty());
+        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, int groundOffset) {
-        this(structure, Optional.empty(), groundOffset, false, Optional.empty());
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset) {
-        this(structure, rotation, groundOffset, false, Optional.empty());
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
-        this(structure, rotation, groundOffset, centered, Optional.empty());
+        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F);
+    }
+
+    // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction, no
+    // ground offset or explicit anchor point needed.
+    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
+        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, BlockPos anchor) {
-        this(structure, Optional.empty(), 0, false, Optional.of(anchor));
+        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F);
     }
 
     public static final Codec<SingleStructureConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -74,6 +88,7 @@ public record SingleStructureConfiguration(ResourceLocation structure, Optional<
             Codec.STRING.xmap(Rotation::valueOf, Rotation::name).optionalFieldOf("rotation").forGetter(SingleStructureConfiguration::rotation),
             Codec.INT.optionalFieldOf("ground_offset", 0).forGetter(SingleStructureConfiguration::groundOffset),
             Codec.BOOL.optionalFieldOf("centered", false).forGetter(SingleStructureConfiguration::centered),
-            BlockPos.CODEC.optionalFieldOf("anchor").forGetter(SingleStructureConfiguration::anchor)
+            BlockPos.CODEC.optionalFieldOf("anchor").forGetter(SingleStructureConfiguration::anchor),
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_clear_fraction", 0.0F).forGetter(SingleStructureConfiguration::minClearFraction)
     ).apply(instance, SingleStructureConfiguration::new));
 }

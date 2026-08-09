@@ -34,6 +34,7 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_UNDERGROUND_JUNGLE_VEGETATION = registerKey("add_underground_jungle_vegetation");
     public static final ResourceKey<BiomeModifier> ADD_UNDERGROUND_JUNGLE_CAVE_VINES = registerKey("add_underground_jungle_cave_vines");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS = registerKey("add_mushroom_fields_huge_mushrooms");
+    public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS = registerKey("add_mushroom_fields_small_mushrooms");
     public static final ResourceKey<BiomeModifier> ADD_DARK_FOREST_HUGE_MUSHROOMS = registerKey("add_dark_forest_huge_mushrooms");
 
     // Mob spawns ported from the Bedrock spawn_rules biome tags, applied to the matching vanilla
@@ -80,6 +81,15 @@ public class ModBiomeModifiers {
             HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
             HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY)),
             GenerationStep.Decoration.VEGETAL_DECORATION));
+    // Small mod-added mushroom variants (via the mycelium-floor-patch mechanism -
+    // MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY's vegetationFeature is SELECT_MUSHROOM_KEY) were
+    // already wired into FungleJungle directly, but vanilla mushroom fields only ever got the huge
+    // mushroom modifier above - it had no path to this mod's own small mushroom colours at all.
+    // Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
+    context.register(ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+            HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
+            HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY)),
+            GenerationStep.Decoration.LOCAL_MODIFICATIONS));
     context.register(ADD_DARK_FOREST_HUGE_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
             HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST)),
             HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
@@ -106,8 +116,7 @@ public class ModBiomeModifiers {
     // crimson / warped / mushroom + this mod's nether biomes
     context.register(ADD_SPAWN_HOPPLESHROOM, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS), biomes.getOrThrow(Biomes.CRIMSON_FOREST),
-                    biomes.getOrThrow(Biomes.WARPED_FOREST), biomes.getOrThrow(ModBiomes.THE_NETHERLANDS),
-                    biomes.getOrThrow(ModBiomes.THE_NETHERLANDS_MUTATED)),
+                    biomes.getOrThrow(Biomes.WARPED_FOREST)),
             List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOPPLESHROOM.get(), MobSpawnWeightTuning.HOPPLESHROOM, 1, 5))));
     // jellyfish: dense in JellyfishFields, rare on beaches
     context.register(ADD_SPAWN_JELLYFISH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(

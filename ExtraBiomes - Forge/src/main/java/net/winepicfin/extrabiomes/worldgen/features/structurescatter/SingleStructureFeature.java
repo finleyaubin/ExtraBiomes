@@ -41,6 +41,11 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
      */
     private static final int WRITE_RADIUS_CHUNKS = 1;
 
+    // Matches the same safety margin used elsewhere in the mod (MesaFeatures' ore placement,
+    // ModSurfaceRules' clearOfBedrock) - one block above the maximum possible thickness of Java's
+    // randomized 1-5-block bedrock floor, which starts at y=-64.
+    private static final int BEDROCK_MARGIN_Y = -59;
+
     public SingleStructureFeature(Codec<SingleStructureConfiguration> codec) {
         super(codec);
     }
@@ -64,7 +69,12 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
         StructurePlaceSettings settings = new StructurePlaceSettings()
                 .setRotation(rotation)
                 .setMirror(Mirror.NONE)
-                .setIgnoreEntities(false);
+                .setIgnoreEntities(false)
+                // Prevents this otherwise-unconditional placement from carving through the world's
+                // bottom bedrock layer whenever the randomized origin lands near y=-64 - see
+                // PreserveBedrockProcessor's own javadoc for why this belongs here rather than in
+                // each individual subsystem.
+                .addProcessor(PreserveBedrockProcessor.INSTANCE);
 
         BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
@@ -87,7 +97,28 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             origin = anchor.subtract(rotatedCenter);
         }
 
-        if (!fitsWithinSafeWriteArea(template, settings, origin, context.origin())) {
+        BoundingBox structureBox = template.getBoundingBox(settings, origin);
+        if (!fitsWithinSafeWriteArea(structureBox, context.origin())) {
+            return false;
+        }
+
+        // Skip the WHOLE placement here rather than letting PreserveBedrockProcessor silently
+        // drop just the individual blocks that land on bedrock. Block-by-block skipping is what
+        // produced the floating-cap/clipped-through-walls look: bedrock survives, but the rest of
+        // the structure still gets carved into the surrounding terrain around the gap where it
+        // used to be. Not attempting the placement at all when it would reach this low is the
+        // actual fix - the processor stays on as a defense-in-depth backstop, not the primary guard.
+        if (structureBox.minY() < BEDROCK_MARGIN_Y) {
+            return false;
+        }
+
+        // Opt-in "is this actually open space" check (see SingleStructureConfiguration's own
+        // javadoc). Disabled by default (minClearFraction 0.0F) for every existing convenience
+        // constructor, so unrelated subsystems keep placing unconditionally exactly as before -
+        // this only fires for subsystems that explicitly ask for it, currently the huge mushrooms,
+        // whose dense random scattering could otherwise land one attempt's cap squarely on top of
+        // an already-placed neighbour's solid blocks with nothing checking for that beforehand.
+        if (config.minClearFraction() > 0.0F && !hasEnoughClearSpace(level, structureBox, config.minClearFraction())) {
             return false;
         }
 
@@ -95,12 +126,35 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
     }
 
     /**
-     * Checks the template's true rotated/mirrored footprint (via {@link StructureTemplate#getBoundingBox})
-     * against the chunk-column window vanilla actually allows Feature writes into, so oversized
-     * templates skip cleanly instead of getting clipped at the edge.
+     * Fraction of {@code box} that's currently air (covers regular air, cave air, and void air -
+     * see {@link net.minecraft.world.level.block.state.BlockState#isAir}). Anything already
+     * non-air here is either natural terrain the structure is expected to partially embed into
+     * (its own base/floor row) or - the case this exists to catch - solid blocks from a previous
+     * structure placement that's already sitting in this exact space.
      */
-    private static boolean fitsWithinSafeWriteArea(StructureTemplate template, StructurePlaceSettings settings, BlockPos origin, BlockPos decoratingColumn) {
-        BoundingBox structureBox = template.getBoundingBox(settings, origin);
+    private static boolean hasEnoughClearSpace(WorldGenLevel level, BoundingBox box, float minClearFraction) {
+        int total = 0;
+        int clear = 0;
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = box.minX(); x <= box.maxX(); x++) {
+            for (int y = box.minY(); y <= box.maxY(); y++) {
+                for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                    total++;
+                    if (level.getBlockState(pos.set(x, y, z)).isAir()) {
+                        clear++;
+                    }
+                }
+            }
+        }
+        return total == 0 || (float) clear / total >= minClearFraction;
+    }
+
+    /**
+     * Checks the template's true rotated/mirrored footprint against the chunk-column window
+     * vanilla actually allows Feature writes into, so oversized templates skip cleanly instead of
+     * getting clipped at the edge.
+     */
+    private static boolean fitsWithinSafeWriteArea(BoundingBox structureBox, BlockPos decoratingColumn) {
         ChunkPos chunk = new ChunkPos(decoratingColumn);
         int minX = chunk.getMinBlockX() - (WRITE_RADIUS_CHUNKS * 16);
         int maxX = chunk.getMaxBlockX() + (WRITE_RADIUS_CHUNKS * 16);

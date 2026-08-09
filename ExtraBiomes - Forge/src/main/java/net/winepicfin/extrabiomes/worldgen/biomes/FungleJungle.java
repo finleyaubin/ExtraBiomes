@@ -49,6 +49,7 @@ public class FungleJungle {
         // boulder: weighted stick-pile selection, vegetal decoration step
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
         // mushroom_island_surface_huge_mushroom: mushroom-island-specific huge mushroom distribution
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
