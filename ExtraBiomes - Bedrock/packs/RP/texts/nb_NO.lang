@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Tett Tett Sky Tett Skymurstein
 tile.extrabiomes:dense_cloud_brick_slab.name=Tett Tett Sky Tett Skymurstein Helle
 tile.extrabiomes:dense_cloud_brick_stairs.name=Tett Tett Sky Tett Skymurstein Trapp
 
+tile.extrabiomes:black_sand.name=Svart Sand
+tile.extrabiomes:black_sandstone.name=Svart Sandstein
+tile.extrabiomes:chiseled_black_sandstone.name=Hogd Svart Sandstein
+tile.extrabiomes:cut_black_sandstone.name=Skåret Svart Sandstein
+tile.extrabiomes:smooth_black_sandstone.name=Glatt Svart Sandstein
+tile.extrabiomes:black_sandstone_stairs.name=Svart Sandsteinstrapp
+tile.extrabiomes:black_sandstone_slab.name=Svart Sandsteinhelle
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Glatt Svart Sandsteinstrapp
+tile.extrabiomes:smooth_black_sandstone_slab.name=Glatt Svart Sandsteinhelle
+tile.extrabiomes:cut_black_sandstone_slab.name=Skåret Svart Sandsteinhelle
+tile.extrabiomes:black_sandstone_wall.name=Svart Sandsteinmur
+
 
 tile.extrabiomes:mystic_log.name=Mystisk Tømmerstokk
 tile.extrabiomes:mystic_leaves.name=Mystisk Løv

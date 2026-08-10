@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Tæt Tæt Sky Tæt Skymursten
 tile.extrabiomes:dense_cloud_brick_slab.name=Tæt Tæt Sky Tæt Skymursten Trædeplade
 tile.extrabiomes:dense_cloud_brick_stairs.name=Tæt Tæt Sky Tæt Skymursten Trappe
 
+tile.extrabiomes:black_sand.name=Sort Sand
+tile.extrabiomes:black_sandstone.name=Sort Sandsten
+tile.extrabiomes:chiseled_black_sandstone.name=Udskåret Sort Sandsten
+tile.extrabiomes:cut_black_sandstone.name=Skåret Sort Sandsten
+tile.extrabiomes:smooth_black_sandstone.name=Glat Sort Sandsten
+tile.extrabiomes:black_sandstone_stairs.name=Sort Sandstenstrappe
+tile.extrabiomes:black_sandstone_slab.name=Sort Sandstensplade
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Glat Sort Sandstenstrappe
+tile.extrabiomes:smooth_black_sandstone_slab.name=Glat Sort Sandstensplade
+tile.extrabiomes:cut_black_sandstone_slab.name=Skåret Sort Sandstensplade
+tile.extrabiomes:black_sandstone_wall.name=Sort Sandstensmur
+
 
 tile.extrabiomes:mystic_log.name=Mystisk Træstamme
 tile.extrabiomes:mystic_leaves.name=Mystisk Løv

@@ -1,0 +1,29 @@
+{
+	"format_version": "1.20.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:black_sand",
+			"menu_category": {
+				"category": "nature"
+			}
+		},
+		"components": {
+			"minecraft:geometry": "minecraft:geometry.full_block",
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "extrabiomes_black_sand",
+					"render_method": "opaque"
+				}
+			},
+			"minecraft:map_color": "#2e2b28",
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 0.5
+			},
+			"minecraft:destructible_by_explosion": {
+				"explosion_resistance": 0.5
+			},
+			"minecraft:light_dampening": 15,
+			"tag:minecraft:is_shovel_item_destructible": {}
+		}
+	}
+}

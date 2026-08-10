@@ -59,7 +59,7 @@
         "builder": {
           "type": "minecraft:overworld",
           "foundation_material": "minecraft:stone",
-          "mid_material": "minecraft:blackstone",
+          "mid_material": "extrabiomes:black_sandstone",
           "top_material": "minecraft:grass_block",
           "sea_floor_depth": 5,
           "sea_floor_material": "minecraft:gravel",

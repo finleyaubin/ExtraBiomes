@@ -1,0 +1,28 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:tnt_from_black_sand"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"#~#",
+			"~#~",
+			"#~#"
+		],
+		"key": {
+			"#": {
+				"item": "extrabiomes:black_sand"
+			},
+			"~": {
+				"item": "minecraft:gunpowder"
+			}
+		},
+		"result": {
+			"item": "minecraft:tnt",
+			"count": 1
+		}
+	}
+}

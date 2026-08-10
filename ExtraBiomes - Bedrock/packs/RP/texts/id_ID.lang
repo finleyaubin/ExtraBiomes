@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Awan Padat Bata Awan Padat Padat
 tile.extrabiomes:dense_cloud_brick_slab.name=Awan Padat Bata Awan Padat Slab Padat
 tile.extrabiomes:dense_cloud_brick_stairs.name=Awan Padat Bata Awan Padat Tangga Padat
 
+tile.extrabiomes:black_sand.name=Pasir Hitam
+tile.extrabiomes:black_sandstone.name=Batu Pasir Hitam
+tile.extrabiomes:chiseled_black_sandstone.name=Batu Pasir Hitam Berukir
+tile.extrabiomes:cut_black_sandstone.name=Batu Pasir Hitam Terpotong
+tile.extrabiomes:smooth_black_sandstone.name=Batu Pasir Hitam Halus
+tile.extrabiomes:black_sandstone_stairs.name=Tangga Batu Pasir Hitam
+tile.extrabiomes:black_sandstone_slab.name=Lempengan Batu Pasir Hitam
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Tangga Batu Pasir Hitam Halus
+tile.extrabiomes:smooth_black_sandstone_slab.name=Lempengan Batu Pasir Hitam Halus
+tile.extrabiomes:cut_black_sandstone_slab.name=Lempengan Batu Pasir Hitam Terpotong
+tile.extrabiomes:black_sandstone_wall.name=Dinding Batu Pasir Hitam
+
 
 tile.extrabiomes:mystic_log.name=Kayu Gelondongan Mistis
 tile.extrabiomes:mystic_leaves.name=Daun Mistis

@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Nuvem Densa Tijolo de Nuvem Densa Densa
 tile.extrabiomes:dense_cloud_brick_slab.name=Nuvem Densa Tijolo de Nuvem Densa Laje Densa
 tile.extrabiomes:dense_cloud_brick_stairs.name=Nuvem Densa Tijolo de Nuvem Densa Escada Densa
 
+tile.extrabiomes:black_sand.name=Areia Negra
+tile.extrabiomes:black_sandstone.name=Arenito Negro
+tile.extrabiomes:chiseled_black_sandstone.name=Arenito Negro Cinzelado
+tile.extrabiomes:cut_black_sandstone.name=Arenito Negro Cortado
+tile.extrabiomes:smooth_black_sandstone.name=Arenito Negro Liso
+tile.extrabiomes:black_sandstone_stairs.name=Escada de Arenito Negro
+tile.extrabiomes:black_sandstone_slab.name=Laje de Arenito Negro
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Escada de Arenito Negro Liso
+tile.extrabiomes:smooth_black_sandstone_slab.name=Laje de Arenito Negro Liso
+tile.extrabiomes:cut_black_sandstone_slab.name=Laje de Arenito Negro Cortado
+tile.extrabiomes:black_sandstone_wall.name=Muro de Arenito Negro
+
 
 tile.extrabiomes:mystic_log.name=Tora Místico
 tile.extrabiomes:mystic_leaves.name=Folhas Místico

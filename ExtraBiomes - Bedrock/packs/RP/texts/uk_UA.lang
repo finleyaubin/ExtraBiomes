@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Щільна Щільна Хмара Ц�
 tile.extrabiomes:dense_cloud_brick_slab.name=Щільна Щільна Хмара Цегла зі Щільної Хмари Плита
 tile.extrabiomes:dense_cloud_brick_stairs.name=Щільна Щільна Хмара Цегла зі Щільної Хмари Сходи
 
+tile.extrabiomes:black_sand.name=чорний пісок
+tile.extrabiomes:black_sandstone.name=чорний пісковик
+tile.extrabiomes:chiseled_black_sandstone.name=різьблений чорний пісковик
+tile.extrabiomes:cut_black_sandstone.name=тесаний чорний пісковик
+tile.extrabiomes:smooth_black_sandstone.name=гладкий чорний пісковик
+tile.extrabiomes:black_sandstone_stairs.name=сходи з чорного пісковику
+tile.extrabiomes:black_sandstone_slab.name=плита з чорного пісковику
+tile.extrabiomes:smooth_black_sandstone_stairs.name=сходи з гладкого чорного пісковику
+tile.extrabiomes:smooth_black_sandstone_slab.name=плита з гладкого чорного пісковику
+tile.extrabiomes:cut_black_sandstone_slab.name=плита з тесаного чорного пісковику
+tile.extrabiomes:black_sandstone_wall.name=стіна з чорного пісковику
+
 
 tile.extrabiomes:mystic_log.name=Містичний Колода
 tile.extrabiomes:mystic_leaves.name=Містичний Листя
