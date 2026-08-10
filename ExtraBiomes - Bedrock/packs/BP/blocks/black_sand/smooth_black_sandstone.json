@@ -11,7 +11,7 @@
 			"minecraft:geometry": "minecraft:geometry.full_block",
 			"minecraft:material_instances": {
 				"*": {
-					"texture": "extrabiomes_black_sandstone_smooth",
+					"texture": "extrabiomes_black_sandstone_top",
 					"render_method": "opaque"
 				}
 			},

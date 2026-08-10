@@ -28,6 +28,14 @@
       },
       "minecraft:material_instances": {
         "*": {
+          "texture": "extrabiomes_black_sandstone_smooth",
+          "render_method": "opaque"
+        },
+        "up": {
+          "texture": "extrabiomes_black_sandstone_top",
+          "render_method": "opaque"
+        },
+        "down": {
           "texture": "extrabiomes_black_sandstone_top",
           "render_method": "opaque"
         }

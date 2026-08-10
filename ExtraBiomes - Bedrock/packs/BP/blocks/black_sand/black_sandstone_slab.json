@@ -30,6 +30,14 @@
         "*": {
           "texture": "extrabiomes_black_sandstone_normal",
           "render_method": "opaque"
+        },
+        "up": {
+          "texture": "extrabiomes_black_sandstone_top",
+          "render_method": "opaque"
+        },
+        "down": {
+          "texture": "extrabiomes_black_sandstone_bottom",
+          "render_method": "opaque"
         }
       },
 			"minecraft:liquid_detection": {
