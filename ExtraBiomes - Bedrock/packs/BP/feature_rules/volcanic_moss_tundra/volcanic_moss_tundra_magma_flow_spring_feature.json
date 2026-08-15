@@ -2,8 +2,8 @@
   "format_version": "1.14.0",
   "minecraft:feature_rules": {
     "description": {
-      "identifier": "extrabiomes:volcanic_moss_tundra_elevation_moss_feature",
-      "places_feature": "extrabiomes:moss/carpet_patch"
+      "identifier": "extrabiomes:volcanic_moss_tundra_magma_flow_spring_feature",
+      "places_feature": "extrabiomes:volcanic_moss_tundra/magma_flow_spring"
     },
     "conditions": {
       "placement_pass": "after_surface_pass",
@@ -16,16 +16,13 @@
       ]
     },
     "distribution": {
-      "iterations": 60,
-      "scatter_chance": "math.clamp((query.heightmap(variable.worldx, variable.worldz) - 70) / 1, 0, 1) * 100",
+      "iterations": 2,
+      "scatter_chance": "math.clamp((query.heightmap(variable.worldx, variable.worldz) - 118) / 6, 0, 1) * 100",
       "x": {
         "distribution": "uniform",
         "extent": [ 0, 16 ]
       },
-      "y": {
-        "distribution": "uniform",
-        "extent": [ "query.heightmap(variable.worldx, variable.worldz)", "query.heightmap(variable.worldx, variable.worldz)" ]
-      },
+      "y": "query.heightmap(variable.worldx, variable.worldz)",
       "z": {
         "distribution": "uniform",
         "extent": [ 0, 16 ]

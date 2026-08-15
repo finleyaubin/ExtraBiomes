@@ -1,0 +1,14 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:single_block_feature": {
+		"description": {
+			"identifier": "extrabiomes:volcanic_moss_tundra/magma_flow_spring"
+		},
+		"places_block": "minecraft:lava",
+		"enforce_survivability_rules": false,
+		"enforce_placement_rules": false,
+		"may_replace": [
+			"minecraft:air"
+		]
+	}
+}
