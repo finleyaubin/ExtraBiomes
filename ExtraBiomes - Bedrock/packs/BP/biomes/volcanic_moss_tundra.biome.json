@@ -42,6 +42,29 @@
               0.4,
               0.65
             ]
+          },
+          {
+            "materials": {
+              "top_material": "minecraft:magma",
+              "mid_material": "minecraft:magma",
+              "sea_material": "minecraft:lava"
+            },
+            "noise_frequency_scale": 0.001,
+            "noise_range": [
+              0.14,
+              0.155
+            ]
+          },
+           {
+            "materials": {
+              "top_material": "minecraft:lava",
+              "mid_material": "minecraft:lava"
+            },
+            "noise_frequency_scale": 0.001,
+            "noise_range": [
+              0.142,
+              0.153
+            ]
           }
         ]
       },
