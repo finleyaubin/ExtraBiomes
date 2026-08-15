@@ -1,0 +1,30 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:vegetation_patch_feature": {
+		"description": {
+			"identifier": "extrabiomes:volcanic_moss_tundra/lava_river_bank"
+		},
+		"replaceable_blocks": [
+			"minecraft:dirt",
+			"minecraft:stone",
+			"minecraft:gravel",
+			"minecraft:grass_block",
+			"minecraft:moss_block",
+			"extrabiomes:black_sand",
+			"extrabiomes:black_sandstone"
+		],
+		"ground_block": "minecraft:magma",
+		"vegetation_feature": "extrabiomes:volcanic_moss_tundra/basalt_bank_ground_check",
+		"surface": "floor",
+		"depth": 2,
+		"vertical_range": 6,
+		"vegetation_chance": 0,
+		"horizontal_radius": {
+			"range_min": 2,
+			"range_max": 3
+		},
+		"extra_deep_block_chance": 0.4,
+		"extra_edge_column_chance": 0.6,
+		"waterlogged": false
+	}
+}

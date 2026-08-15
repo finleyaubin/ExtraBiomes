@@ -165,6 +165,39 @@
 	"extrabiomes:dense_cloud_brick": {
 		"sound": "cloth"
 	},
+	"extrabiomes:black_sand": {
+		"sound": "sand"
+	},
+	"extrabiomes:black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:chiseled_black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:cut_black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:smooth_black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:black_sandstone_stairs": {
+		"sound": "stone"
+	},
+	"extrabiomes:black_sandstone_slab": {
+		"sound": "stone"
+	},
+	"extrabiomes:smooth_black_sandstone_stairs": {
+		"sound": "stone"
+	},
+	"extrabiomes:smooth_black_sandstone_slab": {
+		"sound": "stone"
+	},
+	"extrabiomes:cut_black_sandstone_slab": {
+		"sound": "stone"
+	},
+	"extrabiomes:black_sandstone_wall": {
+		"sound": "stone"
+	},
 	"extrabiomes:gilded_sky_door_bottom": {
 		"sound": "wood"
 	},

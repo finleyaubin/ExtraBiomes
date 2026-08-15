@@ -1,11 +1,11 @@
 {
-	"format_version": "1.20.100",
+	"format_version": "1.26.0",
 	"minecraft:block": {
 		"description": {
 			"identifier": "extrabiomes:sky_stairs",
 			"menu_category": {
 				"category": "construction",
-				"group": "itemGroup.name.stairs"
+				"group": "minecraft:itemGroup.name.stairs"
 			},
 			"states": {
 				"extrabiomes:is_upside_down": [
@@ -112,7 +112,7 @@
 				"detection_rules": [
 					{
 						"liquid_type": "water",
-						"can_contain_liquid": true, 
+						"can_contain_liquid": true,
 						"on_liquid_touches": "blocking"
 					}
 				]
@@ -211,7 +211,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_north": {}
+					"tag:extrabiomes:stairs_north": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -246,7 +272,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_north": {}
+					"tag:extrabiomes:stairs_north": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -281,7 +333,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_south": {}
+					"tag:extrabiomes:stairs_south": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								0
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -316,7 +394,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_south": {}
+					"tag:extrabiomes:stairs_south": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								0
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -351,7 +455,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_west": {}
+					"tag:extrabiomes:stairs_west": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								0,
+								8,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								16
+							]
+						}
+					]
 				}
 			},
 			{
@@ -386,7 +516,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_west": {}
+					"tag:extrabiomes:stairs_west": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								0,
+								0,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								16
+							]
+						}
+					]
 				}
 			},
 			{
@@ -421,7 +577,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_east": {}
+					"tag:extrabiomes:stairs_east": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								16
+							]
+						}
+					]
 				}
 			},
 			{
@@ -456,7 +638,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_east": {}
+					"tag:extrabiomes:stairs_east": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								16
+							]
+						}
+					]
 				}
 			},
 			{
@@ -491,7 +699,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -526,7 +760,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -561,7 +821,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								0,
+								8,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -596,7 +882,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								0,
+								0,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -631,7 +943,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -666,7 +1004,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -701,7 +1065,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								0,
+								8,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -736,7 +1126,33 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_outer": {}
+					"tag:extrabiomes:stairs_outer": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								0,
+								0,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -771,7 +1187,45 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								0
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -806,7 +1260,45 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								0
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -841,7 +1333,45 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								0
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								0,
+								8,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -876,7 +1406,45 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								0
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								0,
+								0,
+								-8
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -911,7 +1479,45 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								0,
+								8,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -946,7 +1552,45 @@
 							"southwest_inner_up": true
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								0,
+								0,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -981,7 +1625,45 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								-8,
+								8,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			},
 			{
@@ -1016,7 +1698,45 @@
 							"southwest_inner_up": false
 						}
 					},
-					"tag:extrabiomes:stairs_inner": {}
+					"tag:extrabiomes:stairs_inner": {},
+					"minecraft:collision_box": [
+						{
+							"origin": [
+								-8,
+								8,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								16
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								-8
+							],
+							"size": [
+								16,
+								8,
+								8
+							]
+						},
+						{
+							"origin": [
+								-8,
+								0,
+								0
+							],
+							"size": [
+								8,
+								8,
+								8
+							]
+						}
+					]
 				}
 			}
 		]

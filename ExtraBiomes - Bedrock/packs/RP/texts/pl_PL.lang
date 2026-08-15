@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Gesta Gesta Chmura Cegla z Gestej Chmury
 tile.extrabiomes:dense_cloud_brick_slab.name=Gesta Gesta Chmura Cegla z Gestej Chmury Plyta
 tile.extrabiomes:dense_cloud_brick_stairs.name=Gesta Gesta Chmura Cegla z Gestej Chmury Schody
 
+tile.extrabiomes:black_sand.name=Czarny Piasek
+tile.extrabiomes:black_sandstone.name=Czarny Piaskowiec
+tile.extrabiomes:chiseled_black_sandstone.name=Rzeźbiony Czarny Piaskowiec
+tile.extrabiomes:cut_black_sandstone.name=Cięty Czarny Piaskowiec
+tile.extrabiomes:smooth_black_sandstone.name=Gładki Czarny Piaskowiec
+tile.extrabiomes:black_sandstone_stairs.name=Schody z Czarnego Piaskowca
+tile.extrabiomes:black_sandstone_slab.name=Płyta z Czarnego Piaskowca
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Schody z Gładkiego Czarnego Piaskowca
+tile.extrabiomes:smooth_black_sandstone_slab.name=Płyta z Gładkiego Czarnego Piaskowca
+tile.extrabiomes:cut_black_sandstone_slab.name=Płyta z Ciętego Czarnego Piaskowca
+tile.extrabiomes:black_sandstone_wall.name=Mur z Czarnego Piaskowca
+
 
 tile.extrabiomes:mystic_log.name=Mistyczna Kloda
 tile.extrabiomes:mystic_leaves.name=Mistyczna Liscie

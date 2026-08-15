@@ -1,0 +1,114 @@
+{
+	"format_version": "1.20.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:black_sandstone_wall",
+			"states": {
+				"extrabiomes:north": [
+					false,
+					true
+				],
+				"extrabiomes:south": [
+					false,
+					true
+				],
+				"extrabiomes:east": [
+					false,
+					true
+				],
+				"extrabiomes:west": [
+					false,
+					true
+				],
+				"extrabiomes:on_placed": [
+					false,
+					true
+				]
+			},
+			"menu_category": {
+				"category": "construction",
+				"group": "itemGroup.name.wall"
+			}
+		},
+		"components": {
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 0.8
+			},
+			"tag:minecraft:is_pickaxe_item_destructible": {},
+			"minecraft:collision_box": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					16,
+					16
+				]
+			},
+			"minecraft:selection_box": {
+				"origin": [
+					-8,
+					0,
+					-8
+				],
+				"size": [
+					16,
+					16,
+					16
+				]
+			},
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "extrabiomes_black_sandstone_normal",
+					"render_method": "opaque"
+				}
+			},
+			"minecraft:geometry": {
+				"identifier": "geometry.extrabiomes_wall",
+				"bone_visibility": {
+					"preview": "query.block_state('extrabiomes:on_placed') == false",
+					"post": "query.block_state('extrabiomes:on_placed') == true",
+					"north": "query.block_state('extrabiomes:north') == true",
+					"south": "query.block_state('extrabiomes:south') == true",
+					"east": "query.block_state('extrabiomes:east') == true",
+					"west": "query.block_state('extrabiomes:west') == true"
+				}
+			},
+			"minecraft:light_dampening": 15,
+			"minecraft:liquid_detection": {
+				"detection_rules": [
+					{
+						"liquid_type": "water",
+						"can_contain_liquid": true,
+						"on_liquid_touches": "blocking"
+					}
+				]
+			},
+			"minecraft:destructible_by_explosion": {
+				"explosion_resistance": 0.8
+			},
+			"tag:extrabiomes:wall": {},
+			"extrabiomes:wall": {}
+		},
+		"permutations": [
+			{
+				"condition": "q.block_state('extrabiomes:on_placed') == true",
+				"components": {
+					"minecraft:geometry": {
+						"identifier": "geometry.extrabiomes_wall",
+						"bone_visibility": {
+							"north": "query.block_state('extrabiomes:north')",
+							"south": "query.block_state('extrabiomes:south')",
+							"east": "query.block_state('extrabiomes:east')",
+							"west": "query.block_state('extrabiomes:west')",
+							"preview": false,
+							"post": true
+						}
+					}
+				}
+			}
+		]
+	}
+}

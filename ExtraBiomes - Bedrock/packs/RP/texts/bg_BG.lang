@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Плътен Плътен Облак Т�
 tile.extrabiomes:dense_cloud_brick_slab.name=Плътен Плътен Облак Тухла от Плътен Облак Плоча
 tile.extrabiomes:dense_cloud_brick_stairs.name=Плътен Плътен Облак Тухла от Плътен Облак Стълби
 
+tile.extrabiomes:black_sand.name=черен пясък
+tile.extrabiomes:black_sandstone.name=черен пясъчник
+tile.extrabiomes:chiseled_black_sandstone.name=резбован черен пясъчник
+tile.extrabiomes:cut_black_sandstone.name=дялан черен пясъчник
+tile.extrabiomes:smooth_black_sandstone.name=гладък черен пясъчник
+tile.extrabiomes:black_sandstone_stairs.name=стълби от черен пясъчник
+tile.extrabiomes:black_sandstone_slab.name=плоча от черен пясъчник
+tile.extrabiomes:smooth_black_sandstone_stairs.name=стълби от гладък черен пясъчник
+tile.extrabiomes:smooth_black_sandstone_slab.name=плоча от гладък черен пясъчник
+tile.extrabiomes:cut_black_sandstone_slab.name=плоча от дялан черен пясъчник
+tile.extrabiomes:black_sandstone_wall.name=стена от черен пясъчник
+
 
 tile.extrabiomes:mystic_log.name=Мистичен Труп
 tile.extrabiomes:mystic_leaves.name=Мистичен Листа

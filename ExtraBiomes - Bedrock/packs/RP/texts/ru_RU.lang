@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Плотное Плотное Облак
 tile.extrabiomes:dense_cloud_brick_slab.name=Плотное Плотное Облако Кирпич из Плотного Облака Плита
 tile.extrabiomes:dense_cloud_brick_stairs.name=Плотное Плотное Облако Кирпич из Плотного Облака Лестница
 
+tile.extrabiomes:black_sand.name=чёрный песок
+tile.extrabiomes:black_sandstone.name=чёрный песчаник
+tile.extrabiomes:chiseled_black_sandstone.name=резной чёрный песчаник
+tile.extrabiomes:cut_black_sandstone.name=тёсаный чёрный песчаник
+tile.extrabiomes:smooth_black_sandstone.name=гладкий чёрный песчаник
+tile.extrabiomes:black_sandstone_stairs.name=лестница из чёрного песчаника
+tile.extrabiomes:black_sandstone_slab.name=плита из чёрного песчаника
+tile.extrabiomes:smooth_black_sandstone_stairs.name=лестница из гладкого чёрного песчаника
+tile.extrabiomes:smooth_black_sandstone_slab.name=плита из гладкого чёрного песчаника
+tile.extrabiomes:cut_black_sandstone_slab.name=плита из тёсаного чёрного песчаника
+tile.extrabiomes:black_sandstone_wall.name=стена из чёрного песчаника
+
 
 tile.extrabiomes:mystic_log.name=Мистический Бревно
 tile.extrabiomes:mystic_leaves.name=Мистический Листва

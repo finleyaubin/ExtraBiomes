@@ -12,6 +12,21 @@
          "sounds" : [
             "sounds/mob/hoppleshroom/jump"
          ]
+      },
+      "mob.puckoo.ambient" : {
+         "category" : "neutral",
+         "sounds" : [
+            "sounds/mob/puckoo/idle1",
+            "sounds/mob/puckoo/idle2",
+            "sounds/mob/puckoo/idle3"
+         ]
+      },
+      "mob.puckoo.cry" : {
+         "category" : "neutral",
+         "sounds" : [
+            "sounds/mob/puckoo/cry1",
+            "sounds/mob/puckoo/cry2"
+         ]
       }
    }
 }

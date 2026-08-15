@@ -30,6 +30,9 @@
 				},
 				"shock" : {
 					"animations" : [ "shock", "setup" ],
+					"sound_effects" : [
+						{ "effect" : "mob.puckoo.cry" }
+					],
 					"transitions" : [
 						{
 							"default" : "query.all_animations_finished"

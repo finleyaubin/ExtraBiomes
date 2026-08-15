@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=濃雲磚
 tile.extrabiomes:dense_cloud_brick_slab.name=濃雲磚臺階
 tile.extrabiomes:dense_cloud_brick_stairs.name=濃雲磚樓梯
 
+tile.extrabiomes:black_sand.name=黑沙
+tile.extrabiomes:black_sandstone.name=黑砂岩
+tile.extrabiomes:chiseled_black_sandstone.name=雕紋黑砂岩
+tile.extrabiomes:cut_black_sandstone.name=切製黑砂岩
+tile.extrabiomes:smooth_black_sandstone.name=平滑黑砂岩
+tile.extrabiomes:black_sandstone_stairs.name=黑砂岩樓梯
+tile.extrabiomes:black_sandstone_slab.name=黑砂岩台階
+tile.extrabiomes:smooth_black_sandstone_stairs.name=平滑黑砂岩樓梯
+tile.extrabiomes:smooth_black_sandstone_slab.name=平滑黑砂岩台階
+tile.extrabiomes:cut_black_sandstone_slab.name=切製黑砂岩台階
+tile.extrabiomes:black_sandstone_wall.name=黑砂岩牆
+
 
 tile.extrabiomes:mystic_log.name=祕術原木
 tile.extrabiomes:mystic_leaves.name=祕術樹葉

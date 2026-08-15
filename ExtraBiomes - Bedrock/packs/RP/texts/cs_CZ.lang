@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Husty Husty Mrak Cihla z Hosteho Mraku
 tile.extrabiomes:dense_cloud_brick_slab.name=Husty Husty Mrak Cihla z Hosteho Mraku Deska
 tile.extrabiomes:dense_cloud_brick_stairs.name=Husty Husty Mrak Cihla z Hosteho Mraku Schody
 
+tile.extrabiomes:black_sand.name=Černý Písek
+tile.extrabiomes:black_sandstone.name=Černý Pískovec
+tile.extrabiomes:chiseled_black_sandstone.name=Tesaný Černý Pískovec
+tile.extrabiomes:cut_black_sandstone.name=Řezaný Černý Pískovec
+tile.extrabiomes:smooth_black_sandstone.name=Hladký Černý Pískovec
+tile.extrabiomes:black_sandstone_stairs.name=Schody z Černého Pískovce
+tile.extrabiomes:black_sandstone_slab.name=Deska z Černého Pískovce
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Schody z Hladkého Černého Pískovce
+tile.extrabiomes:smooth_black_sandstone_slab.name=Deska z Hladkého Černého Pískovce
+tile.extrabiomes:cut_black_sandstone_slab.name=Deska z Řezaného Černého Pískovce
+tile.extrabiomes:black_sandstone_wall.name=Zeď z Černého Pískovce
+
 
 tile.extrabiomes:mystic_log.name=Mysticky Klada
 tile.extrabiomes:mystic_leaves.name=Mysticky Listi

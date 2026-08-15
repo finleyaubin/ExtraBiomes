@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Suru Suru Felho Suru Felho Tegla
 tile.extrabiomes:dense_cloud_brick_slab.name=Suru Suru Felho Suru Felho Tegla Lap
 tile.extrabiomes:dense_cloud_brick_stairs.name=Suru Suru Felho Suru Felho Tegla Lepcso
 
+tile.extrabiomes:black_sand.name=Fekete Homok
+tile.extrabiomes:black_sandstone.name=Fekete Homokkő
+tile.extrabiomes:chiseled_black_sandstone.name=Faragott Fekete Homokkő
+tile.extrabiomes:cut_black_sandstone.name=Vágott Fekete Homokkő
+tile.extrabiomes:smooth_black_sandstone.name=Csiszolt Fekete Homokkő
+tile.extrabiomes:black_sandstone_stairs.name=Fekete Homokkő Lépcső
+tile.extrabiomes:black_sandstone_slab.name=Fekete Homokkő Lap
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Csiszolt Fekete Homokkő Lépcső
+tile.extrabiomes:smooth_black_sandstone_slab.name=Csiszolt Fekete Homokkő Lap
+tile.extrabiomes:cut_black_sandstone_slab.name=Vágott Fekete Homokkő Lap
+tile.extrabiomes:black_sandstone_wall.name=Fekete Homokkő Fal
+
 
 tile.extrabiomes:mystic_log.name=Miszikus Rond
 tile.extrabiomes:mystic_leaves.name=Miszikus Lomb
