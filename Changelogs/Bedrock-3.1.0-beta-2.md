@@ -2,6 +2,7 @@
 # Changes
 ## Biomes
 ### Volcanic Moss Tundra
+<img width="2563" height="1446" alt="Screenshot 2026-08-15 172925" src="https://github.com/user-attachments/assets/e7717fbe-9306-4d06-af89-e479fb65a9b1" />
 A cold, volcanic take on the tundra — dark, volcanic terrain (black sand and black sandstone) rather than snow, with patches of moss and moss carpet blanketing the higher ground. this biome is inspired from parts of Iceland so Despite the volcanic theme it keeps tundra-like cold-biome behavior (cold-variant farm animals and frogs spawn here), though snowfall itself is disabled.
 
 The land is shaped by volcanic terrain features — boulders, rock formations, basalt pillars, and volcanoes scattered across it - and cut through by a winding river of lava, bordered by magma banks with clusters of basalt pillars jutting out of the ground along its edges.
