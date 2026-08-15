@@ -11,7 +11,7 @@
         {
           "test": "has_biome_tag",
           "operator": "==",
-          "value": "mountain"
+          "value": "volcanic_moss_tundra"
         }
       ]
     },
