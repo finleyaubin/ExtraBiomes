@@ -13,6 +13,6 @@ It generates as a rare replacement for ice plains in the Overworld.
 ## Blocks
 - Added black sand and a full black sandstone block set, including chiseled, cut and smooth variants, along with slabs, stairs and walls, and the recipes/stonecutter recipes to craft them.
 - Added a recipe to turn black sand into glass, and to craft TNT from black sand.
-- Fixed the collision boxes and texture UVs on stairs across all wood types.
+- Fixed the collision boxes and texture UVs on stairs across all types.
 ## Entitys
 - Puckoos now have a full set of ambient and cry sounds, made from distorted Peacock recordings.
