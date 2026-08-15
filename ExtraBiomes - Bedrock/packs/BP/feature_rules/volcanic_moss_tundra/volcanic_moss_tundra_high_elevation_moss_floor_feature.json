@@ -16,13 +16,13 @@
       ]
     },
     "distribution": {
-      "iterations": 256,
+      "iterations": 10,
       "scatter_chance": 40,
       "x": {
         "distribution": "uniform",
         "extent": [ 0, 16 ]
       },
-      "y": "query.heightmap(variable.worldx, variable.worldz) - 1",
+      "y": "((query.heightmap(variable.worldx, variable.worldz) - 1) >= 75) ? (query.heightmap(variable.worldx, variable.worldz) - 1) : 300",
       "z": {
         "distribution": "uniform",
         "extent": [ 0, 16 ]

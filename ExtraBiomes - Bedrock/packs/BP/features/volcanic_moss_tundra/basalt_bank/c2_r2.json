@@ -1,0 +1,15 @@
+{
+  "format_version": "1.21.0",
+  "minecraft:scatter_feature": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra/basalt_bank/c2_r2"
+    },
+    "places_feature": "extrabiomes:volcanic_moss_tundra/basalt_pillar_5",
+    "iterations": 1,
+    "scatter_chance": 100,
+    "coordinate_eval_order": "xzy",
+    "x": 2,
+    "z": 2,
+    "y": "query.heightmap(variable.worldx, variable.worldz) - 2"
+  }
+}
