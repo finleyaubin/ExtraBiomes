@@ -57,6 +57,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_SLAB);
 
+        //~~~~~~~~~~~~~Black Sand~~~~~~~~~~\\
+        evenSimplerBlockItem(ModBlocks.BLACK_SANDSTONE_STAIRS);
+        evenSimplerBlockItem(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS);
+        evenSimplerBlockItem(ModBlocks.BLACK_SANDSTONE_SLAB);
+        evenSimplerBlockItem(ModBlocks.CUT_BLACK_SANDSTONE_SLAB);
+        evenSimplerBlockItem(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB);
+        withExistingParent(ForgeRegistries.BLOCKS.getKey(ModBlocks.BLACK_SANDSTONE_WALL.get()).getPath(), mcLoc("block/wall_inventory"))
+                .texture("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone"));
+
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);
         fenceItem(ModBlocks.MYSTIC_FENCE, ModBlocks.MYSTIC_PLANKS);

@@ -49,6 +49,12 @@ public final class BiomeAppearanceTuning {
     public static final Appearance THE_NETHERLANDS = register("the_netherlands", 0x90ADAD, 0xD4912C, 0x7AAB35, 0x78A7FF);
     public static final Appearance THE_NETHERLANDS_MUTATED = register("the_netherlands_mutated", 0x9EB0B0, 0xE3B56D, 0x51AD07, 0x78A7FF);
     public static final Appearance TROPICAL_ISLAND = register("tropical_island", 0x28c8e0, 0x40b020, 0x60c840, 0x7BA4FF);
+    // Bedrock 3.1.0-beta-2 shipped this biome with no RP/biomes/volcanic_moss_tundra.client_biome.json
+    // (checked - none found), so a matching one was authored alongside this port (see
+    // "ExtraBiomes - Bedrock/packs/RP/biomes/volcanic_moss_tundra.client_biome.json") using a dark,
+    // cool water tone and muted moss-green foliage/grass over the black sand; skyColor follows this
+    // mod's other frozen biomes as usual (see class javadoc).
+    public static final Appearance VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra", 0x2e4a5c, 0x4a7a5a, 0x5a8a6a, 0x7FA1FF);
 
     private BiomeAppearanceTuning() {
     }

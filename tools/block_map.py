@@ -131,8 +131,14 @@ def map_block(name, states, be=None):
     if name == "minecraft:air":
         return "minecraft:air", {}
     if name in ("minecraft:black_concrete", "minecraft:white_concrete",
-                "minecraft:cyan_carpet", "minecraft:crafting_table"):
+                "minecraft:cyan_carpet", "minecraft:crafting_table",
+                "minecraft:blackstone", "minecraft:cracked_polished_blackstone_bricks",
+                "minecraft:moss_block"):
         return name, {}
+    if name == "minecraft:magma":
+        return "minecraft:magma_block", {}
+    if name == "minecraft:lava":
+        return "minecraft:lava", {"level": "0"}
     if name == "minecraft:glass_pane":
         # north/south/east/west default to false; Java recomputes on placement.
         return "minecraft:glass_pane", {"waterlogged": "false"}

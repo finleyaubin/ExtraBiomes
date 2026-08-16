@@ -39,6 +39,8 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource MYCELIUM = makeStateRule(Blocks.MYCELIUM);
     private static final SurfaceRules.RuleSource MOSS_BLOCK = makeStateRule(Blocks.MOSS_BLOCK);
     private static final SurfaceRules.RuleSource SANDSTONE = makeStateRule(Blocks.SANDSTONE);
+    private static final SurfaceRules.RuleSource BLACK_SAND = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.BLACK_SAND.get());
+    private static final SurfaceRules.RuleSource BLACK_SANDSTONE = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.BLACK_SANDSTONE.get());
 
     public static SurfaceRules.RuleSource makeRules()
     {
@@ -177,6 +179,15 @@ public class ModSurfaceRules {
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT)),
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
+
+                // --- Volcanic Moss Tundra: top=mid=black_sand, foundation=black_sandstone instead
+                //     of stone - stoneDepthCheck bounds black_sand to a shallow band like the sandy
+                //     biomes above, then black_sandstone fills the rest as this biome's foundation,
+                //     same pattern as The Netherlands' netherrack foundation above. ---
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.VOLCANIC_MOSS_TUNDRA),
+                        SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), BLACK_SAND),
+                                BLACK_SANDSTONE)),
 
                 // --- Reference vanilla jungle rule kept from the original file ---
                 SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.isBiome(Biomes.JUNGLE),

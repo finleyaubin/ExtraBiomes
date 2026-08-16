@@ -32,6 +32,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
         stickPileBlock(ModBlocks.STICK_PILE.get());
+        //~~~~~~~~~black sand~~~~~~~~\\
+        blockWithItem(ModBlocks.BLACK_SAND);
+        simpleBlockWithItem(ModBlocks.BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top")));
+        simpleBlockWithItem(ModBlocks.CHISELED_BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top")));
+        simpleBlockWithItem(ModBlocks.CUT_BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.CUT_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top")));
+        simpleBlockWithItem(ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), models().cubeAll(name(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top")));
+        stairsBlock(((StairBlock) ModBlocks.BLACK_SANDSTONE_STAIRS.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top"));
+        stairsBlock(((StairBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()), modLoc("block/black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"));
+        wallBlock(((WallBlock) ModBlocks.BLACK_SANDSTONE_WALL.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()));
         //~~~~~~~~~mystic wood~~~~~~~~\\
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());

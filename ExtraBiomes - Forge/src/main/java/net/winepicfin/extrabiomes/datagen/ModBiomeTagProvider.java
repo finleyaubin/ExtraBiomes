@@ -53,7 +53,7 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         this.tag(BiomeTags.WITHOUT_PATROL_SPAWNS).add(ModBiomes.FUNGLE_JUNGLE);
 
         this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).add(ModBiomes.DEEP_DARK_GREEN, ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE,
-                ModBiomes.COLD_MESA_PLATEAU, ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES);
+                ModBiomes.COLD_MESA_PLATEAU, ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES, ModBiomes.VOLCANIC_MOSS_TUNDRA);
         this.tag(BiomeTags.SPAWNS_WARM_VARIANT_FROGS).add(ModBiomes.CHARRED_FOREST, ModBiomes.DESERT_BRYCE, ModBiomes.FUTURE_DESERT,
                 ModBiomes.GRAND_OASIS, ModBiomes.JELLYFISH_FIELDS, ModBiomes.TROPICAL_ISLAND);
         this.tag(BiomeTags.SPAWNS_SNOW_FOXES).add(ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,

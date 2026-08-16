@@ -365,6 +365,19 @@ public class ModOverworldRegion extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.TROPICAL_ISLAND));
 
+        // Volcanic Moss Tundra - bedrock temp=0.2, downfall=0.85, "rare" (replace_biomes amount
+        // 0.5) replacement of vanilla's ice_plains (Snowy Plains). "Rare" is modeled the same way
+        // as Deep Dark Green above: restricted to half the weirdness range rather than claiming
+        // the whole climate cell, so vanilla Snowy Plains still generates in the other half.
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.FROZEN)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .erosion(ParameterUtils.Erosion.EROSION_2, ParameterUtils.Erosion.EROSION_4)
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(Climate.Parameter.span(-1.0F, 0.0F))
+                .build().forEach(point -> builder.add(point, ModBiomes.VOLCANIC_MOSS_TUNDRA));
+
         // Add our points to the mapper
         builder.build().forEach(mapper::accept);
     }

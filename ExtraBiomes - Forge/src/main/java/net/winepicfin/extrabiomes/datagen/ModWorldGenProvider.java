@@ -37,6 +37,7 @@ import net.winepicfin.extrabiomes.worldgen.features.shatteredswamp.ShatteredSwam
 import net.winepicfin.extrabiomes.worldgen.features.tropical.TropicalIslandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.palm.PalmTreeFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.VolcanicMossTundraFeatures;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -79,6 +80,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 TropicalIslandFeatures.bootstrapConfigured(context);
                 BryceMesaPillarFeatures.bootstrapConfigured(context);
                 PalmTreeFeatures.bootstrapConfigured(context);
+                VolcanicMossTundraFeatures.bootstrapConfigured(context);
             })
             .add(Registries.PLACED_FEATURE, context -> {
                 ModPlacedFeatures.bootstrap(context);
@@ -105,6 +107,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 ShatteredSwampFeatures.bootstrapPlaced(context);
                 TropicalIslandFeatures.bootstrapPlaced(context);
                 BryceMesaPillarFeatures.bootstrapPlaced(context);
+                VolcanicMossTundraFeatures.bootstrapPlaced(context);
             })
             .add(Registries.CONFIGURED_CARVER, NetherlandsCaveCarver::bootstrapCarver)
             .add(Registries.NOISE, ModNoiseParameters::bootstrap)

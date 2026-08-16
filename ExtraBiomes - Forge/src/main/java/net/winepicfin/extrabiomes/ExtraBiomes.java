@@ -41,6 +41,7 @@ import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
@@ -73,6 +74,7 @@ public class ExtraBiomes
         ModTrunkPlacerTypes.register(modEventBus);
         ModTreeDecoratorTypes.register(modEventBus);
         ModStructureScatterFeatures.register(modEventBus);
+        ModVolcanicPlacementModifiers.register(modEventBus);
         ModBrycePillarsFeatures.register(modEventBus);
         MoorlandFeatures.register(modEventBus);
         MysticFeatures.register(modEventBus);
