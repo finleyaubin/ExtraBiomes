@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Nube Densa Mattone di Nube Densa Densa
 tile.extrabiomes:dense_cloud_brick_slab.name=Nube Densa Mattone di Nube Densa Lastra Densa
 tile.extrabiomes:dense_cloud_brick_stairs.name=Nube Densa Mattone di Nube Densa Scala Densa
 
+tile.extrabiomes:black_sand.name=Sabbia Nera
+tile.extrabiomes:black_sandstone.name=Arenaria Nera
+tile.extrabiomes:chiseled_black_sandstone.name=Arenaria Nera Bugnata
+tile.extrabiomes:cut_black_sandstone.name=Arenaria Nera Tagliata
+tile.extrabiomes:smooth_black_sandstone.name=Arenaria Nera Levigata
+tile.extrabiomes:black_sandstone_stairs.name=Scala di Arenaria Nera
+tile.extrabiomes:black_sandstone_slab.name=Lastra di Arenaria Nera
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Scala di Arenaria Nera Levigata
+tile.extrabiomes:smooth_black_sandstone_slab.name=Lastra di Arenaria Nera Levigata
+tile.extrabiomes:cut_black_sandstone_slab.name=Lastra di Arenaria Nera Tagliata
+tile.extrabiomes:black_sandstone_wall.name=Muro di Arenaria Nera
+
 
 tile.extrabiomes:mystic_log.name=Tronco Mistico
 tile.extrabiomes:mystic_leaves.name=Foglie Mistico

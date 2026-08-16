@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Nuage Dense Brique de Nuage Dense Dense
 tile.extrabiomes:dense_cloud_brick_slab.name=Nuage Dense Brique de Nuage Dense Dalle Dense
 tile.extrabiomes:dense_cloud_brick_stairs.name=Nuage Dense Brique de Nuage Dense Escalier Dense
 
+tile.extrabiomes:black_sand.name=Sable Noir
+tile.extrabiomes:black_sandstone.name=Grès Noir
+tile.extrabiomes:chiseled_black_sandstone.name=Grès Noir Taillé
+tile.extrabiomes:cut_black_sandstone.name=Grès Noir Découpé
+tile.extrabiomes:smooth_black_sandstone.name=Grès Noir Lisse
+tile.extrabiomes:black_sandstone_stairs.name=Escalier en Grès Noir
+tile.extrabiomes:black_sandstone_slab.name=Dalle de Grès Noir
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Escalier en Grès Noir Lisse
+tile.extrabiomes:smooth_black_sandstone_slab.name=Dalle de Grès Noir Lisse
+tile.extrabiomes:cut_black_sandstone_slab.name=Dalle de Grès Noir Découpé
+tile.extrabiomes:black_sandstone_wall.name=Muret de Grès Noir
+
 
 tile.extrabiomes:mystic_log.name=Bois de Mystique
 tile.extrabiomes:mystic_leaves.name=Feuilles Mystique

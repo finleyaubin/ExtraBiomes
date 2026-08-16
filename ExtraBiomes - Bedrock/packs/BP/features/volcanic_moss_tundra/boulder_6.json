@@ -1,0 +1,25 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:structure_template_feature": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra/boulder_6"
+    },
+    "structure_name": "extrabiomes:volcanic_moss_tundra/boulder_6",
+    "constraints": {
+      "block_intersection": {
+        "block_allowlist": [
+          "minecraft:air",
+          "minecraft:grass_block",
+          "minecraft:blackstone",
+          "minecraft:moss_block",
+          "minecraft:gravel",
+          "minecraft:dirt",
+          "minecraft:stone",
+          "extrabiomes:black_sand",
+          "extrabiomes:black_sandstone",
+          "minecraft:water"
+        ]
+      }
+    }
+  }
+}

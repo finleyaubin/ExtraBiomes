@@ -1,0 +1,13 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_furnace": {
+		"description": {
+			"identifier": "extrabiomes:black_sand_to_glass"
+		},
+		"tags": [
+			"furnace"
+		],
+		"input": "extrabiomes:black_sand",
+		"output": "minecraft:glass"
+	}
+}

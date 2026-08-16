@@ -6,6 +6,7 @@ ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new b
 ### Bedrock:
 - [Curseforge](https://www.curseforge.com/minecraft-bedrock/addons/extrabiomes)
 - [mcpedl](https://mcpedl.com/extrabiomes/)
+- [modbay](https://modbay.org/mods/57-extrabiomes.html)
 ### Java:
 The Java port of Extrabiomes is still in development, but can be compiled from source by cloning this repo.
 ## Overworld Surface Biomes

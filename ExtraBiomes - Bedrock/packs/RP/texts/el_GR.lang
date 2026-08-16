@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Πυκνό Πυκνό Σύννεφο Τ�
 tile.extrabiomes:dense_cloud_brick_slab.name=Πυκνό Πυκνό Σύννεφο Τούβλο Πυκνού Σύννεφου Πλάκα
 tile.extrabiomes:dense_cloud_brick_stairs.name=Πυκνό Πυκνό Σύννεφο Τούβλο Πυκνού Σύννεφου Σκάλα
 
+tile.extrabiomes:black_sand.name=Μαύρη Άμμος
+tile.extrabiomes:black_sandstone.name=Μαύρος Ψαμμίτης
+tile.extrabiomes:chiseled_black_sandstone.name=Σκαλιστός Μαύρος Ψαμμίτης
+tile.extrabiomes:cut_black_sandstone.name=Κομμένος Μαύρος Ψαμμίτης
+tile.extrabiomes:smooth_black_sandstone.name=Λείος Μαύρος Ψαμμίτης
+tile.extrabiomes:black_sandstone_stairs.name=Σκάλα Μαύρου Ψαμμίτη
+tile.extrabiomes:black_sandstone_slab.name=Πλάκα Μαύρου Ψαμμίτη
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Σκάλα Λείου Μαύρου Ψαμμίτη
+tile.extrabiomes:smooth_black_sandstone_slab.name=Πλάκα Λείου Μαύρου Ψαμμίτη
+tile.extrabiomes:cut_black_sandstone_slab.name=Πλάκα Κομμένου Μαύρου Ψαμμίτη
+tile.extrabiomes:black_sandstone_wall.name=Τοίχος Μαύρου Ψαμμίτη
+
 
 tile.extrabiomes:mystic_log.name=Μυστικιστικό Κορμός
 tile.extrabiomes:mystic_leaves.name=Μυστικιστικό Φύλλα

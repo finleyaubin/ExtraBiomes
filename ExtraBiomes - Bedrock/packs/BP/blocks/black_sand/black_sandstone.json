@@ -1,0 +1,37 @@
+{
+	"format_version": "1.20.100",
+	"minecraft:block": {
+		"description": {
+			"identifier": "extrabiomes:black_sandstone",
+			"menu_category": {
+				"category": "construction"
+			}
+		},
+		"components": {
+			"minecraft:geometry": "minecraft:geometry.full_block",
+			"minecraft:material_instances": {
+				"*": {
+					"texture": "extrabiomes_black_sandstone_normal",
+					"render_method": "opaque"
+				},
+				"up": {
+					"texture": "extrabiomes_black_sandstone_top",
+					"render_method": "opaque"
+				},
+				"down": {
+					"texture": "extrabiomes_black_sandstone_bottom",
+					"render_method": "opaque"
+				}
+			},
+			"minecraft:map_color": "#262422",
+			"minecraft:destructible_by_mining": {
+				"seconds_to_destroy": 0.8
+			},
+			"minecraft:destructible_by_explosion": {
+				"explosion_resistance": 0.8
+			},
+			"minecraft:light_dampening": 15,
+			"tag:minecraft:is_pickaxe_item_destructible": {}
+		}
+	}
+}

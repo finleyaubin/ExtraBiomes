@@ -1,0 +1,59 @@
+{
+  "format_version": "1.21.110",
+  "minecraft:biome": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra"
+    },
+    "components": {
+      "minecraft:climate": {
+        "downfall": 0.85,
+        "snow_accumulation": [
+          0,
+          0
+        ],
+        "temperature": 0.2
+      },
+      "minecraft:overworld_height": {
+        "noise_params": [
+          -0.15,
+          0.15
+        ]
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:ice_plains"
+            ],
+            "amount": 0.5,
+            "noise_frequency_scale": 0.01
+          }
+        ]
+      },
+      "minecraft:surface_builder": {
+        "builder": {
+          "type": "minecraft:overworld",
+          "foundation_material": "extrabiomes:black_sandstone",
+          "mid_material": "extrabiomes:black_sand",
+          "top_material": "extrabiomes:black_sand",
+          "sea_floor_depth": 5,
+          "sea_floor_material": "minecraft:gravel",
+          "sea_material": "minecraft:water"
+        }
+      },
+      "minecraft:tags": {
+        "tags": [
+          "animal",
+          "caves",
+          "cold",
+          "monster",
+          "overworld",
+          "volcanic_moss_tundra",
+          "spawns_cold_variant_farm_animals",
+          "spawns_cold_variant_frogs"
+        ]
+      }
+    }
+  }
+}

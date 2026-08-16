@@ -10,6 +10,7 @@ import { LeafLootComponent } from "./blocks/Components/leaf_loot.js";
 import { SaplingGrowComponent } from "./blocks/Components/sapling_grower.js";
 import { OpenComponent } from "./blocks/Components/open.js";
 import { fence } from "./blocks/Components/fence_place.js";
+import { wall } from "./blocks/Components/wall_place.js";
 import { DoorCloseComponent, DoorOnPlace, DoorOpenComponent, ResetTop, ResetBottom } from "./blocks/Components/door.js";
 
 //Import item components
@@ -34,6 +35,7 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
   blockComponentRegistry.registerCustomComponent("extrabiomes:sapling_grower",SaplingGrowComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:open",OpenComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:fence",fence);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:wall",wall);
   blockComponentRegistry.registerCustomComponent("extrabiomes:door_place",DoorOnPlace);
   blockComponentRegistry.registerCustomComponent("extrabiomes:door_close",DoorCloseComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:door_open",DoorOpenComponent);

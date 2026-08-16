@@ -1,0 +1,40 @@
+{
+  "format_version": "1.13.0",
+  "minecraft:aggregate_feature": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra/basalt_bank"
+    },
+    "features": [
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c2_r0",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c2_r1",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c2_r2",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c2_r3",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c2_r4",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c2_r5",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c3_r0",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c3_r1",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c3_r2",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c3_r3",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c3_r4",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c3_r5",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c4_r0",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c4_r1",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c4_r2",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c4_r3",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c4_r4",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c4_r5",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c5_r0",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c5_r1",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c5_r2",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c5_r3",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c5_r4",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c5_r5",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c6_r1",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c6_r3",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c6_r5",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c7_r0",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c7_r2",
+      "extrabiomes:volcanic_moss_tundra/basalt_bank/c7_r4"
+    ]
+  }
+}

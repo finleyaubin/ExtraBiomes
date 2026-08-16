@@ -1,0 +1,23 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:cut_black_sandstone_slab"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"###"
+		],
+		"key": {
+			"#": {
+				"item": "extrabiomes:cut_black_sandstone"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:cut_black_sandstone_slab",
+			"count": 6
+		}
+	}
+}

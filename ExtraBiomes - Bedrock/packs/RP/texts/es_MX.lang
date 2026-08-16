@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Nube Densa Ladrillo de Nube Densa Densa
 tile.extrabiomes:dense_cloud_brick_slab.name=Nube Densa Ladrillo de Nube Densa Losa Densa
 tile.extrabiomes:dense_cloud_brick_stairs.name=Nube Densa Ladrillo de Nube Densa Escalera Densa
 
+tile.extrabiomes:black_sand.name=Arena Negra
+tile.extrabiomes:black_sandstone.name=Arenisca Negra
+tile.extrabiomes:chiseled_black_sandstone.name=Arenisca Negra Cincelada
+tile.extrabiomes:cut_black_sandstone.name=Arenisca Negra Tallada
+tile.extrabiomes:smooth_black_sandstone.name=Arenisca Negra Lisa
+tile.extrabiomes:black_sandstone_stairs.name=Escalera de Arenisca Negra
+tile.extrabiomes:black_sandstone_slab.name=Losa de Arenisca Negra
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Escalera de Arenisca Negra Lisa
+tile.extrabiomes:smooth_black_sandstone_slab.name=Losa de Arenisca Negra Lisa
+tile.extrabiomes:cut_black_sandstone_slab.name=Losa de Arenisca Negra Tallada
+tile.extrabiomes:black_sandstone_wall.name=Muro de Arenisca Negra
+
 
 tile.extrabiomes:mystic_log.name=Tronco de Místico
 tile.extrabiomes:mystic_leaves.name=Hojas Místico

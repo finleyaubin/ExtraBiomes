@@ -23,6 +23,15 @@ export const SlabberComponent = {
         else if (type === "gilded") {
             slabId = 'extrabiomes:gilded_sky_slab';
         }
+        else if (type === "black") {
+            slabId = 'extrabiomes:black_sandstone_slab';
+        }
+        else if (type === "cut") {
+            slabId = 'extrabiomes:cut_black_sandstone_slab';
+        }
+        else if (type === "smooth") {
+            slabId = 'extrabiomes:smooth_black_sandstone_slab';
+        }
         else {
             slabId = `extrabiomes:${type}_slab`;
         }

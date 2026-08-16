@@ -134,6 +134,36 @@
 				"textures/blocks/dense_cloud_brick"
 			]
 		},
+		"extrabiomes_black_sand": {
+			"textures": [
+				"textures/blocks/black_sand/black_sand"
+			]
+		},
+		"extrabiomes_black_sandstone_top": {
+			"textures": [
+				"textures/blocks/black_sand/black_sandstone_top"
+			]
+		},
+		"extrabiomes_black_sandstone_bottom": {
+			"textures": [
+				"textures/blocks/black_sand/black_sandstone_bottom"
+			]
+		},
+		"extrabiomes_black_sandstone_normal": {
+			"textures": [
+				"textures/blocks/black_sand/black_sandstone_normal"
+			]
+		},
+		"extrabiomes_black_sandstone_carved": {
+			"textures": [
+				"textures/blocks/black_sand/black_sandstone_carved"
+			]
+		},
+		"extrabiomes_black_sandstone_smooth": {
+			"textures": [
+				"textures/blocks/black_sand/black_sandstone_smooth"
+			]
+		},
 		"extrabiomes_sky_sapling": {
 			"textures": [
 				"textures/blocks/sky wood/sapling_sky"
