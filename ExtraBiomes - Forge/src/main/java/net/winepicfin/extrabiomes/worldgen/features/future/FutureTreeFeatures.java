@@ -51,11 +51,12 @@ import java.util.List;
  *       trunk/foliage placer shape to reproduce).</li>
  *   <li>No {@code facing_direction} is specified on either Bedrock feature -> random rotation
  *       ({@link SingleStructureConfiguration}'s default, {@code Optional.empty()}).</li>
- *   <li>{@code y = heightmap(worldx, worldz)} with no "-N" offset -> groundOffset 0 (the 1-arg
- *       {@link SingleStructureConfiguration} constructor already defaults to that) plus
- *       {@link HeightmapPlacement#onHeightmap(Heightmap.Types)} on {@code WORLD_SURFACE_WG}, which
- *       also satisfies Bedrock's {@code grounded}/{@code unburied}/air-intersection constraints
- *       (placing directly on the surface heightmap is inherently grounded and unburied).</li>
+ *   <li>{@code y = heightmap(worldx, worldz)} with no "-N" offset in Bedrock, but a small
+ *       {@code GROUND_OFFSET} is applied here anyway so the base doesn't float just above the
+ *       ground, plus {@link HeightmapPlacement#onHeightmap(Heightmap.Types)} on
+ *       {@code OCEAN_FLOOR_WG} (ignores fluids, so this can't land on top of water) - together
+ *       these also satisfy Bedrock's {@code grounded}/{@code unburied}/air-intersection
+ *       constraints (placing on/into the actual ground is inherently grounded and unburied).</li>
  *   <li>{@code iterations: 1}, {@code x/z uniform [0,16]} -> {@link InSquarePlacement#spread()}
  *       (once per chunk, spread across it).</li>
  *   <li>{@code scatter_chance: 10} -> {@link RarityFilter#onAverageOnceEvery(int)} with 10, the
@@ -79,14 +80,19 @@ public class FutureTreeFeatures {
     public static final ResourceKey<PlacedFeature> FUTURE_TREE_3_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_3"));
 
+    // Bedrock's y = heightmap(worldx, worldz) has no "-N" offset, but placed flush on the
+    // heightmap these small leaf clusters read as floating just above the ground rather than
+    // growing out of it - sinking them in slightly keeps their base embedded.
+    private static final int GROUND_OFFSET = -1;
+
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(FUTURE_TREE_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/2_tall_white_tree"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/2_tall_white_tree"), GROUND_OFFSET)
         ));
         context.register(FUTURE_TREE_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/3_tall_white_tree"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/3_tall_white_tree"), GROUND_OFFSET)
         ));
     }
 
@@ -98,7 +104,7 @@ public class FutureTreeFeatures {
                 List.of(
                         RarityFilter.onAverageOnceEvery(10),
                         InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
                         BiomeFilter.biome()
                 )
         ));
@@ -107,7 +113,7 @@ public class FutureTreeFeatures {
                 List.of(
                         RarityFilter.onAverageOnceEvery(10),
                         InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
                         BiomeFilter.biome()
                 )
         ));

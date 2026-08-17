@@ -36,6 +36,18 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
                 pOutput.accept(ModBlocks.NETHER_DIAMOND_ORE.get());
+                //~~~~~~~~~~~~~Black Sand~~~~~~~~~~~~\\
+                pOutput.accept(ModBlocks.BLACK_SAND.get());
+                pOutput.accept(ModBlocks.BLACK_SANDSTONE.get());
+                pOutput.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
+                pOutput.accept(ModBlocks.CUT_BLACK_SANDSTONE.get());
+                pOutput.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE.get());
+                pOutput.accept(ModBlocks.BLACK_SANDSTONE_SLAB.get());
+                pOutput.accept(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get());
+                pOutput.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get());
+                pOutput.accept(ModBlocks.BLACK_SANDSTONE_STAIRS.get());
+                pOutput.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get());
+                pOutput.accept(ModBlocks.BLACK_SANDSTONE_WALL.get());
                 //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.MYSTIC_PLANKS.get());
                 pOutput.accept(ModBlocks.MYSTIC_STAIRS.get());

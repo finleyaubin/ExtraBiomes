@@ -84,6 +84,8 @@ public class GlacierFeatures {
     public static final ResourceKey<PlacedFeature> SELECT_SNOW_DRIFT_PLACED_KEY =
             placedKey("select_snow_drift");
 
+    private static final int SNOW_DRIFT_GROUND_OFFSET = -1;
+
     // Bedrock replace_rules.may_replace list, shared by all three ice ore features.
     private static List<OreConfiguration.TargetBlockState> iceTargets(BlockState result) {
         RuleTest[] sources = new RuleTest[] {
@@ -114,15 +116,17 @@ public class GlacierFeatures {
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
 
         // Bedrock facing_direction wasn't specified for either snow-drift structure -> random
-        // rotation (SingleStructureConfiguration's 1-arg ctor). Distribution y = [heightmap,
-        // heightmap] (no "-N" offset) -> groundOffset 0 (the 1-arg ctor already defaults to that).
+        // rotation. Bedrock's distribution y = [heightmap, heightmap] has no "-N" offset, but
+        // placed flush on the heightmap a drift reads as resting ON TOP of the ground rather than
+        // a drift of snow banked up against/into it - SNOW_DRIFT_GROUND_OFFSET sinks it in slightly
+        // so it looks embedded instead of floating.
         Holder<ConfiguredFeature<?, ?>> snowDrift1 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"), SNOW_DRIFT_GROUND_OFFSET)
         ));
         Holder<ConfiguredFeature<?, ?>> snowDrift2 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"), SNOW_DRIFT_GROUND_OFFSET)
         ));
         // Sub-features of the weighted selector carry no placement of their own - the outer
         // SELECT_SNOW_DRIFT_PLACED_KEY (registered in bootstrapPlaced) controls where/how often the
@@ -175,8 +179,10 @@ public class GlacierFeatures {
         // snow_drift.json: iterations 1, scatter_chance 30 (~30% per chunk) -> approximated as
         // RarityFilter.onAverageOnceEvery(3) (~33%), the nearest integer reciprocal (simplification -
         // Bedrock's percentage-based scatter_chance has no exact Java equivalent); x/z uniform[0,16]
-        // -> InSquarePlacement.spread(); y = [heightmap, heightmap] -> HeightmapPlacement (no ground
-        // offset needed here, unlike the oasis_puddle worked example which used heightmap-4).
+        // -> InSquarePlacement.spread(); y = [heightmap, heightmap] -> HeightmapPlacement on
+        // OCEAN_FLOOR_WG (ignores fluids, unlike WORLD_SURFACE_WG, which would land a drift on top
+        // of a frozen lake's water column instead of its bed), with SNOW_DRIFT_GROUND_OFFSET sinking
+        // it in slightly (see that constant's own comment above).
         // constraints.unburied + block_intersection.block_allowlist [air, snow_layer] -> a
         // BlockPredicateFilter testing the placement origin itself (0,0,0) must be air or (Java)
         // snow, i.e. the surface must be clear/snow-covered to place onto; constraints.grounded is
@@ -187,7 +193,7 @@ public class GlacierFeatures {
                 List.of(
                         RarityFilter.onAverageOnceEvery(3),
                         InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
                         BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), Blocks.AIR, Blocks.SNOW)),
                         BiomeFilter.biome()
                 )));

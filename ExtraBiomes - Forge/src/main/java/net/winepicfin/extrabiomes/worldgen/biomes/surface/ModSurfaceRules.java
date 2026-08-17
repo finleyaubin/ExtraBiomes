@@ -25,6 +25,11 @@ import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
  * class's javadoc for how Bedrock's per-adjustment noise_frequency_scale maps onto them.
  */
 public class ModSurfaceRules {
+    // Shared depth split for sand-topped biomes: top material for the shallow band, that biome's
+    // "sandstone" foundation for the deeper band below it, then normal stone resumes.
+    private static final int TOP_DEPTH = 3;
+    private static final int FOUNDATION_DEPTH = 10;
+
     private static final SurfaceRules.RuleSource DIRT = makeStateRule(Blocks.DIRT);
     private static final SurfaceRules.RuleSource GRASS_BLOCK = makeStateRule(Blocks.GRASS_BLOCK);
     private static final SurfaceRules.RuleSource STONE = makeStateRule(Blocks.STONE);
@@ -33,6 +38,7 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource SNOW_BLOCK = makeStateRule(Blocks.SNOW_BLOCK);
     private static final SurfaceRules.RuleSource ICE = makeStateRule(Blocks.ICE);
     private static final SurfaceRules.RuleSource WHITE_CONCRETE_POWDER = makeStateRule(Blocks.WHITE_CONCRETE_POWDER);
+    private static final SurfaceRules.RuleSource WHITE_CONCRETE = makeStateRule(Blocks.WHITE_CONCRETE);
     private static final SurfaceRules.RuleSource NETHERRACK = makeStateRule(Blocks.NETHERRACK);
     private static final SurfaceRules.RuleSource MUD = makeStateRule(Blocks.MUD);
     private static final SurfaceRules.RuleSource PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
@@ -94,33 +100,36 @@ public class ModSurfaceRules {
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), GRASS_BLOCK)),
                                 SurfaceRules.bandlands()))),
 
-                // --- Sandy biomes: top=sand, mid=sand for a few blocks, then fall through to the
-                //     normal stone base. NOTE: these rules previously had no depth guard at all
-                //     (just isBiome(X) -> SAND), which matches at every Y-level the surface pass
-                //     visits - not just near the surface - so it replaced the ENTIRE column,
+                // --- Sandy biomes: top material for a shallow band, then that biome's own
+                //     "sandstone" foundation for a deeper band below it, then fall through to the
+                //     normal stone base - top=3 blocks deep, foundation=the next 7 (so normal
+                //     terrain resumes at depth 10). NOTE: these rules previously had no depth guard
+                //     at all (just isBiome(X) -> SAND), which matches at every Y-level the surface
+                //     pass visits - not just near the surface - so it replaced the ENTIRE column,
                 //     stone and all, with sand. With nothing solid left to rest on, the whole
-                //     column collapsed as soon as the chunk loaded. stoneDepthCheck bounds the
-                //     sand to a shallow band like vanilla's own desert rule. ---
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.DESERT_BRYCE),
-                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
-                // Grand Oasis also has two surface_material_adjustments patches layered inside that
-                // same shallow band: top_material -> red_sand in one noise band (checked only at
+                //     column collapsed as soon as the chunk loaded. ---
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.DESERT_BRYCE), sandOverFoundation(SAND, SANDSTONE)),
+                // Grand Oasis also has two surface_material_adjustments patches layered inside the
+                // shallow top band: top_material -> red_sand in one noise band (checked only at
                 // the very top block, matching Bedrock's top_material scope), and
                 // mid_material -> sandstone in another (applies anywhere in the band, matching
-                // Bedrock's mid_material filling everything below/around the top).
+                // Bedrock's mid_material filling everything below/around the top) - the deeper
+                // foundation band below reuses the same sandstone rule.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GRAND_OASIS),
-                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR),
-                                SurfaceRules.sequence(
-                                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.15, 0.3), RED_SAND)),
-                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.45, 0.58), SANDSTONE),
-                                        SAND))),
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.TROPICAL_ISLAND),
-                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), SAND)),
+                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(TOP_DEPTH, false, CaveSurface.FLOOR),
+                                        SurfaceRules.sequence(
+                                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.15, 0.3), RED_SAND)),
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.45, 0.58), SANDSTONE),
+                                                SAND)),
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(FOUNDATION_DEPTH, false, CaveSurface.FLOOR), SANDSTONE)))),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.TROPICAL_ISLAND), sandOverFoundation(SAND, SANDSTONE)),
 
-                // --- Future Desert: top=white concretepowder ---
+                // --- Future Desert: top=white concretepowder, foundation=white concrete (its
+                //     solidified "sandstone" equivalent) ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.FUTURE_DESERT),
-                        SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), WHITE_CONCRETE_POWDER)),
+                        sandOverFoundation(WHITE_CONCRETE_POWDER, WHITE_CONCRETE)),
 
                 // --- Glacier: top=snow, mid=ice ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.GLACIER),
@@ -181,18 +190,27 @@ public class ModSurfaceRules {
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
 
                 // --- Volcanic Moss Tundra: top=mid=black_sand, foundation=black_sandstone instead
-                //     of stone - stoneDepthCheck bounds black_sand to a shallow band like the sandy
-                //     biomes above, then black_sandstone fills the rest as this biome's foundation,
-                //     same pattern as The Netherlands' netherrack foundation above. ---
+                //     of stone - same shallow-top/deeper-foundation pattern as the sandy biomes
+                //     above (black_sand for 3 blocks, black_sandstone for the next 7, then normal
+                //     stone resumes). ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.VOLCANIC_MOSS_TUNDRA),
-                        SurfaceRules.sequence(
-                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), BLACK_SAND),
-                                BLACK_SANDSTONE)),
+                        sandOverFoundation(BLACK_SAND, BLACK_SANDSTONE)),
 
                 // --- Reference vanilla jungle rule kept from the original file ---
                 SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.isBiome(Biomes.JUNGLE),
                         SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassOverDirt)))
         );
+    }
+
+    private static SurfaceRules.RuleSource sandOverFoundation(SurfaceRules.RuleSource top, SurfaceRules.RuleSource foundation)
+    {
+        // stoneDepthCheck(..., CaveSurface.FLOOR) matches ANY solid-to-air floor transition,
+        // including cave floors/ceilings underground - not just the real world surface. Without
+        // gating on abovePreliminarySurface(), this band would also paint sand/sandstone onto
+        // cave walls far below the surface.
+        return SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), SurfaceRules.sequence(
+                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(TOP_DEPTH, false, CaveSurface.FLOOR), top),
+                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(FOUNDATION_DEPTH, false, CaveSurface.FLOOR), foundation)));
     }
 
     private static SurfaceRules.RuleSource makeStateRule(Block block)

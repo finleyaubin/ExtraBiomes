@@ -181,6 +181,8 @@ public class BoulderFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_STICK_PILE_KEY = configuredKey("select_stick_pile");
     public static final ResourceKey<PlacedFeature> SELECT_STICK_PILE_PLACED_KEY = placedKey("select_stick_pile");
 
+    private static final int STICK_PILE_GROUND_OFFSET = -1;
+
     // ===================================================================
     // configured features
     // ===================================================================
@@ -242,9 +244,11 @@ public class BoulderFeatures {
                 placedFeatures.getOrThrow(GROUND_PEBBLE_PATCH_PLACED_KEY)
         )));
 
-        // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE) ---
-        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE));
-        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE));
+        // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE).
+        // STICK_PILE_GROUND_OFFSET sinks each pile in slightly so it reads as resting among/into
+        // the ground rather than floating on top of it. ---
+        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
+        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
 
         // select_stick_pile.json weights: stick_pile0 1, stick_pile1 1 (total 2) -> chance 0.5, default stick_pile1.
         context.register(SELECT_STICK_PILE_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
@@ -254,10 +258,12 @@ public class BoulderFeatures {
     }
 
     private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation) {
+        registerSingleStructure(context, key, structurePath, rotation, 0);
+    }
+
+    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset) {
         ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
-        SingleStructureConfiguration config = rotation
-                .map(r -> new SingleStructureConfiguration(structure, r))
-                .orElseGet(() -> new SingleStructureConfiguration(structure));
+        SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset);
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }
 
@@ -328,13 +334,15 @@ public class BoulderFeatures {
 
         // select_stick_pile (via stick_pile_placer.json): iterations 1, scatter_chance 10, x/z
         // uniform [0,16], y = heightmap +/- 1 (grounded/unburied constraints approximated by
-        // sitting directly on the heightmap surface - see class docs).
+        // sitting directly on the heightmap surface - see class docs). OCEAN_FLOOR_WG (instead of
+        // WORLD_SURFACE_WG) keeps this off the water's own surface, landing on the actual
+        // lake/pond bed instead - STICK_PILE_GROUND_OFFSET then sinks each pile in slightly.
         context.register(SELECT_STICK_PILE_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_STICK_PILE_KEY),
                 List.of(
                         RarityFilter.onAverageOnceEvery(10),
                         InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
                         BiomeFilter.biome()
                 )
         ));

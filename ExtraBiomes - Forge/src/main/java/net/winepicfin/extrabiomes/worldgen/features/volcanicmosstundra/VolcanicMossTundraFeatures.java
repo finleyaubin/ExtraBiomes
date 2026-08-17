@@ -88,6 +88,9 @@ public class VolcanicMossTundraFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_VOLCANO_KEY = configuredKey("select_volcano");
     public static final ResourceKey<PlacedFeature> SELECT_VOLCANO_PLACED_KEY = placedKey("select_volcano");
 
+    private static final int ROCK_FORMATION_GROUND_OFFSET = -3;
+    private static final int VOLCANO_GROUND_OFFSET = -6;
+
     private static final String[] PILLARS = {"pillar_1", "pillar_2", "pillar_3", "pillar_4", "pillar_5", "pillar_6"};
     private static final String[] BOULDERS = {"boulder_1", "boulder_2", "boulder_3", "boulder_4", "boulder_5", "boulder_6", "boulder_7", "boulder_8"};
     private static final String[] ELEPHANT_ROCKS = {"elephant_rock_1", "elephant_rock_2", "elephant_rock_3", "elephant_rock_4"};
@@ -112,11 +115,13 @@ public class VolcanicMossTundraFeatures {
         context.register(BASALT_BANK_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.BASALT_BANK.get(), NoneFeatureConfiguration.INSTANCE));
 
         // Individual rock-formation / volcano structure sub-features (random rotation - Bedrock
-        // specifies no facing_direction for any of these).
-        for (String pillar : PILLARS) registerSingleStructure(context, pillar);
-        for (String boulder : BOULDERS) registerSingleStructure(context, boulder);
-        for (String elephantRock : ELEPHANT_ROCKS) registerSingleStructure(context, elephantRock);
-        for (String volcano : VOLCANOES) registerSingleStructure(context, volcano);
+        // specifies no facing_direction for any of these). rock_formations_feature.json's
+        // "y": "query.above_top_solid(...)-3" and volcano_feature.json's "-6" sink each structure
+        // that far below the ground heightmap so they read as embedded rather than resting on top.
+        for (String pillar : PILLARS) registerSingleStructure(context, pillar, ROCK_FORMATION_GROUND_OFFSET);
+        for (String boulder : BOULDERS) registerSingleStructure(context, boulder, ROCK_FORMATION_GROUND_OFFSET);
+        for (String elephantRock : ELEPHANT_ROCKS) registerSingleStructure(context, elephantRock, ROCK_FORMATION_GROUND_OFFSET);
+        for (String volcano : VOLCANOES) registerSingleStructure(context, volcano, VOLCANO_GROUND_OFFSET);
 
         // select_rock_formation.json weights: pillar_1..6 = 3 each (18), boulder_1..8 = 4 each (32),
         // elephant_rock_1..4 = 2 each (8); total 58. Converted to the same sequential-trial chances
@@ -179,21 +184,25 @@ public class VolcanicMossTundraFeatures {
         for (String volcano : VOLCANOES) registerNoModifiers(context, configuredFeatures, volcano);
 
         // rock_formations_feature.json: iterations 1, scatter_chance 15% -> onAverageOnceEvery(7)
-        // (nearest integer reciprocal), y = above_top_solid-3 -> approximated with WORLD_SURFACE_WG.
+        // (nearest integer reciprocal), y = above_top_solid-3 - "above_top_solid" ignores fluids
+        // (unlike WORLD_SURFACE_WG, which would land these on top of water), so OCEAN_FLOOR_WG is
+        // the correct heightmap type here; the "-3" itself is applied via each sub-feature's
+        // SingleStructureConfiguration groundOffset (see ROCK_FORMATION_GROUND_OFFSET above).
         context.register(SELECT_ROCK_FORMATION_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SELECT_ROCK_FORMATION_KEY),
                 List.of(RarityFilter.onAverageOnceEvery(7), InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome())));
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG), BiomeFilter.biome())));
 
-        // volcano_feature.json: iterations 1, scatter_chance 1% -> onAverageOnceEvery(100), y = above_top_solid-6.
+        // volcano_feature.json: iterations 1, scatter_chance 1% -> onAverageOnceEvery(100), y =
+        // above_top_solid-6 (see VOLCANO_GROUND_OFFSET above; same OCEAN_FLOOR_WG reasoning).
         context.register(SELECT_VOLCANO_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SELECT_VOLCANO_KEY),
                 List.of(RarityFilter.onAverageOnceEvery(100), InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome())));
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG), BiomeFilter.biome())));
     }
 
-    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, String name) {
+    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, String name, int groundOffset) {
         ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name);
         context.register(configuredKey(name), new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(structure, Optional.<net.minecraft.world.level.block.Rotation>empty(), 0)));
+                new SingleStructureConfiguration(structure, Optional.<net.minecraft.world.level.block.Rotation>empty(), groundOffset)));
     }
 
     private static void registerNoModifiers(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, String name) {
