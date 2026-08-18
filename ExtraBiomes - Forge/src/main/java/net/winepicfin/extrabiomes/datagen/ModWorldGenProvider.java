@@ -18,6 +18,7 @@ import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moss.MossFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFeatures;
@@ -36,6 +37,7 @@ import net.winepicfin.extrabiomes.worldgen.features.shatteredswamp.ShatteredSwam
 import net.winepicfin.extrabiomes.worldgen.features.tropical.TropicalIslandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.palm.PalmTreeFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.VolcanicMossTundraFeatures;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -60,6 +62,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 MushroomFeatures.bootstrapConfigured(context);
                 MossFeatures.bootstrapConfigured(context);
                 MoorlandFeatures.bootstrapConfigured(context);
+                MysticFeatures.bootstrapConfigured(context);
                 GlacierFeatures.bootstrapConfigured(context);
                 NetherlandsOreFeatures.bootstrapConfigured(context);
                 NetherlandsTulipFeatures.bootstrapConfigured(context);
@@ -77,6 +80,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 TropicalIslandFeatures.bootstrapConfigured(context);
                 BryceMesaPillarFeatures.bootstrapConfigured(context);
                 PalmTreeFeatures.bootstrapConfigured(context);
+                VolcanicMossTundraFeatures.bootstrapConfigured(context);
             })
             .add(Registries.PLACED_FEATURE, context -> {
                 ModPlacedFeatures.bootstrap(context);
@@ -86,6 +90,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 MushroomFeatures.bootstrapPlaced(context);
                 MossFeatures.bootstrapPlaced(context);
                 MoorlandFeatures.bootstrapPlaced(context);
+                MysticFeatures.bootstrapPlaced(context);
                 GlacierFeatures.bootstrapPlaced(context);
                 NetherlandsOreFeatures.bootstrapPlaced(context);
                 NetherlandsTulipFeatures.bootstrapPlaced(context);
@@ -102,6 +107,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 ShatteredSwampFeatures.bootstrapPlaced(context);
                 TropicalIslandFeatures.bootstrapPlaced(context);
                 BryceMesaPillarFeatures.bootstrapPlaced(context);
+                VolcanicMossTundraFeatures.bootstrapPlaced(context);
             })
             .add(Registries.CONFIGURED_CARVER, NetherlandsCaveCarver::bootstrapCarver)
             .add(Registries.NOISE, ModNoiseParameters::bootstrap)

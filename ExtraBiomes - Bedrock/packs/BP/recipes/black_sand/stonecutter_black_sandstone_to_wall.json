@@ -1,0 +1,18 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shapeless": {
+		"description": {
+			"identifier": "extrabiomes:stonecutter_black_sandstone_to_wall"
+		},
+		"tags": [
+			"stonecutter"
+		],
+		"ingredients": [
+			{ "item": "extrabiomes:black_sandstone" }
+		],
+		"result": {
+			"item": "extrabiomes:black_sandstone_wall",
+			"count": 1
+		}
+	}
+}

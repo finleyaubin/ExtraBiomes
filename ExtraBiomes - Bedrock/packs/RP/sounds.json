@@ -11,6 +11,16 @@
             ],
             "volume": 1.0
          },
+         "extrabiomes:puckoo": {
+            "events": {
+               "ambient": "mob.puckoo.ambient"
+            },
+            "pitch": [
+               0.90,
+               1.10
+            ],
+            "volume": 1.0
+         },
          "extrabiomes:hoppleshroom": {
             "events": {
                "fall.small": "mob.hoppleshroom.jump",

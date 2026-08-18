@@ -25,6 +25,19 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.NETHER_DIAMOND_ORE.get(),block -> createOreDrop(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
         this.dropSelf(ModBlocks.STICK_PILE.get());
 
+        //~~~~~~~~~~~~~Black Sand~~~~~~~~~~\\
+        this.dropSelf(ModBlocks.BLACK_SAND.get());
+        this.dropSelf(ModBlocks.BLACK_SANDSTONE.get());
+        this.dropSelf(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
+        this.dropSelf(ModBlocks.CUT_BLACK_SANDSTONE.get());
+        this.dropSelf(ModBlocks.SMOOTH_BLACK_SANDSTONE.get());
+        this.dropSelf(ModBlocks.BLACK_SANDSTONE_STAIRS.get());
+        this.dropSelf(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get());
+        this.dropSelf(ModBlocks.BLACK_SANDSTONE_WALL.get());
+        this.add(ModBlocks.BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable(ModBlocks.BLACK_SANDSTONE_SLAB.get()));
+        this.add(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()));
+        this.add(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()));
+
         //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
         this.dropSelf(ModBlocks.MYSTIC_PLANKS.get());
         this.dropSelf(ModBlocks.MYSTIC_LOG.get());

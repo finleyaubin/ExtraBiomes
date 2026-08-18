@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Dense Cloud Brick
 tile.extrabiomes:dense_cloud_brick_slab.name=Dense Cloud Brick Slab
 tile.extrabiomes:dense_cloud_brick_stairs.name=Dense Cloud Brick Stairs
 
+tile.extrabiomes:black_sand.name=Black Sand
+tile.extrabiomes:black_sandstone.name=Black Sandstone
+tile.extrabiomes:chiseled_black_sandstone.name=Chiseled Black Sandstone
+tile.extrabiomes:cut_black_sandstone.name=Cut Black Sandstone
+tile.extrabiomes:smooth_black_sandstone.name=Smooth Black Sandstone
+tile.extrabiomes:black_sandstone_stairs.name=Black Sandstone Stairs
+tile.extrabiomes:black_sandstone_slab.name=Black Sandstone Slab
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Smooth Black Sandstone Stairs
+tile.extrabiomes:smooth_black_sandstone_slab.name=Smooth Black Sandstone Slab
+tile.extrabiomes:cut_black_sandstone_slab.name=Cut Black Sandstone Slab
+tile.extrabiomes:black_sandstone_wall.name=Black Sandstone Wall
+
 
 tile.extrabiomes:mystic_log.name=Mystic Log
 tile.extrabiomes:mystic_leaves.name=Mystic leaves

@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Dichte Dichte Wolk Dichte Wolksteen
 tile.extrabiomes:dense_cloud_brick_slab.name=Dichte Dichte Wolk Dichte Wolksteen Plaat
 tile.extrabiomes:dense_cloud_brick_stairs.name=Dichte Dichte Wolk Dichte Wolksteen Trap
 
+tile.extrabiomes:black_sand.name=Zwart Zand
+tile.extrabiomes:black_sandstone.name=Zwarte Zandsteen
+tile.extrabiomes:chiseled_black_sandstone.name=Gebeeldhouwde Zwarte Zandsteen
+tile.extrabiomes:cut_black_sandstone.name=Gezaagde Zwarte Zandsteen
+tile.extrabiomes:smooth_black_sandstone.name=Gladde Zwarte Zandsteen
+tile.extrabiomes:black_sandstone_stairs.name=Zwarte Zandsteentrap
+tile.extrabiomes:black_sandstone_slab.name=Zwarte Zandsteenplaat
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Gladde Zwarte Zandsteentrap
+tile.extrabiomes:smooth_black_sandstone_slab.name=Gladde Zwarte Zandsteenplaat
+tile.extrabiomes:cut_black_sandstone_slab.name=Gezaagde Zwarte Zandsteenplaat
+tile.extrabiomes:black_sandstone_wall.name=Zwarte Zandsteenmuur
+
 
 tile.extrabiomes:mystic_log.name=Mystiek Stam
 tile.extrabiomes:mystic_leaves.name=Mystiek Bladeren

@@ -1,0 +1,31 @@
+{
+  "format_version": "1.13.0",
+  "minecraft:growing_plant_feature": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra/basalt_pillar_5"
+    },
+    "height_distribution": [
+      [
+        {
+          "range_min": 7,
+          "range_max": 7
+        },
+        1
+      ]
+    ],
+    "growth_direction": "UP",
+    "body_blocks": [
+      [
+        "minecraft:basalt",
+        1
+      ]
+    ],
+    "head_blocks": [
+      [
+        "minecraft:basalt",
+        1
+      ]
+    ],
+    "allow_water": false
+  }
+}

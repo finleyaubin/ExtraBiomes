@@ -36,7 +36,17 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get(),
                 ModBlocks.PEBBLE.get(),
-                ModBlocks.MOSSY_PEBBLE.get()
+                ModBlocks.MOSSY_PEBBLE.get(),
+                ModBlocks.BLACK_SANDSTONE.get(),
+                ModBlocks.CHISELED_BLACK_SANDSTONE.get(),
+                ModBlocks.CUT_BLACK_SANDSTONE.get(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE.get(),
+                ModBlocks.BLACK_SANDSTONE_SLAB.get(),
+                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(),
+                ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(),
+                ModBlocks.BLACK_SANDSTONE_WALL.get()
         );
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(
@@ -98,7 +108,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.GILDED_SKY_WALL_SIGN.get(),
                 ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()
         );
-        this.tag(BlockTags.MINEABLE_WITH_SHOVEL);
+        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(
+                ModBlocks.BLACK_SAND.get()
+        );
         this.tag(BlockTags.MINEABLE_WITH_HOE);
         this.tag(Tags.Blocks.NEEDS_WOOD_TOOL).add(
                 ModBlocks.DENSE_CLOUD.get()
@@ -155,6 +167,19 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_PLANKS.get(),
                 ModBlocks.PALM_PLANKS.get(),
                 ModBlocks.GILDED_SKY_PLANKS.get()
+        );
+
+        this.tag(BlockTags.WALLS).add(
+                ModBlocks.BLACK_SANDSTONE_WALL.get()
+        );
+        this.tag(BlockTags.STAIRS).add(
+                ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()
+        );
+        this.tag(BlockTags.SLABS).add(
+                ModBlocks.BLACK_SANDSTONE_SLAB.get(),
+                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
         );
 
 

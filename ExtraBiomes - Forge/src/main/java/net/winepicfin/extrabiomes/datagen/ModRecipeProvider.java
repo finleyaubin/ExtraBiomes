@@ -41,6 +41,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         brick(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_BRICK.get());
         stair(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
+        blackSandRecipes(pWriter);
         gildRecipes(pWriter,
                 new ArrayList<>() {{
                         add(ModBlocks.SKY_PLANKS.get());
@@ -250,6 +251,73 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('&', ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput);
+    }
+
+    private static void blackSandRecipes(Consumer<FinishedRecipe> recipeOutput) {
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SAND.get()), RecipeCategory.MISC, Items.GLASS, 0.1F, 200)
+                .unlockedBy(getHasName(ModBlocks.BLACK_SAND.get()), has(ModBlocks.BLACK_SAND.get()))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":glass_from_black_sand");
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SANDSTONE.get()), RecipeCategory.BUILDING_BLOCKS, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), 0.1F, 200)
+                .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE.get()), has(ModBlocks.BLACK_SANDSTONE.get()))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SANDSTONE.get())
+                .pattern("##")
+                .pattern("##")
+                .define('#', ModBlocks.BLACK_SAND.get())
+                .unlockedBy(getHasName(ModBlocks.BLACK_SAND.get()), has(ModBlocks.BLACK_SAND.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_BLACK_SANDSTONE.get(), 4)
+                .pattern("##")
+                .pattern("##")
+                .define('#', ModBlocks.BLACK_SANDSTONE.get())
+                .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE.get()), has(ModBlocks.BLACK_SANDSTONE.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.CHISELED_BLACK_SANDSTONE.get())
+                .pattern("#")
+                .pattern("#")
+                .define('#', ModBlocks.BLACK_SANDSTONE_SLAB.get())
+                .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE_SLAB.get()), has(ModBlocks.BLACK_SANDSTONE_SLAB.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, Items.TNT)
+                .pattern("#~#")
+                .pattern("~#~")
+                .pattern("#~#")
+                .define('#', ModBlocks.BLACK_SAND.get())
+                .define('~', Items.GUNPOWDER)
+                .unlockedBy(getHasName(ModBlocks.BLACK_SAND.get()), has(ModBlocks.BLACK_SAND.get()))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":tnt_from_black_sand");
+
+        slab(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.BLACK_SANDSTONE_SLAB.get());
+        slab(recipeOutput, ModBlocks.CUT_BLACK_SANDSTONE.get(), ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get());
+        slab(recipeOutput, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get());
+        stair(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.BLACK_SANDSTONE_STAIRS.get());
+        stair(recipeOutput, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get());
+        wall(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.BLACK_SANDSTONE_WALL.get());
+
+        stonecutting(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.CHISELED_BLACK_SANDSTONE.get(), 1);
+        stonecutting(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.CUT_BLACK_SANDSTONE.get(), 1);
+        stonecutting(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.BLACK_SANDSTONE_SLAB.get(), 2);
+        stonecutting(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.BLACK_SANDSTONE_STAIRS.get(), 1);
+        stonecutting(recipeOutput, ModBlocks.BLACK_SANDSTONE.get(), ModBlocks.BLACK_SANDSTONE_WALL.get(), 1);
+        stonecutting(recipeOutput, ModBlocks.CUT_BLACK_SANDSTONE.get(), ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), 2);
+        stonecutting(recipeOutput, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), 2);
+        stonecutting(recipeOutput, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(), 1);
+    }
+
+    private static void wall(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, output, 6)
+                .pattern("&&&")
+                .pattern("&&&")
+                .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
+    }
+
+    private static void stonecutting(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output, int count) {
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(ingredient), RecipeCategory.BUILDING_BLOCKS, output, count)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient) + "_stonecutting");
     }
 
     private static void gild(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {

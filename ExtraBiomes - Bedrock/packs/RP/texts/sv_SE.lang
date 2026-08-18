@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Tät Tätt Moln Tätt Molntegel
 tile.extrabiomes:dense_cloud_brick_slab.name=Tät Tätt Moln Tätt Molntegel Häll
 tile.extrabiomes:dense_cloud_brick_stairs.name=Tät Tätt Moln Tätt Molntegel Trappa
 
+tile.extrabiomes:black_sand.name=Svart Sand
+tile.extrabiomes:black_sandstone.name=Svart Sandsten
+tile.extrabiomes:chiseled_black_sandstone.name=Huggen Svart Sandsten
+tile.extrabiomes:cut_black_sandstone.name=Skuren Svart Sandsten
+tile.extrabiomes:smooth_black_sandstone.name=Slät Svart Sandsten
+tile.extrabiomes:black_sandstone_stairs.name=Svart Sandstenstrappa
+tile.extrabiomes:black_sandstone_slab.name=Svart Sandstensplatta
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Slät Svart Sandstenstrappa
+tile.extrabiomes:smooth_black_sandstone_slab.name=Slät Svart Sandstensplatta
+tile.extrabiomes:cut_black_sandstone_slab.name=Skuren Svart Sandstensplatta
+tile.extrabiomes:black_sandstone_wall.name=Svart Sandstensmur
+
 
 tile.extrabiomes:mystic_log.name=Mystisk Stock
 tile.extrabiomes:mystic_leaves.name=Mystisk Löv

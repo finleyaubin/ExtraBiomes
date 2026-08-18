@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Dichte Wolke Wolkenziegel
 tile.extrabiomes:dense_cloud_brick_slab.name=Dichte Wolke Wolkenziegel Stufe
 tile.extrabiomes:dense_cloud_brick_stairs.name=Dichte Wolke Wolkenziegel Treppe
 
+tile.extrabiomes:black_sand.name=Schwarzer Sand
+tile.extrabiomes:black_sandstone.name=Schwarzer Sandstein
+tile.extrabiomes:chiseled_black_sandstone.name=Gemeißelter Schwarzer Sandstein
+tile.extrabiomes:cut_black_sandstone.name=Geschnittener Schwarzer Sandstein
+tile.extrabiomes:smooth_black_sandstone.name=Glatter Schwarzer Sandstein
+tile.extrabiomes:black_sandstone_stairs.name=Schwarze Sandsteintreppe
+tile.extrabiomes:black_sandstone_slab.name=Schwarze Sandsteinstufe
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Glatte Schwarze Sandsteintreppe
+tile.extrabiomes:smooth_black_sandstone_slab.name=Glatte Schwarze Sandsteinstufe
+tile.extrabiomes:cut_black_sandstone_slab.name=Geschnittene Schwarze Sandsteinstufe
+tile.extrabiomes:black_sandstone_wall.name=Schwarze Sandsteinmauer
+
 
 tile.extrabiomes:mystic_log.name=Mystischer Stamm
 tile.extrabiomes:mystic_leaves.name=Mystischer Laub

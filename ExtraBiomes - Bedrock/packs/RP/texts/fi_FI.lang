@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Tihea Tihea Pilvi Tihean Pilven Tiili
 tile.extrabiomes:dense_cloud_brick_slab.name=Tihea Tihea Pilvi Tihean Pilven Tiili Laatta
 tile.extrabiomes:dense_cloud_brick_stairs.name=Tihea Tihea Pilvi Tihean Pilven Tiili Portaat
 
+tile.extrabiomes:black_sand.name=Musta Hiekka
+tile.extrabiomes:black_sandstone.name=Musta Hiekkakivi
+tile.extrabiomes:chiseled_black_sandstone.name=Veistetty Musta Hiekkakivi
+tile.extrabiomes:cut_black_sandstone.name=Leikattu Musta Hiekkakivi
+tile.extrabiomes:smooth_black_sandstone.name=Sileä Musta Hiekkakivi
+tile.extrabiomes:black_sandstone_stairs.name=Mustat Hiekkakiviportaat
+tile.extrabiomes:black_sandstone_slab.name=Musta Hiekkakivilaatta
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Sileät Mustat Hiekkakiviportaat
+tile.extrabiomes:smooth_black_sandstone_slab.name=Sileä Musta Hiekkakivilaatta
+tile.extrabiomes:cut_black_sandstone_slab.name=Leikattu Musta Hiekkakivilaatta
+tile.extrabiomes:black_sandstone_wall.name=Musta Hiekkakivimuuri
+
 
 tile.extrabiomes:mystic_log.name=Mystinen Tukki
 tile.extrabiomes:mystic_leaves.name=Mystinen Lehdet

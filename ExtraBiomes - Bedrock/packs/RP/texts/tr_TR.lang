@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Yogun Yogun Bulut Yogun Bulut Tugla
 tile.extrabiomes:dense_cloud_brick_slab.name=Yogun Yogun Bulut Yogun Bulut Tugla Basamak
 tile.extrabiomes:dense_cloud_brick_stairs.name=Yogun Yogun Bulut Yogun Bulut Tugla Merdiven
 
+tile.extrabiomes:black_sand.name=Siyah Kum
+tile.extrabiomes:black_sandstone.name=Siyah Kum Taşı
+tile.extrabiomes:chiseled_black_sandstone.name=Oyma Siyah Kum Taşı
+tile.extrabiomes:cut_black_sandstone.name=Kesilmiş Siyah Kum Taşı
+tile.extrabiomes:smooth_black_sandstone.name=Düzgün Siyah Kum Taşı
+tile.extrabiomes:black_sandstone_stairs.name=Siyah Kum Taşı Merdiveni
+tile.extrabiomes:black_sandstone_slab.name=Siyah Kum Taşı Yarım Bloğu
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Düzgün Siyah Kum Taşı Merdiveni
+tile.extrabiomes:smooth_black_sandstone_slab.name=Düzgün Siyah Kum Taşı Yarım Bloğu
+tile.extrabiomes:cut_black_sandstone_slab.name=Kesilmiş Siyah Kum Taşı Yarım Bloğu
+tile.extrabiomes:black_sandstone_wall.name=Siyah Kum Taşı Duvarı
+
 
 tile.extrabiomes:mystic_log.name=Mistik Kutuk
 tile.extrabiomes:mystic_leaves.name=Mistik Yapraklar

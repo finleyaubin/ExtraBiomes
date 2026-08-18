@@ -1,0 +1,24 @@
+{
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:chiseled_black_sandstone"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"#",
+			"#"
+		],
+		"key": {
+			"#": {
+				"item": "extrabiomes:black_sandstone_slab"
+			}
+		},
+		"result": {
+			"item": "extrabiomes:chiseled_black_sandstone",
+			"count": 1
+		}
+	}
+}

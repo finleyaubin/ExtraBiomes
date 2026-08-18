@@ -46,6 +46,21 @@ public class ModBlocks {
     public static final RegistryObject<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistryObject<StickPileBlock> STICK_PILE = registerBlock("stick_pile", () -> new StickPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion().strength(StickPileTuning.DESTROY_SECONDS)));
 
+    //~~~~~~~~~black sand~~~~~~~~\\
+    // Bedrock's black_sand has no gravity (Bedrock engine limitation, per project notes) - Java
+    // copies vanilla SAND's falling behaviour via FallingBlock, matching normal sand.
+    public static final RegistryObject<Block> BLACK_SAND = registerBlock("black_sand", () -> new FallingBlock(BlockBehaviour.Properties.copy(Blocks.SAND).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> BLACK_SANDSTONE = registerBlock("black_sandstone", () -> new Block(BlockBehaviour.Properties.copy(Blocks.SANDSTONE).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> CHISELED_BLACK_SANDSTONE = registerBlock("chiseled_black_sandstone", () -> new Block(BlockBehaviour.Properties.copy(Blocks.CHISELED_SANDSTONE).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> CUT_BLACK_SANDSTONE = registerBlock("cut_black_sandstone", () -> new Block(BlockBehaviour.Properties.copy(Blocks.CUT_SANDSTONE).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> SMOOTH_BLACK_SANDSTONE = registerBlock("smooth_black_sandstone", () -> new Block(BlockBehaviour.Properties.copy(Blocks.SMOOTH_SANDSTONE).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> BLACK_SANDSTONE_SLAB = registerBlock("black_sandstone_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.SANDSTONE_SLAB).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> CUT_BLACK_SANDSTONE_SLAB = registerBlock("cut_black_sandstone_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.CUT_SANDSTONE_SLAB).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> SMOOTH_BLACK_SANDSTONE_SLAB = registerBlock("smooth_black_sandstone_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.SMOOTH_SANDSTONE_SLAB).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> BLACK_SANDSTONE_STAIRS = registerBlock("black_sandstone_stairs", () -> new StairBlock(() -> ModBlocks.BLACK_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.SANDSTONE_STAIRS).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> SMOOTH_BLACK_SANDSTONE_STAIRS = registerBlock("smooth_black_sandstone_stairs", () -> new StairBlock(() -> ModBlocks.SMOOTH_BLACK_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.SMOOTH_SANDSTONE_STAIRS).mapColor(MapColor.COLOR_BLACK)));
+    public static final RegistryObject<Block> BLACK_SANDSTONE_WALL = registerBlock("black_sandstone_wall", () -> new WallBlock(BlockBehaviour.Properties.copy(Blocks.SANDSTONE_WALL).mapColor(MapColor.COLOR_BLACK)));
+
     //~~~~~~~~~mystic wood~~~~~~~~\\
     public static final RegistryObject<Block> MYSTIC_PLANKS = registerBlock("mystic_planks", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_PLANKS)));
     public static final RegistryObject<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> new ModLogs(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));

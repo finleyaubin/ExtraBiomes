@@ -1,0 +1,13 @@
+{
+	"format_version": "1.12",
+	"minecraft:recipe_furnace": {
+		"description": {
+			"identifier": "extrabiomes:smooth_black_sandstone"
+		},
+		"tags": [
+			"furnace"
+		],
+		"input": "extrabiomes:black_sandstone",
+		"output": "extrabiomes:smooth_black_sandstone"
+	}
+}

@@ -1,0 +1,82 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:volcanic_moss_tundra/select_rock_formation"
+    },
+    "features": [
+      [
+        "extrabiomes:volcanic_moss_tundra/pillar_1",
+        3
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/pillar_2",
+        3
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/pillar_3",
+        3
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/pillar_4",
+        3
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/pillar_5",
+        3
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/pillar_6",
+        3
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_1",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_2",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_3",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_4",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_5",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_6",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_7",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/boulder_8",
+        4
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/elephant_rock_1",
+        2
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/elephant_rock_2",
+        2
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/elephant_rock_3",
+        2
+      ],
+      [
+        "extrabiomes:volcanic_moss_tundra/elephant_rock_4",
+        2
+      ]
+    ]
+  }
+}

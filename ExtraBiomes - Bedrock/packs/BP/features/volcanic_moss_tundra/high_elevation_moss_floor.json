@@ -1,0 +1,30 @@
+{
+	"format_version": "1.13.0",
+	"minecraft:vegetation_patch_feature": {
+		"description": {
+			"identifier": "extrabiomes:volcanic_moss_tundra/high_elevation_moss_floor"
+		},
+		"replaceable_blocks": [
+			"minecraft:dirt",
+			"minecraft:stone",
+			"minecraft:gravel",
+			"minecraft:grass_block",
+			"minecraft:podzol",
+			"extrabiomes:black_sand",
+			"extrabiomes:black_sandstone"
+		],
+		"ground_block": "minecraft:moss_block",
+		"vegetation_feature": "extrabiomes:volcanic_moss_tundra/basalt_bank_ground_check",
+		"surface": "floor",
+		"depth": 1,
+		"vertical_range": 4,
+		"vegetation_chance": 0,
+		"horizontal_radius": {
+			"range_min": 3,
+			"range_max": 6
+		},
+		"extra_deep_block_chance": 0.2,
+		"extra_edge_column_chance": 0.6,
+		"waterlogged": false
+	}
+}

@@ -45,6 +45,7 @@ public class ModBiomes
     public static final ResourceKey<Biome> THE_NETHERLANDS_MUTATED = register("the_netherlands_mutated");
     public static final ResourceKey<Biome> TAIGA_SPIKES = register("taiga_spikes");
     public static final ResourceKey<Biome> TROPICAL_ISLAND = register("tropical_island");
+    public static final ResourceKey<Biome> VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra");
 
 
     private static ResourceKey<Biome> register(String name)
@@ -78,6 +79,7 @@ public class ModBiomes
         context.register(THE_NETHERLANDS_MUTATED, new TheNetherlandsMutated().Register(context));
         context.register(TAIGA_SPIKES, new TiagaSpikes().Register(context));
         context.register(TROPICAL_ISLAND, new TropicalIsland().Register(context));
+        context.register(VOLCANIC_MOSS_TUNDRA, new VolcanicMossTundra().Register(context));
     }
 
     public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {

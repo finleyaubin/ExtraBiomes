@@ -38,6 +38,18 @@ tile.extrabiomes:dense_cloud_brick.name=Husty Husty Mrak Tehla z Husteho Mraku
 tile.extrabiomes:dense_cloud_brick_slab.name=Husty Husty Mrak Tehla z Husteho Mraku Doska
 tile.extrabiomes:dense_cloud_brick_stairs.name=Husty Husty Mrak Tehla z Husteho Mraku Schody
 
+tile.extrabiomes:black_sand.name=Čierny Piesok
+tile.extrabiomes:black_sandstone.name=Čierny Pieskovec
+tile.extrabiomes:chiseled_black_sandstone.name=Tesaný Čierny Pieskovec
+tile.extrabiomes:cut_black_sandstone.name=Rezaný Čierny Pieskovec
+tile.extrabiomes:smooth_black_sandstone.name=Hladký Čierny Pieskovec
+tile.extrabiomes:black_sandstone_stairs.name=Schody z Čierneho Pieskovca
+tile.extrabiomes:black_sandstone_slab.name=Doska z Čierneho Pieskovca
+tile.extrabiomes:smooth_black_sandstone_stairs.name=Schody z Hladkého Čierneho Pieskovca
+tile.extrabiomes:smooth_black_sandstone_slab.name=Doska z Hladkého Čierneho Pieskovca
+tile.extrabiomes:cut_black_sandstone_slab.name=Doska z Rezaného Čierneho Pieskovca
+tile.extrabiomes:black_sandstone_wall.name=Múr z Čierneho Pieskovca
+
 
 tile.extrabiomes:mystic_log.name=Mysticky Klada
 tile.extrabiomes:mystic_leaves.name=Mysticky Listie

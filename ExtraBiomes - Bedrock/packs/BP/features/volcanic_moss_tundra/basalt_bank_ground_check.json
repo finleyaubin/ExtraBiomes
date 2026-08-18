@@ -1,0 +1,27 @@
+{
+	"format_version": "1.17.0",
+	"minecraft:single_block_feature": {
+		"description": {
+			"identifier": "extrabiomes:volcanic_moss_tundra/basalt_bank_ground_check"
+		},
+		"places_block": "minecraft:air",
+		"enforce_survivability_rules": false,
+		"enforce_placement_rules": false,
+		"may_replace": [
+			"minecraft:air"
+		],
+		"may_attach_to": {
+			"bottom": [
+				"extrabiomes:black_sand",
+				"extrabiomes:black_sandstone",
+				"minecraft:moss_block",
+				"minecraft:stone",
+				"minecraft:dirt",
+				"minecraft:grass_block",
+				"minecraft:gravel",
+				"minecraft:podzol",
+				"minecraft:magma"
+			]
+		}
+	}
+}
