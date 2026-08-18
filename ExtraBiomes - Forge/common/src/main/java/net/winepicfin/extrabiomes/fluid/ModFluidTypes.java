@@ -11,9 +11,9 @@ import org.joml.Vector3f;
 // FluidType/ForgeRegistries.Keys.FLUID_TYPES is a Forge/NeoForge-only concept with no vanilla or
 // Fabric equivalent registry key, so this one file keeps a direct Forge import for the key itself.
 public class ModFluidTypes {
-    public static final ResourceLocation WATER_STILL_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_still");
-    public static final ResourceLocation WATER_FLOWING_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_flow");
-    public static final ResourceLocation GOO_OVERLAY_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo");
+    public static final ResourceLocation WATER_STILL_RL = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo_still");
+    public static final ResourceLocation WATER_FLOWING_RL = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo_flow");
+    public static final ResourceLocation GOO_OVERLAY_RL = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo");
 
     public static final DeferredRegister<FluidType> FLUID_TYPES =
             DeferredRegister.create(ExtraBiomes.MOD_ID, ForgeRegistries.Keys.FLUID_TYPES);

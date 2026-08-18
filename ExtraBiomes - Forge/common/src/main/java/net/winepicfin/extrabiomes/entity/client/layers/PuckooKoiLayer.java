@@ -20,10 +20,10 @@ import java.util.Map;
 
 public class PuckooKoiLayer extends RenderLayer<PuckooEntity,PuckooModel<PuckooEntity>> {
     private static final Map<PuckooKoiMarkings, ResourceLocation> LOCATION_BY_MARKINGS = Util.make(Maps.newEnumMap(PuckooKoiMarkings.class), (p_114874_) -> {
-        p_114874_.put(PuckooKoiMarkings.BLANK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi0.png"));
-        p_114874_.put(PuckooKoiMarkings.RED, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi1.png"));
-        p_114874_.put(PuckooKoiMarkings.FULL_ORANGE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi2.png"));
-        p_114874_.put(PuckooKoiMarkings.SEMI_ORANGE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi3.png"));
+        p_114874_.put(PuckooKoiMarkings.BLANK, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi0.png"));
+        p_114874_.put(PuckooKoiMarkings.RED, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi1.png"));
+        p_114874_.put(PuckooKoiMarkings.FULL_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi2.png"));
+        p_114874_.put(PuckooKoiMarkings.SEMI_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi3.png"));
     });
 
     public PuckooKoiLayer(RenderLayerParent<PuckooEntity, PuckooModel<PuckooEntity>> entityPuckooModelRenderLayerParent) {

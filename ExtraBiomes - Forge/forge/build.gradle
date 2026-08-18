@@ -24,7 +24,7 @@ loom {
             configName = "Forge Data"
             server()
             source sourceSets.main
-            programArgs '--mod', mod_id, '--all', '--output', file('src/main/generated'), '--existing', project(':common').file('src/main/resources')
+            programArgs '--mod', mod_id, '--all', '--output', file('src/main/generated').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
         }
         gameTestServer {
             configName = "Forge Game Test Server"

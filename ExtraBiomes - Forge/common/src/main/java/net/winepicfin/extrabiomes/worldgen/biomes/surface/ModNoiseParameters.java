@@ -35,6 +35,6 @@ public class ModNoiseParameters {
     }
 
     private static ResourceKey<NormalNoise.NoiseParameters> key(String name) {
-        return ResourceKey.create(Registries.NOISE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.NOISE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
     }
 }

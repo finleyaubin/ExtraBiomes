@@ -14,6 +14,6 @@ public class HarpyRenderer extends MobRenderer<HarpyEntity, HarpyModel<HarpyEnti
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(HarpyEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/harpy.png");
+        return new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/harpy.png");
     }
 }

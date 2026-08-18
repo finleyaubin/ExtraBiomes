@@ -1,13 +1,12 @@
 package net.winepicfin.extrabiomes;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.gametest.ForgeGameTestHooks;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModTerrablender;
 
-@Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+// The @Mod.EventBusSubscriber/ModConfigEvent wiring lives in ExtraBiomesForge (forge module),
+// which calls load() below — those FML annotation-processor types only exist in Loom's
+// specially patched Forge dev jar, not any plain downloadable Maven artifact.
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -30,13 +29,11 @@ public class Config
     // regardless of the configured value - real players never see this override.
     private static final int GAMETEST_BIOME_WEIGHT = 100;
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
     public static int biomeWeight;
     public static int rareBiomeWeight;
 
-
-    @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
+    public static void load()
     {
         boolean isGametest = ForgeGameTestHooks.isGametestServer();
         biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : BIOMEWEIGHT.get();

@@ -18,7 +18,7 @@ public class HoppleshroomRenderer extends MobRenderer<HoppleshroomEntity, Hopple
 
     static {
         for (int i = 0; i < COLOURS.length; i++) {
-            TEXTURES[i] = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,
+            TEXTURES[i] = new ResourceLocation(ExtraBiomes.MOD_ID,
                     "textures/entity/hopping_spore/" + COLOURS[i] + ".png");
         }
     }

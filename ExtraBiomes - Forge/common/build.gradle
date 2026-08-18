@@ -15,12 +15,22 @@ dependencies {
 
     // GeckoLib is used directly by a couple of common classes for this Forge-only pass
     // (FrogHelmetItem/FrogHelmetRenderer) — a real cross-loader abstraction is deferred
-    // until a second loader is added. Forge's own API (ForgeConfigSpec, FluidType,
-    // ForgeSpawnEggItem, IForgeShearable, ToolAction, IClientItemExtensions — used directly by
-    // Config/ModFluids/ModFluidTypes/ModItems/ModLogs/ModLeavesWithSupport/FrogHelmetItem, all
-    // accepted Forge-shaped exceptions for now) comes from `architectury { common("forge") }"
-    // above, since enabled_platforms=forge.
+    // until a second loader is added.
     modCompileOnly "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}"
+
+    // architectury { common("forge") } only controls output transforms for packaging, NOT
+    // compile-time access to Forge's own API — that has to be added explicitly. A handful of
+    // common classes (Config/ModFluids/ModFluidTypes/ModItems/ModLogs/ModLeavesWithSupport/
+    // FrogHelmetItem/BaseFluidType) use Forge-only types (ForgeConfigSpec, FluidType,
+    // ForgeSpawnEggItem, IForgeShearable, ToolAction, IClientItemExtensions/
+    // IClientFluidTypeExtensions) with no vanilla/cross-loader equivalent yet — accepted
+    // Forge-shaped exceptions for this Forge-only pass. The "universal" classifier exposes
+    // Forge's own authored classes (not SRG-obfuscated, unlike vanilla Minecraft symbols in
+    // this jar) so it's safe to reference at compile time without Loom's remapping.
+    compileOnly "net.minecraftforge:forge:${minecraft_version}-${forge_version}:universal"
+    // javax.annotation.Nullable (JSR-305) — pulled in transitively via ForgeGradle previously,
+    // not automatically present under Loom.
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 }
 
 publishing {

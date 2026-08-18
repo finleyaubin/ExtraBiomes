@@ -7,8 +7,8 @@ import terrablender.api.Regions;
 
 public class ModTerrablender {
     public static void registerBiomes(){
-        Regions.register(new ModOverworldRegion(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
-        Regions.register(new ModOverworldRegionRare(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_rare"), Config.rareBiomeWeight));
+        Regions.register(new ModOverworldRegion(new ResourceLocation(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
+        Regions.register(new ModOverworldRegionRare(new ResourceLocation(ExtraBiomes.MOD_ID,"overworld_rare"), Config.rareBiomeWeight));
         System.out.println(Config.biomeWeight+" is the biome weight On registerBiomes");
         System.out.println(Config.rareBiomeWeight+" is the rare biome weight On registerBiomes");
     }

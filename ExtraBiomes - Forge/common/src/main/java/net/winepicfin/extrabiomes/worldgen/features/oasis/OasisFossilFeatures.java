@@ -124,10 +124,10 @@ public class OasisFossilFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis/" + name));
     }
 }

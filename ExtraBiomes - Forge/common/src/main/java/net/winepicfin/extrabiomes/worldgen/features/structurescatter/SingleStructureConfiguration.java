@@ -17,7 +17,7 @@ import java.util.Optional;
  * (oasis puddles, jellycoral clusters, windmills, stone pillars, glacier snow-drifts, taiga spikes, ...).
  *
  * @param structure    the location of the converted structure template, e.g.
- *                     {@code ResourceLocation.fromNamespaceAndPath("extrabiomes", "structurescatter/oasis_puddle")},
+ *                     {@code new ResourceLocation("extrabiomes", "structurescatter/oasis_puddle")},
  *                     which resolves to {@code data/extrabiomes/structures/structurescatter/oasis_puddle.nbt}.
  * @param rotation     a fixed rotation to always place with, or {@code Optional.empty()} to pick a
  *                     uniformly random rotation per placement. This maps directly onto Bedrock's

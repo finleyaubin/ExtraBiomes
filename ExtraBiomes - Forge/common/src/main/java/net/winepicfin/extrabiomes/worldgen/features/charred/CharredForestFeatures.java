@@ -223,10 +223,10 @@ public class CharredForestFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "charred/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "charred/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "charred/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "charred/" + name));
     }
 }
