@@ -35,6 +35,8 @@ public class ModCreativeModeTabs {
                 //~~~~~~~~~~~~~Blocks~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
+                pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
+                pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
                 pOutput.accept(ModBlocks.NETHER_DIAMOND_ORE.get());
                 //~~~~~~~~~~~~~Black Sand~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.BLACK_SAND.get());
@@ -48,6 +50,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.BLACK_SANDSTONE_STAIRS.get());
                 pOutput.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get());
                 pOutput.accept(ModBlocks.BLACK_SANDSTONE_WALL.get());
+                pOutput.accept(ModBlocks.STICK_PILE.get());
                 //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~~~\\
                 pOutput.accept(ModBlocks.MYSTIC_PLANKS.get());
                 pOutput.accept(ModBlocks.MYSTIC_STAIRS.get());
@@ -117,6 +120,15 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.GILDED_SKY_SIGN.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get());
                 //~~~~~~~~~Mushrooms~~~~~~~~\\
+                pOutput.accept(ModBlocks.BLACK_MUSHROOM.get());
+                pOutput.accept(ModBlocks.BLUE_MUSHROOM.get());
+                pOutput.accept(ModBlocks.CYAN_MUSHROOM.get());
+                pOutput.accept(ModBlocks.GREEN_MUSHROOM.get());
+                pOutput.accept(ModBlocks.ORANGE_MUSHROOM.get());
+                pOutput.accept(ModBlocks.PURPLE_MUSHROOM.get());
+                pOutput.accept(ModBlocks.WHITE_MUSHROOM.get());
+                pOutput.accept(ModBlocks.YELLOW_MUSHROOM.get());
+                pOutput.accept(ModBlocks.GLOW_MUSHROOM.get());
                 pOutput.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.CYAN_MUSHROOM_BLOCK.get());

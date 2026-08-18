@@ -140,6 +140,43 @@ def _build_sign_be(be):
     return T_comp(d)
 
 
+# Bedrock loot table paths (as referenced by container block_entity_data's
+# "LootTable" field, relative to a behavior pack's loot_tables/ folder) that
+# have a known Java-side equivalent resource location. Add an entry here
+# before a structure containing a Barrel/Chest with that loot table can carry
+# it through conversion - anything not listed is left empty (with a warning)
+# rather than guessing.
+LOOT_TABLE_MAP = {
+    "loot_tables/chests/shipwrecktreasure.json": "minecraft:chests/shipwreck_treasure",
+    # Custom loot tables (no vanilla equivalent) hand-ported to
+    # data/extrabiomes/loot_tables/chests/*.json - see those files for the
+    # item-id fixups applied versus the Bedrock source (legacy ids like
+    # "appleEnchanted"/"horsearmorgold"/"record_otherside"/"web" -> their
+    # modern Java equivalents).
+    "loot_tables/chests/windmill.json": "extrabiomes:chests/windmill",
+    "loot_tables/chests/common_skycity.json": "extrabiomes:chests/common_skycity",
+    "loot_tables/chests/rare_skycity.json": "extrabiomes:chests/rare_skycity",
+    "loot_tables/chests/epic_skycity.json": "extrabiomes:chests/epic_skycity",
+}
+
+
+def _build_container_be(java_id, be, warnings):
+    """Carry a Bedrock Barrel/Chest's LootTable reference into a Java container
+    block entity, so the container auto-fills from that loot table on first
+    open (Java honors a "LootTable" tag with no "Items" the same way)."""
+    loot = be.get("LootTable")
+    if not loot:
+        return None
+    java_loot = LOOT_TABLE_MAP.get(loot)
+    if java_loot is None:
+        warnings.append("unmapped loot table: %s" % loot)
+        return None
+    d = OrderedDict()
+    d["id"] = T_str(java_id)
+    d["LootTable"] = T_str(java_loot)
+    return T_comp(d)
+
+
 def _build_spawner_be(be):
     """Best-effort carry of the Bedrock spawner entity into a Java spawner."""
     ent_id = be.get("EntityIdentifier")
@@ -244,6 +281,10 @@ def convert(path, warnings, id_counter):
                 nbt = _build_sign_be(be)
             elif beid == "MobSpawner":
                 nbt = _build_spawner_be(be)
+            elif beid == "Barrel":
+                nbt = _build_container_be("minecraft:barrel", be, warnings)
+            elif beid in ("Chest", "ChestBlock"):
+                nbt = _build_container_be("minecraft:chest", be, warnings)
         if nbt is not None:
             blk["nbt"] = nbt
 

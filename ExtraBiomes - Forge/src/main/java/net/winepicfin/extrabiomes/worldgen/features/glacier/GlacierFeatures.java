@@ -84,7 +84,7 @@ public class GlacierFeatures {
     public static final ResourceKey<PlacedFeature> SELECT_SNOW_DRIFT_PLACED_KEY =
             placedKey("select_snow_drift");
 
-    private static final int SNOW_DRIFT_GROUND_OFFSET = -1;
+    private static final int SNOW_DRIFT_GROUND_OFFSET = -2;
 
     // Bedrock replace_rules.may_replace list, shared by all three ice ore features.
     private static List<OreConfiguration.TargetBlockState> iceTargets(BlockState result) {
@@ -116,10 +116,11 @@ public class GlacierFeatures {
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
 
         // Bedrock facing_direction wasn't specified for either snow-drift structure -> random
-        // rotation. Bedrock's distribution y = [heightmap, heightmap] has no "-N" offset, but
-        // placed flush on the heightmap a drift reads as resting ON TOP of the ground rather than
-        // a drift of snow banked up against/into it - SNOW_DRIFT_GROUND_OFFSET sinks it in slightly
-        // so it looks embedded instead of floating.
+        // rotation. Distribution y = [heightmap, heightmap] in Bedrock has no "-N" offset, but both
+        // templates' wide, unevenly-shaped bases (21x19 / 12x12 footprints, sampled at a single
+        // corner) mean uneven terrain under the rest of the footprint reads as the drift floating
+        // above dips - SNOW_DRIFT_GROUND_OFFSET sinks the whole base a couple blocks into the
+        // ground so it hugs slopes instead (same technique as OasisPuddleFeature's -4).
         Holder<ConfiguredFeature<?, ?>> snowDrift1 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"), SNOW_DRIFT_GROUND_OFFSET)
@@ -176,22 +177,24 @@ public class GlacierFeatures {
                         BiomeFilter.biome()
                 )));
 
-        // snow_drift.json: iterations 1, scatter_chance 30 (~30% per chunk) -> approximated as
-        // RarityFilter.onAverageOnceEvery(3) (~33%), the nearest integer reciprocal (simplification -
-        // Bedrock's percentage-based scatter_chance has no exact Java equivalent); x/z uniform[0,16]
-        // -> InSquarePlacement.spread(); y = [heightmap, heightmap] -> HeightmapPlacement on
-        // OCEAN_FLOOR_WG (ignores fluids, unlike WORLD_SURFACE_WG, which would land a drift on top
-        // of a frozen lake's water column instead of its bed), with SNOW_DRIFT_GROUND_OFFSET sinking
-        // it in slightly (see that constant's own comment above).
+        // snow_drift.json: iterations 1, scatter_chance 30 (~30% per chunk) -> Bedrock's
+        // percentage-based scatter_chance has no exact Java equivalent, so this is approximated with
+        // RarityFilter; x/z uniform[0,16] -> InSquarePlacement.spread(); y = [heightmap, heightmap]
+        // -> HeightmapPlacement on OCEAN_FLOOR_WG (ignores fluids, unlike WORLD_SURFACE_WG, which
+        // would land a drift on top of a frozen lake's water column instead of its bed), combined
+        // with the SNOW_DRIFT_GROUND_OFFSET groundOffset above (see snowDrift1/2 comment).
         // constraints.unburied + block_intersection.block_allowlist [air, snow_layer] -> a
         // BlockPredicateFilter testing the placement origin itself (0,0,0) must be air or (Java)
         // snow, i.e. the surface must be clear/snow-covered to place onto; constraints.grounded is
         // implicitly satisfied by HeightmapPlacement always landing on top of the first
         // solid/motion-blocking column.
+        // Reduced from onAverageOnceEvery(3) (~33%, the literal reciprocal of Bedrock's 30%) to
+        // onAverageOnceEvery(8) (~12.5%) - drifts were reading as too dense across glacier/frozen
+        // biomes at the literal rate.
         context.register(SELECT_SNOW_DRIFT_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_SNOW_DRIFT_KEY),
                 List.of(
-                        RarityFilter.onAverageOnceEvery(3),
+                        RarityFilter.onAverageOnceEvery(8),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
                         BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), Blocks.AIR, Blocks.SNOW)),
