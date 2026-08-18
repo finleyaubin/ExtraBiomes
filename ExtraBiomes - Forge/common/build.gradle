@@ -1,0 +1,33 @@
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+}
+
+dependencies {
+    // Fabric loader is only needed on the common compile classpath for @Environment annotations
+    // and mixin dependencies. No fabric module exists yet in this project — keep this even so,
+    // it costs nothing and saves a step when a fabric module is added later.
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "dev.architectury:architectury:${rootProject.architectury_api_version}"
+
+    // TerraBlender's API package (terrablender.api.*) is identical across its forge/fabric
+    // artifacts, so common code against it compiles fine without a platform choice here.
+    modCompileOnly "com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}"
+
+    // GeckoLib is used directly by a couple of common classes for this Forge-only pass
+    // (FrogHelmetItem/FrogHelmetRenderer) — a real cross-loader abstraction is deferred
+    // until a second loader is added. Forge's own API (ForgeConfigSpec, FluidType,
+    // ForgeSpawnEggItem, IForgeShearable, ToolAction, IClientItemExtensions — used directly by
+    // Config/ModFluids/ModFluidTypes/ModItems/ModLogs/ModLeavesWithSupport/FrogHelmetItem, all
+    // accepted Forge-shaped exceptions for now) comes from `architectury { common("forge") }"
+    // above, since enabled_platforms=forge.
+    modCompileOnly "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}"
+}
+
+publishing {
+    publications {
+        mavenCommon(MavenPublication) {
+            artifactId = rootProject.archives_base_name
+            from components.java
+        }
+    }
+}

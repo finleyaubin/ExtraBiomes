@@ -1,0 +1,111 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    // src/main/resources/META-INF/accesstransformer.cfg is picked up automatically by Loom's forge platform.
+    runs {
+        client {
+            configName = "Forge Client"
+            client()
+            source sourceSets.main
+        }
+        server {
+            configName = "Forge Server"
+            server()
+            source sourceSets.main
+        }
+        data {
+            configName = "Forge Data"
+            server()
+            source sourceSets.main
+            programArgs '--mod', mod_id, '--all', '--output', file('src/main/generated'), '--existing', project(':common').file('src/main/resources')
+        }
+        gameTestServer {
+            configName = "Forge Game Test Server"
+            server()
+            source sourceSets.main
+            vmArgs "-Dforge.enabledGameTestNamespaces=${mod_id}"
+        }
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    modApi "dev.architectury:architectury-forge:${architectury_api_version}"
+
+    modImplementation "com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}"
+    modImplementation "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+    inputs.property "mod_authors", mod_authors
+    inputs.property "mod_description", mod_description
+    inputs.property "forge_version_range", forge_version_range
+    inputs.property "loader_version_range", loader_version_range
+
+    filesMatching(['META-INF/mods.toml']) {
+        expand([
+                version              : project.version,
+                mod_id               : mod_id,
+                mod_name             : mod_name,
+                mod_authors          : mod_authors,
+                mod_description      : mod_description,
+                forge_version_range  : forge_version_range,
+                loader_version_range : loader_version_range,
+        ])
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+}
