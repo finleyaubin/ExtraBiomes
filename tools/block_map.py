@@ -226,6 +226,14 @@ def map_block(name, states, be=None):
         coral = CORAL_COLOR.get(_s(states.get("coral_color", "blue")), "tube")
         return "minecraft:%s_coral_fan" % coral, {"waterlogged": "true"}
 
+    # Bare full coral blocks (as opposed to coral_block/coral_fan above): Bedrock
+    # names these directly per color ("minecraft:horn_coral" etc.) with no
+    # coral_color state, matching Java's own per-color block names 1:1.
+    if name in ("minecraft:tube_coral", "minecraft:brain_coral", "minecraft:bubble_coral",
+                "minecraft:fire_coral", "minecraft:horn_coral"):
+        prefix = "dead_" if states.get("dead_bit") in (1, True) else ""
+        return "minecraft:%s%s" % (prefix, name[len("minecraft:"):]), {}
+
     if name == "minecraft:kelp":
         age = max(0, min(25, int(states.get("kelp_age", 0))))
         return "minecraft:kelp", {"age": _s(age)}

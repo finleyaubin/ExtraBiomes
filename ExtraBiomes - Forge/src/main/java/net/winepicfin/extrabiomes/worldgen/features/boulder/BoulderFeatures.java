@@ -27,6 +27,7 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
@@ -243,8 +244,10 @@ public class BoulderFeatures {
         )));
 
         // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE) ---
-        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE));
-        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE));
+        // groundOffset -1 sinks the pile's base row slightly into the ground instead of perching
+        // exactly on top of the heightmap surface (same technique as GlacierFeatures' snow drifts).
+        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), -1);
+        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), -1);
 
         // select_stick_pile.json weights: stick_pile0 1, stick_pile1 1 (total 2) -> chance 0.5, default stick_pile1.
         context.register(SELECT_STICK_PILE_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
@@ -259,6 +262,12 @@ public class BoulderFeatures {
                 .map(r -> new SingleStructureConfiguration(structure, r))
                 .orElseGet(() -> new SingleStructureConfiguration(structure));
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+    }
+
+    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset) {
+        ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
+        context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
+                new SingleStructureConfiguration(structure, rotation, groundOffset)));
     }
 
     private static void registerGroundPatch(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, net.minecraft.world.level.block.state.BlockState groundState, Holder<PlacedFeature> pebbleSelect, boolean isPebblePatch) {
@@ -328,13 +337,17 @@ public class BoulderFeatures {
 
         // select_stick_pile (via stick_pile_placer.json): iterations 1, scatter_chance 10, x/z
         // uniform [0,16], y = heightmap +/- 1 (grounded/unburied constraints approximated by
-        // sitting directly on the heightmap surface - see class docs).
+        // sitting directly on the heightmap surface - see class docs). Anchored on OCEAN_FLOOR_WG
+        // (not WORLD_SURFACE_WG, which counts water as non-air and would place the pile floating on
+        // a lake/river's surface) plus SurfaceWaterDepthFilter.forMaxDepth(0) so piles never
+        // generate on or in water at all - same fix as NetherlandsWindmillFeature's own water check.
         context.register(SELECT_STICK_PILE_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_STICK_PILE_KEY),
                 List.of(
                         RarityFilter.onAverageOnceEvery(10),
                         InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        SurfaceWaterDepthFilter.forMaxDepth(0),
                         BiomeFilter.biome()
                 )
         ));

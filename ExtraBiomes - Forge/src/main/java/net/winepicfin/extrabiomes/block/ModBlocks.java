@@ -132,6 +132,7 @@ public class ModBlocks {
     public static final RegistryObject<Block>  PURPLE_MUSHROOM= registerBlock("purple_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_PURPLE_MUSHROOM_KEY));
     public static final RegistryObject<Block>  WHITE_MUSHROOM= registerBlock("white_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_WHITE_MUSHROOM_KEY));
     public static final RegistryObject<Block>  YELLOW_MUSHROOM= registerBlock("yellow_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_YELLOW_MUSHROOM_KEY));
+    public static final RegistryObject<Block>  GLOW_MUSHROOM= registerBlock("glow_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM).lightLevel(BlockState->MiscBlockTuning.GLOW_MUSHROOM_LIGHT_EMISSION), MushroomFeatures.HUGE_GLOW_MUSHROOM_KEY));
 //~~~~~~~~~Mushroom Blocks~~~~~~~~\\
     public static final RegistryObject<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
     public static final RegistryObject<Block>  BLUE_MUSHROOM_BLOCK= registerBlock("blue_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));

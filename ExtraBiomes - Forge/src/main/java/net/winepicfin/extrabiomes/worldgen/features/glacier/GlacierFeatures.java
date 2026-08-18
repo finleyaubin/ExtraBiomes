@@ -114,15 +114,18 @@ public class GlacierFeatures {
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
 
         // Bedrock facing_direction wasn't specified for either snow-drift structure -> random
-        // rotation (SingleStructureConfiguration's 1-arg ctor). Distribution y = [heightmap,
-        // heightmap] (no "-N" offset) -> groundOffset 0 (the 1-arg ctor already defaults to that).
+        // rotation. Distribution y = [heightmap, heightmap] in Bedrock has no "-N" offset, but both
+        // templates' wide, unevenly-shaped bases (21x19 / 12x12 footprints, sampled at a single
+        // corner) mean uneven terrain under the rest of the footprint reads as the drift floating
+        // above dips - a small negative groundOffset sinks the whole base a couple blocks into the
+        // ground so it hugs slopes instead (same technique as OasisPuddleFeature's -4).
         Holder<ConfiguredFeature<?, ?>> snowDrift1 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"), -2)
         ));
         Holder<ConfiguredFeature<?, ?>> snowDrift2 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"), -2)
         ));
         // Sub-features of the weighted selector carry no placement of their own - the outer
         // SELECT_SNOW_DRIFT_PLACED_KEY (registered in bootstrapPlaced) controls where/how often the
@@ -172,20 +175,22 @@ public class GlacierFeatures {
                         BiomeFilter.biome()
                 )));
 
-        // snow_drift.json: iterations 1, scatter_chance 30 (~30% per chunk) -> approximated as
-        // RarityFilter.onAverageOnceEvery(3) (~33%), the nearest integer reciprocal (simplification -
-        // Bedrock's percentage-based scatter_chance has no exact Java equivalent); x/z uniform[0,16]
-        // -> InSquarePlacement.spread(); y = [heightmap, heightmap] -> HeightmapPlacement (no ground
-        // offset needed here, unlike the oasis_puddle worked example which used heightmap-4).
+        // snow_drift.json: iterations 1, scatter_chance 30 (~30% per chunk) -> Bedrock's
+        // percentage-based scatter_chance has no exact Java equivalent, so this is approximated with
+        // RarityFilter; x/z uniform[0,16] -> InSquarePlacement.spread(); y = [heightmap, heightmap]
+        // -> HeightmapPlacement, combined with the -2 groundOffset above (see snowDrift1/2 comment).
         // constraints.unburied + block_intersection.block_allowlist [air, snow_layer] -> a
         // BlockPredicateFilter testing the placement origin itself (0,0,0) must be air or (Java)
         // snow, i.e. the surface must be clear/snow-covered to place onto; constraints.grounded is
         // implicitly satisfied by HeightmapPlacement always landing on top of the first
         // solid/motion-blocking column.
+        // Reduced from onAverageOnceEvery(3) (~33%, the literal reciprocal of Bedrock's 30%) to
+        // onAverageOnceEvery(8) (~12.5%) - drifts were reading as too dense across glacier/frozen
+        // biomes at the literal rate.
         context.register(SELECT_SNOW_DRIFT_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_SNOW_DRIFT_KEY),
                 List.of(
-                        RarityFilter.onAverageOnceEvery(3),
+                        RarityFilter.onAverageOnceEvery(8),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), Blocks.AIR, Blocks.SNOW)),

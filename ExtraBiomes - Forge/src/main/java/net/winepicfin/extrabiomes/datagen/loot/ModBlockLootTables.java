@@ -40,7 +40,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.MYSTIC_SLAB.get(), block -> createSlabItemTable(ModBlocks.MYSTIC_SLAB.get()));
         this.add(ModBlocks.MYSTIC_DOOR.get(), block -> createDoorTable(ModBlocks.MYSTIC_DOOR.get()));
         this.dropSelf(ModBlocks.MYSTIC_SAPLING.get());
-        this.add(ModBlocks.MYSTIC_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.MYSTIC_LEAVES.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
+        this.add(ModBlocks.MYSTIC_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.MYSTIC_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
         this.add(ModBlocks.MYSTIC_SIGN.get(),Block->createSingleItemTable(ModItems.MYSTIC_SIGN.get()));
         this.add(ModBlocks.MYSTIC_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.MYSTIC_SIGN.get()));
         this.add(ModBlocks.MYSTIC_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.MYSTIC_HANGING_SIGN.get()));
@@ -60,7 +60,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.SKY_SLAB.get(), block -> createSlabItemTable(ModBlocks.SKY_SLAB.get()));
         this.add(ModBlocks.SKY_DOOR.get(), block -> createDoorTable(ModBlocks.SKY_DOOR.get()));
         this.dropSelf(ModBlocks.SKY_SAPLING.get());
-        this.add(ModBlocks.SKY_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.SKY_LEAVES.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
+        this.add(ModBlocks.SKY_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.SKY_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
         this.add(ModBlocks.SKY_SIGN.get(),Block->createSingleItemTable(ModItems.SKY_SIGN.get()));
         this.add(ModBlocks.SKY_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.SKY_SIGN.get()));
         this.add(ModBlocks.SKY_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.SKY_HANGING_SIGN.get()));
@@ -80,7 +80,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.PALM_SLAB.get(), block -> createSlabItemTable(ModBlocks.PALM_SLAB.get()));
         this.add(ModBlocks.PALM_DOOR.get(), block -> createDoorTable(ModBlocks.PALM_DOOR.get()));
         this.dropSelf(ModBlocks.PALM_SAPLING.get());
-        this.add(ModBlocks.PALM_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.PALM_LEAVES.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
+        this.add(ModBlocks.PALM_LEAVES.get(), (block -> createLeavesDrops(block, ModBlocks.PALM_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES)));
         this.add(ModBlocks.PALM_SIGN.get(),Block->createSingleItemTable(ModItems.PALM_SIGN.get()));
         this.add(ModBlocks.PALM_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.PALM_SIGN.get()));
         this.add(ModBlocks.PALM_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.PALM_HANGING_SIGN.get()));
@@ -110,6 +110,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.PURPLE_MUSHROOM.get());
         this.dropSelf(ModBlocks.WHITE_MUSHROOM.get());
         this.dropSelf(ModBlocks.YELLOW_MUSHROOM.get());
+        this.dropSelf(ModBlocks.GLOW_MUSHROOM.get());
         //~~~~~~~~~Mushrooms~~~~~~~~\\
         this.dropSelf(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
         this.dropSelf(ModBlocks.BLUE_MUSHROOM_BLOCK.get());

@@ -13,6 +13,9 @@ public final class MiscBlockTuning {
     // Java's light level).
     public static final int GLOW_MUSHROOM_BLOCK_LIGHT_EMISSION = 13;
 
+    // blocks/mushrooms/glow_mushroom.json: minecraft:light_emission.
+    public static final int GLOW_MUSHROOM_LIGHT_EMISSION = 10;
+
     private MiscBlockTuning() {
     }
 }

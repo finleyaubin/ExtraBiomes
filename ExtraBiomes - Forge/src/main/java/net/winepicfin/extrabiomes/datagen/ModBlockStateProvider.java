@@ -123,6 +123,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         saplingBlock(ModBlocks.PURPLE_MUSHROOM);
         saplingBlock(ModBlocks.WHITE_MUSHROOM);
         saplingBlock(ModBlocks.YELLOW_MUSHROOM);
+        saplingBlock(ModBlocks.GLOW_MUSHROOM);
         //~~~~~~~~~Mushrooms~~~~~~~~\\
         blockWithItem(ModBlocks.BLACK_MUSHROOM_BLOCK);
         blockWithItem(ModBlocks.BLUE_MUSHROOM_BLOCK);
