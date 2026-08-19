@@ -76,7 +76,7 @@ public class OasisFossilFeatures {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         for (int i = 0; i < BONE_PIECES.length; i++) {
-            ResourceLocation structure = ResourceLocation.withDefaultNamespace(BONE_PIECES[i]);
+            ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, BONE_PIECES[i]);
             context.register(PIECE_KEYS.get(i), new ConfiguredFeature<>(
                     ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                     new SingleStructureConfiguration(structure)

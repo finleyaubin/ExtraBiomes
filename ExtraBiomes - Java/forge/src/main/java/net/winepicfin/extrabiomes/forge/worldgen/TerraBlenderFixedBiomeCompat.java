@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.worldgen;
+package net.winepicfin.extrabiomes.forge.worldgen;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

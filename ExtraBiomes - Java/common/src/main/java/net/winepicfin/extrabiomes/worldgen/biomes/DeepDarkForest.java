@@ -32,16 +32,22 @@ public class DeepDarkForest {
         //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
-        BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addForestGrass(biomeBuilder);
         // Bedrock's deep_dark_forest carries both the "taiga"+"mega" tags (large/old-growth taiga
         // trees) and the "roofed" tag (dark oak trees) at once - both are added here rather than
         // picking just one, matching that hybrid tag set.
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_OLD_GROWTH_SPRUCE_TAIGA);
+        //
+        // FeatureSorter builds one global per-step feature order across every biome that shares
+        // a placed feature, so a feature's position here must stay consistent with its position
+        // in whichever vanilla biome it's borrowed from (dark_forest for DARK_FOREST_VEGETATION,
+        // old-growth taiga for TREES_OLD_GROWTH_SPRUCE_TAIGA/addGiantTaigaVegetation) or two
+        // biomes disagreeing on the order produces an IllegalStateException: Feature order cycle.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.DARK_FOREST_VEGETATION);
+        BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_OLD_GROWTH_SPRUCE_TAIGA);
+        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
+        BiomeDefaultFeatures.addForestGrass(biomeBuilder);
         BiomeDefaultFeatures.addGiantTaigaVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);

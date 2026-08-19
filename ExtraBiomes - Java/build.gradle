@@ -20,7 +20,6 @@ subprojects {
     }
 
     repositories {
-        mavenLocal()
         maven {
             name = 'GeckoLib'
             url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
@@ -61,6 +60,13 @@ allprojects {
 
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        // Pin the toolchain instead of relying on whatever JDK happens to be the
+        // caller's default (Minecraft 1.20.1/Loom requires 17) - keeps the build
+        // reproducible across machines regardless of the system default JDK.
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
 
     tasks.named('test', Test).configure {

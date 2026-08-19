@@ -97,7 +97,7 @@ import java.util.Optional;
  *       (with a {@code extrabiomes:facing}/block_face state). Bedrock's permutations only ever
  *       apply an identical rotation within each opposite-face pair (north/south, east/west,
  *       up/down), i.e. the visual only depends on {@link net.minecraft.core.Direction#getAxis()}
- *       - exactly like a log - so it is ported as {@link net.winepicfin.extrabiomes.block.custom.StickPileBlock},
+ *       - exactly like a log - so it is ported as {@code net.winepicfin.extrabiomes.forge.block.custom.StickPileBlock},
  *       a {@link net.minecraft.world.level.block.RotatedPillarBlock} with three baked per-axis
  *       models (see tools/convert_stick_pile_model.py, which converts the Bedrock geometry
  *       directly since its bones carry no rotations of their own). tools/block_map.py maps

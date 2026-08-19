@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.block.custom;
+package net.winepicfin.extrabiomes.forge.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

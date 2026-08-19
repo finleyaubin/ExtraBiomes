@@ -2,6 +2,11 @@ architectury {
     common(rootProject.enabled_platforms.split(","))
 }
 
+// Datagen output (see forge/build.gradle's data run) lands here. Without this, the generated
+// datapack JSON (biomes, tags, recipes, loot tables, ...) only exists on disk for tests to read
+// directly - it's never actually packaged into the mod, so none of it exists at runtime.
+sourceSets.main.resources.srcDir 'src/generated/resources'
+
 dependencies {
     // Fabric loader is only needed on the common compile classpath for @Environment annotations
     // and mixin dependencies. No fabric module exists yet in this project — keep this even so,
@@ -38,6 +43,10 @@ dependencies {
     // Forge's own authored classes (not SRG-obfuscated, unlike vanilla Minecraft symbols in
     // this jar) so it's safe to reference at compile time without Loom's remapping.
     compileOnly "net.minecraftforge:forge:${minecraft_version}-${forge_version}:universal"
+    // IEventBus (used by ModFluidTypes to defer registration of the forge:fluid_type custom
+    // registry via Forge's own DeferredRegister) lives in this separate artifact, not in the
+    // "universal" jar above.
+    compileOnly "net.minecraftforge:eventbus:6.0.5"
     // javax.annotation.Nullable (JSR-305) — pulled in transitively via ForgeGradle previously,
     // not automatically present under Loom.
     compileOnly "com.google.code.findbugs:jsr305:3.0.2"

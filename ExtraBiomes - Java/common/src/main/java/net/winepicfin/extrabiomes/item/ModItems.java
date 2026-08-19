@@ -8,22 +8,21 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModEntities;
-import net.winepicfin.extrabiomes.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.custom.BaitItem;
 import net.winepicfin.extrabiomes.item.custom.DiamondRazorFeatherItem;
-import net.winepicfin.extrabiomes.item.custom.FrogHelmetItem;
 import net.winepicfin.extrabiomes.item.custom.JellyfishJamBottleItem;
 import net.winepicfin.extrabiomes.item.custom.JellyfishingNetItem;
 import net.winepicfin.extrabiomes.item.custom.NetheriteRazorFeatherItem;
 import net.winepicfin.extrabiomes.item.custom.PebbleItem;
 import net.winepicfin.extrabiomes.item.custom.RazorFeatherItem;
+import net.winepicfin.extrabiomes.platform.ExtraBiomesExpectPlatform;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.ITEM);
     public  static final RegistrySupplier<Item> PEBBLE = ITEMS.register("pebble",()-> new PebbleItem(new Item.Properties()));
     public  static final RegistrySupplier<Item> MOSSY_PEBBLE = ITEMS.register("mossy_pebble",()-> new PebbleItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> BUCKET_OF_GOO = ITEMS.register("bucket_of_goo",()-> new BucketItem(ModFluids.SOURCE_GOO, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistrySupplier<Item> BUCKET_OF_GOO = ITEMS.register("bucket_of_goo",()-> ExtraBiomesExpectPlatform.createBucketOfGooItem(new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     public static final RegistrySupplier<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
     public static final RegistrySupplier<Item> DIAMOND_RAZOR_FEATHER = ITEMS.register("diamond_razor_feather",()-> new DiamondRazorFeatherItem(new Item.Properties()));
     public static final RegistrySupplier<Item> NETHERITE_RAZOR_FEATHER = ITEMS.register("netherite_razor_feather",()-> new NetheriteRazorFeatherItem(new Item.Properties().fireResistant()));
@@ -36,7 +35,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> JELLYFISH_JAM_BOTTLE = ITEMS.register("jellyfish_jam_bottle",()-> new JellyfishJamBottleItem(new Item.Properties().food(ModFoods.JELLYFISH_JAM).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_EMPTY = ITEMS.register("jellyfishing_net_empty",()-> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_FULL = ITEMS.register("jellyfishing_net_full",()-> new JellyfishingNetItem(new Item.Properties().stacksTo(1)));
-    public static final RegistrySupplier<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> new FrogHelmetItem(ModItemMaterials.FROG, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistrySupplier<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> ExtraBiomesExpectPlatform.createFrogHelmetItem(ModItemMaterials.FROG, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistrySupplier<Item> MYSTIC_SIGN = ITEMS.register("mystic_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.MYSTIC_SIGN.get(),ModBlocks.MYSTIC_WALL_SIGN.get()));
     public static final RegistrySupplier<Item> MYSTIC_HANGING_SIGN = ITEMS.register("mystic_hanging_sign",()-> new HangingSignItem(ModBlocks.MYSTIC_HANGING_SIGN.get(),ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> PALM_SIGN = ITEMS.register("palm_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.PALM_SIGN.get(),ModBlocks.PALM_WALL_SIGN.get()));

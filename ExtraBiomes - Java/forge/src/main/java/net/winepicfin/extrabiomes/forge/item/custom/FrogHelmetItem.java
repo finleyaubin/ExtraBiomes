@@ -1,42 +1,34 @@
-package net.winepicfin.extrabiomes.item.custom;
+package net.winepicfin.extrabiomes.forge.item.custom;
 
 import com.google.common.collect.ImmutableMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.winepicfin.extrabiomes.entity.client.armour.FrogHelmetRenderer;
 import net.winepicfin.extrabiomes.item.ModItemMaterials;
-import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.constant.DefaultAnimations;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
-
+// Lives in forge/ (not common/) because initializeClient overrides IForgeItem.initializeClient,
+// a method Forge's patches add to the vanilla Item hierarchy - common only compiles against
+// plain vanilla Item, which has no such method to override. See
+// platform/ExtraBiomesExpectPlatform#createFrogHelmetItem for how common constructs one.
 public final class FrogHelmetItem extends ArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public static final Map<ArmorMaterial, MobEffectInstance> MATERIAL_MOB_EFFECT_INSTANCE_MAP = (new ImmutableMap.Builder<ArmorMaterial, MobEffectInstance>()).put(ModItemMaterials.FROG, new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 1, false, false, true ))
@@ -119,5 +111,3 @@ public final class FrogHelmetItem extends ArmorItem implements GeoItem {
     }
 
 }
-
-

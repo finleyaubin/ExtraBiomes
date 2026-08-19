@@ -22,9 +22,12 @@ loom {
         }
         data {
             configName = "Forge Data"
-            server()
-            source sourceSets.main
-            programArgs '--mod', mod_id, '--all', '--output', file('src/main/generated').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            data()
+            // Output goes into common/src/generated/resources, not this module's own
+            // src/main/generated: datapack content is loader-agnostic and the common-module
+            // tests (e.g. BiomeRegistrationParityTest) read it from there via a path relative
+            // to common's own project directory.
+            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
         }
         gameTestServer {
             configName = "Forge Game Test Server"

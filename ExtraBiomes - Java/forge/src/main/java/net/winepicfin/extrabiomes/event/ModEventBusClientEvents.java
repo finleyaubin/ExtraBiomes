@@ -22,7 +22,7 @@ import net.winepicfin.extrabiomes.entity.client.TreefrogModel;
 import net.winepicfin.extrabiomes.entity.client.WormModel;
 import net.winepicfin.extrabiomes.entity.client.layers.PuckooBaseModelLayers;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
-import net.winepicfin.extrabiomes.entity.client.layers.WolfFrogHatLayer;
+import net.winepicfin.extrabiomes.forge.entity.client.layers.WolfFrogHatLayer;
 
 @Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {

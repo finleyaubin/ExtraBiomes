@@ -9,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModNoiseParameters;
-import net.winepicfin.extrabiomes.worldgen.ModBiomeModifiers;
+import net.winepicfin.extrabiomes.forge.worldgen.ModBiomeModifiers;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.ModConfigureFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.OasisPuddleFeature;

@@ -11,7 +11,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 
 public class ModCreativeModeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.CREATIVE_MODE_TAB);
-    public static final RegistrySupplier<CreativeModeTab> EXTRABIOMES_TAB = CREATIVE_MODE_TAB.register("extrabiomes_tab",()-> CreativeModeTab.builder().icon(()->new ItemStack(ModBlocks.MYSTIC_SAPLING.get()))
+    public static final RegistrySupplier<CreativeModeTab> EXTRABIOMES_TAB = CREATIVE_MODE_TAB.register("extrabiomes_tab",()-> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0).icon(()->new ItemStack(ModBlocks.MYSTIC_SAPLING.get()))
             .title(Component.translatable("creativetab.extrabiomes"))
             .displayItems((pParameters, pOutput)->{
                 //~~~~~~~~~~~~~Items~~~~~~~~~~~~\\

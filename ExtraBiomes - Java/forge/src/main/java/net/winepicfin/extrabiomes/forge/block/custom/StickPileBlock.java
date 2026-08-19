@@ -1,5 +1,6 @@
-package net.winepicfin.extrabiomes.block.custom;
+package net.winepicfin.extrabiomes.forge.block.custom;
 
+import net.winepicfin.extrabiomes.block.custom.StickPileTuning;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;

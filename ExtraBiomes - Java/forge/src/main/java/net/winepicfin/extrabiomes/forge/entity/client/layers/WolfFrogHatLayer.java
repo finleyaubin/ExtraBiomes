@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.entity.client.layers;
+package net.winepicfin.extrabiomes.forge.entity.client.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

@@ -38,20 +38,23 @@ public class CharredForest {
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, CharredForestFeatures.BURNT_BASALT_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, CharredForestFeatures.BURNT_MAGMA_PLACED_KEY);
+        // Must stay in this order - vanilla's own forest biome (the "other birch trees" branch of
+        // OverworldBiomes#forest) calls these in exactly this sequence: addForestFlowers,
+        // addDefaultOres, addDefaultSoftDisks, TREES_BIRCH_AND_OAK, addDefaultFlowers,
+        // addForestGrass, addDefaultMushrooms, addDefaultExtraVegetation. FeatureSorter builds one
+        // global per-step ordering across every biome that shares a placed feature, so
+        // disagreeing on the relative order of two shared features is a hard "Feature order
+        // cycle" crash at world load, not just a cosmetic difference.
+        BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
-        // Must stay in this order (addForestFlowers before addDefaultFlowers) - vanilla's own
-        // forest/dark-forest biomes always call them in this order, and DeepDarkForest does too;
-        // FeatureSorter builds one global per-step ordering across every biome, so disagreeing on
-        // the relative order of two features both biomes share is a hard "Feature order cycle"
-        // crash at world load, not just a cosmetic difference.
-        BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addForestGrass(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);
         // Standard forest trees (the same oak/birch mix vanilla's Forest biome uses) alongside the
         // charred trees, rather than charred trees being the only tree type in the biome.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_BIRCH_AND_OAK);
+        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
+        BiomeDefaultFeatures.addForestGrass(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.CHARRED_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, CharredForestFeatures.SCATTER_FIRE_PLACED_KEY);

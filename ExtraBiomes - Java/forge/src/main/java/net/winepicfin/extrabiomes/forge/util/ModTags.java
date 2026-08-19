@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.util;
+package net.winepicfin.extrabiomes.forge.util;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
