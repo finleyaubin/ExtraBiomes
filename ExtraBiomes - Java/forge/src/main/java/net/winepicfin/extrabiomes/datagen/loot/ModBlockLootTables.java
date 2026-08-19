@@ -25,7 +25,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.NETHER_DIAMOND_ORE.get(),block -> createOreDrop(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
         this.dropSelf(ModBlocks.STICK_PILE.get());
 
-        //~~~~~~~~~~~~~Black Sand~~~~~~~~~~\\
+        // Black Sand
         this.dropSelf(ModBlocks.BLACK_SAND.get());
         this.dropSelf(ModBlocks.BLACK_SANDSTONE.get());
         this.dropSelf(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
@@ -38,7 +38,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()));
         this.add(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()));
 
-        //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
+        // Mystic Wood
         this.dropSelf(ModBlocks.MYSTIC_PLANKS.get());
         this.dropSelf(ModBlocks.MYSTIC_LOG.get());
         this.dropSelf(ModBlocks.MYSTIC_WOOD.get());
@@ -58,7 +58,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.MYSTIC_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.MYSTIC_SIGN.get()));
         this.add(ModBlocks.MYSTIC_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.MYSTIC_HANGING_SIGN.get()));
         this.add(ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.MYSTIC_HANGING_SIGN.get()));
-        //~~~~~~~~~~~~~Sky Wood~~~~~~~~~~\\
+        // Sky Wood
         this.dropSelf(ModBlocks.SKY_PLANKS.get());
         this.dropSelf(ModBlocks.SKY_LOG.get());
         this.dropSelf(ModBlocks.SKY_WOOD.get());
@@ -78,7 +78,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.SKY_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.SKY_SIGN.get()));
         this.add(ModBlocks.SKY_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.SKY_HANGING_SIGN.get()));
         this.add(ModBlocks.SKY_WALL_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.SKY_HANGING_SIGN.get()));
-        //~~~~~~~~~~~~~Palm Wood~~~~~~~~~~\\
+        // Palm Wood
         this.dropSelf(ModBlocks.PALM_PLANKS.get());
         this.dropSelf(ModBlocks.PALM_LOG.get());
         this.dropSelf(ModBlocks.PALM_WOOD.get());
@@ -98,7 +98,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.PALM_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.PALM_SIGN.get()));
         this.add(ModBlocks.PALM_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.PALM_HANGING_SIGN.get()));
         this.add(ModBlocks.PALM_WALL_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.PALM_HANGING_SIGN.get()));
-        //~~~~~~~~~~~~~Gilded sky Wood~~~~~~~~~~\\
+        // Gilded sky Wood
         this.dropSelf(ModBlocks.GILDED_SKY_PLANKS.get());
         this.dropSelf(ModBlocks.GILDED_SKY_LOG.get());
         this.dropSelf(ModBlocks.GILDED_SKY_WOOD.get());
@@ -114,7 +114,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(ModBlocks.GILDED_SKY_WALL_SIGN.get(),Block->createSingleItemTable(ModItems.GILDED_SKY_SIGN.get()));
         this.add(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.GILDED_SKY_HANGING_SIGN.get()));
         this.add(ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),Block->createSingleItemTable(ModItems.GILDED_SKY_HANGING_SIGN.get()));
-        //~~~~~~~~~Small Mushrooms~~~~~~~~\\
+        // Small Mushrooms
         this.dropSelf(ModBlocks.BLACK_MUSHROOM.get());
         this.dropSelf(ModBlocks.BLUE_MUSHROOM.get());
         this.dropSelf(ModBlocks.CYAN_MUSHROOM.get());
@@ -123,7 +123,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.PURPLE_MUSHROOM.get());
         this.dropSelf(ModBlocks.WHITE_MUSHROOM.get());
         this.dropSelf(ModBlocks.YELLOW_MUSHROOM.get());
-        //~~~~~~~~~Mushrooms~~~~~~~~\\
+        // Mushrooms
         this.dropSelf(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
         this.dropSelf(ModBlocks.BLUE_MUSHROOM_BLOCK.get());
         this.dropSelf(ModBlocks.CYAN_MUSHROOM_BLOCK.get());

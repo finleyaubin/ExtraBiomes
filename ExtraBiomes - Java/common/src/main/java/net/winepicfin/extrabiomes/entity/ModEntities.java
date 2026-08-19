@@ -24,7 +24,7 @@ import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectil
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.ENTITY_TYPE);
 
-    // ~~~~~~~~~~~~~ Mobs ~~~~~~~~~~~~~ \\
+    // Mobs
     public static final RegistrySupplier<EntityType<PuckooEntity>> PUCKOO = ENTITIES.register("puckoo",
             () -> EntityType.Builder.of(PuckooEntity::new, MobCategory.CREATURE).sized(0.8f, 1f).build("puckoo"));
     public static final RegistrySupplier<EntityType<WormEntity>> WORM = ENTITIES.register("worm",
@@ -42,7 +42,7 @@ public class ModEntities {
     public static final RegistrySupplier<EntityType<HarpyEntity>> HARPY = ENTITIES.register("harpy",
             () -> EntityType.Builder.of(HarpyEntity::new, MobCategory.MONSTER).sized(2.0f, 2.0f).build("harpy"));
 
-    // ~~~~~~~~~~~~~ Projectiles ~~~~~~~~~~~~~ \\
+    // Projectiles
     public static final RegistrySupplier<EntityType<PebbleProjectileEntity>> PEBBLE_PROJECTILE = ENTITIES.register("pebble_projectile",
             () -> EntityType.Builder.<PebbleProjectileEntity>of(PebbleProjectileEntity::new, MobCategory.MISC).sized(0.5f, 0.5f).build("pebble_projectile"));
     public static final RegistrySupplier<EntityType<MossyPebbleProjectileEntity>> MOSSY_PEBBLE_PROJECTILE = ENTITIES.register("mossy_pebble_projectile",

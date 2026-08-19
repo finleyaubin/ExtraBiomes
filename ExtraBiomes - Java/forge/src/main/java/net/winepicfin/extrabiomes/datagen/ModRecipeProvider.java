@@ -15,7 +15,6 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -43,79 +42,74 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
         blackSandRecipes(pWriter);
         gildRecipes(pWriter,
-                new ArrayList<>() {{
-                        add(ModBlocks.SKY_PLANKS.get());
-                        add(ModBlocks.SKY_LOG.get());
-                        add(ModBlocks.SKY_WOOD.get());
-                        add(ModBlocks.SKY_STAIRS.get());
-                        add(ModBlocks.SKY_SLAB.get());
-                        add(ModBlocks.SKY_BUTTON.get());
-                        add(ModBlocks.SKY_PRESSURE_PLATE.get());
-                        add(ModBlocks.SKY_FENCE_GATE.get());
-                        add(ModBlocks.SKY_FENCE.get());
-                        add(ModBlocks.SKY_DOOR.get());
-                        add(ModBlocks.SKY_TRAPDOOR.get());
-                        add(ModBlocks.SKY_SIGN.get());
-                    }
-                }, new ArrayList<>() {{
-                    add(ModBlocks.GILDED_SKY_PLANKS.get());
-                    add(ModBlocks.GILDED_SKY_LOG.get());
-                    add(ModBlocks.GILDED_SKY_WOOD.get());
-                    add(ModBlocks.GILDED_SKY_STAIRS.get());
-                    add(ModBlocks.GILDED_SKY_SLAB.get());
-                    add(ModBlocks.GILDED_SKY_BUTTON.get());
-                    add(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());
-                    add(ModBlocks.GILDED_SKY_FENCE_GATE.get());
-                    add(ModBlocks.GILDED_SKY_FENCE.get());
-                    add(ModBlocks.GILDED_SKY_DOOR.get());
-                    add(ModBlocks.GILDED_SKY_TRAPDOOR.get());
-                    add(ModBlocks.GILDED_SKY_SIGN.get());
-                }});
+                List.of(
+                        ModBlocks.SKY_PLANKS.get(),
+                        ModBlocks.SKY_LOG.get(),
+                        ModBlocks.SKY_WOOD.get(),
+                        ModBlocks.SKY_STAIRS.get(),
+                        ModBlocks.SKY_SLAB.get(),
+                        ModBlocks.SKY_BUTTON.get(),
+                        ModBlocks.SKY_PRESSURE_PLATE.get(),
+                        ModBlocks.SKY_FENCE_GATE.get(),
+                        ModBlocks.SKY_FENCE.get(),
+                        ModBlocks.SKY_DOOR.get(),
+                        ModBlocks.SKY_TRAPDOOR.get(),
+                        ModBlocks.SKY_SIGN.get()
+                ), List.of(
+                        ModBlocks.GILDED_SKY_PLANKS.get(),
+                        ModBlocks.GILDED_SKY_LOG.get(),
+                        ModBlocks.GILDED_SKY_WOOD.get(),
+                        ModBlocks.GILDED_SKY_STAIRS.get(),
+                        ModBlocks.GILDED_SKY_SLAB.get(),
+                        ModBlocks.GILDED_SKY_BUTTON.get(),
+                        ModBlocks.GILDED_SKY_PRESSURE_PLATE.get(),
+                        ModBlocks.GILDED_SKY_FENCE_GATE.get(),
+                        ModBlocks.GILDED_SKY_FENCE.get(),
+                        ModBlocks.GILDED_SKY_DOOR.get(),
+                        ModBlocks.GILDED_SKY_TRAPDOOR.get(),
+                        ModBlocks.GILDED_SKY_SIGN.get()
+                ));
     }
 
     public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
     public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
 
 
-    protected static void oreSmelting(Consumer<FinishedRecipe> p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_) {
-        oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_smelting");
-    }
-
-    protected static void oreBlasting(Consumer<FinishedRecipe> p_248775_, List<ItemLike> p_251504_, RecipeCategory p_248846_, ItemLike p_249735_, float p_248783_, int p_250303_, String p_251984_, Boolean createSmelting) {
-        oreCooking(p_248775_, RecipeSerializer.BLASTING_RECIPE, p_251504_, p_248846_, p_249735_, p_248783_, p_250303_, p_251984_, "_from_blasting");
+    protected static void oreBlasting(Consumer<FinishedRecipe> recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean createSmelting) {
+        oreCooking(recipeOutput, RecipeSerializer.BLASTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_blasting");
         if (createSmelting) {
-            oreSmelting(p_248775_, p_251504_, p_248846_, p_249735_, p_248783_, p_250303_ * 2, p_251984_);
+            oreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime * 2, group, "_from_smelting");
         }
     }
 
-    protected static void foodCooking(Consumer<FinishedRecipe> p_250654_, List<ItemLike> p_250172_, RecipeCategory p_250588_, ItemLike p_251868_, float p_250789_, int p_252144_, String p_251687_, Boolean campfireAndSmoker) {
-        oreCooking(p_250654_, RecipeSerializer.SMELTING_RECIPE, p_250172_, p_250588_, p_251868_, p_250789_, p_252144_, p_251687_, "_from_cooking");
+    protected static void foodCooking(Consumer<FinishedRecipe> recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean campfireAndSmoker) {
+        oreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_cooking");
         if (campfireAndSmoker) {
-            campfireCooking(p_250654_, "campfire_cooking", 600, p_250172_, p_251868_, p_250789_);
-            smokingCooking(p_250654_, "smoking", 100, p_250172_, p_251868_, p_250789_);
+            campfireCooking(recipeOutput, "campfire_cooking", 600, ingredients, result, experience);
+            smokingCooking(recipeOutput, "smoking", 100, ingredients, result, experience);
         }
     }
 
-    protected static void oreCooking(Consumer<FinishedRecipe> pfinishedRecipeConsumer, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> p_249619_, RecipeCategory p_251154_, ItemLike p_250066_, float p_251871_, int p_251316_, String p_251450_, String pRecipieName) {
-        for (ItemLike itemlike : p_249619_) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), p_251154_, p_250066_, p_251871_, p_251316_, recipeSerializer).group(p_251450_).unlockedBy(getHasName(itemlike), has(itemlike))
-                    .save(pfinishedRecipeConsumer, ExtraBiomes.MOD_ID + ":" + getItemName(p_250066_) + pRecipieName + "_" + getItemName(itemlike));
+    protected static void oreCooking(Consumer<FinishedRecipe> recipeOutput, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
+        for (ItemLike itemlike : ingredients) {
+            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), category, result, experience, cookingTime, recipeSerializer).group(group).unlockedBy(getHasName(itemlike), has(itemlike))
+                    .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(result) + recipeSuffix + "_" + getItemName(itemlike));
         }
     }
 
-    private static void campfireCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
+    private static void campfireCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
         for (ItemLike itemlike : ingredient) {
-            SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, p_252138_, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
+            SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
         }
     }
 
-    private static void smokingCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float p_252138_) {
+    private static void smokingCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
         for (ItemLike itemlike : ingredient) {
-            SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, p_252138_, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
+            SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
         }
     }
 
-    private static void gildRecipes(Consumer<FinishedRecipe> recipeOutput, ArrayList<Block> nonGilded, ArrayList<Block> gilded) {
+    private static void gildRecipes(Consumer<FinishedRecipe> recipeOutput, List<Block> nonGilded, List<Block> gilded) {
         int recipeNum = 0;
         for (Block currentNonGilded : nonGilded) {
             gild(recipeOutput, currentNonGilded, gilded.get(recipeNum++));
@@ -123,12 +117,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     }
 
     private static void woodRecipes(Consumer<FinishedRecipe> recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block stripedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign) {
-        List<ItemLike> woods = new ArrayList<>() {{
-            add(log);
-            add(strippedLog);
-            add(wood);
-            add(stripedWood);
-        }};
+        List<ItemLike> woods = List.of(log, strippedLog, wood, stripedWood);
         planks(recipeOutput, woods, plank);
         wood(recipeOutput, log, wood);
         wood(recipeOutput, strippedLog, stripedWood);

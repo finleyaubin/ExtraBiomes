@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -86,7 +85,6 @@ public class ExtraBiomesForge
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::addCreative);
         modEventBus.addListener((ModConfigEvent event) -> Config.load());
 
         // Register ourselves for server and other game events we are interested in
@@ -136,10 +134,6 @@ public class ExtraBiomesForge
             ModVanillaCompat.register();
         });
     }
-
-
-private void addCreative(BuildCreativeModeTabContentsEvent event){
-}
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

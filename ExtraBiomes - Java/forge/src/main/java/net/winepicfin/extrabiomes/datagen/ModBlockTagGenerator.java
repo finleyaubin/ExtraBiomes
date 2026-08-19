@@ -50,7 +50,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         );
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(
-                //~~~~~~~~~mystic wood~~~~~~~~\\
+                // mystic wood
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.MYSTIC_STAIRS.get(),
                 ModBlocks.MYSTIC_SLAB.get(),
@@ -64,7 +64,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.MYSTIC_HANGING_SIGN.get(),
                 ModBlocks.MYSTIC_WALL_SIGN.get(),
                 ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),
-                //~~~~~~~~~sky wood~~~~~~~~\\
+                // sky wood
                 ModBlocks.SKY_PLANKS.get(),
                 ModBlocks.SKY_STAIRS.get(),
                 ModBlocks.SKY_SLAB.get(),
@@ -78,7 +78,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_HANGING_SIGN.get(),
                 ModBlocks.SKY_WALL_SIGN.get(),
                 ModBlocks.SKY_WALL_HANGING_SIGN.get(),
-                //~~~~~~~~~palm wood~~~~~~~~\\
+                // palm wood
                 ModBlocks.PALM_PLANKS.get(),
                 ModBlocks.PALM_STAIRS.get(),
                 ModBlocks.PALM_SLAB.get(),
@@ -92,11 +92,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.PALM_HANGING_SIGN.get(),
                 ModBlocks.PALM_WALL_SIGN.get(),
                 ModBlocks.PALM_WALL_HANGING_SIGN.get(),
-                //~~~~~~~~~Gilded_sky wood~~~~~~~~\\
+                // Gilded_sky wood
                 ModBlocks.GILDED_SKY_PLANKS.get(),
                 ModBlocks.GILDED_SKY_STAIRS.get(),
                 ModBlocks.GILDED_SKY_SLAB.get(),
-                ModBlocks.GILDED_SKY_BUTTON.get(),
                 ModBlocks.GILDED_SKY_BUTTON.get(),
                 ModBlocks.GILDED_SKY_PRESSURE_PLATE.get(),
                 ModBlocks.GILDED_SKY_FENCE.get(),

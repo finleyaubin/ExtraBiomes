@@ -8,7 +8,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 public class ModVanillaCompat {
     public static void register(){
         registerFlammable(ModBlocks.STICK_PILE.get(),50,50);
-        //~~~~~~~~~~~~Mystic Wood~~~~~~~~~~~~\\
+        // Mystic Wood
         registerFlammable(ModBlocks.MYSTIC_PLANKS.get(),5,5);
         registerFlammable(ModBlocks.MYSTIC_LOG.get(),5,20);
         registerFlammable(ModBlocks.MYSTIC_WOOD.get(),5,20);
@@ -24,7 +24,7 @@ public class ModVanillaCompat {
         registerFlammable(ModBlocks.MYSTIC_FENCE_GATE.get(),5,20);
         registerFlammable(ModBlocks.MYSTIC_DOOR.get(),5,20);
         registerFlammable(ModBlocks.MYSTIC_TRAPDOOR.get(),5,20);
-        //~~~~~~~~~~~~Palm Wood~~~~~~~~~~~~\\
+        // Palm Wood
         registerFlammable(ModBlocks.PALM_PLANKS.get(),5,5);
         registerFlammable(ModBlocks.PALM_LOG.get(),5,20);
         registerFlammable(ModBlocks.PALM_WOOD.get(),5,20);
@@ -40,7 +40,7 @@ public class ModVanillaCompat {
         registerFlammable(ModBlocks.PALM_FENCE_GATE.get(),5,20);
         registerFlammable(ModBlocks.PALM_DOOR.get(),5,20);
         registerFlammable(ModBlocks.PALM_TRAPDOOR.get(),5,20);
-        //~~~~~~~~~~~~Sky Wood~~~~~~~~~~~~\\
+        // Sky Wood
         registerFlammable(ModBlocks.SKY_PLANKS.get(),5,5);
         registerFlammable(ModBlocks.SKY_LOG.get(),5,20);
         registerFlammable(ModBlocks.SKY_WOOD.get(),5,20);
@@ -56,7 +56,7 @@ public class ModVanillaCompat {
         registerFlammable(ModBlocks.SKY_FENCE_GATE.get(),5,20);
         registerFlammable(ModBlocks.SKY_DOOR.get(),5,20);
         registerFlammable(ModBlocks.SKY_TRAPDOOR.get(),5,20);
-        //~~~~~~~~~~~~Gilded Sky Wood~~~~~~~~~~~~\\
+        // Gilded Sky Wood
         registerFlammable(ModBlocks.GILDED_SKY_PLANKS.get(),5,5);
         registerFlammable(ModBlocks.GILDED_SKY_LOG.get(),5,20);
         registerFlammable(ModBlocks.GILDED_SKY_WOOD.get(),5,20);

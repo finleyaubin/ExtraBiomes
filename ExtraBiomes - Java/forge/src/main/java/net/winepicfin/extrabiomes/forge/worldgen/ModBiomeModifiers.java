@@ -97,7 +97,7 @@ public class ModBiomeModifiers {
             HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
             GenerationStep.Decoration.VEGETAL_DECORATION));
 
-    // ~~~~~~~~~ Mob spawns (Bedrock spawn_rules -> vanilla + mod biomes) ~~~~~~~~~ \\
+    // Mob spawns (Bedrock spawn_rules -> vanilla + mod biomes)
     // jungle tag: giant_tortoise, piranha, treefrog
     context.register(ADD_SPAWN_GIANT_TORTOISE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
             biomes.getOrThrow(BiomeTags.IS_JUNGLE),

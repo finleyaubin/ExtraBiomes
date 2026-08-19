@@ -41,7 +41,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.WORM);
         simpleItem(ModItems.BAIT);
         simpleItem(ModItems.JELLYFISH_JAM_BOTTLE);
-        //~~~~~~~~~Small Mushrooms~~~~~~~~\\
+        // Small Mushrooms
         saplingItem(ModBlocks.BLACK_MUSHROOM);
         saplingItem(ModBlocks.BLUE_MUSHROOM);
         saplingItem(ModBlocks.CYAN_MUSHROOM);
@@ -57,7 +57,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_SLAB);
 
-        //~~~~~~~~~~~~~Black Sand~~~~~~~~~~\\
+        // Black Sand
         evenSimplerBlockItem(ModBlocks.BLACK_SANDSTONE_STAIRS);
         evenSimplerBlockItem(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS);
         evenSimplerBlockItem(ModBlocks.BLACK_SANDSTONE_SLAB);
@@ -66,7 +66,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent(ForgeRegistries.BLOCKS.getKey(ModBlocks.BLACK_SANDSTONE_WALL.get()).getPath(), mcLoc("block/wall_inventory"))
                 .texture("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone"));
 
-        //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~\\
+        // Mystic Wood
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);
         fenceItem(ModBlocks.MYSTIC_FENCE, ModBlocks.MYSTIC_PLANKS);
         buttonItem(ModBlocks.MYSTIC_BUTTON, ModBlocks.MYSTIC_PLANKS);
@@ -78,7 +78,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         saplingItem(ModBlocks.MYSTIC_SAPLING);
         simpleItem(ModItems.MYSTIC_SIGN);
         simpleItem(ModItems.MYSTIC_HANGING_SIGN);
-        //~~~~~~~~~~~~~Sky Wood~~~~~~~~~~\\
+        // Sky Wood
         simpleBlockItem(ModBlocks.SKY_DOOR);
         fenceItem(ModBlocks.SKY_FENCE, ModBlocks.SKY_PLANKS);
         buttonItem(ModBlocks.SKY_BUTTON, ModBlocks.SKY_PLANKS);
@@ -90,7 +90,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         saplingItem(ModBlocks.SKY_SAPLING);
         simpleItem(ModItems.SKY_SIGN);
         simpleItem(ModItems.SKY_HANGING_SIGN);
-        //~~~~~~~~~~~~~Palm Wood~~~~~~~~~~\\
+        // Palm Wood
         simpleBlockItem(ModBlocks.PALM_DOOR);
         fenceItem(ModBlocks.PALM_FENCE, ModBlocks.PALM_PLANKS);
         buttonItem(ModBlocks.PALM_BUTTON, ModBlocks.PALM_PLANKS);
@@ -102,7 +102,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         saplingItem(ModBlocks.PALM_SAPLING);
         simpleItem(ModItems.PALM_SIGN);
         simpleItem(ModItems.PALM_HANGING_SIGN);
-        //~~~~~~~~~~~~~Gilded Sky Wood~~~~~~~~~~\\
+        // Gilded Sky Wood
         simpleBlockItem(ModBlocks.GILDED_SKY_DOOR);
         fenceItem(ModBlocks.GILDED_SKY_FENCE, ModBlocks.GILDED_SKY_PLANKS);
         buttonItem(ModBlocks.GILDED_SKY_BUTTON, ModBlocks.GILDED_SKY_PLANKS);
@@ -113,7 +113,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.GILDED_SKY_FENCE_GATE);
         simpleItem(ModItems.GILDED_SKY_SIGN);
         simpleItem(ModItems.GILDED_SKY_HANGING_SIGN);
-        //~~~~~~~~~Spawn Eggs~~~~~~~~\\
+        // Spawn Eggs
         withExistingParent(ModItems.PUCKOO_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.WORM_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.TREEFROG_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
@@ -141,8 +141,6 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
     // Shoutout to El_Redstoniano for making this
     private void trimmedArmorItem(RegistrySupplier<Item> itemRegistryObject) {
-        final String MOD_ID = ExtraBiomes.MOD_ID; // Change this to your mod id
-
         if(itemRegistryObject.get() instanceof ArmorItem armorItem) {
             trimMaterials.entrySet().forEach(entry -> {
 
@@ -160,9 +158,9 @@ public class ModItemModelProvider extends ItemModelProvider {
                 String armorItemPath = "item/" + armorItem;
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
-                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(MOD_ID, armorItemPath);
+                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, armorItemPath);
                 ResourceLocation trimResLoc = ResourceLocation.parse(trimPath); // minecraft namespace
-                ResourceLocation trimNameResLoc = ResourceLocation.fromNamespaceAndPath(MOD_ID, currentTrimName);
+                ResourceLocation trimNameResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, currentTrimName);
 
                 // This is used for making the ExistingFileHelper acknowledge that this texture exist, so this will
                 // avoid an IllegalArgumentException
@@ -182,7 +180,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
                         .predicate(mcLoc("trim_type"), trimValue).end()
                         .texture("layer0",
-                                ResourceLocation.fromNamespaceAndPath(MOD_ID,
+                                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,
                                         "item/" + itemRegistryObject.getId().getPath()));
             });
         }

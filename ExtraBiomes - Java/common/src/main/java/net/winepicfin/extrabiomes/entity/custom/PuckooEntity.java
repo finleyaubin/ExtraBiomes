@@ -34,97 +34,107 @@ import java.util.Objects;
 
 public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooBaseVariants> {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(PuckooEntity.class, EntityDataSerializers.INT);
-    public PuckooEntity(EntityType<? extends AbstractHorse> p_27557_, Level p_27558_) {
-        super(p_27557_, p_27558_);
+
+    // Out of 9: 4/9 inherit this parent's variant, 4/9 inherit the other parent's, 1/9 random.
+    private static final int VARIANT_ROLL_BOUND = 9;
+    private static final int VARIANT_INHERIT_SELF_THRESHOLD = 4;
+    private static final int VARIANT_INHERIT_OTHER_THRESHOLD = 8;
+    // Out of 5: 2/5 inherit this parent's markings, 2/5 inherit the other parent's, 1/5 random.
+    private static final int MARKINGS_ROLL_BOUND = 5;
+    private static final int MARKINGS_INHERIT_SELF_THRESHOLD = 2;
+    private static final int MARKINGS_INHERIT_OTHER_THRESHOLD = 4;
+
+    public PuckooEntity(EntityType<? extends AbstractHorse> entityType, Level level) {
+        super(entityType, level);
         this.createInventory();
     }
 
-
-
-
-    @Override
-    public void tick() {
-        super.tick();
-        if(this.level().isClientSide()){
-
-        }
-    }
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ID_TYPE_VARIANT, 0);
     }
 
-    public void addAdditionalSaveData(CompoundTag p_30716_) {
-        super.addAdditionalSaveData(p_30716_);
-        p_30716_.putInt("Variant", this.getTypeVariant());
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("Variant", this.getTypeVariant());
     }
-    public void readAdditionalSaveData(CompoundTag p_30711_) {
-        super.readAdditionalSaveData(p_30711_);
-        this.setTypeVariant(p_30711_.getInt("Variant"));
-        }
+
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setTypeVariant(tag.getInt("Variant"));
+    }
+
     @Override
     protected void updateWalkAnimation(float pPartialTick) {
-        float f;
+        float walkAmount;
         if (this.getPose() == Pose.STANDING) {
-            f=Math.min(pPartialTick*6f,1f);
-        }else {
-            f=0f;
+            walkAmount = Math.min(pPartialTick * 6f, 1f);
+        } else {
+            walkAmount = 0f;
         }
-        this.walkAnimation.update(f,0.2f);
+        this.walkAnimation.update(walkAmount, 0.2f);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.5));
-        this.goalSelector.addGoal(2, new BreedGoal(this,1.15));
+        this.goalSelector.addGoal(2, new BreedGoal(this, 1.15));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.20, Ingredient.of(ModItems.MOSSY_PEBBLE.get()), false));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this,1.0));
+        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0));
     }
 
-    protected void randomizeAttributes(RandomSource p_218815_) {
-        Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue((double)generateMaxHealth(p_218815_::nextInt));
-        Objects.requireNonNull(this.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(generateSpeed(p_218815_::nextDouble));
-
+    protected void randomizeAttributes(RandomSource random) {
+        Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue((double) generateMaxHealth(random::nextInt));
+        Objects.requireNonNull(this.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(generateSpeed(random::nextDouble));
     }
-    public static AttributeSupplier.Builder createAttributes(){
+
+    public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH,6)
-                .add(Attributes.MOVEMENT_SPEED,0.35)
+                .add(Attributes.MAX_HEALTH, 6)
+                .add(Attributes.MOVEMENT_SPEED, 0.35)
                 .add(Attributes.FOLLOW_RANGE, 24);
     }
+
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob partner) {
-        PuckooEntity puckoo = (PuckooEntity) partner;
+        PuckooEntity other = (PuckooEntity) partner;
         PuckooEntity baby = ModEntities.PUCKOO.get().create(level);
-        if (baby != null){
-            int i = this.random.nextInt(9);
-            PuckooBaseVariants variant;
-            if (i<4){
-                variant = this.getVariant();
-            }else if (i < 8){
-                variant=puckoo.getVariant();
-            }
-            else {
-                variant = Util.getRandom(PuckooBaseVariants.values(), this.random);
-            }
-            int j =this.random.nextInt(5);
-            PuckooKoiMarkings markings;
-            if (j<2){
-                markings=this.getMarkings();
-            }else if (j < 4){
-                markings = puckoo.getMarkings();
-            }else  markings = Util.getRandom(PuckooKoiMarkings.values(),this.random);
-            baby.setVariantAndMarkings(variant,markings);
+        if (baby != null) {
+            PuckooBaseVariants variant = pickInheritedVariant(other);
+            PuckooKoiMarkings markings = pickInheritedMarkings(other);
+            baby.setVariantAndMarkings(variant, markings);
         }
         return baby;
     }
 
+    private PuckooBaseVariants pickInheritedVariant(PuckooEntity other) {
+        int roll = this.random.nextInt(VARIANT_ROLL_BOUND);
+        if (roll < VARIANT_INHERIT_SELF_THRESHOLD) {
+            return this.getVariant();
+        } else if (roll < VARIANT_INHERIT_OTHER_THRESHOLD) {
+            return other.getVariant();
+        } else {
+            return Util.getRandom(PuckooBaseVariants.values(), this.random);
+        }
+    }
+
+    private PuckooKoiMarkings pickInheritedMarkings(PuckooEntity other) {
+        int roll = this.random.nextInt(MARKINGS_ROLL_BOUND);
+        if (roll < MARKINGS_INHERIT_SELF_THRESHOLD) {
+            return this.getMarkings();
+        } else if (roll < MARKINGS_INHERIT_OTHER_THRESHOLD) {
+            return other.getMarkings();
+        } else {
+            return Util.getRandom(PuckooKoiMarkings.values(), this.random);
+        }
+    }
+
     @Override
-    public boolean isFood(ItemStack p_27600_) {
-        return p_27600_.is(ModItems.MOSSY_PEBBLE.get());
+    public boolean isFood(ItemStack stack) {
+        return stack.is(ModItems.MOSSY_PEBBLE.get());
     }
 
     @Nullable
@@ -133,34 +143,39 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         return SoundEvents.CHICKEN_AMBIENT;
     }
 
-    private void setTypeVariant(int p_30737_) {
-        this.entityData.set(DATA_ID_TYPE_VARIANT, p_30737_);
+    private void setTypeVariant(int typeVariant) {
+        this.entityData.set(DATA_ID_TYPE_VARIANT, typeVariant);
     }
+
     private int getTypeVariant() {
         return this.entityData.get(DATA_ID_TYPE_VARIANT);
     }
 
-
     @Override
-    public void setVariant(PuckooBaseVariants p_262689_) {
-        this.setTypeVariant(p_262689_.getId() & 255 | this.getTypeVariant() & -256);
+    public void setVariant(PuckooBaseVariants variant) {
+        this.setTypeVariant(variant.getId() & 255 | this.getTypeVariant() & -256);
     }
-    private void setVariantAndMarkings(PuckooBaseVariants p_30700_, PuckooKoiMarkings p_30701_) {
-        this.setTypeVariant(p_30700_.getId() & 255 | p_30701_.getId() << 8 & '\uff00');
 
+    // Type variant packs both traits into one synced int: low byte is the base variant id,
+    // high byte is the koi markings id.
+    private void setVariantAndMarkings(PuckooBaseVariants variant, PuckooKoiMarkings markings) {
+        this.setTypeVariant(variant.getId() & 255 | markings.getId() << 8 & '\uff00');
     }
+
     public PuckooKoiMarkings getMarkings() {
         return PuckooKoiMarkings.byId((this.getTypeVariant() & '\uff00') >> 8);
     }
+
     @Override
     public @NotNull PuckooBaseVariants getVariant() {
         return PuckooBaseVariants.byId(this.getTypeVariant() & 255);
     }
+
     @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_30703_, DifficultyInstance p_30704_, MobSpawnType p_30705_, @javax.annotation.Nullable SpawnGroupData p_30706_, @javax.annotation.Nullable CompoundTag p_30707_) {
-        RandomSource randomsource = p_30703_.getRandom();
-            PuckooBaseVariants puckooBaseVariants= Util.getRandom(PuckooBaseVariants.values(), randomsource);
-        this.setVariantAndMarkings(puckooBaseVariants, Util.getRandom(PuckooKoiMarkings.values(), randomsource));
-        return super.finalizeSpawn(p_30703_, p_30704_, p_30705_, p_30706_, p_30707_);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @javax.annotation.Nullable SpawnGroupData spawnGroupData, @javax.annotation.Nullable CompoundTag tag) {
+        RandomSource random = level.getRandom();
+        PuckooBaseVariants variant = Util.getRandom(PuckooBaseVariants.values(), random);
+        this.setVariantAndMarkings(variant, Util.getRandom(PuckooKoiMarkings.values(), random));
+        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData, tag);
     }
 }

@@ -13,13 +13,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 // Loads a single JSON file from ExtraBiomes - Bedrock/packs/... (resolved relative to the repo
-// root, one directory up from this Gradle module) so parity tests assert against the actual
-// Bedrock source file instead of literals copy-pasted into the test.
+// root, which is two directories up from this Gradle module's own directory - Gradle's Test
+// task defaults workingDir to the module dir, e.g. ".../ExtraBiomes - Java/common") so parity
+// tests assert against the actual Bedrock source file instead of literals copy-pasted into the
+// test.
 //
 // Bedrock's JSON files aren't always strictly valid JSON - some (e.g. blocks/stick_pile.json)
 // contain "//" line comments - so those are stripped before parsing.
 public final class BedrockEntityJson {
-    private static final Path PACKS_DIR = Paths.get("..", "ExtraBiomes - Bedrock", "packs").normalize();
+    private static final Path PACKS_DIR = Paths.get("..", "..", "ExtraBiomes - Bedrock", "packs").normalize();
 
     private final JsonObject root;
 

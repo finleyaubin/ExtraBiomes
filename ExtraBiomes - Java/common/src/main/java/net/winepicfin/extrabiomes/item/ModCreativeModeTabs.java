@@ -14,7 +14,7 @@ public class ModCreativeModeTabs {
     public static final RegistrySupplier<CreativeModeTab> EXTRABIOMES_TAB = CREATIVE_MODE_TAB.register("extrabiomes_tab",()-> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0).icon(()->new ItemStack(ModBlocks.MYSTIC_SAPLING.get()))
             .title(Component.translatable("creativetab.extrabiomes"))
             .displayItems((pParameters, pOutput)->{
-                //~~~~~~~~~~~~~Items~~~~~~~~~~~~\\
+                // Items
                 pOutput.accept(ModItems.PEBBLE.get());
                 pOutput.accept(ModItems.MOSSY_PEBBLE.get());
                 pOutput.accept(ModItems.RAZOR_FEATHER.get());
@@ -31,11 +31,11 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModItems.JELLYFISHING_NET_FULL.get());
                 pOutput.accept(ModItems.BUCKET_OF_GOO.get());
                 pOutput.accept(ModItems.FROG_HELMET.get());
-                //~~~~~~~~~~~~~Blocks~~~~~~~~~~~~\\
+                // Blocks
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
                 pOutput.accept(ModBlocks.NETHER_DIAMOND_ORE.get());
-                //~~~~~~~~~~~~~Black Sand~~~~~~~~~~~~\\
+                // Black Sand
                 pOutput.accept(ModBlocks.BLACK_SAND.get());
                 pOutput.accept(ModBlocks.BLACK_SANDSTONE.get());
                 pOutput.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
@@ -47,7 +47,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.BLACK_SANDSTONE_STAIRS.get());
                 pOutput.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get());
                 pOutput.accept(ModBlocks.BLACK_SANDSTONE_WALL.get());
-                //~~~~~~~~~~~~~Mystic Wood~~~~~~~~~~~~\\
+                // Mystic Wood
                 pOutput.accept(ModBlocks.MYSTIC_PLANKS.get());
                 pOutput.accept(ModBlocks.MYSTIC_STAIRS.get());
                 pOutput.accept(ModBlocks.MYSTIC_SLAB.get());
@@ -65,7 +65,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.MYSTIC_LEAVES.get());
                 pOutput.accept(ModBlocks.MYSTIC_SIGN.get());
                 pOutput.accept(ModBlocks.MYSTIC_HANGING_SIGN.get());
-                //~~~~~~~~~~~~~Sky Wood~~~~~~~~~~~~\\
+                // Sky Wood
                 pOutput.accept(ModBlocks.SKY_PLANKS.get());
                 pOutput.accept(ModBlocks.SKY_STAIRS.get());
                 pOutput.accept(ModBlocks.SKY_SLAB.get());
@@ -83,7 +83,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.SKY_LEAVES.get());
                 pOutput.accept(ModBlocks.SKY_SIGN.get());
                 pOutput.accept(ModBlocks.SKY_HANGING_SIGN.get());
-                //~~~~~~~~~~~~~Palm Wood~~~~~~~~~~~~\\
+                // Palm Wood
                 pOutput.accept(ModBlocks.PALM_PLANKS.get());
                 pOutput.accept(ModBlocks.PALM_STAIRS.get());
                 pOutput.accept(ModBlocks.PALM_SLAB.get());
@@ -101,7 +101,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.PALM_LEAVES.get());
                 pOutput.accept(ModBlocks.PALM_SIGN.get());
                 pOutput.accept(ModBlocks.PALM_HANGING_SIGN.get());
-                //~~~~~~~~~~~~~Gilded Sky Wood~~~~~~~~~~~~\\
+                // Gilded Sky Wood
                 pOutput.accept(ModBlocks.GILDED_SKY_PLANKS.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_STAIRS.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_SLAB.get());
@@ -115,7 +115,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.GILDED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_SIGN.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get());
-                //~~~~~~~~~Mushrooms~~~~~~~~\\
+                // Mushrooms
                 pOutput.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.CYAN_MUSHROOM_BLOCK.get());
@@ -125,7 +125,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.WHITE_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.YELLOW_MUSHROOM_BLOCK.get());
                 pOutput.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get());
-                //~~~~~~~~~Spawn Eggs~~~~~~~~\\
+                // Spawn Eggs
                 pOutput.accept(ModItems.PUCKOO_SPAWN_EGG.get());
                 pOutput.accept(ModItems.WORM_SPAWN_EGG.get());
                 pOutput.accept(ModItems.TREEFROG_SPAWN_EGG.get());

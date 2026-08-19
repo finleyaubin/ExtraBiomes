@@ -32,7 +32,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
         stickPileBlock(ModBlocks.STICK_PILE.get());
-        //~~~~~~~~~black sand~~~~~~~~\\
+        // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
         simpleBlockWithItem(ModBlocks.BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top")));
         simpleBlockWithItem(ModBlocks.CHISELED_BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top")));
@@ -44,7 +44,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         slabBlock(((SlabBlock) ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top"));
         slabBlock(((SlabBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"));
         wallBlock(((WallBlock) ModBlocks.BLACK_SANDSTONE_WALL.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()));
-        //~~~~~~~~~mystic wood~~~~~~~~\\
+        // mystic wood
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
         logBlock((RotatedPillarBlock) ModBlocks.STRIPED_MYSTIC_LOG.get());
@@ -66,7 +66,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.MYSTIC_TRAPDOOR.get()), modLoc("block/mystic_trapdoor"),true,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.MYSTIC_SIGN.get()),((WallSignBlock) ModBlocks.MYSTIC_WALL_SIGN.get()),blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         hangingSignBlock((ModBlocks.MYSTIC_HANGING_SIGN.get()),( ModBlocks.MYSTIC_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
-        //~~~~~~~~~sky wood~~~~~~~~\\
+        // sky wood
         blockWithItem(ModBlocks.SKY_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.SKY_LOG.get());
         logBlock((RotatedPillarBlock) ModBlocks.STRIPED_SKY_LOG.get());
@@ -88,7 +88,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SKY_TRAPDOOR.get()), modLoc("block/sky_trapdoor"),true,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.SKY_SIGN.get()),((WallSignBlock) ModBlocks.SKY_WALL_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlock((ModBlocks.SKY_HANGING_SIGN.get()),( ModBlocks.SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
-        //~~~~~~~~~palm wood~~~~~~~~\\
+        // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.PALM_LOG.get());
         logBlock((RotatedPillarBlock) ModBlocks.STRIPED_PALM_LOG.get());
@@ -110,7 +110,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.PALM_TRAPDOOR.get()), modLoc("block/palm_trapdoor"),true,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.PALM_SIGN.get()),((WallSignBlock) ModBlocks.PALM_WALL_SIGN.get()),blockTexture(ModBlocks.PALM_PLANKS.get()));
         hangingSignBlock((ModBlocks.PALM_HANGING_SIGN.get()),( ModBlocks.PALM_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.PALM_PLANKS.get()));
-        //~~~~~~~~~Gilded Sky wood~~~~~~~~\\
+        // Gilded Sky wood
         blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.GILDED_SKY_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.GILDED_SKY_WOOD.get()), blockTexture(ModBlocks.GILDED_SKY_LOG.get()),blockTexture(ModBlocks.GILDED_SKY_LOG.get()));
@@ -126,7 +126,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.GILDED_SKY_TRAPDOOR.get()), modLoc("block/gilded_sky_trapdoor"),true,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.GILDED_SKY_SIGN.get()),((WallSignBlock) ModBlocks.GILDED_SKY_WALL_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         hangingSignBlock((ModBlocks.GILDED_SKY_HANGING_SIGN.get()),( ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
-        //~~~~~~~~~Small Mushrooms~~~~~~~~\\
+        // Small Mushrooms
         saplingBlock(ModBlocks.BLACK_MUSHROOM);
         saplingBlock(ModBlocks.BLUE_MUSHROOM);
         saplingBlock(ModBlocks.CYAN_MUSHROOM);
@@ -135,7 +135,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         saplingBlock(ModBlocks.PURPLE_MUSHROOM);
         saplingBlock(ModBlocks.WHITE_MUSHROOM);
         saplingBlock(ModBlocks.YELLOW_MUSHROOM);
-        //~~~~~~~~~Mushrooms~~~~~~~~\\
+        // Mushrooms
         blockWithItem(ModBlocks.BLACK_MUSHROOM_BLOCK);
         blockWithItem(ModBlocks.BLUE_MUSHROOM_BLOCK);
         blockWithItem(ModBlocks.CYAN_MUSHROOM_BLOCK);

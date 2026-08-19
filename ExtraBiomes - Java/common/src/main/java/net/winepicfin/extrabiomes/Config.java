@@ -38,8 +38,6 @@ public class Config
         boolean isGametest = ForgeGameTestHooks.isGametestServer();
         biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : BIOMEWEIGHT.get();
         rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : RAREBIOMEWEIGHT.get();
-        System.out.println(biomeWeight+" is the biome weight On load");
-        System.out.println(rareBiomeWeight+" is the rare biome weight On load");
         ModTerrablender.registerBiomes();
 
     }
