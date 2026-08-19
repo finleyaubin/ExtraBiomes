@@ -5,24 +5,31 @@ on:
     branches:
       - main
       - Java-Dev
+      - multiloader-architectury
   pull_request:
     branches:
       - main
       - Java-Dev
+      - multiloader-architectury
 
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "ExtraBiomes - Forge"
+        working-directory: "ExtraBiomes - Java"
     steps:
       - uses: actions/checkout@v7
 
-      - name: Set up JDK 17
+      # Loom's toolchain compiles for 17, but the Gradle daemon itself needs 21 to run
+      # (a loom dependency requires JVM runtime 21+). Installing both lets Gradle's toolchain
+      # support auto-detect the 17 JDK for compilation while running on 21.
+      - name: Set up JDKs
         uses: actions/setup-java@v5
         with:
-          java-version: '17'
+          java-version: |
+            17
+            21
           distribution: 'temurin'
 
       - name: Setup Gradle
@@ -31,11 +38,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # runGameTestServer boots a real dedicated server, which refuses to start without this.
+      - name: Accept Minecraft EULA for the local test server
+        run: |
+          mkdir -p forge/run
+          echo "eula=true" > forge/run/eula.txt
+
       - name: Generate data
-        run: ./gradlew runData
+        run: ./gradlew :forge:runData
 
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew :common:test
         continue-on-error: true
 
       - name: Upload test report
@@ -43,11 +56,16 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-forge-test-report
-          path: "ExtraBiomes - Forge/build/reports/tests/test/"
+          path: "ExtraBiomes - Java/common/build/reports/tests/test/"
           if-no-files-found: ignore
 
+      # runGameTestServer boots a plain dedicated server with the gametest namespace enabled -
+      # it doesn't run tests or exit on its own, so we drive its console: wait for world gen to
+      # finish, trigger the tests, wait for them to finish, then stop the server. The overall
+      # timeout is a hard ceiling so a hang here can't run up the CI bill.
       - name: Run GameTests
-        run: ./gradlew runGameTestServer | tee gametest.log
+        run: |
+          (sleep 60 && echo "test runall" && sleep 180 && echo "stop") | timeout 600 ./gradlew :forge:runGameTestServer | tee gametest.log
         shell: bash
 
       - name: Upload GameTest log
@@ -55,7 +73,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-forge-gametest-log
-          path: "ExtraBiomes - Forge/gametest.log"
+          path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
 
       - name: Build with Gradle
@@ -65,4 +83,4 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-forge-build
-          path: "ExtraBiomes - Forge/build/libs/*.jar"
+          path: "ExtraBiomes - Java/forge/build/libs/*.jar"
