@@ -64,6 +64,7 @@ public class ExtraBiomesForge
         dev.architectury.platform.forge.EventBuses.registerModEventBus(ExtraBiomes.MOD_ID, modEventBus);
 
         startDatagenExitWatchdogIfRunningDataGen();
+        startGameTestExitWatchdogIfRunningGameTestServer();
 
         ModCreativeModeTabs.register();
         ModItems.register();
@@ -120,6 +121,42 @@ public class ExtraBiomesForge
             }
             Runtime.getRuntime().halt(0);
         }, "extrabiomes-datagen-exit-watchdog");
+        watchdog.setDaemon(true);
+        watchdog.start();
+    }
+
+    // Same root cause and fix as startDatagenExitWatchdogIfRunningDataGen() above (see its
+    // comment) - Loom's TransformerRuntime wrapper doesn't call System.exit() after the JVM's
+    // real work is done, so :forge:runGameTestServer's console "stop" command shuts the
+    // DedicatedServer down cleanly (its "Server thread" - the non-daemon thread actually keeping
+    // the JVM alive, unlike "main" which just launches it and returns - finishes and logs "All
+    // dimensions are saved") but Gradle never gets control back, hanging until CI's outer
+    // `timeout` wrapper kills it. forge.enabledGameTestNamespaces is the vmArg
+    // forge/build.gradle's gameTestServer run sets, so this only applies there.
+    private void startGameTestExitWatchdogIfRunningGameTestServer() {
+        if (System.getProperty("forge.enabledGameTestNamespaces") == null) {
+            return;
+        }
+        Thread watchdog = new Thread(() -> {
+            Thread serverThread;
+            do {
+                serverThread = Thread.getAllStackTraces().keySet().stream()
+                        .filter(t -> t.getName().equals("Server thread"))
+                        .findFirst().orElse(null);
+                if (serverThread == null) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ignored) {
+                        return;
+                    }
+                }
+            } while (serverThread == null);
+            try {
+                serverThread.join();
+            } catch (InterruptedException ignored) {
+            }
+            Runtime.getRuntime().halt(0);
+        }, "extrabiomes-gametest-exit-watchdog");
         watchdog.setDaemon(true);
         watchdog.start();
     }
