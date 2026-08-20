@@ -1,4 +1,4 @@
-name: Build Forge Mod
+name: Build Mod
 
 on:
   push:
@@ -89,6 +89,21 @@ jobs:
           path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
 
+      # Unlike Forge's dedicated server, Fabric API's gametest server auto-runs every registered
+      # @GameTest as soon as world gen finishes (driven by the -Dfabric-api.gametest=true vmArg in
+      # fabric/build.gradle) and then exits on its own - no interactive console driving needed.
+      - name: Run Fabric GameTests
+        run: timeout 600 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
+        shell: bash
+
+      - name: Upload Fabric GameTest log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-fabric-gametest-log
+          path: "ExtraBiomes - Java/fabric-gametest.log"
+          if-no-files-found: ignore
+
       - name: Build with Gradle
         run: ./gradlew build
         timeout-minutes: 15
@@ -98,3 +113,9 @@ jobs:
         with:
           name: extrabiomes-forge-build
           path: "ExtraBiomes - Java/forge/build/libs/*.jar"
+
+      - name: Upload Fabric build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-fabric-build
+          path: "ExtraBiomes - Java/fabric/build/libs/*.jar"
