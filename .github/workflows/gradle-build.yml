@@ -76,9 +76,17 @@ jobs:
       # it doesn't run tests or exit on its own, so we drive its console: wait for world gen to
       # finish, trigger the tests, wait for them to finish, then stop the server. The overall
       # timeout is a hard ceiling so a hang here can't run up the CI bill.
+      #
+      # The test-wait window (480s) is deliberately generous: allModBiomesAppearInOverworldGeneration
+      # does an exhaustive ServerLevel#findClosestBiome3d (15000-block radius) for all 26 mod
+      # biomes, real Perlin-noise sampling with no shortcuts. That took 70s+ on a 14900K in local
+      # testing - GitHub's shared runners are far weaker, so a short window sends "stop" mid-search
+      # (the JVM can't act on it until the current synchronous tick's work finishes), which then
+      # just eats the rest of the budget waiting on a graceful shutdown that stalls. Sending "stop"
+      # only after the search has had real headroom to finish avoids that.
       - name: Run GameTests
         run: |
-          (sleep 60 && echo "test runall" && sleep 180 && echo "stop") | timeout 600 ./gradlew :forge:runGameTestServer | tee gametest.log
+          (sleep 60 && echo "test runall" && sleep 480 && echo "stop") | timeout 900 ./gradlew :forge:runGameTestServer | tee gametest.log
         shell: bash
 
       - name: Upload GameTest log
@@ -93,7 +101,7 @@ jobs:
       # @GameTest as soon as world gen finishes (driven by the -Dfabric-api.gametest=true vmArg in
       # fabric/build.gradle) and then exits on its own - no interactive console driving needed.
       - name: Run Fabric GameTests
-        run: timeout 600 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
+        run: timeout 900 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
         shell: bash
 
       - name: Upload Fabric GameTest log
