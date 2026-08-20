@@ -40,10 +40,18 @@ jobs:
         run: chmod +x gradlew
 
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
+      # Also pre-seed server.properties with max-tick-time=-1: BiomeGenerationGameTests runs all
+      # 26 mod biomes' exhaustive ServerLevel#findClosestBiome3d (15000-block radius, real Perlin
+      # noise, no shortcuts) synchronously within a single server tick. Vanilla's default
+      # max-tick-time (60000ms) has ServerWatchdog force-crash the server if any one tick exceeds
+      # that - which this test reliably does on GitHub's shared runners (confirmed via a captured
+      # crash report: "single server tick took 60.00 seconds"), even though it stays under the
+      # threshold on faster local hardware. -1 disables the watchdog entirely for this run.
       - name: Accept Minecraft EULA for the local test server
         run: |
           mkdir -p forge/run
           echo "eula=true" > forge/run/eula.txt
+          echo "max-tick-time=-1" > forge/run/server.properties
 
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
       # populated until this runs at least once. Without it, runData's forked JVM throws
@@ -75,15 +83,10 @@ jobs:
       # runGameTestServer boots a plain dedicated server with the gametest namespace enabled -
       # it doesn't run tests or exit on its own, so we drive its console: wait for world gen to
       # finish, trigger the tests, wait for them to finish, then stop the server. The overall
-      # timeout is a hard ceiling so a hang here can't run up the CI bill.
-      #
-      # The test-wait window (480s) is deliberately generous: allModBiomesAppearInOverworldGeneration
-      # does an exhaustive ServerLevel#findClosestBiome3d (15000-block radius) for all 26 mod
-      # biomes, real Perlin-noise sampling with no shortcuts. That took 70s+ on a 14900K in local
-      # testing - GitHub's shared runners are far weaker, so a short window sends "stop" mid-search
-      # (the JVM can't act on it until the current synchronous tick's work finishes), which then
-      # just eats the rest of the budget waiting on a graceful shutdown that stalls. Sending "stop"
-      # only after the search has had real headroom to finish avoids that.
+      # timeout is a hard ceiling so a hang here can't run up the CI bill. The test-wait window
+      # (480s) is generous headroom on top of the max-tick-time fix above (see that step's
+      # comment) - the search itself shouldn't come close to it once the watchdog can't preempt
+      # it, but shared runners are unpredictable enough to be worth the margin.
       - name: Run GameTests
         run: |
           (sleep 60 && echo "test runall" && sleep 480 && echo "stop") | timeout 900 ./gradlew :forge:runGameTestServer | tee gametest.log
