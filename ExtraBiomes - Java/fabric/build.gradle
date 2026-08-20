@@ -1,0 +1,157 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    // src/main/resources/extrabiomes.mixins.json is picked up automatically by Loom's fabric platform
+    // (declared as a "mixins" entry in fabric.mod.json).
+    runs {
+        client {
+            configName = "Fabric Client"
+            client()
+            source sourceSets.main
+        }
+        server {
+            configName = "Fabric Server"
+            server()
+            source sourceSets.main
+        }
+        gameTestServer {
+            configName = "Fabric Game Test Server"
+            server()
+            source sourceSets.main
+            // Fabric API only registers @GameTest methods (and skips the EULA/headless-server
+            // prompts) when this system property is present at all - see
+            // FabricGameTestHelper's static initializer / MainMixin.isEulaAgreedTo. Test
+            // classes themselves are discovered via the "fabric-gametest" entrypoint in
+            // fabric.mod.json, not this property.
+            vmArg "-Dfabric-api.gametest=true"
+        }
+        // Fabric datagen: Loom's data() run type is Forge-only, so Fabric API's own
+        // fabricApi.configureDataGeneration() extension (below) provides the equivalent "runDatagen"
+        // run instead, driving the "fabric-datagen" entrypoint registered in fabric.mod.json.
+    }
+}
+
+fabricApi {
+    configureDataGeneration {
+        // Same target Forge's own "data" run writes to (see forge/build.gradle) - datapack content
+        // (biomes, tags, recipes, loot tables) and resource-pack content (blockstates, models) are
+        // loader-agnostic and shouldn't be generated twice per loader or diverge between them.
+        // common's own build.gradle already wires src/generated/resources into its resources
+        // sourceSet, so nothing needs adding to *this* module's resources for it to take effect.
+        outputDirectory = project(':common').file('src/generated/resources')
+        addToResources = false
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+// geckolib-fabric-1.20.1:4.7.2's Gradle Module Metadata declares a runtime-scoped
+// "requires: 0.16.14" on net.fabricmc:fabric-loader, which wins Gradle's default
+// highest-version conflict resolution over the fabric_loader_version (0.15.7) declared
+// above - and this is actually required, not just an accident: fabric-api 0.92.6+1.20.1
+// (and fabric-object-builder-api-v1 within it) itself hard-requires fabricloader
+// >=0.16.10, so forcing fabric-loader back down to 0.15.7 makes Fabric Loader's own mod
+// resolution refuse to start ("Fabric API requires version 0.16.10 or later of Fabric
+// Loader"). The real mismatch is net.fabricmc:sponge-mixin, which independently resolves
+// to the old 0.12.5+mixin.0.8.5 line (paired with loader 0.15.x) instead of a version new
+// enough for loader 0.16.14's Knot bootstrap, which unconditionally probes
+// MixinEnvironment.CompatibilityLevel.JAVA_22 - a constant 0.12.5 doesn't have, crashing
+// every dev run (runClient/runServer/runDatagen/runGameTestServer) before any mod code
+// even loads. Force sponge-mixin up to 0.15.5+mixin.0.8.7 instead (confirmed to define
+// JAVA_22), so it's compatible with the fabric-loader version fabric-api actually needs.
+configurations.all {
+    resolutionStrategy {
+        force "net.fabricmc:sponge-mixin:0.15.5+mixin.0.8.7"
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_api_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+
+    // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle
+    // for why (JitPack 401s on the old glitchfiend/TerraBlender coordinate).
+    modImplementation "maven.modrinth:terrablender:${terrablender_fabric_modrinth_id}"
+
+    // TerraBlender-fabric jar-in-jars its own nightconfig (core+toml 3.6.7, per its
+    // fabric.mod.json "jars" entries) rather than declaring it as a normal Maven dependency -
+    // Architectury Loom's dev-launch classpath doesn't extract those nested jars the way a real
+    // Fabric Loader launch would, so TerraBlenderFabric's entrypoint throws NoClassDefFoundError
+    // on com.electronwill.nightconfig.core.ConfigFormat at dev-run time without this. Plain
+    // (non-mod) library, not remapped.
+    implementation "com.electronwill.night-config:core:3.6.7"
+    implementation "com.electronwill.night-config:toml:3.6.7"
+
+    // GeckoLib has no Forge-style module-layer isolation problem on Fabric, so unlike the forge
+    // module's hand-merged jar (see forge/build.gradle), a plain dependency is enough here.
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_fabric_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+    inputs.property "mod_authors", mod_authors
+    inputs.property "mod_description", mod_description
+
+    filesMatching(['fabric.mod.json']) {
+        expand([
+                version         : project.version,
+                mod_id          : mod_id,
+                mod_name        : mod_name,
+                mod_authors     : mod_authors,
+                mod_description : mod_description,
+        ])
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+}

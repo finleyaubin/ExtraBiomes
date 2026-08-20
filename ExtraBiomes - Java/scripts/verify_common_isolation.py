@@ -11,20 +11,11 @@ from pathlib import Path
 
 COMMON_JAVA = Path(__file__).resolve().parent.parent / "common/src/main/java"
 
-# Files allowed to import net.minecraftforge.* because they hold a Forge-only value type
-# (FluidType, ForgeFlowingFluid, ForgeConfigSpec, ForgeSpawnEggItem, IForgeShearable,
-# ToolAction, IClientItemExtensions/IClientFluidTypeExtensions) with no vanilla or
-# cross-loader equivalent yet. Revisit each of these when a second loader is added.
-ACCEPTED_EXCEPTIONS = {
-    "net/winepicfin/extrabiomes/Config.java",
-    "net/winepicfin/extrabiomes/fluid/BaseFluidType.java",
-    "net/winepicfin/extrabiomes/fluid/ModFluids.java",
-    "net/winepicfin/extrabiomes/fluid/ModFluidTypes.java",
-    "net/winepicfin/extrabiomes/item/ModItems.java",
-    "net/winepicfin/extrabiomes/item/custom/FrogHelmetItem.java",
-    "net/winepicfin/extrabiomes/block/custom/ModLogs.java",
-    "net/winepicfin/extrabiomes/block/custom/ModLeavesWithSupport.java",
-}
+# No file in common/ should import net.minecraftforge.* anymore - Config, ModFluids/
+# ModFluidTypes/BaseFluidType, ModItems (spawn eggs), FrogHelmetItem, ModLogs, and
+# ModLeavesWithSupport (IForgeShearable) have all either moved out to forge/'s own packages or
+# been rewritten loader-agnostically now that the fabric module needs real implementations too.
+ACCEPTED_EXCEPTIONS = set()
 
 
 def main():

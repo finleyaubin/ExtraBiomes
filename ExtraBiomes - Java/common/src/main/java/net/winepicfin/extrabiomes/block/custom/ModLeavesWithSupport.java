@@ -14,9 +14,12 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.IForgeShearable;
 
-public class ModLeavesWithSupport extends LeavesBlock implements SimpleWaterloggedBlock, IForgeShearable {
+// IForgeShearable used to be implemented here as a marker, but with no onSheared/isShearable
+// override its Forge-side default behavior is identical to vanilla's own loot-table-driven leaf
+// shearing - dropping it is behavior-neutral on Forge and removes the last Forge-only import from
+// common (see scripts/verify_common_isolation.py), letting this class work unmodified on Fabric.
+public class ModLeavesWithSupport extends LeavesBlock implements SimpleWaterloggedBlock {
     public static final int DECAY_DISTANCE = 7;
     private static final int TICK_DELAY = 1;
 

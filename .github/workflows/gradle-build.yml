@@ -15,6 +15,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: "ExtraBiomes - Java"
@@ -44,12 +45,24 @@ jobs:
           mkdir -p forge/run
           echo "eula=true" > forge/run/eula.txt
 
+      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
+      # populated until this runs at least once. Without it, runData's forked JVM throws
+      # "Cannot parse argument '.../fabric-loom/assets' of option assetsDir" and - since Loom's
+      # dev-launch wrapper never calls System.exit() after an early crash like this - just hangs
+      # forever instead of failing, eating the whole job's time budget (see the 2026-08-19 CI run
+      # that hit the 6-hour ceiling on this exact step for the failure mode this step prevents).
+      - name: Download Loom assets
+        run: ./gradlew :forge:downloadAssets
+        timeout-minutes: 10
+
       - name: Generate data
         run: ./gradlew :forge:runData
+        timeout-minutes: 10
 
       - name: Run unit tests
         run: ./gradlew :common:test
         continue-on-error: true
+        timeout-minutes: 10
 
       - name: Upload test report
         if: always()
@@ -78,6 +91,7 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
+        timeout-minutes: 15
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v7

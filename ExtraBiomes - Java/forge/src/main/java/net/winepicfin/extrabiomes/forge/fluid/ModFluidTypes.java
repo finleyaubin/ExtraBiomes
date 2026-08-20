@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.fluid;
+package net.winepicfin.extrabiomes.forge.fluid;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;

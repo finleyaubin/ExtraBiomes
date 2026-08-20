@@ -19,7 +19,7 @@ import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
-import net.winepicfin.extrabiomes.forge.util.ModTags;
+import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnWeightTuning;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;

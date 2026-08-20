@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_authors}"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "extrabiomes_logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.winepicfin.extrabiomes.fabric.ExtraBiomesFabric"
+    ],
+    "client": [
+      "net.winepicfin.extrabiomes.fabric.ExtraBiomesFabricClient"
+    ],
+    "fabric-gametest": [
+      "net.winepicfin.extrabiomes.fabric.gametest.BiomeGenerationGameTests"
+    ],
+    "fabric-datagen": [
+      "net.winepicfin.extrabiomes.fabric.datagen.FabricDataGenerators"
+    ],
+    "terrablender": [
+      "net.winepicfin.extrabiomes.fabric.ExtraBiomesTerraBlenderApi"
+    ]
+  },
+  "mixins": [
+    "extrabiomes.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.7",
+    "fabric": "*",
+    "fabric-api": "*",
+    "minecraft": "1.20.1",
+    "terrablender": "*"
+  }
+}

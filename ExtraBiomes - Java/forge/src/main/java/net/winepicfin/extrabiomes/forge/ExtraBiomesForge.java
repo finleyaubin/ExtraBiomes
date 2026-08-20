@@ -15,7 +15,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.winepicfin.extrabiomes.Config;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
@@ -31,8 +30,8 @@ import net.winepicfin.extrabiomes.entity.client.PuckooRenderer;
 import net.winepicfin.extrabiomes.entity.client.RazorFeatherRenderer;
 import net.winepicfin.extrabiomes.entity.client.TreefrogRenderer;
 import net.winepicfin.extrabiomes.entity.client.WormRenderer;
-import net.winepicfin.extrabiomes.fluid.ModFluidTypes;
-import net.winepicfin.extrabiomes.fluid.ModFluids;
+import net.winepicfin.extrabiomes.forge.fluid.ModFluidTypes;
+import net.winepicfin.extrabiomes.forge.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.forge.util.ModVanillaCompat;
@@ -85,13 +84,13 @@ public class ExtraBiomesForge
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener((ModConfigEvent event) -> Config.load());
+        modEventBus.addListener((ModConfigEvent event) -> ForgeConfig.load());
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -

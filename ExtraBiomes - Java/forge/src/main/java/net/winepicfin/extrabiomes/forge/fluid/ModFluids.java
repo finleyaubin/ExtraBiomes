@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.fluid;
+package net.winepicfin.extrabiomes.forge.fluid;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;

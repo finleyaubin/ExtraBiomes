@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.fluid;
+package net.winepicfin.extrabiomes.forge.fluid;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;

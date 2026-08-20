@@ -28,25 +28,15 @@ dependencies {
     // number" alone is ambiguous between its forge and fabric/quilt uploads.
     modCompileOnly "maven.modrinth:terrablender:${terrablender_modrinth_id}"
 
-    // GeckoLib is used directly by a couple of common classes for this Forge-only pass
-    // (FrogHelmetItem/FrogHelmetRenderer) — a real cross-loader abstraction is deferred
-    // until a second loader is added.
-    modCompileOnly "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}"
-
-    // architectury { common("forge") } only controls output transforms for packaging, NOT
-    // compile-time access to Forge's own API — that has to be added explicitly. A handful of
-    // common classes (Config/ModFluids/ModFluidTypes/ModItems/ModLogs/ModLeavesWithSupport/
-    // FrogHelmetItem/BaseFluidType) use Forge-only types (ForgeConfigSpec, FluidType,
-    // ForgeSpawnEggItem, IForgeShearable, ToolAction, IClientItemExtensions/
-    // IClientFluidTypeExtensions) with no vanilla/cross-loader equivalent yet — accepted
-    // Forge-shaped exceptions for this Forge-only pass. The "universal" classifier exposes
-    // Forge's own authored classes (not SRG-obfuscated, unlike vanilla Minecraft symbols in
-    // this jar) so it's safe to reference at compile time without Loom's remapping.
+    // ModLeavesWithSupport is the last remaining common class with a direct net.minecraftforge
+    // import (IForgeShearable, a marker interface with no vanilla/cross-loader equivalent) - see
+    // scripts/verify_common_isolation.py. Everything else that needed Forge-only types
+    // (Config/ModItems/ModFluids/ModFluidTypes/BaseFluidType/ModLogs/FrogHelmetItem) has since
+    // moved out to forge/'s own packages or been rewritten loader-agnostically now that the
+    // fabric module needs real implementations too. The "universal" classifier exposes Forge's
+    // own authored classes (not SRG-obfuscated, unlike vanilla Minecraft symbols in this jar) so
+    // it's safe to reference at compile time without Loom's remapping.
     compileOnly "net.minecraftforge:forge:${minecraft_version}-${forge_version}:universal"
-    // IEventBus (used by ModFluidTypes to defer registration of the forge:fluid_type custom
-    // registry via Forge's own DeferredRegister) lives in this separate artifact, not in the
-    // "universal" jar above.
-    compileOnly "net.minecraftforge:eventbus:6.0.5"
     // javax.annotation.Nullable (JSR-305) — pulled in transitively via ForgeGradle previously,
     // not automatically present under Loom.
     compileOnly "com.google.code.findbugs:jsr305:3.0.2"
