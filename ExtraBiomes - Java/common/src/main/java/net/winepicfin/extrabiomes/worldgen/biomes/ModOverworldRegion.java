@@ -171,11 +171,16 @@ public class ModOverworldRegion extends Region {
 
         // Fungle Jungle - bedrock temp=0.95, downfall=0.9, mushroom_island tag (also tagged
         // "rare", but replace_biomes amount is 0.4 - one of the higher values in the set; see
-        // class javadoc note on "rare" not implying frequency)
+        // class javadoc note on "rare" not implying frequency). Capped to NEAR_INLAND rather than
+        // the wider INLAND alias (COAST=[-0.19,-0.11], NEAR_INLAND=[-0.11,0.03], but
+        // INLAND=[-0.11,0.55] - a "numerically wide alias", not a synonym for NEAR_INLAND; see the
+        // Charred Forest comment above) - spanning to INLAND left Jungle Pillars (which claims
+        // INLAND..FAR_INLAND = [-0.11,1.0]) with only the sliver above continentalness 0.55 as
+        // exclusive territory, too narrow to reliably generate within a normal search radius.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.INLAND))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.NEAR_INLAND))
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
