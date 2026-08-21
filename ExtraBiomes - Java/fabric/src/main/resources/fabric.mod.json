@@ -19,7 +19,9 @@
       "net.winepicfin.extrabiomes.fabric.ExtraBiomesFabricClient"
     ],
     "fabric-gametest": [
-      "net.winepicfin.extrabiomes.fabric.gametest.BiomeGenerationGameTests"
+      "net.winepicfin.extrabiomes.fabric.gametest.BiomeGenerationGameTests",
+      "net.winepicfin.extrabiomes.fabric.gametest.BiomeModifierApplicationGameTests",
+      "net.winepicfin.extrabiomes.fabric.gametest.SpawnEggItemGameTests"
     ],
     "fabric-datagen": [
       "net.winepicfin.extrabiomes.fabric.datagen.FabricDataGenerators"
