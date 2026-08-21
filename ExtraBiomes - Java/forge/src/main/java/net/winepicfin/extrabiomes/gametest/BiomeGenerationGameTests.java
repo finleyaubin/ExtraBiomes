@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.gametest;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.GameTest;
@@ -11,6 +12,7 @@ import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.BiomeClimateTuning;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ import java.util.List;
 @GameTestHolder(ExtraBiomes.MOD_ID)
 @PrefixGameTestTemplate(false)
 public class BiomeGenerationGameTests {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final int SEARCH_RADIUS_BLOCKS = 15_000;
     private static final int SEARCH_INCREMENT_BLOCKS = 32;
     private static final int SEARCH_STEP_BLOCKS = 128;
@@ -39,11 +42,20 @@ public class BiomeGenerationGameTests {
         ServerLevel level = helper.getLevel();
         BlockPos origin = level.getSharedSpawnPos();
 
+        // Logs every biome's search result (not just failures) so a CI/local gametest log always
+        // shows the actual distance-from-spawn TerraBlender placed each biome at on that seed -
+        // useful for eyeballing whether a biome is merely "technically present somewhere in
+        // 15000 blocks" vs. actually reachable by normal exploration, without needing to rerun
+        // with extra instrumentation each time this needs checking.
         List<String> missing = new ArrayList<>();
         for (String expectedPath : BiomeClimateTuning.BY_BEDROCK_KEY.keySet()) {
             Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(holder -> matchesPath(holder, expectedPath), origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS);
             if (found == null) {
                 missing.add(expectedPath);
+                LOGGER.error("[BiomeGenerationGameTests] {}: NOT FOUND within {} blocks", expectedPath, SEARCH_RADIUS_BLOCKS);
+            } else {
+                int dist = (int) Math.sqrt(origin.distSqr(found.getFirst()));
+                LOGGER.info("[BiomeGenerationGameTests] {}: found at {} ({} blocks from spawn)", expectedPath, found.getFirst(), dist);
             }
         }
         helper.assertTrue(missing.isEmpty(),
