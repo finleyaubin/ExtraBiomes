@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.GameTestSequence;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.gametest.GameTestHolder;
@@ -37,6 +38,15 @@ public class BiomeGenerationGameTests {
     private static final int SEARCH_INCREMENT_BLOCKS = 32;
     private static final int SEARCH_STEP_BLOCKS = 128;
 
+    // findClosestBiome3d has no early exit for a biome that's absent (or outside the search box)
+    // - it walks the *entire* 15000-block radius, which alone can take 30+ seconds on a shared
+    // CI runner. Running all 26 searches back-to-back inside a single synchronous method (as
+    // this used to) crams that worst case into one server tick, and ServerWatchdog force-crashes
+    // the server if any one tick runs long (confirmed via a captured crash report: eight
+    // consecutive full/failed sweeps alone cost 272s in well under 5 minutes). A GameTestSequence
+    // instead runs one biome's search per thenExecute/thenIdle(1) step, so each *tick* only ever
+    // has to absorb a single biome's worst case - comfortably under even vanilla's default
+    // max-tick-time, with no need for CI to disable or stretch the watchdog for this test at all.
     @GameTest(template = "empty", timeoutTicks = 60000)
     public static void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -48,20 +58,23 @@ public class BiomeGenerationGameTests {
         // 15000 blocks" vs. actually reachable by normal exploration, without needing to rerun
         // with extra instrumentation each time this needs checking.
         List<String> missing = new ArrayList<>();
+        GameTestSequence sequence = helper.startSequence();
         for (String expectedPath : BiomeClimateTuning.BY_BEDROCK_KEY.keySet()) {
-            Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(holder -> matchesPath(holder, expectedPath), origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS);
-            if (found == null) {
-                missing.add(expectedPath);
-                LOGGER.error("[BiomeGenerationGameTests] {}: NOT FOUND within {} blocks", expectedPath, SEARCH_RADIUS_BLOCKS);
-            } else {
-                int dist = (int) Math.sqrt(origin.distSqr(found.getFirst()));
-                LOGGER.info("[BiomeGenerationGameTests] {}: found at {} ({} blocks from spawn)", expectedPath, found.getFirst(), dist);
-            }
+            sequence = sequence.thenExecute(() -> {
+                Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(holder -> matchesPath(holder, expectedPath), origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS);
+                if (found == null) {
+                    missing.add(expectedPath);
+                    LOGGER.error("[BiomeGenerationGameTests] {}: NOT FOUND within {} blocks", expectedPath, SEARCH_RADIUS_BLOCKS);
+                } else {
+                    int dist = (int) Math.sqrt(origin.distSqr(found.getFirst()));
+                    LOGGER.info("[BiomeGenerationGameTests] {}: found at {} ({} blocks from spawn)", expectedPath, found.getFirst(), dist);
+                }
+            }).thenIdle(1);
         }
-        helper.assertTrue(missing.isEmpty(),
-                missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
-                        + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing);
-        helper.succeed();
+        sequence.thenExecute(() -> helper.assertTrue(missing.isEmpty(),
+                        missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
+                                + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing))
+                .thenSucceed();
     }
 
     private static boolean matchesPath(Holder<Biome> holder, String expectedPath) {

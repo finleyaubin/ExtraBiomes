@@ -45,16 +45,18 @@ jobs:
         run: chmod +x gradlew
 
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
-      # Also pre-seed server.properties with a raised max-tick-time: BiomeGenerationGameTests
-      # runs all 26 mod biomes' exhaustive ServerLevel#findClosestBiome3d (15000-block radius,
-      # real Perlin noise, no shortcuts) synchronously within a single server tick. Vanilla's
-      # default max-tick-time (60000ms) has ServerWatchdog force-crash the server if any one tick
-      # exceeds that - which this test reliably does on GitHub's shared runners (confirmed via a
-      # captured crash report: "single server tick took 60.00 seconds"), even though it stays
-      # under the threshold on faster local hardware. 300000ms (5 min) gives that search generous
-      # headroom on slow shared runners while still letting the watchdog catch a genuinely
-      # infinite-looping tick quickly, instead of disabling it outright and leaving nothing but
-      # the blunt 900s outer `timeout` to notice a real hang.
+      # Also pre-seed server.properties with a moderately raised max-tick-time:
+      # BiomeGenerationGameTests runs each of its 26 mod-biome ServerLevel#findClosestBiome3d
+      # searches (15000-block radius, real Perlin noise, no shortcuts) as its own
+      # GameTestSequence step on its own server tick, specifically so no single tick has to
+      # absorb more than one biome's worst case - a biome that's genuinely absent (or outside the
+      # search box) makes findClosestBiome3d walk the *entire* radius with no early exit, which
+      # alone can take 30+ seconds on a shared CI runner (confirmed via a captured crash report:
+      # eight consecutive full/failed sweeps averaged ~34s each). 120000ms (2 min) gives a single
+      # such sweep generous headroom above that observed worst case while still letting the
+      # watchdog catch a genuinely hung tick reasonably promptly, instead of disabling it
+      # outright - unlike before this test was split per-tick, a bounded value is safe again here
+      # since it only ever has to cover one biome's sweep, not the sum of all 26.
       # Also pin level-seed: CI checks out a clean workspace every run, so with no seed set
       # Minecraft generates a brand-new random world each time, and TerraBlender's noise-based
       # biome placement can push most mod biomes outside the fixed 15000-block search box on an
@@ -67,7 +69,7 @@ jobs:
         run: |
           mkdir -p forge/run
           echo "eula=true" > forge/run/eula.txt
-          printf 'max-tick-time=300000\nlevel-seed=extrabiomes\n' > forge/run/server.properties
+          printf 'max-tick-time=120000\nlevel-seed=extrabiomes\n' > forge/run/server.properties
 
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
       # populated until this runs at least once. Without it, runData's forked JVM throws
@@ -99,10 +101,17 @@ jobs:
       # runGameTestServer boots a plain dedicated server with the gametest namespace enabled -
       # it doesn't run tests or exit on its own, so we drive its console: wait for world gen to
       # finish, trigger the tests, wait for them to finish, then stop the server. The overall
-      # timeout is a hard ceiling so a hang here can't run up the CI bill. The test-wait window
-      # (480s) is generous headroom on top of the max-tick-time fix above (see that step's
-      # comment) - the search itself shouldn't come close to it once the watchdog can't preempt
-      # it, but shared runners are unpredictable enough to be worth the margin.
+      # timeout is a hard ceiling so a hang here can't run up the CI bill.
+      #
+      # The test-wait window (1500s) has to cover BiomeGenerationGameTests' worst case, not its
+      # typical case: findClosestBiome3d has no early exit for a biome that's absent (or outside
+      # the 15000-block search box) - it walks the *entire* radius, which alone can take 30+
+      # seconds per biome on a shared runner (confirmed via a captured crash report showing eight
+      # consecutive full/failed sweeps costing 272s in under 5 minutes, before a since-removed
+      # max-tick-time cap killed the server mid-run). With up to 26 biomes potentially needing a
+      # full sweep, sending "stop" too early would cut the test off mid-search rather than let it
+      # report a real pass/fail - 1500s gives headroom for every biome needing the worst case
+      # (~26 * 40s = 1040s) plus margin, instead of guessing from the common case.
       # forge:runGameTestServer's own exit code can't be trusted: ExtraBiomesForge's exit
       # watchdog (see startGameTestExitWatchdogIfRunningGameTestServer) always halts the JVM
       # with code 0 once the driven-console server shuts down, regardless of whether any
@@ -112,7 +121,7 @@ jobs:
       # finishes, so grep the captured log for those instead of trusting the exit code.
       - name: Run GameTests
         run: |
-          (sleep 60 && echo "test runall" && sleep 480 && echo "stop") | timeout 900 ./gradlew :forge:runGameTestServer | tee gametest.log
+          (sleep 60 && echo "test runall" && sleep 1500 && echo "stop") | timeout 1800 ./gradlew :forge:runGameTestServer | tee gametest.log
           if grep -q "required tests failed" gametest.log; then
             echo "::error::One or more required GameTests failed - see gametest.log"
             exit 1
