@@ -63,7 +63,7 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.MYSTIC_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.MYSTIC_SLAB.get()));
         add.accept(ModBlocks.MYSTIC_DOOR.get(), block -> createDoorTable.apply(ModBlocks.MYSTIC_DOOR.get()));
         dropSelf.accept(ModBlocks.MYSTIC_SAPLING.get());
-        add.accept(ModBlocks.MYSTIC_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.MYSTIC_LEAVES.get()));
+        add.accept(ModBlocks.MYSTIC_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.MYSTIC_SAPLING.get()));
         add.accept(ModBlocks.MYSTIC_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_SIGN.get()));
         add.accept(ModBlocks.MYSTIC_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_SIGN.get()));
         add.accept(ModBlocks.MYSTIC_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_HANGING_SIGN.get()));
@@ -83,7 +83,7 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.SKY_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.SKY_SLAB.get()));
         add.accept(ModBlocks.SKY_DOOR.get(), block -> createDoorTable.apply(ModBlocks.SKY_DOOR.get()));
         dropSelf.accept(ModBlocks.SKY_SAPLING.get());
-        add.accept(ModBlocks.SKY_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.SKY_LEAVES.get()));
+        add.accept(ModBlocks.SKY_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.SKY_SAPLING.get()));
         add.accept(ModBlocks.SKY_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_SIGN.get()));
         add.accept(ModBlocks.SKY_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_SIGN.get()));
         add.accept(ModBlocks.SKY_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_HANGING_SIGN.get()));
@@ -103,7 +103,7 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.PALM_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.PALM_SLAB.get()));
         add.accept(ModBlocks.PALM_DOOR.get(), block -> createDoorTable.apply(ModBlocks.PALM_DOOR.get()));
         dropSelf.accept(ModBlocks.PALM_SAPLING.get());
-        add.accept(ModBlocks.PALM_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.PALM_LEAVES.get()));
+        add.accept(ModBlocks.PALM_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.PALM_SAPLING.get()));
         add.accept(ModBlocks.PALM_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_SIGN.get()));
         add.accept(ModBlocks.PALM_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_SIGN.get()));
         add.accept(ModBlocks.PALM_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_HANGING_SIGN.get()));
