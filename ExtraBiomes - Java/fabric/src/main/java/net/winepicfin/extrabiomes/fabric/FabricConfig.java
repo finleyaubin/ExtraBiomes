@@ -22,7 +22,16 @@ public class FabricConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger("extrabiomes-config");
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve(ExtraBiomes.MOD_ID + ".properties");
 
+    // On the gametest server, a low weight makes narrow/rare biomes impractically hard to find
+    // within a reasonable search radius (see BiomeGenerationGameTests), so force it high there
+    // regardless of the configured value - real players never see this override. Mirrors
+    // ForgeConfig's GAMETEST_BIOME_WEIGHT/ForgeGameTestHooks.isGametestServer() override;
+    // "fabric-api.gametest" is the system property fabric/build.gradle's gameTestServer run
+    // sets, Fabric's equivalent of Forge's isGametestServer() check.
+    private static final int GAMETEST_BIOME_WEIGHT = 100;
+
     public static void load() {
+        boolean isGametest = Boolean.getBoolean("fabric-api.gametest");
         Properties properties = new Properties();
         if (Files.exists(CONFIG_PATH)) {
             try (InputStream in = Files.newInputStream(CONFIG_PATH)) {
@@ -32,16 +41,21 @@ public class FabricConfig {
             }
         }
 
-        Config.biomeWeight = readInt(properties, "biomeWeight", Config.DEFAULT_BIOME_WEIGHT);
-        Config.rareBiomeWeight = readInt(properties, "rareBiomeWeight", Config.DEFAULT_RARE_BIOME_WEIGHT);
+        int biomeWeight = readInt(properties, "biomeWeight", Config.DEFAULT_BIOME_WEIGHT);
+        int rareBiomeWeight = readInt(properties, "rareBiomeWeight", Config.DEFAULT_RARE_BIOME_WEIGHT);
 
-        properties.setProperty("biomeWeight", String.valueOf(Config.biomeWeight));
-        properties.setProperty("rareBiomeWeight", String.valueOf(Config.rareBiomeWeight));
+        // Persist the real configured values, not the gametest override, so a gametest run
+        // never overwrites a player's saved config with the forced test weight.
+        properties.setProperty("biomeWeight", String.valueOf(biomeWeight));
+        properties.setProperty("rareBiomeWeight", String.valueOf(rareBiomeWeight));
         try (OutputStream out = Files.newOutputStream(CONFIG_PATH)) {
             properties.store(out, "ExtraBiomes config - biomeWeight/rareBiomeWeight control how frequently this mod's TerraBlender biome regions are picked (see ModTerrablender)");
         } catch (IOException e) {
             LOGGER.error("Failed to write {}", CONFIG_PATH, e);
         }
+
+        Config.biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : biomeWeight;
+        Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : rareBiomeWeight;
 
         Config.load();
     }

@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
@@ -28,6 +27,16 @@ import java.util.Optional;
 // has no Fabric equivalent, this is the loader-specific replacement. Tuning values match
 // forge/.../ModFluids.GOO_PROPERTIES (slopeFindDistance(1), levelDecreasePerBlock(5)) and
 // forge/.../ModFluidTypes.GOO_FLUID_TYPE (viscosity(40) ~= a slow tick delay).
+//
+// canDrown/canPushEntity/canSwim (Forge's FluidType.Properties) have no per-fluid vanilla
+// hook to override on Fabric - swimming, drowning and fluid-push physics are all hardcoded in
+// Entity/LivingEntity to check membership in the vanilla FluidTags.WATER tag, not a queryable
+// property. fabric/src/main/resources/data/minecraft/tags/fluid/water.json adds both Goo
+// fluids to that tag to match Forge's canDrown(true)/canPushEntity(true)/canSwim(true) as
+// closely as vanilla allows. The one property that can't be matched this way is
+// canExtinguish(false): vanilla ties fire-extinguishing to the same FluidTags.WATER check
+// (Entity.clearFire() via isInWaterRainOrBubble()), so on Fabric, unlike Forge, standing in
+// Goo also puts out fire - a known, unavoidable divergence without a mixin into that method.
 public abstract class GooFluid extends FlowingFluid {
     public static final ResourceLocation STILL_TEXTURE = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo_still");
     public static final ResourceLocation FLOWING_TEXTURE = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo_flow");

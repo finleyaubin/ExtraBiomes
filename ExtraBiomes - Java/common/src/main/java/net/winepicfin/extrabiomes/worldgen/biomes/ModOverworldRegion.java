@@ -174,9 +174,9 @@ public class ModOverworldRegion extends Region {
         // class javadoc note on "rare" not implying frequency). Capped to NEAR_INLAND rather than
         // the wider INLAND alias (COAST=[-0.19,-0.11], NEAR_INLAND=[-0.11,0.03], but
         // INLAND=[-0.11,0.55] - a "numerically wide alias", not a synonym for NEAR_INLAND; see the
-        // Charred Forest comment above) - spanning to INLAND left Jungle Pillars (which claims
-        // INLAND..FAR_INLAND = [-0.11,1.0]) with only the sliver above continentalness 0.55 as
-        // exclusive territory, too narrow to reliably generate within a normal search radius.
+        // Charred Forest comment above). Jungle Pillars now starts at MID_INLAND (0.03), exactly
+        // where this box ends, so the two no longer share any continentalness range at all (see
+        // Jungle Pillars' own comment below for the history of why).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
@@ -208,11 +208,20 @@ public class ModOverworldRegion extends Region {
 
         // Jungle Pillars - bedrock temp=0.95, downfall=0.9, stone_pillars tag (tagged "rare";
         // replace_biomes amount 0.15). Low erosion, positive-weirdness half only (see class
-        // javadoc).
+        // javadoc). Floor raised from INLAND (=[-0.11,0.55]) to MID_INLAND (=[0.03,0.3]) - INLAND's
+        // lower bound (-0.11) is identical to NEAR_INLAND's lower bound, so despite b1212a9
+        // capping Fungle Jungle to COAST..NEAR_INLAND (=[-0.19,0.03]) specifically to give Jungle
+        // Pillars exclusive territory, the two boxes still fully overlapped on continentalness
+        // [-0.11,0.03] - and within that band Fungle Jungle's erosion (EROSION_0..2) and weirdness
+        // (FULL_RANGE) both fully contain Jungle Pillars' lowErosion (EROSION_0..4) and
+        // variantWeirdness ranges too, so every point that qualified for Jungle Pillars there also
+        // qualified for Fungle Jungle. Starting Jungle Pillars at MID_INLAND instead makes the two
+        // boxes' continentalness ranges meet at 0.03 with no shared span, closing the overlap
+        // completely rather than just narrowing it.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.MID_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
                 .erosion(lowErosion)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(variantWeirdness)
