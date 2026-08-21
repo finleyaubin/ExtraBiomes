@@ -77,6 +77,21 @@ allprojects {
         }
     }
 
+    // Gradle auto-wires the toolchain above into compileJava/test/javadoc, but Loom's run
+    // tasks (runClient/runServer/runDatagen/runGameTestServer) are plain JavaExec subclasses
+    // that don't request a toolchain launcher, so left alone they fork the game using
+    // whatever JVM happens to be running the Gradle daemon itself - which on newer JDKs
+    // (22+) makes Mixin fail to transform core JDK classes ("Unsupported class file major
+    // version", ClassNotFoundException: java.lang.System) before any mod code loads.
+    // Forcing every JavaExec task onto the toolchain-resolved 17 launcher keeps the actual
+    // game process on the JDK Minecraft 1.20.1/Loom expects, auto-detected or
+    // auto-provisioned by Gradle rather than hardcoded to a path on this machine.
+    tasks.withType(JavaExec).configureEach {
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
     dependencies {
         testImplementation platform('org.junit:junit-bom:5.10.2')
         testImplementation 'org.junit.jupiter:junit-jupiter'

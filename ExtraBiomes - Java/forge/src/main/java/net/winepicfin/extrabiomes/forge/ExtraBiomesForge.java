@@ -133,13 +133,24 @@ public class ExtraBiomesForge
     // dimensions are saved") but Gradle never gets control back, hanging until CI's outer
     // `timeout` wrapper kills it. forge.enabledGameTestNamespaces is the vmArg
     // forge/build.gradle's gameTestServer run sets, so this only applies there.
+    //
+    // This watchdog's only job is to make sure the JVM always exits - actual pass/fail is
+    // determined by CI grepping the console log for TestCommand's "All required tests passed"/
+    // "required tests failed" summary lines (see gradle-build.yml's "Run GameTests" step), not
+    // by this process's exit code. Waiting for "Server thread" to appear used to be unbounded:
+    // if the server crashed during startup (e.g. a registry/worldgen bootstrap exception) before
+    // DedicatedServer's constructor ever created that thread, the loop spun forever and this
+    // watchdog never fired - the JVM then hung until CI's outer `timeout` killed it 15 minutes
+    // later with no diagnostics. Bounding the wait means a startup crash now exits promptly
+    // instead of silently eating the whole timeout budget.
     private void startGameTestExitWatchdogIfRunningGameTestServer() {
         if (System.getProperty("forge.enabledGameTestNamespaces") == null) {
             return;
         }
         Thread watchdog = new Thread(() -> {
-            Thread serverThread;
-            do {
+            Thread serverThread = null;
+            long deadline = System.currentTimeMillis() + java.util.concurrent.TimeUnit.MINUTES.toMillis(2);
+            while (serverThread == null && System.currentTimeMillis() < deadline) {
                 serverThread = Thread.getAllStackTraces().keySet().stream()
                         .filter(t -> t.getName().equals("Server thread"))
                         .findFirst().orElse(null);
@@ -150,7 +161,12 @@ public class ExtraBiomesForge
                         return;
                     }
                 }
-            } while (serverThread == null);
+            }
+            if (serverThread == null) {
+                LOGGER.error("extrabiomes-gametest-exit-watchdog: \"Server thread\" never appeared within 2 minutes - the server likely crashed during startup. Exiting.");
+                Runtime.getRuntime().halt(1);
+                return;
+            }
             try {
                 serverThread.join();
             } catch (InterruptedException ignored) {

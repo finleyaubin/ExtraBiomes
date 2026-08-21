@@ -15,7 +15,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # Sum of this job's own step timeouts: downloadAssets(10) + runData(10) + unit tests(10) +
+    # Run GameTests(15, via its inline `timeout 900`) + Run Fabric GameTests(15, same) +
+    # final build(15) = 75 minutes, plus headroom for checkout/setup-java/setup-gradle/EULA
+    # steps (uncapped but fast). A job timeout below that sum kills everything with no
+    # diagnostics before a slow step's own timeout/watchdog gets a chance to fire.
+    timeout-minutes: 90
     defaults:
       run:
         working-directory: "ExtraBiomes - Java"
@@ -40,18 +45,29 @@ jobs:
         run: chmod +x gradlew
 
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
-      # Also pre-seed server.properties with max-tick-time=-1: BiomeGenerationGameTests runs all
-      # 26 mod biomes' exhaustive ServerLevel#findClosestBiome3d (15000-block radius, real Perlin
-      # noise, no shortcuts) synchronously within a single server tick. Vanilla's default
-      # max-tick-time (60000ms) has ServerWatchdog force-crash the server if any one tick exceeds
-      # that - which this test reliably does on GitHub's shared runners (confirmed via a captured
-      # crash report: "single server tick took 60.00 seconds"), even though it stays under the
-      # threshold on faster local hardware. -1 disables the watchdog entirely for this run.
+      # Also pre-seed server.properties with a raised max-tick-time: BiomeGenerationGameTests
+      # runs all 26 mod biomes' exhaustive ServerLevel#findClosestBiome3d (15000-block radius,
+      # real Perlin noise, no shortcuts) synchronously within a single server tick. Vanilla's
+      # default max-tick-time (60000ms) has ServerWatchdog force-crash the server if any one tick
+      # exceeds that - which this test reliably does on GitHub's shared runners (confirmed via a
+      # captured crash report: "single server tick took 60.00 seconds"), even though it stays
+      # under the threshold on faster local hardware. 300000ms (5 min) gives that search generous
+      # headroom on slow shared runners while still letting the watchdog catch a genuinely
+      # infinite-looping tick quickly, instead of disabling it outright and leaving nothing but
+      # the blunt 900s outer `timeout` to notice a real hang.
+      # Also pin level-seed: CI checks out a clean workspace every run, so with no seed set
+      # Minecraft generates a brand-new random world each time, and TerraBlender's noise-based
+      # biome placement can push most mod biomes outside the fixed 15000-block search box on an
+      # unlucky seed (observed: 17/26 biomes "missing" on one CI run vs 1/26 locally, where the
+      # persisted run/world/ dir happened to keep reusing the same lucky seed across runs). A
+      # fixed seed makes the test's result deterministic across both environments; kept even
+      # after narrowing the Jungle Pillars/Fungle Jungle climate-box overlap (see
+      # ModOverworldRegion.java) since determinism across CI runs is worth it regardless.
       - name: Accept Minecraft EULA for the local test server
         run: |
           mkdir -p forge/run
           echo "eula=true" > forge/run/eula.txt
-          echo "max-tick-time=-1" > forge/run/server.properties
+          printf 'max-tick-time=300000\nlevel-seed=extrabiomes\n' > forge/run/server.properties
 
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
       # populated until this runs at least once. Without it, runData's forked JVM throws
@@ -87,9 +103,24 @@ jobs:
       # (480s) is generous headroom on top of the max-tick-time fix above (see that step's
       # comment) - the search itself shouldn't come close to it once the watchdog can't preempt
       # it, but shared runners are unpredictable enough to be worth the margin.
+      # forge:runGameTestServer's own exit code can't be trusted: ExtraBiomesForge's exit
+      # watchdog (see startGameTestExitWatchdogIfRunningGameTestServer) always halts the JVM
+      # with code 0 once the driven-console server shuts down, regardless of whether any
+      # @GameTest actually failed - its only job is making sure the process doesn't hang, not
+      # reporting results. Vanilla's TestCommand prints one of two fixed summary lines
+      # ("All required tests passed :)" / "N required tests failed :(") once `test runall`
+      # finishes, so grep the captured log for those instead of trusting the exit code.
       - name: Run GameTests
         run: |
           (sleep 60 && echo "test runall" && sleep 480 && echo "stop") | timeout 900 ./gradlew :forge:runGameTestServer | tee gametest.log
+          if grep -q "required tests failed" gametest.log; then
+            echo "::error::One or more required GameTests failed - see gametest.log"
+            exit 1
+          fi
+          if ! grep -q "All required tests passed" gametest.log; then
+            echo "::error::GameTest run never reported a pass/fail summary (server likely didn't finish in time) - see gametest.log"
+            exit 1
+          fi
         shell: bash
 
       - name: Upload GameTest log
@@ -99,6 +130,14 @@ jobs:
           name: extrabiomes-forge-gametest-log
           path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
+
+      # Same level-seed reasoning as the Forge EULA/seed step above - Fabric's run/ dir gets a
+      # clean checkout every CI run too, so it needs its own pinned seed for a deterministic
+      # biome search.
+      - name: Pin seed for the Fabric test server
+        run: |
+          mkdir -p fabric/run
+          printf 'level-seed=extrabiomes\n' > fabric/run/server.properties
 
       # Unlike Forge's dedicated server, Fabric API's gametest server auto-runs every registered
       # @GameTest as soon as world gen finishes (driven by the -Dfabric-api.gametest=true vmArg in
