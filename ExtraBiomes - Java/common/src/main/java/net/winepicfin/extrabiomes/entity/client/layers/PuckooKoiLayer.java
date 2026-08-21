@@ -19,11 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class PuckooKoiLayer extends RenderLayer<PuckooEntity,PuckooModel<PuckooEntity>> {
-    private static final Map<PuckooKoiMarkings, ResourceLocation> LOCATION_BY_MARKINGS = Util.make(Maps.newEnumMap(PuckooKoiMarkings.class), (p_114874_) -> {
-        p_114874_.put(PuckooKoiMarkings.BLANK, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi0.png"));
-        p_114874_.put(PuckooKoiMarkings.RED, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi1.png"));
-        p_114874_.put(PuckooKoiMarkings.FULL_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi2.png"));
-        p_114874_.put(PuckooKoiMarkings.SEMI_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi3.png"));
+    private static final Map<PuckooKoiMarkings, ResourceLocation> LOCATION_BY_MARKINGS = Util.make(Maps.newEnumMap(PuckooKoiMarkings.class), (map) -> {
+        map.put(PuckooKoiMarkings.BLANK, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi0.png"));
+        map.put(PuckooKoiMarkings.RED, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi1.png"));
+        map.put(PuckooKoiMarkings.FULL_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi2.png"));
+        map.put(PuckooKoiMarkings.SEMI_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi3.png"));
     });
 
     public PuckooKoiLayer(RenderLayerParent<PuckooEntity, PuckooModel<PuckooEntity>> entityPuckooModelRenderLayerParent) {
@@ -36,11 +36,11 @@ public class PuckooKoiLayer extends RenderLayer<PuckooEntity,PuckooModel<PuckooE
     }
 
     @Override
-    public void render(@NotNull PoseStack p_117349_, @NotNull MultiBufferSource p_117350_, int p_117351_, PuckooEntity p_117352_, float p_117353_, float p_117354_, float p_117355_, float p_117356_, float p_117357_, float p_117358_) {
-        ResourceLocation resourcelocation = LOCATION_BY_MARKINGS.get(p_117352_.getMarkings());
-        if (resourcelocation != null && !p_117352_.isInvisible()) {
-            VertexConsumer vertexconsumer = p_117350_.getBuffer(RenderType.entityTranslucent(resourcelocation));
-            this.getParentModel().renderToBuffer(p_117349_, vertexconsumer, p_117351_, LivingEntityRenderer.getOverlayCoords(p_117352_, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+    public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight, PuckooEntity entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
+        ResourceLocation resourcelocation = LOCATION_BY_MARKINGS.get(entity.getMarkings());
+        if (resourcelocation != null && !entity.isInvisible()) {
+            VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityTranslucent(resourcelocation));
+            this.getParentModel().renderToBuffer(poseStack, vertexconsumer, packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 }

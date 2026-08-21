@@ -23,11 +23,11 @@ public class ModLeavesWithSupport extends LeavesBlock implements SimpleWaterlogg
     public static final int DECAY_DISTANCE = 7;
     private static final int TICK_DELAY = 1;
 
-    public ModLeavesWithSupport(BlockBehaviour.Properties p_54422_) {
-        super(p_54422_);
+    public ModLeavesWithSupport(BlockBehaviour.Properties properties) {
+        super(properties);
     }
 
-    public VoxelShape getBlockSupportShape(BlockState p_54456_, BlockGetter p_54457_, BlockPos p_54458_) {
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
         return Shapes.block();
     }
 

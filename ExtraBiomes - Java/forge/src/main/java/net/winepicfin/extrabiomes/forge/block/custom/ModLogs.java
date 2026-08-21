@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class ModLogs extends RotatedPillarBlock {
 
-    public ModLogs(Properties p_55926_) {
-        super(p_55926_);
+    public ModLogs(Properties properties) {
+        super(properties);
     }
 
     @Override

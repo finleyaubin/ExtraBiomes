@@ -3,7 +3,6 @@ package net.winepicfin.extrabiomes.forge.item.custom;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.winepicfin.extrabiomes.entity.client.armour.FrogHelmetRenderer;
+import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
 import net.winepicfin.extrabiomes.item.ModItemMaterials;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -31,11 +31,11 @@ import java.util.function.Consumer;
 // platform/ExtraBiomesExpectPlatform#createFrogHelmetItem for how common constructs one.
 public final class FrogHelmetItem extends ArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public static final Map<ArmorMaterial, MobEffectInstance> MATERIAL_MOB_EFFECT_INSTANCE_MAP = (new ImmutableMap.Builder<ArmorMaterial, MobEffectInstance>()).put(ModItemMaterials.FROG, new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 1, false, false, true ))
+    public static final Map<ArmorMaterial, MobEffectInstance> MATERIAL_MOB_EFFECT_INSTANCE_MAP = (new ImmutableMap.Builder<ArmorMaterial, MobEffectInstance>()).put(ModItemMaterials.FROG, FrogHelmetEffects.playerWaterBreathing())
              .build();
 
-    public FrogHelmetItem(ArmorMaterial p_40386_, Type p_266831_, Properties p_40388_) {
-        super(p_40386_, p_266831_, p_40388_);
+    public FrogHelmetItem(ArmorMaterial material, Type type, Properties properties) {
+        super(material, type, properties);
     }
 
     // IForgeItem.onArmorTick is deprecated for removal - vanilla's Item.inventoryTick is the
@@ -76,7 +76,7 @@ public final class FrogHelmetItem extends ArmorItem implements GeoItem {
         boolean hasPlayerEffect=player.hasEffect(mapStatusEffect.getEffect());
         if(hasFrogHelmetOn(mapArmourMaterial,player)&&!hasPlayerEffect){
             player.addEffect(new MobEffectInstance(mapStatusEffect));
-            player.addEffect(new MobEffectInstance(MobEffects.JUMP,200, 1, false, false, true ));
+            player.addEffect(FrogHelmetEffects.playerJumpBoost());
         }
     }
     // Create our armor model/renderer for forge and return it

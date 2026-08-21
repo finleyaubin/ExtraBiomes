@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public class PalmTreeGrower extends AbstractTreeGrower {
     @Nullable
     @Override
-    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource p_222910_, boolean p_222911_) {
+    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource random, boolean hasFlowers) {
         return PalmTreeFeatures.SELECT_PALM_KEY;
     }
 }

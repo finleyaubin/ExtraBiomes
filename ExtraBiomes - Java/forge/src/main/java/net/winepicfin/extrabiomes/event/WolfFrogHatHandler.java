@@ -4,8 +4,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -17,6 +15,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
 import net.winepicfin.extrabiomes.item.ModItems;
 
 /**
@@ -68,7 +67,7 @@ public class WolfFrogHatHandler {
         if (wolf.getItemBySlot(EquipmentSlot.HEAD).getItem() != ModItems.FROG_HELMET.get()) return;
         if (wolf.isInWaterOrBubble()) return;
 
-        wolf.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 220, 1, false, false, true));
-        wolf.addEffect(new MobEffectInstance(MobEffects.JUMP, 220, 1, false, false, true));
+        wolf.addEffect(FrogHelmetEffects.wolfWaterBreathing());
+        wolf.addEffect(FrogHelmetEffects.wolfJumpBoost());
     }
 }

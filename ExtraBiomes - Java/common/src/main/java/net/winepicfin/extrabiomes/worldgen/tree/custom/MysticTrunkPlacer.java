@@ -23,21 +23,21 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class MysticTrunkPlacer extends TrunkPlacer {
-    private static final Codec<UniformInt> BRANCH_START_CODEC = ExtraCodecs.validate(UniformInt.CODEC, (p_275181_) -> {
-        return p_275181_.getMaxValue() - p_275181_.getMinValue() < 1 ? DataResult.error(() -> {
+    private static final Codec<UniformInt> BRANCH_START_CODEC = ExtraCodecs.validate(UniformInt.CODEC, (pUniformInt) -> {
+        return pUniformInt.getMaxValue() - pUniformInt.getMinValue() < 1 ? DataResult.error(() -> {
             return "Need at least 2 blocks variation for the branch starts to fit both branches";
-        }) : DataResult.success(p_275181_);
+        }) : DataResult.success(pUniformInt);
     });
-public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((p_273579_) -> {
-    return trunkPlacerParts(p_273579_).and(p_273579_.group(IntProvider.codec(1, 3).fieldOf("branch_count").forGetter((p_272644_) -> {
-        return p_272644_.branchCount;
-    }), IntProvider.codec(2, 16).fieldOf("branch_horizontal_length").forGetter((p_273612_) -> {
-        return p_273612_.branchHorizontalLength;
-    }), IntProvider.codec(-16, 0, BRANCH_START_CODEC).fieldOf("branch_start_offset_from_top").forGetter((p_272705_) -> {
-        return p_272705_.branchStartOffsetFromTop;
-    }), IntProvider.codec(-16, 16).fieldOf("branch_end_offset_from_top").forGetter((p_273633_) -> {
-        return p_273633_.branchEndOffsetFromTop;
-    }))).apply(p_273579_, MysticTrunkPlacer::new);
+public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((pInstance) -> {
+    return trunkPlacerParts(pInstance).and(pInstance.group(IntProvider.codec(1, 3).fieldOf("branch_count").forGetter((pTrunkPlacer) -> {
+        return pTrunkPlacer.branchCount;
+    }), IntProvider.codec(2, 16).fieldOf("branch_horizontal_length").forGetter((pTrunkPlacer) -> {
+        return pTrunkPlacer.branchHorizontalLength;
+    }), IntProvider.codec(-16, 0, BRANCH_START_CODEC).fieldOf("branch_start_offset_from_top").forGetter((pTrunkPlacer) -> {
+        return pTrunkPlacer.branchStartOffsetFromTop;
+    }), IntProvider.codec(-16, 16).fieldOf("branch_end_offset_from_top").forGetter((pTrunkPlacer) -> {
+        return pTrunkPlacer.branchEndOffsetFromTop;
+    }))).apply(pInstance, MysticTrunkPlacer::new);
 });
     public MysticTrunkPlacer(int pBaseHeight, int pHeightRandomA, int pHeightRandomB, IntProvider pBranchCount, IntProvider pBranchLength, UniformInt pBranchOffsetFromTop, IntProvider branchEndOffsetFromTop) {
         super(pBaseHeight, pHeightRandomA, pHeightRandomB);
@@ -105,8 +105,8 @@ public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((
 
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(pRandom);
-        Function<BlockState, BlockState> function = (p_273382_) -> {
-            return p_273382_.trySetValue(RotatedPillarBlock.AXIS, direction.getAxis());
+        Function<BlockState, BlockState> function = (pState) -> {
+            return pState.trySetValue(RotatedPillarBlock.AXIS, direction.getAxis());
         };
         list.add(this.generateBranch(pLevel, pBlockSetter, pRandom, pFreeTreeHeight, pPos, pConfig, function, direction, i, i < l - 1, blockpos$mutableblockpos));
         if (flag1) {
@@ -116,30 +116,30 @@ public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((
         return list;
     }
 
-    private FoliagePlacer.FoliageAttachment generateBranch(LevelSimulatedReader p_272736_, BiConsumer<BlockPos, BlockState> p_273092_, RandomSource p_273449_, int p_272659_, BlockPos p_273743_, TreeConfiguration p_273027_, Function<BlockState, BlockState> p_273558_, Direction p_273712_, int p_272980_, boolean p_272719_, BlockPos.MutableBlockPos p_273496_) {
-        p_273496_.set(p_273743_).move(Direction.UP, p_272980_);
-        int i = p_272659_ - 1 + this.branchEndOffsetFromTop.sample(p_273449_);
-        boolean flag = p_272719_ || i < p_272980_;
-        int j = this.branchHorizontalLength.sample(p_273449_) + (flag ? 1 : 0);
-        BlockPos blockpos = p_273743_.relative(p_273712_, j).above(i);
+    private FoliagePlacer.FoliageAttachment generateBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig, Function<BlockState, BlockState> pPropertySetter, Direction pDirection, int pOffset, boolean pOffsetExtra, BlockPos.MutableBlockPos pPosMutable) {
+        pPosMutable.set(pPos).move(Direction.UP, pOffset);
+        int i = pFreeTreeHeight - 1 + this.branchEndOffsetFromTop.sample(pRandom);
+        boolean flag = pOffsetExtra || i < pOffset;
+        int j = this.branchHorizontalLength.sample(pRandom) + (flag ? 1 : 0);
+        BlockPos blockpos = pPos.relative(pDirection, j).above(i);
         int k = flag ? 2 : 1;
 
         for(int l = 0; l < k; ++l) {
-            this.placeLog(p_272736_, p_273092_, p_273449_, p_273496_.move(p_273712_), p_273027_, p_273558_);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(pDirection), pConfig, pPropertySetter);
         }
 
-        Direction direction = blockpos.getY() > p_273496_.getY() ? Direction.UP : Direction.DOWN;
+        Direction direction = blockpos.getY() > pPosMutable.getY() ? Direction.UP : Direction.DOWN;
 
         while(true) {
-            int i1 = p_273496_.distManhattan(blockpos);
+            int i1 = pPosMutable.distManhattan(blockpos);
             if (i1 == 0) {
                 return new FoliagePlacer.FoliageAttachment(blockpos.above(), 0, false);
             }
 
-            float f = (float)Math.abs(blockpos.getY() - p_273496_.getY()) / (float)i1;
-            boolean flag1 = p_273449_.nextFloat() < f;
-            p_273496_.move(flag1 ? direction : p_273712_);
-            this.placeLog(p_272736_, p_273092_, p_273449_, p_273496_, p_273027_, flag1 ? Function.identity() : p_273558_);
+            float f = (float)Math.abs(blockpos.getY() - pPosMutable.getY()) / (float)i1;
+            boolean flag1 = pRandom.nextFloat() < f;
+            pPosMutable.move(flag1 ? direction : pDirection);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable, pConfig, flag1 ? Function.identity() : pPropertySetter);
         }
     }
 }

@@ -33,8 +33,8 @@ public class PebbleProjectileEntity extends ThrowableItemProjectile {
         super.onHitEntity(result);
         result.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), 6.0F);
     }
-    protected void onHit(HitResult p_37406_) {
-        super.onHit(p_37406_);
+    protected void onHit(HitResult hitResult) {
+        super.onHit(hitResult);
         if (!this.level().isClientSide) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();

@@ -2,7 +2,6 @@ package net.winepicfin.extrabiomes.fabric.item.custom;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -10,6 +9,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.winepicfin.extrabiomes.fabric.entity.client.armour.FrogHelmetRenderer;
+import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
 import net.winepicfin.extrabiomes.item.ModItemMaterials;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.RenderProvider;
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public final class FrogHelmetItem extends ArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
-    public static final Map<ArmorMaterial, MobEffectInstance> MATERIAL_MOB_EFFECT_INSTANCE_MAP = (new ImmutableMap.Builder<ArmorMaterial, MobEffectInstance>()).put(ModItemMaterials.FROG, new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 1, false, false, true))
+    public static final Map<ArmorMaterial, MobEffectInstance> MATERIAL_MOB_EFFECT_INSTANCE_MAP = (new ImmutableMap.Builder<ArmorMaterial, MobEffectInstance>()).put(ModItemMaterials.FROG, FrogHelmetEffects.playerWaterBreathing())
             .build();
 
     public FrogHelmetItem(ArmorMaterial material, Type type, Properties properties) {
@@ -70,7 +70,7 @@ public final class FrogHelmetItem extends ArmorItem implements GeoItem {
         boolean hasPlayerEffect = player.hasEffect(mapStatusEffect.getEffect());
         if (hasFrogHelmetOn(mapArmourMaterial, player) && !hasPlayerEffect) {
             player.addEffect(new MobEffectInstance(mapStatusEffect));
-            player.addEffect(new MobEffectInstance(MobEffects.JUMP, 200, 1, false, false, true));
+            player.addEffect(FrogHelmetEffects.playerJumpBoost());
         }
     }
 

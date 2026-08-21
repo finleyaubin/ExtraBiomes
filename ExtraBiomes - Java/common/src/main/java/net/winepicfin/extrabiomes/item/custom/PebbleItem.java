@@ -20,8 +20,8 @@ import net.winepicfin.extrabiomes.entity.custom.projectile.PebbleProjectileEntit
 import net.winepicfin.extrabiomes.item.ModItems;
 
 public class PebbleItem extends Item {
-    public PebbleItem(Properties p_41383_) {
-        super(p_41383_);
+    public PebbleItem(Properties properties) {
+        super(properties);
     }
 
     @Override
@@ -45,15 +45,15 @@ public class PebbleItem extends Item {
         return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
     }
 
-    public InteractionResult useOn(UseOnContext p_41297_) {
-        Player player = p_41297_.getPlayer();
-        Level level = p_41297_.getLevel();
+    public InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
+        Level level = context.getLevel();
         if (player.isCrouching()) {
-            BlockPos blockpos = p_41297_.getClickedPos();
+            BlockPos blockpos = context.getClickedPos();
             BlockState blockstate = level.getBlockState(blockpos);
             BlockState blockstate1;
-            BlockPos blockpos1 = blockpos.relative(p_41297_.getClickedFace());
-            if (player.getItemInHand(p_41297_.getHand()).getItem()== ModItems.PEBBLE.get()){
+            BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
+            if (player.getItemInHand(context.getHand()).getItem()== ModItems.PEBBLE.get()){
                 blockstate1 = ModBlocks.PEBBLE.get().getStateForThrowing();
             }else {
                 blockstate1 = ModBlocks.MOSSY_PEBBLE.get().getStateForThrowing();
@@ -64,7 +64,7 @@ public class PebbleItem extends Item {
             level.playSound(player, blockpos1, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
             level.setBlock(blockpos1, blockstate1, 11);
             level.gameEvent(player, GameEvent.BLOCK_PLACE, blockpos);
-            ItemStack itemstack = p_41297_.getItemInHand();
+            ItemStack itemstack = context.getItemInHand();
             if (player instanceof ServerPlayer) {
                 itemstack.shrink(1);
                 return InteractionResult.sidedSuccess(level.isClientSide());

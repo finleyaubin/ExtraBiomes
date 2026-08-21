@@ -43,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * tapering linearly to a single-block point at its own top - rather than a uniform 1-wide shaft.
  * A third, finer noise field then runs an erosion pass over that cone, perturbing its radius
  * block-by-block so the outline reads as a weathered, fluted hoodoo instead of a smooth cylinder
- * (see the {@code erosion}/{@code erosionScale} maths in {@link #place}). The materials (and the
+ * (see the {@code erosion}/{@code erosionScale} maths in {@link #placePillar}). The materials (and the
  * height/radius/rarity/erosion tuning) are all pulled from the per-biome
  * {@link BrycePillarsConfiguration}, so the same shape logic reproduces every one of the Bedrock
  * biomes' distinct clay/hardened-clay combinations.
@@ -83,8 +83,8 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
         WorldGenLevel level = context.level();
         BrycePillarsConfiguration config = context.config();
         BlockPos origin = context.origin();
-        // Materials are now chosen deterministically by absolute Y (getBandedMaterial), so this
-        // feature no longer needs the placement RandomSource at all.
+        // Materials are chosen deterministically by absolute Y (getBandedMaterial), so this
+        // feature needs no placement RandomSource.
         // One array per (world seed, biome's material recipe), built once and reused for every
         // pillar in every chunk of this biome - never regenerated per column, since that's what
         // keeps a given Y the same colour everywhere.
@@ -121,59 +121,86 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                 int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
                 if (surfaceY != floorY) continue;
 
-                double roof = PILLAR_ROOF_NOISE.getValue(x * NOISE_SCALE, z * NOISE_SCALE, false);
                 double strength = (mask - config.threshold()) / (1.0D - config.threshold());
-                int span = config.maxHeight() - config.minHeight();
-                int height = config.minHeight() + (int) Math.round(strength * span) + (int) Math.round(roof * span * ROOF_INFLUENCE);
-                height = Math.max(config.minHeight(), Math.min(config.maxHeight(), height));
-                if (height <= 0) continue;
+                PillarShape shape = computePillarShape(config, x, z, strength);
+                if (shape.height() <= 0) continue;
 
                 int baseY = floorY;
-                int maxRadius = Math.max(0, Math.min(config.maxRadius(), (int) Math.round(config.maxRadius() * strength)));
-                BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
                 // Read whatever's already sitting one block below the pillar's own base - since
                 // this feature runs after surface rules, that's the real bandlands()-generated
                 // terracotta colour (or real tuff/stone) already placed for this exact column.
-                // Used only for the single bottommost row (below), so the pillar's footing joins
-                // seamlessly with the ground - everything above uses pure global Y-indexing so
-                // "same Y = same colour everywhere" isn't broken by rotating per pillar.
-                BlockState anchorState = level.getBlockState(pos.set(x, baseY - 1, z));
-                for (int y = baseY; y < baseY + height; y++) {
-                    // Linear taper: full maxRadius at the base, shrinking to a single-block point
-                    // by the pillar's own top, so each spire is wide-footed rather than a uniform
-                    // 1-block-wide shaft.
-                    double heightFraction = height > 1 ? (double) (y - baseY) / (height - 1) : 1.0D;
-                    int radius = Math.round((float) (maxRadius * (1.0D - heightFraction)));
-                    // Erosion pass: perturb the cone's radius per-block with a separate, finer
-                    // noise field instead of testing a perfect circle - weathers the outline into
-                    // vertical flutes/notches (Bedrock's stained_hardened_clay hoodoos never read
-                    // as smooth cylinders). Weighted toward the top (heightFraction) so pillars
-                    // still stand on a solid, mostly-intact base rather than eroding themselves
-                    // loose at the ground.
-                    double erosionScale = config.erosionStrength() * (0.4D + 0.6D * heightFraction);
-                    int maxScan = radius + (int) Math.ceil(erosionScale);
-                    boolean isBaseRow = y == baseY;
-                    BlockState material = getBandedMaterial(bands, x, y, z, isBaseRow, anchorState);
-                    for (int rx = -maxScan; rx <= maxScan; rx++) {
-                        for (int rz = -maxScan; rz <= maxScan; rz++) {
-                            // The pillar's own core column always survives erosion, no matter how
-                            // strong - otherwise a harsh negative erosion sample at radius 0 (the
-                            // tapered tip) could carve out the one block holding the tip up,
-                            // leaving a disconnected floating cap above a gap.
-                            if (rx != 0 || rz != 0) {
-                                double dist = Math.sqrt(rx * rx + rz * rz);
-                                double erosion = EROSION_NOISE.getValue((x + rx) * EROSION_SCALE, (z + rz) * EROSION_SCALE, false);
-                                if (dist > radius + erosion * erosionScale) continue;
-                            }
-                            pos.set(x + rx, y, z + rz);
-                            level.setBlock(pos, material, 2);
-                            placedAny = true;
-                        }
+                // Used only for the single bottommost row (in placePillar), so the pillar's
+                // footing joins seamlessly with the ground - everything above uses pure global
+                // Y-indexing so "same Y = same colour everywhere" isn't broken by rotating per
+                // pillar.
+                BlockState anchorState = level.getBlockState(new BlockPos(x, baseY - 1, z));
+                placedAny |= placePillar(level, x, z, baseY, shape.height(), shape.maxRadius(), bands, anchorState, config);
+            }
+        }
+        return placedAny;
+    }
+
+    /**
+     * Derives this pillar's height and base radius from how strongly its column cleared the mask
+     * threshold ({@code strength}), plus the finer "roof" noise field for an uneven skyline rather
+     * than uniform mesas.
+     */
+    private static PillarShape computePillarShape(BrycePillarsConfiguration config, int x, int z, double strength) {
+        double roof = PILLAR_ROOF_NOISE.getValue(x * NOISE_SCALE, z * NOISE_SCALE, false);
+        int span = config.maxHeight() - config.minHeight();
+        int height = config.minHeight() + (int) Math.round(strength * span) + (int) Math.round(roof * span * ROOF_INFLUENCE);
+        height = Math.max(config.minHeight(), Math.min(config.maxHeight(), height));
+        int maxRadius = Math.max(0, Math.min(config.maxRadius(), (int) Math.round(config.maxRadius() * strength)));
+        return new PillarShape(height, maxRadius);
+    }
+
+    /**
+     * Carves one pillar: a cone tapering linearly from {@code maxRadius} at {@code baseY} to a
+     * single-block point at its own top, run through an erosion pass so its outline reads as a
+     * weathered, fluted hoodoo instead of a smooth cylinder. Returns whether it placed at least
+     * one block.
+     */
+    private static boolean placePillar(WorldGenLevel level, int x, int z, int baseY, int height, int maxRadius,
+                                        List<BlockState> bands, BlockState anchorState, BrycePillarsConfiguration config) {
+        boolean placedAny = false;
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int y = baseY; y < baseY + height; y++) {
+            // Linear taper: full maxRadius at the base, shrinking to a single-block point
+            // by the pillar's own top, so each spire is wide-footed rather than a uniform
+            // 1-block-wide shaft.
+            double heightFraction = height > 1 ? (double) (y - baseY) / (height - 1) : 1.0D;
+            int radius = Math.round((float) (maxRadius * (1.0D - heightFraction)));
+            // Erosion pass: perturb the cone's radius per-block with a separate, finer
+            // noise field instead of testing a perfect circle - weathers the outline into
+            // vertical flutes/notches (Bedrock's stained_hardened_clay hoodoos never read
+            // as smooth cylinders). Weighted toward the top (heightFraction) so pillars
+            // still stand on a solid, mostly-intact base rather than eroding themselves
+            // loose at the ground.
+            double erosionScale = config.erosionStrength() * (0.4D + 0.6D * heightFraction);
+            int maxScan = radius + (int) Math.ceil(erosionScale);
+            boolean isBaseRow = y == baseY;
+            BlockState material = getBandedMaterial(bands, x, y, z, isBaseRow, anchorState);
+            for (int rx = -maxScan; rx <= maxScan; rx++) {
+                for (int rz = -maxScan; rz <= maxScan; rz++) {
+                    // The pillar's own core column always survives erosion, no matter how
+                    // strong - otherwise a harsh negative erosion sample at radius 0 (the
+                    // tapered tip) could carve out the one block holding the tip up,
+                    // leaving a disconnected floating cap above a gap.
+                    if (rx != 0 || rz != 0) {
+                        double dist = Math.sqrt(rx * rx + rz * rz);
+                        double erosion = EROSION_NOISE.getValue((x + rx) * EROSION_SCALE, (z + rz) * EROSION_SCALE, false);
+                        if (dist > radius + erosion * erosionScale) continue;
                     }
+                    pos.set(x + rx, y, z + rz);
+                    level.setBlock(pos, material, 2);
+                    placedAny = true;
                 }
             }
         }
         return placedAny;
+    }
+
+    private record PillarShape(int height, int maxRadius) {
     }
 
     private static boolean isLocalMaximum(int x, int z, double mask) {

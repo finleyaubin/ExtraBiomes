@@ -28,8 +28,8 @@ public class MossyPebbleBlock extends Block {
     public static final VoxelShape SHAPE3=Block.box(0,0,0,16,4,16);
     public static IntegerProperty SIZE=IntegerProperty.create("size", 1,3);
 
-    public MossyPebbleBlock(Properties p_49795_) {
-        super(p_49795_);
+    public MossyPebbleBlock(Properties properties) {
+        super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(SIZE, 1));
     }
 
@@ -45,7 +45,7 @@ public class MossyPebbleBlock extends Block {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState p_60550_) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -56,7 +56,7 @@ public class MossyPebbleBlock extends Block {
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext p_49820_) {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         return this.defaultBlockState().setValue(SIZE,1);
     }
 
