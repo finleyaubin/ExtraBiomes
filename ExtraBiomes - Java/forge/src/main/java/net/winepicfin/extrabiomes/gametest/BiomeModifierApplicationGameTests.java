@@ -47,7 +47,7 @@ public class BiomeModifierApplicationGameTests {
         assertHasFeature(helper, jungle, GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_UPPER_PLACED_KEY);
         assertHasFeature(helper, jungle, GenerationStep.Decoration.UNDERGROUND_DECORATION, UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY);
 
-        assertHasSpawn(helper, jungle, MobCategory.CREATURE, ModEntities.GIANT_TORTOISE.get());
+        assertHasSpawn(helper, jungle, MobCategory.MONSTER, ModEntities.GIANT_TORTOISE.get());
         assertHasSpawn(helper, jungle, MobCategory.WATER_CREATURE, ModEntities.PIRANHA.get());
         assertHasSpawn(helper, jungle, MobCategory.CREATURE, ModEntities.TREEFROG.get());
 
