@@ -39,7 +39,11 @@ import java.util.List;
  * <ul>
  *   <li>{@code structure_name} -> the converted .nbt at
  *       data/extrabiomes/structures/structurescatter/oasis_puddle.nbt, referenced here as
- *       "extrabiomes:structurescatter/oasis_puddle".</li>
+ *       "extrabiomes:structurescatter/oasis_puddle". Besides water and the 11x11 sand rim, the
+ *       template carries a loaded Barrel (Bedrock's "loot_tables/chests/shipwrecktreasure.json" ->
+ *       Java's vanilla "minecraft:chests/shipwreck_treasure", carried through by
+ *       tools/mc2java.py's container block-entity handling) plus four coral types and a sea pickle
+ *       scattered around the water's edge.</li>
  *   <li>{@code iterations: 1} + {@code scatter_chance: 1} (always run once) -> {@link CountPlacement#of(int)} with 1,
  *       thinned further by a {@link RarityFilter} not present in the Bedrock source. Bedrock also runs this
  *       placement pass "before_surface_pass" (before its surface/sand texturing finalizes), which lets the

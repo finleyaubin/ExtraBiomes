@@ -133,6 +133,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.PURPLE_MUSHROOM.get());
         dropSelf.accept(ModBlocks.WHITE_MUSHROOM.get());
         dropSelf.accept(ModBlocks.YELLOW_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.GLOW_MUSHROOM.get());
         // Mushrooms
         dropSelf.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
         dropSelf.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get());

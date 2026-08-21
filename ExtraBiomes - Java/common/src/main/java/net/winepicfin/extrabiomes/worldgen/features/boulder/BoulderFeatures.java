@@ -26,6 +26,7 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
+import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
@@ -245,7 +246,7 @@ public class BoulderFeatures {
 
         // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE).
         // STICK_PILE_GROUND_OFFSET sinks each pile in slightly so it reads as resting among/into
-        // the ground rather than floating on top of it. ---
+        // the ground rather than floating on top of it (same technique as GlacierFeatures' snow drifts). ---
         registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
         registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
 
@@ -333,15 +334,18 @@ public class BoulderFeatures {
 
         // select_stick_pile (via stick_pile_placer.json): iterations 1, scatter_chance 10, x/z
         // uniform [0,16], y = heightmap +/- 1 (grounded/unburied constraints approximated by
-        // sitting directly on the heightmap surface - see class docs). OCEAN_FLOOR_WG (instead of
-        // WORLD_SURFACE_WG) keeps this off the water's own surface, landing on the actual
-        // lake/pond bed instead - STICK_PILE_GROUND_OFFSET then sinks each pile in slightly.
+        // sitting directly on the heightmap surface - see class docs). Anchored on OCEAN_FLOOR_WG
+        // (not WORLD_SURFACE_WG, which counts water as non-air and would place the pile floating on
+        // a lake/river's surface) plus SurfaceWaterDepthFilter.forMaxDepth(0) so piles never
+        // generate on or in water at all - same fix as NetherlandsWindmillFeature's own water check.
+        // STICK_PILE_GROUND_OFFSET then sinks each pile in slightly.
         context.register(SELECT_STICK_PILE_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_STICK_PILE_KEY),
                 List.of(
                         RarityFilter.onAverageOnceEvery(10),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        SurfaceWaterDepthFilter.forMaxDepth(0),
                         BiomeFilter.biome()
                 )
         ));
