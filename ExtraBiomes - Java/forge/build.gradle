@@ -28,6 +28,17 @@ loom {
             // tests (e.g. BiomeRegistrationParityTest) read it from there via a path relative
             // to common's own project directory.
             programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            // Own working directory, separate from "run" (the default, shared with
+            // client/server/gameTestServer): bootstrapping structure/registry context for data
+            // generation creates a throwaway world save (confirmed locally - forge/run/world/
+            // level.dat appears after a bare `./gradlew :forge:runData` against an empty run
+            // dir) with whatever seed that bootstrap happens to use, not the one CI/local pin in
+            // run/server.properties for the GameTest server. Left in the shared "run" dir, that
+            // leftover level.dat would already exist by the time runGameTestServer starts, and
+            // since Minecraft only reads level-seed from server.properties when *creating* a
+            // world, the pinned seed would be silently ignored in favour of whatever datagen's
+            // throwaway world used - exactly what was happening before this was split out.
+            runDir "run-data"
         }
         gameTestServer {
             configName = "Forge Game Test Server"

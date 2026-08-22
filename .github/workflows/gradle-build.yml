@@ -95,23 +95,17 @@ jobs:
         run: ./gradlew :forge:downloadAssets
         timeout-minutes: 10
 
+      # :forge:runData now uses its own "run-data" directory (see forge/build.gradle's data
+      # run config) instead of the "run" dir shared with runGameTestServer - it was previously
+      # leaving a throwaway world save (forge/run/world/level.dat) behind as a side effect of
+      # bootstrapping structure/registry context, which silently overrode the level-seed pinned
+      # in the EULA step above (Minecraft only reads level-seed when *creating* a world) by the
+      # time runGameTestServer started. That was the actual cause of CI's "17/26 biomes not
+      # found" runs - the pinned seed was never taking effect, not a biome-placement/TerraBlender
+      # issue. Isolating runData's working directory removes the interference at its source.
       - name: Generate data
         run: ./gradlew :forge:runData
         timeout-minutes: 10
-
-      # :forge:runData creates forge/run/world/level.dat as a side effect of bootstrapping a level
-      # for structure/data generation - confirmed locally by running runData alone against a
-      # freshly-emptied forge/run and finding world/level.dat afterwards. Minecraft only reads
-      # level-seed from server.properties when *creating* a world; once level.dat exists it keeps
-      # whatever seed is already baked into it, so without this step the seed pinned in the EULA
-      # step above was being silently ignored by the time runGameTestServer started, and
-      # BiomeGenerationGameTests was searching an effectively-random world every CI run (matching
-      # the historical "17/26 biomes missing" failure signature from before seed-pinning was even
-      # introduced, despite the pin appearing correctly in server.properties the whole time).
-      # Deleting the world here - after datagen, before the GameTest server - guarantees
-      # runGameTestServer actually creates a fresh world using the pinned seed.
-      - name: Clear GameTest world (datagen leaves one behind)
-        run: rm -rf forge/run/world forge/run/world_nether forge/run/world_the_end
 
       - name: Run unit tests
         run: ./gradlew :common:test
