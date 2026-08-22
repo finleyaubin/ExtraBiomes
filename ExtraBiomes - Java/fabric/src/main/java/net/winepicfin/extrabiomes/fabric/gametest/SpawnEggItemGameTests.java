@@ -1,11 +1,13 @@
 package net.winepicfin.extrabiomes.fabric.gametest;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.Item;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
+import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -17,9 +19,11 @@ import java.util.List;
 // applies identically on Fabric - nothing here is Forge-specific, this is just a second real
 // runtime to catch a regression in either loader's own item registration wiring.
 public class SpawnEggItemGameTests {
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
     public static void everySpawnEggResolvesRequiredFeaturesWithoutThrowing(GameTestHelper helper) {
+        LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: starting");
         List<Item> spawnEggs = List.of(
                 ModItems.PUCKOO_SPAWN_EGG.get(),
                 ModItems.WORM_SPAWN_EGG.get(),
@@ -31,12 +35,14 @@ public class SpawnEggItemGameTests {
                 ModItems.HARPY_SPAWN_EGG.get());
 
         for (Item item : spawnEggs) {
+            LOGGER.info("[SpawnEggItemGameTests] checking {}", item);
             helper.assertTrue(item instanceof ExtraBiomesSpawnEggItem, item + " is not an ExtraBiomesSpawnEggItem");
             item.requiredFeatures();
             helper.assertTrue(((ExtraBiomesSpawnEggItem) item).getType(null) != null,
                     item + "#getType(null) returned null");
         }
 
+        LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed");
         helper.succeed();
     }
 }

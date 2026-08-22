@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.gametest;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
@@ -19,6 +20,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+import org.slf4j.Logger;
 
 // ModBiomeModifiers.bootstrap() only *declares* which vanilla biomes should gain this mod's
 // features/spawns - none of the existing tests actually confirm Forge's BiomeModifier registry
@@ -38,9 +40,11 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.Undergroun
 @GameTestHolder(ExtraBiomes.MOD_ID)
 @PrefixGameTestTemplate(false)
 public class BiomeModifierApplicationGameTests {
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     @GameTest(template = "empty")
     public static void jungleGetsUndergroundJungleFeaturesAndSpawns(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: starting");
         Biome jungle = biome(helper, Biomes.JUNGLE);
 
         assertHasFeature(helper, jungle, GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_PLACED_KEY);
@@ -51,26 +55,31 @@ public class BiomeModifierApplicationGameTests {
         assertHasSpawn(helper, jungle, MobCategory.WATER_CREATURE, ModEntities.PIRANHA.get());
         assertHasSpawn(helper, jungle, MobCategory.CREATURE, ModEntities.TREEFROG.get());
 
+        LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: passed");
         helper.succeed();
     }
 
     @GameTest(template = "empty")
     public static void mushroomFieldsGetsHugeMushroomsAndSpawns(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] mushroomFieldsGetsHugeMushroomsAndSpawns: starting");
         Biome mushroomFields = biome(helper, Biomes.MUSHROOM_FIELDS);
 
         assertHasFeature(helper, mushroomFields, GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
         assertHasFeature(helper, mushroomFields, GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
         assertHasSpawn(helper, mushroomFields, MobCategory.CREATURE, ModEntities.HOPPLESHROOM.get());
 
+        LOGGER.info("[BiomeModifierApplicationGameTests] mushroomFieldsGetsHugeMushroomsAndSpawns: passed");
         helper.succeed();
     }
 
     @GameTest(template = "empty")
     public static void darkForestGetsHugeMushrooms(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: starting");
         Biome darkForest = biome(helper, Biomes.DARK_FOREST);
 
         assertHasFeature(helper, darkForest, GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
+        LOGGER.info("[BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: passed");
         helper.succeed();
     }
 
