@@ -41,7 +41,7 @@ public class FabricBiomeModifiers {
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.DARK_FOREST),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
-        BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.CREATURE,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.MONSTER,
                 ModEntities.GIANT_TORTOISE.get(), MobSpawnWeightTuning.GIANT_TORTOISE, 1, 2);
         BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.WATER_CREATURE,
                 ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE, 6, 10);
