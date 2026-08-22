@@ -3,5 +3,10 @@
     "flipbook_texture": "textures/blocks/goo",
     "atlas_tile": "goo",
     "ticks_per_frame": 4
+  },
+  {
+    "flipbook_texture": "textures/items/worm",
+    "atlas_tile": "extrabiomes:worm",
+    "ticks_per_frame": 20
   }
 ]
