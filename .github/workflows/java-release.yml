@@ -61,6 +61,20 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
+      # populated until this runs at least once - see gradle-build.yml's identical step.
+      - name: Download Loom assets
+        run: ./gradlew :forge:downloadAssets
+        timeout-minutes: 10
+
+      # ./gradlew build runs :common:test, and BiomeRegistrationParityTest reads generated
+      # biome JSON from src/generated/resources/ - without running runData first, those files
+      # don't exist yet and every case in that test fails with NoSuchFileException. Mirrors
+      # the same two steps gradle-build.yml runs before its own build.
+      - name: Generate data
+        run: ./gradlew :forge:runData
+        timeout-minutes: 10
+
       # mod_version in gradle.properties should already match the tag before tagging a
       # release - this doesn't derive the jar version from the tag, it just builds whatever
       # gradle.properties currently says.
