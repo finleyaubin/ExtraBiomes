@@ -1,0 +1,112 @@
+plugins {
+    id "architectury-plugin" version "${architectury_plugin_version}"
+    id "dev.architectury.loom" version "${architectury_loom_version}" apply false
+}
+
+architectury {
+    minecraft = rootProject.minecraft_version
+}
+
+subprojects {
+    apply plugin: "dev.architectury.loom"
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.officialMojangMappings()
+    }
+
+    repositories {
+        maven {
+            name = 'GeckoLib'
+            url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        }
+        maven {
+            name = 'JitPack'
+            url 'https://jitpack.io'
+        }
+        // TerraBlender-forge is fetched through Modrinth's Maven proxy (see common/build.gradle)
+        // because JitPack now 401s on the glitchfiend/TerraBlender-forge coordinate — the repo's
+        // versioning scheme moved on and JitPack never rebuilt this old tag.
+        maven {
+            name = 'Modrinth'
+            url 'https://api.modrinth.com/maven'
+        }
+    }
+}
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "idea"
+    apply plugin: "maven-publish"
+
+    base {
+        archivesName = rootProject.archives_base_name
+    }
+
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    java {
+        withSourcesJar()
+
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+
+        // Pin the toolchain instead of relying on whatever JDK happens to be the
+        // caller's default (Minecraft 1.20.1/Loom requires 17) - keeps the build
+        // reproducible across machines regardless of the system default JDK.
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    tasks.named('test', Test).configure {
+        useJUnitPlatform()
+        testLogging {
+            exceptionFormat = 'full'
+            events "passed", "skipped", "failed"
+        }
+    }
+
+    // Gradle auto-wires the toolchain above into compileJava/test/javadoc, but Loom's run
+    // tasks (runClient/runServer/runDatagen/runGameTestServer) are plain JavaExec subclasses
+    // that don't request a toolchain launcher, so left alone they fork the game using
+    // whatever JVM happens to be running the Gradle daemon itself - which on newer JDKs
+    // (22+) makes Mixin fail to transform core JDK classes ("Unsupported class file major
+    // version", ClassNotFoundException: java.lang.System) before any mod code loads.
+    // Forcing these tasks onto the toolchain-resolved 17 launcher keeps the actual game
+    // process on the JDK Minecraft 1.20.1/Loom expects, auto-detected or auto-provisioned by
+    // Gradle rather than hardcoded to a path on this machine.
+    //
+    // Scoped by task name to Loom's own run tasks rather than every JavaExec in the project:
+    // a blanket tasks.withType(JavaExec).configureEach { javaLauncher = ... } also caught
+    // IntelliJ's own generated Gradle run configurations (e.g. running a Loom task's
+    // dev.architectury.transformer.TransformerRuntime.main() straight from the IDE), which set
+    // their own explicit `executable` pointing at whatever JDK IDEA has configured - JavaExec
+    // rejects having both `executable` and `javaLauncher` set to different JDKs ("Toolchain
+    // from `executable` property does not match toolchain from `javaLauncher` property").
+    // Checking `executable == null` before assigning doesn't reliably dodge this either: it
+    // has to happen at configuration time (javaLauncher is finalized before any doFirst runs,
+    // so that's too late even for Loom's own tasks), and configuration order between this
+    // block and the IDE's own task setup isn't guaranteed. Matching by name sidesteps the
+    // whole ordering question by never touching IDE-only tasks in the first place.
+    tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer', 'runDatagen', 'runGameTestServer'] }.configureEach {
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    dependencies {
+        testImplementation platform('org.junit:junit-bom:5.10.2')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+    }
+}

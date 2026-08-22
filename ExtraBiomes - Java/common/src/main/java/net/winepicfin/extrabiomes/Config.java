@@ -1,0 +1,23 @@
+package net.winepicfin.extrabiomes;
+
+import net.winepicfin.extrabiomes.worldgen.biomes.ModTerrablender;
+
+// Loader-agnostic config *values* only - each platform owns its own config file format/UI and
+// writes the fields below before calling load(): forge/ExtraBiomesForge registers a
+// ForgeConfigSpec (see forge/.../ForgeConfig.java) and rewrites these fields on ModConfigEvent;
+// fabric/ExtraBiomesFabric reads a plain .properties file under the fabric config dir. Neither
+// ForgeConfigSpec nor a Fabric config library has a cross-loader equivalent, so the file
+// format/UI itself can't live here - only the resulting ints that world-gen code actually reads.
+public class Config
+{
+    public static final int DEFAULT_BIOME_WEIGHT = 15;
+    public static final int DEFAULT_RARE_BIOME_WEIGHT = 4;
+
+    public static int biomeWeight = DEFAULT_BIOME_WEIGHT;
+    public static int rareBiomeWeight = DEFAULT_RARE_BIOME_WEIGHT;
+
+    public static void load()
+    {
+        ModTerrablender.registerBiomes();
+    }
+}

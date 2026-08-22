@@ -1,0 +1,149 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    // src/main/resources/META-INF/accesstransformer.cfg is picked up automatically by Loom's forge platform.
+    runs {
+        client {
+            configName = "Forge Client"
+            client()
+            source sourceSets.main
+        }
+        server {
+            configName = "Forge Server"
+            server()
+            source sourceSets.main
+        }
+        data {
+            configName = "Forge Data"
+            data()
+            // Output goes into common/src/generated/resources, not this module's own
+            // src/main/generated: datapack content is loader-agnostic and the common-module
+            // tests (e.g. BiomeRegistrationParityTest) read it from there via a path relative
+            // to common's own project directory.
+            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            // Own working directory, separate from "run" (the default, shared with
+            // client/server/gameTestServer): bootstrapping structure/registry context for data
+            // generation creates a throwaway world save (confirmed locally - forge/run/world/
+            // level.dat appears after a bare `./gradlew :forge:runData` against an empty run
+            // dir) with whatever seed that bootstrap happens to use, not the one CI/local pin in
+            // run/server.properties for the GameTest server. Left in the shared "run" dir, that
+            // leftover level.dat would already exist by the time runGameTestServer starts, and
+            // since Minecraft only reads level-seed from server.properties when *creating* a
+            // world, the pinned seed would be silently ignored in favour of whatever datagen's
+            // throwaway world used - exactly what was happening before this was split out.
+            runDir "run-data"
+        }
+        gameTestServer {
+            configName = "Forge Game Test Server"
+            server()
+            source sourceSets.main
+            vmArgs "-Dforge.enabledGameTestNamespaces=${mod_id}"
+        }
+    }
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    modApi "dev.architectury:architectury-forge:${architectury_api_version}"
+
+    // Resolved through Modrinth's Maven proxy - see common/build.gradle for why.
+    modImplementation "maven.modrinth:terrablender:${terrablender_modrinth_id}"
+    // GeckoLib bundles a small math library (mclib) via Forge's Jar-in-Jar mechanism
+    // (META-INF/jarjar/mclib-20.jar), which a real Forge launch unpacks automatically but
+    // Loom's dev classpath does not - every dev run logs "[JarInJarDependencyLocator] No
+    // dependencies to load found", and mclib never shows up as its own "Found mod file" the
+    // way geckolib/terrablender/architectury do. Declaring mclib as its own
+    // (mod)Implementation/include() dependency, or even baking its .class files directly into
+    // this mod's own compiled output, resolves it onto the classpath Gradle sees, but
+    // GeckoLib's module still can't see it at runtime (NoClassDefFoundError on
+    // com.eliotlash.mclib.math.IValue) - FML's per-mod modules only read the modules their own
+    // mods.toml declares a dependency on, same as real JPMS `requires`, not "every other module
+    // in the layer". The only module GeckoLib's own classes are guaranteed to read is GeckoLib's
+    // own module, so mclib has to physically live inside GeckoLib's jar - exactly what Forge's
+    // (non-functional-here) Jar-in-Jar step would normally have done.
+    //
+    // libs/geckolib-forge-1.20.1-4.7.3-with-mclib.jar is geckolib-forge-1.20.1-4.7.3.jar with
+    // mclib-20.jar's classes merged in (mclib's META-INF excluded, GeckoLib's kept). It has to
+    // be a real file present before Gradle configures this project - Loom's ModConfigurationRemapper
+    // checksums every modImplementation artifact during project configuration, before any task
+    // (including one that could build this jar) has run - so it can't be produced by a Gradle
+    // task; regenerate it by re-running the equivalent of:
+    //   unzip geckolib-forge-1.20.1-4.7.3.jar -d tmp/ && unzip -o mclib-20.jar -d tmp/ -x "META-INF/*"
+    //   (cd tmp && zip -r ../libs/geckolib-forge-1.20.1-4.7.3-with-mclib.jar .)
+    // if bumping geckolib_version or mclib's "20".
+    modImplementation files("libs/geckolib-forge-1.20.1-4.7.3-with-mclib.jar")
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+    inputs.property "mod_authors", mod_authors
+    inputs.property "mod_description", mod_description
+    inputs.property "forge_version_range", forge_version_range
+    inputs.property "loader_version_range", loader_version_range
+
+    filesMatching(['META-INF/mods.toml']) {
+        expand([
+                version              : project.version,
+                mod_id               : mod_id,
+                mod_name             : mod_name,
+                mod_authors          : mod_authors,
+                mod_description      : mod_description,
+                forge_version_range  : forge_version_range,
+                loader_version_range : loader_version_range,
+        ])
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+}
