@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.gametest;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.BiomeClimateTuning;
+import org.slf4j.Logger;
 import terrablender.util.LevelUtils;
 
 import java.util.ArrayList;
@@ -40,12 +42,14 @@ import java.util.List;
 // So build the normal overworld generator from the world preset registry and initialize
 // TerraBlender against it exactly as a real server start would, then search that.
 public class BiomeGenerationGameTests {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final int SEARCH_RADIUS_BLOCKS = 15_000;
     private static final int SEARCH_INCREMENT_BLOCKS = 32;
     private static final int SEARCH_STEP_BLOCKS = 128;
 
     @GameTest(template = ExtraBiomes.MOD_ID + ":empty", timeoutTicks = 60000)
     public static void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
+        LOGGER.info("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();
         RegistryAccess registryAccess = level.registryAccess();
         long seed = level.getSeed();
@@ -68,7 +72,16 @@ public class BiomeGenerationGameTests {
             Pair<BlockPos, Holder<Biome>> found = biomeSource.findClosestBiome3d(origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS, holder -> matchesPath(holder, expectedPath), randomState.sampler(), level);
             if (found == null) {
                 missing.add(expectedPath);
+                LOGGER.error("[BiomeGenerationGameTests] {}: NOT FOUND within {} blocks", expectedPath, SEARCH_RADIUS_BLOCKS);
+            } else {
+                int dist = (int) Math.sqrt(origin.distSqr(found.getFirst()));
+                LOGGER.info("[BiomeGenerationGameTests] {}: found at {} ({} blocks from spawn)", expectedPath, found.getFirst(), dist);
             }
+        }
+        if (missing.isEmpty()) {
+            LOGGER.info("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: passed");
+        } else {
+            LOGGER.error("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: failed");
         }
         helper.assertTrue(missing.isEmpty(),
                 missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "

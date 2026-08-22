@@ -62,6 +62,7 @@ public class BiomeGenerationGameTests {
     // regardless of the runner's hardware.
     @GameTest(template = "empty", timeoutTicks = 60000)
     public static void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
+        LOGGER.info("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();
         BlockPos origin = new BlockPos(0, 80, 0);
 
@@ -84,9 +85,16 @@ public class BiomeGenerationGameTests {
                 }
             }).thenIdle(1);
         }
-        sequence.thenExecute(() -> helper.assertTrue(missing.isEmpty(),
-                        missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
-                                + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing))
+        sequence.thenExecute(() -> {
+                    if (missing.isEmpty()) {
+                        LOGGER.info("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: passed");
+                    } else {
+                        LOGGER.error("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: failed");
+                    }
+                    helper.assertTrue(missing.isEmpty(),
+                            missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
+                                    + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing);
+                })
                 .thenSucceed();
     }
 
