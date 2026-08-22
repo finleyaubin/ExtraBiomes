@@ -1,7 +1,7 @@
 # ExtraBiomes
 <img width="100%" alt="fungal cover" src="https://github.com/user-attachments/assets/16c58209-0960-4c33-8919-c69a35c8329f" />
 
-ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new biomes to the overworld, along with the mobs, blocks, and structures to fill them — from burnt forests and jellyfish-filled oceans to a floating Sky City above the mountains. All textures include PBR maps, so the addon works with RTX resource packs and the new shader system out of the box.
+ExtraBiomes is a world generation addon/mod for Minecraft, available for both Bedrock and Java Edition, that adds 26 new biomes to the overworld, along with the mobs, blocks, and structures to fill them — from burnt forests and jellyfish-filled oceans to a floating Sky City above the mountains. On Bedrock, all textures include PBR maps, so the addon works with RTX resource packs and the new shader system out of the box.
 ## Official downloads sources:
 ### Bedrock:
 - [Curseforge](https://www.curseforge.com/minecraft-bedrock/addons/extrabiomes)
@@ -10,7 +10,7 @@ ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new b
 ### Java:
 - [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases) (Forge & Fabric, Minecraft 1.20.1)
 
-The Java port is currently in beta and requires [TerraBlender](https://modrinth.com/mod/terrablender) as a dependency. It can also be compiled from source by cloning this repo.
+The Java port is currently in beta and requires [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
 ## Overworld Surface Biomes
 <table>  
  <tr>
