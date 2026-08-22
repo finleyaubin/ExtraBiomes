@@ -64,6 +64,13 @@ public class PebbleBlock extends Block {
         return this.defaultBlockState().setValue(SIZE,1);
     }
 
+    // Pick-block should hand back the placeable pebble item, not the auto-registered
+    // "pebble_block" BlockItem the SIZE-stacking behavior above is keyed off of.
+    @Override
+    public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state) {
+        return new ItemStack(ModItems.PEBBLE.get());
+    }
+
 
     @Override
     public @NotNull InteractionResult use(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {

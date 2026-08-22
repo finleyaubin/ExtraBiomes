@@ -15,6 +15,7 @@ import net.winepicfin.extrabiomes.item.custom.JellyfishingNetItem;
 import net.winepicfin.extrabiomes.item.custom.NetheriteRazorFeatherItem;
 import net.winepicfin.extrabiomes.item.custom.PebbleItem;
 import net.winepicfin.extrabiomes.item.custom.RazorFeatherItem;
+import net.winepicfin.extrabiomes.item.custom.WormItem;
 import net.winepicfin.extrabiomes.platform.ExtraBiomesExpectPlatform;
 
 public class ModItems {
@@ -31,7 +32,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> COOKED_FROGS_LEGS = ITEMS.register("cooked_frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.COOKED_FROGS_LEGS)));
     public static final RegistrySupplier<Item> PIRANHA = ITEMS.register("piranha",()-> new Item(new Item.Properties().food(ModFoods.PIRANHA)));
     public static final RegistrySupplier<Item> COOKED_PIRANHA = ITEMS.register("cooked_piranha",()-> new Item(new Item.Properties().food(ModFoods.COOKED_PIRANHA)));
-    public static final RegistrySupplier<Item> WORM = ITEMS.register("worm",()-> new Item(new Item.Properties()));
+    public static final RegistrySupplier<Item> WORM = ITEMS.register("worm",()-> new WormItem(new Item.Properties()));
     public static final RegistrySupplier<Item> JELLYFISH_JAM_BOTTLE = ITEMS.register("jellyfish_jam_bottle",()-> new JellyfishJamBottleItem(new Item.Properties().food(ModFoods.JELLYFISH_JAM).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_EMPTY = ITEMS.register("jellyfishing_net_empty",()-> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_FULL = ITEMS.register("jellyfishing_net_full",()-> new JellyfishingNetItem(new Item.Properties().stacksTo(1)));

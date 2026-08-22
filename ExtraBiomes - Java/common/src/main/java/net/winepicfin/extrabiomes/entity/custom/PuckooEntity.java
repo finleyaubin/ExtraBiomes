@@ -17,10 +17,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.ai.PuckooEatMossyPebbleGoal;
 import net.winepicfin.extrabiomes.entity.custom.varents.PuckooBaseVariants;
@@ -46,6 +48,14 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     // Bedrock's "minecraft:horse.jump_strength" range_min/range_max.
     private static final double BEDROCK_JUMP_STRENGTH_MIN = 0.35;
     private static final double BEDROCK_JUMP_STRENGTH_MAX = 0.45;
+    // Vanilla horse-style taming: while ridden and untamed, a periodic chance to gain temper and
+    // either buck the rider off or, once temper caps out, tame. Playtesting found puckoos never
+    // bucked riders at all, so this is spelled out explicitly rather than assumed from AbstractHorse.
+    private static final int BUCK_CHECK_TICK_CHANCE = 10;
+    private static final int BUCK_COOLDOWN_TICKS = 20;
+    private static final int TEMPER_GAIN_PER_ATTEMPT = 5;
+
+    private int buckCooldown;
 
     public PuckooEntity(EntityType<? extends AbstractHorse> entityType, Level level) {
         super(entityType, level);
@@ -76,6 +86,30 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
             walkAmount = 0f;
         }
         this.walkAnimation.update(walkAmount, 0.2f);
+    }
+
+    @Override
+    protected void tickRidden(Player player, Vec3 travelVector) {
+        super.tickRidden(player, travelVector);
+        if (this.isTamed() || this.level().isClientSide) {
+            return;
+        }
+        if (this.buckCooldown > 0) {
+            this.buckCooldown--;
+            return;
+        }
+        if (this.random.nextInt(BUCK_CHECK_TICK_CHANCE) != 0) {
+            return;
+        }
+        this.buckCooldown = BUCK_COOLDOWN_TICKS;
+        this.modifyTemper(TEMPER_GAIN_PER_ATTEMPT);
+        if (this.getTemper() >= this.getMaxTemper()) {
+            this.setTamed(true);
+            this.spawnTamingParticles(true);
+        } else {
+            this.spawnTamingParticles(false);
+            player.stopRiding();
+        }
     }
 
     @Override

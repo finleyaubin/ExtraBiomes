@@ -50,6 +50,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         saplingItem(ModBlocks.PURPLE_MUSHROOM);
         saplingItem(ModBlocks.WHITE_MUSHROOM);
         saplingItem(ModBlocks.YELLOW_MUSHROOM);
+        saplingItem(ModBlocks.GLOW_MUSHROOM);
         simpleItem(ModItems.JELLYFISHING_NET_EMPTY);
         simpleItem(ModItems.JELLYFISHING_NET_FULL);
         simpleItem(ModItems.BUCKET_OF_GOO);
