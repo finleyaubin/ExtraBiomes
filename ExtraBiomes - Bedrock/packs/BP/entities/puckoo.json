@@ -399,6 +399,21 @@
       "minecraft:game_event_movement_tracking": {
         "emit_flap": true
       },
+      "minecraft:behavior.move_to_block": {
+        "priority": 5,
+        "speed_multiplier": 1.0,
+        "search_range": 12,
+        "search_height": 4,
+        "tick_interval": 20,
+        "goal_radius": 1.0,
+        "stay_duration": 60,
+        "target_selection_method": "nearest",
+        "target_blocks": [
+          "extrabiomes:large_mossy_pebble",
+          "extrabiomes:medium_mossy_pebble",
+          "extrabiomes:small_mossy_pebble"
+        ]
+      },
       "minecraft:behavior.eat_block": {
         "priority": 6,
         "success_chance": "query.is_baby ? 0.02 : 0.01",
