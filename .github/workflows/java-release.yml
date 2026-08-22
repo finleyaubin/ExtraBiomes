@@ -88,8 +88,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           files: |
-            ExtraBiomes - Java/forge/build/libs/*.jar
-            ExtraBiomes - Java/fabric/build/libs/*.jar
+            ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
+            ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
           body_path: /tmp/changelog.md
           draft: false
           prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
@@ -97,13 +97,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # One mc-publish step per loader rather than a single glob across both build/libs
-      # dirs - each loader has its own -dev-shadow/-sources jar to exclude and its own
-      # `loaders:` value, and splitting keeps a failure on one loader from being ambiguous
-      # about which upload it was. CurseForge project 1663861 reuses Bedrock's CF_API_TOKEN
-      # (same CurseForge account); Modrinth project "extrabiome" needs its own PAT in
-      # MODRINTH_TOKEN (create one at modrinth.com/settings/pats with the "Create versions"
-      # scope on that project). GitHub release publishing is left to the softprops step
-      # above, so no github-token is passed here.
+      # dirs - each has its own `loaders:` value, and splitting keeps a failure on one loader
+      # from being ambiguous about which upload it was. The ExtraBiomes-<loader>-v*.jar glob
+      # only matches remapJar's final output (see forge/build.gradle and fabric/build.gradle's
+      # archiveFileName), not the intermediate -dev-shadow or -sources jars also in build/libs.
+      # CurseForge project 1663861 reuses Bedrock's CF_API_TOKEN (same CurseForge account);
+      # Modrinth project "extrabiome" needs its own PAT in MODRINTH_TOKEN (create one at
+      # modrinth.com/settings/pats with the "Create versions" scope on that project). GitHub
+      # release publishing is left to the softprops step above, so no github-token is passed here.
       - name: Publish Forge jar
         uses: Kira-NT/mc-publish@v3
         with:
@@ -111,7 +112,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: ExtraBiomes - Java/forge/build/libs/!(*-@(dev-shadow|sources)).jar
+          files: ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
           loaders: forge
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
@@ -124,7 +125,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: ExtraBiomes - Java/fabric/build/libs/!(*-@(dev-shadow|sources)).jar
+          files: ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
           loaders: fabric
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}

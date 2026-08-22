@@ -133,6 +133,7 @@ remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier = null
+    archiveFileName = "${archives_base_name}-fabric-v${mod_version}-${minecraft_version}.jar"
 }
 
 sourcesJar {
