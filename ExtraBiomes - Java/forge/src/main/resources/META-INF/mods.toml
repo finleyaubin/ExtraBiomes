@@ -1,13 +1,13 @@
 
 modLoader="javafml" #mandatory
 loaderVersion="${loader_version_range}" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
-license="MIT Licence"
+license="MIT License"
 [[mods]]
-    modId="extrabiomes"
-    version="0.0.1"
-    displayName="ExtraBiomes"
+    modId="${mod_id}"
+    version="${version}"
+    displayName="${mod_name}"
     logoFile="extrabiomes_logo.png"
-    authors="Win Epic Fin"
+    authors="${mod_authors}"
     description='''${mod_description}'''
 [[dependencies.extrabiomes]]
     modId="forge"
