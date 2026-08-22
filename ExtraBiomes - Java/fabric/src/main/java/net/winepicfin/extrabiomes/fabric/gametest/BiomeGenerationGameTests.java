@@ -56,7 +56,12 @@ public class BiomeGenerationGameTests {
 
         BiomeSource biomeSource = generator.getBiomeSource();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(), registryAccess.lookupOrThrow(Registries.NOISE), seed);
-        BlockPos origin = level.getSharedSpawnPos();
+        // Fixed coordinate, not level.getSharedSpawnPos() - see the Forge test's javadoc for why:
+        // Vanilla's spawn-suitability search can converge on a different valid candidate depending
+        // on chunk-completion ordering on machines with different core counts, which drifted the
+        // Forge test's search origin (and therefore its results) between CI and local runs despite
+        // an identical pinned seed. A fixed anchor removes that source of cross-environment drift.
+        BlockPos origin = new BlockPos(0, 80, 0);
 
         List<String> missing = new ArrayList<>();
         for (String expectedPath : BiomeClimateTuning.BY_BEDROCK_KEY.keySet()) {

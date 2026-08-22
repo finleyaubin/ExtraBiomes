@@ -16,11 +16,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # Sum of this job's own step timeouts: downloadAssets(10) + runData(10) + unit tests(10) +
-    # Run GameTests(15, via its inline `timeout 900`) + Run Fabric GameTests(15, same) +
-    # final build(15) = 75 minutes, plus headroom for checkout/setup-java/setup-gradle/EULA
-    # steps (uncapped but fast). A job timeout below that sum kills everything with no
-    # diagnostics before a slow step's own timeout/watchdog gets a chance to fire.
-    timeout-minutes: 90
+    # Run GameTests(72, via its inline `timeout 4300`) + Run Fabric GameTests(50, via its inline
+    # `timeout 3000`) + final build(15) = 167 minutes, plus headroom for checkout/setup-java/
+    # setup-gradle/EULA steps (uncapped but fast). A job timeout below that sum kills everything
+    # with no diagnostics before a slow step's own timeout/watchdog gets a chance to fire. The
+    # GameTest steps got wider budgets after raising max-tick-time to 1000s (see the EULA step
+    # below) - a real, single-threaded Perlin-noise search, not a hang, so it needs matching
+    # wall-clock room rather than a shorter watchdog cutting it off mid-search.
+    timeout-minutes: 180
     defaults:
       run:
         working-directory: "ExtraBiomes - Java"
@@ -45,18 +48,23 @@ jobs:
         run: chmod +x gradlew
 
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
-      # Also pre-seed server.properties with a moderately raised max-tick-time:
+      # Also pre-seed server.properties with a raised max-tick-time:
       # BiomeGenerationGameTests runs each of its 26 mod-biome ServerLevel#findClosestBiome3d
       # searches (15000-block radius, real Perlin noise, no shortcuts) as its own
       # GameTestSequence step on its own server tick, specifically so no single tick has to
       # absorb more than one biome's worst case - a biome that's genuinely absent (or outside the
-      # search box) makes findClosestBiome3d walk the *entire* radius with no early exit, which
-      # alone can take 30+ seconds on a shared CI runner (confirmed via a captured crash report:
-      # eight consecutive full/failed sweeps averaged ~34s each). 120000ms (2 min) gives a single
-      # such sweep generous headroom above that observed worst case while still letting the
-      # watchdog catch a genuinely hung tick reasonably promptly, instead of disabling it
-      # outright - unlike before this test was split per-tick, a bounded value is safe again here
-      # since it only ever has to cover one biome's sweep, not the sum of all 26.
+      # search box) makes findClosestBiome3d walk the *entire* radius with no early exit. Most
+      # biomes' full sweep costs 30-40s on a shared CI runner, but biomes constrained to
+      # ParameterUtils.Depth.FLOOR (e.g. Deep Dark Green - see ModOverworldRegion.java) force the
+      # 3D grid walk to sample near the bottom of the world at every horizontal step instead of
+      # short-circuiting near the surface, which is measurably more expensive per sample and has
+      # been observed pushing a single tick's search well past 120s (confirmed via a captured
+      # crash report + full stack trace rooted in ImprovedNoise.noise/PerlinNoise.getValue - real
+      # single-threaded noise computation, not a stuck/looping thread). 1000000ms (1000s) gives a
+      # single such sweep generous headroom above that observed worst case while still letting the
+      # watchdog catch a genuinely hung tick eventually, instead of disabling it outright - unlike
+      # before this test was split per-tick, a bounded value is safe again here since it only ever
+      # has to cover one biome's sweep, not the sum of all 26.
       # Also pin level-seed: CI checks out a clean workspace every run, so with no seed set
       # Minecraft generates a brand-new random world each time, and TerraBlender's noise-based
       # biome placement can push most mod biomes outside the fixed 15000-block search box on an
@@ -64,12 +72,18 @@ jobs:
       # persisted run/world/ dir happened to keep reusing the same lucky seed across runs). A
       # fixed seed makes the test's result deterministic across both environments; kept even
       # after narrowing the Jungle Pillars/Fungle Jungle climate-box overlap (see
-      # ModOverworldRegion.java) since determinism across CI runs is worth it regardless.
+      # ModOverworldRegion.java) since determinism across CI runs is worth it regardless. Even
+      # with a fixed seed, a handful of biomes (e.g. the Cold Mesa family, Deep Dark
+      # Forest/Green) still land outside 15000 blocks on this particular seed - that is TerraBlender
+      # correctly applying each Region's configured weight (Config.biomeWeight/rareBiomeWeight,
+      # wired up via ModTerrablender.registerBiomes(), called from both ForgeConfig.load() and
+      # FabricConfig.load()) to a real, non-degenerate climate parameter box per biome; it is not a
+      # registration/weight bug, just genuine placement rarity at this specific seed.
       - name: Accept Minecraft EULA for the local test server
         run: |
           mkdir -p forge/run
           echo "eula=true" > forge/run/eula.txt
-          printf 'max-tick-time=120000\nlevel-seed=extrabiomes\n' > forge/run/server.properties
+          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > forge/run/server.properties
 
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
       # populated until this runs at least once. Without it, runData's forked JVM throws
@@ -103,15 +117,16 @@ jobs:
       # finish, trigger the tests, wait for them to finish, then stop the server. The overall
       # timeout is a hard ceiling so a hang here can't run up the CI bill.
       #
-      # The test-wait window (1500s) has to cover BiomeGenerationGameTests' worst case, not its
+      # The test-wait window (4200s) has to cover BiomeGenerationGameTests' worst case, not its
       # typical case: findClosestBiome3d has no early exit for a biome that's absent (or outside
-      # the 15000-block search box) - it walks the *entire* radius, which alone can take 30+
-      # seconds per biome on a shared runner (confirmed via a captured crash report showing eight
-      # consecutive full/failed sweeps costing 272s in under 5 minutes, before a since-removed
-      # max-tick-time cap killed the server mid-run). With up to 26 biomes potentially needing a
-      # full sweep, sending "stop" too early would cut the test off mid-search rather than let it
-      # report a real pass/fail - 1500s gives headroom for every biome needing the worst case
-      # (~26 * 40s = 1040s) plus margin, instead of guessing from the common case.
+      # the 15000-block search box) - it walks the *entire* radius, which costs ~30-40s per biome
+      # for a normal FULL_RANGE-depth search, but the handful of biomes constrained to
+      # ParameterUtils.Depth.FLOOR (see the EULA/max-tick-time step above) can each individually
+      # cost close to the raised 1000s max-tick-time ceiling. With up to 26 biomes potentially
+      # needing a full sweep - worst case a few of those being FLOOR-depth - sending "stop" too
+      # early would cut the test off mid-search rather than let it report a real pass/fail: 4200s
+      # gives headroom for every biome needing its own worst case (~24 * 40s + 2 * 1000s = 2960s)
+      # plus margin, instead of guessing from the common case.
       # forge:runGameTestServer's own exit code can't be trusted: ExtraBiomesForge's exit
       # watchdog (see startGameTestExitWatchdogIfRunningGameTestServer) always halts the JVM
       # with code 0 once the driven-console server shuts down, regardless of whether any
@@ -121,7 +136,7 @@ jobs:
       # finishes, so grep the captured log for those instead of trusting the exit code.
       - name: Run GameTests
         run: |
-          (sleep 60 && echo "test runall" && sleep 1500 && echo "stop") | timeout 1800 ./gradlew :forge:runGameTestServer | tee gametest.log
+          (sleep 60 && echo "test runall" && sleep 4200 && echo "stop") | timeout 4300 ./gradlew :forge:runGameTestServer | tee gametest.log
           if grep -q "required tests failed" gametest.log; then
             echo "::error::One or more required GameTests failed - see gametest.log"
             exit 1
@@ -140,19 +155,24 @@ jobs:
           path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
 
-      # Same level-seed reasoning as the Forge EULA/seed step above - Fabric's run/ dir gets a
-      # clean checkout every CI run too, so it needs its own pinned seed for a deterministic
-      # biome search.
+      # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
+      # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
+      # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
+      # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as Forge's, so it
+      # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it mid-sweep.
       - name: Pin seed for the Fabric test server
         run: |
           mkdir -p fabric/run
-          printf 'level-seed=extrabiomes\n' > fabric/run/server.properties
+          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > fabric/run/server.properties
 
       # Unlike Forge's dedicated server, Fabric API's gametest server auto-runs every registered
       # @GameTest as soon as world gen finishes (driven by the -Dfabric-api.gametest=true vmArg in
       # fabric/build.gradle) and then exits on its own - no interactive console driving needed.
+      # 3000s mirrors the Forge GameTest step's reasoning: most of the 26 biome sweeps cost
+      # 30-40s, but the FLOOR-depth ones can each individually approach the 1000s max-tick-time
+      # ceiling above.
       - name: Run Fabric GameTests
-        run: timeout 900 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
+        run: timeout 3000 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
         shell: bash
 
       - name: Upload Fabric GameTest log

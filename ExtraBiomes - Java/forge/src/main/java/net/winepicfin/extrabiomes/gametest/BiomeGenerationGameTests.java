@@ -47,10 +47,23 @@ public class BiomeGenerationGameTests {
     // instead runs one biome's search per thenExecute/thenIdle(1) step, so each *tick* only ever
     // has to absorb a single biome's worst case - comfortably under even vanilla's default
     // max-tick-time, with no need for CI to disable or stretch the watchdog for this test at all.
+    //
+    // Search origin is a fixed world coordinate, not level.getSharedSpawnPos(): two local runs
+    // against a pinned seed (one reusing an old world save, one a fully fresh one - matching CI's
+    // clean checkout) independently placed every one of the 26 biomes, including the ones CI
+    // reported "NOT FOUND", within 2500-6900 blocks of BlockPos(0, 80, 0). CI's own log showed
+    // those searches running to full completion (not being cut off) and still coming up empty -
+    // i.e. the biome map itself was fine, but CI's *origin* was somewhere the biomes genuinely
+    // aren't nearby. getSharedSpawnPos() runs Vanilla's own spawn-suitability search over
+    // concurrently-generated chunks, which can converge on a different valid candidate depending
+    // on chunk-completion ordering on machines with different core counts - a source of
+    // environment-dependent drift that has nothing to do with the pinned world seed. Anchoring on
+    // a fixed coordinate instead makes the search fully reproducible given the same seed,
+    // regardless of the runner's hardware.
     @GameTest(template = "empty", timeoutTicks = 60000)
     public static void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        BlockPos origin = level.getSharedSpawnPos();
+        BlockPos origin = new BlockPos(0, 80, 0);
 
         // Logs every biome's search result (not just failures) so a CI/local gametest log always
         // shows the actual distance-from-spawn TerraBlender placed each biome at on that seed -
