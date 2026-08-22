@@ -82,8 +82,36 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # CurseForge/Modrinth publishing isn't wired up yet - no Java-side project exists on
-      # either platform. Once one does, add an upload step here the same way manual.yml
-      # (the Bedrock release workflow) uses itsmeow/curseforge-upload, with that project's
-      # own ID and an API token secret - CF_API_TOKEN is already Bedrock's, a Java project on
-      # the same CurseForge account can likely reuse it, but Modrinth needs its own token.
+      # One mc-publish step per loader rather than a single glob across both build/libs
+      # dirs - each loader has its own -dev-shadow/-sources jar to exclude and its own
+      # `loaders:` value, and splitting keeps a failure on one loader from being ambiguous
+      # about which upload it was. CurseForge project 1663861 reuses Bedrock's CF_API_TOKEN
+      # (same CurseForge account); Modrinth project "extrabiome" needs its own PAT in
+      # MODRINTH_TOKEN (create one at modrinth.com/settings/pats with the "Create versions"
+      # scope on that project). GitHub release publishing is left to the softprops step
+      # above, so no github-token is passed here.
+      - name: Publish Forge jar
+        uses: Kira-NT/mc-publish@v3
+        with:
+          modrinth-id: extrabiome
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: "1663861"
+          curseforge-token: ${{ secrets.CF_API_TOKEN }}
+          files: forge/build/libs/!(*-@(dev-shadow|sources)).jar
+          loaders: forge
+          game-versions: 1.20.1
+          version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
+          changelog-file: /tmp/changelog.md
+
+      - name: Publish Fabric jar
+        uses: Kira-NT/mc-publish@v3
+        with:
+          modrinth-id: extrabiome
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: "1663861"
+          curseforge-token: ${{ secrets.CF_API_TOKEN }}
+          files: fabric/build/libs/!(*-@(dev-shadow|sources)).jar
+          loaders: fabric
+          game-versions: 1.20.1
+          version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
+          changelog-file: /tmp/changelog.md
