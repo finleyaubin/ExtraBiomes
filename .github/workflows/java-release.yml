@@ -111,7 +111,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: forge/build/libs/!(*-@(dev-shadow|sources)).jar
+          files: ExtraBiomes - Java/forge/build/libs/!(*-@(dev-shadow|sources)).jar
           loaders: forge
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
@@ -124,7 +124,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: fabric/build/libs/!(*-@(dev-shadow|sources)).jar
+          files: ExtraBiomes - Java/fabric/build/libs/!(*-@(dev-shadow|sources)).jar
           loaders: fabric
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
