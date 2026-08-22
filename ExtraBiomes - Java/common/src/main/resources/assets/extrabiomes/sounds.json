@@ -1,0 +1,8 @@
+{
+  "mob.hoppleshroom.jump": {
+    "category": "neutral",
+    "sounds": [
+      "extrabiomes:mob/hoppleshroom/jump"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "values": [
+    "minecraft:dirt",
+    "minecraft:coarse_dirt",
+    "minecraft:podzol",
+    "minecraft:rooted_dirt",
+    "minecraft:grass_block",
+    "minecraft:mycelium",
+    "minecraft:stone",
+    "minecraft:deepslate",
+    "minecraft:tuff",
+    "minecraft:moss_block",
+    "minecraft:cave_vines",
+    "minecraft:cave_vines_plant"
+  ]
+}

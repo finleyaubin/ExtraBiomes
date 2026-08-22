@@ -1,0 +1,117 @@
+name: Build & Publish Java Mod
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'Java-*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+      # Extract a clean version string like "3.1.0-beta-1" from a
+      # "Java-V3.1.0-beta-1" (or "Java-3.1.0-beta-1") style tag
+      - name: Extract version
+        id: version
+        run: |
+          TAG="${{ github.ref_name }}"
+          TAG="${TAG#Java-}"
+          TAG="${TAG#v}"
+          TAG="${TAG#V}"
+          echo "VERSION=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Detect prerelease tag
+        id: prerelease
+        run: |
+          echo "IS_PRERELEASE=${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}" >> $GITHUB_OUTPUT
+
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="../Changelogs/Java-${{ steps.version.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::warning::No changelog file found at $FILE, using placeholder"
+            echo "No changelog was provided for this release." > /tmp/changelog.md
+          fi
+
+      # Loom's toolchain compiles for 17, but the Gradle daemon itself needs 21 to run
+      # (a loom dependency requires JVM runtime 21+) - same reasoning as gradle-build.yml.
+      - name: Set up JDKs
+        uses: actions/setup-java@v5
+        with:
+          java-version: |
+            17
+            21
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # mod_version in gradle.properties should already match the tag before tagging a
+      # release - this doesn't derive the jar version from the tag, it just builds whatever
+      # gradle.properties currently says.
+      - name: Build mod jars
+        run: ./gradlew build
+        timeout-minutes: 20
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          files: |
+            ExtraBiomes - Java/forge/build/libs/*.jar
+            ExtraBiomes - Java/fabric/build/libs/*.jar
+          body_path: /tmp/changelog.md
+          draft: false
+          prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # One mc-publish step per loader rather than a single glob across both build/libs
+      # dirs - each loader has its own -dev-shadow/-sources jar to exclude and its own
+      # `loaders:` value, and splitting keeps a failure on one loader from being ambiguous
+      # about which upload it was. CurseForge project 1663861 reuses Bedrock's CF_API_TOKEN
+      # (same CurseForge account); Modrinth project "extrabiome" needs its own PAT in
+      # MODRINTH_TOKEN (create one at modrinth.com/settings/pats with the "Create versions"
+      # scope on that project). GitHub release publishing is left to the softprops step
+      # above, so no github-token is passed here.
+      - name: Publish Forge jar
+        uses: Kira-NT/mc-publish@v3
+        with:
+          modrinth-id: extrabiome
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: "1663861"
+          curseforge-token: ${{ secrets.CF_API_TOKEN }}
+          files: forge/build/libs/!(*-@(dev-shadow|sources)).jar
+          loaders: forge
+          game-versions: 1.20.1
+          version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
+          changelog-file: /tmp/changelog.md
+
+      - name: Publish Fabric jar
+        uses: Kira-NT/mc-publish@v3
+        with:
+          modrinth-id: extrabiome
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: "1663861"
+          curseforge-token: ${{ secrets.CF_API_TOKEN }}
+          files: fabric/build/libs/!(*-@(dev-shadow|sources)).jar
+          loaders: fabric
+          game-versions: 1.20.1
+          version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
+          changelog-file: /tmp/changelog.md

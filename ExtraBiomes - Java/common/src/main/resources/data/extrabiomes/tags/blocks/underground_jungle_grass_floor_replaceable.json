@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:dirt",
+    "minecraft:rooted_dirt",
+    "minecraft:stone",
+    "minecraft:cave_vines",
+    "minecraft:cave_vines_plant",
+    "minecraft:gravel",
+    "minecraft:deepslate",
+    "minecraft:mycelium",
+    "minecraft:sand"
+  ]
+}

@@ -1,14 +1,18 @@
 # ExtraBiomes
 <img width="100%" alt="fungal cover" src="https://github.com/user-attachments/assets/16c58209-0960-4c33-8919-c69a35c8329f" />
 
-ExtraBiomes is a world generation addon for Minecraft Bedrock that adds 24 new biomes to the overworld, along with the mobs, blocks, and structures to fill them — from burnt forests and jellyfish-filled oceans to a floating Sky City above the mountains. All textures include PBR maps, so the addon works with RTX resource packs and the new shader system out of the box.
+ExtraBiomes is a world generation addon/mod for Minecraft, available for both Bedrock and Java Edition, that adds 26 new biomes to the overworld, along with the mobs, blocks, and structures to fill them, from burnt forests and jellyfish-filled oceans to a floating Sky City above the mountains. On Bedrock, all textures include PBR maps, so the addon works with RTX resource packs and the new shader system out of the box.
 ## Official downloads sources:
 ### Bedrock:
 - [Curseforge](https://www.curseforge.com/minecraft-bedrock/addons/extrabiomes)
 - [mcpedl](https://mcpedl.com/extrabiomes/)
 - [modbay](https://modbay.org/mods/57-extrabiomes.html)
+- [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
 ### Java:
-The Java port of Extrabiomes is still in development, but can be compiled from source by cloning this repo.
+- [Modrinth](https://modrinth.com/project/extrabiome)
+- [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
+
+The Java port is currently in beta and requires [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
 ## Overworld Surface Biomes
 <table>  
  <tr>
@@ -265,7 +269,7 @@ The Java port of Extrabiomes is still in development, but can be compiled from s
 ### Sky City
 <img alt="Sky City" src="https://github.com/user-attachments/assets/ca1ea023-df90-4280-ab1e-0c569a10a671" />
 <i>
-High above the mountains, the Sky City generates as a jigsaw structure: floating islands connected by cloud paths, with houses, towers, and fountains built from sky wood and with dense cloud brick that you float onto — and harpies defending it.
+High above the mountains, the Sky City generates as a jigsaw structure: floating islands connected by cloud paths, with houses, towers, and fountains built from sky wood and with dense cloud brick that you float onto, and harpies defending it.
 </i>
 
 ### Mobs
@@ -329,7 +333,7 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
 </table>
 
 ### Blocks
-Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky — each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
+Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky, each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
 
 ## Experiments
 <img width="50%" alt="Required Experiments" src="https://github.com/user-attachments/assets/449765af-892a-45fe-ab0c-0705d6872ba0" />

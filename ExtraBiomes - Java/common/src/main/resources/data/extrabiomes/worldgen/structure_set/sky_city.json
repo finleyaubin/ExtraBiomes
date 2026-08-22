@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "extrabiomes:sky_city",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 40,
+    "separation": 12,
+    "salt": 283829,
+    "spread_type": "linear"
+  }
+}
