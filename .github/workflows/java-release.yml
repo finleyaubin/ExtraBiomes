@@ -1,0 +1,86 @@
+name: Build & Publish Java Mod
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'Java-*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+      # Extract a clean version string like "3.1.0-beta-1" from a
+      # "Java-V3.1.0-beta-1" (or "Java-3.1.0-beta-1") style tag
+      - name: Extract version
+        id: version
+        run: |
+          TAG="${{ github.ref_name }}"
+          TAG="${TAG#Java-}"
+          TAG="${TAG#v}"
+          TAG="${TAG#V}"
+          echo "VERSION=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Detect prerelease tag
+        id: prerelease
+        run: |
+          echo "IS_PRERELEASE=${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}" >> $GITHUB_OUTPUT
+
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="../Changelogs/Java-${{ steps.version.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::warning::No changelog file found at $FILE, using placeholder"
+            echo "No changelog was provided for this release." > /tmp/changelog.md
+          fi
+
+      # Loom's toolchain compiles for 17, but the Gradle daemon itself needs 21 to run
+      # (a loom dependency requires JVM runtime 21+) - same reasoning as gradle-build.yml.
+      - name: Set up JDKs
+        uses: actions/setup-java@v5
+        with:
+          java-version: |
+            17
+            21
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # mod_version in gradle.properties should already match the tag before tagging a
+      # release - this doesn't derive the jar version from the tag, it just builds whatever
+      # gradle.properties currently says.
+      - name: Build mod jars
+        run: ./gradlew build
+        timeout-minutes: 20
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          files: |
+            ExtraBiomes - Java/forge/build/libs/*.jar
+            ExtraBiomes - Java/fabric/build/libs/*.jar
+          body_path: /tmp/changelog.md
+          draft: false
+          prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # CurseForge/Modrinth publishing isn't wired up yet - no Java-side project exists on
+      # either platform. Once one does, add an upload step here the same way manual.yml
+      # (the Bedrock release workflow) uses itsmeow/curseforge-upload, with that project's
+      # own ID and an API token secret - CF_API_TOKEN is already Bedrock's, a Java project on
+      # the same CurseForge account can likely reuse it, but Modrinth needs its own token.
