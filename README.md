@@ -7,9 +7,10 @@ ExtraBiomes is a world generation addon/mod for Minecraft, available for both Be
 - [Curseforge](https://www.curseforge.com/minecraft-bedrock/addons/extrabiomes)
 - [mcpedl](https://mcpedl.com/extrabiomes/)
 - [modbay](https://modbay.org/mods/57-extrabiomes.html)
+- [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
 ### Java:
 - [Modrinth](https://modrinth.com/project/extrabiome)
-- [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases) (Forge & Fabric, Minecraft 1.20.1)
+- [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
 
 The Java port is currently in beta and requires [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
 ## Overworld Surface Biomes
