@@ -11,6 +11,7 @@ import net.winepicfin.extrabiomes.fabric.event.WolfFrogHatInteractHandler;
 import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 import net.winepicfin.extrabiomes.fabric.util.FabricVanillaCompat;
 import net.winepicfin.extrabiomes.fabric.worldgen.FabricBiomeModifiers;
+import net.winepicfin.extrabiomes.fabric.worldgen.FabricSpawnCaps;
 import net.winepicfin.extrabiomes.fabric.worldgen.FabricTerraBlenderFixedBiomeCompat;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -59,6 +60,7 @@ public class ExtraBiomesFabric implements ModInitializer {
         FabricVanillaCompat.register();
         FabricModEvents.register();
         FabricBiomeModifiers.register();
+        FabricSpawnCaps.register();
         FabricTerraBlenderFixedBiomeCompat.register();
         WolfFrogHatInteractHandler.register();
         FabricServerEvents.register();

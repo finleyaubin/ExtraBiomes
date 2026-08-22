@@ -18,6 +18,7 @@ import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.worldgen.MobSpawnCapTuning;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import org.slf4j.Logger;
@@ -54,6 +55,13 @@ public class BiomeModifierApplicationGameTests {
         assertHasSpawn(helper, jungle, MobCategory.MONSTER, ModEntities.GIANT_TORTOISE.get());
         assertHasSpawn(helper, jungle, MobCategory.WATER_AMBIENT, ModEntities.PIRANHA.get());
         assertHasSpawn(helper, jungle, MobCategory.CREATURE, ModEntities.TREEFROG.get());
+
+        // The piranha spawn above is capped by its category, not its weight - assert the access
+        // transformer actually widened MobCategory.max and ModSpawnCaps' write landed.
+        int waterAmbientCap = MobCategory.WATER_AMBIENT.getMaxInstancesPerChunk();
+        helper.assertTrue(waterAmbientCap == MobSpawnCapTuning.WATER_AMBIENT_MAX_INSTANCES_PER_CHUNK,
+                "Expected WATER_AMBIENT spawn cap " + MobSpawnCapTuning.WATER_AMBIENT_MAX_INSTANCES_PER_CHUNK
+                        + " but it was " + waterAmbientCap);
 
         LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: passed");
         helper.succeed();

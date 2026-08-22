@@ -35,6 +35,7 @@ import net.winepicfin.extrabiomes.forge.fluid.ModFluids;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.forge.util.ModVanillaCompat;
+import net.winepicfin.extrabiomes.forge.worldgen.ModSpawnCaps;
 import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
@@ -184,6 +185,7 @@ public class ExtraBiomesForge
             // Register our surface rules
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID, ModSurfaceRules.makeRules());
             ModVanillaCompat.register();
+            ModSpawnCaps.register();
         });
     }
 
