@@ -12,6 +12,8 @@ public final class GiantTortoiseTuning {
     public static final double ATTACK_KNOCKBACK = 1.5;
     public static final double KNOCKBACK_RESISTANCE = 0.8;
     public static final double FOLLOW_RANGE = 25;
+    // Bedrock's top-level "minecraft:damage_sensor" trigger for cause "lightning".
+    public static final float LIGHTNING_DAMAGE_MULTIPLIER = 2000;
 
     private GiantTortoiseTuning() {
     }

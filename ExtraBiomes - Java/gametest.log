@@ -1,0 +1,164 @@
+
+> Configure project :
+Architect Plugin: 3.4.164
+Architectury Loom: 1.11.458
+
+> Task :common:compileJava UP-TO-DATE
+> Task :common:processResources
+> Task :common:classes
+> Task :common:jar
+> Task :forge:compileJava UP-TO-DATE
+> Task :forge:processResources UP-TO-DATE
+> Task :forge:classes UP-TO-DATE
+> Task :forge:generateLog4jConfig UP-TO-DATE
+> Task :forge:generateRemapClasspath UP-TO-DATE
+> Task :forge:generateDLIConfig UP-TO-DATE
+> Task :forge:prepareArchitecturyTransformer
+> Task :forge:configureLaunch
+
+> Task :forge:runGameTestServer
+[Architectury Transformer] Architectury Runtime 5.2.91
+[Architectury Transformer] Read classpath in 1.396 s
+[Architectury Transformer] Listening at /home/fin/Projects/Source/ExtraBiomes/ExtraBiomes - Java/common/build/devlibs/ExtraBiomes-3.1.0-beta-1-dev.jar
+[34m[10:55:11][m [32m[main/INFO][m [36m(Launcher)[m [0mModLauncher running: args [--launchTarget, forgeserveruserdev, --gameDir, ., --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, nogui]
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(Launcher)[m [0mModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.16 by Microsoft; OS Linux arch amd64 version 7.1.8-zen1-3-zen
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(unprotect)[m [0mInitializing Unprotect using ModLauncher backend, target: Minecraft and loader classes (minecraft+forge)
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ImmediateWindowHandler)[m [0mImmediateWindowProvider not loading because launch target is forgeserveruserdev
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(mixin)[m [0mSpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/home/fin/.gradle/caches/modules-2/files-2.1/dev.architectury/mixin-patched/0.8.5.12/cf1f787f58d3b08b0cb53ecbba7928c09a1893c8/mixin-patched-0.8.5.12.jar%23116!/ Service=ModLauncher Env=SERVER
+[m[34m[10:55:11][m [33m[main/WARN][m [36m(ModFileParser)[m [0mMod file /home/fin/.gradle/caches/modules-2/files-2.1/net.minecraftforge/javafmllanguage/1.20.1-47.4.10/ccc533c7dd67e0983217197d7549c8b49e7ab453/javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[m[34m[10:55:11][m [33m[main/WARN][m [36m(ModFileParser)[m [0mMod file /home/fin/.gradle/caches/modules-2/files-2.1/net.minecraftforge/lowcodelanguage/1.20.1-47.4.10/e9a2879fe3612ea34b9728ec2633304a1e67d480/lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[m[34m[10:55:11][m [33m[main/WARN][m [36m(ModFileParser)[m [0mMod file /home/fin/.gradle/caches/modules-2/files-2.1/net.minecraftforge/mclanguage/1.20.1-47.4.10/ec5cefbbc65c67302b8fac317010faab85fa14b9/mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[m[34m[10:55:11][m [33m[main/WARN][m [36m(ModFileParser)[m [0mMod file /home/fin/.gradle/caches/modules-2/files-2.1/net.minecraftforge/fmlcore/1.20.1-47.4.10/94dae566be650566ea9115a1414ab76bfcf5a804/fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file javafmllanguage-1.20.1-47.4.10.jar of type LANGPROVIDER with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6a6b4536
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file lowcodelanguage-1.20.1-47.4.10.jar of type LANGPROVIDER with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6a6b4536
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file mclanguage-1.20.1-47.4.10.jar of type LANGPROVIDER with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6a6b4536
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file fmlcore-1.20.1-47.4.10.jar of type LIBRARY with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6a6b4536
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file forge-1.20.1-47.4.10-minecraft-merged-b681d5cec1-1.20.1-loom.mappings.1_20_1.layered+hash.40359-v2-forge-1.20.1-47.4.10.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6a6b4536
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file main of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6a6b4536
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file  of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.MinecraftLocator@6a6b4536
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file terrablender-0cd3bb3a-zGconCHG.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file geckolib-forge-1.20.1-4.7.3-with-mclib-0cd3bb3a-57b1c2debd.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file architectury-forge-0cd3bb3a-9.0.8.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file 15723253344121714491.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file terrablender-0cd3bb3a-zGconCHG.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file geckolib-forge-1.20.1-4.7.3-with-mclib-0cd3bb3a-57b1c2debd.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file architectury-forge-0cd3bb3a-9.0.8.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(ModDiscoverer)[m [0mFound mod file 15723253344121714491.jar of type MOD with provider net.minecraftforge.fml.loading.moddiscovery.ClasspathLocator@7d1647d5
+[m[34m[10:55:11][m [32m[main/INFO][m [36m(JarInJarDependencyLocator)[m [0mNo dependencies to load found. Skipping!
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(mixin)[m [0mCompatibility level set to JAVA_17
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(LaunchServiceHandler)[m [0mLaunching target 'forgeserveruserdev' with arguments [--gameDir, ., nogui]
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(mixin)[m [0mRemapping refMap terrablender.refmap.json using RemapperChain (Architectury Patched)
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(mixin)[m [0mRemapping refMap terrablender.refmap.json using RemapperChain (Architectury Patched)
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(mixin)[m [0mRemapping refMap geckolib.refmap.json using RemapperChain (Architectury Patched)
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(unprotect)[m [0mFound 7423 Minecraft classes
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(mixin)[m [0mRemapping refMap architectury-forge-refmap.json using RemapperChain (Architectury Patched)
+[m[34m[10:55:12][m [32m[main/INFO][m [36m(mixin)[m [0mRemapping refMap architectury-common-refmap.json using RemapperChain (Architectury Patched)
+[m2026-08-22 10:55:12,743 main WARN Error parsing URI /home/fin/Projects/Source/ExtraBiomes/ExtraBiomes - Java/forge/.gradle/loom-cache/log4j.xml
+2026-08-22 10:55:12,779 main WARN Advanced terminal features are not available in this environment
+[10:55:15] [modloading-worker-0/INFO] [ne.mi.co.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
+[10:55:15] [modloading-worker-0/INFO] [ne.mi.co.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
+[10:55:15] [modloading-worker-0/INFO] [de.ar.ne.fo.NetworkManagerImpl/]: Registering C2S receiver with id architectury:sync_ids
+[10:55:15] [main/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
+[10:55:15] [main/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
+[10:55:15] [main/INFO] [terrablender/]: Registered region extrabiomes:overworld to index 1 for type OVERWORLD
+[10:55:15] [main/INFO] [terrablender/]: Registered region extrabiomes:overworld_rare to index 2 for type OVERWORLD
+[10:55:15] [Forge Version Check/INFO] [ne.mi.fm.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
+[10:55:16] [Forge Version Check/INFO] [ne.mi.fm.VersionChecker/]: [forge] Found status: UP_TO_DATE Current: 47.4.10 Target: null
+[10:55:16] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[10:55:16] [main/WARN] [ne.mi.co.ForgeHooks/WP]: The following mods have version differences that were not resolved:
+extrabiomes (version 0.0.1 -> 3.1.0-beta-1)
+generated_fc12915 (version 1 -> MISSING)
+Things may not work well.
+[10:55:16] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/fin/Projects/Source/ExtraBiomes/ExtraBiomes%20-%20Java/.gradle/loom-cache/minecraftMaven/net/minecraft/forge-1.20.1-47.4.10-minecraft-merged-b681d5cec1/1.20.1-loom.mappings.1_20_1.layered+hash.40359-v2-forge-1.20.1-47.4.10/forge-1.20.1-47.4.10-minecraft-merged-b681d5cec1-1.20.1-loom.mappings.1_20_1.layered+hash.40359-v2-forge-1.20.1-47.4.10.jar%23187!/assets/.mcassetsroot' uses unexpected schema
+[10:55:16] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/fin/Projects/Source/ExtraBiomes/ExtraBiomes%20-%20Java/.gradle/loom-cache/minecraftMaven/net/minecraft/forge-1.20.1-47.4.10-minecraft-merged-b681d5cec1/1.20.1-loom.mappings.1_20_1.layered+hash.40359-v2-forge-1.20.1-47.4.10/forge-1.20.1-47.4.10-minecraft-merged-b681d5cec1-1.20.1-loom.mappings.1_20_1.layered+hash.40359-v2-forge-1.20.1-47.4.10.jar%23187!/data/.mcassetsroot' uses unexpected schema
+[10:55:16] [main/WARN] [minecraft/Pack]: Missing metadata in pack mod:extrabiomes
+[10:55:16] [main/WARN] [minecraft/MinecraftServer]: Missing data pack mod:generated_fc12915
+[10:55:16] [main/WARN] [minecraft/MinecraftServer]: Missing data pack mod:extrabiomes
+[10:55:17] [main/INFO] [minecraft/RecipeManager]: Loaded 7 recipes
+[10:55:17] [main/INFO] [minecraft/AdvancementList]: Loaded 1357 advancements
+[10:55:18] [Server thread/INFO] [minecraft/DedicatedServer]: Starting minecraft server version 1.20.1
+[10:55:18] [Server thread/INFO] [minecraft/DedicatedServer]: Loading properties
+[10:55:18] [Server thread/INFO] [minecraft/DedicatedServer]: Default game type: SURVIVAL
+[10:55:18] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
+[10:55:18] [Server thread/INFO] [minecraft/DedicatedServer]: Starting Minecraft server on *:25565
+[10:55:18] [Server thread/INFO] [minecraft/ServerConnectionListener]: Using epoll channel type
+[10:55:18] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:the_nether
+[10:55:18] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:overworld
+[10:55:18] [Server thread/INFO] [minecraft/DedicatedServer]: Preparing level "world"
+[10:55:20] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[10:55:21] [Worker-Main-27/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[10:55:21] [Worker-Main-27/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 0%
+[10:55:21] [Worker-Main-6/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 10%
+[10:55:21] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 1390 ms
+[10:55:21] [Server thread/INFO] [minecraft/DedicatedServer]: Done (3.442s)! For help, type "help"
+[10:55:21] [Server thread/INFO] [ne.mi.ga.ForgeGameTestHooks/]: Enabled Gametest Namespaces: [extrabiomes]
+[10:55:21] [Server thread/INFO] [ne.mi.se.pe.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
+[10:56:35] [Server thread/INFO] [minecraft/MinecraftServer]: Running all 5 tests...
+[10:56:35] [Server thread/INFO] [minecraft/GameTestBatchRunner]: Running test batch 'defaultBatch:1' (5 tests)...
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeModifierApplicationGameTests/]: [BiomeModifierApplicationGameTests] mushroomFieldsGetsHugeMushroomsAndSpawns: starting
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeModifierApplicationGameTests/]: [BiomeModifierApplicationGameTests] mushroomFieldsGetsHugeMushroomsAndSpawns: passed
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: starting
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] charred_forest: found at BlockPos{x=-160, y=80, z=-608} (628 blocks from spawn)
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: starting
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking puckoo_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking worm_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking treefrog_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking hoppleshroom_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking giant_tortoise_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking jellyfish_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking piranha_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] checking harpy_spawn_egg
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.SpawnEggItemGameTests/]: [SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeModifierApplicationGameTests/]: [BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: starting
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeModifierApplicationGameTests/]: [BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: passed
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeModifierApplicationGameTests/]: [BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: starting
+[10:56:35] [Server thread/INFO] [ne.wi.ex.ga.BiomeModifierApplicationGameTests/]: [BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: passed
+[10:56:36] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] cold_mesa: found at BlockPos{x=-2240, y=80, z=-384} (2272 blocks from spawn)
+[10:56:38] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] cold_mesa_bryce: found at BlockPos{x=-4000, y=80, z=5248} (6598 blocks from spawn)
+[10:56:38] [Server thread/WARN] [minecraft/MinecraftServer]: Can't keep up! Is the server overloaded? Running 2714ms or 54 ticks behind
+[10:56:40] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] cold_mesa_plateau: found at BlockPos{x=-3328, y=80, z=5280} (6241 blocks from spawn)
+[10:56:40] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] deep_dark_forest: found at BlockPos{x=1472, y=80, z=-608} (1592 blocks from spawn)
+[10:56:40] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] deep_dark_green: found at BlockPos{x=448, y=-48, z=-864} (981 blocks from spawn)
+[10:56:41] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] desert_bryce: found at BlockPos{x=0, y=80, z=-1120} (1120 blocks from spawn)
+[10:56:41] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] floating_jungle: found at BlockPos{x=2816, y=80, z=-2816} (3982 blocks from spawn)
+[10:56:41] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] fungle_jungle: found at BlockPos{x=-608, y=80, z=-512} (794 blocks from spawn)
+[10:56:41] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] future_desert: found at BlockPos{x=-160, y=208, z=-608} (641 blocks from spawn)
+[10:56:43] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] glacier: found at BlockPos{x=-4480, y=80, z=-4512} (6358 blocks from spawn)
+[10:56:43] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] grand_oasis: found at BlockPos{x=736, y=80, z=-1216} (1421 blocks from spawn)
+[10:56:43] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] jellyfish_fields: found at BlockPos{x=128, y=80, z=-192} (230 blocks from spawn)
+[10:56:44] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] jungle_marsh: found at BlockPos{x=-384, y=-48, z=3296} (3320 blocks from spawn)
+[10:56:44] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] jungle_pillars: found at BlockPos{x=-672, y=80, z=-576} (885 blocks from spawn)
+[10:56:44] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] lush_mesa: found at BlockPos{x=-384, y=80, z=-960} (1033 blocks from spawn)
+[10:56:44] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] lush_mesa_bryce: found at BlockPos{x=-544, y=80, z=-768} (941 blocks from spawn)
+[10:56:44] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] moorlands: found at BlockPos{x=352, y=80, z=1152} (1204 blocks from spawn)
+[10:56:44] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] mystic_forest: found at BlockPos{x=-352, y=80, z=1728} (1763 blocks from spawn)
+[10:56:45] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] shattered_swamp: found at BlockPos{x=-928, y=80, z=-160} (941 blocks from spawn)
+[10:56:45] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] shattered_taiga_spikes: found at BlockPos{x=-3328, y=80, z=-832} (3430 blocks from spawn)
+[10:56:46] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] the_netherlands: found at BlockPos{x=2880, y=80, z=-1248} (3138 blocks from spawn)
+[10:56:46] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] the_netherlands_mutated: found at BlockPos{x=-992, y=-48, z=1120} (1501 blocks from spawn)
+[10:56:47] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] taiga_spikes: found at BlockPos{x=-2208, y=80, z=-384} (2241 blocks from spawn)
+[10:56:47] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] tropical_island: found at BlockPos{x=192, y=80, z=-160} (249 blocks from spawn)
+[10:56:47] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] volcanic_moss_tundra: found at BlockPos{x=-2272, y=80, z=-352} (2299 blocks from spawn)
+[10:56:47] [Server thread/INFO] [ne.wi.ex.ga.BiomeGenerationGameTests/]: [BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: passed
+[10:56:49] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping the server
+[10:56:49] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[10:56:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[10:56:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[10:56:49] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[10:56:56] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[10:56:56] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[10:56:56] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[10:56:56] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[10:56:56] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[10:56:56] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+
+[Incubating] Problems report is available at: file:///home/fin/Projects/Source/ExtraBiomes/ExtraBiomes%20-%20Java/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 1m 51s
+10 actionable tasks: 4 executed, 6 up-to-date

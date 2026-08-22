@@ -20,6 +20,9 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -39,7 +42,10 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
                 .add(Attributes.MAX_HEALTH, 15)
                 .add(Attributes.MOVEMENT_SPEED, 0.25)
                 .add(Attributes.FLYING_SPEED, 0.6)
-                .add(Attributes.FOLLOW_RANGE, 24);
+                // Bedrock's "minecraft:follow_range" component (value/max 64), matching its
+                // nearest_attackable_target max_dist. 24 left harpies blind to anything on the
+                // ground, since they nest near build height.
+                .add(Attributes.FOLLOW_RANGE, 64);
     }
 
     // Harpies only nest near the top of the world, not on the surface.
@@ -56,6 +62,11 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        // Rest of Bedrock's nearest_attackable_target entity_types: irongolem, snowgolem and
+        // phantom (which targets harpies back — see PhantomHarpyTargeting).
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Phantom.class, true));
     }
 
     @Override

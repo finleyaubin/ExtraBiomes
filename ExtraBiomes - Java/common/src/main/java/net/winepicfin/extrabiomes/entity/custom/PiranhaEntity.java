@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -103,6 +104,19 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
 
     @Override
     public void aiStep() {
+        // Bedrock gets flopping for free from "runtime_identifier": "minecraft:cod"; on Java that
+        // behavior lives in AbstractFish, which PiranhaEntity deliberately doesn't extend (it would
+        // drag in bucket-catching and the passive panic/avoid-player goals). Same flop AbstractFish
+        // performs, copied rather than inherited.
+        if (!this.isInWater() && this.onGround() && this.verticalCollision) {
+            this.setDeltaMovement(this.getDeltaMovement().add(
+                    (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F, 0.4F,
+                    (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F));
+            this.setOnGround(false);
+            this.hasImpulse = true;
+            this.playSound(SoundEvents.COD_FLOP, this.getSoundVolume(), this.getVoicePitch());
+        }
+
         super.aiStep();
         if (!this.level().isClientSide) {
             this.entityData.set(DATA_BITING, this.getTarget() != null || this.chasedBait != null);

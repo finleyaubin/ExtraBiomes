@@ -63,6 +63,8 @@ public class HoppleshroomEntity extends Animal {
     public float oSquish;
     private boolean wasOnGroundLastTick;
 
+    private static final int FALL_DAMAGE_MODIFIER = -12;
+
     public HoppleshroomEntity(EntityType<? extends Animal> type, Level level) {
         super(type, level);
     }
@@ -89,6 +91,14 @@ public class HoppleshroomEntity extends Animal {
     @Override
     protected float getJumpPower() {
         return (float) this.getAttributeValue(Attributes.JUMP_STRENGTH);
+    }
+
+    // Bedrock's "minecraft:damage_sensor" trigger for cause "fall" (damage_modifier: -12): fall
+    // damage is reduced by a flat 12 rather than cancelled, so a hoppleshroom never hurts itself
+    // on its own near-continuous hopping but a long enough drop still kills it.
+    @Override
+    protected int calculateFallDamage(float distance, float multiplier) {
+        return Math.max(0, super.calculateFallDamage(distance, multiplier) + FALL_DAMAGE_MODIFIER);
     }
 
     public void hop(double vx, double vz) {

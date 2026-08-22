@@ -1,5 +1,7 @@
 package net.winepicfin.extrabiomes.entity.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -22,5 +24,18 @@ public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaModel<Pir
     @Override
     public @NotNull ResourceLocation getTextureLocation(PiranhaEntity entity) {
         return TEXTURES[Mth.clamp(entity.getVariant(), 0, TEXTURES.length - 1)];
+    }
+
+    // Bedrock's animation.piranha.flop rolls the body by variable.zrot when out of water; vanilla
+    // CodRenderer does the same thing here rather than in the model, so this mirrors it.
+    @Override
+    protected void setupRotations(PiranhaEntity entity, PoseStack poseStack, float ageInTicks, float rotationYaw,
+                                  float partialTicks) {
+        super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks);
+        poseStack.mulPose(Axis.YP.rotationDegrees(4.3F * Mth.sin(0.6F * ageInTicks)));
+        if (!entity.isInWater()) {
+            poseStack.translate(0.1F, 0.1F, -0.1F);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
+        }
     }
 }

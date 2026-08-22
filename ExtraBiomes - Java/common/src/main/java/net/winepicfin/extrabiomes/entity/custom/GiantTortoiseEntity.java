@@ -1,6 +1,12 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.warden.Warden;
+import org.jetbrains.annotations.NotNull;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
@@ -65,9 +71,20 @@ public class GiantTortoiseEntity extends Monster {
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        // Bedrock also targets iron golems, snow golems and the warden — add here if/when those
-        // entity classes are available to reference, e.g.:
-        // this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        // Rest of Bedrock's nearest_attackable_target entity_types: irongolem, snowgolem, warden.
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Warden.class, true));
+    }
+
+    // Bedrock's "minecraft:damage_sensor" trigger for cause "lightning" multiplies the damage by
+    // 2000, i.e. a lightning strike is an instant kill on a 70-HP tortoise however it's dealt.
+    @Override
+    public boolean hurt(@NotNull DamageSource source, float amount) {
+        if (source.is(DamageTypes.LIGHTNING_BOLT)) {
+            amount *= GiantTortoiseTuning.LIGHTNING_DAMAGE_MULTIPLIER;
+        }
+        return super.hurt(source, amount);
     }
 
     @Override
