@@ -416,7 +416,7 @@
       },
       "minecraft:behavior.eat_block": {
         "priority": 6,
-        "success_chance": "query.is_baby ? 0.02 : 0.01",
+        "success_chance": "query.is_baby ? 0.4 : 0.5",
         "eat_and_replace_block_pairs": [
           { "eat_block": "extrabiomes:large_mossy_pebble", "replace_block": "extrabiomes:medium_mossy_pebble" },
           { "eat_block": "extrabiomes:medium_mossy_pebble", "replace_block": "extrabiomes:small_mossy_pebble" },
