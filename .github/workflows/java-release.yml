@@ -120,6 +120,7 @@ jobs:
           dependencies: |
             terrablender(required){modrinth:terrablender}{curseforge:563928}
             geckolib(required){modrinth:geckolib}{curseforge:388172}
+            architectury-api(required){modrinth:architectury-api}{curseforge:419699}
 
       - name: Publish Fabric jar
         uses: Kira-NT/mc-publish@v3
@@ -136,4 +137,5 @@ jobs:
           dependencies: |
             terrablender(required){modrinth:terrablender}{curseforge:563928}
             geckolib(required){modrinth:geckolib}{curseforge:388172}
+            architectury-api(required){modrinth:architectury-api}{curseforge:419699}
             fabric-api(required){modrinth:fabric-api}{curseforge:306612}
