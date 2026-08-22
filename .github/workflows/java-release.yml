@@ -136,3 +136,4 @@ jobs:
           dependencies: |
             terrablender(required){modrinth:terrablender}{curseforge:563928}
             geckolib(required){modrinth:geckolib}{curseforge:388172}
+            fabric-api(required){modrinth:fabric-api}{curseforge:306612}
