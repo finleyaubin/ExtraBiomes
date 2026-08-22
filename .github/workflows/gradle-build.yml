@@ -183,18 +183,26 @@ jobs:
           path: "ExtraBiomes - Java/fabric-gametest.log"
           if-no-files-found: ignore
 
+      # Runs (and uploads) even when an earlier GameTest step failed - a manually-downloadable jar
+      # to test against is useful precisely when the automated biome-placement check disagrees
+      # with local results, so a real failure here shouldn't also block getting a jar out.
       - name: Build with Gradle
+        if: always()
         run: ./gradlew build
         timeout-minutes: 15
 
       - name: Upload build artifacts
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-forge-build
           path: "ExtraBiomes - Java/forge/build/libs/*.jar"
+          if-no-files-found: ignore
 
       - name: Upload Fabric build artifacts
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-fabric-build
           path: "ExtraBiomes - Java/fabric/build/libs/*.jar"
+          if-no-files-found: ignore
