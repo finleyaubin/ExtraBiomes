@@ -32,4 +32,11 @@ class TreefrogParityTest {
         assertEquals(bedrock.getDouble("minecraft:entity", "components", "minecraft:jump.static", "jump_power"),
                 TreefrogTuning.JUMP_STRENGTH);
     }
+
+    @Test
+    void fallDamageModifierMatchesBedrock_damageSensor() {
+        assertEquals(bedrock.getDouble("minecraft:entity", "components", "minecraft:damage_sensor", "triggers",
+                        "damage_modifier"),
+                TreefrogTuning.FALL_DAMAGE_MODIFIER);
+    }
 }

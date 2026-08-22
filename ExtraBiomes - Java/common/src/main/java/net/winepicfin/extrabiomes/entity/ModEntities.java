@@ -37,8 +37,13 @@ public class ModEntities {
             () -> EntityType.Builder.of(GiantTortoiseEntity::new, MobCategory.MONSTER).sized(1.6f, 1.0f).build("giant_tortoise"));
     public static final RegistrySupplier<EntityType<JellyfishEntity>> JELLYFISH = ENTITIES.register("jellyfish",
             () -> EntityType.Builder.of(JellyfishEntity::new, MobCategory.WATER_CREATURE).sized(0.8f, 1.0f).build("jellyfish"));
+    // WATER_AMBIENT, not WATER_CREATURE: spawn caps are per-category, and WATER_CREATURE allows only
+    // 5 mobs per spawn area against WATER_AMBIENT's 20 — with piranha the sole water spawn in jungle
+    // biomes, that cap (not the spawn weight) was what kept jungle water from teeming. WATER_AMBIENT
+    // is also the category vanilla uses for schooling fish, and its 64-block despawn distance is far
+    // closer to Bedrock's despawn_from_distance (32-40) than WATER_CREATURE's 128.
     public static final RegistrySupplier<EntityType<PiranhaEntity>> PIRANHA = ENTITIES.register("piranha",
-            () -> EntityType.Builder.of(PiranhaEntity::new, MobCategory.WATER_CREATURE).sized(0.6f, 0.3f).build("piranha"));
+            () -> EntityType.Builder.of(PiranhaEntity::new, MobCategory.WATER_AMBIENT).sized(0.6f, 0.3f).build("piranha"));
     public static final RegistrySupplier<EntityType<HarpyEntity>> HARPY = ENTITIES.register("harpy",
             () -> EntityType.Builder.of(HarpyEntity::new, MobCategory.MONSTER).sized(2.0f, 2.0f).build("harpy"));
 

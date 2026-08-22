@@ -48,6 +48,15 @@ public class TreefrogEntity extends Animal {
         return (float) this.getAttributeValue(Attributes.JUMP_STRENGTH);
     }
 
+    // Bedrock's damage_sensor knocks a flat 12 off any fall damage, which is what stops a treefrog
+    // hurting itself on its own hop. Vanilla's Frog cancels self-inflicted fall damage the same way
+    // (Frog#causeFallDamage returns false); subtracting Bedrock's modifier keeps very long drops
+    // lethal instead of making the frog fall-proof.
+    @Override
+    protected int calculateFallDamage(float distance, float multiplier) {
+        return Math.max(0, super.calculateFallDamage(distance, multiplier) + TreefrogTuning.FALL_DAMAGE_MODIFIER);
+    }
+
     public void hop(double vx, double vz) {
         this.setDeltaMovement(vx, this.getJumpPower(), vz);
         this.hasImpulse = true;

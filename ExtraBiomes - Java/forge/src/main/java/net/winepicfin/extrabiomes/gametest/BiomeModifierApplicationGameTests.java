@@ -52,7 +52,7 @@ public class BiomeModifierApplicationGameTests {
         assertHasFeature(helper, jungle, GenerationStep.Decoration.UNDERGROUND_DECORATION, UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY);
 
         assertHasSpawn(helper, jungle, MobCategory.MONSTER, ModEntities.GIANT_TORTOISE.get());
-        assertHasSpawn(helper, jungle, MobCategory.WATER_CREATURE, ModEntities.PIRANHA.get());
+        assertHasSpawn(helper, jungle, MobCategory.WATER_AMBIENT, ModEntities.PIRANHA.get());
         assertHasSpawn(helper, jungle, MobCategory.CREATURE, ModEntities.TREEFROG.get());
 
         LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: passed");

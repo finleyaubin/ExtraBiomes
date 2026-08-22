@@ -99,7 +99,8 @@ public class ModBiomeModifiers {
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.GIANT_TORTOISE.get(), MobSpawnWeightTuning.GIANT_TORTOISE, 1, 2))));
         context.register(ADD_SPAWN_PIRANHA_JUNGLE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE, 6, 10))));
+                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE,
+                        MobSpawnWeightTuning.PIRANHA_JUNGLE_MIN_GROUP, MobSpawnWeightTuning.PIRANHA_JUNGLE_MAX_GROUP))));
         context.register(ADD_SPAWN_PIRANHA_SWAMP, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
                 HolderSet.direct(biomes.getOrThrow(Biomes.MANGROVE_SWAMP), biomes.getOrThrow(ModBiomes.SHATTERED_SWAMP)),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_SWAMP, 2, 5))));

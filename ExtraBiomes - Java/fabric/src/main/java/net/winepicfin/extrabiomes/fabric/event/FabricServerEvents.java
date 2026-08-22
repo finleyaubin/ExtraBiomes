@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.fabric.event;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +14,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.entity.PhantomHarpyTargeting;
+import net.winepicfin.extrabiomes.fabric.mixin.MobAccessor;
 import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
 import net.winepicfin.extrabiomes.item.ModItems;
 
@@ -35,6 +39,14 @@ public class FabricServerEvents {
         });
 
         ServerTickEvents.END_WORLD_TICK.register(FabricServerEvents::tickWolves);
+
+        // Fabric equivalent of forge/.../event/PhantomHarpyTargetHandler.java.
+        ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
+            Goal goal = PhantomHarpyTargeting.createHarpyTargetGoal(entity);
+            if (goal != null) {
+                ((MobAccessor) entity).extrabiomes$getTargetSelector().addGoal(PhantomHarpyTargeting.GOAL_PRIORITY, goal);
+            }
+        });
     }
 
     private static void applyDenseCloudSlowFalling(Player player) {
