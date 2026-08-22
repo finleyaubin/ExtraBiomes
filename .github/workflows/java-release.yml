@@ -117,6 +117,9 @@ jobs:
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
+          dependencies: |
+            terrablender(required){modrinth:terrablender}{curseforge:563928}
+            geckolib(required){modrinth:geckolib}{curseforge:388172}
 
       - name: Publish Fabric jar
         uses: Kira-NT/mc-publish@v3
@@ -130,3 +133,6 @@ jobs:
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
+          dependencies: |
+            terrablender(required){modrinth:terrablender}{curseforge:563928}
+            geckolib(required){modrinth:geckolib}{curseforge:388172}
