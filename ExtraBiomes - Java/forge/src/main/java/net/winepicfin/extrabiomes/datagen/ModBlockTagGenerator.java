@@ -50,6 +50,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         );
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(
+                ModBlocks.STICK_PILE.get(),
                 // mystic wood
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.MYSTIC_STAIRS.get(),
