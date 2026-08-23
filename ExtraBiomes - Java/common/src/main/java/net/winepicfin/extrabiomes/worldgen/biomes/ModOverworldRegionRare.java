@@ -31,10 +31,11 @@ import java.util.function.Consumer;
  * {@link ModOverworldRegion} - moving regions doesn't by itself require re-tuning continentalness/
  * erosion/weirdness, since TerraBlender picks which Region governs a given point in the world
  * before it ever looks at that Region's own climate boxes, so these five no longer compete
- * against anything left behind in the primary region. Future Desert's box in particular used to
- * need a weirdness-half restriction purely to avoid swallowing Desert Bryce, which stayed behind
- * in the primary region - that restriction is no longer load-bearing now that the two are in
- * separate Regions, but it's left as-is here rather than widened, since widening it is a
+ * against anything left behind in either primary-frequency region. Future Desert's box in
+ * particular used to need a weirdness-half restriction purely to avoid swallowing Desert Bryce
+ * (now in {@link ModOverworldRegionSecondary}, having originally stayed behind in
+ * {@link ModOverworldRegion} itself) - that restriction is no longer load-bearing now that the two
+ * are in separate Regions, but it's left as-is here rather than widened, since widening it is a
  * generation-behaviour change that deserves its own playtested patch, not a side effect of
  * moving files around.
  * <p>

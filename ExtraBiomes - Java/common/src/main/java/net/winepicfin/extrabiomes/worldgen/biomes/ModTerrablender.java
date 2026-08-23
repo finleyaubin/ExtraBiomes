@@ -28,6 +28,7 @@ public class ModTerrablender {
     public static void registerBiomes(){
         if (!REGISTERED.compareAndSet(false, true)) return;
         Regions.register(new ModOverworldRegion(new ResourceLocation(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
+        Regions.register(new ModOverworldRegionSecondary(new ResourceLocation(ExtraBiomes.MOD_ID,"overworld_secondary"), Config.secondaryBiomeWeight));
         Regions.register(new ModOverworldRegionRare(new ResourceLocation(ExtraBiomes.MOD_ID,"overworld_rare"), Config.rareBiomeWeight));
     }
 }

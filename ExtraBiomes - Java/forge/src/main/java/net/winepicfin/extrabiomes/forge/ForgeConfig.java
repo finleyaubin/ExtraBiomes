@@ -13,8 +13,15 @@ public class ForgeConfig
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.IntValue BIOMEWEIGHT = BUILDER
-            .comment("The Weight of ExtraBiomes biomes, the default value is " + Config.DEFAULT_BIOME_WEIGHT)
+            .comment("The Weight of ExtraBiomes' primary biomes (ModOverworldRegion), the default value is " + Config.DEFAULT_BIOME_WEIGHT)
             .defineInRange("Biome Weight", Config.DEFAULT_BIOME_WEIGHT, 0, Integer.MAX_VALUE);
+
+    // Weight for ModOverworldRegionSecondary, the other half of the primary-frequency biomes,
+    // split into its own Region to keep climatically-similar biomes (bryce/spire siblings, etc.)
+    // from competing for the same Region's climate space - see that class's javadoc.
+    private static final ForgeConfigSpec.IntValue SECONDARYBIOMEWEIGHT = BUILDER
+            .comment("The Weight of ExtraBiomes' secondary biomes (ModOverworldRegionSecondary), the default value is " + Config.DEFAULT_SECONDARY_BIOME_WEIGHT)
+            .defineInRange("Secondary Biome Weight", Config.DEFAULT_SECONDARY_BIOME_WEIGHT, 0, Integer.MAX_VALUE);
 
     // Weight for ModOverworldRegionRare, the small set of biomes that are genuinely low-frequency
     // in the Bedrock source data (replace_biomes amount <= 0.10 - see that class's javadoc).
@@ -34,6 +41,7 @@ public class ForgeConfig
     {
         boolean isGametest = ForgeGameTestHooks.isGametestServer();
         Config.biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : BIOMEWEIGHT.get();
+        Config.secondaryBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : SECONDARYBIOMEWEIGHT.get();
         Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : RAREBIOMEWEIGHT.get();
         Config.load();
     }

@@ -10,10 +10,12 @@ import net.winepicfin.extrabiomes.worldgen.biomes.ModTerrablender;
 // format/UI itself can't live here - only the resulting ints that world-gen code actually reads.
 public class Config
 {
-    public static final int DEFAULT_BIOME_WEIGHT = 15;
-    public static final int DEFAULT_RARE_BIOME_WEIGHT = 4;
+    public static final int DEFAULT_BIOME_WEIGHT = 20;
+    public static final int DEFAULT_SECONDARY_BIOME_WEIGHT = 20;
+    public static final int DEFAULT_RARE_BIOME_WEIGHT = 10;
 
     public static int biomeWeight = DEFAULT_BIOME_WEIGHT;
+    public static int secondaryBiomeWeight = DEFAULT_SECONDARY_BIOME_WEIGHT;
     public static int rareBiomeWeight = DEFAULT_RARE_BIOME_WEIGHT;
 
     public static void load()
