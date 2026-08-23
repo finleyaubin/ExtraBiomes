@@ -27,10 +27,14 @@ import java.util.function.Supplier;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.BLOCK);
 
-    public static final RegistrySupplier<Block> DENSE_CLOUD = registerBlock("dense_cloud", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_BRICK_DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_SLAB).sound(SoundType.WOOL).strength(0.5f)));
-    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_STAIRS).sound(SoundType.WOOL).strength(0.5f)));
+    // noOcclusion(): dense cloud is thematically translucent (light should pass through it), which
+    // otherwise wouldn't happen since these all copy fully-opaque vanilla materials
+    // (white_wool/stone_bricks) - noOcclusion() is what actually zeroes a block's light-block value
+    // (vanilla's own light-transparent blocks, e.g. leaves/glass, rely on the same flag).
+    public static final RegistrySupplier<Block> DENSE_CLOUD = registerBlock("dense_cloud", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_BRICK_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_SLAB).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_STAIRS).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops(), UniformInt.of(3, 7)));
     public static final RegistrySupplier<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> ExtraBiomesExpectPlatform.createGooLiquidBlock(BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
     public static final RegistrySupplier<PebbleBlock> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
