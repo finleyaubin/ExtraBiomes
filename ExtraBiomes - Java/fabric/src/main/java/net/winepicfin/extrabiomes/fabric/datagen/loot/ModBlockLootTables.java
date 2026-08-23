@@ -28,6 +28,7 @@ public class ModBlockLootTables extends FabricBlockLootTableProvider {
                 this::createDoorTable,
                 (leavesBlock, saplingBlock) -> createLeavesDrops(leavesBlock, saplingBlock, NORMAL_LEAVES_SAPLING_CHANCES),
                 this::createOreDrop,
-                this::createSingleItemTable);
+                this::createSingleItemTable,
+                this::createMushroomBlockDrop);
     }
 }

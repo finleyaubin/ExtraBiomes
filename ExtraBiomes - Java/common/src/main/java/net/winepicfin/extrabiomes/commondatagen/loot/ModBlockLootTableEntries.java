@@ -27,7 +27,8 @@ public class ModBlockLootTableEntries {
             Function<Block, LootTable.Builder> createDoorTable,
             BiFunctionLeaves createLeavesDrops,
             BiFunctionOre createOreDrop,
-            Function<net.minecraft.world.level.ItemLike, LootTable.Builder> createSingleItemTable) {
+            Function<net.minecraft.world.level.ItemLike, LootTable.Builder> createSingleItemTable,
+            BiFunctionMushroom createMushroomBlockDrop) {
         dropSelf.accept(ModBlocks.DENSE_CLOUD.get());
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
@@ -134,16 +135,19 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.WHITE_MUSHROOM.get());
         dropSelf.accept(ModBlocks.YELLOW_MUSHROOM.get());
         dropSelf.accept(ModBlocks.GLOW_MUSHROOM.get());
-        // Mushrooms
-        dropSelf.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.CYAN_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.GREEN_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.ORANGE_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.PURPLE_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.WHITE_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.YELLOW_MUSHROOM_BLOCK.get());
-        dropSelf.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get());
+        // Mushrooms - like vanilla's huge mushroom blocks (createMushroomBlockDrop): silk touch
+        // drops the block itself, otherwise it drops 0-2 of the matching small mushroom item
+        // (with looting bonus), same as vanilla red/brown mushroom blocks. Previously dropSelf,
+        // which always dropped the (much harder to farm) huge mushroom block itself.
+        add.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.BLACK_MUSHROOM.get()));
+        add.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.BLUE_MUSHROOM.get()));
+        add.accept(ModBlocks.CYAN_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.CYAN_MUSHROOM.get()));
+        add.accept(ModBlocks.GREEN_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.GREEN_MUSHROOM.get()));
+        add.accept(ModBlocks.ORANGE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.ORANGE_MUSHROOM.get()));
+        add.accept(ModBlocks.PURPLE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.PURPLE_MUSHROOM.get()));
+        add.accept(ModBlocks.WHITE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.WHITE_MUSHROOM.get()));
+        add.accept(ModBlocks.YELLOW_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.YELLOW_MUSHROOM.get()));
+        add.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.GLOW_MUSHROOM.get()));
     }
 
     // createLeavesDrops/createOreDrop take more parameters than java.util.function's stock
@@ -157,5 +161,10 @@ public class ModBlockLootTableEntries {
     @FunctionalInterface
     public interface BiFunctionOre {
         LootTable.Builder apply(Block oreBlock, net.minecraft.world.item.Item item);
+    }
+
+    @FunctionalInterface
+    public interface BiFunctionMushroom {
+        LootTable.Builder apply(Block mushroomBlock, net.minecraft.world.level.ItemLike smallMushroomItem);
     }
 }

@@ -268,6 +268,18 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     private static void blackSandRecipes(Consumer<FinishedRecipe> recipeOutput) {
+        // Not from Bedrock (no equivalent recipe there) - added per playtest request: dye a batch of
+        // sand black, same "8 around a dye" bulk-dyeing shape vanilla itself uses (e.g. wool/concrete
+        // powder), 8 sand in -> 8 black sand out.
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SAND.get(), 8)
+                .pattern("###")
+                .pattern("#$#")
+                .pattern("###")
+                .define('#', Items.SAND)
+                .define('$', Items.BLACK_DYE)
+                .unlockedBy(getHasName(Items.SAND), has(Items.SAND))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":black_sand_from_dye");
+
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SAND.get()), RecipeCategory.MISC, Items.GLASS, 0.1F, 200)
                 .unlockedBy(getHasName(ModBlocks.BLACK_SAND.get()), has(ModBlocks.BLACK_SAND.get()))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":glass_from_black_sand");
