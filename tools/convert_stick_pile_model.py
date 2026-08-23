@@ -22,7 +22,7 @@ import os
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GEO_PATH = os.path.join(REPO, "ExtraBiomes - Bedrock", "packs", "RP", "models", "blocks", "stick_pile.geo.json")
-MODEL_DIR = os.path.join(REPO, "ExtraBiomes - Forge", "src", "main", "resources", "assets", "extrabiomes", "models", "block")
+MODEL_DIR = os.path.join(REPO, "ExtraBiomes - Java", "common", "src", "main", "resources", "assets", "extrabiomes", "models", "block")
 
 
 def load_cubes():
@@ -62,6 +62,13 @@ def rotate_z90(p, center=(8, 8, 8)):
     cx, cy, cz = center
     x, y, z = p
     return (cx - (y - cy), cy + (x - cx), z)
+
+
+def rotate_y90(p, center=(8, 8, 8)):
+    # +90 degrees about the Y axis, around the given center: (x, y, z) -> (x, y, 16-x) (mirrored)
+    cx, cy, cz = center
+    x, y, z = p
+    return (cx + (z - cz), y, cz - (x - cx))
 
 
 def aabb_from_corners(p0, p1):
@@ -104,14 +111,21 @@ def write_model(path, elements):
 def main():
     cubes = load_cubes()
 
+    # Bucket <-> rotation mapping taken directly from packs/BP/blocks/stick_pile.json's three
+    # permutations, keyed by q.block_state('minecraft:block_face') - NOT guessed: west/east ->
+    # rotation [90,0,0] (X), up/down -> rotation [0,0,90] (Z), north/south -> rotation [0,90,0]
+    # (Y). A prior version of this script paired each Java axis with the wrong Bedrock bucket
+    # (cyclically off-by-one), which is why placed stick piles rotated incorrectly in-game.
     variants = {
-        # axis=Y: raw geometry, unrotated (layers stack vertically - the natural orientation
-        # used for the Bedrock north/south facing bucket, which only ever applies a yaw).
-        "stick_pile_y": None,
-        # axis=X: rotate the raw geometry 90 degrees about Z, matching Bedrock's up/down bucket.
-        "stick_pile_x": rotate_z90,
-        # axis=Z: rotate the raw geometry 90 degrees about X, matching Bedrock's west/east bucket.
-        "stick_pile_z": rotate_x90,
+        # axis=Y (placed on the up/down face of a block): Bedrock's up/down bucket, rotation
+        # [0,0,90] about Z.
+        "stick_pile_y": rotate_z90,
+        # axis=X (placed on the west/east face of a block): Bedrock's west/east bucket, rotation
+        # [90,0,0] about X.
+        "stick_pile_x": rotate_x90,
+        # axis=Z (placed on the north/south face of a block): Bedrock's north/south bucket,
+        # rotation [0,90,0] about Y.
+        "stick_pile_z": rotate_y90,
     }
 
     for name, rotate in variants.items():

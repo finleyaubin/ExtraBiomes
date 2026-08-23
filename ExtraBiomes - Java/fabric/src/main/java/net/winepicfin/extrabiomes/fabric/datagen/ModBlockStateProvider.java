@@ -155,6 +155,7 @@ public class ModBlockStateProvider implements DataProvider {
         saplingBlock(ModBlocks.PURPLE_MUSHROOM.get());
         saplingBlock(ModBlocks.WHITE_MUSHROOM.get());
         saplingBlock(ModBlocks.YELLOW_MUSHROOM.get());
+        saplingBlock(ModBlocks.GLOW_MUSHROOM.get());
         // Mushrooms
         blockWithItem(ModBlocks.BLACK_MUSHROOM_BLOCK);
         blockWithItem(ModBlocks.BLUE_MUSHROOM_BLOCK);

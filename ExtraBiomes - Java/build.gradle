@@ -99,7 +99,7 @@ allprojects {
     // so that's too late even for Loom's own tasks), and configuration order between this
     // block and the IDE's own task setup isn't guaranteed. Matching by name sidesteps the
     // whole ordering question by never touching IDE-only tasks in the first place.
-    tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer', 'runDatagen', 'runGameTestServer'] }.configureEach {
+    tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer', 'runData', 'runDatagen', 'runGameTestServer'] }.configureEach {
         javaLauncher = javaToolchains.launcherFor {
             languageVersion = JavaLanguageVersion.of(17)
         }

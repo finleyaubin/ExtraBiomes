@@ -1,5 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -12,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
@@ -20,8 +23,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConf
 import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -67,6 +72,15 @@ public class NetherlandsWheatFeatures {
     private static final ResourceKey<PlacedFeature> SELECT_WHEAT_PLACED_KEY = placedKey("netherlands_select_wheat");
     public static final ResourceKey<PlacedFeature> WHEAT_FLOOR_PLACED_KEY = placedKey("netherlands_wheat_floor");
 
+    // Not from Bedrock - added per playtest feedback: farmland with no water source nearby reverts
+    // to dirt (killing the crop on it) over time, which is what was making the wheat field look
+    // "patchy" - Bedrock's visible farm_water canal (NetherlandsWaterFeature) doesn't reach every
+    // patch. This scatters single hidden water sources one block under the farmland (never exposed
+    // to air, so it reads as buried irrigation rather than a surface pond) to keep nearby farmland
+    // hydrated without visibly altering the field.
+    private static final ResourceKey<ConfiguredFeature<?, ?>> HYDRATION_WATER_KEY = key("netherlands_hydration_water");
+    public static final ResourceKey<PlacedFeature> HYDRATION_WATER_PLACED_KEY = placedKey("netherlands_hydration_water");
+
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(WHEAT_BIG_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WHEAT.defaultBlockState().setValue(CropBlock.AGE, 7)))));
@@ -81,6 +95,9 @@ public class NetherlandsWheatFeatures {
         context.register(WHEAT_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 WHEAT_REPLACEABLE, BlockStateProvider.simple(Blocks.FARMLAND), placedFeatures.getOrThrow(SELECT_WHEAT_PLACED_KEY),
                 CaveSurface.FLOOR, ConstantInt.of(1), 0.0F, 2, 1.0F, UniformInt.of(1, 10), 0.0F)));
+
+        context.register(HYDRATION_WATER_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WATER.defaultBlockState()))));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
@@ -92,6 +109,28 @@ public class NetherlandsWheatFeatures {
         List<PlacementModifier> scatter = List.of(
                 CountPlacement.of(100), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome());
         context.register(WHEAT_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_FLOOR_KEY), scatter));
+
+        // From the heightmap (air just above the field), scan down through air then farmland until
+        // reaching the dirt subsoil directly beneath it - that position is where the water source
+        // is placed, so it always sits under a solid farmland cap. The BlockPredicateFilter then
+        // requires the 4 horizontal neighbours to also be solid, so a patch right at the field's
+        // edge (next to open air/a drop-off) is skipped rather than exposing the water.
+        List<PlacementModifier> hydration = List.of(
+                CountPlacement.of(20),
+                InSquarePlacement.spread(),
+                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                EnvironmentScanPlacement.scanningFor(
+                        Direction.DOWN,
+                        BlockPredicate.matchesBlocks(Blocks.DIRT),
+                        BlockPredicate.matchesBlocks(Blocks.AIR, Blocks.FARMLAND, Blocks.WHEAT),
+                        6),
+                BlockPredicateFilter.forPredicate(BlockPredicate.allOf(
+                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(1, 0, 0), Blocks.AIR)),
+                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(-1, 0, 0), Blocks.AIR)),
+                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 1), Blocks.AIR)),
+                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(0, 0, -1), Blocks.AIR)))),
+                BiomeFilter.biome());
+        context.register(HYDRATION_WATER_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(HYDRATION_WATER_KEY), hydration));
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {

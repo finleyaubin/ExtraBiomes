@@ -5,7 +5,6 @@ import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
@@ -25,9 +24,7 @@ public class JunglePillars {
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
-        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
         // stone_pillars: single pillar structure placed once per chunk (Bedrock feature_rules/stone_pillars.json, first_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, StonePillarsFeature.STONE_PILLARS_PLACED_KEY);
         // Bedrock layers TWO independent pillar mechanics on jungle_pillars: the hand-authored

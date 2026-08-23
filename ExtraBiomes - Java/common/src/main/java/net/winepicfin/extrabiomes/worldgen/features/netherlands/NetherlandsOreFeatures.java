@@ -25,11 +25,11 @@ import net.winepicfin.extrabiomes.worldgen.features.ore.ModOrePlacement;
  * The matching feature_rules' "iterations" is the number of vein ATTEMPTS per chunk -> {@link ModOrePlacement#commonOrePlacement}'s
  * count parameter (via {@code CountPlacement}). The feature_rules' y "extent" is the absolute height range each vein can roll within.
  * <p>
- * SIMPLIFICATION: every one of these Bedrock ore_feature JSONs has {@code replace_rules.may_replace = minecraft:netherrack},
- * which cannot function as-is since this biome (despite its "the_netherlands/nether..." naming, inherited from an
- * apparent Bedrock nether-reskin template) generates in the OVERWORLD, not on netherrack. This is ported as
- * "may replace {@code minecraft:stone}" instead (matching where {@code BiomeDefaultFeatures.addDefaultOres} already
- * places vanilla ore for this biome in TheNetherlands.java), which is the closest faithful equivalent.
+ * Every one of these Bedrock ore_feature JSONs has {@code replace_rules.may_replace = minecraft:netherrack}. Despite
+ * this biome generating in the OVERWORLD, that is honored literally here too: {@link net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules}
+ * gives The Netherlands a netherrack underground layer (its "nethrack" pun), so these veins replace
+ * {@code minecraft:netherrack}, not {@code minecraft:stone} - a stone-targeted BlockMatchTest here previously matched
+ * nothing in this biome's actual terrain and silently placed no ore at all.
  * <p>
  * SIMPLIFICATION 2: Bedrock's {@code places_block} for coal/copper/iron/lapis/redstone are custom addon blocks
  * ("extrabiomes:nether_coal_ore" etc.) that were never ported to the Java block registry (only
@@ -62,17 +62,21 @@ public class NetherlandsOreFeatures {
     public static final ResourceKey<PlacedFeature> REDSTONE_ORE_PLACED_KEY = placedKey("netherlands_redstone_ore");
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        BlockMatchTest replaceStone = new BlockMatchTest(Blocks.STONE);
+        // ModSurfaceRules paints this biome's underground as netherrack (down to a shallow band,
+        // with plain stone resuming below it) - not stone - so these veins must target netherrack
+        // to actually find anything to replace. A BlockMatchTest(Blocks.STONE) here matched nothing
+        // in the terrain these veins actually roll in, which is why none of the ores ever appeared.
+        BlockMatchTest replaceNetherrack = new BlockMatchTest(Blocks.NETHERRACK);
         // count (vein size) values read from features/the_netherlands/*_ore_feature.json
-        context.register(COAL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.COAL_ORE.defaultBlockState(), 17)));
-        context.register(COPPER_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.COPPER_ORE.defaultBlockState(), 9)));
-        context.register(DIAMOND_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, ModBlocks.NETHER_DIAMOND_ORE.get().defaultBlockState(), 8)));
-        context.register(EMERALD_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.EMERALD_ORE.defaultBlockState(), 1)));
-        context.register(GOLD_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.NETHER_GOLD_ORE.defaultBlockState(), 9)));
-        context.register(IRON_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.IRON_ORE.defaultBlockState(), 9)));
-        context.register(LAPIS_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.LAPIS_ORE.defaultBlockState(), 3)));
-        context.register(QUARTZ_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.NETHER_QUARTZ_ORE.defaultBlockState(), 9)));
-        context.register(REDSTONE_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceStone, Blocks.REDSTONE_ORE.defaultBlockState(), 8)));
+        context.register(COAL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.COAL_ORE.defaultBlockState(), 17)));
+        context.register(COPPER_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.COPPER_ORE.defaultBlockState(), 9)));
+        context.register(DIAMOND_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_DIAMOND_ORE.get().defaultBlockState(), 8)));
+        context.register(EMERALD_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.EMERALD_ORE.defaultBlockState(), 1)));
+        context.register(GOLD_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.NETHER_GOLD_ORE.defaultBlockState(), 9)));
+        context.register(IRON_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.IRON_ORE.defaultBlockState(), 9)));
+        context.register(LAPIS_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.LAPIS_ORE.defaultBlockState(), 3)));
+        context.register(QUARTZ_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.NETHER_QUARTZ_ORE.defaultBlockState(), 9)));
+        context.register(REDSTONE_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.REDSTONE_ORE.defaultBlockState(), 8)));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
