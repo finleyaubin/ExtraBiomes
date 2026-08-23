@@ -36,6 +36,7 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_BOULDER_JUNGLE = registerKey("add_boulder_jungle");
     public static final ResourceKey<BiomeModifier> ADD_STICK_PILE_FOREST = registerKey("add_stick_pile_forest");
     public static final ResourceKey<BiomeModifier> ADD_STICK_PILE_JUNGLE = registerKey("add_stick_pile_jungle");
+    public static final ResourceKey<BiomeModifier> REMOVE_STICK_PILE_DARK_FOREST = registerKey("remove_stick_pile_dark_forest");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS = registerKey("add_mushroom_fields_huge_mushrooms");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS = registerKey("add_mushroom_fields_small_mushrooms");
     public static final ResourceKey<BiomeModifier> ADD_DARK_FOREST_HUGE_MUSHROOMS = registerKey("add_dark_forest_huge_mushrooms");
@@ -78,6 +79,35 @@ public class ModBiomeModifiers {
                 HolderSet.direct(placedFeatures.getOrThrow(UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
+        // Registered before the boulder/stick_pile block below - see the long comment there for
+        // why the ORDER of these two blocks (not just their content) matters: JungleMarsh.java
+        // bakes extrabiomes:swamp_huge_mushroom directly into its own VEGETAL_DECORATION list at
+        // biome-registration time (i.e. always before any BiomeModifier runs at all), so on
+        // vanilla Dark Forest - which gets both swamp_huge_mushroom and select_stick_pile purely
+        // via modifiers - the mushroom modifier must also be registered (and therefore applied)
+        // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
+        // orders for the same pair of features and vanilla's FeatureSorter crashes with
+        // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
+        // Custom huge mushroom variants added to vanilla's own mushroom-themed biomes, mirroring how
+        // FungleJungle/DeepDarkForest already use these same placed features for this mod's biomes.
+        context.register(ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
+                HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+        // Small mod-added mushroom variants (via the mycelium-floor-patch mechanism -
+        // MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY's vegetationFeature is SELECT_MUSHROOM_KEY) were
+        // already wired into FungleJungle directly, but vanilla mushroom fields only ever got the huge
+        // mushroom modifier above - it had no path to this mod's own small mushroom colours at all.
+        // Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
+        context.register(ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
+                HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY)),
+                GenerationStep.Decoration.LOCAL_MODIFICATIONS));
+        context.register(ADD_DARK_FOREST_HUGE_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST)),
+                HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+
         // Bedrock's boulder_placer/stick_pile_placer feature_rules (packs/BP/feature_rules/boulder/)
         // gate on has_biome_tag alone (boulder: plains/forest/jungle, stick_pile: forest/jungle), not
         // a fixed biome list - so any biome (vanilla, this mod's, or a third-party mod's) carrying one
@@ -107,26 +137,18 @@ public class ModBiomeModifiers {
                 biomes.getOrThrow(BiomeTags.IS_JUNGLE),
                 HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
-
-        // Custom huge mushroom variants added to vanilla's own mushroom-themed biomes, mirroring how
-        // FungleJungle/DeepDarkForest already use these same placed features for this mod's biomes.
-        context.register(ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
-                HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
-        // Small mod-added mushroom variants (via the mycelium-floor-patch mechanism -
-        // MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY's vegetationFeature is SELECT_MUSHROOM_KEY) were
-        // already wired into FungleJungle directly, but vanilla mushroom fields only ever got the huge
-        // mushroom modifier above - it had no path to this mod's own small mushroom colours at all.
-        // Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
-        context.register(ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
-                HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY)),
-                GenerationStep.Decoration.LOCAL_MODIFICATIONS));
-        context.register(ADD_DARK_FOREST_HUGE_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+        // Dark Forest specifically triggers vanilla's FeatureSorter "Feature order cycle found"
+        // crash once it shares select_stick_pile with extrabiomes:jungle_marsh - bisected
+        // empirically (see FabricBiomeModifiers' matching comment for the full story; reordering
+        // this mod's own modifier registrations did not resolve it, so rather than continue
+        // hunting a multi-hop contradiction through vanilla's own biome/feature graph, Dark Forest
+        // is excluded here). Forge applies BiomeModifiers by Phase (ADD, then REMOVE), not
+        // registration order, so this REMOVE always runs after every ADD above regardless of where
+        // it's registered - every other IS_FOREST biome still gets stick piles from
+        // ADD_STICK_PILE_FOREST.
+        context.register(REMOVE_STICK_PILE_DARK_FOREST, ForgeBiomeModifiers.RemoveFeaturesBiomeModifier.allSteps(
                 HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST)),
-                HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
+                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY))));
 
         // Mob spawns (Bedrock spawn_rules -> vanilla + mod biomes)
         // jungle tag: giant_tortoise, piranha, treefrog
