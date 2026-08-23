@@ -40,6 +40,7 @@ public abstract class CommonRecipes extends RecipeProvider {
 
     public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
     public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
+    public static final List<ItemLike> PIRANHA_SMELTABLES = List.of(ModItems.PIRANHA.get());
 
     public static void build(Consumer<FinishedRecipe> pWriter) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.BAIT.get())
@@ -51,6 +52,10 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(pWriter);
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
         foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs", Boolean.TRUE);
+        foodCooking(pWriter, PIRANHA_SMELTABLES, RecipeCategory.FOOD, ModItems.COOKED_PIRANHA.get(), 0.25f, 100, "cooked_piranha", Boolean.TRUE);
+        pebbleRecipes(pWriter);
+        razorFeatherRecipes(pWriter);
+        stickPileRecipes(pWriter);
         woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPED_MYSTIC_LOG.get(), ModBlocks.STRIPED_MYSTIC_WOOD.get(), ModBlocks.MYSTIC_STAIRS.get(), ModBlocks.MYSTIC_SLAB.get(), ModBlocks.MYSTIC_BUTTON.get(), ModBlocks.MYSTIC_PRESSURE_PLATE.get(), ModBlocks.MYSTIC_FENCE_GATE.get(), ModBlocks.MYSTIC_FENCE.get(), ModBlocks.MYSTIC_DOOR.get(), ModBlocks.MYSTIC_TRAPDOOR.get(),ModBlocks.MYSTIC_SIGN.get());
         woodRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModBlocks.PALM_LOG.get(), ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPED_PALM_LOG.get(), ModBlocks.STRIPED_PALM_WOOD.get(), ModBlocks.PALM_STAIRS.get(), ModBlocks.PALM_SLAB.get(), ModBlocks.PALM_BUTTON.get(), ModBlocks.PALM_PRESSURE_PLATE.get(), ModBlocks.PALM_FENCE_GATE.get(), ModBlocks.PALM_FENCE.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.PALM_SIGN.get());
         woodRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModBlocks.SKY_LOG.get(), ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPED_SKY_LOG.get(), ModBlocks.STRIPED_SKY_WOOD.get(), ModBlocks.SKY_STAIRS.get(), ModBlocks.SKY_SLAB.get(), ModBlocks.SKY_BUTTON.get(), ModBlocks.SKY_PRESSURE_PLATE.get(), ModBlocks.SKY_FENCE_GATE.get(), ModBlocks.SKY_FENCE.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.SKY_TRAPDOOR.get(),ModBlocks.SKY_SIGN.get());
@@ -112,15 +117,20 @@ public abstract class CommonRecipes extends RecipeProvider {
         }
     }
 
+    // NOTE: the save id below must carry the "extrabiomes:" namespace explicitly - an unqualified
+    // id string is parsed as "minecraft:<id>" by RecipeBuilder.save(Consumer, String), which
+    // silently wrote every campfire/smoking recipe (frogs legs included, not just the new piranha
+    // ones) under data/minecraft/recipes/ instead of data/extrabiomes/recipes/. Still functionally
+    // loaded either way (recipe ids don't have to match their content's namespace), but wrong.
     private static void campfireCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
         for (ItemLike itemlike : ingredient) {
-            SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
+            SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + cookingType);
         }
     }
 
     private static void smokingCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
         for (ItemLike itemlike : ingredient) {
-            SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, getItemName(output) + "_from_" + cookingType);
+            SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + cookingType);
         }
     }
 
@@ -322,6 +332,66 @@ public abstract class CommonRecipes extends RecipeProvider {
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(ingredient), RecipeCategory.BUILDING_BLOCKS, output, count)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient) + "_stonecutting");
+    }
+
+    // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/pebbles/*.json.
+    private static void pebbleRecipes(Consumer<FinishedRecipe> recipeOutput) {
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.PEBBLE.get(), 4)
+                .requires(Items.COBBLESTONE)
+                .unlockedBy(getHasName(Items.COBBLESTONE), has(Items.COBBLESTONE))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":pebble_from_cobble");
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Items.COBBLESTONE)
+                .pattern("##")
+                .pattern("##")
+                .define('#', ModItems.PEBBLE.get())
+                .unlockedBy(getHasName(ModItems.PEBBLE.get()), has(ModItems.PEBBLE.get()))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":cobble_from_pebble");
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.MOSSY_PEBBLE.get(), 4)
+                .requires(Items.MOSSY_COBBLESTONE)
+                .unlockedBy(getHasName(Items.MOSSY_COBBLESTONE), has(Items.MOSSY_COBBLESTONE))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":mossy_pebble_from_cobble");
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Items.MOSSY_COBBLESTONE)
+                .pattern("##")
+                .pattern("##")
+                .define('#', ModItems.MOSSY_PEBBLE.get())
+                .unlockedBy(getHasName(ModItems.MOSSY_PEBBLE.get()), has(ModItems.MOSSY_PEBBLE.get()))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":mossy_cobble_from_pebble");
+    }
+
+    // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/diamond_razor_feather.json and
+    // diamond_razor_feather_to_netherite.json.
+    private static void razorFeatherRecipes(Consumer<FinishedRecipe> recipeOutput) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.DIAMOND_RAZOR_FEATHER.get(), 3)
+                .pattern("#+")
+                .pattern("##")
+                .define('#', ModItems.RAZOR_FEATHER.get())
+                .define('+', Items.DIAMOND)
+                .unlockedBy(getHasName(ModItems.RAZOR_FEATHER.get()), has(ModItems.RAZOR_FEATHER.get()))
+                .save(recipeOutput);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.NETHERITE_RAZOR_FEATHER.get(), 8)
+                .pattern("##+")
+                .pattern("###")
+                .pattern("###")
+                .define('#', ModItems.DIAMOND_RAZOR_FEATHER.get())
+                .define('+', Items.NETHERITE_INGOT)
+                .unlockedBy(getHasName(ModItems.DIAMOND_RAZOR_FEATHER.get()), has(ModItems.DIAMOND_RAZOR_FEATHER.get()))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":diamond_razor_feather_to_netherite");
+    }
+
+    // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/stick_pile_from_stick.json and
+    // stick_from_stick_pile.json.
+    private static void stickPileRecipes(Consumer<FinishedRecipe> recipeOutput) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.STICK_PILE.get())
+                .pattern("~~~")
+                .pattern("~~~")
+                .pattern("~~~")
+                .define('~', Items.STICK)
+                .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":stick_pile_from_stick");
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STICK, 9)
+                .requires(ModBlocks.STICK_PILE.get())
+                .unlockedBy(getHasName(ModBlocks.STICK_PILE.get()), has(ModBlocks.STICK_PILE.get()))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":stick_from_stick_pile");
     }
 
     private static void gild(Consumer<FinishedRecipe> recipeOutput, Block ingredient, Block output) {
