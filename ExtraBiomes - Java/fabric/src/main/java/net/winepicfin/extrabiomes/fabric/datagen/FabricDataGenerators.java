@@ -21,7 +21,6 @@ import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulip
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWaterFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindmillFeature;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsCaveCarver;
 import net.winepicfin.extrabiomes.worldgen.features.jellycoral.JellyCoralFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.taigaspike.TaigaSpikeFeatures;
@@ -122,7 +121,6 @@ public class FabricDataGenerators implements DataGeneratorEntrypoint {
                     BryceMesaPillarFeatures.bootstrapPlaced(context);
                     VolcanicMossTundraFeatures.bootstrapPlaced(context);
                 })
-                .add(Registries.CONFIGURED_CARVER, NetherlandsCaveCarver::bootstrapCarver)
                 .add(Registries.NOISE, ModNoiseParameters::bootstrap)
                 .add(Registries.BIOME, ModBiomes::boostrap);
     }

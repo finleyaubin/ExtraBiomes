@@ -175,19 +175,24 @@ public class ModSurfaceRules {
                                         SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, -0.115, 0.212), MUD)))),
 
                 // --- The Netherlands: top=grass/dirt (base) or dirt with no grass cap (mutated),
-                //     but both variants have a netherrack foundation instead of stone at depth
-                //     ("nethrack" pun) - stoneDepthCheck bounds the top layer to a shallow band,
-                //     same pattern as the sandy biomes above, then netherrack fills the rest. ---
+                //     with a netherrack band instead of stone at depth ("nethrack" pun). Unlike
+                //     Bedrock (whose foundation_material replaces the entire underground column),
+                //     this band is capped to ~30 blocks below the surface, then plain stone
+                //     resumes - Bedrock needed its own cave carver
+                //     (NetherlandsCaveCarver/BlockTags.OVERWORLD_CARVER_REPLACEABLES doesn't cover
+                //     netherrack) specifically because its netherrack column went all the way down;
+                //     capping the band here means normal terrain - and the vanilla cave carver -
+                //     resumes well before bedrock, so no custom carver is needed on Java. ---
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS),
                         SurfaceRules.sequence(
                                 grassOverDirt,
-                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(30, false, CaveSurface.FLOOR), NETHERRACK))),
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT)),
-                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), NETHERRACK))),
+                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(30, false, CaveSurface.FLOOR), NETHERRACK))),
 
                 // --- Volcanic Moss Tundra: top=mid=black_sand, foundation=black_sandstone instead
                 //     of stone - same shallow-top/deeper-foundation pattern as the sandy biomes

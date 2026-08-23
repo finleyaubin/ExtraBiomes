@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsCaveCarver;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindmillFeature;
@@ -48,7 +47,10 @@ public class TheNetherlands {
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.RED_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.WHITE_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
-        biomeBuilder.addCarver(GenerationStep.Carving.AIR, NetherlandsCaveCarver.NETHERLANDS_CAVE_KEY);
+        // No custom cave carver on Java - see ModSurfaceRules' netherrack band comment: capping
+        // that band to ~30 blocks means the vanilla cave carver (which only carves through
+        // BlockTags.OVERWORLD_CARVER_REPLACEABLES, not netherrack) already reaches plain stone
+        // well before bedrock, so Bedrock's netherrack-aware carver isn't needed here.
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

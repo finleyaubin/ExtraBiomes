@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsCaveCarver;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWaterFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
@@ -41,9 +40,10 @@ public class TheNetherlandsMutated {
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         // 'mutated' variant gets wheat + the canal/water feature instead of tulips (tulips are base TheNetherlands only)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWheatFeatures.WHEAT_FLOOR_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWheatFeatures.HYDRATION_WATER_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWaterFeature.WATER_FEATURE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
-        biomeBuilder.addCarver(GenerationStep.Carving.AIR, NetherlandsCaveCarver.NETHERLANDS_CAVE_KEY);
+        // No custom cave carver on Java - see TheNetherlands/ModSurfaceRules for why.
         // NOTE: 'mutated' variant of TheNetherlands - see notes there. Bedrock top material here
         // is plain dirt (no grass) rather than grass_block, reflected in the surface rules.
 
