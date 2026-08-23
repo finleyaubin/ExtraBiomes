@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.advancements.AdvancementProvider;
+import net.winepicfin.extrabiomes.advancements.ModAdvancements;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModNoiseParameters;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
@@ -58,6 +60,8 @@ public class FabricDataGenerators implements DataGeneratorEntrypoint {
 
         pack.addProvider(ModBlockStateProvider::new);
         pack.addProvider(ModItemModelProvider::new);
+
+        pack.addProvider((output, registriesFuture) -> new AdvancementProvider(output, registriesFuture, java.util.List.of(new ModAdvancements())));
     }
 
     @Override
