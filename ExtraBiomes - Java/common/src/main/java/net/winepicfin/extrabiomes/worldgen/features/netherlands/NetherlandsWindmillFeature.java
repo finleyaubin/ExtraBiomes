@@ -23,6 +23,7 @@ import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructur
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Bedrock's windmill structure ("ExtraBiomes - Bedrock/packs/BP/features/windmill.json",
@@ -66,7 +67,12 @@ public class NetherlandsWindmillFeature {
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(WINDMILL_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "the_netherlands/windmill"), Rotation.NONE)
+                // requireGroundedFloor: like stick piles (see BoulderFeatures), a single-column
+                // HeightmapPlacement only checks the placement origin, so a structure this wide can
+                // still have part of its footprint hang over a ledge/slope/gap - this requires solid
+                // ground under the whole footprint instead.
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "the_netherlands/windmill"),
+                        Optional.of(Rotation.NONE), 0, 0.0F, true)
         ));
     }
 

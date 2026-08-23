@@ -177,27 +177,34 @@ public class MushroomFeatures {
         register(context, VANILLA_HUGE_BROWN_MUSHROOM_KEY, Feature.HUGE_BROWN_MUSHROOM,
                 new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 3));
 
-        // -- select_huge_mushroom.json: weighted_random_feature, 11 colored variants (1 each) + vanilla
-        //    huge_mushroom_feature (10, split evenly 5/5 between red and brown to emulate its internal
-        //    50/50 pick since Java has no single combined "either huge mushroom" feature). Total weight
-        //    21. RandomFeatureConfiguration is a SEQUENCE of independent Bernoulli trials (first hit
-        //    wins), so weight w_i at position i (with W_i weight remaining from i onward) becomes
-        //    chance = w_i / W_i; the final entry is folded into the mandatory "default" (guaranteed if
-        //    every earlier trial missed, which is exactly its correct probability). ------------------
+        // -- select_huge_mushroom.json: Bedrock's own weighted_random_feature is 11 colored variants
+        //    (1 each) + vanilla huge_mushroom_feature (10, split evenly 5/5 between red and brown to
+        //    emulate its internal 50/50 pick since Java has no single combined "either huge mushroom"
+        //    feature) - ~52/48 collectively, but since that's spread across 11 distinct custom colors
+        //    against only 2 vanilla ones, any single vanilla color individually outnumbers any single
+        //    custom color 5:1, which reads as "barely any of the modded mushrooms" even though the
+        //    totals are close - playtest feedback confirmed exactly that in Mushroom Fields/Dark
+        //    Forest. Rebalanced to weight 3 per custom color (33 total) against vanilla's unchanged
+        //    10, i.e. roughly 3:1 in the custom colors' favor collectively, deliberately diverging from
+        //    Bedrock's literal weights to fix the practical density complaint. RandomFeatureConfiguration
+        //    is a SEQUENCE of independent Bernoulli trials (first hit wins), so weight w_i at position i
+        //    (with W_i weight remaining from i onward) becomes chance = w_i / W_i; the final entry is
+        //    folded into the mandatory "default" (guaranteed if every earlier trial missed, which is
+        //    exactly its correct probability). ------------------
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         register(context, SELECT_HUGE_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BLACK_MUSHROOM_PLACED_KEY), 1f / 21f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BLUE_MUSHROOM_PLACED_KEY), 1f / 20f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BROWN_MUSHROOM1_PLACED_KEY), 1f / 19f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_CYAN_MUSHROOM_PLACED_KEY), 1f / 18f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_GLOW_MUSHROOM_PLACED_KEY), 1f / 17f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_GREEN_MUSHROOM_PLACED_KEY), 1f / 16f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_ORANGE_MUSHROOM_PLACED_KEY), 1f / 15f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_PURPLE_MUSHROOM_PLACED_KEY), 1f / 14f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_RED_MUSHROOM1_PLACED_KEY), 1f / 13f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_WHITE_MUSHROOM_PLACED_KEY), 1f / 12f),
-                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_YELLOW_MUSHROOM_PLACED_KEY), 1f / 11f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BLACK_MUSHROOM_PLACED_KEY), 3f / 43f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BLUE_MUSHROOM_PLACED_KEY), 3f / 40f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BROWN_MUSHROOM1_PLACED_KEY), 3f / 37f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_CYAN_MUSHROOM_PLACED_KEY), 3f / 34f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_GLOW_MUSHROOM_PLACED_KEY), 3f / 31f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_GREEN_MUSHROOM_PLACED_KEY), 3f / 28f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_ORANGE_MUSHROOM_PLACED_KEY), 3f / 25f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_PURPLE_MUSHROOM_PLACED_KEY), 3f / 22f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_RED_MUSHROOM1_PLACED_KEY), 3f / 19f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_WHITE_MUSHROOM_PLACED_KEY), 3f / 16f),
+                        new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_YELLOW_MUSHROOM_PLACED_KEY), 3f / 13f),
                         new WeightedPlacedFeature(placedFeatures.getOrThrow(VANILLA_HUGE_RED_MUSHROOM_PLACED_KEY), 5f / 10f)
                 ),
                 placedFeatures.getOrThrow(VANILLA_HUGE_BROWN_MUSHROOM_PLACED_KEY)
