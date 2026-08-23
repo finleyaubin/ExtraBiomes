@@ -61,6 +61,20 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
+      # populated until this runs at least once - see gradle-build.yml's identical step.
+      - name: Download Loom assets
+        run: ./gradlew :forge:downloadAssets
+        timeout-minutes: 10
+
+      # ./gradlew build runs :common:test, and BiomeRegistrationParityTest reads generated
+      # biome JSON from src/generated/resources/ - without running runData first, those files
+      # don't exist yet and every case in that test fails with NoSuchFileException. Mirrors
+      # the same two steps gradle-build.yml runs before its own build.
+      - name: Generate data
+        run: ./gradlew :forge:runData
+        timeout-minutes: 10
+
       # mod_version in gradle.properties should already match the tag before tagging a
       # release - this doesn't derive the jar version from the tag, it just builds whatever
       # gradle.properties currently says.
@@ -74,8 +88,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
           files: |
-            ExtraBiomes - Java/forge/build/libs/*.jar
-            ExtraBiomes - Java/fabric/build/libs/*.jar
+            ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
+            ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
           body_path: /tmp/changelog.md
           draft: false
           prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
@@ -83,13 +97,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # One mc-publish step per loader rather than a single glob across both build/libs
-      # dirs - each loader has its own -dev-shadow/-sources jar to exclude and its own
-      # `loaders:` value, and splitting keeps a failure on one loader from being ambiguous
-      # about which upload it was. CurseForge project 1663861 reuses Bedrock's CF_API_TOKEN
-      # (same CurseForge account); Modrinth project "extrabiome" needs its own PAT in
-      # MODRINTH_TOKEN (create one at modrinth.com/settings/pats with the "Create versions"
-      # scope on that project). GitHub release publishing is left to the softprops step
-      # above, so no github-token is passed here.
+      # dirs - each has its own `loaders:` value, and splitting keeps a failure on one loader
+      # from being ambiguous about which upload it was. The ExtraBiomes-<loader>-v*.jar glob
+      # only matches remapJar's final output (see forge/build.gradle and fabric/build.gradle's
+      # archiveFileName), not the intermediate -dev-shadow or -sources jars also in build/libs.
+      # CurseForge project 1663861 reuses Bedrock's CF_API_TOKEN (same CurseForge account);
+      # Modrinth project "extrabiome" needs its own PAT in MODRINTH_TOKEN (create one at
+      # modrinth.com/settings/pats with the "Create versions" scope on that project). GitHub
+      # release publishing is left to the softprops step above, so no github-token is passed here.
       - name: Publish Forge jar
         uses: Kira-NT/mc-publish@v3
         with:
@@ -97,11 +112,15 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: forge/build/libs/!(*-@(dev-shadow|sources)).jar
+          files: ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
           loaders: forge
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
+          dependencies: |
+            terrablender(required){modrinth:terrablender}{curseforge:563928}
+            geckolib(required){modrinth:geckolib}{curseforge:388172}
+            architectury-api(required){modrinth:architectury-api}{curseforge:419699}
 
       - name: Publish Fabric jar
         uses: Kira-NT/mc-publish@v3
@@ -110,8 +129,13 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
-          files: fabric/build/libs/!(*-@(dev-shadow|sources)).jar
+          files: ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
           loaders: fabric
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
+          dependencies: |
+            terrablender(required){modrinth:terrablender}{curseforge:563928}
+            geckolib(required){modrinth:geckolib}{curseforge:388172}
+            architectury-api(required){modrinth:architectury-api}{curseforge:419699}
+            fabric-api(required){modrinth:fabric-api}{curseforge:306612}
