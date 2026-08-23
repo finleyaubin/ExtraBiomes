@@ -20,6 +20,7 @@ import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnWeightTuning;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
+import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 
@@ -30,6 +31,11 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_LUSH_GRASS = registerKey("add_lush_grass");
     public static final ResourceKey<BiomeModifier> ADD_UNDERGROUND_JUNGLE_VEGETATION = registerKey("add_underground_jungle_vegetation");
     public static final ResourceKey<BiomeModifier> ADD_UNDERGROUND_JUNGLE_CAVE_VINES = registerKey("add_underground_jungle_cave_vines");
+    public static final ResourceKey<BiomeModifier> ADD_BOULDER_PLAINS = registerKey("add_boulder_plains");
+    public static final ResourceKey<BiomeModifier> ADD_BOULDER_FOREST = registerKey("add_boulder_forest");
+    public static final ResourceKey<BiomeModifier> ADD_BOULDER_JUNGLE = registerKey("add_boulder_jungle");
+    public static final ResourceKey<BiomeModifier> ADD_STICK_PILE_FOREST = registerKey("add_stick_pile_forest");
+    public static final ResourceKey<BiomeModifier> ADD_STICK_PILE_JUNGLE = registerKey("add_stick_pile_jungle");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS = registerKey("add_mushroom_fields_huge_mushrooms");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS = registerKey("add_mushroom_fields_small_mushrooms");
     public static final ResourceKey<BiomeModifier> ADD_DARK_FOREST_HUGE_MUSHROOMS = registerKey("add_dark_forest_huge_mushrooms");
@@ -71,6 +77,36 @@ public class ModBiomeModifiers {
                 biomes.getOrThrow(BiomeTags.IS_JUNGLE),
                 HolderSet.direct(placedFeatures.getOrThrow(UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_DECORATION));
+
+        // Bedrock's boulder_placer/stick_pile_placer feature_rules (packs/BP/feature_rules/boulder/)
+        // gate on has_biome_tag alone (boulder: plains/forest/jungle, stick_pile: forest/jungle), not
+        // a fixed biome list - so any biome (vanilla, this mod's, or a third-party mod's) carrying one
+        // of those tags gets the feature, same mechanism as ADD_UNDERGROUND_JUNGLE_VEGETATION above.
+        // Passing the tag's own HolderSet (not a snapshot of its current members) is what makes this
+        // dynamic: a biome another mod tags into IS_JUNGLE etc. after this runs still gets included.
+        // Previously hardcoded onto 9 of this mod's own biomes individually (see git history) - moved
+        // here so vanilla Plains/Forest/Jungle and any other mod's tagged biomes get them too, and so
+        // this mod's own biomes only need the tag (ModBiomeTagProvider) to opt in.
+        context.register(ADD_BOULDER_PLAINS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(ModTags.Biomes.IS_PLAINS),
+                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_BOULDER_PLACED_KEY)),
+                GenerationStep.Decoration.LOCAL_MODIFICATIONS));
+        context.register(ADD_BOULDER_FOREST, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_FOREST),
+                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_BOULDER_PLACED_KEY)),
+                GenerationStep.Decoration.LOCAL_MODIFICATIONS));
+        context.register(ADD_BOULDER_JUNGLE, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_JUNGLE),
+                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_BOULDER_PLACED_KEY)),
+                GenerationStep.Decoration.LOCAL_MODIFICATIONS));
+        context.register(ADD_STICK_PILE_FOREST, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_FOREST),
+                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
+        context.register(ADD_STICK_PILE_JUNGLE, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_JUNGLE),
+                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY)),
+                GenerationStep.Decoration.VEGETAL_DECORATION));
 
         // Custom huge mushroom variants added to vanilla's own mushroom-themed biomes, mirroring how
         // FungleJungle/DeepDarkForest already use these same placed features for this mod's biomes.

@@ -7,7 +7,6 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 
 public class LushMesa {
 
@@ -30,13 +29,11 @@ public class LushMesa {
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
-        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         BiomeDefaultFeatures.addJungleMelons(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.LUSH_GRASS_PLACED_KEY);
         // NOTE: bedrock top=grass over hardened_clay mid -> patches of terracotta converted to
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

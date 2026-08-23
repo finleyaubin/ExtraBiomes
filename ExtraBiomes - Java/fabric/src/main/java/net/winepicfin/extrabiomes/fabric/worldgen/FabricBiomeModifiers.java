@@ -11,6 +11,7 @@ import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnWeightTuning;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
+import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.util.ModTags;
@@ -33,6 +34,21 @@ public class FabricBiomeModifiers {
                 GenerationStep.Decoration.VEGETAL_DECORATION, UndergroundJungleFeatures.GRASS_FLOOR_UPPER_PLACED_KEY);
         BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
                 GenerationStep.Decoration.UNDERGROUND_DECORATION, UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY);
+
+        // Bedrock's boulder_placer/stick_pile_placer feature_rules gate on has_biome_tag alone
+        // (boulder: plains/forest/jungle, stick_pile: forest/jungle) - see ModBiomeModifiers (forge)
+        // for the full rationale. ModTags.Biomes.IS_PLAINS is this mod's own tag since vanilla has
+        // no BiomeTags.IS_PLAINS equivalent.
+        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.IS_PLAINS),
+                GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
+        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_FOREST),
+                GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
+        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
+                GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
+        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_FOREST),
+                GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
+        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
+                GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
 
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);

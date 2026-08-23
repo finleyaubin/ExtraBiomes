@@ -6,7 +6,6 @@ import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
@@ -31,9 +30,7 @@ public class LushMesaBryce {
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         BiomeDefaultFeatures.addJungleMelons(biomeBuilder);
-        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.LUSH_GRASS_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
         // 'bryce' variant: reconstructs the pre-1.18 mesa surface builder's noise-gated pillar
         // bumps (packs/BP/biomes/lush_mesa_bryce.biome.json "bryce_pillars": true).
         biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.TERRACOTTA_PLACED_KEY);
