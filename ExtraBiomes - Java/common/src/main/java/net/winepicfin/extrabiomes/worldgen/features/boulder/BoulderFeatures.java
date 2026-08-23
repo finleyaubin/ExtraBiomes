@@ -181,7 +181,10 @@ public class BoulderFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_STICK_PILE_KEY = configuredKey("select_stick_pile");
     public static final ResourceKey<PlacedFeature> SELECT_STICK_PILE_PLACED_KEY = placedKey("select_stick_pile");
 
-    private static final int STICK_PILE_GROUND_OFFSET = -1;
+    // Was -1 (sinks the pile in slightly, same technique as GlacierFeatures' snow drifts), but
+    // playtest feedback was that it read as sunk too far into the ground - 0 sits it flush with
+    // the heightmap surface instead.
+    private static final int STICK_PILE_GROUND_OFFSET = 0;
 
     // ===================================================================
     // configured features
@@ -244,9 +247,7 @@ public class BoulderFeatures {
                 placedFeatures.getOrThrow(GROUND_PEBBLE_PATCH_PLACED_KEY)
         )));
 
-        // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE).
-        // STICK_PILE_GROUND_OFFSET sinks each pile in slightly so it reads as resting among/into
-        // the ground rather than floating on top of it (same technique as GlacierFeatures' snow drifts). ---
+        // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE). ---
         registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
         registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
 
@@ -338,7 +339,6 @@ public class BoulderFeatures {
         // (not WORLD_SURFACE_WG, which counts water as non-air and would place the pile floating on
         // a lake/river's surface) plus SurfaceWaterDepthFilter.forMaxDepth(0) so piles never
         // generate on or in water at all - same fix as NetherlandsWindmillFeature's own water check.
-        // STICK_PILE_GROUND_OFFSET then sinks each pile in slightly.
         context.register(SELECT_STICK_PILE_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_STICK_PILE_KEY),
                 List.of(
