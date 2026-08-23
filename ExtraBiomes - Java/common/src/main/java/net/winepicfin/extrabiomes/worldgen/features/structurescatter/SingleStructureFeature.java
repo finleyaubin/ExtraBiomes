@@ -122,6 +122,13 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             return false;
         }
 
+        // Opt-in "is the whole footprint actually resting on solid ground" check (see
+        // SingleStructureConfiguration's own javadoc). Disabled by default for every existing
+        // convenience constructor.
+        if (config.requireGroundedFloor() && !hasSolidFloor(level, structureBox)) {
+            return false;
+        }
+
         return template.placeInWorld(level, origin, anchor, settings, random, Block.UPDATE_CLIENTS);
     }
 
@@ -147,6 +154,28 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             }
         }
         return total == 0 || (float) clear / total >= minClearFraction;
+    }
+
+    /**
+     * True only if every column of {@code box}'s footprint has a solid (non-air) block directly
+     * beneath its lowest row - i.e. the structure's own base row is expected to rest right at
+     * ground level (as with a {@code groundOffset} of 0), not float above or embed below it. A
+     * single-column {@link net.minecraft.world.level.levelgen.placement.HeightmapPlacement} only
+     * verifies the placement origin's own column, so a wide structure can still be placed with
+     * part of its footprint hanging over a ledge, slope, or gap in the terrain - this catches that
+     * before the whole thing gets stamped in regardless.
+     */
+    private static boolean hasSolidFloor(WorldGenLevel level, BoundingBox box) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int floorY = box.minY() - 1;
+        for (int x = box.minX(); x <= box.maxX(); x++) {
+            for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                if (level.getBlockState(pos.set(x, floorY, z)).isAir()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

@@ -50,37 +50,52 @@ import java.util.Optional;
  *                     tightly enough that one attempt's cap can otherwise land squarely inside an
  *                     already-placed neighbour's cap/stem) where two placements landing on top of
  *                     each other reads as broken rather than as dense/lush.
+ * @param requireGroundedFloor when {@code true}, every column of the structure's footprint (not
+ *                     just the placement origin) must have solid, non-air ground directly beneath
+ *                     its lowest row before placement is allowed - Bedrock's own
+ *                     {@code constraints.grounded}, which a single-column {@code HeightmapPlacement}
+ *                     doesn't reproduce on its own: that only checks the origin column, so a wide
+ *                     structure placed near a ledge, slope, or single-block gap can still have part
+ *                     of its footprint hang over open air. {@code false} (the default for every
+ *                     existing convenience constructor) disables the check, preserving this
+ *                     feature's original behaviour.
  */
-public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction) implements FeatureConfiguration {
+public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor) implements FeatureConfiguration {
 
     public SingleStructureConfiguration(ResourceLocation structure) {
-        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F);
+        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Rotation fixedRotation) {
-        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F);
+        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, int groundOffset) {
-        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F);
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F);
+        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false);
     }
 
     // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction, no
     // ground offset or explicit anchor point needed.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction);
+        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false);
+    }
+
+    // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required
+    // solid floor under the whole footprint, no centering or explicit anchor point needed.
+    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
+        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, BlockPos anchor) {
-        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F);
+        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false);
     }
 
     public static final Codec<SingleStructureConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -89,6 +104,7 @@ public record SingleStructureConfiguration(ResourceLocation structure, Optional<
             Codec.INT.optionalFieldOf("ground_offset", 0).forGetter(SingleStructureConfiguration::groundOffset),
             Codec.BOOL.optionalFieldOf("centered", false).forGetter(SingleStructureConfiguration::centered),
             BlockPos.CODEC.optionalFieldOf("anchor").forGetter(SingleStructureConfiguration::anchor),
-            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_clear_fraction", 0.0F).forGetter(SingleStructureConfiguration::minClearFraction)
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_clear_fraction", 0.0F).forGetter(SingleStructureConfiguration::minClearFraction),
+            Codec.BOOL.optionalFieldOf("require_grounded_floor", false).forGetter(SingleStructureConfiguration::requireGroundedFloor)
     ).apply(instance, SingleStructureConfiguration::new));
 }

@@ -185,6 +185,10 @@ public class BoulderFeatures {
     // playtest feedback was that it read as sunk too far into the ground - 0 sits it flush with
     // the heightmap surface instead.
     private static final int STICK_PILE_GROUND_OFFSET = 0;
+    // Matches MushroomFeatures' own huge-mushroom clear-space threshold - see its registerStructure
+    // javadoc. Not 1.0F: the pile's own bottom/floor row against the ground is expected to be
+    // non-air, so requiring every block clear would reject nearly all placements.
+    private static final float STICK_PILE_MIN_CLEAR_FRACTION = 0.9F;
 
     // ===================================================================
     // configured features
@@ -247,9 +251,15 @@ public class BoulderFeatures {
                 placedFeatures.getOrThrow(GROUND_PEBBLE_PATCH_PLACED_KEY)
         )));
 
-        // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE). ---
-        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
-        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
+        // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE).
+        // minClearFraction requires most of the structure's footprint to already be air before
+        // placement is allowed (same mechanism MushroomFeatures uses), so a pile no longer
+        // unconditionally stamps itself through trees/other terrain it happens to land inside of.
+        // requireGroundedFloor requires solid ground under the WHOLE footprint (not just the
+        // single heightmap-sampled origin column), so it no longer partially floats over a ledge/
+        // slope/gap either - see SingleStructureFeature's own javadoc for both. ---
+        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET, STICK_PILE_MIN_CLEAR_FRACTION, true);
+        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET, STICK_PILE_MIN_CLEAR_FRACTION, true);
 
         // select_stick_pile.json weights: stick_pile0 1, stick_pile1 1 (total 2) -> chance 0.5, default stick_pile1.
         context.register(SELECT_STICK_PILE_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
@@ -265,6 +275,12 @@ public class BoulderFeatures {
     private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset) {
         ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, structurePath);
         SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset);
+        context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+    }
+
+    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
+        ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, structurePath);
+        SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset, minClearFraction, requireGroundedFloor);
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }
 
