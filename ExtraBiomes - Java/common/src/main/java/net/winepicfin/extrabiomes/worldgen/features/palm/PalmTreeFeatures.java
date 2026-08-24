@@ -58,12 +58,7 @@ public class PalmTreeFeatures {
             ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_palm_tree"));
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        // anchor = the actual base-log column measured off each .mcstructure (tools/viz_tree.py /
-        // a horizontal-slice dump) - these trunks lean, so the base log is NOT at the bounding
-        // box's local (0,0,0) corner. Without this, the placement origin's heightmap/water-depth
-        // check (which runs against the ORIGIN column) tests the wrong column entirely, and the
-        // tree's actual trunk can end up floating above uneven ground or standing in water that
-        // was never checked. Anchoring here makes the origin BE the trunk's true ground column.
+        // anchor = each structure's measured base-log column (trunks lean, so it isn't local (0,0,0)) so the origin's heightmap/water check tests the trunk's true ground column, not an arbitrary corner.
         context.register(PALM_SMALL_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "palm/palm_tree_2"), new BlockPos(1, 0, 1))

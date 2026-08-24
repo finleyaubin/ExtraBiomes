@@ -108,6 +108,12 @@ public class ModBiomeModifiers {
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
+        // Underground badlands terracotta banding (including the near-lava glazed band) is handled
+        // by ModSurfaceRules' bandlands()/glazedTerracottaBand() surface rules, not a biome modifier
+        // - a Feature-based approach here was both redundant with vanilla's own real terracotta
+        // banding mechanism and, being a per-chunk full-volume block scan, too slow ("Can't keep up"
+        // warnings during world generation). See ModSurfaceRules.makeRules() javadoc.
+
         // Bedrock's boulder_placer/stick_pile_placer feature_rules (packs/BP/feature_rules/boulder/)
         // gate on has_biome_tag alone (boulder: plains/forest/jungle, stick_pile: forest/jungle), not
         // a fixed biome list - so any biome (vanilla, this mod's, or a third-party mod's) carrying one

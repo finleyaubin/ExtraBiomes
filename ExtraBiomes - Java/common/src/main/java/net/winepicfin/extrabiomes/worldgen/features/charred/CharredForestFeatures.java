@@ -106,9 +106,6 @@ import java.util.List;
  */
 public class CharredForestFeatures {
 
-    // -----------------------------------------------------------------
-    // burnt land select (burnt_basalt.json + burnt_magma.json, combined via burnt_land_select.json)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> BURNT_BASALT_KEY = configuredKey("burnt_basalt");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BURNT_MAGMA_KEY = configuredKey("burnt_magma");
 
@@ -117,16 +114,10 @@ public class CharredForestFeatures {
     /** Register alongside {@link #BURNT_BASALT_PLACED_KEY} at the same LOCAL_MODIFICATIONS step (see class docs - aggregate simplification). */
     public static final ResourceKey<PlacedFeature> BURNT_MAGMA_PLACED_KEY = placedKey("burnt_magma");
 
-    // -----------------------------------------------------------------
-    // smoking ground (smoking_ground.json)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> SMOKING_GROUND_KEY = configuredKey("smoking_ground");
     /** Register via {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SMOKING_GROUND_PLACED_KEY)}. */
     public static final ResourceKey<PlacedFeature> SMOKING_GROUND_PLACED_KEY = placedKey("smoking_ground");
 
-    // -----------------------------------------------------------------
-    // scattered fire (fire_feature.json + scatter_fire_feature.json)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> FIRE_KEY = configuredKey("fire");
     /** Inner air/survivability-guarded single fire placement - not a top-level decoration by itself. */
     public static final ResourceKey<PlacedFeature> FIRE_INNER_PLACED_KEY = placedKey("fire_inner");
@@ -135,15 +126,10 @@ public class CharredForestFeatures {
     /** Register via {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SCATTER_FIRE_PLACED_KEY)}. */
     public static final ResourceKey<PlacedFeature> SCATTER_FIRE_PLACED_KEY = placedKey("scatter_fire");
 
-    // Deliberately toned down from Bedrock's literal values (outer iterations 15, inner patch tries
-    // 90) - user feedback was that a faithful port covers the ground in far more fire than reads as
-    // right for Java. Kept as a stylistic deviation, not a Bedrock-parity bug fix.
+    // Toned down from Bedrock's literal values (15 outer / 90 patch tries) - a faithful port covers the ground in far more fire than reads right for Java.
     private static final int FIRE_OUTER_COUNT = 4;
     private static final int FIRE_PATCH_TRIES = 25;
 
-    // ===================================================================
-    // configured features
-    // ===================================================================
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
@@ -152,10 +138,8 @@ public class CharredForestFeatures {
                 OreConfiguration.target(new BlockMatchTest(Blocks.DIRT_PATH), Blocks.BASALT.defaultBlockState()),
                 OreConfiguration.target(new BlockMatchTest(Blocks.COARSE_DIRT), Blocks.BASALT.defaultBlockState())
         );
-        // burnt_basalt.json: count 3 (vein size), replaces dirt/grass_path/coarse_dirt with basalt.
         context.register(BURNT_BASALT_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(dirtFamily, 3, 0f)));
 
-        // burnt_magma.json: count 22 (vein size), replaces basalt with magma.
         context.register(BURNT_MAGMA_KEY, new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(new BlockMatchTest(Blocks.BASALT), Blocks.MAGMA_BLOCK.defaultBlockState(), 22, 0f)));
 
@@ -164,28 +148,19 @@ public class CharredForestFeatures {
                 OreConfiguration.target(new BlockMatchTest(Blocks.DIRT_PATH), Blocks.CAMPFIRE.defaultBlockState()),
                 OreConfiguration.target(new BlockMatchTest(Blocks.COARSE_DIRT), Blocks.CAMPFIRE.defaultBlockState())
         );
-        // smoking_ground.json: count 3 (vein size), replaces dirt/grass_path/coarse_dirt with a lit campfire.
         context.register(SMOKING_GROUND_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(dirtFamilyToCampfire, 3, 0f)));
 
-        // fire_feature.json: single fire block, air-only, subject to normal fire survivability/placement rules.
         context.register(FIRE_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FIRE.defaultBlockState()))));
 
-        // scatter_fire_feature.json: iterations 90, gaussian x/z extent +-8, gaussian y extent +-4, wrapping fire_feature.
-        // Deliberately reduced from Bedrock's literal 90 tries to FIRE_PATCH_TRIES (see that constant's
-        // comment) - a straight port reads as far too much fire covering the ground in practice.
         Holder<PlacedFeature> fireInner = placedFeatures.getOrThrow(FIRE_INNER_PLACED_KEY);
         context.register(SCATTER_FIRE_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(FIRE_PATCH_TRIES, 8, 4, fireInner)));
     }
 
-    // ===================================================================
-    // placed features
-    // ===================================================================
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // burnt_land_feature.json: iterations 4, x/z uniform 0-16, y uniform heightmap +-4.
         List<PlacementModifier> burntLandPlacement = List.of(
                 CountPlacement.of(4),
                 InSquarePlacement.spread(),
@@ -196,7 +171,6 @@ public class CharredForestFeatures {
         context.register(BURNT_BASALT_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BURNT_BASALT_KEY), burntLandPlacement));
         context.register(BURNT_MAGMA_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BURNT_MAGMA_KEY), burntLandPlacement));
 
-        // smoking_ground_feature.json: iterations 50, x/z uniform 0-16, y = heightmap - 3 (fixed).
         context.register(SMOKING_GROUND_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SMOKING_GROUND_KEY), List.of(
                 CountPlacement.of(50),
                 InSquarePlacement.spread(),
@@ -205,15 +179,11 @@ public class CharredForestFeatures {
                 BiomeFilter.biome()
         )));
 
-        // fire_feature.json's own placement: air check + fire's normal survivability/placement rules.
         context.register(FIRE_INNER_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(FIRE_KEY), List.<PlacementModifier>of(
                 BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)),
                 BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.FIRE.defaultBlockState(), BlockPos.ZERO))
         )));
 
-        // charred_forest_fire_feature.json's outer distribution: iterations 15, x/z uniform 0-16, y anchored to the surface
-        // (see class docs re: the heightmap*2 simplification); the RANDOM_PATCH configured feature itself supplies the
-        // further gaussian ±8/±4 scatter that was scatter_fire_feature.json's own extents.
         context.register(SCATTER_FIRE_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SCATTER_FIRE_KEY), List.of(
                 CountPlacement.of(FIRE_OUTER_COUNT),
                 InSquarePlacement.spread(),

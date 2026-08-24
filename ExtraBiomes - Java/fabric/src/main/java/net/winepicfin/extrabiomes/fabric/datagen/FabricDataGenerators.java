@@ -26,7 +26,6 @@ import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindm
 import net.winepicfin.extrabiomes.worldgen.features.jellycoral.JellyCoralFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.taigaspike.TaigaSpikeFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.charred.CharredForestFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.future.FutureTreeFeatures;
@@ -88,7 +87,6 @@ public class FabricDataGenerators implements DataGeneratorEntrypoint {
                     JellyCoralFeatures.bootstrapConfigured(context);
                     StonePillarsFeature.bootstrapConfigured(context);
                     TaigaSpikeFeatures.bootstrapConfigured(context);
-                    MesaFeatures.bootstrapConfigured(context);
                     UndergroundJungleFeatures.bootstrapConfigured(context);
                     CharredForestFeatures.bootstrapConfigured(context);
                     FutureTreeFeatures.bootstrapConfigured(context);
@@ -116,7 +114,6 @@ public class FabricDataGenerators implements DataGeneratorEntrypoint {
                     JellyCoralFeatures.bootstrapPlaced(context);
                     StonePillarsFeature.bootstrapPlaced(context);
                     TaigaSpikeFeatures.bootstrapPlaced(context);
-                    MesaFeatures.bootstrapPlaced(context);
                     UndergroundJungleFeatures.bootstrapPlaced(context);
                     CharredForestFeatures.bootstrapPlaced(context);
                     FutureTreeFeatures.bootstrapPlaced(context);

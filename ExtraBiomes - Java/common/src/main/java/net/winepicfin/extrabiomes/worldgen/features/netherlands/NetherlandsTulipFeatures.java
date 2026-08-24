@@ -99,15 +99,12 @@ public class NetherlandsTulipFeatures {
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
-        // Inner single-block features: no placement modifiers of their own - the outer vegetation patch feature
-        // (registered below) fully controls where each individual tulip block within the patch actually lands.
+        // The outer vegetation patch feature registered below controls placement of these inner blocks.
         context.register(ORANGE_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(ORANGE_TULIP_KEY), List.of()));
         context.register(PINK_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(PINK_TULIP_KEY), List.of()));
         context.register(RED_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(RED_TULIP_KEY), List.of()));
         context.register(WHITE_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHITE_TULIP_KEY), List.of()));
 
-        // Outer per-chunk scatter: iterations 10 (all four colours) read from
-        // feature_rules/the_netherlands/netherlands_{orange,pink,red,white}_tulip_feature.json
         List<net.minecraft.world.level.levelgen.placement.PlacementModifier> scatter = List.of(
                 CountPlacement.of(10), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome());
         context.register(ORANGE_TULIP_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(ORANGE_TULIP_FLOOR_KEY), scatter));

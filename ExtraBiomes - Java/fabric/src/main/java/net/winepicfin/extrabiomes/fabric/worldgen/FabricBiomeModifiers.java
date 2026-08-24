@@ -51,6 +51,12 @@ public class FabricBiomeModifiers {
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.DARK_FOREST),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
+        // Underground badlands terracotta banding (including the near-lava glazed band) is handled
+        // by ModSurfaceRules' bandlands()/glazedTerracottaBand() surface rules, not a biome modifier
+        // - a Feature-based approach here was both redundant with vanilla's own real terracotta
+        // banding mechanism and, being a per-chunk full-volume block scan, too slow ("Can't keep up"
+        // warnings during world generation). See ModSurfaceRules.makeRules() javadoc.
+
         // Bedrock's boulder_placer/stick_pile_placer feature_rules gate on has_biome_tag alone
         // (boulder: plains/forest/jungle, stick_pile: forest/jungle) - see ModBiomeModifiers (forge)
         // for the full rationale. ModTags.Biomes.IS_PLAINS is this mod's own tag since vanilla has

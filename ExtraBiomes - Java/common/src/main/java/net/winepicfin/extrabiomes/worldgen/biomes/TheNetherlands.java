@@ -23,7 +23,6 @@ public class TheNetherlands {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COAL_ORE_PLACED_KEY);
@@ -37,20 +36,14 @@ public class TheNetherlands {
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.REDSTONE_ORE_PLACED_KEY);
         BiomeDefaultFeatures.addPlainVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
-        // NOTE: despite bedrock's 'nether'/'nether_wastes' spawn-category tags, this biome is
-        // themed after the real-world Netherlands (tulip fields, windmills, wheat, canals -
-        // see bedrock feature_rules/the_netherlands/*). It generates in the OVERWORLD.
-        // Base (non-mutated) TheNetherlands gets tulip fields (feature_rules gate on
-        // has_biome_tag != "mutated"); TheNetherlandsMutated gets wheat/canal instead.
+        // Despite Bedrock's 'nether'/'nether_wastes' spawn-category tags, this biome generates in the OVERWORLD and is themed after the real-world Netherlands (tulips, windmills, wheat, canals).
+        // Base (non-mutated) TheNetherlands gets tulip fields; TheNetherlandsMutated gets wheat/canal instead.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.ORANGE_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.PINK_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.RED_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.WHITE_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
-        // No custom cave carver on Java - see ModSurfaceRules' netherrack band comment: capping
-        // that band to ~30 blocks means the vanilla cave carver (which only carves through
-        // BlockTags.OVERWORLD_CARVER_REPLACEABLES, not netherrack) already reaches plain stone
-        // well before bedrock, so Bedrock's netherrack-aware carver isn't needed here.
+        // No custom cave carver on Java: the netherrack band (see ModSurfaceRules) is capped low enough that the vanilla carver already reaches plain stone before bedrock, so Bedrock's netherrack-aware carver isn't needed.
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

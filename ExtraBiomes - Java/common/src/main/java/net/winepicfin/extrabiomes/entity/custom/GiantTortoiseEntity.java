@@ -26,8 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.winepicfin.extrabiomes.entity.ai.GiantTortoiseChargeGoal;
 
-// Ported from Bedrock extrabiomes:giant_tortoise — large, slow, amphibious monster that
-// charges (ram_attack) and melees (attack: 10 damage) players, golems and the warden on sight.
+// Ported from Bedrock extrabiomes:giant_tortoise — a slow amphibious monster that charges and melees players, golems and the warden on sight.
 public class GiantTortoiseEntity extends Monster {
     private static final EntityDataAccessor<Boolean> DATA_CHARGING =
             SynchedEntityData.defineId(GiantTortoiseEntity.class, EntityDataSerializers.BOOLEAN);
@@ -77,8 +76,7 @@ public class GiantTortoiseEntity extends Monster {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Warden.class, true));
     }
 
-    // Bedrock's "minecraft:damage_sensor" trigger for cause "lightning" multiplies the damage by
-    // 2000, i.e. a lightning strike is an instant kill on a 70-HP tortoise however it's dealt.
+    // Bedrock's lightning damage_sensor multiplies damage by 2000, an instant kill on a 70-HP tortoise however it's dealt.
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
         if (source.is(DamageTypes.LIGHTNING_BOLT)) {

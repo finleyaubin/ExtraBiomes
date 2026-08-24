@@ -1,10 +1,6 @@
 package net.winepicfin.extrabiomes.block.custom;
 
-// Bedrock's "minecraft:destructible_by_mining".seconds_to_destroy for every ModLogs-based wood
-// type's log/wood block (mystic/sky/palm/gilded_sky - see e.g.
-// ExtraBiomes - Bedrock/packs/BP/blocks/mystic_wood/mystic_log.json) is 2, shared identically
-// across all four. Deliberately has no Minecraft imports so tests can read the current Java
-// value without needing a bootstrapped registry to construct a Block.
+// Bedrock's destructible_by_mining.seconds_to_destroy is 2 for every ModLogs wood type (mystic/sky/palm/gilded_sky); deliberately has no Minecraft imports so tests can read this without a bootstrapped registry.
 public final class ModLogsTuning {
     public static final float DESTROY_SECONDS = 2.0f;
 

@@ -89,9 +89,7 @@ public class ModBiomes
         BiomeDefaultFeatures.addDefaultUndergroundVariety(builder);
         BiomeDefaultFeatures.addDefaultSprings(builder);
         BiomeDefaultFeatures.addSurfaceFreezing(builder);
-        // Bedrock's underground_mushroom/{glow_mushroom,huge_glow_mushroom}_feature.json rules apply to
-        // any_of overworld/overworld_generation (i.e. every overworld biome), so they're wired here
-        // rather than per-biome.
+        // Bedrock's underground_mushroom rules apply to every overworld biome, so they're wired here rather than per-biome.
         builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.SELECT_MUSHROOM_PLACED_KEY);
         builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY);
     }

@@ -91,17 +91,11 @@ public class ModOverworldRegion extends Region {
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
         VanillaParameterOverlayBuilder builder = new VanillaParameterOverlayBuilder();
 
-        // Shared low-erosion band Cold Mesa/Lush Mesa's flat halves claim here, and their
-        // bryce/spire siblings (now in ModOverworldRegionSecondary) claim the positive-weirdness
-        // half of - see class javadoc. normalWeirdness = vanilla's negative-weirdness half
-        // (rugged, not spired).
+        // Shared with the bryce/spire siblings in ModOverworldRegionSecondary, which claim the positive-weirdness half of this same band.
         Climate.Parameter lowErosion = ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4);
         Climate.Parameter normalWeirdness = ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_NORMAL_ASCENDING, ParameterUtils.Weirdness.LOW_SLICE_NORMAL_DESCENDING);
 
-        // Cold Mesa - bedrock temp=0, downfall=1 (frozen mesa). Covers the flat/rolling erosion
-        // band (3-6) at any weirdness, plus the negative-weirdness half of the low-erosion band
-        // (0-2) - the same low erosion Cold Mesa Bryce (now in ModOverworldRegionSecondary)
-        // claims for its positive-weirdness half.
+        // Cold Mesa - bedrock temp=0, downfall=1 (frozen mesa).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
@@ -119,8 +113,7 @@ public class ModOverworldRegion extends Region {
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA));
 
-        // Deep Dark Forest - bedrock temp=0.3, downfall=0.8, roofed/mega forest (tagged "rare";
-        // replace_biomes amount 0.15 - see class javadoc)
+        // Deep Dark Forest - bedrock temp=0.3, downfall=0.8, roofed/mega forest (replace_biomes amount 0.15).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.COOL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
@@ -130,24 +123,20 @@ public class ModOverworldRegion extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.DEEP_DARK_FOREST));
 
-        // Floating Jungle - bedrock temp=0.95, downfall=0.9 (tagged "rare"; replace_biomes
-        // amount 0.2)
+        // Floating Jungle - bedrock temp=0.95, downfall=0.9 (replace_biomes amount 0.2). Placed on
+        // vanilla's actual Peaks recipe (see OverworldBiomeBuilder#pickPeakBiome): erosion index 0
+        // is what produces the jagged mountain-peak terrain shape, not just the PEAK_NORMAL weirdness
+        // point alone - the previous EROSION_4-6 band put this in smooth/flat terrain instead.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.MID_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6))
+                .erosion(ParameterUtils.Erosion.EROSION_0)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.PEAK_NORMAL)
                 .build().forEach(point -> builder.add(point, ModBiomes.FLOATING_JUNGLE));
 
-        // Fungle Jungle - bedrock temp=0.95, downfall=0.9, mushroom_island tag (also tagged
-        // "rare", but replace_biomes amount is 0.4 - one of the higher values in the set; see
-        // class javadoc note on "rare" not implying frequency). Capped to NEAR_INLAND rather than
-        // the wider INLAND alias (COAST=[-0.19,-0.11], NEAR_INLAND=[-0.11,0.03], but
-        // INLAND=[-0.11,0.55] - a "numerically wide alias", not a synonym for NEAR_INLAND).
-        // Jungle Pillars (now in ModOverworldRegionSecondary) no longer shares any climate space
-        // with this box at all, being in a different Region entirely - see class javadoc.
+        // Fungle Jungle - bedrock temp=0.95, downfall=0.9, mushroom_island tag (replace_biomes amount 0.4). Capped to NEAR_INLAND rather than the wider INLAND alias (INLAND=[-0.11,0.55] is not a synonym for NEAR_INLAND=[-0.11,0.03]).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
@@ -167,19 +156,7 @@ public class ModOverworldRegion extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.GRAND_OASIS));
 
-        // Lush Mesa - bedrock temp=2, downfall=0.7. Temperature is HOT, not WARM, to match every
-        // other temp=2 biome across all three Regions (Charred Forest, Desert Bryce, Grand Oasis) -
-        // it was previously miscoded as WARM, which put its box (COAST..INLAND, erosion 3-6,
-        // HUMID..WET, full weirdness) in the same temperature bucket as, and as a strict geometric
-        // superset of, Jungle Marsh's box (COAST..NEAR_INLAND, erosion 4-6, WET..HUMID, full
-        // weirdness). Climate.ParameterList resolves points with tied fitness (i.e. a query
-        // location that falls inside both boxes) in favor of whichever point wins its internal
-        // tie-break - consistently Lush Mesa here - so Jungle Marsh had no reachable territory at
-        // all despite its own box looking reasonably sized in isolation. Moving Lush Mesa to HOT
-        // removes the overlap entirely rather than trying to carve out exclusive territory by
-        // hand. Covers the flat/rolling erosion band (3-6) at any weirdness, plus the
-        // negative-weirdness half of the low-erosion band (0-2) - the same low erosion Lush Mesa
-        // Bryce (now in ModOverworldRegionSecondary) claims for its positive-weirdness half.
+        // Lush Mesa - bedrock temp=2, downfall=0.7. Temperature is HOT, not WARM: as WARM its box was a strict superset of Jungle Marsh's, and ParameterList's tied-fitness tie-break always favored Lush Mesa, leaving Jungle Marsh unreachable.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.HOT)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.HUMID, ParameterUtils.Humidity.WET))
@@ -197,11 +174,7 @@ public class ModOverworldRegion extends Region {
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.LUSH_MESA));
 
-        // Tiaga Spikes - bedrock temp=0, downfall=1. Capped to COAST-NEAR_INLAND (rather than
-        // reaching to MID_INLAND) so it leaves room for Cold Mesa Bryce (MID_INLAND) - now in
-        // ModOverworldRegionSecondary, but the cap is kept unchanged since it still fits Taiga
-        // Spikes' own theme. (Shattered Taiga Spikes, formerly FAR_INLAND, lives in
-        // ModOverworldRegionRare - see that class's javadoc.)
+        // Tiaga Spikes - bedrock temp=0, downfall=1. Capped to COAST-NEAR_INLAND to leave room for Cold Mesa Bryce (MID_INLAND, in ModOverworldRegionSecondary).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
@@ -223,7 +196,6 @@ public class ModOverworldRegion extends Region {
 
         // Volcanic Moss Tundra moved to ModOverworldRegionSecondary - its box overlapped Cold Mesa's above.
 
-        // Add our points to the mapper
         builder.build().forEach(mapper::accept);
     }
 }

@@ -54,10 +54,7 @@ public class PiranhaModel<T extends PiranhaEntity> extends HierarchicalModel<T> 
 		this.head.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * 4f)) * 0.017453292f;
 		this.tailfin.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * (-25.75f))) * 0.017453292f;
 
-		// animation.piranha.bite — plays whenever the piranha has a target (query.has_target).
-		// Bedrock drives this off sin(life_time)^2*40, but life_time in raw seconds gives a
-		// multi-second period that reads as barely moving; scaled up here into a quick,
-		// clearly visible chomp (roughly two full snaps per second).
+		// animation.piranha.bite, scaled up from Bedrock's sin(life_time)^2*40 (too slow in raw seconds) into a quick, visible chomp.
 		if (entity.isBiting()) {
 			float t = ageInTicks * 0.3f;
 			float bite = Mth.sin(t) * Mth.sin(t) * 40f;

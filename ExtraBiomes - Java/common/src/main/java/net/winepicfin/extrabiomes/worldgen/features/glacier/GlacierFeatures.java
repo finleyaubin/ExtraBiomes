@@ -35,6 +35,31 @@ import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStruc
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Port of the Bedrock "extrabiomes:glacier/*" feature set:
+ * <ul>
+ *     <li>glacier_ice_feature / glacier_packed_ice_feature / glacier_top_ice_feature -
+ *         {@code minecraft:ore_feature} entries that replace stone-family/dirt/sand blocks with
+ *         ice, packed ice, and ice respectively, gated on the "glacier" biome tag.</li>
+ *     <li>select_snow_drift_feature - a {@code minecraft:weighted_random_feature} (2:1) between
+ *         snow_drift_1_feature and snow_drift_2_feature, each a
+ *         {@code minecraft:structure_template_feature}, gated on the broader "frozen" biome tag
+ *         (Glacier, ColdMesa/ColdMesaBryce/ColdMesaPlateau, ShatteredTiagaSpikes, TiagaSpikes).</li>
+ * </ul>
+ * Bedrock source: "ExtraBiomes - Bedrock/packs/BP/features/glacier/*.json" +
+ * "ExtraBiomes - Bedrock/packs/BP/feature_rules/glacier/*.json".
+ * <p>
+ * The two snow-drift structures reuse the "structurescatter" subsystem's shared
+ * SingleStructureFeature/SingleStructureConfiguration infrastructure rather than defining a new
+ * Feature class. Since Feature.RANDOM_SELECTOR's RandomFeatureConfiguration needs a
+ * Holder&lt;PlacedFeature&gt; per sub-feature (not a registry key), the two sub-features are built
+ * as unregistered inline holders via {@link PlacementUtils#inlinePlaced} - exactly the pattern
+ * vanilla itself uses for its own weighted/degenerate features (see e.g. vanilla's
+ * TreePlacements) - rather than going through the CONFIGURED_FEATURE/PLACED_FEATURE registries,
+ * which would create a registration-order problem (PLACED_FEATURE bootstrap normally runs after
+ * CONFIGURED_FEATURE bootstrap, so a same-pass lookup of a not-yet-registered PlacedFeature would
+ * fail).
+ */
 public class GlacierFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_ICE_KEY =
@@ -53,6 +78,7 @@ public class GlacierFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_SNOW_DRIFT_KEY =
             configuredKey("select_snow_drift");
+    /** This is the key the biome-wiring pass should addFeature(...) with. */
     public static final ResourceKey<PlacedFeature> SELECT_SNOW_DRIFT_PLACED_KEY =
             placedKey("select_snow_drift");
 
@@ -133,20 +159,7 @@ public class GlacierFeatures {
                         BiomeFilter.biome()
                 )));
 
-        // snow_drift.json: iterations 1, scatter_chance 30 (~30% per chunk) -> Bedrock's
-        // percentage-based scatter_chance has no exact Java equivalent, so this is approximated with
-        // RarityFilter; x/z uniform[0,16] -> InSquarePlacement.spread(); y = [heightmap, heightmap]
-        // -> HeightmapPlacement on OCEAN_FLOOR_WG (ignores fluids, unlike WORLD_SURFACE_WG, which
-        // would land a drift on top of a frozen lake's water column instead of its bed), combined
-        // with the SNOW_DRIFT_GROUND_OFFSET groundOffset above (see snowDrift1/2 comment).
-        // constraints.unburied + block_intersection.block_allowlist [air, snow_layer] -> a
-        // BlockPredicateFilter testing the placement origin itself (0,0,0) must be air or (Java)
-        // snow, i.e. the surface must be clear/snow-covered to place onto; constraints.grounded is
-        // implicitly satisfied by HeightmapPlacement always landing on top of the first
-        // solid/motion-blocking column.
-        // Reduced from onAverageOnceEvery(3) (~33%, the literal reciprocal of Bedrock's 30%) to
-        // onAverageOnceEvery(8) (~12.5%) - drifts were reading as too dense across glacier/frozen
-        // biomes at the literal rate.
+        // OCEAN_FLOOR_WG (not WORLD_SURFACE_WG) ignores fluids so a drift lands on a frozen lake's bed, not floats on its water column; rarity reduced from the literal ~33% to ~12.5% since drifts read as too dense at the literal rate.
         context.register(SELECT_SNOW_DRIFT_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_SNOW_DRIFT_KEY),
                 List.of(

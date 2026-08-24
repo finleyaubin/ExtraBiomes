@@ -73,15 +73,10 @@ public class ModOverworldRegionRare extends Region {
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
         VanillaParameterOverlayBuilder builder = new VanillaParameterOverlayBuilder();
 
-        // See the Future Desert box below - carried over from ModOverworldRegion, where this
-        // constant paired with Desert Bryce's variantWeirdness slice on a shared low-erosion band.
-        // Desert Bryce stayed in the primary region, so that specific pairing no longer applies,
-        // but the constant (and the box that uses it) is kept unchanged for this patch - see class
-        // javadoc.
+        // Used by the Future Desert box below; kept unchanged from ModOverworldRegion even though it no longer pairs against Desert Bryce there - see class javadoc.
         Climate.Parameter normalWeirdness = ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_NORMAL_ASCENDING, ParameterUtils.Weirdness.LOW_SLICE_NORMAL_DESCENDING);
 
-        // Mystic Forest - bedrock temp=0.95, downfall=0.9. Lowest replace_biomes amount (0.05) in
-        // the whole biome set.
+        // Mystic Forest - bedrock temp=0.95, downfall=0.9. Lowest replace_biomes amount (0.05) in the whole biome set.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.NEUTRAL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.HUMID, ParameterUtils.Humidity.WET))
@@ -91,9 +86,7 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.MYSTIC_FOREST));
 
-        // Jellyfish Fields - bedrock temp=0.5, downfall=0.5, ocean/warm tags; replace_biomes
-        // amount 0.08. Confined to DEEP_OCEAN..OCEAN so it doesn't bleed into the COAST band
-        // (which is land/beach transition).
+        // Jellyfish Fields - bedrock temp=0.5, downfall=0.5, ocean/warm tags; replace_biomes amount 0.08. Confined to DEEP_OCEAN..OCEAN so it doesn't bleed into the COAST (land/beach) band.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.NEUTRAL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
@@ -103,9 +96,7 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.JELLYFISH_FIELDS));
 
-        // Future Desert - bedrock temp=2, downfall=0; replace_biomes amount 0.1. Weirdness
-        // restriction and MID_INLAND.FAR_INLAND continentalness band are historical (see class
-        // Javadoc) - kept unchanged rather than widened in this patch.
+        // Future Desert - bedrock temp=2, downfall=0; replace_biomes amount 0.1. Weirdness restriction and continentalness band are historical (see class javadoc) - kept unchanged rather than widened.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.HOT)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.NEUTRAL))
@@ -115,8 +106,7 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.FUTURE_DESERT));
 
-        // The Netherlands - bedrock temp=0.5, downfall=0.5 (Dutch tulip fields/windmills,
-        // overworld); replace_biomes amount 0.1.
+        // The Netherlands - bedrock temp=0.5, downfall=0.5 (Dutch tulip fields/windmills, overworld); replace_biomes amount 0.1.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.NEUTRAL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
@@ -136,9 +126,7 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS_MUTATED));
 
-        // Jungle Marsh - bedrock temp=0.95, downfall=0.9, jungle+swamp tags; replace_biomes
-        // amount 0.5, NOT low-frequency - lives here for worldgen-stability reasons, not rarity.
-        // See class javadoc.
+        // Jungle Marsh - bedrock temp=0.95, downfall=0.9, jungle+swamp tags; replace_biomes amount 0.5, NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
@@ -148,11 +136,7 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.JUNGLE_MARSH));
 
-        // Shattered Tiaga Spikes - mutated variant of Tiaga Spikes (which stays in
-        // ModOverworldRegion); NOT low-frequency - lives here for worldgen-stability reasons, not
-        // rarity. See class javadoc. Low erosion, positive-weirdness half only (see
-        // ModOverworldRegion's javadoc on bryce/pillar biomes needing that combination to render
-        // as spires).
+        // Shattered Tiaga Spikes - mutated variant of Tiaga Spikes (which stays in ModOverworldRegion); NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.WET))
@@ -162,9 +146,7 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.LOW_SLICE_VARIANT_ASCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING))
                 .build().forEach(point -> builder.add(point, ModBiomes.SHATTERED_TAIGA_SPIKES));
 
-        // Charred Forest - bedrock temp=2, downfall=0.5 (hot, replaces pale garden/birch forest).
-        // NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class
-        // javadoc.
+        // Charred Forest - bedrock temp=2, downfall=0.5 (hot, replaces pale garden/birch forest). NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.HOT)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.NEUTRAL))
@@ -174,8 +156,7 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.PEAK_NORMAL, ParameterUtils.Weirdness.MID_SLICE_NORMAL_DESCENDING))
                 .build().forEach(point -> builder.add(point, ModBiomes.CHARRED_FOREST));
 
-        // Moorlands - bedrock temp=0.5, downfall=0.5, plains/river tags. NOT low-frequency - lives
-        // here for worldgen-stability reasons, not rarity. See class javadoc.
+        // Moorlands - bedrock temp=0.5, downfall=0.5, plains/river tags. NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.NEUTRAL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
@@ -185,7 +166,6 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.MOORLANDS));
 
-        // Add our points to the mapper
         builder.build().forEach(mapper::accept);
     }
 }

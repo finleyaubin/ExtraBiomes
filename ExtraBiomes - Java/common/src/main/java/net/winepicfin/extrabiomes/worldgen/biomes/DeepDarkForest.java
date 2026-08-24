@@ -18,18 +18,10 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
-        // Bedrock's deep_dark_forest carries both the "taiga"+"mega" tags (large/old-growth taiga
-        // trees) and the "roofed" tag (dark oak trees) at once - both are added here rather than
-        // picking just one, matching that hybrid tag set.
-        //
-        // FeatureSorter builds one global per-step feature order across every biome that shares
-        // a placed feature, so a feature's position here must stay consistent with its position
-        // in whichever vanilla biome it's borrowed from (dark_forest for DARK_FOREST_VEGETATION,
-        // old-growth taiga for TREES_OLD_GROWTH_SPRUCE_TAIGA/addGiantTaigaVegetation) or two
-        // biomes disagreeing on the order produces an IllegalStateException: Feature order cycle.
+        // Bedrock's deep_dark_forest carries both "taiga"+"mega" (old-growth taiga trees) and "roofed" (dark oak) tags at once, so both are added rather than picking just one.
+        // Each feature's position here must match its position in the vanilla biome it's borrowed from, or FeatureSorter throws Feature order cycle since it shares one global per-step order across biomes.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.DARK_FOREST_VEGETATION);
         BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
@@ -40,8 +32,7 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.addGiantTaigaVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
-        // NOTE: bedrock tags include 'has_structure_trail_ruins' - Java Trail Ruins structure placement
-        // is handled via structure_set/biome tags (see ModBiomeTagProvider), not here.
+        // Bedrock's 'has_structure_trail_ruins' tag is handled via structure_set/biome tags (see ModBiomeTagProvider), not here.
 
         // shattered_swamp/swamp_huge_mushroom_feature.json applies to swamp OR roofed-forest tagged biomes
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);

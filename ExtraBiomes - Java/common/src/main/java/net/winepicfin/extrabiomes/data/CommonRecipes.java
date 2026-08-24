@@ -108,8 +108,7 @@ public abstract class CommonRecipes extends RecipeProvider {
         }
     }
 
-    // Named modOreCooking (not oreCooking) because vanilla RecipeProvider already declares a static
-    // oreCooking with this exact signature - redeclaring it here would be a "cannot hide" compile error.
+    // Named modOreCooking (not oreCooking) because vanilla RecipeProvider already declares a static oreCooking with this exact signature - redeclaring it would be a "cannot hide" compile error.
     protected static void modOreCooking(Consumer<FinishedRecipe> recipeOutput, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
         for (ItemLike itemlike : ingredients) {
             SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), category, result, experience, cookingTime, recipeSerializer).group(group).unlockedBy(getHasName(itemlike), has(itemlike))
@@ -117,11 +116,7 @@ public abstract class CommonRecipes extends RecipeProvider {
         }
     }
 
-    // NOTE: the save id below must carry the "extrabiomes:" namespace explicitly - an unqualified
-    // id string is parsed as "minecraft:<id>" by RecipeBuilder.save(Consumer, String), which
-    // silently wrote every campfire/smoking recipe (frogs legs included, not just the new piranha
-    // ones) under data/minecraft/recipes/ instead of data/extrabiomes/recipes/. Still functionally
-    // loaded either way (recipe ids don't have to match their content's namespace), but wrong.
+    // The save id must carry the "extrabiomes:" namespace explicitly - an unqualified id is parsed as "minecraft:<id>" by RecipeBuilder.save(Consumer, String), silently writing recipes under data/minecraft/recipes/ instead.
     private static void campfireCooking(Consumer<FinishedRecipe> recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
         for (ItemLike itemlike : ingredient) {
             SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + cookingType);
@@ -268,9 +263,7 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     private static void blackSandRecipes(Consumer<FinishedRecipe> recipeOutput) {
-        // Not from Bedrock (no equivalent recipe there) - added per playtest request: dye a batch of
-        // sand black, same "8 around a dye" bulk-dyeing shape vanilla itself uses (e.g. wool/concrete
-        // powder), 8 sand in -> 8 black sand out.
+        // Not from Bedrock (no equivalent recipe there) - added per playtest request, using vanilla's own "8 around a dye" bulk-dyeing shape.
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SAND.get(), 8)
                 .pattern("###")
                 .pattern("#$#")
@@ -370,8 +363,7 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":mossy_cobble_from_pebble");
     }
 
-    // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/diamond_razor_feather.json and
-    // diamond_razor_feather_to_netherite.json.
+    // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/diamond_razor_feather.json and diamond_razor_feather_to_netherite.json.
     private static void razorFeatherRecipes(Consumer<FinishedRecipe> recipeOutput) {
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.DIAMOND_RAZOR_FEATHER.get(), 3)
                 .pattern("#+")
@@ -390,8 +382,7 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":diamond_razor_feather_to_netherite");
     }
 
-    // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/stick_pile_from_stick.json and
-    // stick_from_stick_pile.json.
+    // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/stick_pile_from_stick.json and stick_from_stick_pile.json.
     private static void stickPileRecipes(Consumer<FinishedRecipe> recipeOutput) {
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.STICK_PILE.get())
                 .pattern("~~~")

@@ -41,17 +41,13 @@ public class TreefrogEntity extends Animal {
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
     }
 
-    // JUMP_STRENGTH only affects horses by default — read it directly so the attribute set in
-    // createAttributes() actually controls how high each hop launches.
+    // JUMP_STRENGTH only affects horses by default — read it directly so createAttributes() actually controls hop height.
     @Override
     protected float getJumpPower() {
         return (float) this.getAttributeValue(Attributes.JUMP_STRENGTH);
     }
 
-    // Bedrock's damage_sensor knocks a flat 12 off any fall damage, which is what stops a treefrog
-    // hurting itself on its own hop. Vanilla's Frog cancels self-inflicted fall damage the same way
-    // (Frog#causeFallDamage returns false); subtracting Bedrock's modifier keeps very long drops
-    // lethal instead of making the frog fall-proof.
+    // Subtracts a flat 12 (Bedrock's modifier) rather than cancelling fall damage outright like vanilla Frog does, so hopping is safe but long drops stay lethal.
     @Override
     protected int calculateFallDamage(float distance, float multiplier) {
         return Math.max(0, super.calculateFallDamage(distance, multiplier) + TreefrogTuning.FALL_DAMAGE_MODIFIER);

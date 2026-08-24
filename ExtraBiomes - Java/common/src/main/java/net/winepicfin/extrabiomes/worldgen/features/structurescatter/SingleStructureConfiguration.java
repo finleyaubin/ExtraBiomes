@@ -87,14 +87,12 @@ public record SingleStructureConfiguration(ResourceLocation structure, Optional<
         this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of());
     }
 
-    // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction, no
-    // ground offset or explicit anchor point needed.
+    // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
         this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of());
     }
 
-    // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required
-    // solid floor under the whole footprint, no centering or explicit anchor point needed.
+    // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required solid floor.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
         this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of());
     }

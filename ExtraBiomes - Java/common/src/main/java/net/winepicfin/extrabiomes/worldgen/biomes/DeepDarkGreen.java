@@ -14,18 +14,13 @@ public class DeepDarkGreen {
 
     public Biome Register(BootstapContext<Biome> context)
     {
-        // NOTE: bedrock tags are "caves", "deep_dark", "overworld", "jungle" (plus
-        // spawns_cold_variant_farm_animals/frogs) with no "monster" tag - this is a cave variant of
-        // vanilla's Deep Dark (see ModOverworldRegion for its underground placement), not a surface
-        // biome, so it follows vanilla's deepDark() generation/spawn setup with a jungle-flavoured
-        // vegetation/color twist instead of Deep Dark's usual plain grass and pitch-black colors.
+        // A cave variant of vanilla's Deep Dark (placed underground via ModOverworldRegion), so it follows deepDark()'s setup but with jungle-flavoured vegetation/colors instead of plain grass and black.
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
         spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FROG, 5, 2, 4));
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);

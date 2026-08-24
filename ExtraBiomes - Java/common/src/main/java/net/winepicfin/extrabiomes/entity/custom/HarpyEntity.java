@@ -42,9 +42,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
                 .add(Attributes.MAX_HEALTH, 15)
                 .add(Attributes.MOVEMENT_SPEED, 0.25)
                 .add(Attributes.FLYING_SPEED, 0.6)
-                // Bedrock's "minecraft:follow_range" component (value/max 64), matching its
-                // nearest_attackable_target max_dist. 24 left harpies blind to anything on the
-                // ground, since they nest near build height.
+                // Matches Bedrock's nearest_attackable_target max_dist; a lower value left harpies blind to anything on the ground since they nest near build height.
                 .add(Attributes.FOLLOW_RANGE, 64);
     }
 
@@ -62,8 +60,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        // Rest of Bedrock's nearest_attackable_target entity_types: irongolem, snowgolem and
-        // phantom (which targets harpies back — see PhantomHarpyTargeting).
+        // Phantoms target harpies back — see PhantomHarpyTargeting.
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Phantom.class, true));

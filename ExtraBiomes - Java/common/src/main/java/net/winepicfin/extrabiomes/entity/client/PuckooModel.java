@@ -1,7 +1,5 @@
-package net.winepicfin.extrabiomes.entity.client;// Made with Blockbench 4.8.3
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
-
+package net.winepicfin.extrabiomes.entity.client;
+// Generated with Blockbench 4.8.3
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

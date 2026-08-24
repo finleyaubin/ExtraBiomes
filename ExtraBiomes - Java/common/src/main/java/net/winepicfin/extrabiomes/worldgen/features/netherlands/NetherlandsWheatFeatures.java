@@ -72,12 +72,7 @@ public class NetherlandsWheatFeatures {
     private static final ResourceKey<PlacedFeature> SELECT_WHEAT_PLACED_KEY = placedKey("netherlands_select_wheat");
     public static final ResourceKey<PlacedFeature> WHEAT_FLOOR_PLACED_KEY = placedKey("netherlands_wheat_floor");
 
-    // Not from Bedrock - added per playtest feedback: farmland with no water source nearby reverts
-    // to dirt (killing the crop on it) over time, which is what was making the wheat field look
-    // "patchy" - Bedrock's visible farm_water canal (NetherlandsWaterFeature) doesn't reach every
-    // patch. This scatters single hidden water sources one block under the farmland (never exposed
-    // to air, so it reads as buried irrigation rather than a surface pond) to keep nearby farmland
-    // hydrated without visibly altering the field.
+    // Not from Bedrock - buried water source added per playtest feedback so farmland out of NetherlandsWaterFeature's canal reach doesn't revert to dirt and kill its crop.
     private static final ResourceKey<ConfiguredFeature<?, ?>> HYDRATION_WATER_KEY = key("netherlands_hydration_water");
     public static final ResourceKey<PlacedFeature> HYDRATION_WATER_PLACED_KEY = placedKey("netherlands_hydration_water");
 
@@ -110,11 +105,7 @@ public class NetherlandsWheatFeatures {
                 CountPlacement.of(100), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome());
         context.register(WHEAT_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_FLOOR_KEY), scatter));
 
-        // From the heightmap (air just above the field), scan down through air then farmland until
-        // reaching the dirt subsoil directly beneath it - that position is where the water source
-        // is placed, so it always sits under a solid farmland cap. The BlockPredicateFilter then
-        // requires the 4 horizontal neighbours to also be solid, so a patch right at the field's
-        // edge (next to open air/a drop-off) is skipped rather than exposing the water.
+        // Scans down to the dirt beneath the farmland so the water always sits under a solid cap; the horizontal-neighbour check skips field edges to avoid exposing the water.
         List<PlacementModifier> hydration = List.of(
                 CountPlacement.of(20),
                 InSquarePlacement.spread(),

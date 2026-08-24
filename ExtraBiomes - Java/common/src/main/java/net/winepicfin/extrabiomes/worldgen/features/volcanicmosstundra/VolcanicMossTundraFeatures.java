@@ -114,19 +114,13 @@ public class VolcanicMossTundraFeatures {
 
         context.register(BASALT_BANK_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.BASALT_BANK.get(), NoneFeatureConfiguration.INSTANCE));
 
-        // Individual rock-formation / volcano structure sub-features (random rotation - Bedrock
-        // specifies no facing_direction for any of these). rock_formations_feature.json's
-        // "y": "query.above_top_solid(...)-3" and volcano_feature.json's "-6" sink each structure
-        // that far below the ground heightmap so they read as embedded rather than resting on top.
+        // ROCK_FORMATION_GROUND_OFFSET/VOLCANO_GROUND_OFFSET sink each structure below the ground heightmap so it reads as embedded rather than resting on top.
         for (String pillar : PILLARS) registerSingleStructure(context, pillar, ROCK_FORMATION_GROUND_OFFSET);
         for (String boulder : BOULDERS) registerSingleStructure(context, boulder, ROCK_FORMATION_GROUND_OFFSET);
         for (String elephantRock : ELEPHANT_ROCKS) registerSingleStructure(context, elephantRock, ROCK_FORMATION_GROUND_OFFSET);
         for (String volcano : VOLCANOES) registerSingleStructure(context, volcano, VOLCANO_GROUND_OFFSET);
 
-        // select_rock_formation.json weights: pillar_1..6 = 3 each (18), boulder_1..8 = 4 each (32),
-        // elephant_rock_1..4 = 2 each (8); total 58. Converted to the same sequential-trial chances
-        // BoulderFeatures uses (weight / remaining-total-from-here), with the final entry
-        // (elephant_rock_4) as the RANDOM_SELECTOR's guaranteed "default".
+        // Weights converted to sequential-trial chances (weight / remaining-total-from-here), same technique as BoulderFeatures, with the final entry as the RANDOM_SELECTOR's guaranteed default.
         List<WeightedPlacedFeature> rockEntries = new ArrayList<>();
         float remaining = 58.0F;
         for (String pillar : PILLARS) {
@@ -144,7 +138,6 @@ public class VolcanicMossTundraFeatures {
         context.register(SELECT_ROCK_FORMATION_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 rockEntries, structurePlaced(placedFeatures, ELEPHANT_ROCKS[ELEPHANT_ROCKS.length - 1]))));
 
-        // select_volcano.json weights: volcano_1 1, volcano_2 1 (total 2) -> chance 0.5, default volcano_2.
         context.register(SELECT_VOLCANO_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(new WeightedPlacedFeature(structurePlaced(placedFeatures, VOLCANOES[0]), 0.5F)),
                 structurePlaced(placedFeatures, VOLCANOES[1]))));
@@ -155,25 +148,20 @@ public class VolcanicMossTundraFeatures {
 
         context.register(NO_OP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(NO_OP_KEY), List.of()));
 
-        // lava_river_core_feature.json: iterations 30, x/z uniform[0,16], noise band < 0.003, y = heightmap-1.
         context.register(LAVA_RIVER_CORE_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(LAVA_RIVER_CORE_KEY),
                 List.of(CountPlacement.of(30), InSquarePlacement.spread(), new RiverNoiseFilter(0.0, 0.003),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome())));
-        // lava_river_bank_feature.json: iterations 30, x/z uniform[0,16], noise band 0.003-0.006, y = heightmap-1.
         context.register(LAVA_RIVER_BANK_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(LAVA_RIVER_BANK_KEY),
                 List.of(CountPlacement.of(30), InSquarePlacement.spread(), new RiverNoiseFilter(0.003, 0.006),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome())));
-        // high_elevation_moss_floor_feature.json: iterations 10, x/z uniform[0,16], y = heightmap-1 if >=75.
         context.register(HIGH_ELEVATION_MOSS_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(HIGH_ELEVATION_MOSS_FLOOR_KEY),
                 List.of(CountPlacement.of(10), InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), new MinYFilter(75), BiomeFilter.biome())));
 
-        // elevation_moss_feature.json: iterations 60, x/z uniform[0,16], y = heightmap if >=75.
         context.register(ELEVATION_MOSS_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(MossFeatures.MOSS_CARPET_KEY),
                 List.of(CountPlacement.of(60), InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), new MinYFilter(75), BiomeFilter.biome())));
 
-        // basalt_bank_feature.json: iterations 24, x/z uniform[0,16], noise band 0.006-0.01, y = heightmap.
         context.register(BASALT_BANK_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BASALT_BANK_KEY),
                 List.of(CountPlacement.of(24), InSquarePlacement.spread(), new RiverNoiseFilter(0.006, 0.01),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome())));
@@ -183,17 +171,11 @@ public class VolcanicMossTundraFeatures {
         for (String elephantRock : ELEPHANT_ROCKS) registerNoModifiers(context, configuredFeatures, elephantRock);
         for (String volcano : VOLCANOES) registerNoModifiers(context, configuredFeatures, volcano);
 
-        // rock_formations_feature.json: iterations 1, scatter_chance 15% -> onAverageOnceEvery(7)
-        // (nearest integer reciprocal), y = above_top_solid-3 - "above_top_solid" ignores fluids
-        // (unlike WORLD_SURFACE_WG, which would land these on top of water), so OCEAN_FLOOR_WG is
-        // the correct heightmap type here; the "-3" itself is applied via each sub-feature's
-        // SingleStructureConfiguration groundOffset (see ROCK_FORMATION_GROUND_OFFSET above).
+        // OCEAN_FLOOR_WG (not WORLD_SURFACE_WG) ignores fluids, so these don't land on top of water; the ground offset is applied separately via SingleStructureConfiguration.
         context.register(SELECT_ROCK_FORMATION_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SELECT_ROCK_FORMATION_KEY),
                 List.of(RarityFilter.onAverageOnceEvery(7), InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG), BiomeFilter.biome())));
 
-        // volcano_feature.json: iterations 1, scatter_chance 1% -> onAverageOnceEvery(100), y =
-        // above_top_solid-6 (see VOLCANO_GROUND_OFFSET above; same OCEAN_FLOOR_WG reasoning).
         context.register(SELECT_VOLCANO_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SELECT_VOLCANO_KEY),
                 List.of(RarityFilter.onAverageOnceEvery(100), InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG), BiomeFilter.biome())));

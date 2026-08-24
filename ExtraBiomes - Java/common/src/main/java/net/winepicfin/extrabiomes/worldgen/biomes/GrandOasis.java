@@ -23,7 +23,6 @@ public class GrandOasis {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
@@ -31,8 +30,7 @@ public class GrandOasis {
 
         // oasis subsystem: scattered puddle structure_template (Bedrock oasis_puddle_placer)
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OasisPuddleFeature.OASIS_PUDDLE_SCATTER_PLACED_KEY);
-        // exposed surface fossils in the style of Soul Sand Valley's bone piles, rather than
-        // vanilla desert's buried-underground Feature.FOSSIL (see OasisFossilFeatures)
+        // Exposed surface fossils like Soul Sand Valley's bone piles, rather than vanilla desert's buried-underground Feature.FOSSIL.
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OasisFossilFeatures.SELECT_FOSSIL_PLACED_KEY);
 
         return new Biome.BiomeBuilder()

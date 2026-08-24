@@ -42,9 +42,7 @@ import java.util.function.Consumer;
  * Forge/Fabric-specific wrapper types.
  */
 public class ModAdvancements implements AdvancementSubProvider {
-    // Every biome ModBiomes registers - see ModBiomes.java. Kept as an explicit list (rather than
-    // reflecting over ModBiomes's fields) so a new biome only shows up in the "visit them all"
-    // advancement once someone deliberately adds it here.
+    // Kept as an explicit list (rather than reflecting over ModBiomes's fields) so a new biome only shows up in the "visit them all" advancement once someone deliberately adds it here.
     private static final List<ResourceKey<Biome>> ALL_BIOMES = List.of(
             ModBiomes.CHARRED_FOREST, ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,
             ModBiomes.DEEP_DARK_FOREST, ModBiomes.DEEP_DARK_GREEN, ModBiomes.DESERT_BRYCE, ModBiomes.FLOATING_JUNGLE,
@@ -139,9 +137,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("has_nether_diamond_ore", InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.NETHER_DIAMOND_ORE.get()))
                 .save(saver, advancementId("dutch_treasure"));
 
-        // Mirrors vanilla's own "Adventuring Time" (visit every vanilla biome): one location
-        // criterion per ModBiomes entry, all required (no requirements() override -> defaults to
-        // AND-all, same as vanilla's own adventuring_time.json).
+        // Mirrors vanilla's own "Adventuring Time": one location criterion per ModBiomes entry, all required (no requirements() override -> defaults to AND-all).
         Advancement.Builder biomeExplorer = Advancement.Builder.advancement()
                 .parent(root)
                 .display(Items.FILLED_MAP,

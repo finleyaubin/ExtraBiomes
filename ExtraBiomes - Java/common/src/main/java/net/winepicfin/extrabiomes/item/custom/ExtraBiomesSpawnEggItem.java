@@ -10,25 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-// Loader-agnostic stand-in for Forge's ForgeSpawnEggItem: vanilla's own SpawnEggItem constructor
-// needs a resolved EntityType at construction time, which architectury's DeferredRegister can't
-// guarantee (items and entities are independent deferred registries with no fixed firing order
-// relative to each other). `null` is passed to super() and the real type is resolved lazily via
-// typeSupplier, by which point mod loading has finished and every registry has settled.
-//
-// Forge patches vanilla SpawnEggItem with a protected getDefaultType() override point for exactly
-// this (see ForgeSpawnEggItem); plain vanilla - what this common module compiles against, so also
-// what Fabric runs - has no such hook: SpawnEggItem#requiredFeatures() reads the private final
-// `defaultType` field directly (confirmed via javap on the vanilla jar), which stays permanently
-// null for every instance built through this class. That's a real crash, not a hypothetical: it
-// NPEs in FeatureElement#isEnabled -> requiredFeatures -> null.requiredFeatures(), which fires for
-// every item while building creative-tab contents (both at startup and whenever a player opens
-// their inventory), because CreativeModeTab's contents rebuild calls requiredFeatures() on every
-// registered item regardless of whether it's actually in that tab.
-//
-// Since the field itself can't be overridden, override requiredFeatures() as a method instead
-// (vanilla's own version isn't final) so it never touches the null field at all - same fix as
-// getType(CompoundTag) below, applied to the other vanilla entry point that needs a real type.
+// `null` is passed to super() because DeferredRegister can't guarantee EntityType is resolved yet; the real type is resolved lazily via typeSupplier. getType()/requiredFeatures() are overridden because vanilla (unlike Forge's patched SpawnEggItem) reads the permanently-null `defaultType` field directly in requiredFeatures(), which otherwise NPEs whenever creative-tab contents rebuild.
 public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
     private final Supplier<? extends EntityType<? extends Mob>> typeSupplier;
 

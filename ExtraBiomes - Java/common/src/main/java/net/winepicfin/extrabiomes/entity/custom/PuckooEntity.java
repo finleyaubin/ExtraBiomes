@@ -50,9 +50,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     // Bedrock's "minecraft:horse.jump_strength" range_min/range_max.
     private static final double BEDROCK_JUMP_STRENGTH_MIN = 0.35;
     private static final double BEDROCK_JUMP_STRENGTH_MAX = 0.45;
-    // Vanilla horse-style taming: while ridden and untamed, a periodic chance to gain temper and
-    // either buck the rider off or, once temper caps out, tame. Playtesting found puckoos never
-    // bucked riders at all, so this is spelled out explicitly rather than assumed from AbstractHorse.
+    // Vanilla horse-style ride-and-buck taming spelled out explicitly: playtesting found puckoos never bucked riders when left to AbstractHorse's default.
     private static final int BUCK_CHECK_TICK_CHANCE = 10;
     private static final int BUCK_COOLDOWN_TICKS = 20;
     private static final int TEMPER_GAIN_PER_ATTEMPT = 5;
@@ -109,11 +107,18 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         this.modifyTemper(TEMPER_GAIN_PER_ATTEMPT);
         if (this.getTemper() >= this.getMaxTemper()) {
             this.setTamed(true);
-            this.spawnTamingParticles(true);
+            this.broadcastTamingFeedback(true);
         } else {
-            this.spawnTamingParticles(false);
+            this.broadcastTamingFeedback(false);
             player.stopRiding();
         }
+    }
+
+    // spawnTamingParticles() only draws locally; a direct server-side call is invisible to clients.
+    // Vanilla horses instead broadcast an entity event that AbstractHorse#handleEntityEvent turns
+    // back into spawnTamingParticles() on each client, so route through that instead.
+    private void broadcastTamingFeedback(boolean success) {
+        this.level().broadcastEntityEvent(this, (byte) (success ? 7 : 6));
     }
 
     // AbstractHorse#mobInteract never routes to feeding, so without this a mossy pebble just mounted it.
@@ -127,9 +132,9 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
                 if (this.getTemper() >= this.getMaxTemper()) {
                     this.setTamed(true);
                     this.setOwnerUUID(player.getUUID());
-                    this.spawnTamingParticles(true);
+                    this.broadcastTamingFeedback(true);
                 } else {
-                    this.spawnTamingParticles(false);
+                    this.broadcastTamingFeedback(false);
                 }
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -144,8 +149,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.15));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.20, Ingredient.of(ModItems.MOSSY_PEBBLE.get()), false));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        // Bedrock runs eat_block at the same priority as random_stroll; here it goes just above so
-        // idle wandering doesn't keep pre-empting a puckoo already heading for a pebble.
+        // Placed above random_stroll (unlike Bedrock's equal priority) so idle wandering doesn't pre-empt a puckoo already heading for a pebble.
         this.goalSelector.addGoal(5, new PuckooEatMossyPebbleGoal(this));
         this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1.0));
     }
@@ -160,9 +164,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 6)
                 .add(Attributes.MOVEMENT_SPEED, 0.35)
-                // AbstractHorse#getCustomJump reads JUMP_STRENGTH, but this builds off
-                // createLivingAttributes() rather than createBaseHorseAttributes(), so the
-                // attribute has to be declared here or a ridden puckoo can't jump at all.
+                // Must be declared here since this builds off createLivingAttributes() rather than createBaseHorseAttributes(), or a ridden puckoo can't jump at all.
                 .add(Attributes.JUMP_STRENGTH, BEDROCK_JUMP_STRENGTH_MIN)
                 .add(Attributes.FOLLOW_RANGE, 24);
     }
@@ -173,12 +175,17 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
                 + random.getAsDouble() * (BEDROCK_JUMP_STRENGTH_MAX - BEDROCK_JUMP_STRENGTH_MIN);
     }
 
-    // Bedrock's "minecraft:damage_sensor" trigger for cause "fall" is deals_damage: false — a
-    // puckoo is outright fall-immune, unlike the reduced-but-real fall damage AbstractHorse gives
-    // it by default. Matters most when one is being ridden and power-jumped off a cliff.
+    // A puckoo is outright fall-immune (Bedrock's deals_damage: false), unlike AbstractHorse's reduced-but-real default; matters most when power-jumped off a cliff while ridden.
     @Override
     public boolean causeFallDamage(float distance, float multiplier, @NotNull DamageSource source) {
         return false;
+    }
+
+    // AbstractHorse's default (bounding-box height * 0.75) sits the rider well above the model's back;
+    // Bedrock's seat position ([0, 0.5, -0.1]) is the actual intended height.
+    @Override
+    public double getPassengersRidingOffset() {
+        return 0.5D;
     }
 
     @Nullable
@@ -252,8 +259,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         this.setTypeVariant(variant.getId() & 255 | this.getTypeVariant() & -256);
     }
 
-    // Type variant packs both traits into one synced int: low byte is the base variant id,
-    // high byte is the koi markings id.
+    // Type variant packs both traits into one synced int: low byte is the base variant id, high byte is the koi markings id.
     private void setVariantAndMarkings(PuckooBaseVariants variant, PuckooKoiMarkings markings) {
         this.setTypeVariant(variant.getId() & 255 | markings.getId() << 8 & '\uff00');
     }

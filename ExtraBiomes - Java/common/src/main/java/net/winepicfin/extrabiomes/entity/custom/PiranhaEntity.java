@@ -41,13 +41,10 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     // Separately-rolled size axis, independent of DATA_VARIANT's texture (see PiranhaTuning).
     private static final EntityDataAccessor<Float> DATA_SIZE =
             SynchedEntityData.defineId(PiranhaEntity.class, EntityDataSerializers.FLOAT);
-    // Targets and goal state only exist server-side, so the renderer needs the bite state synced
-    // to it explicitly — without this the jaw animation never played for the client at all.
+    // Targets and goal state only exist server-side, so the bite state must be synced explicitly for the client's jaw animation to play.
     private static final EntityDataAccessor<Boolean> DATA_BITING =
             SynchedEntityData.defineId(PiranhaEntity.class, EntityDataSerializers.BOOLEAN);
 
-    // Ported from Bedrock's controller.animation.piranha.general "bite" state (query.has_target) —
-    // the jaw chomps whenever the piranha has something to attack, a player or a chased bait alike.
     @Nullable
     private BaitProjectileEntity chasedBait;
 
@@ -88,8 +85,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, PiranhaTuning.RANDOM_SWIM_SPEED, 20));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        // Ported from Bedrock's nearest_attackable_target "is_family mob && != fish" entry —
-        // piranhas also go after any other mob that wanders into the water, not just players.
+        // Piranhas also go after any other mob that wanders into the water, not just players (Bedrock's "is_family mob && != fish" entry).
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
                 (LivingEntity target) -> !(target instanceof WaterAnimal) && target.isInWater()));
     }
@@ -99,10 +95,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         return new WaterBoundPathNavigation(this, level);
     }
 
-    // WaterAnimal inherits LivingEntity#travel, which accelerates swimming mobs at a fixed 0.02 and
-    // ignores generic.movement_speed entirely — that, not the attribute value, is why piranhas
-    // crawled. Vanilla's Dolphin solves it the same way, by driving movement off getSpeed() (which
-    // SmoothSwimmingMoveControl sets from goalSpeed * MOVEMENT_SPEED * IN_WATER_SPEED_MODIFIER).
+    // WaterAnimal#travel ignores generic.movement_speed entirely (fixed 0.02 accel), which is why piranhas crawled; overridden the same way vanilla Dolphin does, off getSpeed().
     @Override
     public void travel(Vec3 travelVector) {
         if (this.isEffectiveAi() && this.isInWater()) {
@@ -123,10 +116,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
 
     @Override
     public void aiStep() {
-        // Bedrock gets flopping for free from "runtime_identifier": "minecraft:cod"; on Java that
-        // behavior lives in AbstractFish, which PiranhaEntity deliberately doesn't extend (it would
-        // drag in bucket-catching and the passive panic/avoid-player goals). Same flop AbstractFish
-        // performs, copied rather than inherited.
+        // Flop behavior copied from AbstractFish rather than inherited, since extending it would drag in bucket-catching and passive panic/avoid-player goals.
         if (!this.isInWater() && this.onGround() && this.verticalCollision) {
             this.setDeltaMovement(this.getDeltaMovement().add(
                     (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F, 0.4F,
@@ -142,8 +132,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         }
     }
 
-    // Drives the jaw-bite animation client-side — true while pursuing bait even if no player is
-    // currently aggroed, matching Bedrock's "bite" state being independent of the true attack target.
+    // True while pursuing bait even with no player aggroed, matching Bedrock's bite state being independent of the true attack target.
     public boolean isBiting() {
         return this.entityData.get(DATA_BITING);
     }

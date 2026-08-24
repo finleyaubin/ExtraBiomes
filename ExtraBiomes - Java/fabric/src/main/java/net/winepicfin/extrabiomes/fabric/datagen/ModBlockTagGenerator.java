@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import org.jetbrains.annotations.NotNull;
 
@@ -183,6 +184,17 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
+        ));
+
+        // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
+        // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
+        // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
+        // glazed terracotta isn't in that tag at all. Adding the four colors used there fixes it.
+        this.tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(keys(
+                Blocks.WHITE_GLAZED_TERRACOTTA,
+                Blocks.ORANGE_GLAZED_TERRACOTTA,
+                Blocks.RED_GLAZED_TERRACOTTA,
+                Blocks.BLACK_GLAZED_TERRACOTTA
         ));
 
 

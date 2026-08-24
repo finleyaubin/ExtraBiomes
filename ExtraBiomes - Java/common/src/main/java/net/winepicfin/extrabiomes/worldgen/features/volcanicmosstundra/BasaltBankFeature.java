@@ -32,8 +32,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 public class BasaltBankFeature extends Feature<NoneFeatureConfiguration> {
     private static final int RIVER_PROXIMITY_RADIUS = 10;
 
-    // {dx, dz, height} - see basalt_bank/c{col}_r{row}.json (dx=col, dz=row) and each entry's
-    // "places_feature" -> basalt_pillar_1..5 height (3,4,5,6,7 respectively).
+    // {dx, dz, height} - see basalt_bank/c{col}_r{row}.json (dx=col, dz=row); height is basalt_pillar_1..5's 3/4/5/6/7.
     private static final int[][] OFFSETS = {
             {2, 0, 7}, {2, 1, 5}, {2, 2, 7}, {2, 3, 5}, {2, 4, 7}, {2, 5, 5},
             {3, 0, 4}, {3, 1, 6}, {3, 2, 4}, {3, 3, 6}, {3, 4, 4}, {3, 5, 6},

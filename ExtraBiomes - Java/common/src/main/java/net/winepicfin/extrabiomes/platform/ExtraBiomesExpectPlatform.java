@@ -49,9 +49,7 @@ public class ExtraBiomesExpectPlatform {
         throw new AssertionError();
     }
 
-    // Goo's LiquidBlock/BucketItem need the Supplier<? extends Fluid> constructor overloads
-    // Forge's patches add to these vanilla classes - not present on plain vanilla, so common
-    // can't call `new LiquidBlock(ModFluids.SOURCE_GOO, ...)` directly either.
+    // Goo's LiquidBlock/BucketItem need the Supplier<? extends Fluid> constructor overloads Forge patches onto these vanilla classes, which aren't present on plain vanilla that common compiles against.
     @ExpectPlatform
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {
         throw new AssertionError();

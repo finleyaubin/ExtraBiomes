@@ -41,13 +41,7 @@ public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> LUSH_GRASS_KEY = registerKey("lush_grass");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context){
-        // Tuned against the actual Bedrock structures (packs/BP/structures/extrabiomes/mystic_tree
-        // + Large_mystic_tree.mcstructure, dumped with tools/viz_tree.py): both show a sprawling
-        // 2-branch canopy reaching a leaf radius of ~6-9 blocks from the trunk, well beyond a plain
-        // vanilla Cherry tree's ~4 block spread. branch_horizontal_length and the foliage radius are
-        // widened to reach that spread, and the trunk height range is widened so tall rolls
-        // occasionally approach the scale of the rare Large_mystic_tree variant, while still using
-        // IntProviders throughout so every tree keeps procedural (non-static) variation.
+        // Tuned against the actual Bedrock mystic_tree structures: both show a sprawling 2-branch canopy reaching ~6-9 blocks from the trunk, well beyond a plain vanilla Cherry tree's ~4 block spread.
         register(context, MYSTIC_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LOG.get()),
                 new MysticTrunkPlacer(9, 5, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(3, 7), UniformInt.of(-5, -3), UniformInt.of(-1, 1)),
@@ -55,10 +49,7 @@ public class ModConfigureFeatures {
                 new CherryFoliagePlacer(ConstantInt.of(5), ConstantInt.of(0), ConstantInt.of(6), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
                 new TwoLayersFeatureSize(1,0,2)).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
         );
-        // sky_tree.mcstructure is a single 1-wide trunk (~9-10 tall) with leaves tapering from a
-        // radius-0 point at the very top down to a ~2 block radius band and back to bare trunk near
-        // the bottom - a conical/tapered silhouette that SpruceFoliagePlacer matches far better than
-        // the round BlobFoliagePlacer this used before.
+        // sky_tree.mcstructure has a conical/tapered silhouette that SpruceFoliagePlacer matches far better than the round BlobFoliagePlacer this used before.
         register(context, SKY_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.SKY_LOG.get()),
                 new StraightTrunkPlacer(6, 3, 0),
@@ -66,11 +57,7 @@ public class ModConfigureFeatures {
                 new SpruceFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(3, 5)),
                 new TwoLayersFeatureSize(4, 10, 6)).build()
         );
-        // Palm trees are no longer a procedural Feature.TREE - see PalmTreeFeatures for why (the
-        // real palm_tree_*.mcstructure trunks lean/kink sideways and their crowns are an irregular
-        // frond spray, not anything a TrunkPlacer/FoliagePlacer pair can reproduce) and its
-        // SELECT_PALM_KEY, which is what PalmTreeGrower/ModPlacedFeatures now reference instead of
-        // a key from this class.
+        // Palm trees are no longer a procedural Feature.TREE - see PalmTreeFeatures.SELECT_PALM_KEY, which PalmTreeGrower/ModPlacedFeatures reference instead, since real palm trunks lean/kink and can't be reproduced by a TrunkPlacer/FoliagePlacer pair.
         register(context, CHARRED_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.BASALT),
                 new FancyTrunkPlacer(5, 2, 0),

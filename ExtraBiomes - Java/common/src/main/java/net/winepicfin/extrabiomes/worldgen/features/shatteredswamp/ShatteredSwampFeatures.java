@@ -62,22 +62,14 @@ public class ShatteredSwampFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> BAMBOO_KEY = configuredKey("shattered_swamp_bamboo");
     public static final ResourceKey<PlacedFeature> BAMBOO_PLACED_KEY = placedKey("shattered_swamp_bamboo");
 
-    // ===================================================================
-    // configured features
-    // ===================================================================
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        // No probability given in the Bedrock JSON - use vanilla's own default bamboo density
-        // (the same value vanilla's "bamboo_some_podzol" configured feature uses).
+        // No probability given in the Bedrock JSON, so this uses vanilla's own default bamboo density (same value as vanilla's "bamboo_some_podzol" configured feature).
         context.register(BAMBOO_KEY, new ConfiguredFeature<>(Feature.BAMBOO, new ProbabilityFeatureConfiguration(0.2F)));
     }
 
-    // ===================================================================
-    // placed features
-    // ===================================================================
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // iterations: always 15, x/z uniform [0,16], y = heightmap.
         context.register(BAMBOO_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(BAMBOO_KEY),
                 List.of(

@@ -49,28 +49,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * biomes' distinct clay/hardened-clay combinations.
  */
 public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
-    // Static, world-seed-agnostic noise fields shared by every biome using this feature - mirrors
-    // vanilla's old MesaSurfaceBuilder having one pillarNoise/pillarRoofNoise pair for the whole
-    // mesa family; only the materials (and optionally height/threshold) vary per biome via config.
+    // Static, world-seed-agnostic noise fields shared by every biome using this feature - mirrors vanilla's old MesaSurfaceBuilder having one pillarNoise/pillarRoofNoise pair for the whole mesa family.
     private static final PerlinSimplexNoise PILLAR_NOISE = new PerlinSimplexNoise(RandomSource.create(2345L), List.of(0));
     private static final PerlinSimplexNoise PILLAR_ROOF_NOISE = new PerlinSimplexNoise(RandomSource.create(4321L), List.of(0));
-    // Finer-grained than PILLAR_NOISE on purpose - the mask/roof fields decide where a pillar
-    // exists and how tall it grows, this one just roughs up the resulting cone's surface.
+    // Finer-grained than PILLAR_NOISE on purpose - the mask/roof fields decide where a pillar exists and how tall it grows, this one just roughs up the resulting cone's surface.
     private static final PerlinSimplexNoise EROSION_NOISE = new PerlinSimplexNoise(RandomSource.create(9876L), List.of(0));
-    // The wiki's "noiseValue" that shifts which of the 192 layers a given (x, y, z) reads from -
-    // "each layer may shift up and down by at most +-7 blocks based on noise". This is what makes
-    // the bands read as wavy/organic instead of perfectly flat horizontal slabs.
+    // The wiki's "noiseValue" that shifts which of the 192 layers a given (x, y, z) reads from, making the bands read as wavy/organic instead of perfectly flat horizontal slabs.
     private static final PerlinSimplexNoise BAND_OFFSET_NOISE = new PerlinSimplexNoise(RandomSource.create(1357L), List.of(0));
     private static final double NOISE_SCALE = 0.25D;
     private static final double EROSION_SCALE = 0.6D;
     private static final double BAND_OFFSET_COORD_SCALE = 0.15D;
     private static final double BAND_OFFSET_MAX = 7.0D;
     private static final double ROOF_INFLUENCE = 0.25D;
-    // "Each world seed generates 192 layers of terracotta for each Y-coordinate to pick from"
-    // (minecraft.wiki, badlands biome article) - layers[(noiseValue + Y + 192) % 192]. Built once
-    // per (world seed, material recipe) and cached, mirroring how vanilla's own array is generated
-    // once per world and shared by every badlands column in it - NOT re-rolled per pillar or per
-    // chunk, which is what actually makes "the same Y = the same colour everywhere" true.
+    // Built once per (world seed, material recipe) and cached - NOT re-rolled per pillar or per chunk, which is what makes "the same Y = the same colour everywhere" true.
     private static final int BAND_LAYER_COUNT = 192;
     private static final Map<BandCacheKey, List<BlockState>> BAND_CACHE = new ConcurrentHashMap<>();
 
@@ -83,14 +74,9 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
         WorldGenLevel level = context.level();
         BrycePillarsConfiguration config = context.config();
         BlockPos origin = context.origin();
-        // Materials are chosen deterministically by absolute Y (getBandedMaterial), so this
-        // feature needs no placement RandomSource.
-        // One array per (world seed, biome's material recipe), built once and reused for every
-        // pillar in every chunk of this biome - never regenerated per column, since that's what
-        // keeps a given Y the same colour everywhere.
+        // Materials are chosen deterministically by absolute Y (getBandedMaterial), so this feature needs no placement RandomSource.
         List<BlockState> bands = getOrBuildBands(level.getSeed(), config);
-        // Normalize to the chunk's corner regardless of what x/z the placement modifiers picked -
-        // this feature scans the whole 16x16 column grid itself rather than placing at one point.
+        // Normalize to the chunk's corner regardless of what x/z the placement modifiers picked - this feature scans the whole 16x16 column grid itself rather than placing at one point.
         int chunkX = origin.getX() & ~15;
         int chunkZ = origin.getZ() & ~15;
 
@@ -103,20 +89,10 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                 double mask = Math.abs(PILLAR_NOISE.getValue(x * NOISE_SCALE, z * NOISE_SCALE, false));
                 if (mask <= config.threshold()) continue;
 
-                // A smooth noise field clears the threshold across a whole contiguous patch of
-                // columns, not just one - without this, every column in that patch would
-                // independently draw its own wide cone (below), compounding into one big chaotic
-                // mound instead of a single isolated spire. Requiring this column to be a local
-                // maximum among its 4 cardinal neighbours collapses each patch down to the one
-                // column that actually becomes a pillar, which is also what keeps these scarce
-                // rather than "a pillar on every other block" even with a high threshold.
+                // A smooth noise field clears the threshold across a whole contiguous patch of columns; requiring this column to be a local maximum among its 4 cardinal neighbours collapses each patch down to a single pillar instead of a chaotic mound.
                 if (!isLocalMaximum(x, z, mask)) continue;
 
-                // OCEAN_FLOOR_WG ignores fluids (the true solid ground), unlike WORLD_SURFACE_WG
-                // which counts the top of a lake/pond as "surface" - using the latter for baseY
-                // was planting pillars floating on top of water. Skipping whenever the two heights
-                // differ at all (i.e. there's any water/lava above the solid ground here) keeps
-                // pillars off water bodies entirely rather than just grounding them underwater.
+                // OCEAN_FLOOR_WG ignores fluids, unlike WORLD_SURFACE_WG which counted lake/pond tops as "surface" and planted pillars floating on water; skipping whenever the two heights differ keeps pillars off water entirely.
                 int floorY = level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, x, z);
                 int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
                 if (surfaceY != floorY) continue;
@@ -126,13 +102,7 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                 if (shape.height() <= 0) continue;
 
                 int baseY = floorY;
-                // Read whatever's already sitting one block below the pillar's own base - since
-                // this feature runs after surface rules, that's the real bandlands()-generated
-                // terracotta colour (or real tuff/stone) already placed for this exact column.
-                // Used only for the single bottommost row (in placePillar), so the pillar's
-                // footing joins seamlessly with the ground - everything above uses pure global
-                // Y-indexing so "same Y = same colour everywhere" isn't broken by rotating per
-                // pillar.
+                // Used only for the single bottommost row (in placePillar) so the pillar's footing joins the real ground colour already placed by surface rules, without breaking "same Y = same colour" for every row above.
                 BlockState anchorState = level.getBlockState(new BlockPos(x, baseY - 1, z));
                 placedAny |= placePillar(level, x, z, baseY, shape.height(), shape.maxRadius(), bands, anchorState, config);
             }
@@ -165,27 +135,16 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
         boolean placedAny = false;
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int y = baseY; y < baseY + height; y++) {
-            // Linear taper: full maxRadius at the base, shrinking to a single-block point
-            // by the pillar's own top, so each spire is wide-footed rather than a uniform
-            // 1-block-wide shaft.
             double heightFraction = height > 1 ? (double) (y - baseY) / (height - 1) : 1.0D;
             int radius = Math.round((float) (maxRadius * (1.0D - heightFraction)));
-            // Erosion pass: perturb the cone's radius per-block with a separate, finer
-            // noise field instead of testing a perfect circle - weathers the outline into
-            // vertical flutes/notches (Bedrock's stained_hardened_clay hoodoos never read
-            // as smooth cylinders). Weighted toward the top (heightFraction) so pillars
-            // still stand on a solid, mostly-intact base rather than eroding themselves
-            // loose at the ground.
+            // Erosion is weighted toward the top (heightFraction) so pillars stand on a solid, mostly-intact base rather than eroding themselves loose at the ground.
             double erosionScale = config.erosionStrength() * (0.4D + 0.6D * heightFraction);
             int maxScan = radius + (int) Math.ceil(erosionScale);
             boolean isBaseRow = y == baseY;
             BlockState material = getBandedMaterial(bands, x, y, z, isBaseRow, anchorState);
             for (int rx = -maxScan; rx <= maxScan; rx++) {
                 for (int rz = -maxScan; rz <= maxScan; rz++) {
-                    // The pillar's own core column always survives erosion, no matter how
-                    // strong - otherwise a harsh negative erosion sample at radius 0 (the
-                    // tapered tip) could carve out the one block holding the tip up,
-                    // leaving a disconnected floating cap above a gap.
+                    // The pillar's own core column always survives erosion - otherwise a harsh erosion sample at the tapered tip could carve out the one block holding it up, leaving a disconnected floating cap.
                     if (rx != 0 || rz != 0) {
                         double dist = Math.sqrt(rx * rx + rz * rz);
                         double erosion = EROSION_NOISE.getValue((x + rx) * EROSION_SCALE, (z + rz) * EROSION_SCALE, false);

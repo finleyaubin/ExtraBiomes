@@ -1,10 +1,6 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
-// Bedrock source values from ExtraBiomes - Bedrock/packs/BP/entities/giant_tortoise.json
-// ("minecraft:adult" component group). Deliberately has no Minecraft imports so tests can read
-// these constants without triggering GiantTortoiseEntity's own class-load side effects (its
-// SynchedEntityData.defineId(...) call needs a bootstrapped registry that plain JUnit can't
-// provide).
+// No Minecraft imports, deliberately: lets tests read these constants without triggering GiantTortoiseEntity's registry-dependent class-load.
 public final class GiantTortoiseTuning {
     public static final double MAX_HEALTH = 70;
     public static final double MOVEMENT_SPEED = 0.3;

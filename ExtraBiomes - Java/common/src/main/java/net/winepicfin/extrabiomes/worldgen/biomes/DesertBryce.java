@@ -17,13 +17,10 @@ public class DesertBryce {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
-        //BiomeDefaultFeatures.addFossilDecoration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
-        // reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps
-        // (packs/BP/biomes/desert_bryce.biome.json "bryce_pillars": true).
+        // Reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps.
         biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.SAND_PLACED_KEY);
 
         return new Biome.BiomeBuilder()

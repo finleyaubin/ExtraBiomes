@@ -135,14 +135,12 @@ public class JellyfishEntity extends WaterAnimal {
     @Override
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
-        // Milk the jellyfish with a glass bottle -> jellyfish jam.
         if (held.is(Items.GLASS_BOTTLE) && this.isAlive()) {
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             ItemStack jam = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISH_JAM_BOTTLE.get()));
             player.setItemInHand(hand, jam);
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
-        // Scoop the jellyfish into an empty jellyfishing net -> full net, remove the jellyfish.
         if (held.is(ModItems.JELLYFISHING_NET_EMPTY.get())) {
             if (!this.level().isClientSide) {
                 player.playSound(SoundEvents.BUCKET_FILL_FISH, 1.0F, 1.0F);
@@ -156,7 +154,6 @@ public class JellyfishEntity extends WaterAnimal {
         return super.mobInteract(player, hand);
     }
 
-    // 1.2x scale in Bedrock; applied in the renderer.
     @Override
     public boolean canBeLeashed(Player player) {
         return false;

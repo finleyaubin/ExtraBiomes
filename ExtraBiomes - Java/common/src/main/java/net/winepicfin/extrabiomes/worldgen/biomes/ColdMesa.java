@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
 
 public class ColdMesa {
@@ -26,7 +25,6 @@ public class ColdMesa {
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
-        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MesaFeatures.SELECT_TERRACOTTA_PLACED_KEY);
         BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
         BiomeDefaultFeatures.addBlueIce(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, GlacierFeatures.SELECT_SNOW_DRIFT_PLACED_KEY);

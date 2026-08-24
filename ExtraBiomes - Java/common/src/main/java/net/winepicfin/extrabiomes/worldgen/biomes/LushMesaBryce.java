@@ -6,7 +6,6 @@ import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
 public class LushMesaBryce {
@@ -19,11 +18,9 @@ public class LushMesaBryce {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MesaFeatures.SELECT_TERRACOTTA_PLACED_KEY);
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
@@ -31,8 +28,7 @@ public class LushMesaBryce {
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         BiomeDefaultFeatures.addJungleMelons(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.LUSH_GRASS_PLACED_KEY);
-        // 'bryce' variant: reconstructs the pre-1.18 mesa surface builder's noise-gated pillar
-        // bumps (packs/BP/biomes/lush_mesa_bryce.biome.json "bryce_pillars": true).
+        // Reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps, since this biome uses vanilla's Overworld density functions rather than its own erosion-spire noise.
         biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.TERRACOTTA_PLACED_KEY);
 
         return new Biome.BiomeBuilder()

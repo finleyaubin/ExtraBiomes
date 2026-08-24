@@ -39,8 +39,7 @@ public class HoppleshroomEntity extends Animal {
     private static final EntityDataAccessor<Integer> DATA_VARIANT =
             SynchedEntityData.defineId(HoppleshroomEntity.class, EntityDataSerializers.INT);
 
-    // Index order matches HoppleshroomRenderer's COLOURS/texture order and getMushroomBlock():
-    // black, blue, brown, crimson, cyan, green, orange, purple, red, warped, white, yellow.
+    // Index order matches HoppleshroomRenderer's COLOURS/texture order and getMushroomBlock().
     private static final Vector3f[] DUST_COLORS = {
             new Vector3f(0.12F, 0.12F, 0.12F),
             new Vector3f(0.25F, 0.4F, 0.95F),
@@ -56,9 +55,7 @@ public class HoppleshroomEntity extends Animal {
             new Vector3f(0.9F, 0.85F, 0.2F),
     };
 
-    // Landing squash, driven purely off the onGround transition rather than synced data — both
-    // the server and each client run identical physics for this entity, so the squish can be
-    // derived locally on each side exactly like vanilla Slime does with its own squish fields.
+    // Driven off the local onGround transition rather than synced data, like vanilla Slime's own squish fields, since server and client run identical physics here.
     public float squish;
     public float oSquish;
     private boolean wasOnGroundLastTick;
@@ -86,16 +83,13 @@ public class HoppleshroomEntity extends Animal {
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
     }
 
-    // JUMP_STRENGTH only affects horses by default — read it directly so the attribute set in
-    // createAttributes() actually controls how high each hop launches.
+    // JUMP_STRENGTH only affects horses by default — read it directly so createAttributes() actually controls hop height.
     @Override
     protected float getJumpPower() {
         return (float) this.getAttributeValue(Attributes.JUMP_STRENGTH);
     }
 
-    // Bedrock's "minecraft:damage_sensor" trigger for cause "fall" (damage_modifier: -12): fall
-    // damage is reduced by a flat 12 rather than cancelled, so a hoppleshroom never hurts itself
-    // on its own near-continuous hopping but a long enough drop still kills it.
+    // Fall damage is reduced by a flat 12 rather than cancelled, so near-continuous hopping never hurts it but a long enough drop still kills it.
     @Override
     protected int calculateFallDamage(float distance, float multiplier) {
         return Math.max(0, super.calculateFallDamage(distance, multiplier) + FALL_DAMAGE_MODIFIER);
@@ -113,8 +107,6 @@ public class HoppleshroomEntity extends Animal {
         boolean onGroundNow = this.onGround();
         if (onGroundNow && !this.wasOnGroundLastTick) {
             this.squish = 1.0F;
-            // Bedrock's animation controller triggers its "drop_spores" particle emitter and the
-            // jump sound off the same q.is_on_ground transition this mirrors.
             this.playSound(ModSounds.HOPPLESHROOM_JUMP.get(), 0.3F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             if (this.level().isClientSide()) {
                 spawnLandingParticles();
@@ -126,9 +118,7 @@ public class HoppleshroomEntity extends Animal {
         this.wasOnGroundLastTick = onGroundNow;
     }
 
-    // Ported from Bedrock's spore.particle.json (extrabiomes:spore_dust): an instant disc burst of
-    // 8 particles radiating outward from the landing point, tinted to the hoppleshroom's own colour
-    // instead of the single fixed tan tint Bedrock used for every variant.
+    // Ported from Bedrock's spore_dust particle, but tinted to the hoppleshroom's own colour instead of the single fixed tan tint Bedrock used for every variant.
     private void spawnLandingParticles() {
         Vector3f color = DUST_COLORS[Math.floorMod(this.getVariant(), DUST_COLORS.length)];
         DustParticleOptions options = new DustParticleOptions(color, 1.0F);

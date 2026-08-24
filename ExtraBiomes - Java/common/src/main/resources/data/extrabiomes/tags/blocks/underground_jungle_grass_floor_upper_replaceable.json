@@ -3,6 +3,7 @@
     "minecraft:stone",
     "minecraft:cave_vines",
     "minecraft:cave_vines_plant",
-    "minecraft:gravel"
+    "minecraft:gravel",
+    "#minecraft:terracotta"
   ]
 }

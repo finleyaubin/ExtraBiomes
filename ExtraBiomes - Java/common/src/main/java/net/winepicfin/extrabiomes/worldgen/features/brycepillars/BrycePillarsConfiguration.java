@@ -25,14 +25,7 @@ import java.util.List;
  * jungle_pillars' stone, which collapses the whole 192-array down to one repeated colour.
  */
 public record BrycePillarsConfiguration(BlockState backgroundMaterial, List<BlockState> streakPalette, int minHeight, int maxHeight, float threshold, int maxRadius, float erosionStrength) implements FeatureConfiguration {
-    // threshold raised 0.55 -> 0.75 -> 0.85: abs(simplex) clears 0.55 (and even 0.75) on a large
-    // share of columns, which is what made these "way too frequent" - real Bryce Canyon-style
-    // hoodoos are sparse, isolated spires, not a pillar on most columns. maxHeight raised 15 -> 48
-    // (near the codec's range ceiling) so the tallest pillars can tower well above the old vanilla
-    // mesa height cap. maxRadius gives each pillar a wide base that tapers to a point at its own
-    // height (see BrycePillarsFeature's per-column cone) instead of a uniform 1-block-wide shaft.
-    // erosionStrength perturbs that cone's radius with a separate noise field so the outline is a
-    // weathered, fluted silhouette instead of a perfect circle at every layer.
+    // threshold raised 0.55 -> 0.85 since abs(simplex) cleared 0.55 (and even 0.75) on far too many columns for sparse, isolated Bryce Canyon-style hoodoos; maxHeight raised 15 -> 48 so the tallest pillars tower above the old vanilla mesa cap.
     public BrycePillarsConfiguration(BlockState backgroundMaterial, List<BlockState> streakPalette) {
         this(backgroundMaterial, streakPalette, 5, 48, 0.97F, 4, 1.5F);
     }

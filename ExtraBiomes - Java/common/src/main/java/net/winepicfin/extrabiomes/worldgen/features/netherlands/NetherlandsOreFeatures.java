@@ -62,12 +62,8 @@ public class NetherlandsOreFeatures {
     public static final ResourceKey<PlacedFeature> REDSTONE_ORE_PLACED_KEY = placedKey("netherlands_redstone_ore");
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        // ModSurfaceRules paints this biome's underground as netherrack (down to a shallow band,
-        // with plain stone resuming below it) - not stone - so these veins must target netherrack
-        // to actually find anything to replace. A BlockMatchTest(Blocks.STONE) here matched nothing
-        // in the terrain these veins actually roll in, which is why none of the ores ever appeared.
+        // ModSurfaceRules paints this biome's underground as netherrack, not stone, so these veins must target netherrack to find anything to replace.
         BlockMatchTest replaceNetherrack = new BlockMatchTest(Blocks.NETHERRACK);
-        // count (vein size) values read from features/the_netherlands/*_ore_feature.json
         context.register(COAL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.COAL_ORE.defaultBlockState(), 17)));
         context.register(COPPER_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.COPPER_ORE.defaultBlockState(), 9)));
         context.register(DIAMOND_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_DIAMOND_ORE.get().defaultBlockState(), 8)));
@@ -81,7 +77,6 @@ public class NetherlandsOreFeatures {
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
-        // iterations (veins/chunk) and y extent read from feature_rules/the_netherlands/netherlands_underground_*_ore_feature.json
         register(context, configuredFeatures, COAL_ORE_KEY, COAL_ORE_PLACED_KEY, 20, 0, 128);
         register(context, configuredFeatures, COPPER_ORE_KEY, COPPER_ORE_PLACED_KEY, 20, 0, 64);
         register(context, configuredFeatures, DIAMOND_ORE_KEY, DIAMOND_ORE_PLACED_KEY, 1, 0, 16);

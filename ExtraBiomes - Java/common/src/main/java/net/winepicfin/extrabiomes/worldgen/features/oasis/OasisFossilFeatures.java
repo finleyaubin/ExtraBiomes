@@ -81,8 +81,7 @@ public class OasisFossilFeatures {
             ));
         }
 
-        // Equal 1-in-8 chance per piece (same sequential-trial conversion used by BoulderFeatures):
-        // the last piece is the guaranteed RANDOM_SELECTOR default.
+        // Equal 1-in-8 chance per piece via the same sequential-trial conversion used by BoulderFeatures; the last piece is the guaranteed RANDOM_SELECTOR default.
         context.register(SELECT_FOSSIL_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(
                         new WeightedPlacedFeature(placedFeatures.getOrThrow(SPINE_1_PLACED_KEY), 1.0F / 8.0F),
@@ -100,8 +99,7 @@ public class OasisFossilFeatures {
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // Bone pieces carry no placement modifiers of their own - they're only ever invoked as a
-        // WeightedPlacedFeature entry of SELECT_FOSSIL, which carries the real scatter/surface modifiers.
+        // Bone pieces are only ever invoked as a WeightedPlacedFeature entry of SELECT_FOSSIL, which carries the real scatter/surface modifiers.
         for (int i = 0; i < PIECE_KEYS.size(); i++) {
             context.register(PIECE_PLACED_KEYS.get(i), new PlacedFeature(configuredFeatures.getOrThrow(PIECE_KEYS.get(i)), List.<PlacementModifier>of()));
         }

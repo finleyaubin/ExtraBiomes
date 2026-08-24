@@ -41,7 +41,57 @@ import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStruc
 import java.util.List;
 import java.util.Optional;
 
-// Ports Bedrock's huge-mushroom select chain plus the underground glow-mushroom/mycelium-floor chain; the per-color small-mushroom scatter chain isn't ported since those Bedrock "_placed" blocks don't exist in ModBlocks yet (add them, then wire it up like SELECT_HUGE_MUSHROOM_KEY).
+/**
+ * Port of Bedrock's shared "huge mushroom select" chain
+ * ("ExtraBiomes - Bedrock/packs/BP/features/mushroom/**") plus the underground
+ * glow-mushroom and mycelium-floor chain ("feature_rules/underground_mushroom/*").
+ * <p>
+ * Bedrock source overview:
+ * <ul>
+ *   <li>{@code features/mushroom/select_huge_mushroom.json} ({@code minecraft:weighted_random_feature}):
+ *       vanilla {@code minecraft:huge_mushroom_feature} weight 10, plus 11 custom colored huge mushroom
+ *       structures ({@code huge_red_mushroom1}, {@code huge_brown_mushroom1}, {@code huge_purple_mushroom},
+ *       {@code huge_blue_mushroom}, {@code huge_yellow_mushroom}, {@code huge_green_mushroom},
+ *       {@code huge_cyan_mushroom}, {@code huge_white_mushroom}, {@code huge_black_mushroom},
+ *       {@code huge_orange_mushroom}, {@code huge_glow_mushroom}) each weight 1 -> total weight 21.
+ *       Each colored variant is a {@code minecraft:structure_template_feature} referencing a converted
+ *       .nbt under {@code data/extrabiomes/structures/mushroom/}; {@code huge_brown_mushroom1} and
+ *       {@code huge_red_mushroom1} pin {@code facing_direction: "south"} (fixed rotation), every other
+ *       colored variant leaves it random.</li>
+ *   <li>{@code feature_rules/mushroom_island_surface_huge_mushroom_feature.json}: places
+ *       {@code select_huge_mushroom} once per chunk at {@code query.above_top_solid} for biomes tagged
+ *       {@code mooshroom_island} -&gt; {@link #MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY}.</li>
+ *   <li>{@code feature_rules/shattered_swamp/swamp_huge_mushroom_feature.json}: places
+ *       {@code select_huge_mushroom} once per chunk (1/4 chance) at {@code query.above_top_solid} for
+ *       biomes tagged {@code swamp} or {@code roofed} -&gt; {@link #SWAMP_HUGE_MUSHROOM_PLACED_KEY}.</li>
+ *   <li>{@code feature_rules/underground_mushroom/huge_glow_mushroom_feature.json}: places ONLY
+ *       {@code extrabiomes:mushroom/huge_glow_mushroom} (not the full weighted selector), 25
+ *       iterations/chunk, y in [-64, heightmap-10], for overworld biomes -&gt;
+ *       {@link #HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY}.</li>
+ *   <li>{@code feature_rules/underground_mushroom/mushroom_surface_mycelium_floor_feature.json} (via
+ *       {@code features/underground_mushroom/mycelium_floor_snap_to_floor_feature.json} ->
+ *       {@code mycelium_floor_feature.json}, a {@code minecraft:vegetation_patch_feature}): scatters
+ *       mycelium floor patches (400 iterations/chunk, y in [-64,60]) for {@code mooshroom_island} biomes,
+ *       growing {@code features/underground_mushroom/select_mushroom_feature.json} on top of each patch
+ *       cell - a {@code minecraft:weighted_random_feature} of {@code select_huge_mushroom} (weight 3)
+ *       vs. vanilla {@code minecraft:legacy:small_mushrooms_feature} (weight 3) -&gt;
+ *       {@link #MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY}.</li>
+ * </ul>
+ * <p>
+ * <b>NOT ported (missing blocks, not invented here):</b> Bedrock's per-color small-mushroom scatter
+ * chain - {@code features/mushroom/mushroom_custom_feature.json} (the "extra custom mushroom" weighted
+ * selector), the 9 {@code features/mushroom/scatter_<color>_mushroom.json} /
+ * {@code <color>_mushroom_patch.json} pairs, {@code features/mushroom/glow_mushroom_patch.json} /
+ * {@code scatter_glow_mushroom.json}, and the two feature_rules that only exist to place
+ * {@code mushroom_custom_feature} ({@code mushroom_island_custom_mushroom_feature.json} and
+ * {@code overworld_surface_extra_custom_mushroom_feature.json}). Every one of these places a Bedrock
+ * "{@code extrabiomes:<color>_mushroom_placed}" block - a small individual mushroom decoration distinct
+ * from the huge-mushroom cap blocks - and NONE of those "_placed" blocks exist in ModBlocks (only the
+ * 9 huge-mushroom CAP blocks do: BLACK/BLUE/CYAN/GREEN/ORANGE/PURPLE/WHITE/YELLOW/GLOW_MUSHROOM_BLOCK,
+ * which this class already reuses for the huge structures above). Per project convention, no new blocks
+ * were invented to cover this gap - add the missing small mushroom blocks to ModBlocks first, then wire
+ * up this second chain the same way as {@link #SELECT_HUGE_MUSHROOM_KEY} below.
+ */
 public class MushroomFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_BLACK_MUSHROOM_KEY = cfKey("huge_black_mushroom");
@@ -68,14 +118,12 @@ public class MushroomFeatures {
     public static final ResourceKey<PlacedFeature> HUGE_WHITE_MUSHROOM_PLACED_KEY = pfKey("huge_white_mushroom");
     public static final ResourceKey<PlacedFeature> HUGE_YELLOW_MUSHROOM_PLACED_KEY = pfKey("huge_yellow_mushroom");
 
-    // -- vanilla huge red/brown mushroom, re-registered locally so they can sit in our own
-    //    RANDOM_SELECTOR alongside the colored variants (mirrors vanilla's own defaults). ------------
+    // Re-registered locally (not referencing vanilla's placed features) so these can sit inside our own RANDOM_SELECTOR alongside the colored variants.
     public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_HUGE_RED_MUSHROOM_KEY = cfKey("vanilla_huge_red_mushroom");
     public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_HUGE_BROWN_MUSHROOM_KEY = cfKey("vanilla_huge_brown_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_HUGE_RED_MUSHROOM_PLACED_KEY = pfKey("vanilla_huge_red_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_HUGE_BROWN_MUSHROOM_PLACED_KEY = pfKey("vanilla_huge_brown_mushroom");
 
-    // -- the shared master selector ("select_huge_mushroom") -----------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_HUGE_MUSHROOM_KEY = cfKey("select_huge_mushroom");
     /** Generic placement (just a biome filter) - use this as an ingredient of other features. */
     public static final ResourceKey<PlacedFeature> SELECT_HUGE_MUSHROOM_PLACED_KEY = pfKey("select_huge_mushroom");
@@ -84,10 +132,9 @@ public class MushroomFeatures {
     /** Bedrock's {@code shattered_swamp/swamp_huge_mushroom_feature.json} distribution (1/4 chance, once per chunk, on the surface). */
     public static final ResourceKey<PlacedFeature> SWAMP_HUGE_MUSHROOM_PLACED_KEY = pfKey("swamp_huge_mushroom");
 
-    // -- standalone underground glow-mushroom scatter (huge_glow_mushroom_feature.json) ---------------
     public static final ResourceKey<PlacedFeature> HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY = pfKey("huge_glow_mushroom_underground");
 
-    // -- vanilla small red/brown mushroom stand-in for "minecraft:legacy:small_mushrooms_feature" -----
+    // Vanilla small mushroom stand-in for Bedrock's legacy small_mushrooms_feature.
     public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_SMALL_RED_MUSHROOM_KEY = cfKey("vanilla_small_red_mushroom");
     public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_SMALL_BROWN_MUSHROOM_KEY = cfKey("vanilla_small_brown_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_SMALL_RED_MUSHROOM_PLACED_KEY = pfKey("vanilla_small_red_mushroom");
@@ -95,11 +142,9 @@ public class MushroomFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_SMALL_MUSHROOM_KEY = cfKey("vanilla_small_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_SMALL_MUSHROOM_PLACED_KEY = pfKey("vanilla_small_mushroom");
 
-    // -- underground_mushroom/select_mushroom_feature.json: select_huge_mushroom (3) vs small (3) -----
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_MUSHROOM_KEY = cfKey("select_mushroom");
     public static final ResourceKey<PlacedFeature> SELECT_MUSHROOM_PLACED_KEY = pfKey("select_mushroom");
 
-    // -- underground_mushroom/mycelium_floor_feature.json (vegetation_patch_feature) ------------------
     public static final TagKey<Block> MYCELIUM_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
             new ResourceLocation(ExtraBiomes.MOD_ID, "mycelium_floor_replaceable"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYCELIUM_FLOOR_KEY = cfKey("mycelium_floor");
@@ -107,7 +152,6 @@ public class MushroomFeatures {
     public static final ResourceKey<PlacedFeature> MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY = pfKey("mushroom_surface_mycelium_floor");
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        // -- the 11 colored huge mushroom structures --------------------------------------------------
         registerStructure(context, HUGE_BLACK_MUSHROOM_KEY, "huge_black_mushroom", Optional.empty());
         registerStructure(context, HUGE_BLUE_MUSHROOM_KEY, "huge_blue_mushroom", Optional.empty());
         registerStructure(context, HUGE_BROWN_MUSHROOM1_KEY, "huge_brown_mushroom1", Optional.of(Rotation.NONE));
@@ -120,26 +164,12 @@ public class MushroomFeatures {
         registerStructure(context, HUGE_WHITE_MUSHROOM_KEY, "huge_white_mushroom", Optional.empty());
         registerStructure(context, HUGE_YELLOW_MUSHROOM_KEY, "huge_yellow_mushroom", Optional.empty());
 
-        // -- vanilla huge red/brown mushroom, mirroring vanilla's own defaults -------------------------
         register(context, VANILLA_HUGE_RED_MUSHROOM_KEY, Feature.HUGE_RED_MUSHROOM,
                 new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 2));
         register(context, VANILLA_HUGE_BROWN_MUSHROOM_KEY, Feature.HUGE_BROWN_MUSHROOM,
                 new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 3));
 
-        // -- select_huge_mushroom.json: Bedrock's own weighted_random_feature is 11 colored variants
-        //    (1 each) + vanilla huge_mushroom_feature (10, split evenly 5/5 between red and brown to
-        //    emulate its internal 50/50 pick since Java has no single combined "either huge mushroom"
-        //    feature) - ~52/48 collectively, but since that's spread across 11 distinct custom colors
-        //    against only 2 vanilla ones, any single vanilla color individually outnumbers any single
-        //    custom color 5:1, which reads as "barely any of the modded mushrooms" even though the
-        //    totals are close - playtest feedback confirmed exactly that in Mushroom Fields/Dark
-        //    Forest. Rebalanced to weight 3 per custom color (33 total) against vanilla's unchanged
-        //    10, i.e. roughly 3:1 in the custom colors' favor collectively, deliberately diverging from
-        //    Bedrock's literal weights to fix the practical density complaint. RandomFeatureConfiguration
-        //    is a SEQUENCE of independent Bernoulli trials (first hit wins), so weight w_i at position i
-        //    (with W_i weight remaining from i onward) becomes chance = w_i / W_i; the final entry is
-        //    folded into the mandatory "default" (guaranteed if every earlier trial missed, which is
-        //    exactly its correct probability). ------------------
+        // Weights are sequential-trial chances (w_i / weight remaining from i onward, since RandomFeatureConfiguration tries entries in order and the last is the guaranteed default), rebalanced to ~3:1 favoring custom colors over Bedrock's literal weights after playtesting showed the literal weights (any one vanilla color individually outnumbers any one custom color 5:1) read as almost no modded mushrooms.
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         register(context, SELECT_HUGE_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(
@@ -159,7 +189,6 @@ public class MushroomFeatures {
                 placedFeatures.getOrThrow(VANILLA_HUGE_BROWN_MUSHROOM_PLACED_KEY)
         ));
 
-        // -- vanilla small mushroom stand-in for Bedrock's "minecraft:legacy:small_mushrooms_feature" --
         register(context, VANILLA_SMALL_RED_MUSHROOM_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM)));
         register(context, VANILLA_SMALL_BROWN_MUSHROOM_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM)));
         HolderGetter<PlacedFeature> placedFeatures2 = context.lookup(Registries.PLACED_FEATURE);
@@ -168,22 +197,14 @@ public class MushroomFeatures {
                 placedFeatures2.getOrThrow(VANILLA_SMALL_BROWN_MUSHROOM_PLACED_KEY)
         ));
 
-        // -- underground_mushroom/select_mushroom_feature.json: select_huge_mushroom (3) vs small (3) --
         HolderGetter<PlacedFeature> placedFeatures3 = context.lookup(Registries.PLACED_FEATURE);
         register(context, SELECT_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(new WeightedPlacedFeature(placedFeatures3.getOrThrow(SELECT_HUGE_MUSHROOM_PLACED_KEY), 0.5f)),
                 placedFeatures3.getOrThrow(VANILLA_SMALL_MUSHROOM_PLACED_KEY)
         ));
 
-        // -- underground_mushroom/mycelium_floor_feature.json (vegetation_patch_feature) ---------------
         HolderGetter<PlacedFeature> placedFeatures4 = context.lookup(Registries.PLACED_FEATURE);
-        // VegetationPatchConfiguration field order is (replaceable, groundState, vegetationFeature,
-        // surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius,
-        // extraEdgeColumnChance) - a prior pass here had verticalRange/extraEdgeColumnChance swapped
-        // and zeroed, which fails datagen ("Value 0 outside of range [1:256]; Value 5.0 outside of
-        // range [0.0:1.0]"). Bedrock's mycelium_floor_feature.json: vertical_range 5, vegetation_chance
-        // 0.008, horizontal_radius 4-8, extra_edge_column_chance 0.3 (extraBottomBlockChance has no
-        // Bedrock equivalent, left at 0).
+        // Field order is (replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance) - a prior swap of verticalRange/extraEdgeColumnChance here failed datagen ("Value 0 outside of range [1:256]").
         register(context, MYCELIUM_FLOOR_KEY, Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 MYCELIUM_FLOOR_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.MYCELIUM),
@@ -201,10 +222,7 @@ public class MushroomFeatures {
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // building-block placements: no extra modifiers, they are only ever placed by a wrapping
-        // ConfiguredFeature (RANDOM_SELECTOR) or by another PlacedFeature that supplies its own
-        // distribution, exactly mirroring how Bedrock's constraints (unburied/grounded) live on the
-        // structure_template_feature itself rather than on the distribution.
+        // No extra modifiers on these building-block placements - they're only ever placed by a wrapping RANDOM_SELECTOR or another PlacedFeature that supplies its own distribution.
         register(context, HUGE_BLACK_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_BLACK_MUSHROOM_KEY));
         register(context, HUGE_BLUE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_BLUE_MUSHROOM_KEY));
         register(context, HUGE_BROWN_MUSHROOM1_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_BROWN_MUSHROOM1_KEY));
@@ -222,23 +240,10 @@ public class MushroomFeatures {
         register(context, VANILLA_SMALL_BROWN_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(VANILLA_SMALL_BROWN_MUSHROOM_KEY));
         register(context, VANILLA_SMALL_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(VANILLA_SMALL_MUSHROOM_KEY));
 
-        // select_huge_mushroom, generic (no distribution baked in) - use as a vegetation_feature input
-        // or wrap again (see MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY) for a specific distribution.
-        // NOTE: no BiomeFilter here - this is only ever referenced as a nested ingredient (inside
-        // SELECT_MUSHROOM_KEY's RandomFeatureConfiguration), never added directly to a biome. A
-        // BiomeFilter on a nested/ingredient feature causes "Tried to biome check an unregistered
-        // feature" at runtime, since FeatureSorter only indexes top-level per-biome features.
+        // No BiomeFilter here - only ever referenced as a nested ingredient (inside SELECT_MUSHROOM_KEY's config); a BiomeFilter on a nested feature causes "Tried to biome check an unregistered feature" at runtime.
         register(context, SELECT_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY));
 
-        // mushroom_island_surface_huge_mushroom_feature.json: iterations 1, x/z uniform [0,16],
-        // y = query.above_top_solid(...) -> once per chunk, spread across it, one above the surface.
-        // Was anchored on WORLD_SURFACE_WG, which treats fluids as "surface" too, so with no
-        // water-depth check it stamped the structure onto the TOP of any lake/pond/ocean in the
-        // column - the "floating on water" bug - since SingleStructureFeature places blocks
-        // unconditionally with no per-block survive check to self-correct. Anchoring on
-        // OCEAN_FLOOR_WG instead places it on the true floor beneath any water, and
-        // SurfaceWaterDepthFilter still allows shallow sea-floor spots (<=3 blocks of water over
-        // that floor) while rejecting placement entirely in deeper water/lakes.
+        // Anchored on OCEAN_FLOOR_WG (not WORLD_SURFACE_WG, which counts fluid tops as "surface") so structures don't get stamped floating on top of lakes/ponds; SurfaceWaterDepthFilter still allows shallow sea-floor spots.
         register(context, MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY),
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
@@ -246,8 +251,6 @@ public class MushroomFeatures {
                 SurfaceWaterDepthFilter.forMaxDepth(3),
                 BiomeFilter.biome());
 
-        // shattered_swamp/swamp_huge_mushroom_feature.json: iterations 1, scatter_chance 1/4,
-        // y = query.above_top_solid(...) -> once per chunk (25% of the time), on the surface.
         register(context, SWAMP_HUGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_HUGE_MUSHROOM_KEY),
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
@@ -256,18 +259,7 @@ public class MushroomFeatures {
                 net.minecraft.world.level.levelgen.placement.RarityFilter.onAverageOnceEvery(4),
                 BiomeFilter.biome());
 
-        // underground_mushroom/huge_glow_mushroom_feature.json: iterations 25, y in [-64, heightmap-10].
-        // NOTE: was VerticalAnchor.belowTop(10), which is 10 blocks below the world's build-height
-        // ceiling (~y310) - not "10 below the terrain surface" as the comment/Bedrock intended. Java's
-        // VerticalAnchor has no heightmap-relative variant, so this was scattering huge mushroom
-        // structures uniformly across nearly the entire world height, mostly in open sky above the
-        // actual terrain. Bounded to a fixed absolute height instead, matching the same underground-ish
-        // range used by MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY below.
-        //
-        // EnvironmentScanPlacement then snaps the picked Y down onto the nearest solid floor (scanning
-        // through air/cave_air, same mechanism vanilla uses for glow lichen/amethyst clusters), so the
-        // structure lands grounded inside a cave/cavity instead of floating wherever the raw random Y
-        // happened to fall. If no floor is found within range for that attempt, placement is skipped.
+        // Was VerticalAnchor.belowTop(10) (10 below build-height ~y310, not the terrain surface, since VerticalAnchor has no heightmap-relative variant), scattering structures across nearly the whole world height in open sky; bounded to a fixed range instead, and EnvironmentScanPlacement snaps the picked Y down onto the nearest solid floor.
         register(context, HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_GLOW_MUSHROOM_KEY),
                 CountPlacement.of(1),
                 InSquarePlacement.spread(),
@@ -279,19 +271,10 @@ public class MushroomFeatures {
                         2),
                 BiomeFilter.biome());
 
-        // select_mushroom (underground_mushroom/select_mushroom_feature.json), generic - fed as the
-        // vegetation_feature of the mycelium floor patch below.
-        // NOTE: no BiomeFilter here either, for the same reason as SELECT_HUGE_MUSHROOM_PLACED_KEY above -
-        // this is only ever referenced nested (as MYCELIUM_FLOOR_KEY's vegetationFeature), never added
-        // directly to a biome.
+        // No BiomeFilter here either - only ever referenced nested, as MYCELIUM_FLOOR_KEY's vegetationFeature.
         register(context, SELECT_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MUSHROOM_KEY));
 
-        // mushroom_surface_mycelium_floor_feature.json: iterations 400, y uniform [-64,60]. Bedrock's
-        // separate "snap_to_surface_feature" wrapper (vertical_search_range 12, surface floor) is folded
-        // into VegetationPatchConfiguration.surface(CaveSurface.FLOOR) above - the patch feature already
-        // searches for a valid floor itself, so no extra Java feature is needed for it.
-        // NOTE: CountPlacement's IntProvider codec caps at 256 - Bedrock's 400 iterations/chunk has no
-        // exact Java equivalent, so this is clamped to the engine max.
+        // CountPlacement's IntProvider codec caps at 256 - Bedrock's 400 iterations/chunk has no exact Java equivalent, so this is clamped to the engine max.
         register(context, MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY, configuredFeatures.getOrThrow(MYCELIUM_FLOOR_KEY),
                 CountPlacement.of(256),
                 InSquarePlacement.spread(),
@@ -300,11 +283,7 @@ public class MushroomFeatures {
     }
 
     private static void registerStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {
-        // centered=true: every huge mushroom's stem sits dead-center in its footprint (e.g. the
-        // black mushroom's stem is at local (6,0,6) inside a 13x13 base), not at the local (0,0,0)
-        // corner - without centering, the stem/trunk lands several blocks away from wherever this
-        // feature's origin actually is (visibly wrong when a Hoppleshroom or bonemeal grows one
-        // from a specific small-mushroom block).
+        // centered=true: the stem sits dead-center in its footprint, not at the local (0,0,0) corner, or it lands several blocks from the feature's actual origin.
         SingleStructureConfiguration config = new SingleStructureConfiguration(
                 new ResourceLocation(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
                 fixedRotation,
