@@ -62,7 +62,6 @@ import java.util.List;
  */
 public class GlacierFeatures {
 
-    // -- ore-style ice layers -------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_ICE_KEY =
             configuredKey("glacier_ice");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_PACKED_ICE_KEY =
@@ -77,7 +76,6 @@ public class GlacierFeatures {
     public static final ResourceKey<PlacedFeature> GLACIER_TOP_ICE_PLACED_KEY =
             placedKey("glacier_top_ice");
 
-    // -- snow drift structure scatter (weighted 2:1 selector) ----------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_SNOW_DRIFT_KEY =
             configuredKey("select_snow_drift");
     /** This is the key the biome-wiring pass should addFeature(...) with. */
@@ -86,7 +84,6 @@ public class GlacierFeatures {
 
     private static final int SNOW_DRIFT_GROUND_OFFSET = -2;
 
-    // Bedrock replace_rules.may_replace list, shared by all three ice ore features.
     private static List<OreConfiguration.TargetBlockState> iceTargets(BlockState result) {
         RuleTest[] sources = new RuleTest[] {
                 new BlockMatchTest(Blocks.STONE),
@@ -104,10 +101,7 @@ public class GlacierFeatures {
     }
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        // count 30/90/110 -> OreConfiguration vein size (mirrors LUSH_GRASS_KEY's grassBlob pattern
-        // in ModConfigureFeatures.java). NOTE: OreConfiguration's vein-size codec caps at 64, so the
-        // packed/top ice veins (originally 90/110, copied from Bedrock's per-chunk "count" which isn't
-        // actually the same quantity as a Java vein size) are clamped to the engine max.
+        // OreConfiguration's vein-size codec caps at 64, so the packed/top ice veins (90/110 in Bedrock) are clamped.
         context.register(GLACIER_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 30, 0.0F)));
         context.register(GLACIER_PACKED_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
@@ -115,12 +109,7 @@ public class GlacierFeatures {
         context.register(GLACIER_TOP_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
 
-        // Bedrock facing_direction wasn't specified for either snow-drift structure -> random
-        // rotation. Distribution y = [heightmap, heightmap] in Bedrock has no "-N" offset, but both
-        // templates' wide, unevenly-shaped bases (21x19 / 12x12 footprints, sampled at a single
-        // corner) mean uneven terrain under the rest of the footprint reads as the drift floating
-        // above dips - SNOW_DRIFT_GROUND_OFFSET sinks the whole base a couple blocks into the
-        // ground so it hugs slopes instead (same technique as OasisPuddleFeature's -4).
+        // SNOW_DRIFT_GROUND_OFFSET sinks the wide, unevenly-shaped drift templates into the ground so uneven terrain under them doesn't read as floating (same technique as OasisPuddleFeature's -4).
         Holder<ConfiguredFeature<?, ?>> snowDrift1 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"), SNOW_DRIFT_GROUND_OFFSET)
@@ -129,14 +118,11 @@ public class GlacierFeatures {
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"), SNOW_DRIFT_GROUND_OFFSET)
         ));
-        // Sub-features of the weighted selector carry no placement of their own - the outer
-        // SELECT_SNOW_DRIFT_PLACED_KEY (registered in bootstrapPlaced) controls where/how often the
-        // whole selector runs.
+        // inlinePlaced avoids a registration-order problem: PLACED_FEATURE bootstrap runs after CONFIGURED_FEATURE, so these sub-features can't go through the registry here.
         Holder<PlacedFeature> snowDrift1Placed = PlacementUtils.inlinePlaced(snowDrift1);
         Holder<PlacedFeature> snowDrift2Placed = PlacementUtils.inlinePlaced(snowDrift2);
 
-        // select_snow_drift_feature: weighted 2:1 between snow_drift_1 (2) and snow_drift_2 (1).
-        // Encoded as one entry with chance 2/3 plus a default feature (which gets the remaining 1/3).
+        // Weighted 2:1 selection is encoded as one entry with chance 2/3 plus a default feature that gets the remaining 1/3.
         context.register(SELECT_SNOW_DRIFT_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
                 new RandomFeatureConfiguration(
                         List.of(new WeightedPlacedFeature(snowDrift1Placed, 2.0F / 3.0F)),
@@ -147,11 +133,7 @@ public class GlacierFeatures {
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // iterations 15/70/60 -> CountPlacement; x/z uniform[0,16] -> InSquarePlacement.spread();
-        // y uniform[-64,100] / [64,100] -> HeightRangePlacement.uniform(...). glacier_ice and
-        // glacier_packed_ice span the full underground range (-64..100) so they're wired at
-        // UNDERGROUND_ORES in the biome; glacier_top_ice only spans 64..100 (near/above sea level)
-        // so it's wired at LOCAL_MODIFICATIONS instead (see project instructions / biome-wiring pass).
+        // glacier_ice/glacier_packed_ice span the full underground range (-64..100) so they're wired at UNDERGROUND_ORES in the biome; glacier_top_ice only spans 64..100 so it's wired at LOCAL_MODIFICATIONS instead.
         context.register(GLACIER_ICE_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(GLACIER_ICE_KEY),
                 List.of(
@@ -177,20 +159,7 @@ public class GlacierFeatures {
                         BiomeFilter.biome()
                 )));
 
-        // snow_drift.json: iterations 1, scatter_chance 30 (~30% per chunk) -> Bedrock's
-        // percentage-based scatter_chance has no exact Java equivalent, so this is approximated with
-        // RarityFilter; x/z uniform[0,16] -> InSquarePlacement.spread(); y = [heightmap, heightmap]
-        // -> HeightmapPlacement on OCEAN_FLOOR_WG (ignores fluids, unlike WORLD_SURFACE_WG, which
-        // would land a drift on top of a frozen lake's water column instead of its bed), combined
-        // with the SNOW_DRIFT_GROUND_OFFSET groundOffset above (see snowDrift1/2 comment).
-        // constraints.unburied + block_intersection.block_allowlist [air, snow_layer] -> a
-        // BlockPredicateFilter testing the placement origin itself (0,0,0) must be air or (Java)
-        // snow, i.e. the surface must be clear/snow-covered to place onto; constraints.grounded is
-        // implicitly satisfied by HeightmapPlacement always landing on top of the first
-        // solid/motion-blocking column.
-        // Reduced from onAverageOnceEvery(3) (~33%, the literal reciprocal of Bedrock's 30%) to
-        // onAverageOnceEvery(8) (~12.5%) - drifts were reading as too dense across glacier/frozen
-        // biomes at the literal rate.
+        // OCEAN_FLOOR_WG (not WORLD_SURFACE_WG) ignores fluids so a drift lands on a frozen lake's bed, not floats on its water column; rarity reduced from the literal ~33% to ~12.5% since drifts read as too dense at the literal rate.
         context.register(SELECT_SNOW_DRIFT_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_SNOW_DRIFT_KEY),
                 List.of(

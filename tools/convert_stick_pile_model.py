@@ -94,6 +94,17 @@ def build_elements(cubes, rotate):
 
 def write_model(path, elements):
     model = {
+        # Without a parent, this custom-elements model has no gui/firstperson/thirdperson display
+        # transforms at all, so the item icon (stick_pile_y, used directly as the block item's
+        # model - see ModBlockStateProvider.stickPileBlock()) renders with identity transforms
+        # instead of the standard scaled/rotated block-item framing. That's what made the item
+        # icon look broken after the axis-rotation fix: the geometry itself changed shape/
+        # orientation, and with no display block to normalize it for GUI/inventory rendering, the
+        # new orientation no longer happens to look reasonable by chance the way the old (wrong)
+        # one incidentally did. "minecraft:block/block" supplies the same default display
+        # transforms every vanilla block model gets; it doesn't affect in-world rendering (only
+        # item/gui contexts use "display"), so it's safe to add to all three axis variants.
+        "parent": "minecraft:block/block",
         "ambientocclusion": False,
         "textures": {
             "stick": "minecraft:block/oak_log",

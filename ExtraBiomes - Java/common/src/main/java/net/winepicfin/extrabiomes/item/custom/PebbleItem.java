@@ -20,6 +20,8 @@ import net.winepicfin.extrabiomes.entity.custom.projectile.PebbleProjectileEntit
 import net.winepicfin.extrabiomes.item.ModItems;
 
 public class PebbleItem extends Item {
+    private static final int THROW_COOLDOWN_TICKS = 10;
+
     public PebbleItem(Properties properties) {
         super(properties);
     }
@@ -27,6 +29,9 @@ public class PebbleItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemstack = player.getItemInHand(interactionHand);
+        if (player.getCooldowns().isOnCooldown(this)) {
+            return InteractionResultHolder.fail(itemstack);
+        }
         if (!level.isClientSide) {
             if (!player.isCrouching()) {
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
@@ -34,6 +39,7 @@ public class PebbleItem extends Item {
                 pebbleEntity.setItem(itemstack);
                 pebbleEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
                 level.addFreshEntity(pebbleEntity);
+                player.getCooldowns().addCooldown(this, THROW_COOLDOWN_TICKS);
             }
         }
 

@@ -26,8 +26,15 @@ public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaModel<Pir
         return TEXTURES[Mth.clamp(entity.getVariant(), 0, TEXTURES.length - 1)];
     }
 
-    // Bedrock's animation.piranha.flop rolls the body by variable.zrot when out of water; vanilla
-    // CodRenderer does the same thing here rather than in the model, so this mirrors it.
+    // Visual counterpart to PiranhaEntity#getDimensions' hitbox scale.
+    @Override
+    protected void scale(PiranhaEntity entity, PoseStack poseStack, float partialTickTime) {
+        super.scale(entity, poseStack, partialTickTime);
+        float s = entity.getSizeScale();
+        poseStack.scale(s, s, s);
+    }
+
+    // Mirrors vanilla CodRenderer: rolls the body out of water in the renderer rather than the model, matching Bedrock's animation.piranha.flop.
     @Override
     protected void setupRotations(PiranhaEntity entity, PoseStack poseStack, float ageInTicks, float rotationYaw,
                                   float partialTicks) {

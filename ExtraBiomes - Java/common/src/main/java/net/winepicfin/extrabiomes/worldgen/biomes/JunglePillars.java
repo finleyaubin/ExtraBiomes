@@ -18,7 +18,6 @@ public class JunglePillars {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
@@ -27,10 +26,7 @@ public class JunglePillars {
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)
         // stone_pillars: single pillar structure placed once per chunk (Bedrock feature_rules/stone_pillars.json, first_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, StonePillarsFeature.STONE_PILLARS_PLACED_KEY);
-        // Bedrock layers TWO independent pillar mechanics on jungle_pillars: the hand-authored
-        // stone_pillar_{1,2,3} structures above, AND its "minecraft:mesa" surface builder's own
-        // "bryce_pillars": true terrain-noise bumps (packs/BP/biomes/jungle_pillars.biome.json) -
-        // this reconstructs that second mechanic.
+        // Bedrock layers two independent pillar mechanics here: the hand-authored stone_pillar structures above, and its "mesa" surface builder's own bryce_pillars noise bumps, reconstructed below.
         biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.STONE_PLACED_KEY);
 
         return new Biome.BiomeBuilder()

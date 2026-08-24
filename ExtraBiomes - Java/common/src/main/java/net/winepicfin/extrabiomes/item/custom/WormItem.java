@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.custom.WormEntity;
 
-// Bedrock parity: extrabiomes:worm is directly placeable from the item, not just via spawn egg -
-// mirrors vanilla's bucket-of-fish placement flow (right-click a block face to release the mob).
+// Bedrock parity: extrabiomes:worm is directly placeable from the item, not just via spawn egg - mirrors vanilla's bucket-of-fish placement flow.
 public class WormItem extends Item {
     public WormItem(Properties properties) {
         super(properties);

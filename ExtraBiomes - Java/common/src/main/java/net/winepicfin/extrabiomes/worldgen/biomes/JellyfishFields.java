@@ -13,17 +13,13 @@ public class JellyfishFields {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        // Ocean biome - no land farm animals. Jellyfish itself is added via the
-        // add_spawn_jellyfish biome modifier; these mirror vanilla's warm ocean ambience.
+        // Jellyfish itself is added via the add_spawn_jellyfish biome modifier, not here; these mirror vanilla's warm ocean ambience.
         BiomeDefaultFeatures.warmOceanSpawns(spawnBuilder, 10, 4);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-
-        //BiomeDefaultFeatures.addWarmOceanVegetation(biomeBuilder);
 
         // bedrock feature_rules/jellycoral.json
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, JellyCoralFeatures.JELLYCORAL_1_PLACED_KEY);

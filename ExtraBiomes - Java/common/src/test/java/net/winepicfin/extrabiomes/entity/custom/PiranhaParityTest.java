@@ -18,13 +18,35 @@ class PiranhaParityTest {
         bedrock = BedrockEntityJson.load("BP/entities/piranha.json");
     }
 
+    // Confirms the health/damage interpolation's endpoints still match Bedrock's small/large data points.
     @Test
-    void healthMatchesBedrock_scaleSmallVariant() {
-        // Bedrock rolls one of three scale component groups on spawn (6/7/8 health); the Java port
-        // has no size variants, so it pins the smallest.
+    void healthMatchesBedrock_atScaleEndpoints() {
         assertEquals(bedrock.getDouble("minecraft:entity", "component_groups", "scale_small",
                         "minecraft:health", "value"),
-                PiranhaTuning.MAX_HEALTH);
+                PiranhaTuning.HEALTH_AT_MIN_SCALE);
+        assertEquals(bedrock.getDouble("minecraft:entity", "component_groups", "scale_large",
+                        "minecraft:health", "value"),
+                PiranhaTuning.HEALTH_AT_MAX_SCALE);
+    }
+
+    @Test
+    void attackDamageMatchesBedrock_atScaleEndpoints() {
+        assertEquals(bedrock.getDouble("minecraft:entity", "component_groups", "scale_small",
+                        "minecraft:attack", "damage"),
+                PiranhaTuning.ATTACK_DAMAGE_AT_MIN_SCALE);
+        assertEquals(bedrock.getDouble("minecraft:entity", "component_groups", "scale_large",
+                        "minecraft:attack", "damage"),
+                PiranhaTuning.ATTACK_DAMAGE_AT_MAX_SCALE);
+    }
+
+    @Test
+    void scaleMatchesBedrock_atScaleEndpoints() {
+        assertEquals(bedrock.getDouble("minecraft:entity", "component_groups", "scale_small",
+                        "minecraft:scale", "value"),
+                (double) PiranhaTuning.SIZE_MIN_SCALE);
+        assertEquals(bedrock.getDouble("minecraft:entity", "component_groups", "scale_large",
+                        "minecraft:scale", "value"),
+                (double) PiranhaTuning.SIZE_MAX_SCALE);
     }
 
     @Test

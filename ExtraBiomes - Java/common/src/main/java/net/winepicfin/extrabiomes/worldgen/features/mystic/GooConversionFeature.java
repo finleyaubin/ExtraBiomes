@@ -25,8 +25,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
  */
 public class GooConversionFeature extends Feature<NoneFeatureConfiguration> {
 
-    // Deep enough for a typical surface pond/lake, shallow enough to stay clearly "surface water"
-    // rather than reaching into deep ocean trenches or anything cave-adjacent.
+    // Deep enough for a typical surface pond/lake, shallow enough to avoid deep ocean trenches or cave-adjacent water.
     private static final int SEARCH_DEPTH = 16;
 
     public GooConversionFeature(Codec<NoneFeatureConfiguration> codec) {
@@ -46,8 +45,7 @@ public class GooConversionFeature extends Feature<NoneFeatureConfiguration> {
                 level.setBlock(pos, gooState, 2);
                 placedAny = true;
             } else if (placedAny) {
-                // Already converted the contiguous water body above this point; a non-water
-                // block means we've reached its floor.
+                // Non-water after already converting some means we've reached the water body's floor.
                 break;
             }
             pos.move(0, -1, 0);

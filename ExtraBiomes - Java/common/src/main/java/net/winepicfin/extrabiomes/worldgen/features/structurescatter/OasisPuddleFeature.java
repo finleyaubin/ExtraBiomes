@@ -1,6 +1,5 @@
 package net.winepicfin.extrabiomes.worldgen.features.structurescatter;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -10,16 +9,15 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Worked example / reference implementation of {@link SingleStructureFeature}, converted from
@@ -55,13 +53,10 @@ import java.util.List;
  *       {@code groundOffset = -4} in the {@link SingleStructureConfiguration}, which is applied inside
  *       {@link SingleStructureFeature#place} right before the structure is stamped down.</li>
  *   <li>{@code constraints.grounded} + {@code block_intersection.block_allowlist} (the puddle must sit on
- *       sand/red sand) -> a {@link BlockPredicateFilter} testing the block one below the (pre-groundOffset)
- *       heightmap surface position against {@link BlockPredicate#matchesBlocks}, i.e. this is expressed as a
- *       PlacementModifier rather than as feature configuration, exactly as Bedrock's "constraints" block is
- *       itself a placement-time constraint, not part of the structure feature's own definition. This check is
- *       also repeated at the far corner of the 11x11 footprint in every rotation direction (not just the
- *       center), since a single-point check lets the flat template land across uneven sand and appear to
- *       float above dips or get buried under rises.</li>
+ *       sand/red sand) -> {@link SingleStructureConfiguration}'s {@code requireGroundedFloor} +
+ *       {@code requiredFloorBlocks} (SAND, RED_SAND), checked against the structure's real post-rotation
+ *       footprint (a prior PlacementModifier-based version checked pre-rotation offsets and over-rejected
+ *       almost every site).</li>
  *   <li>{@code has_biome_tag "oasis"} -> intentionally NOT included here; per project convention the biome
  *       wiring pass adds this PlacedFeature to the relevant biome(s) directly via
  *       biomeBuilder.addFeature(...), and {@link BiomeFilter#biome()} (last modifier below) is what makes
@@ -77,7 +72,8 @@ public class OasisPuddleFeature {
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(OASIS_PUDDLE_SCATTER_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "structurescatter/oasis_puddle"), -4)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "structurescatter/oasis_puddle"),
+                        Optional.empty(), -4, true, List.of(Blocks.SAND, Blocks.RED_SAND))
         ));
     }
 
@@ -90,19 +86,6 @@ public class OasisPuddleFeature {
                         RarityFilter.onAverageOnceEvery(5),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                        // The 11x11 template is stamped down at a random rotation around this
-                        // single sampled point, so its footprint can land in any of the four
-                        // quadrants relative to it. Requiring sand at the far corner in every
-                        // direction (not just the center) rejects sites where the sand dips or
-                        // rises across that span - otherwise part of the puddle ends up floating
-                        // above a dip or buried under a rise instead of sitting flush with the ground.
-                        BlockPredicateFilter.forPredicate(BlockPredicate.allOf(
-                                BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.SAND, Blocks.RED_SAND),
-                                BlockPredicate.matchesBlocks(new BlockPos(10, -1, 10), Blocks.SAND, Blocks.RED_SAND),
-                                BlockPredicate.matchesBlocks(new BlockPos(-10, -1, 10), Blocks.SAND, Blocks.RED_SAND),
-                                BlockPredicate.matchesBlocks(new BlockPos(10, -1, -10), Blocks.SAND, Blocks.RED_SAND),
-                                BlockPredicate.matchesBlocks(new BlockPos(-10, -1, -10), Blocks.SAND, Blocks.RED_SAND)
-                        )),
                         BiomeFilter.biome()
                 )
         ));

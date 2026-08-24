@@ -24,7 +24,6 @@ public class TheNetherlandsMutated {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COAL_ORE_PLACED_KEY);
@@ -44,8 +43,7 @@ public class TheNetherlandsMutated {
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWaterFeature.WATER_FEATURE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
         // No custom cave carver on Java - see TheNetherlands/ModSurfaceRules for why.
-        // NOTE: 'mutated' variant of TheNetherlands - see notes there. Bedrock top material here
-        // is plain dirt (no grass) rather than grass_block, reflected in the surface rules.
+        // Bedrock's top material here is plain dirt (no grass) rather than grass_block, reflected in the surface rules.
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

@@ -51,9 +51,6 @@ import java.util.List;
  */
 public class TropicalIslandFeatures {
 
-    // -----------------------------------------------------------------
-    // tropical_melon_feature.json
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> MELON_KEY = configuredKey("tropical_melon");
 
     /**
@@ -63,9 +60,6 @@ public class TropicalIslandFeatures {
      */
     public static final ResourceKey<PlacedFeature> MELON_PLACED_KEY = placedKey("tropical_melon");
 
-    // -----------------------------------------------------------------
-    // island_grass_floor_feature.json
-    // -----------------------------------------------------------------
     public static final TagKey<Block> ISLAND_GRASS_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
             new ResourceLocation(ExtraBiomes.MOD_ID, "island_grass_floor_replaceable"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRASS_FLOOR_KEY = configuredKey("island_grass_floor");
@@ -77,15 +71,11 @@ public class TropicalIslandFeatures {
      */
     public static final ResourceKey<PlacedFeature> GRASS_FLOOR_PLACED_KEY = placedKey("island_grass_floor");
 
-    // ===================================================================
-    // configured features
-    // ===================================================================
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(MELON_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MELON.defaultBlockState()))));
 
-        // island_grass_floor_feature.json: depth 1, vertical_range 5, vegetation_chance 0,
-        // horizontal_radius 8, extra_edge_column_chance 0.3.
+        // vegetationChance 0.0F is intentional: no vegetation is ever placed, this is just a sand-to-grass floor patch.
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH,
                 new VegetationPatchConfiguration(
@@ -102,13 +92,9 @@ public class TropicalIslandFeatures {
                 )));
     }
 
-    // ===================================================================
-    // placed features
-    // ===================================================================
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // may_attach_to.bottom = [minecraft:grass, minecraft:moss_block], min_sides_must_attach 1.
         context.register(MELON_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(MELON_KEY),
                 List.of(

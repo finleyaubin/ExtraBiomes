@@ -80,9 +80,7 @@ public class FutureTreeFeatures {
     public static final ResourceKey<PlacedFeature> FUTURE_TREE_3_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "future_tree_3"));
 
-    // Bedrock's y = heightmap(worldx, worldz) has no "-N" offset, but placed flush on the
-    // heightmap these small leaf clusters read as floating just above the ground rather than
-    // growing out of it - sinking them in slightly keeps their base embedded.
+    // Placed flush on the heightmap these small leaf clusters read as floating above the ground; sinking them in slightly keeps their base embedded.
     private static final int GROUND_OFFSET = -1;
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {

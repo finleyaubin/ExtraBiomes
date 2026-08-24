@@ -7,10 +7,7 @@ import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
 
 import java.util.EnumSet;
 
-// Ported from Bedrock extrabiomes:treefrog — travels by hopping like a slime rather than walking:
-// picks a random facing and launches itself with a burst of velocity when it lands, instead of
-// continuously pathing across the ground. Tuned well beyond Bedrock's 5-15 tick jump_delay for
-// long, infrequent leaps rather than a constant twitchy hop.
+// Ported from Bedrock: hops like a slime rather than pathing continuously; delay tuned well beyond Bedrock's 5-15 ticks for long, infrequent leaps.
 public class TreefrogHopGoal extends Goal {
     private final TreefrogEntity treefrog;
     private int hopDelay;

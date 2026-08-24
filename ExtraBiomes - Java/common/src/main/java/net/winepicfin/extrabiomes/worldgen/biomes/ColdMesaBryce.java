@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.mesa.MesaFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
 
@@ -23,18 +22,13 @@ public class ColdMesaBryce {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
-        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MesaFeatures.SELECT_TERRACOTTA_PLACED_KEY);
         BiomeDefaultFeatures.addBadlandExtraVegetation(biomeBuilder);
         BiomeDefaultFeatures.addBlueIce(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, GlacierFeatures.SELECT_SNOW_DRIFT_PLACED_KEY);
-        // 'bryce' variant: reconstructs the pre-1.18 mesa surface builder's noise-gated pillar
-        // bumps (packs/BP/biomes/cold_mesa_bryce.biome.json "bryce_pillars": true), since this
-        // biome is grafted onto vanilla's Overworld density functions rather than shipping its
-        // own erosion-spire noise settings.
+        // Reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps, since this biome uses vanilla's Overworld density functions rather than its own erosion-spire noise.
         biomeBuilder.addFeature(GenerationStep.Decoration.RAW_GENERATION, BryceMesaPillarFeatures.TERRACOTTA_PLACED_KEY);
 
         return new Biome.BiomeBuilder()

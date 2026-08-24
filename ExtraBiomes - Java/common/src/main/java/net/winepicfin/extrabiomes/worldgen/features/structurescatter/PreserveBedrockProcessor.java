@@ -40,9 +40,7 @@ public final class PreserveBedrockProcessor extends StructureProcessor {
     @Nullable
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
-        // relativeBlockInfo.pos() is already rotated/mirrored/translated into real world
-        // coordinates (unlike blockInfo.pos(), which is still the template's local space) - that's
-        // the actual position about to be written, so it's what needs checking.
+        // relativeBlockInfo.pos() is the real world position about to be written (blockInfo.pos() is still template-local space).
         return level.getBlockState(relativeBlockInfo.pos()).is(Blocks.BEDROCK) ? null : relativeBlockInfo;
     }
 

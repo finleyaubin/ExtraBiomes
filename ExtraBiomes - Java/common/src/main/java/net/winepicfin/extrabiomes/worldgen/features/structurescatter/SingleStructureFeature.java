@@ -41,9 +41,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
      */
     private static final int WRITE_RADIUS_CHUNKS = 1;
 
-    // Matches the same safety margin used elsewhere in the mod (MesaFeatures' ore placement,
-    // ModSurfaceRules' clearOfBedrock) - one block above the maximum possible thickness of Java's
-    // randomized 1-5-block bedrock floor, which starts at y=-64.
+    // One block above the max thickness of Java's randomized 1-5-block bedrock floor (y=-64); matches MesaFeatures/ModSurfaceRules' own margin.
     private static final int BEDROCK_MARGIN_Y = -59;
 
     public SingleStructureFeature(Codec<SingleStructureConfiguration> codec) {
@@ -70,27 +68,17 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 .setRotation(rotation)
                 .setMirror(Mirror.NONE)
                 .setIgnoreEntities(false)
-                // Prevents this otherwise-unconditional placement from carving through the world's
-                // bottom bedrock layer whenever the randomized origin lands near y=-64 - see
-                // PreserveBedrockProcessor's own javadoc for why this belongs here rather than in
-                // each individual subsystem.
+                // Prevents this otherwise-unconditional placement from carving through the bottom bedrock layer near y=-64 - see PreserveBedrockProcessor's javadoc.
                 .addProcessor(PreserveBedrockProcessor.INSTANCE);
 
         BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
         if (config.anchor().isPresent()) {
-            // Same rotation-pivot trick as the centered case below, but for an arbitrary local
-            // point instead of the footprint center - lets a structure's actual focal point (e.g.
-            // a leaning tree's trunk base, which isn't at the bounding box's corner OR center) be
-            // what lands on `anchor` regardless of rotation.
+            // Same rotation-pivot trick as the centered case below, but for an arbitrary local point (e.g. a leaning tree's trunk base) instead of the footprint center.
             BlockPos rotatedPoint = StructureTemplate.transform(config.anchor().get(), Mirror.NONE, rotation, BlockPos.ZERO);
             origin = anchor.subtract(rotatedPoint);
         } else if (config.centered()) {
-            // StructurePlaceSettings' rotation pivot defaults to the template's local (0,0,0)
-            // corner, not its footprint center, and rotation is applied in that local space
-            // BEFORE translating by `origin` - so the footprint's center must be rotated the
-            // same way here to find how far it lands from that corner, then subtracted back out
-            // so the center (not the corner) ends up sitting on `anchor` regardless of rotation.
+            // StructurePlaceSettings' rotation pivot is the template's local (0,0,0) corner, applied before translating by `origin`, so the center must be rotated the same way to find its offset from that corner.
             Vec3i size = template.getSize();
             BlockPos localCenter = new BlockPos(size.getX() / 2, 0, size.getZ() / 2);
             BlockPos rotatedCenter = StructureTemplate.transform(localCenter, Mirror.NONE, rotation, BlockPos.ZERO);
@@ -102,23 +90,18 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             return false;
         }
 
-        // Skip the WHOLE placement here rather than letting PreserveBedrockProcessor silently
-        // drop just the individual blocks that land on bedrock. Block-by-block skipping is what
-        // produced the floating-cap/clipped-through-walls look: bedrock survives, but the rest of
-        // the structure still gets carved into the surrounding terrain around the gap where it
-        // used to be. Not attempting the placement at all when it would reach this low is the
-        // actual fix - the processor stays on as a defense-in-depth backstop, not the primary guard.
+        // Skip the whole placement rather than letting PreserveBedrockProcessor drop individual blocks - block-by-block skipping produced a floating-cap/clipped-through-walls look.
         if (structureBox.minY() < BEDROCK_MARGIN_Y) {
             return false;
         }
 
-        // Opt-in "is this actually open space" check (see SingleStructureConfiguration's own
-        // javadoc). Disabled by default (minClearFraction 0.0F) for every existing convenience
-        // constructor, so unrelated subsystems keep placing unconditionally exactly as before -
-        // this only fires for subsystems that explicitly ask for it, currently the huge mushrooms,
-        // whose dense random scattering could otherwise land one attempt's cap squarely on top of
-        // an already-placed neighbour's solid blocks with nothing checking for that beforehand.
+        // Opt-in check (minClearFraction 0.0F by default keeps unrelated subsystems placing unconditionally) - currently only used by huge mushrooms to avoid landing on an already-placed neighbour.
         if (config.minClearFraction() > 0.0F && !hasEnoughClearSpace(level, structureBox, config.minClearFraction())) {
+            return false;
+        }
+
+        // Checked at the un-offset heightmap origin so a negative groundOffset doesn't probe underground.
+        if (config.requireGroundedFloor() && !hasSolidFloor(level, structureBox, context.origin().getY() - 1, config.requiredFloorBlocks())) {
             return false;
         }
 
@@ -147,6 +130,24 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             }
         }
         return total == 0 || (float) clear / total >= minClearFraction;
+    }
+
+    // Catches wide structures hanging over a ledge that a single-column HeightmapPlacement wouldn't.
+    private static boolean hasSolidFloor(WorldGenLevel level, BoundingBox box, int floorY, java.util.List<Block> requiredFloorBlocks) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = box.minX(); x <= box.maxX(); x++) {
+            for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos.set(x, floorY, z));
+                if (requiredFloorBlocks.isEmpty()) {
+                    if (state.isAir()) {
+                        return false;
+                    }
+                } else if (!requiredFloorBlocks.contains(state.getBlock())) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

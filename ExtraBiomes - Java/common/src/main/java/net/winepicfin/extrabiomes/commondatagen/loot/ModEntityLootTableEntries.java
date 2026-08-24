@@ -15,45 +15,32 @@ import net.winepicfin.extrabiomes.item.ModItems;
 
 import java.util.function.BiConsumer;
 
-// Entity loot tables ported from the Bedrock BP/loot_tables/entities/*.json files - shared body of
-// both loaders' entity loot table generators (forge/.../datagen/loot/ModEntityLootTables and
-// fabric/.../datagen/loot/ModEntityLootTables). Forge's EntityLootSubProvider.add(EntityType, Builder)
-// and Fabric's raw SimpleFabricLootTableProvider BiConsumer<ResourceLocation, Builder> callback have
-// different shapes (Fabric has no entity-specific scoped provider like FabricBlockLootTableProvider,
-// so it sidesteps EntityLootSubProvider's registry-wide completeness check entirely by extending the
-// generic SimpleFabricLootTableProvider instead) - each loader adapts its own callback to this
-// shared EntityType-keyed shape (Fabric via entityType.getDefaultLootTable()), so the actual table
-// contents only need to be written once.
+// Entity loot tables ported from Bedrock BP/loot_tables/entities/*.json; shared body of both loaders' generators, which adapt their differently-shaped callbacks to this EntityType-keyed shape so the table contents only need to be written once.
 public class ModEntityLootTableEntries {
     public static void populate(BiConsumer<EntityType<?>, LootTable.Builder> add) {
-        // giant_tortoise: scute 0-1 (+looting)
         add.accept(ModEntities.GIANT_TORTOISE.get(), LootTable.lootTable().withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(Items.SCUTE)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
                                 .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))));
 
-        // treefrog: frogs_legs 0-1 (+looting)
         add.accept(ModEntities.TREEFROG.get(), LootTable.lootTable().withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(ModItems.FROGS_LEGS.get())
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
                                 .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))));
 
-        // worm: 1 worm item
         add.accept(ModEntities.WORM.get(), LootTable.lootTable().withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(ModItems.WORM.get())
                                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1.0F))))));
 
-        // puckoo: feather 0-2 (+looting)
         add.accept(ModEntities.PUCKOO.get(), LootTable.lootTable().withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(Items.FEATHER)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 2.0F)))
                                 .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))));
 
-        // harpy: 2 rolls of (razor_feather w2 0-1 +looting3) or (gold_ingot w1 0-1 +looting1)
         add.accept(ModEntities.HARPY.get(), LootTable.lootTable().withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(2))
                         .add(LootItem.lootTableItem(ModItems.RAZOR_FEATHER.get()).setWeight(2)
@@ -63,7 +50,6 @@ public class ModEntityLootTableEntries {
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
                                 .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))));
 
-        // piranha: raw piranha item; + 25% (looting-boosted) chance of bone 1-2
         add.accept(ModEntities.PIRANHA.get(), LootTable.lootTable()
                 .withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                         .add(LootItem.lootTableItem(ModItems.PIRANHA.get())))

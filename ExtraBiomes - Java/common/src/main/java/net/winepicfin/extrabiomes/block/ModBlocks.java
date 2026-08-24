@@ -27,19 +27,18 @@ import java.util.function.Supplier;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.BLOCK);
 
-    public static final RegistrySupplier<Block> DENSE_CLOUD = registerBlock("dense_cloud", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_BRICK_DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_SLAB).sound(SoundType.WOOL).strength(0.5f)));
-    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_STAIRS).sound(SoundType.WOOL).strength(0.5f)));
+    // noOcclusion() is needed because dense cloud is thematically translucent, but copies fully-opaque vanilla materials (white_wool/stone_bricks) that would otherwise block light.
+    public static final RegistrySupplier<Block> DENSE_CLOUD = registerBlock("dense_cloud", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_BRICK_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_SLAB).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_STAIRS).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops(), UniformInt.of(3, 7)));
-    public static final RegistrySupplier<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> ExtraBiomesExpectPlatform.createGooLiquidBlock(BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
+    public static final RegistrySupplier<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> ExtraBiomesExpectPlatform.createGooLiquidBlock(BlockBehaviour.Properties.copy(Blocks.WATER).sound(SoundType.SLIME_BLOCK).noLootTable()));
     public static final RegistrySupplier<PebbleBlock> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistrySupplier<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistrySupplier<Block> STICK_PILE = registerBlock("stick_pile", () -> ExtraBiomesExpectPlatform.createStickPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion().strength(StickPileTuning.DESTROY_SECONDS)));
 
-    // black sand
-    // Bedrock's black_sand has no gravity (Bedrock engine limitation, per project notes) - Java
-    // copies vanilla SAND's falling behaviour via FallingBlock, matching normal sand.
+    // Bedrock's black_sand has no gravity (engine limitation); Java copies vanilla SAND's falling behaviour instead.
     public static final RegistrySupplier<Block> BLACK_SAND = registerBlock("black_sand", () -> new FallingBlock(BlockBehaviour.Properties.copy(Blocks.SAND).mapColor(MapColor.COLOR_BLACK)));
     public static final RegistrySupplier<Block> BLACK_SANDSTONE = registerBlock("black_sandstone", () -> new Block(BlockBehaviour.Properties.copy(Blocks.SANDSTONE).mapColor(MapColor.COLOR_BLACK)));
     public static final RegistrySupplier<Block> CHISELED_BLACK_SANDSTONE = registerBlock("chiseled_black_sandstone", () -> new Block(BlockBehaviour.Properties.copy(Blocks.CHISELED_SANDSTONE).mapColor(MapColor.COLOR_BLACK)));
@@ -52,14 +51,13 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> SMOOTH_BLACK_SANDSTONE_STAIRS = registerBlock("smooth_black_sandstone_stairs", () -> new StairBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.SMOOTH_SANDSTONE_STAIRS).mapColor(MapColor.COLOR_BLACK)));
     public static final RegistrySupplier<Block> BLACK_SANDSTONE_WALL = registerBlock("black_sandstone_wall", () -> new WallBlock(BlockBehaviour.Properties.copy(Blocks.SANDSTONE_WALL).mapColor(MapColor.COLOR_BLACK)));
 
-    // mystic wood
     private static final StandardWoodSet MYSTIC_WOOD_SET = registerStandardWoodSet("mystic", ModWoodTypes.MYSTIC);
     public static final RegistrySupplier<Block> MYSTIC_PLANKS = MYSTIC_WOOD_SET.planks();
     public static final RegistrySupplier<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> STRIPED_MYSTIC_LOG = registerBlock("striped_mystic_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)));
-    public static final RegistrySupplier<Block> STRIPED_MYSTIC_WOOD = registerBlock("striped_mystic_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> STRIPPED_MYSTIC_LOG = registerBlock("stripped_mystic_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.GRASS)));
+    public static final RegistrySupplier<Block> STRIPPED_MYSTIC_WOOD = registerBlock("stripped_mystic_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> MYSTIC_SAPLING = registerBlock("mystic_sapling", () -> new SaplingBlock(new MysticTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistrySupplier<Block> MYSTIC_STAIRS = MYSTIC_WOOD_SET.stairs();
     public static final RegistrySupplier<Block> MYSTIC_SLAB = MYSTIC_WOOD_SET.slab();
@@ -74,14 +72,13 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> MYSTIC_WALL_SIGN = MYSTIC_SIGNS.wallSign();
     public static final RegistrySupplier<Block> MYSTIC_HANGING_SIGN = MYSTIC_SIGNS.hangingSign();
     public static final RegistrySupplier<Block> MYSTIC_WALL_HANGING_SIGN = MYSTIC_SIGNS.wallHangingSign();
-    // sky wood
     private static final StandardWoodSet SKY_WOOD_SET = registerStandardWoodSet("sky", ModWoodTypes.SKY);
     public static final RegistrySupplier<Block> SKY_PLANKS = SKY_WOOD_SET.planks();
     public static final RegistrySupplier<Block> SKY_LOG = registerBlock("sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> SKY_WOOD = registerBlock("sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> STRIPED_SKY_LOG = registerBlock("striped_sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)) );
-    public static final RegistrySupplier<Block> STRIPED_SKY_WOOD = registerBlock("striped_sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> STRIPPED_SKY_LOG = registerBlock("stripped_sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.GRASS)) );
+    public static final RegistrySupplier<Block> STRIPPED_SKY_WOOD = registerBlock("stripped_sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> SKY_SAPLING = registerBlock("sky_sapling", () -> new SaplingBlock(new SkyTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistrySupplier<Block> SKY_STAIRS = SKY_WOOD_SET.stairs();
     public static final RegistrySupplier<Block> SKY_SLAB = SKY_WOOD_SET.slab();
@@ -96,14 +93,13 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> SKY_WALL_SIGN = SKY_SIGNS.wallSign();
     public static final RegistrySupplier<Block> SKY_HANGING_SIGN = SKY_SIGNS.hangingSign();
     public static final RegistrySupplier<Block> SKY_WALL_HANGING_SIGN = SKY_SIGNS.wallHangingSign();
-    // Palm wood
     private static final StandardWoodSet PALM_WOOD_SET = registerStandardWoodSet("palm", ModWoodTypes.PALM);
     public static final RegistrySupplier<Block> PALM_PLANKS = PALM_WOOD_SET.planks();
     public static final RegistrySupplier<Block> PALM_LOG = registerBlock("palm_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> PALM_WOOD = registerBlock("palm_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> STRIPED_PALM_LOG = registerBlock("striped_palm_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)) );
-    public static final RegistrySupplier<Block> STRIPED_PALM_WOOD = registerBlock("striped_palm_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> STRIPPED_PALM_LOG = registerBlock("stripped_palm_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.GRASS)) );
+    public static final RegistrySupplier<Block> STRIPPED_PALM_WOOD = registerBlock("stripped_palm_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> PALM_SAPLING = registerBlock("palm_sapling", () -> new PalmSaplingBlock(new PalmTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistrySupplier<Block> PALM_STAIRS = PALM_WOOD_SET.stairs();
     public static final RegistrySupplier<Block> PALM_SLAB = PALM_WOOD_SET.slab();
@@ -118,11 +114,12 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> PALM_WALL_SIGN = PALM_SIGNS.wallSign();
     public static final RegistrySupplier<Block> PALM_HANGING_SIGN = PALM_SIGNS.hangingSign();
     public static final RegistrySupplier<Block> PALM_WALL_HANGING_SIGN = PALM_SIGNS.wallHangingSign();
-    // Gilded sky wood
     private static final StandardWoodSet GILDED_SKY_WOOD_SET = registerStandardWoodSet("gilded_sky", ModWoodTypes.GILDED_SKY);
     public static final RegistrySupplier<Block> GILDED_SKY_PLANKS = GILDED_SKY_WOOD_SET.planks();
     public static final RegistrySupplier<Block> GILDED_SKY_LOG = registerBlock("gilded_sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> GILDED_SKY_WOOD = registerBlock("gilded_sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> STRIPPED_GILDED_SKY_LOG = registerBlock("stripped_gilded_sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> STRIPPED_GILDED_SKY_WOOD = registerBlock("stripped_gilded_sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> GILDED_SKY_STAIRS = GILDED_SKY_WOOD_SET.stairs();
     public static final RegistrySupplier<Block> GILDED_SKY_SLAB = GILDED_SKY_WOOD_SET.slab();
     public static final RegistrySupplier<Block> GILDED_SKY_BUTTON = GILDED_SKY_WOOD_SET.button();
@@ -136,7 +133,6 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> GILDED_SKY_WALL_SIGN = GILDED_SKY_SIGNS.wallSign();
     public static final RegistrySupplier<Block> GILDED_SKY_HANGING_SIGN = GILDED_SKY_SIGNS.hangingSign();
     public static final RegistrySupplier<Block> GILDED_SKY_WALL_HANGING_SIGN = GILDED_SKY_SIGNS.wallHangingSign();
-// Small Mushrooms
     // Bonemeal on each grows that colour's own huge mushroom structure (MushroomFeatures).
     public static final RegistrySupplier<Block>  BLACK_MUSHROOM= registerBlock("black_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_BLACK_MUSHROOM_KEY));
     public static final RegistrySupplier<Block>  BLUE_MUSHROOM= registerBlock("blue_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_BLUE_MUSHROOM_KEY));
@@ -147,16 +143,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block>  WHITE_MUSHROOM= registerBlock("white_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_WHITE_MUSHROOM_KEY));
     public static final RegistrySupplier<Block>  YELLOW_MUSHROOM= registerBlock("yellow_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_YELLOW_MUSHROOM_KEY));
     public static final RegistrySupplier<Block>  GLOW_MUSHROOM= registerBlock("glow_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM).lightLevel(BlockState->MiscBlockTuning.GLOW_MUSHROOM_LIGHT_EMISSION), MushroomFeatures.HUGE_GLOW_MUSHROOM_KEY));
-// Mushroom Blocks
-    public static final RegistrySupplier<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  BLUE_MUSHROOM_BLOCK= registerBlock("blue_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  CYAN_MUSHROOM_BLOCK= registerBlock("cyan_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  GREEN_MUSHROOM_BLOCK= registerBlock("green_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  ORANGE_MUSHROOM_BLOCK= registerBlock("orange_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  PURPLE_MUSHROOM_BLOCK= registerBlock("purple_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  WHITE_MUSHROOM_BLOCK= registerBlock("white_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  YELLOW_MUSHROOM_BLOCK= registerBlock("yellow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  GLOW_MUSHROOM_BLOCK= registerBlock("glow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).lightLevel(BlockState->MiscBlockTuning.GLOW_MUSHROOM_BLOCK_LIGHT_EMISSION)));
+    public static final RegistrySupplier<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  BLUE_MUSHROOM_BLOCK= registerBlock("blue_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  CYAN_MUSHROOM_BLOCK= registerBlock("cyan_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  GREEN_MUSHROOM_BLOCK= registerBlock("green_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  ORANGE_MUSHROOM_BLOCK= registerBlock("orange_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  PURPLE_MUSHROOM_BLOCK= registerBlock("purple_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  WHITE_MUSHROOM_BLOCK= registerBlock("white_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  YELLOW_MUSHROOM_BLOCK= registerBlock("yellow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  GLOW_MUSHROOM_BLOCK= registerBlock("glow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT).lightLevel(BlockState->MiscBlockTuning.GLOW_MUSHROOM_BLOCK_LIGHT_EMISSION)));
 
 
     private static <T extends Block> RegistrySupplier<T> registerBlock(String name, Supplier<T> block) {
@@ -169,8 +164,7 @@ public class ModBlocks {
         return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
-    // planks/stairs/slab/button/pressure plate/fence/fence gate/door/trapdoor follow an identical
-    // pattern across every wood set - only the name prefix and wood type differ.
+    // planks/stairs/slab/etc. follow an identical pattern across every wood set - only the name prefix and wood type differ.
     private record StandardWoodSet(RegistrySupplier<Block> planks, RegistrySupplier<Block> stairs, RegistrySupplier<Block> slab, RegistrySupplier<Block> button, RegistrySupplier<Block> pressurePlate, RegistrySupplier<Block> fence, RegistrySupplier<Block> fenceGate, RegistrySupplier<Block> door, RegistrySupplier<Block> trapdoor) {
     }
 
@@ -187,8 +181,7 @@ public class ModBlocks {
         return new StandardWoodSet(planks, stairs, slab, button, pressurePlate, fence, fenceGate, door, trapdoor);
     }
 
-    // Sign block parents vary by wood set (mystic copies the warped signs, the rest copy oak) -
-    // pass them in rather than hard-coding, since register() itself is otherwise identical.
+    // Sign block parents vary by wood set (mystic copies the warped signs, the rest copy oak), so they're passed in rather than hard-coded.
     private record StandardWoodSigns(RegistrySupplier<Block> sign, RegistrySupplier<Block> wallSign, RegistrySupplier<Block> hangingSign, RegistrySupplier<Block> wallHangingSign) {
     }
 

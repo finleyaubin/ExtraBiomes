@@ -49,8 +49,7 @@ public class WormModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		// "Archie" easter egg: the long extra tail (Bedrock part_visibility "q.get_name == 'Archie'")
-		// only shows when the worm is renamed to Archie.
+		// "Archie" easter egg: the long extra tail only shows when the worm is renamed to Archie.
 		this.Archie.visible = entity.hasCustomName() && "Archie".equals(entity.getCustomName().getString());
 		// animation.worm.move
 		this.head1.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;

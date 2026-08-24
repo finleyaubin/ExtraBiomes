@@ -39,24 +39,24 @@ public class ModItemTagGenerator extends ItemTagsProvider {
 
         this.tag(ItemTags.LOGS).add(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
-                ModBlocks.STRIPED_MYSTIC_LOG.get().asItem(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
-                ModBlocks.STRIPED_MYSTIC_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
                 ModBlocks.SKY_LOG.get().asItem(),
-                ModBlocks.STRIPED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
-                ModBlocks.STRIPED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem()
         );
         this.tag(ItemTags.LOGS_THAT_BURN).add(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
-                ModBlocks.STRIPED_MYSTIC_LOG.get().asItem(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
-                ModBlocks.STRIPED_MYSTIC_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
                 ModBlocks.SKY_LOG.get().asItem(),
-                ModBlocks.STRIPED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
-                ModBlocks.STRIPED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem()
         );
         this.tag(ItemTags.PLANKS).add(

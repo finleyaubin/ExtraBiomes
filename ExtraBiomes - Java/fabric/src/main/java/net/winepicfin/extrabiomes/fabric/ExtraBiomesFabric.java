@@ -66,6 +66,12 @@ public class ExtraBiomesFabric implements ModInitializer {
         FabricServerEvents.register();
 
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID, ModSurfaceRules.makeRules());
+        // addSurfaceRules above only reaches biomes namespaced "extrabiomes" - this instead injects
+        // into the shared default ruleset every other namespace (including vanilla's own badlands/
+        // eroded_badlands/wooded_badlands) falls back to, so those get the same depth-banded
+        // terracotta too. See ModSurfaceRules.makeVanillaBadlandsAdditions() javadoc.
+        SurfaceRuleManager.addToDefaultSurfaceRulesAtStage(SurfaceRuleManager.RuleCategory.OVERWORLD,
+                SurfaceRuleManager.RuleStage.BEFORE_BEDROCK, 0, ModSurfaceRules.makeVanillaBadlandsAdditions());
 
         // FabricConfig.load() (which triggers ModTerrablender.registerBiomes()) is NOT called
         // here - see ExtraBiomesTerraBlenderApi for why it has to run from the "terrablender"

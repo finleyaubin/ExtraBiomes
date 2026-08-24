@@ -22,9 +22,7 @@ public class ModTags {
     public static class Biomes{
         public static final TagKey<Biome> LUSH_MESA = tag("lush_mesa");
         public static final TagKey<Biome> MYSTIC_FOREST = tag("mystic_forest");
-        // Vanilla has no BiomeTags.IS_PLAINS equivalent (checked via javap - only
-        // HAS_VILLAGE_PLAINS exists), needed to port Bedrock's boulder_placer.json biome_filter
-        // ("plains"/"forest"/"jungle") - see ModBiomeModifiers' ADD_BOULDER_PLAINS.
+        // Vanilla has no BiomeTags.IS_PLAINS equivalent (only HAS_VILLAGE_PLAINS); needed to port Bedrock's boulder_placer.json biome_filter - see ModBiomeModifiers' ADD_BOULDER_PLAINS.
         public static final TagKey<Biome> IS_PLAINS = tag("is_plains");
         public static TagKey<Biome> tag(String name){
            return TagKey.create(Registries.BIOME, new ResourceLocation(ExtraBiomes.MOD_ID, name));

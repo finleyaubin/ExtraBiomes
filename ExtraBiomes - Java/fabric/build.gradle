@@ -38,6 +38,17 @@ loom {
     }
 }
 
+// Same reasoning as forge/build.gradle's clearGameTestWorld: server.properties' level-seed is
+// only honoured when a world is *created*, so a leftover run/world/ save from a previous local
+// run silently keeps its own (untracked) seed instead of the pinned one, making
+// BiomeGenerationGameTests' 15000-block search non-deterministic across repeated local runs.
+tasks.register("clearGameTestWorld", Delete) {
+    delete file("run/world")
+}
+tasks.named("runGameTestServer") {
+    dependsOn "clearGameTestWorld"
+}
+
 fabricApi {
     configureDataGeneration {
         // Same target Forge's own "data" run writes to (see forge/build.gradle) - datapack content
@@ -58,20 +69,7 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
-// geckolib-fabric-1.20.1:4.7.2's Gradle Module Metadata declares a runtime-scoped
-// "requires: 0.16.14" on net.fabricmc:fabric-loader, which wins Gradle's default
-// highest-version conflict resolution over the fabric_loader_version (0.15.7) declared
-// above - and this is actually required, not just an accident: fabric-api 0.92.6+1.20.1
-// (and fabric-object-builder-api-v1 within it) itself hard-requires fabricloader
-// >=0.16.10, so forcing fabric-loader back down to 0.15.7 makes Fabric Loader's own mod
-// resolution refuse to start ("Fabric API requires version 0.16.10 or later of Fabric
-// Loader"). The real mismatch is net.fabricmc:sponge-mixin, which independently resolves
-// to the old 0.12.5+mixin.0.8.5 line (paired with loader 0.15.x) instead of a version new
-// enough for loader 0.16.14's Knot bootstrap, which unconditionally probes
-// MixinEnvironment.CompatibilityLevel.JAVA_22 - a constant 0.12.5 doesn't have, crashing
-// every dev run (runClient/runServer/runDatagen/runGameTestServer) before any mod code
-// even loads. Force sponge-mixin up to 0.15.5+mixin.0.8.7 instead (confirmed to define
-// JAVA_22), so it's compatible with the fabric-loader version fabric-api actually needs.
+// sponge-mixin otherwise resolves to 0.12.5, which lacks JAVA_22 and crashes loader 0.16.14's Knot bootstrap.
 configurations.all {
     resolutionStrategy {
         force "net.fabricmc:sponge-mixin:0.15.5+mixin.0.8.7"

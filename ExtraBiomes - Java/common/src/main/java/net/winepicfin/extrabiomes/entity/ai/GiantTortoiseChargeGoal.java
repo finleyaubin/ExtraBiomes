@@ -9,12 +9,7 @@ import net.winepicfin.extrabiomes.entity.custom.GiantTortoiseEntity;
 import java.util.EnumSet;
 import java.util.UUID;
 
-// Ported from Bedrock minecraft:behavior.ram_attack (min_ram_distance: 4, ram_distance: 7,
-// ram_speed: 2 vs run_speed: 1) — beelines at the target and doubles movement speed while
-// within charging range. Unlike a one-shot dash, this runs the whole ram cycle itself: charge in,
-// hit on contact, back off for another run-up, then charge again — so it keeps rolling (and
-// dealing damage) for as long as the target stays engaged, instead of handing off to a separate
-// melee goal once it closes the distance.
+// Ported from Bedrock's ram_attack: runs the full charge/hit/retreat/re-charge cycle itself instead of handing off to a separate melee goal.
 public class GiantTortoiseChargeGoal extends Goal {
     private static final UUID CHARGE_SPEED_MODIFIER_ID = UUID.fromString("23a748af-3d91-45e8-b502-545165bdedc4");
     private static final double MIN_RAM_DISTANCE = 4.0D;

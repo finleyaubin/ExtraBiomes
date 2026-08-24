@@ -193,22 +193,23 @@ public class BaitModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		// animation.bait.wrigle — every worm's chain of 4 segments flexes in an alternating
-		// +/-45 degree pattern, all in lockstep off abs(sin(life_time*50)).
+		// animation.bait.wrigle: all worm segment chains flex in an alternating +/-45 degree pattern off abs(sin(life_time)); slowed from the Bedrock source's *50 for a calmer wiggle.
+		// Each worm gets a phase offset so the 9 chains don't all flex in lockstep.
 		float lifeTime = ageInTicks / 20f;
-		float wiggle = Math.abs(Mth.sin(lifeTime * 50f)) * 45f * 0.017453292f;
-		applyWiggle(wiggle, this.head1, this.head2, this.head3, this.body2);
-		applyWiggle(wiggle, this.head5, this.head6, this.head7, this.body3);
-		applyWiggle(wiggle, this.head9, this.head10, this.head11, this.body4);
-		applyWiggle(wiggle, this.head13, this.head14, this.head15, this.body5);
-		applyWiggle(wiggle, this.head17, this.head18, this.head19, this.body6);
-		applyWiggle(wiggle, this.head21, this.head22, this.head23, this.body7);
-		applyWiggle(wiggle, this.head25, this.head26, this.head27, this.body8);
-		applyWiggle(wiggle, this.head29, this.head30, this.head31, this.body9);
-		applyWiggle(wiggle, this.head33, this.head34, this.head35, this.body10);
+		applyWiggle(lifeTime, 0, this.head1, this.head2, this.head3, this.body2);
+		applyWiggle(lifeTime, 1, this.head5, this.head6, this.head7, this.body3);
+		applyWiggle(lifeTime, 2, this.head9, this.head10, this.head11, this.body4);
+		applyWiggle(lifeTime, 3, this.head13, this.head14, this.head15, this.body5);
+		applyWiggle(lifeTime, 4, this.head17, this.head18, this.head19, this.body6);
+		applyWiggle(lifeTime, 5, this.head21, this.head22, this.head23, this.body7);
+		applyWiggle(lifeTime, 6, this.head25, this.head26, this.head27, this.body8);
+		applyWiggle(lifeTime, 7, this.head29, this.head30, this.head31, this.body9);
+		applyWiggle(lifeTime, 8, this.head33, this.head34, this.head35, this.body10);
 	}
 
-	private static void applyWiggle(float wiggle, ModelPart first, ModelPart second, ModelPart third, ModelPart fourth) {
+	private static void applyWiggle(float lifeTime, int wormIndex, ModelPart first, ModelPart second, ModelPart third, ModelPart fourth) {
+		float phase = wormIndex * 0.6981317F;
+		float wiggle = Math.abs(Mth.sin(lifeTime + phase)) * 45f * 0.017453292f;
 		first.xRot += wiggle;
 		second.xRot -= wiggle;
 		third.xRot -= wiggle;

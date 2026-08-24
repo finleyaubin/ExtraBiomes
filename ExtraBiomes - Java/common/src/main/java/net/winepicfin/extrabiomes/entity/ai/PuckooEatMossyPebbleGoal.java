@@ -13,20 +13,13 @@ import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.entity.custom.PuckooEntity;
 import net.winepicfin.extrabiomes.item.ModItems;
 
-// Ported from Bedrock extrabiomes:puckoo's "minecraft:behavior.eat_block", which chews a mossy
-// pebble down a size tier at a time (large -> medium -> small -> air) and fires the
-// extrabiomes:drop event to spit out a pebble item. Bedrock's component only fires on a block the
-// mob is already standing at; this extends MoveToBlockGoal so a puckoo actually goes looking for
-// one, the way vanilla mobs seek out sand/crops.
-//
-// Bedrock's three separate mossy-pebble blocks are one block with a SIZE property here, so
-// "replace_block" is a decrement rather than a block swap.
+// Ported from Bedrock's eat_block behavior; extends MoveToBlockGoal (Bedrock's only fires when already standing on the block) so the puckoo actively seeks one out.
+// Mossy pebble is one block with a SIZE property here rather than Bedrock's three separate blocks, so eating decrements SIZE instead of swapping blocks.
 public class PuckooEatMossyPebbleGoal extends MoveToBlockGoal {
     private static final double SPEED_MODIFIER = 1.0;
     private static final int SEARCH_RANGE = 12;
     private static final int VERTICAL_SEARCH_RANGE = 4;
-    // Bedrock nibbles at a 1-2% per-tick success_chance; a flat chew time reads the same without
-    // being able to strip a whole pile in a second once the puckoo is standing on it.
+    // Flat chew time stands in for Bedrock's per-tick success_chance, avoiding a pile being stripped in one tick.
     private static final int CHEW_TICKS = 60;
 
     private final PuckooEntity puckoo;

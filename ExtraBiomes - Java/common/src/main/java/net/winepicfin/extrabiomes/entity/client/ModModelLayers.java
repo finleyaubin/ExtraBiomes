@@ -4,7 +4,6 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
-// Model layer locations for the entities ported from Bedrock.
 public class ModModelLayers {
     public static final ModelLayerLocation WORM = layer("worm");
     public static final ModelLayerLocation TREEFROG = layer("treefrog");

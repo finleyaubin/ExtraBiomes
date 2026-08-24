@@ -129,9 +129,7 @@ import java.util.List;
  */
 public class UndergroundJungleFeatures {
 
-    // Custom Feature<?> implementations must be registered in Registries.FEATURE (mirrors
-    // net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures) so their codec has a
-    // stable registry name for ConfiguredFeature (de)serialization/datagen.
+    // Custom Feature<?> implementations must be registered in Registries.FEATURE (mirrors MoorlandFeatures) so their codec has a stable registry name for datagen.
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
 
     public static final RegistrySupplier<CaveVineFeature> CAVE_VINE_FEATURE =
@@ -146,9 +144,6 @@ public class UndergroundJungleFeatures {
         FEATURES.register();
     }
 
-    // -----------------------------------------------------------------
-    // replaceable-block tags
-    // -----------------------------------------------------------------
     public static final TagKey<Block> GRASS_FLOOR_REPLACEABLE =
             tagKey("underground_jungle_grass_floor_replaceable");
     public static final TagKey<Block> GRASS_FLOOR_UPPER_REPLACEABLE =
@@ -156,9 +151,6 @@ public class UndergroundJungleFeatures {
     public static final TagKey<Block> MOSS_PATCH_REPLACEABLE =
             tagKey("underground_jungle_moss_patch_replaceable");
 
-    // -----------------------------------------------------------------
-    // building-block features (fallen tree, cave vine)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> FALLEN_JUNGLE_TREE_KEY = cfKey("fallen_jungle_tree");
     public static final ResourceKey<PlacedFeature> FALLEN_JUNGLE_TREE_PLACED_KEY = pfKey("fallen_jungle_tree");
 
@@ -166,25 +158,17 @@ public class UndergroundJungleFeatures {
     /** Bedrock's {@code jungle_after_surface_cave_vines_feature.json} distribution - register in UNDERGROUND_DECORATION. */
     public static final ResourceKey<PlacedFeature> CAVE_VINE_PLACED_KEY = pfKey("cave_vine");
 
-    // -----------------------------------------------------------------
-    // custom_moss_select_feature.json equivalent (fresh no-modifier wrappers around MossFeatures'
-    // configured features + vanilla's jungle bush, combined with MultiFeature)
-    // -----------------------------------------------------------------
+    // custom_moss_select_feature.json equivalent: fresh no-modifier wrappers around MossFeatures' configured features + vanilla's jungle bush, combined with MultiFeature.
     public static final ResourceKey<PlacedFeature> MOSS_SELECT_TALL_GRASS_PLACED_KEY = pfKey("moss_select_tall_grass");
     public static final ResourceKey<PlacedFeature> MOSS_SELECT_CARPET_PLACED_KEY = pfKey("moss_select_carpet");
     public static final ResourceKey<PlacedFeature> MOSS_SELECT_JUNGLE_BUSH_PLACED_KEY = pfKey("moss_select_jungle_bush");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOSS_SELECT_KEY = cfKey("moss_select");
     public static final ResourceKey<PlacedFeature> MOSS_SELECT_PLACED_KEY = pfKey("moss_select");
 
-    // -----------------------------------------------------------------
-    // custom_moss_patch_feature.json equivalent
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> CUSTOM_MOSS_PATCH_KEY = cfKey("custom_moss_patch");
     public static final ResourceKey<PlacedFeature> CUSTOM_MOSS_PATCH_PLACED_KEY = pfKey("custom_moss_patch");
 
-    // -----------------------------------------------------------------
     // vanilla tree building blocks, re-keyed locally so they can sit in our own RANDOM_SELECTOR/MultiFeature
-    // -----------------------------------------------------------------
     public static final ResourceKey<PlacedFeature> MEGA_JUNGLE_TREE_PLACED_KEY = pfKey("mega_jungle_tree");
     public static final ResourceKey<PlacedFeature> JUNGLE_TREE_WITH_COCOA_PLACED_KEY = pfKey("jungle_tree_with_cocoa");
     public static final ResourceKey<PlacedFeature> BAMBOO_PLACED_KEY = pfKey("bamboo");
@@ -198,17 +182,12 @@ public class UndergroundJungleFeatures {
      */
     public static final ResourceKey<ConfiguredFeature<?, ?>> JUNGLE_TREE_NO_COCOA_KEY = cfKey("jungle_tree_no_cocoa");
 
-    // -----------------------------------------------------------------
-    // select_moss_or_jungle_tree_feature.json / _upper
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_MOSS_OR_JUNGLE_TREE_KEY = cfKey("select_moss_or_jungle_tree");
     public static final ResourceKey<PlacedFeature> SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY = pfKey("select_moss_or_jungle_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_MOSS_OR_JUNGLE_TREE_UPPER_KEY = cfKey("select_moss_or_jungle_tree_upper");
     public static final ResourceKey<PlacedFeature> SELECT_MOSS_OR_JUNGLE_TREE_UPPER_PLACED_KEY = pfKey("select_moss_or_jungle_tree_upper");
 
-    // -----------------------------------------------------------------
-    // grass_floor_feature.json / _upper (top-level features - wire these into biomes)
-    // -----------------------------------------------------------------
+    // top-level features - wire these into biomes
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRASS_FLOOR_KEY = cfKey("grass_floor");
     /** Bedrock's {@code jungle_surface_grass_floor_feature.json} distribution - register in VEGETAL_DECORATION. */
     public static final ResourceKey<PlacedFeature> GRASS_FLOOR_PLACED_KEY = pfKey("grass_floor");
@@ -216,17 +195,13 @@ public class UndergroundJungleFeatures {
     /** Bedrock's {@code jungle_surface_grass_floor_upper_feature.json} distribution - register in VEGETAL_DECORATION. */
     public static final ResourceKey<PlacedFeature> GRASS_FLOOR_UPPER_PLACED_KEY = pfKey("grass_floor_upper");
 
-    // ===================================================================
-    // configured features
-    // ===================================================================
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
-        // -- building blocks --------------------------------------------------------------------------
         context.register(FALLEN_JUNGLE_TREE_KEY, new ConfiguredFeature<>(FALLEN_JUNGLE_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
         context.register(CAVE_VINE_KEY, new ConfiguredFeature<>(CAVE_VINE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
-        // -- cocoa-free jungle tree (vanilla JUNGLE_TREE minus the crash-prone CocoaDecorator) ---------
+        // cocoa-free jungle tree: vanilla JUNGLE_TREE minus the crash-prone CocoaDecorator
         context.register(JUNGLE_TREE_NO_COCOA_KEY, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.JUNGLE_LOG),
                 new StraightTrunkPlacer(4, 8, 0),
@@ -237,17 +212,13 @@ public class UndergroundJungleFeatures {
                 .ignoreVines()
                 .build()));
 
-        // -- custom_moss_select_feature.json: tall grass scatter + moss carpet + jungle bush, all run
-        //    unconditionally at the chosen column (see class docs for why this can't reuse MossFeatures'
-        //    own top-level placed features directly). ---------------------------------------------------
+        // tall grass scatter + moss carpet + jungle bush, all run unconditionally at the chosen column
         context.register(MOSS_SELECT_KEY, new ConfiguredFeature<>(MULTI_FEATURE.get(), new MultiFeatureConfiguration(List.of(
                 placedFeatures.getOrThrow(MOSS_SELECT_TALL_GRASS_PLACED_KEY),
                 placedFeatures.getOrThrow(MOSS_SELECT_CARPET_PLACED_KEY),
                 placedFeatures.getOrThrow(MOSS_SELECT_JUNGLE_BUSH_PLACED_KEY)
         ))));
 
-        // -- custom_moss_patch_feature.json: depth 1-2, vertical_range 1, vegetation_chance 0.1,
-        //    horizontal_radius 1-3, extra_edge_column_chance 0.3. ------------------------------------
         context.register(CUSTOM_MOSS_PATCH_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 MOSS_PATCH_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.MOSS_BLOCK),
@@ -261,9 +232,7 @@ public class UndergroundJungleFeatures {
                 0.3F
         )));
 
-        // -- select_moss_or_jungle_tree_feature.json weights: mega_jungle_tree 1, optional_fallen_jungle_tree 5,
-        //    jungle_tree_with_cocoa 10, custom_moss_patch 9, bamboo 1 (total 26). Sequential-trial
-        //    conversion (see class docs); bamboo (last/lowest-priority entry) becomes the default. ------
+        // select_moss_or_jungle_tree_feature.json weights (total 26): sequential-trial conversion, bamboo becomes the default (see class docs).
         context.register(SELECT_MOSS_OR_JUNGLE_TREE_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(
                         new WeightedPlacedFeature(placedFeatures.getOrThrow(MEGA_JUNGLE_TREE_PLACED_KEY), 1.0F / 26.0F),
@@ -274,18 +243,14 @@ public class UndergroundJungleFeatures {
                 placedFeatures.getOrThrow(BAMBOO_PLACED_KEY)
         )));
 
-        // -- select_moss_or_jungle_tree_upper_feature.json: aggregate of fallen tree + cocoa tree + moss
-        //    patch, all unconditional (no mega tree, no bamboo). -------------------------------------
+        // aggregate of fallen tree + cocoa tree + moss patch, all unconditional (no mega tree, no bamboo)
         context.register(SELECT_MOSS_OR_JUNGLE_TREE_UPPER_KEY, new ConfiguredFeature<>(MULTI_FEATURE.get(), new MultiFeatureConfiguration(List.of(
                 placedFeatures.getOrThrow(FALLEN_JUNGLE_TREE_PLACED_KEY),
                 placedFeatures.getOrThrow(JUNGLE_TREE_WITH_COCOA_PLACED_KEY),
                 placedFeatures.getOrThrow(CUSTOM_MOSS_PATCH_PLACED_KEY)
         ))));
 
-        // -- grass_floor_feature.json: depth 1, vertical_range 5, vegetation_chance 0.4, horizontal_radius 4.
-        //    (Bedrock uses radius 8, but Java's feature-write bounds check rejects blocks a radius-8 patch
-        //    - compounded with its nested moss patch and trees - pushes into far chunks; 4 keeps writes in
-        //    the legal region while still reading as a sizeable jungle floor patch.) ---------------------
+        // horizontal_radius 4, not Bedrock's 8: a radius-8 patch, compounded with its nested moss patch and trees, pushes writes into far chunks and gets rejected.
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 GRASS_FLOOR_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.GRASS_BLOCK),
@@ -299,8 +264,7 @@ public class UndergroundJungleFeatures {
                 0.3F
         )));
 
-        // -- grass_floor_upper_feature.json: depth 1, vertical_range 5, vegetation_chance 0 (never
-        //    actually grows anything - see class docs), horizontal_radius 8. -------------------------
+        // vegetation_chance 0: never actually grows anything - see class docs
         context.register(GRASS_FLOOR_UPPER_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
                 GRASS_FLOOR_UPPER_REPLACEABLE,
                 BlockStateProvider.simple(Blocks.GRASS_BLOCK),
@@ -315,24 +279,16 @@ public class UndergroundJungleFeatures {
         )));
     }
 
-    // ===================================================================
-    // placed features
-    // ===================================================================
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // -- building blocks: no modifiers - only ever invoked at an already-chosen position by a
-        //    wrapping RANDOM_SELECTOR/MultiFeature/VegetationPatchConfiguration. ------------------------
+        // no modifiers: only ever invoked at an already-chosen position by a wrapping RANDOM_SELECTOR/MultiFeature/VegetationPatchConfiguration
         registerNoModifiers(context, FALLEN_JUNGLE_TREE_PLACED_KEY, configuredFeatures.getOrThrow(FALLEN_JUNGLE_TREE_KEY));
         registerNoModifiers(context, MEGA_JUNGLE_TREE_PLACED_KEY, configuredFeatures.getOrThrow(TreeFeatures.MEGA_JUNGLE_TREE));
-        // Use the cocoa-free jungle tree: vanilla JUNGLE_TREE's CocoaDecorator crashes when this tree is
-        // nested in a VegetationPatch and lands underground with no logs (see JUNGLE_TREE_NO_COCOA_KEY).
+        // cocoa-free jungle tree: vanilla JUNGLE_TREE's CocoaDecorator crashes when nested in a VegetationPatch that lands underground with no logs.
         registerNoModifiers(context, JUNGLE_TREE_WITH_COCOA_PLACED_KEY, configuredFeatures.getOrThrow(JUNGLE_TREE_NO_COCOA_KEY));
         registerNoModifiers(context, BAMBOO_PLACED_KEY, configuredFeatures.getOrThrow(VegetationFeatures.BAMBOO_NO_PODZOL));
 
-        // custom_moss_select_feature.json members: tall grass scatter (reuses MossFeatures' own
-        // RANDOM_PATCH configured feature, just without its chunk-wide scatter/heightmap modifiers),
-        // moss carpet (air-guarded, matching the original's "0 spread" single placement), jungle bush.
         registerNoModifiers(context, MOSS_SELECT_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MossFeatures.TALL_GRASS_PATCH_KEY));
         context.register(MOSS_SELECT_CARPET_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(MossFeatures.MOSS_CARPET_KEY),
@@ -345,8 +301,6 @@ public class UndergroundJungleFeatures {
         registerNoModifiers(context, SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MOSS_OR_JUNGLE_TREE_KEY));
         registerNoModifiers(context, SELECT_MOSS_OR_JUNGLE_TREE_UPPER_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MOSS_OR_JUNGLE_TREE_UPPER_KEY));
 
-        // -- jungle_after_surface_cave_vines_feature.json: iterations 90, x/z uniform [0,16],
-        //    y uniform [-64,60]. ---------------------------------------------------------------------
         context.register(CAVE_VINE_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(CAVE_VINE_KEY),
                 List.of(
@@ -357,7 +311,6 @@ public class UndergroundJungleFeatures {
                 )
         ));
 
-        // -- jungle_surface_grass_floor_feature.json: iterations 100, y uniform [-64,62]. -------------
         context.register(GRASS_FLOOR_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(GRASS_FLOOR_KEY),
                 List.of(
@@ -368,7 +321,6 @@ public class UndergroundJungleFeatures {
                 )
         ));
 
-        // -- jungle_surface_grass_floor_upper_feature.json: iterations 200, y uniform [63,128]. --------
         context.register(GRASS_FLOOR_UPPER_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(GRASS_FLOOR_UPPER_KEY),
                 List.of(

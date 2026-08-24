@@ -1,0 +1,246 @@
+{
+  "credit": "Ported from ExtraBiomes - Bedrock/packs/RP/models/blocks/palm_sapling.geo.json",
+  "ambientocclusion": false,
+  "texture_size": [
+    16,
+    16
+  ],
+  "textures": {
+    "leaves": "extrabiomes:block/palm_sapling",
+    "particle": "extrabiomes:block/palm_sapling"
+  },
+  "elements": [
+    {
+      "from": [
+        8,
+        0,
+        5
+      ],
+      "to": [
+        8,
+        5,
+        7
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            7,
+            11,
+            9,
+            16
+          ],
+          "texture": "#leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0,
+        6
+      ],
+      "to": [
+        9,
+        4,
+        6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            12,
+            9,
+            16
+          ],
+          "texture": "#leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        7,
+        9
+      ],
+      "to": [
+        8,
+        12,
+        11
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            5,
+            9,
+            7,
+            14
+          ],
+          "texture": "#leaves",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        7,
+        8
+      ],
+      "to": [
+        11,
+        11,
+        8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            9,
+            7,
+            13
+          ],
+          "texture": "#leaves",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        7,
+        8
+      ],
+      "to": [
+        8,
+        9,
+        9
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            5,
+            7,
+            6,
+            9
+          ],
+          "texture": "#leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        5,
+        9
+      ],
+      "to": [
+        9,
+        9,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            7,
+            6,
+            11
+          ],
+          "texture": "#leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        5,
+        9
+      ],
+      "to": [
+        8,
+        9,
+        10
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            7,
+            5,
+            11
+          ],
+          "texture": "#leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        8,
+        10
+      ],
+      "to": [
+        8,
+        9,
+        11
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            3,
+            7,
+            4,
+            8
+          ],
+          "texture": "#leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        9,
+        6
+      ],
+      "to": [
+        8,
+        12,
+        14
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            0,
+            4,
+            8,
+            7
+          ],
+          "texture": "#leaves"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        9,
+        10
+      ],
+      "to": [
+        12,
+        12,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            8,
+            7
+          ],
+          "texture": "#leaves"
+        }
+      }
+    }
+  ]
+}

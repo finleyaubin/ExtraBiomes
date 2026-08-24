@@ -4,5 +4,20 @@
     "sounds": [
       "extrabiomes:mob/hoppleshroom/jump"
     ]
+  },
+  "mob.puckoo.ambient": {
+    "category": "neutral",
+    "sounds": [
+      "extrabiomes:mob/puckoo/idle1",
+      "extrabiomes:mob/puckoo/idle2",
+      "extrabiomes:mob/puckoo/idle3"
+    ]
+  },
+  "mob.puckoo.cry": {
+    "category": "neutral",
+    "sounds": [
+      "extrabiomes:mob/puckoo/cry1",
+      "extrabiomes:mob/puckoo/cry2"
+    ]
   }
 }

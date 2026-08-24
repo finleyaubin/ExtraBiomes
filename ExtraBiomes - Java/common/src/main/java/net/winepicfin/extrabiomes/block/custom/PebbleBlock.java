@@ -64,8 +64,7 @@ public class PebbleBlock extends Block {
         return this.defaultBlockState().setValue(SIZE,1);
     }
 
-    // Pick-block should hand back the placeable pebble item, not the auto-registered
-    // "pebble_block" BlockItem the SIZE-stacking behavior above is keyed off of.
+    // Pick-block hands back the placeable pebble item, not the auto-registered "pebble_block" BlockItem.
     @Override
     public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state) {
         return new ItemStack(ModItems.PEBBLE.get());
@@ -77,11 +76,9 @@ public class PebbleBlock extends Block {
         ItemStack heldItem = pPlayer.getItemInHand(pHand);
 
     if (pState.getValue(SIZE) < 3 && heldItem.getItem() == ModItems.PEBBLE.get()) {
-            // Increase the block size
             pLevel.setBlockAndUpdate(pPos, pState.setValue(SIZE, pState.getValue(SIZE) + 1));
 
             if (!pPlayer.isCreative()) {
-                // Decrease the item stack size if the player is not in creative mode
                 heldItem.shrink(1);
             }
 

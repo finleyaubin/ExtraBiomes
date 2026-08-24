@@ -86,9 +86,6 @@ import java.util.List;
  */
 public class MossFeatures {
 
-    // -----------------------------------------------------------------
-    // moss carpet (carpet_patch.json + moss/scatter_carpet_feature.json)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOSS_CARPET_KEY = configuredKey("moss_carpet");
 
     /**
@@ -98,9 +95,6 @@ public class MossFeatures {
      */
     public static final ResourceKey<PlacedFeature> MOSS_CARPET_SCATTER_PLACED_KEY = placedKey("moss_carpet_scatter");
 
-    // -----------------------------------------------------------------
-    // moorland-style tall grass scatter (moorlands_scatter_tall_grass_feature.json)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_KEY = configuredKey("tall_grass");
     /** Inner air-guarded placement of a single {@link Blocks#GRASS} block - not a top-level decoration by itself. */
     public static final ResourceKey<PlacedFeature> TALL_GRASS_INNER_PLACED_KEY = placedKey("tall_grass_inner");
@@ -114,9 +108,6 @@ public class MossFeatures {
      */
     public static final ResourceKey<PlacedFeature> TALL_GRASS_SCATTER_PLACED_KEY = placedKey("tall_grass_scatter");
 
-    // -----------------------------------------------------------------
-    // jungle bush (reused as-is from vanilla, not re-registered)
-    // -----------------------------------------------------------------
     /**
      * Vanilla's own {@code minecraft:jungle_bush} placed feature - reused directly rather than
      * re-registered. Register via
@@ -127,9 +118,6 @@ public class MossFeatures {
     public static final ResourceKey<PlacedFeature> JUNGLE_BUSH_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("minecraft", "jungle_bush"));
 
-    // ===================================================================
-    // configured features
-    // ===================================================================
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
@@ -139,19 +127,15 @@ public class MossFeatures {
         context.register(TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.GRASS.defaultBlockState()))));
 
-        // moorlands_scatter_tall_grass_feature.json: iterations 30, x/z gaussian [-8,8], y gaussian [-4,4].
         Holder<PlacedFeature> tallGrassInner = placedFeatures.getOrThrow(TALL_GRASS_INNER_PLACED_KEY);
         context.register(TALL_GRASS_PATCH_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 3, tallGrassInner)));
     }
 
-    // ===================================================================
-    // placed features
-    // ===================================================================
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // moss/scatter_carpet_feature.json: iterations 10 with 0 spread collapses to one placement (see class docs).
+        // Bedrock's source feature scatters 10 attempts with 0 spread, which always lands on the same block; collapsed to a single placement.
         context.register(MOSS_CARPET_SCATTER_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(MOSS_CARPET_KEY),
                 List.of(
@@ -162,13 +146,11 @@ public class MossFeatures {
                 )
         ));
 
-        // inner grass placement: no modifiers of its own besides the air check (mirrors vanilla patch_grass.json).
         context.register(TALL_GRASS_INNER_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(TALL_GRASS_KEY),
                 List.<PlacementModifier>of(BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)))
         ));
 
-        // top-level tall grass scatter: one patch attempt per chosen column, spread across the chunk on the surface.
         context.register(TALL_GRASS_SCATTER_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(TALL_GRASS_PATCH_KEY),
                 List.of(

@@ -81,9 +81,9 @@ public class ModBlockStateProvider implements DataProvider {
         // mystic wood
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock(ModBlocks.MYSTIC_LOG.get());
-        logBlock(ModBlocks.STRIPED_MYSTIC_LOG.get());
+        logBlock(ModBlocks.STRIPPED_MYSTIC_LOG.get());
         axisBlock(ModBlocks.MYSTIC_WOOD.get(), blockTexture(ModBlocks.MYSTIC_LOG.get()));
-        axisBlock(ModBlocks.STRIPED_MYSTIC_WOOD.get(), blockTexture(ModBlocks.STRIPED_MYSTIC_LOG.get()));
+        axisBlock(ModBlocks.STRIPPED_MYSTIC_WOOD.get(), blockTexture(ModBlocks.STRIPPED_MYSTIC_LOG.get()));
         blockWithItem(ModBlocks.MYSTIC_LEAVES);
         saplingBlock(ModBlocks.MYSTIC_SAPLING.get());
         stairsBlock(ModBlocks.MYSTIC_STAIRS.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
@@ -99,9 +99,9 @@ public class ModBlockStateProvider implements DataProvider {
         // sky wood
         blockWithItem(ModBlocks.SKY_PLANKS);
         logBlock(ModBlocks.SKY_LOG.get());
-        logBlock(ModBlocks.STRIPED_SKY_LOG.get());
+        logBlock(ModBlocks.STRIPPED_SKY_LOG.get());
         axisBlock(ModBlocks.SKY_WOOD.get(), blockTexture(ModBlocks.SKY_LOG.get()));
-        axisBlock(ModBlocks.STRIPED_SKY_WOOD.get(), blockTexture(ModBlocks.STRIPED_SKY_LOG.get()));
+        axisBlock(ModBlocks.STRIPPED_SKY_WOOD.get(), blockTexture(ModBlocks.STRIPPED_SKY_LOG.get()));
         blockWithItem(ModBlocks.SKY_LEAVES);
         saplingBlock(ModBlocks.SKY_SAPLING.get());
         stairsBlock(ModBlocks.SKY_STAIRS.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
@@ -117,11 +117,11 @@ public class ModBlockStateProvider implements DataProvider {
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock(ModBlocks.PALM_LOG.get());
-        logBlock(ModBlocks.STRIPED_PALM_LOG.get());
+        logBlock(ModBlocks.STRIPPED_PALM_LOG.get());
         axisBlock(ModBlocks.PALM_WOOD.get(), blockTexture(ModBlocks.PALM_LOG.get()));
-        axisBlock(ModBlocks.STRIPED_PALM_WOOD.get(), blockTexture(ModBlocks.STRIPED_PALM_LOG.get()));
+        axisBlock(ModBlocks.STRIPPED_PALM_WOOD.get(), blockTexture(ModBlocks.STRIPPED_PALM_LOG.get()));
         blockWithItem(ModBlocks.PALM_LEAVES);
-        saplingBlock(ModBlocks.PALM_SAPLING.get());
+        customSaplingBlock(ModBlocks.PALM_SAPLING.get(), modLoc("palm_sapling"));
         stairsBlock(ModBlocks.PALM_STAIRS.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         slabBlock(ModBlocks.PALM_SLAB.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         buttonBlock(ModBlocks.PALM_BUTTON.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
@@ -135,7 +135,9 @@ public class ModBlockStateProvider implements DataProvider {
         // Gilded Sky wood
         blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
         logBlock(ModBlocks.GILDED_SKY_LOG.get());
+        logBlock(ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
         axisBlock(ModBlocks.GILDED_SKY_WOOD.get(), blockTexture(ModBlocks.GILDED_SKY_LOG.get()));
+        axisBlock(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get(), blockTexture(ModBlocks.STRIPPED_GILDED_SKY_LOG.get()));
         stairsBlock(ModBlocks.GILDED_SKY_STAIRS.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         slabBlock(ModBlocks.GILDED_SKY_SLAB.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         buttonBlock(ModBlocks.GILDED_SKY_BUTTON.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
@@ -211,8 +213,11 @@ public class ModBlockStateProvider implements DataProvider {
         });
     }
 
+    // Passing the same texture for both sides put bark on the cut ends too; use the dedicated "_top" texture.
     private void logBlock(Block block) {
-        axisBlock(block, blockTexture(block), blockTexture(block));
+        ResourceLocation side = blockTexture(block);
+        ResourceLocation end = new ResourceLocation(side.getNamespace(), side.getPath() + "_top");
+        axisBlock(block, side, end);
     }
 
     private void axisBlock(Block block, ResourceLocation texture) {
@@ -233,9 +238,20 @@ public class ModBlockStateProvider implements DataProvider {
     private void saplingBlock(Block block) {
         ResourceLocation model = ModelTemplates.CROSS.create(block, TextureMapping.cross(block), models::put);
         simpleBlockState(block, model);
-        // Saplings get a flat inventory icon (item/generated + the block's own texture as layer0),
-        // not a delegate to the 3D cross block model - matches vanilla's own sapling items and Forge's
-        // saplingBlock()/saplingItem() helpers, which both produce this same flat icon shape.
+        saplingItemModel(block);
+    }
+
+    // Palm sapling has its own custom multi-blade geometry on Bedrock (RP/models/blocks/
+    // palm_sapling.geo.json), not vanilla's flat crossed-quad shape - references the static
+    // converted model at models/block/palm_sapling.json instead of generating a CROSS template.
+    private void customSaplingBlock(Block block, ResourceLocation model) {
+        simpleBlockState(block, model);
+        saplingItemModel(block);
+    }
+
+    // Saplings get a flat inventory icon (item/generated + the block's own texture as layer0), not
+    // a delegate to the 3D block model - matches vanilla's own sapling items.
+    private void saplingItemModel(Block block) {
         ResourceLocation itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
         ResourceLocation texture = blockTexture(block);
         models.put(itemModelId, () -> {
@@ -418,11 +434,13 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, up);
     }
 
-    // Doors/trapdoors reference model JSON that already exists as a static resource under
-    // common/src/main/resources (matching Forge's own doorBlockWithRenderType/
-    // trapdoorBlockWithRenderType, which likewise only ever wrote the blockstate - never generated
-    // these particular models either).
+    // The model JSON these blockstates reference was never actually generated on Fabric, leaving doors/trapdoors as the missing-model placeholder.
     private void doorBlockState(Block block, ResourceLocation bottomModel, ResourceLocation topModel) {
+        // Uses the closed/left-hinge DOOR_BOTTOM_LEFT/TOP_LEFT template; Y_ROT alone approximates the other facing/open/hinge combos well enough.
+        TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomModel).put(TextureSlot.TOP, topModel);
+        ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
+        ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
+
         blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
                 PropertyDispatch.properties(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
@@ -444,6 +462,14 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation bottom = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
         ResourceLocation top = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
         ResourceLocation open = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, baseModelName);
+        ModelTemplates.TRAPDOOR_BOTTOM.create(bottom, tm, models::put);
+        ModelTemplates.TRAPDOOR_TOP.create(top, tm, models::put);
+        ModelTemplates.TRAPDOOR_OPEN.create(open, tm, models::put);
+        // Matches vanilla's 3D-look trapdoor item icon (no flat sprite texture is checked in).
+        delegateItemModel(block, bottom);
+
         blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
                 PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> {
@@ -463,23 +489,18 @@ public class ModBlockStateProvider implements DataProvider {
         simpleBlockState(wallSignBlock, air);
     }
 
-    // Hanging signs DO have a visible (chain + plank) block model, built from vanilla's shared
-    // "minecraft:block/hanging_sign" parent template - mirrors Forge's models().sign(name, texture)
-    // helper, which builds this same parent+texture pairing.
+    // No "minecraft:block/hanging_sign" parent exists; the chain/plank mesh is block-entity-rendered like regular signs.
     private void hangingSignBlockState(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
         ResourceLocation modelId = ModelLocationUtils.getModelLocation(signBlock);
         models.put(modelId, () -> {
             JsonObject json = new JsonObject();
-            json.addProperty("parent", "minecraft:block/hanging_sign");
             JsonObject textures = new JsonObject();
-            textures.addProperty("texture", texture.toString());
             textures.addProperty("particle", texture.toString());
             json.add("textures", textures);
             return json;
         });
         simpleBlockState(signBlock, modelId);
         simpleBlockState(wallSignBlock, modelId);
-        delegateItemModel(signBlock, modelId);
     }
 
     // References the pre-existing static models under common/src/main/resources/assets/extrabiomes/

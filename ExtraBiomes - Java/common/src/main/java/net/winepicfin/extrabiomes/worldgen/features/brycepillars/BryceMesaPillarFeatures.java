@@ -51,10 +51,7 @@ public class BryceMesaPillarFeatures {
     public static final ResourceKey<PlacedFeature> STONE_PLACED_KEY = placedKey("bryce_pillars_stone");
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        // Background: plain TERRACOTTA, matching vanilla bandlands()'s own mostly-plain
-        // background. streakPalette supplies the occasional colour bands scattered through it -
-        // see generateBands() in BrycePillarsFeature for how these get distributed across the
-        // 192-layer array (short random-length runs, not an even/independent colour per layer).
+        // streakPalette supplies the occasional colour bands scattered through the plain TERRACOTTA background; see generateBands() in BrycePillarsFeature for the distribution.
         List<BlockState> terracottaStreaks = List.of(
                 Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
                 Blocks.YELLOW_TERRACOTTA.defaultBlockState(),
@@ -70,11 +67,10 @@ public class BryceMesaPillarFeatures {
                 new BrycePillarsConfiguration(Blocks.SAND.defaultBlockState(), List.of())));
         context.register(TUFF_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
                 new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(Blocks.TUFF.defaultBlockState()))));
-        // Bedrock's jungle_pillars config is flat stone/stone - an empty streak palette collapses
-        // the 192-layer array to one repeated colour, still running through the same banding code
-        // path rather than a separate flat-material branch.
+        // Bedrock's jungle_pillars config is flat stone/stone - an empty streak palette collapses the 192-layer array to one repeated colour, still running through the same banding code path.
+        // Grass-capped (see BrycePillarsConfiguration#capMaterial) so JunglePillars.java's existing addJungleTrees/addJungleGrass calls have valid ground to land jungle vegetation on top of these pillars, not just on the flat ground between them.
         context.register(STONE_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of())));
+                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(), java.util.Optional.of(Blocks.GRASS_BLOCK.defaultBlockState()))));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {

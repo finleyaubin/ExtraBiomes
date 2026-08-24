@@ -26,24 +26,15 @@ public class CharredForest {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, CharredForestFeatures.BURNT_BASALT_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, CharredForestFeatures.BURNT_MAGMA_PLACED_KEY);
-        // Must stay in this order - vanilla's own forest biome (the "other birch trees" branch of
-        // OverworldBiomes#forest) calls these in exactly this sequence: addForestFlowers,
-        // addDefaultOres, addDefaultSoftDisks, TREES_BIRCH_AND_OAK, addDefaultFlowers,
-        // addForestGrass, addDefaultMushrooms, addDefaultExtraVegetation. FeatureSorter builds one
-        // global per-step ordering across every biome that shares a placed feature, so
-        // disagreeing on the relative order of two shared features is a hard "Feature order
-        // cycle" crash at world load, not just a cosmetic difference.
+        // Must match vanilla forest's call order exactly - FeatureSorter shares one global per-step ordering across biomes, so disagreeing here is a "Feature order cycle" crash at world load.
         BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);
-        // Standard forest trees (the same oak/birch mix vanilla's Forest biome uses) alongside the
-        // charred trees, rather than charred trees being the only tree type in the biome.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_BIRCH_AND_OAK);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addForestGrass(biomeBuilder);

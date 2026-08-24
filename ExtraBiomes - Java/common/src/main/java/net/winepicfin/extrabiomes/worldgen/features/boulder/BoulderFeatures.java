@@ -107,15 +107,9 @@ import java.util.Optional;
  */
 public class BoulderFeatures {
 
-    // -----------------------------------------------------------------
-    // shared tag
-    // -----------------------------------------------------------------
     public static final TagKey<Block> BOULDER_REPLACEABLE =
             TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "boulder_replaceable"));
 
-    // -----------------------------------------------------------------
-    // pebble sub-features (boulder/pebble.json + its 6 structure_template_feature variants)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_REGULAR_KEY = configuredKey("pebble_regular");
     public static final ResourceKey<PlacedFeature> PEBBLE_REGULAR_PLACED_KEY = placedKey("pebble_regular");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_SMALL_KEY = configuredKey("pebble_small");
@@ -133,9 +127,6 @@ public class BoulderFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_SELECT_KEY = configuredKey("pebble_select");
     public static final ResourceKey<PlacedFeature> PEBBLE_SELECT_PLACED_KEY = placedKey("pebble_select");
 
-    // -----------------------------------------------------------------
-    // boulder ground patches (one vegetation_patch_feature per select_boulder.json entry)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> GROUND_STONE_KEY = configuredKey("ground_stone");
     public static final ResourceKey<PlacedFeature> GROUND_STONE_PLACED_KEY = placedKey("ground_stone");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GROUND_ANDESITE_KEY = configuredKey("ground_andesite");
@@ -165,9 +156,6 @@ public class BoulderFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_BOULDER_KEY = configuredKey("select_boulder");
     public static final ResourceKey<PlacedFeature> SELECT_BOULDER_PLACED_KEY = placedKey("select_boulder");
 
-    // -----------------------------------------------------------------
-    // stick pile (stick_pile/select_stick_pile.json + stick_pile0/1.json)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> STICK_PILE_0_KEY = configuredKey("stick_pile_0");
     public static final ResourceKey<PlacedFeature> STICK_PILE_0_PLACED_KEY = placedKey("stick_pile_0");
     public static final ResourceKey<ConfiguredFeature<?, ?>> STICK_PILE_1_KEY = configuredKey("stick_pile_1");
@@ -181,15 +169,15 @@ public class BoulderFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_STICK_PILE_KEY = configuredKey("select_stick_pile");
     public static final ResourceKey<PlacedFeature> SELECT_STICK_PILE_PLACED_KEY = placedKey("select_stick_pile");
 
-    private static final int STICK_PILE_GROUND_OFFSET = -1;
+    // 0, not -1: sinking the pile into the ground (as GlacierFeatures does for snow drifts) read as too far sunk in playtesting.
+    private static final int STICK_PILE_GROUND_OFFSET = 0;
+    // Not 1.0F: the pile's own floor row against the ground is expected to be non-air, so requiring full clearance would reject nearly all placements.
+    private static final float STICK_PILE_MIN_CLEAR_FRACTION = 0.9F;
 
-    // ===================================================================
-    // configured features
-    // ===================================================================
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
-        // --- pebble structure variants (facing_direction unspecified -> random rotation) ---
+        // facing_direction unspecified in Bedrock source -> random rotation here
         registerSingleStructure(context, PEBBLE_REGULAR_KEY, "boulder/pebble", Optional.empty());
         registerSingleStructure(context, PEBBLE_SMALL_KEY, "boulder/small_pebble", Optional.empty());
         registerSingleStructure(context, PEBBLE_LARGE_KEY, "boulder/large_pebble", Optional.empty());
@@ -197,9 +185,7 @@ public class BoulderFeatures {
         registerSingleStructure(context, PEBBLE_SMALL_MOSSY_KEY, "boulder/small_mossy_pebble", Optional.empty());
         registerSingleStructure(context, PEBBLE_LARGE_MOSSY_KEY, "boulder/large_mossy_pebble", Optional.empty());
 
-        // pebble.json weights: regular 1, small 2, large 1, regular_mossy 1, small_mossy 2, large_mossy 1 (total 8).
-        // Converted to sequential-trial chances (weight / remaining-total-from-here); large_mossy is
-        // the guaranteed (chance 1.0) remainder, so it becomes the RANDOM_SELECTOR "default".
+        // pebble.json weights (total 8) converted to sequential-trial chances; large_mossy is the guaranteed remainder, so it becomes the RANDOM_SELECTOR default.
         context.register(PEBBLE_SELECT_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(
                         new WeightedPlacedFeature(placedFeatures.getOrThrow(PEBBLE_REGULAR_PLACED_KEY), 1.0F / 8.0F),
@@ -211,7 +197,6 @@ public class BoulderFeatures {
                 placedFeatures.getOrThrow(PEBBLE_LARGE_MOSSY_PLACED_KEY)
         )));
 
-        // --- boulder ground vegetation patches ---
         Holder<PlacedFeature> pebbleSelect = placedFeatures.getOrThrow(PEBBLE_SELECT_PLACED_KEY);
         registerGroundPatch(context, GROUND_STONE_KEY, Blocks.STONE.defaultBlockState(), pebbleSelect, false);
         registerGroundPatch(context, GROUND_ANDESITE_KEY, Blocks.ANDESITE.defaultBlockState(), pebbleSelect, false);
@@ -225,10 +210,7 @@ public class BoulderFeatures {
         // pebble_patch.json: depth is a fixed 1 (range_min == range_max) and a much wider horizontal_radius (4-10).
         registerGroundPatch(context, GROUND_PEBBLE_PATCH_KEY, Blocks.GRASS_BLOCK.defaultBlockState(), pebbleSelect, true);
 
-        // select_boulder.json weights: stone 10, andesite 5, diorite 5, granite 5, calcite 4, tuff 2,
-        // cobblestone 2, mossy_cobblestone 1, blackstone 1, pebble_patch 50 (total 85). Same
-        // sequential-trial conversion as pebble.json above; pebble_patch (the last/heaviest entry)
-        // ends up as the guaranteed "default".
+        // select_boulder.json weights (total 85, stone through blackstone then pebble_patch): same sequential-trial conversion as pebble.json above; pebble_patch ends up as the guaranteed default.
         context.register(SELECT_BOULDER_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
                 List.of(
                         new WeightedPlacedFeature(placedFeatures.getOrThrow(GROUND_STONE_PLACED_KEY), 10.0F / 85.0F),
@@ -244,11 +226,9 @@ public class BoulderFeatures {
                 placedFeatures.getOrThrow(GROUND_PEBBLE_PATCH_PLACED_KEY)
         )));
 
-        // --- stick pile structure variants (facing_direction: "north" -> fixed Rotation.NONE).
-        // STICK_PILE_GROUND_OFFSET sinks each pile in slightly so it reads as resting among/into
-        // the ground rather than floating on top of it (same technique as GlacierFeatures' snow drifts). ---
-        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
-        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET);
+        // minClearFraction and requireGroundedFloor stop piles from stamping through terrain or floating over ledges/gaps - see SingleStructureFeature's javadoc.
+        registerSingleStructure(context, STICK_PILE_0_KEY, "boulder/big_stick_pile0", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET, STICK_PILE_MIN_CLEAR_FRACTION, true);
+        registerSingleStructure(context, STICK_PILE_1_KEY, "boulder/big_stick_pile1", Optional.of(Rotation.NONE), STICK_PILE_GROUND_OFFSET, STICK_PILE_MIN_CLEAR_FRACTION, true);
 
         // select_stick_pile.json weights: stick_pile0 1, stick_pile1 1 (total 2) -> chance 0.5, default stick_pile1.
         context.register(SELECT_STICK_PILE_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
@@ -264,6 +244,12 @@ public class BoulderFeatures {
     private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset) {
         ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, structurePath);
         SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset);
+        context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+    }
+
+    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
+        ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, structurePath);
+        SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset, minClearFraction, requireGroundedFloor);
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }
 
@@ -283,15 +269,10 @@ public class BoulderFeatures {
         context.register(key, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, config));
     }
 
-    // ===================================================================
-    // placed features
-    // ===================================================================
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // pebble sub-features + selector: no placement modifiers of their own - they are invoked
-        // directly (at an already-chosen position) either as a vegetation_feature or as a
-        // WeightedPlacedFeature entry of another RANDOM_SELECTOR.
+        // no modifiers: only ever invoked at an already-chosen position, as a vegetation_feature or RANDOM_SELECTOR entry
         registerNoModifiers(context, configuredFeatures, PEBBLE_REGULAR_PLACED_KEY, PEBBLE_REGULAR_KEY);
         registerNoModifiers(context, configuredFeatures, PEBBLE_SMALL_PLACED_KEY, PEBBLE_SMALL_KEY);
         registerNoModifiers(context, configuredFeatures, PEBBLE_LARGE_PLACED_KEY, PEBBLE_LARGE_KEY);
@@ -300,8 +281,7 @@ public class BoulderFeatures {
         registerNoModifiers(context, configuredFeatures, PEBBLE_LARGE_MOSSY_PLACED_KEY, PEBBLE_LARGE_MOSSY_KEY);
         registerNoModifiers(context, configuredFeatures, PEBBLE_SELECT_PLACED_KEY, PEBBLE_SELECT_KEY);
 
-        // boulder ground vegetation patches: likewise no modifiers of their own - only the
-        // top-level select_boulder placement below carries the scatter/heightmap/biome modifiers.
+        // likewise no modifiers - only the top-level select_boulder placement below carries the scatter/heightmap/biome modifiers
         registerNoModifiers(context, configuredFeatures, GROUND_STONE_PLACED_KEY, GROUND_STONE_KEY);
         registerNoModifiers(context, configuredFeatures, GROUND_ANDESITE_PLACED_KEY, GROUND_ANDESITE_KEY);
         registerNoModifiers(context, configuredFeatures, GROUND_DIORITE_PLACED_KEY, GROUND_DIORITE_KEY);
@@ -313,9 +293,7 @@ public class BoulderFeatures {
         registerNoModifiers(context, configuredFeatures, GROUND_BLACKSTONE_PLACED_KEY, GROUND_BLACKSTONE_KEY);
         registerNoModifiers(context, configuredFeatures, GROUND_PEBBLE_PATCH_PLACED_KEY, GROUND_PEBBLE_PATCH_KEY);
 
-        // select_boulder: iterations 1, scatter_chance 10, x/z uniform [0,16], y = heightmap +/- 1,
-        // then boulder_snap_to_floor_feature re-searches for the actual floor (folded into
-        // VegetationPatchConfiguration's own vertical_range/surface search at generation time).
+        // boulder_snap_to_floor_feature's re-search for the actual floor is folded into VegetationPatchConfiguration's own vertical_range/surface search at generation time.
         context.register(SELECT_BOULDER_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_BOULDER_KEY),
                 List.of(
@@ -326,19 +304,11 @@ public class BoulderFeatures {
                 )
         ));
 
-        // stick pile sub-features: no modifiers of their own, same reasoning as pebbles. The
-        // select_stick_pile selector itself gets its modifiers below (it is the top-level feature
-        // placed directly by stick_pile_placer.json), so it is NOT also registered here.
+        // select_stick_pile itself (the top-level feature) gets its modifiers below, so it is NOT also registered here.
         registerNoModifiers(context, configuredFeatures, STICK_PILE_0_PLACED_KEY, STICK_PILE_0_KEY);
         registerNoModifiers(context, configuredFeatures, STICK_PILE_1_PLACED_KEY, STICK_PILE_1_KEY);
 
-        // select_stick_pile (via stick_pile_placer.json): iterations 1, scatter_chance 10, x/z
-        // uniform [0,16], y = heightmap +/- 1 (grounded/unburied constraints approximated by
-        // sitting directly on the heightmap surface - see class docs). Anchored on OCEAN_FLOOR_WG
-        // (not WORLD_SURFACE_WG, which counts water as non-air and would place the pile floating on
-        // a lake/river's surface) plus SurfaceWaterDepthFilter.forMaxDepth(0) so piles never
-        // generate on or in water at all - same fix as NetherlandsWindmillFeature's own water check.
-        // STICK_PILE_GROUND_OFFSET then sinks each pile in slightly.
+        // OCEAN_FLOOR_WG (not WORLD_SURFACE_WG) plus forMaxDepth(0) so piles never float on or generate in water - same fix as NetherlandsWindmillFeature's own water check.
         context.register(SELECT_STICK_PILE_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_STICK_PILE_KEY),
                 List.of(

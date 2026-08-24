@@ -13,6 +13,9 @@ public class ModSounds {
 
     // Ported straight from Bedrock's mob.hoppleshroom.jump sound definition.
     public static final RegistrySupplier<SoundEvent> HOPPLESHROOM_JUMP = registerSound("mob.hoppleshroom.jump");
+    // Ported from Bedrock's mob.puckoo.ambient/mob.puckoo.cry sound definitions.
+    public static final RegistrySupplier<SoundEvent> PUCKOO_AMBIENT = registerSound("mob.puckoo.ambient");
+    public static final RegistrySupplier<SoundEvent> PUCKOO_CRY = registerSound("mob.puckoo.cry");
 
     private static RegistrySupplier<SoundEvent> registerSound(String name) {
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(

@@ -50,7 +50,7 @@ import java.util.List;
  * "fixed single-axis row" primitive, so this is ported as an ordinary per-chunk scatter matching the same iteration
  * count (10): CountPlacement.of(10) + InSquarePlacement.spread() + HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG)
  * (Bedrock's query.above_top_solid) + BiomeFilter.biome(). This preserves the same flower density per chunk while
- * losing the striped-row visual pattern.
+ * losing the stripped-row visual pattern.
  */
 public class NetherlandsTulipFeatures {
     public static final TagKey<Block> TULIP_REPLACEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_tulip_replaceable"));
@@ -99,15 +99,12 @@ public class NetherlandsTulipFeatures {
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
-        // Inner single-block features: no placement modifiers of their own - the outer vegetation patch feature
-        // (registered below) fully controls where each individual tulip block within the patch actually lands.
+        // The outer vegetation patch feature registered below controls placement of these inner blocks.
         context.register(ORANGE_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(ORANGE_TULIP_KEY), List.of()));
         context.register(PINK_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(PINK_TULIP_KEY), List.of()));
         context.register(RED_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(RED_TULIP_KEY), List.of()));
         context.register(WHITE_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHITE_TULIP_KEY), List.of()));
 
-        // Outer per-chunk scatter: iterations 10 (all four colours) read from
-        // feature_rules/the_netherlands/netherlands_{orange,pink,red,white}_tulip_feature.json
         List<net.minecraft.world.level.levelgen.placement.PlacementModifier> scatter = List.of(
                 CountPlacement.of(10), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome());
         context.register(ORANGE_TULIP_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(ORANGE_TULIP_FLOOR_KEY), scatter));

@@ -17,13 +17,10 @@ public class FutureDesert {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
-        // NOTE: bedrock top/mid material is an unspecified 'concretepowder' (defaults to white);
-        // surface rule below assumes LIGHT_GRAY_CONCRETE_POWDER to match the RP's cool grey tint.
-        // future_tree_feature_2 / future_tree_feature_3 (Bedrock: has_biome_tag "future")
+        // Bedrock's top/mid material is an unspecified 'concretepowder' (defaults to white); the surface rule below assumes LIGHT_GRAY_CONCRETE_POWDER to match the RP's cool grey tint.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FutureTreeFeatures.FUTURE_TREE_2_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FutureTreeFeatures.FUTURE_TREE_3_PLACED_KEY);
 

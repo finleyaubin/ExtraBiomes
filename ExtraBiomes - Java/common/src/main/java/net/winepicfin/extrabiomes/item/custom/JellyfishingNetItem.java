@@ -19,7 +19,6 @@ import net.winepicfin.extrabiomes.entity.custom.JellyfishEntity;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
-// A jellyfishing net holding a jellyfish — right-click to release it and get the empty net back.
 public class JellyfishingNetItem extends Item {
     public JellyfishingNetItem(Properties properties) {
         super(properties);

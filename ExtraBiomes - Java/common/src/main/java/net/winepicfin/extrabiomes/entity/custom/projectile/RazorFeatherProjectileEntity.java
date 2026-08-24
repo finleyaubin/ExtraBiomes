@@ -61,10 +61,7 @@ public class RazorFeatherProjectileEntity extends ThrowableItemProjectile {
         result.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), this.getDamage());
     }
 
-    // Fires for both onHitBlock (landing) and onHitEntity (striking a target) since Projectile.onHit
-    // dispatches to those before returning here. Player-thrown feathers drop as a pickupable item on
-    // either outcome, matching Bedrock's player_razor_feather component group; feathers thrown by mobs
-    // (e.g. HarpyEntity) just vanish like before.
+    // Fires for both landing and striking a target; player-thrown feathers drop as a pickupable item on either outcome (matching Bedrock's player_razor_feather group), mob-thrown ones just vanish.
     @Override
     protected void onHit(HitResult result) {
         super.onHit(result);

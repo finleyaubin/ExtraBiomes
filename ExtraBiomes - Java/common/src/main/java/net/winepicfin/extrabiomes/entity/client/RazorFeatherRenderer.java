@@ -14,10 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectileEntity;
 import org.jetbrains.annotations.NotNull;
 
-// Ported from Bedrock's animation.razor_feather.throw, which continuously rolls the feather's body
-// while airborne (variable.roll driven by distance moved + vertical speed). Vanilla ThrownItemRenderer
-// only billboards the item toward the camera with no roll, so this reimplements that render with an
-// added spin so it reads as a thrown blade rather than a static floating icon.
+// Reimplements ThrownItemRenderer's render (which only billboards, no roll) with an added spin, matching Bedrock's animation.razor_feather.throw.
 public class RazorFeatherRenderer<T extends RazorFeatherProjectileEntity> extends EntityRenderer<T> {
     private static final float SPIN_DEGREES_PER_TICK = 45.0F;
 

@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Materials + shape tuning for {@link BrycePillarsFeature}.
@@ -23,18 +24,22 @@ import java.util.List;
  * The same mechanism now backs the tuff/stone pillar variants too (previously flat single
  * materials) - {@code streakPalette} is just empty for a genuinely flat material like
  * jungle_pillars' stone, which collapses the whole 192-array down to one repeated colour.
+ * <p>
+ * {@code capMaterial}, when present, replaces the banded material for just the topmost row of
+ * each pillar (see {@link BrycePillarsFeature#placePillar}) - e.g. a grass block cap on
+ * jungle_pillars' stone spires gives vanilla's already-wired-in {@code addJungleTrees}/
+ * {@code addJungleGrass} placed features (see JunglePillars.java) valid ground to land jungle
+ * trees/vegetation on top of, the same way real-world jungle-topped karst towers work. Empty for
+ * every other biome using this feature, which keeps their pillars exactly as before.
  */
-public record BrycePillarsConfiguration(BlockState backgroundMaterial, List<BlockState> streakPalette, int minHeight, int maxHeight, float threshold, int maxRadius, float erosionStrength) implements FeatureConfiguration {
-    // threshold raised 0.55 -> 0.75 -> 0.85: abs(simplex) clears 0.55 (and even 0.75) on a large
-    // share of columns, which is what made these "way too frequent" - real Bryce Canyon-style
-    // hoodoos are sparse, isolated spires, not a pillar on most columns. maxHeight raised 15 -> 48
-    // (near the codec's range ceiling) so the tallest pillars can tower well above the old vanilla
-    // mesa height cap. maxRadius gives each pillar a wide base that tapers to a point at its own
-    // height (see BrycePillarsFeature's per-column cone) instead of a uniform 1-block-wide shaft.
-    // erosionStrength perturbs that cone's radius with a separate noise field so the outline is a
-    // weathered, fluted silhouette instead of a perfect circle at every layer.
+public record BrycePillarsConfiguration(BlockState backgroundMaterial, List<BlockState> streakPalette, int minHeight, int maxHeight, float threshold, int maxRadius, float erosionStrength, Optional<BlockState> capMaterial) implements FeatureConfiguration {
+    // threshold raised 0.55 -> 0.85 since abs(simplex) cleared 0.55 (and even 0.75) on far too many columns for sparse, isolated Bryce Canyon-style hoodoos; maxHeight raised 15 -> 48 so the tallest pillars tower above the old vanilla mesa cap.
     public BrycePillarsConfiguration(BlockState backgroundMaterial, List<BlockState> streakPalette) {
-        this(backgroundMaterial, streakPalette, 5, 48, 0.97F, 4, 1.5F);
+        this(backgroundMaterial, streakPalette, Optional.empty());
+    }
+
+    public BrycePillarsConfiguration(BlockState backgroundMaterial, List<BlockState> streakPalette, Optional<BlockState> capMaterial) {
+        this(backgroundMaterial, streakPalette, 5, 48, 0.97F, 4, 1.5F, capMaterial);
     }
 
     public static final Codec<BrycePillarsConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -44,6 +49,7 @@ public record BrycePillarsConfiguration(BlockState backgroundMaterial, List<Bloc
             Codec.intRange(0, 96).optionalFieldOf("max_height", 48).forGetter(BrycePillarsConfiguration::maxHeight),
             Codec.floatRange(0.0F, 1.0F).optionalFieldOf("threshold", 0.97F).forGetter(BrycePillarsConfiguration::threshold),
             Codec.intRange(0, 16).optionalFieldOf("max_radius", 4).forGetter(BrycePillarsConfiguration::maxRadius),
-            Codec.floatRange(0.0F, 8.0F).optionalFieldOf("erosion_strength", 1.5F).forGetter(BrycePillarsConfiguration::erosionStrength)
+            Codec.floatRange(0.0F, 8.0F).optionalFieldOf("erosion_strength", 1.5F).forGetter(BrycePillarsConfiguration::erosionStrength),
+            BlockState.CODEC.optionalFieldOf("cap_material").forGetter(BrycePillarsConfiguration::capMaterial)
     ).apply(instance, BrycePillarsConfiguration::new));
 }

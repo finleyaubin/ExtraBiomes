@@ -10,15 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-// Shared body of both loaders' block loot table generators (forge/.../datagen/loot/ModBlockLootTables
-// and fabric/.../datagen/loot/ModBlockLootTables). Both ultimately drive vanilla's
-// BlockLootSubProvider (Fabric API's FabricBlockLootTableProvider extends it, to relax its "every
-// block in the registry needs a table" completeness check to just this mod's blocks; Forge's own
-// subclass does the same via a getKnownBlocks() override), but dropSelf/add/createXTable are all
-// *protected* BlockLootSubProvider members - a plain external helper can't call them through a
-// passed-in instance (Java's protected-access rule requires the accessing class itself be a
-// subclass), so this instead takes bound method references, which each loader's own generate()
-// creates from inside the actual subclass (where the protected access is legal) and hands in.
+// Shared body of both loaders' block loot table generators; dropSelf/add/createXTable are protected BlockLootSubProvider members a plain external helper can't call directly, so this takes bound method references that each loader's own subclass creates and hands in.
 public class ModBlockLootTableEntries {
     public static void populate(
             Consumer<Block> dropSelf,
@@ -36,7 +28,6 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.NETHER_DIAMOND_ORE.get(), block -> createOreDrop.apply(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
         dropSelf.accept(ModBlocks.STICK_PILE.get());
 
-        // Black Sand
         dropSelf.accept(ModBlocks.BLACK_SAND.get());
         dropSelf.accept(ModBlocks.BLACK_SANDSTONE.get());
         dropSelf.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
@@ -49,12 +40,11 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()));
         add.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()));
 
-        // Mystic Wood
         dropSelf.accept(ModBlocks.MYSTIC_PLANKS.get());
         dropSelf.accept(ModBlocks.MYSTIC_LOG.get());
         dropSelf.accept(ModBlocks.MYSTIC_WOOD.get());
-        dropSelf.accept(ModBlocks.STRIPED_MYSTIC_LOG.get());
-        dropSelf.accept(ModBlocks.STRIPED_MYSTIC_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_MYSTIC_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_MYSTIC_WOOD.get());
         dropSelf.accept(ModBlocks.MYSTIC_STAIRS.get());
         dropSelf.accept(ModBlocks.MYSTIC_BUTTON.get());
         dropSelf.accept(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
@@ -69,12 +59,11 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.MYSTIC_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_SIGN.get()));
         add.accept(ModBlocks.MYSTIC_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_HANGING_SIGN.get()));
         add.accept(ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_HANGING_SIGN.get()));
-        // Sky Wood
         dropSelf.accept(ModBlocks.SKY_PLANKS.get());
         dropSelf.accept(ModBlocks.SKY_LOG.get());
         dropSelf.accept(ModBlocks.SKY_WOOD.get());
-        dropSelf.accept(ModBlocks.STRIPED_SKY_LOG.get());
-        dropSelf.accept(ModBlocks.STRIPED_SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_SKY_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_SKY_WOOD.get());
         dropSelf.accept(ModBlocks.SKY_STAIRS.get());
         dropSelf.accept(ModBlocks.SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.SKY_PRESSURE_PLATE.get());
@@ -89,12 +78,11 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.SKY_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_SIGN.get()));
         add.accept(ModBlocks.SKY_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_HANGING_SIGN.get()));
         add.accept(ModBlocks.SKY_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_HANGING_SIGN.get()));
-        // Palm Wood
         dropSelf.accept(ModBlocks.PALM_PLANKS.get());
         dropSelf.accept(ModBlocks.PALM_LOG.get());
         dropSelf.accept(ModBlocks.PALM_WOOD.get());
-        dropSelf.accept(ModBlocks.STRIPED_PALM_LOG.get());
-        dropSelf.accept(ModBlocks.STRIPED_PALM_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_PALM_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_PALM_WOOD.get());
         dropSelf.accept(ModBlocks.PALM_STAIRS.get());
         dropSelf.accept(ModBlocks.PALM_BUTTON.get());
         dropSelf.accept(ModBlocks.PALM_PRESSURE_PLATE.get());
@@ -109,10 +97,11 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.PALM_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_SIGN.get()));
         add.accept(ModBlocks.PALM_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_HANGING_SIGN.get()));
         add.accept(ModBlocks.PALM_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_HANGING_SIGN.get()));
-        // Gilded sky Wood
         dropSelf.accept(ModBlocks.GILDED_SKY_PLANKS.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_LOG.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_STAIRS.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());
@@ -125,7 +114,6 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.GILDED_SKY_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_SIGN.get()));
         add.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_HANGING_SIGN.get()));
         add.accept(ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_HANGING_SIGN.get()));
-        // Small Mushrooms
         dropSelf.accept(ModBlocks.BLACK_MUSHROOM.get());
         dropSelf.accept(ModBlocks.BLUE_MUSHROOM.get());
         dropSelf.accept(ModBlocks.CYAN_MUSHROOM.get());
@@ -135,10 +123,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.WHITE_MUSHROOM.get());
         dropSelf.accept(ModBlocks.YELLOW_MUSHROOM.get());
         dropSelf.accept(ModBlocks.GLOW_MUSHROOM.get());
-        // Mushrooms - like vanilla's huge mushroom blocks (createMushroomBlockDrop): silk touch
-        // drops the block itself, otherwise it drops 0-2 of the matching small mushroom item
-        // (with looting bonus), same as vanilla red/brown mushroom blocks. Previously dropSelf,
-        // which always dropped the (much harder to farm) huge mushroom block itself.
+        // Huge mushroom blocks now drop the small mushroom item (like vanilla red/brown mushroom blocks) instead of dropSelf, which dropped the much-harder-to-farm huge block itself.
         add.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.BLACK_MUSHROOM.get()));
         add.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.BLUE_MUSHROOM.get()));
         add.accept(ModBlocks.CYAN_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.CYAN_MUSHROOM.get()));
@@ -150,9 +135,7 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.GLOW_MUSHROOM.get()));
     }
 
-    // createLeavesDrops/createOreDrop take more parameters than java.util.function's stock
-    // BiFunction shapes conveniently support alongside the varargs float... chances parameter,
-    // so each loader binds a tiny adapter lambda around its own protected method instead.
+    // createLeavesDrops/createOreDrop take more parameters than stock BiFunction shapes support, so each loader binds a tiny adapter lambda around its own protected method instead.
     @FunctionalInterface
     public interface BiFunctionLeaves {
         LootTable.Builder apply(Block leavesBlock, Block saplingBlock);

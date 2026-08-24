@@ -23,6 +23,7 @@ import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructur
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Bedrock's windmill structure ("ExtraBiomes - Bedrock/packs/BP/features/windmill.json",
@@ -66,7 +67,9 @@ public class NetherlandsWindmillFeature {
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(WINDMILL_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "the_netherlands/windmill"), Rotation.NONE)
+                // requireGroundedFloor requires solid ground under the whole footprint, since a single-column HeightmapPlacement only checks the origin and this structure is wide enough to hang over a ledge otherwise.
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "the_netherlands/windmill"),
+                        Optional.of(Rotation.NONE), 0, 0.0F, true)
         ));
     }
 
@@ -78,8 +81,7 @@ public class NetherlandsWindmillFeature {
         context.register(WINDMILL_NETHERLANDS_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(WINDMILL_KEY),
                 List.of(
-                        // Bumped up from the Bedrock-matching onAverageOnceEvery(10) (10% per chunk) -
-                        // that felt too frequent in practice; tuned down to ~3.3%.
+                        // Tuned down from the Bedrock-matching onAverageOnceEvery(10) - that felt too frequent in practice.
                         RarityFilter.onAverageOnceEvery(30),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),

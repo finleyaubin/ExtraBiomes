@@ -128,8 +128,7 @@ public class TaigaSpikeFeatures {
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // Shared origin-block constraint for all three spike variants: Bedrock's
-        // constraints.block_intersection.block_allowlist [air, water, snow_layer, grass_block, snow, dirt, stone].
+        // Shared origin-block constraint for all three variants, mirroring Bedrock's block_intersection.block_allowlist.
         List<PlacementModifier> perSpikeModifiers = List.of(
                 BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(
                         BlockPos.ZERO,

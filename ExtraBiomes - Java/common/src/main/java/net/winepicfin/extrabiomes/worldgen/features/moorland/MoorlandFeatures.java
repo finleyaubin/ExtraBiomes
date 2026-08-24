@@ -81,9 +81,7 @@ import java.util.List;
  */
 public class MoorlandFeatures {
 
-    // Custom Feature<?> implementations must be registered in Registries.FEATURE (mirrors
-    // net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures)
-    // so their codec has a stable registry name for ConfiguredFeature (de)serialization/datagen.
+    // Registered in Registries.FEATURE (not just DeferredRegister) so codecs get stable registry names for ConfiguredFeature serialization/datagen.
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
 
     public static final RegistrySupplier<PodzolConversionFeature> PODZOL_CONVERSION_FEATURE =
@@ -113,11 +111,9 @@ public class MoorlandFeatures {
     public static final ResourceKey<PlacedFeature> MOORLAND_WATERLILY_PLACED_KEY = createKey("moorland_waterlily_placed");
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        // "moorlands_podzol_feature" aggregate -> minecraft:optional_podzol_feature
         context.register(MOORLAND_PODZOL_KEY, new ConfiguredFeature<>(PODZOL_CONVERSION_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
-        // "select_grass_feature" aggregate members - each Bedrock scatter_feature runs 30 inner
-        // iterations with x/z extent +/-8 and y extent +/-4 around the outer placement position.
+        // 30/8/4 mirror each Bedrock scatter_feature's own inner gaussian jitter around the outer placement position.
         context.register(MOORLAND_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
                         PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.GRASS)),
@@ -137,22 +133,18 @@ public class MoorlandFeatures {
                         PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)),
                                 BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
 
-        // "moorlands_surface_waterlily_feature" -> minecraft:fixup_waterlily_position_feature
         context.register(MOORLAND_WATERLILY_KEY, new ConfiguredFeature<>(WATERLILY_FIXUP_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // "moorland_after_surface_podzol_feature": iterations = clamp(noise-derived, 15, 160) per
-        // chunk. Java has no direct analogue of Bedrock's per-chunk 2D noise sampling for placement
-        // counts, so this is approximated with a uniform random count across the same [15,160] range.
+        // Java has no analogue of Bedrock's per-chunk noise-derived placement count, so it's approximated with a uniform random count over the same [15,160] range.
         register(context, MOORLAND_PODZOL_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_PODZOL_KEY),
                 List.of(CountPlacement.of(UniformInt.of(15, 160)), InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome()));
 
-        // "moorland_scatter_tall_grass_feature": iterations 30, y = heightmap +/- 4 (the +/-4 spread
-        // is folded into each configured feature's own RandomPatchConfiguration y_spread above).
+        // The y = heightmap +/- 4 spread is already folded into each configured feature's own RandomPatchConfiguration y_spread above.
         register(context, MOORLAND_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_GRASS_KEY),
                 ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
         register(context, MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_DOUBLE_TALL_GRASS_KEY),
@@ -162,7 +154,6 @@ public class MoorlandFeatures {
         register(context, MOORLAND_TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_DRY_GRASS_KEY),
                 ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
 
-        // "moorlands_surface_waterlily_feature": iterations 4
         register(context, MOORLAND_WATERLILY_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_WATERLILY_KEY),
                 ModOrePlacement.commonOrePlacement(4, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
     }

@@ -25,16 +25,13 @@ public class MysticForest {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        //we need to follow the same order as vanilla biomes for the BiomeDefaultFeatures
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.MYSTIC_PLACED_KEY);
-        // mystic_forest.biome.json's "sea_material": "extrabiomes:goo" - see GooConversionFeature
-        // for why this needs a TOP_LAYER_MODIFICATION feature (run after lakes/aquifers already
-        // exist) rather than a direct fluid swap.
+        // This biome's "sea_material" is goo, which needs a TOP_LAYER_MODIFICATION feature run after lakes/aquifers exist, rather than a direct fluid swap (see GooConversionFeature).
         biomeBuilder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MysticFeatures.MYSTIC_GOO_PLACED_KEY);
 
         return new Biome.BiomeBuilder()

@@ -28,21 +28,14 @@ public class ModPlacedFeatures{
     public static final ResourceKey<PlacedFeature> CHARRED_PLACED_KEY = createKey("charred_placed");
     public static final ResourceKey<PlacedFeature> LUSH_GRASS_PLACED_KEY = createKey("lush_grass_placed");
     public static final ResourceKey<PlacedFeature> SKY_PLACED_KEY = createKey("sky_placed");
-    // PlacementUtils.countExtra(count, extraChance, extraCount): the first and last arguments are
-    // ints and only the middle one is a float - passing a float as the count silently picks the
-    // wrong overload, so keep the literals typed as written below.
+    // PlacementUtils.countExtra(count, extraChance, extraCount): only the middle argument is a float - passing a float as count silently picks the wrong overload, so keep the literals typed as written below.
     public static void bootstrap(BootstapContext<PlacedFeature>context){
         HolderGetter<ConfiguredFeature<?, ?>>configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         register(context, MYSTIC_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.MYSTIC_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), ModBlocks.MYSTIC_SAPLING.get()));
-        // Palm trees are placed as raw structures (see PalmTreeFeatures) anchored on their true
-        // base-log column, so vanilla treePlacement's own SurfaceWaterDepthFilter (checked against
-        // that same anchor column) correctly keeps them off water/uneven ground - no extra filter
-        // needed here beyond what treePlacement already includes.
+        // Palm trees anchor on their true base-log column, so vanilla treePlacement's own SurfaceWaterDepthFilter already keeps them off water/uneven ground - no extra filter needed here.
         register(context, PALM_PLACED_KEY,configuredFeatures.getOrThrow(PalmTreeFeatures.SELECT_PALM_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.5f,2), ModBlocks.PALM_SAPLING.get()));
-        // Grand Oasis reuses the same palm configured feature but wants noticeably denser groves than
-        // Tropical Island's beach-fringe scattering (though slightly less dense than before), so it
-        // gets its own placed feature (same tree, higher per-chunk count) rather than sharing PALM_PLACED_KEY.
-        register(context, GRAND_OASIS_PALM_PLACED_KEY,configuredFeatures.getOrThrow(PalmTreeFeatures.SELECT_PALM_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(6, 0.5f,3), ModBlocks.PALM_SAPLING.get()));
+        // Own placed feature so density can be tuned separately from PALM_PLACED_KEY; thinned after playtesting found the original count read as forest-dense rather than a scattered oasis.
+        register(context, GRAND_OASIS_PALM_PLACED_KEY,configuredFeatures.getOrThrow(PalmTreeFeatures.SELECT_PALM_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(2, 0.5f,1), ModBlocks.PALM_SAPLING.get()));
         register(context, SKY_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.SKY_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), ModBlocks.SKY_SAPLING.get()));
         register(context, CHARRED_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.CHARRED_KEY), VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f,2), Blocks.OAK_SAPLING));
         register(context, LUSH_GRASS_PLACED_KEY,configuredFeatures.getOrThrow(ModConfigureFeatures.LUSH_GRASS_KEY), ModOrePlacement.commonOrePlacement(15, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE)));

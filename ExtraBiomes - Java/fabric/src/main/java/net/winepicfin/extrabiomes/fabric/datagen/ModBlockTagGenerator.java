@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +53,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
         ));
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(
+                ModBlocks.STICK_PILE.get(),
                 // mystic wood
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.MYSTIC_STAIRS.get(),
@@ -130,35 +132,39 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
         this.tag(BlockTags.LOGS).add(keys(
                 ModBlocks.MYSTIC_LOG.get(),
-                ModBlocks.STRIPED_MYSTIC_LOG.get(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
-                ModBlocks.STRIPED_MYSTIC_WOOD.get(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.get(),
                 ModBlocks.PALM_LOG.get(),
-                ModBlocks.STRIPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.SKY_LOG.get(),
-                ModBlocks.STRIPED_SKY_LOG.get(),
+                ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
-                ModBlocks.STRIPED_SKY_WOOD.get(),
+                ModBlocks.STRIPPED_SKY_WOOD.get(),
                 ModBlocks.GILDED_SKY_LOG.get(),
-                ModBlocks.GILDED_SKY_WOOD.get()
+                ModBlocks.GILDED_SKY_WOOD.get(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         ));
         this.tag(BlockTags.LOGS_THAT_BURN).add(keys(
                 ModBlocks.MYSTIC_LOG.get(),
-                ModBlocks.STRIPED_MYSTIC_LOG.get(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
-                ModBlocks.STRIPED_MYSTIC_WOOD.get(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.get(),
                 ModBlocks.PALM_LOG.get(),
-                ModBlocks.STRIPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.SKY_LOG.get(),
-                ModBlocks.STRIPED_SKY_LOG.get(),
+                ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
-                ModBlocks.STRIPED_SKY_WOOD.get(),
+                ModBlocks.STRIPPED_SKY_WOOD.get(),
                 ModBlocks.GILDED_SKY_LOG.get(),
-                ModBlocks.GILDED_SKY_WOOD.get()
+                ModBlocks.GILDED_SKY_WOOD.get(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         ));
         this.tag(BlockTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get(),
@@ -178,6 +184,17 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
+        ));
+
+        // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
+        // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
+        // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
+        // glazed terracotta isn't in that tag at all. Adding the four colors used there fixes it.
+        this.tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(keys(
+                Blocks.WHITE_GLAZED_TERRACOTTA,
+                Blocks.ORANGE_GLAZED_TERRACOTTA,
+                Blocks.RED_GLAZED_TERRACOTTA,
+                Blocks.BLACK_GLAZED_TERRACOTTA
         ));
 
 
