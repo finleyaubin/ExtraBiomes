@@ -33,7 +33,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_SLAB).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_STAIRS).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops(), UniformInt.of(3, 7)));
-    public static final RegistrySupplier<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> ExtraBiomesExpectPlatform.createGooLiquidBlock(BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable()));
+    public static final RegistrySupplier<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> ExtraBiomesExpectPlatform.createGooLiquidBlock(BlockBehaviour.Properties.copy(Blocks.WATER).sound(SoundType.SLIME_BLOCK).noLootTable()));
     public static final RegistrySupplier<PebbleBlock> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistrySupplier<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistrySupplier<Block> STICK_PILE = registerBlock("stick_pile", () -> ExtraBiomesExpectPlatform.createStickPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion().strength(StickPileTuning.DESTROY_SECONDS)));
@@ -56,7 +56,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> MYSTIC_WOOD = registerBlock("mystic_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> STRIPPED_MYSTIC_LOG = registerBlock("stripped_mystic_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)));
+    public static final RegistrySupplier<Block> MYSTIC_LEAVES = registerBlock("mystic_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.GRASS)));
     public static final RegistrySupplier<Block> STRIPPED_MYSTIC_WOOD = registerBlock("stripped_mystic_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> MYSTIC_SAPLING = registerBlock("mystic_sapling", () -> new SaplingBlock(new MysticTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistrySupplier<Block> MYSTIC_STAIRS = MYSTIC_WOOD_SET.stairs();
@@ -77,7 +77,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> SKY_LOG = registerBlock("sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> SKY_WOOD = registerBlock("sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> STRIPPED_SKY_LOG = registerBlock("stripped_sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)) );
+    public static final RegistrySupplier<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.GRASS)) );
     public static final RegistrySupplier<Block> STRIPPED_SKY_WOOD = registerBlock("stripped_sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> SKY_SAPLING = registerBlock("sky_sapling", () -> new SaplingBlock(new SkyTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistrySupplier<Block> SKY_STAIRS = SKY_WOOD_SET.stairs();
@@ -98,7 +98,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> PALM_LOG = registerBlock("palm_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> PALM_WOOD = registerBlock("palm_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> STRIPPED_PALM_LOG = registerBlock("stripped_palm_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_STEM).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.AMETHYST)) );
+    public static final RegistrySupplier<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.CHERRY_LEAVES).sound(SoundType.GRASS)) );
     public static final RegistrySupplier<Block> STRIPPED_PALM_WOOD = registerBlock("stripped_palm_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_WARPED_HYPHAE).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> PALM_SAPLING = registerBlock("palm_sapling", () -> new PalmSaplingBlock(new PalmTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).strength(0f)));
     public static final RegistrySupplier<Block> PALM_STAIRS = PALM_WOOD_SET.stairs();
@@ -143,15 +143,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block>  WHITE_MUSHROOM= registerBlock("white_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_WHITE_MUSHROOM_KEY));
     public static final RegistrySupplier<Block>  YELLOW_MUSHROOM= registerBlock("yellow_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM), MushroomFeatures.HUGE_YELLOW_MUSHROOM_KEY));
     public static final RegistrySupplier<Block>  GLOW_MUSHROOM= registerBlock("glow_mushroom", () -> new MushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM).lightLevel(BlockState->MiscBlockTuning.GLOW_MUSHROOM_LIGHT_EMISSION), MushroomFeatures.HUGE_GLOW_MUSHROOM_KEY));
-    public static final RegistrySupplier<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  BLUE_MUSHROOM_BLOCK= registerBlock("blue_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  CYAN_MUSHROOM_BLOCK= registerBlock("cyan_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  GREEN_MUSHROOM_BLOCK= registerBlock("green_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  ORANGE_MUSHROOM_BLOCK= registerBlock("orange_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  PURPLE_MUSHROOM_BLOCK= registerBlock("purple_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  WHITE_MUSHROOM_BLOCK= registerBlock("white_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  YELLOW_MUSHROOM_BLOCK= registerBlock("yellow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK)));
-    public static final RegistrySupplier<Block>  GLOW_MUSHROOM_BLOCK= registerBlock("glow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).lightLevel(BlockState->MiscBlockTuning.GLOW_MUSHROOM_BLOCK_LIGHT_EMISSION)));
+    public static final RegistrySupplier<Block>  BLACK_MUSHROOM_BLOCK= registerBlock("black_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  BLUE_MUSHROOM_BLOCK= registerBlock("blue_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  CYAN_MUSHROOM_BLOCK= registerBlock("cyan_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  GREEN_MUSHROOM_BLOCK= registerBlock("green_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  ORANGE_MUSHROOM_BLOCK= registerBlock("orange_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  PURPLE_MUSHROOM_BLOCK= registerBlock("purple_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  WHITE_MUSHROOM_BLOCK= registerBlock("white_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  YELLOW_MUSHROOM_BLOCK= registerBlock("yellow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT)));
+    public static final RegistrySupplier<Block>  GLOW_MUSHROOM_BLOCK= registerBlock("glow_mushroom_block", () -> new HugeMushroomBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM_BLOCK).sound(SoundType.SHROOMLIGHT).lightLevel(BlockState->MiscBlockTuning.GLOW_MUSHROOM_BLOCK_LIGHT_EMISSION)));
 
 
     private static <T extends Block> RegistrySupplier<T> registerBlock(String name, Supplier<T> block) {
