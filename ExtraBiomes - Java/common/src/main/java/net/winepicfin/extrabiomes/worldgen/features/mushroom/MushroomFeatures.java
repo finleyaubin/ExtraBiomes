@@ -41,60 +41,9 @@ import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStruc
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Port of Bedrock's shared "huge mushroom select" chain
- * ("ExtraBiomes - Bedrock/packs/BP/features/mushroom/**") plus the underground
- * glow-mushroom and mycelium-floor chain ("feature_rules/underground_mushroom/*").
- * <p>
- * Bedrock source overview:
- * <ul>
- *   <li>{@code features/mushroom/select_huge_mushroom.json} ({@code minecraft:weighted_random_feature}):
- *       vanilla {@code minecraft:huge_mushroom_feature} weight 10, plus 11 custom colored huge mushroom
- *       structures ({@code huge_red_mushroom1}, {@code huge_brown_mushroom1}, {@code huge_purple_mushroom},
- *       {@code huge_blue_mushroom}, {@code huge_yellow_mushroom}, {@code huge_green_mushroom},
- *       {@code huge_cyan_mushroom}, {@code huge_white_mushroom}, {@code huge_black_mushroom},
- *       {@code huge_orange_mushroom}, {@code huge_glow_mushroom}) each weight 1 -> total weight 21.
- *       Each colored variant is a {@code minecraft:structure_template_feature} referencing a converted
- *       .nbt under {@code data/extrabiomes/structures/mushroom/}; {@code huge_brown_mushroom1} and
- *       {@code huge_red_mushroom1} pin {@code facing_direction: "south"} (fixed rotation), every other
- *       colored variant leaves it random.</li>
- *   <li>{@code feature_rules/mushroom_island_surface_huge_mushroom_feature.json}: places
- *       {@code select_huge_mushroom} once per chunk at {@code query.above_top_solid} for biomes tagged
- *       {@code mooshroom_island} -&gt; {@link #MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY}.</li>
- *   <li>{@code feature_rules/shattered_swamp/swamp_huge_mushroom_feature.json}: places
- *       {@code select_huge_mushroom} once per chunk (1/4 chance) at {@code query.above_top_solid} for
- *       biomes tagged {@code swamp} or {@code roofed} -&gt; {@link #SWAMP_HUGE_MUSHROOM_PLACED_KEY}.</li>
- *   <li>{@code feature_rules/underground_mushroom/huge_glow_mushroom_feature.json}: places ONLY
- *       {@code extrabiomes:mushroom/huge_glow_mushroom} (not the full weighted selector), 25
- *       iterations/chunk, y in [-64, heightmap-10], for overworld biomes -&gt;
- *       {@link #HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY}.</li>
- *   <li>{@code feature_rules/underground_mushroom/mushroom_surface_mycelium_floor_feature.json} (via
- *       {@code features/underground_mushroom/mycelium_floor_snap_to_floor_feature.json} ->
- *       {@code mycelium_floor_feature.json}, a {@code minecraft:vegetation_patch_feature}): scatters
- *       mycelium floor patches (400 iterations/chunk, y in [-64,60]) for {@code mooshroom_island} biomes,
- *       growing {@code features/underground_mushroom/select_mushroom_feature.json} on top of each patch
- *       cell - a {@code minecraft:weighted_random_feature} of {@code select_huge_mushroom} (weight 3)
- *       vs. vanilla {@code minecraft:legacy:small_mushrooms_feature} (weight 3) -&gt;
- *       {@link #MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY}.</li>
- * </ul>
- * <p>
- * <b>NOT ported (missing blocks, not invented here):</b> Bedrock's per-color small-mushroom scatter
- * chain - {@code features/mushroom/mushroom_custom_feature.json} (the "extra custom mushroom" weighted
- * selector), the 9 {@code features/mushroom/scatter_<color>_mushroom.json} /
- * {@code <color>_mushroom_patch.json} pairs, {@code features/mushroom/glow_mushroom_patch.json} /
- * {@code scatter_glow_mushroom.json}, and the two feature_rules that only exist to place
- * {@code mushroom_custom_feature} ({@code mushroom_island_custom_mushroom_feature.json} and
- * {@code overworld_surface_extra_custom_mushroom_feature.json}). Every one of these places a Bedrock
- * "{@code extrabiomes:<color>_mushroom_placed}" block - a small individual mushroom decoration distinct
- * from the huge-mushroom cap blocks - and NONE of those "_placed" blocks exist in ModBlocks (only the
- * 9 huge-mushroom CAP blocks do: BLACK/BLUE/CYAN/GREEN/ORANGE/PURPLE/WHITE/YELLOW/GLOW_MUSHROOM_BLOCK,
- * which this class already reuses for the huge structures above). Per project convention, no new blocks
- * were invented to cover this gap - add the missing small mushroom blocks to ModBlocks first, then wire
- * up this second chain the same way as {@link #SELECT_HUGE_MUSHROOM_KEY} below.
- */
+// Ports Bedrock's huge-mushroom select chain plus the underground glow-mushroom/mycelium-floor chain; the per-color small-mushroom scatter chain isn't ported since those Bedrock "_placed" blocks don't exist in ModBlocks yet (add them, then wire it up like SELECT_HUGE_MUSHROOM_KEY).
 public class MushroomFeatures {
 
-    // -- huge mushroom "building blocks": one raw structure placement per colored variant -----------
     public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_BLACK_MUSHROOM_KEY = cfKey("huge_black_mushroom");
     public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_BLUE_MUSHROOM_KEY = cfKey("huge_blue_mushroom");
     public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_BROWN_MUSHROOM1_KEY = cfKey("huge_brown_mushroom1");

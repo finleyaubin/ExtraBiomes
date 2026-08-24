@@ -34,88 +34,11 @@ import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStruc
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Port of the Bedrock "boulder" feature subsystem:
- * <pre>
- * features/boulder/select_boulder.json         (minecraft:weighted_random_feature, 10 entries)
- * features/boulder/{stone,andesite,diorite,granite,calcite,tuff,cobblestone,
- *                    mossy_cobblestone,blackstone}_boulder.json + pebble_patch.json
- *                                               (minecraft:vegetation_patch_feature)
- * features/boulder/boulder_snap_to_floor_feature.json (minecraft:snap_to_surface_feature wrapper)
- * features/boulder/pebble.json                 (minecraft:weighted_random_feature, 6 entries)
- * features/boulder/{regular,small,large}_pebble.json + {regular,small,large}_mossy_pebble.json
- *                                               (minecraft:structure_template_feature)
- * features/stick_pile/select_stick_pile.json    (minecraft:weighted_random_feature, 2 entries)
- * features/stick_pile/stick_pile{0,1}.json      (minecraft:structure_template_feature)
- * feature_rules/boulder/boulder_placer.json, feature_rules/boulder/stick_pile_placer.json
- * </pre>
- * <p>
- * Mapping notes:
- * <ul>
- *   <li>Each "weighted_random_feature" list is converted to {@link Feature#RANDOM_SELECTOR} +
- *       {@link RandomFeatureConfiguration}. Bedrock evaluates a true weighted pick over the whole
- *       list; vanilla's RANDOM_SELECTOR instead tries entries in order, each with its own
- *       independent success chance, falling through to a mandatory "default" entry. To reproduce
- *       the same distribution, each entry's chance is set to {@code weight / (sum of its own and
- *       all remaining weights)} - this yields exactly the same per-item probabilities as a proper
- *       weighted pick, and (conveniently) the last/lowest-priority original entry always ends up
- *       with chance 1.0, i.e. it can be used directly as vanilla's mandatory "default" entry
- *       instead of a WeightedPlacedFeature. This trick is applied to all three weighted lists
- *       below (select_boulder, pebble, select_stick_pile).</li>
- *   <li>"minecraft:vegetation_patch_feature" -> {@link Feature#VEGETATION_PATCH} +
- *       {@link VegetationPatchConfiguration}. {@code replaceable_blocks} becomes the
- *       {@code extrabiomes:boulder_replaceable} block tag (dirt/podzol/rooted_dirt/stone/
- *       grass_block/snow_block, mirroring Bedrock's dirt/podzol/dirt_with_roots/stone/grass/snow).
- *       {@code ground_block} -> {@code groundState}, {@code vegetation_feature} -> the shared
- *       pebble-select {@link PlacedFeature} (see below), {@code surface: "floor"} ->
- *       {@link CaveSurface#FLOOR}, {@code depth}/{@code horizontal_radius} ranges -> IntProviders,
- *       {@code vertical_range}/{@code vegetation_chance} passed straight through.
- *       {@code extra_bottom_block_chance} has no Bedrock equivalent in these files, so it is 0.</li>
- *   <li>"minecraft:snap_to_surface_feature" (boulder_snap_to_floor_feature.json) is folded into
- *       the top-level select_boulder {@link PlacedFeature}'s placement modifiers
- *       ({@link HeightmapPlacement}) rather than becoming a separate Java feature, per project
- *       convention - VegetationPatchFeature itself already re-searches for the floor within
- *       {@code vertical_range}, so the heightmap placement modifier only needs to get the
- *       placement roughly onto the surface first.</li>
- *   <li>"minecraft:structure_template_feature" (the six pebble variants + two stick-pile variants)
- *       -> the shared {@link net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature}
- *       infrastructure, one {@link SingleStructureConfiguration} per converted .nbt. None of the
- *       pebble variants specify a {@code facing_direction}, so they use a per-placement random
- *       rotation (matches Bedrock's default/unspecified facing); the stick piles both fix
- *       {@code facing_direction: "north"}, so they use a fixed {@link Rotation#NONE}.</li>
- *   <li>{@code constraints.grounded}/{@code unburied}/{@code block_intersection} (all six pebble
- *       variants and both stick piles) and {@code adjustment_radius: 4} (stick piles) are Bedrock
- *       placement-time constraints with no direct Java equivalent; they are approximated by
- *       placing on {@link Heightmap.Types#WORLD_SURFACE_WG} with no additional search/adjustment.
- *       This is a simplification - stick piles in particular may occasionally end up floating or
- *       embedded on uneven terrain where Bedrock's adjustment_radius would have nudged them to fit.</li>
- *   <li>{@code scatter_chance: 10} in both {@code boulder_placer.json} and
- *       {@code stick_pile_placer.json} is approximated with {@link RarityFilter#onAverageOnceEvery(int)}
- *       (an average 1-in-10 chance per chunk column attempt), combined with
- *       {@link InSquarePlacement#spread()} for the x/z 0-16 uniform spread (iterations: 1).</li>
- *   <li>The Bedrock stick-pile structures place a custom {@code extrabiomes:stick_pile} block
- *       (with a {@code extrabiomes:facing}/block_face state). Bedrock's permutations only ever
- *       apply an identical rotation within each opposite-face pair (north/south, east/west,
- *       up/down), i.e. the visual only depends on {@link net.minecraft.core.Direction#getAxis()}
- *       - exactly like a log - so it is ported as {@code net.winepicfin.extrabiomes.forge.block.custom.StickPileBlock},
- *       a {@link net.minecraft.world.level.block.RotatedPillarBlock} with three baked per-axis
- *       models (see tools/convert_stick_pile_model.py, which converts the Bedrock geometry
- *       directly since its bones carry no rotations of their own). tools/block_map.py maps
- *       {@code extrabiomes:stick_pile} to it directly (collapsing the 6-way block_face onto the
- *       3-way axis via {@code BLOCK_FACE_AXIS}) instead of dropping to {@code minecraft:air}.</li>
- * </ul>
- */
 public class BoulderFeatures {
 
-    // -----------------------------------------------------------------
-    // shared tag
-    // -----------------------------------------------------------------
     public static final TagKey<Block> BOULDER_REPLACEABLE =
             TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "boulder_replaceable"));
 
-    // -----------------------------------------------------------------
-    // pebble sub-features (boulder/pebble.json + its 6 structure_template_feature variants)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_REGULAR_KEY = configuredKey("pebble_regular");
     public static final ResourceKey<PlacedFeature> PEBBLE_REGULAR_PLACED_KEY = placedKey("pebble_regular");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_SMALL_KEY = configuredKey("pebble_small");
@@ -129,13 +52,9 @@ public class BoulderFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_LARGE_MOSSY_KEY = configuredKey("pebble_large_mossy");
     public static final ResourceKey<PlacedFeature> PEBBLE_LARGE_MOSSY_PLACED_KEY = placedKey("pebble_large_mossy");
 
-    /** extrabiomes:boulder/pebble - weighted pick between the six pebble structure variants. */
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_SELECT_KEY = configuredKey("pebble_select");
     public static final ResourceKey<PlacedFeature> PEBBLE_SELECT_PLACED_KEY = placedKey("pebble_select");
 
-    // -----------------------------------------------------------------
-    // boulder ground patches (one vegetation_patch_feature per select_boulder.json entry)
-    // -----------------------------------------------------------------
     public static final ResourceKey<ConfiguredFeature<?, ?>> GROUND_STONE_KEY = configuredKey("ground_stone");
     public static final ResourceKey<PlacedFeature> GROUND_STONE_PLACED_KEY = placedKey("ground_stone");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GROUND_ANDESITE_KEY = configuredKey("ground_andesite");

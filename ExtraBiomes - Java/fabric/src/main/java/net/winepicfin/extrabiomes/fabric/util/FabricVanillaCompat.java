@@ -20,9 +20,9 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.MYSTIC_PLANKS.get(), 5, 5);
         registerFlammable(ModBlocks.MYSTIC_LOG.get(), 5, 20);
         registerFlammable(ModBlocks.MYSTIC_WOOD.get(), 5, 20);
-        registerFlammable(ModBlocks.STRIPED_MYSTIC_LOG.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_MYSTIC_LOG.get(), 5, 20);
         registerFlammable(ModBlocks.MYSTIC_LEAVES.get(), 30, 60);
-        registerFlammable(ModBlocks.STRIPED_PALM_WOOD.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_PALM_WOOD.get(), 5, 20);
         registerFlammable(ModBlocks.MYSTIC_SAPLING.get(), 5, 20);
         registerFlammable(ModBlocks.MYSTIC_STAIRS.get(), 5, 20);
         registerFlammable(ModBlocks.MYSTIC_SLAB.get(), 5, 20);
@@ -36,9 +36,9 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.PALM_PLANKS.get(), 5, 5);
         registerFlammable(ModBlocks.PALM_LOG.get(), 5, 20);
         registerFlammable(ModBlocks.PALM_WOOD.get(), 5, 20);
-        registerFlammable(ModBlocks.STRIPED_PALM_LOG.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_PALM_LOG.get(), 5, 20);
         registerFlammable(ModBlocks.PALM_LEAVES.get(), 30, 60);
-        registerFlammable(ModBlocks.STRIPED_PALM_WOOD.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_PALM_WOOD.get(), 5, 20);
         registerFlammable(ModBlocks.PALM_SAPLING.get(), 5, 20);
         registerFlammable(ModBlocks.PALM_STAIRS.get(), 5, 20);
         registerFlammable(ModBlocks.PALM_SLAB.get(), 5, 20);
@@ -52,9 +52,9 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.SKY_PLANKS.get(), 5, 5);
         registerFlammable(ModBlocks.SKY_LOG.get(), 5, 20);
         registerFlammable(ModBlocks.SKY_WOOD.get(), 5, 20);
-        registerFlammable(ModBlocks.STRIPED_SKY_LOG.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_SKY_LOG.get(), 5, 20);
         registerFlammable(ModBlocks.SKY_LEAVES.get(), 30, 60);
-        registerFlammable(ModBlocks.STRIPED_PALM_WOOD.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_PALM_WOOD.get(), 5, 20);
         registerFlammable(ModBlocks.SKY_SAPLING.get(), 5, 20);
         registerFlammable(ModBlocks.SKY_STAIRS.get(), 5, 20);
         registerFlammable(ModBlocks.SKY_SLAB.get(), 5, 20);
@@ -78,10 +78,12 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.GILDED_SKY_TRAPDOOR.get(), 5, 20);
 
         // Axe stripping - matches forge/.../block/custom/ModLogs.java's getToolModifiedState
-        StrippableBlockRegistry.register(ModBlocks.MYSTIC_LOG.get(), ModBlocks.STRIPED_MYSTIC_LOG.get());
-        StrippableBlockRegistry.register(ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPED_MYSTIC_WOOD.get());
-        StrippableBlockRegistry.register(ModBlocks.SKY_LOG.get(), ModBlocks.STRIPED_SKY_LOG.get());
-        StrippableBlockRegistry.register(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPED_SKY_WOOD.get());
+        StrippableBlockRegistry.register(ModBlocks.MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get());
+        StrippableBlockRegistry.register(ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPPED_MYSTIC_WOOD.get());
+        StrippableBlockRegistry.register(ModBlocks.SKY_LOG.get(), ModBlocks.STRIPPED_SKY_LOG.get());
+        StrippableBlockRegistry.register(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_WOOD.get());
+        StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_LOG.get(), ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
+        StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_WOOD.get(), ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
     }
 
     private static void registerFlammable(Block block, int burn, int spread) {

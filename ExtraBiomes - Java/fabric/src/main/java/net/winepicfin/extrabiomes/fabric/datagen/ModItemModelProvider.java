@@ -70,6 +70,12 @@ public class ModItemModelProvider implements DataProvider {
         simpleItem(ModItems.GILDED_SKY_SIGN.get());
         simpleItem(ModItems.GILDED_SKY_HANGING_SIGN.get());
 
+        // Trapdoors delegate to their block model instead (see ModBlockStateProvider.trapdoorBlockState).
+        simpleItem(ModBlocks.MYSTIC_DOOR.get().asItem());
+        simpleItem(ModBlocks.SKY_DOOR.get().asItem());
+        simpleItem(ModBlocks.PALM_DOOR.get().asItem());
+        simpleItem(ModBlocks.GILDED_SKY_DOOR.get().asItem());
+
         // Black Sandstone Wall - "wall_inventory" parent needs an explicit item entry (walls, unlike
         // most blocks, use a dedicated inventory-only model rather than reusing a placed-block model).
         withExistingParent(ModBlocks.BLACK_SANDSTONE_WALL.getId().getPath(), "minecraft:block/wall_inventory")
@@ -88,7 +94,8 @@ public class ModItemModelProvider implements DataProvider {
 
     private void simpleItem(Item item) {
         ResourceLocation id = ModelLocationUtils.getModelLocation(item);
-        ResourceLocation texture = ModelLocationUtils.decorateItemModelLocation(BuiltInRegistries.ITEM.getKey(item).getPath());
+        // decorateItemModelLocation(path) defaults to the "minecraft" namespace, not this mod's - producing missing textures.
+        ResourceLocation texture = new ResourceLocation(ExtraBiomes.MOD_ID, "item/" + BuiltInRegistries.ITEM.getKey(item).getPath());
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");

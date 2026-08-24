@@ -3,10 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-// Bedrock climate values (ExtraBiomes - Bedrock/packs/BP/biomes/<key>.biome.json,
-// "minecraft:climate" component) for every ported biome. Deliberately has no Minecraft imports,
-// and BY_BEDROCK_KEY lets BiomeClimateParityTest iterate every biome without needing a
-// bootstrapped registry to construct a real Biome (each Register() method here needs one).
+// Deliberately has no Minecraft imports so BiomeClimateParityTest can iterate BY_BEDROCK_KEY without a bootstrapped registry.
 public final class BiomeClimateTuning {
     public record Climate(float temperature, float downfall) {
     }

@@ -3,15 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-// Bedrock client appearance values (ExtraBiomes - Bedrock/packs/RP/biomes/<key>.client_biome.json,
-// "minecraft:water_appearance"/"minecraft:foliage_appearance"/"minecraft:grass_appearance"
-// components) for every ported biome, plus each biome's skyColor (Bedrock's client_biome.json has
-// no sky component to check parity against, so skyColor is centralized here as the single source
-// of truth rather than tested; values are chosen to match the closest vanilla biome's sky color -
-// see minecraft.wiki/w/Sky - based on each biome's temperature/downfall in BiomeClimateTuning and
-// its description in the repo README). Deliberately has no Minecraft imports, and BY_BEDROCK_KEY
-// lets BiomeAppearanceParityTest iterate every biome without needing a bootstrapped registry to
-// construct a real Biome (each Register() method here needs one). Mirrors BiomeClimateTuning.
+// skyColor has no Bedrock component to check parity against, so it's centralized here untested; no Minecraft imports so BiomeAppearanceParityTest can iterate BY_BEDROCK_KEY without a bootstrapped registry.
 public final class BiomeAppearanceTuning {
     public record Appearance(int waterColor, int foliageColor, int grassColor, int skyColor) {
     }
@@ -49,11 +41,7 @@ public final class BiomeAppearanceTuning {
     public static final Appearance THE_NETHERLANDS = register("the_netherlands", 0x90ADAD, 0xD4912C, 0x7AAB35, 0x78A7FF);
     public static final Appearance THE_NETHERLANDS_MUTATED = register("the_netherlands_mutated", 0x9EB0B0, 0xE3B56D, 0x51AD07, 0x78A7FF);
     public static final Appearance TROPICAL_ISLAND = register("tropical_island", 0x28c8e0, 0x40b020, 0x60c840, 0x7BA4FF);
-    // Bedrock 3.1.0-beta-2 shipped this biome with no RP/biomes/volcanic_moss_tundra.client_biome.json
-    // (checked - none found), so a matching one was authored alongside this port (see
-    // "ExtraBiomes - Bedrock/packs/RP/biomes/volcanic_moss_tundra.client_biome.json") using a dark,
-    // cool water tone and muted moss-green foliage/grass over the black sand; skyColor follows this
-    // mod's other frozen biomes as usual (see class javadoc).
+    // Bedrock 3.1.0-beta-2 shipped no client_biome.json for this biome, so these values were authored alongside the port rather than ported.
     public static final Appearance VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra", 0x2e4a5c, 0x4a7a5a, 0x5a8a6a, 0x7FA1FF);
 
     private BiomeAppearanceTuning() {

@@ -47,15 +47,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // mystic wood
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
-        logBlock((RotatedPillarBlock) ModBlocks.STRIPED_MYSTIC_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_MYSTIC_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.MYSTIC_WOOD.get()), blockTexture(ModBlocks.MYSTIC_LOG.get()),blockTexture(ModBlocks.MYSTIC_LOG.get()));
-        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPED_MYSTIC_WOOD.get()), blockTexture(ModBlocks.STRIPED_MYSTIC_LOG.get()),blockTexture(ModBlocks.STRIPED_MYSTIC_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_MYSTIC_WOOD.get()), blockTexture(ModBlocks.STRIPPED_MYSTIC_LOG.get()),blockTexture(ModBlocks.STRIPPED_MYSTIC_LOG.get()));
         blockWithItem(ModBlocks.MYSTIC_LEAVES);
         saplingBlock(ModBlocks.MYSTIC_SAPLING);
         simpleBlockItem(ModBlocks.MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:mystic_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:mystic_wood", "minecraft:block/cube_column"));
-        simpleBlockItem(ModBlocks.STRIPED_MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:striped_mystic_log", "minecraft:block/cube_column"));
-        simpleBlockItem(ModBlocks.STRIPED_MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:striped_mystic_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:stripped_mystic_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:stripped_mystic_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.MYSTIC_STAIRS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         slabBlock(((SlabBlock) ModBlocks.MYSTIC_SLAB.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.MYSTIC_BUTTON.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
@@ -69,15 +69,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // sky wood
         blockWithItem(ModBlocks.SKY_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.SKY_LOG.get());
-        logBlock((RotatedPillarBlock) ModBlocks.STRIPED_SKY_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_SKY_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.SKY_WOOD.get()), blockTexture(ModBlocks.SKY_LOG.get()),blockTexture(ModBlocks.SKY_LOG.get()));
-        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPED_SKY_WOOD.get()), blockTexture(ModBlocks.STRIPED_SKY_LOG.get()),blockTexture(ModBlocks.STRIPED_SKY_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_SKY_WOOD.get()), blockTexture(ModBlocks.STRIPPED_SKY_LOG.get()),blockTexture(ModBlocks.STRIPPED_SKY_LOG.get()));
         blockWithItem(ModBlocks.SKY_LEAVES);
         saplingBlock(ModBlocks.SKY_SAPLING);
         simpleBlockItem(ModBlocks.SKY_LOG.get(),models().withExistingParent("extrabiomes:sky_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.SKY_WOOD.get(),models().withExistingParent("extrabiomes:sky_wood", "minecraft:block/cube_column"));
-        simpleBlockItem(ModBlocks.STRIPED_SKY_LOG.get(),models().withExistingParent("extrabiomes:striped_sky_log", "minecraft:block/cube_column"));
-        simpleBlockItem(ModBlocks.STRIPED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:striped_sky_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_SKY_LOG.get(),models().withExistingParent("extrabiomes:stripped_sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:stripped_sky_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.SKY_STAIRS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
         slabBlock(((SlabBlock) ModBlocks.SKY_SLAB.get()), blockTexture(ModBlocks.SKY_PLANKS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.SKY_BUTTON.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
@@ -91,15 +91,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.PALM_LOG.get());
-        logBlock((RotatedPillarBlock) ModBlocks.STRIPED_PALM_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_PALM_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.PALM_WOOD.get()), blockTexture(ModBlocks.PALM_LOG.get()),blockTexture(ModBlocks.PALM_LOG.get()));
-        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPED_PALM_WOOD.get()), blockTexture(ModBlocks.STRIPED_PALM_LOG.get()),blockTexture(ModBlocks.STRIPED_PALM_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_PALM_WOOD.get()), blockTexture(ModBlocks.STRIPPED_PALM_LOG.get()),blockTexture(ModBlocks.STRIPPED_PALM_LOG.get()));
         blockWithItem(ModBlocks.PALM_LEAVES);
-        saplingBlock(ModBlocks.PALM_SAPLING);
+        customSaplingBlock(ModBlocks.PALM_SAPLING, "palm_sapling");
         simpleBlockItem(ModBlocks.PALM_LOG.get(),models().withExistingParent("extrabiomes:palm_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.PALM_WOOD.get(),models().withExistingParent("extrabiomes:palm_wood", "minecraft:block/cube_column"));
-        simpleBlockItem(ModBlocks.STRIPED_PALM_LOG.get(),models().withExistingParent("extrabiomes:striped_palm_log", "minecraft:block/cube_column"));
-        simpleBlockItem(ModBlocks.STRIPED_PALM_WOOD.get(),models().withExistingParent("extrabiomes:striped_palm_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_PALM_LOG.get(),models().withExistingParent("extrabiomes:stripped_palm_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_PALM_WOOD.get(),models().withExistingParent("extrabiomes:stripped_palm_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.PALM_STAIRS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
         slabBlock(((SlabBlock) ModBlocks.PALM_SLAB.get()), blockTexture(ModBlocks.PALM_PLANKS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.PALM_BUTTON.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
@@ -153,6 +153,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void saplingBlock(RegistrySupplier<Block> blockRegistryObject){
         simpleBlock(blockRegistryObject.get(),models().cross(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get())).getPath(),blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    // Palm sapling has its own custom multi-blade geometry on Bedrock, not vanilla's flat
+    // crossed-quad shape - references the static converted model at
+    // common/src/main/resources/assets/extrabiomes/models/block/palm_sapling.json.
+    private void customSaplingBlock(RegistrySupplier<Block> blockRegistryObject, String modelName){
+        simpleBlock(blockRegistryObject.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + modelName)));
     }
     public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture){
         ModelFile sign= models().sign(name(signBlock),texture);

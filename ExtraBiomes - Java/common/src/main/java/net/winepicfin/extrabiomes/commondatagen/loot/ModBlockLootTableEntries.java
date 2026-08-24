@@ -53,8 +53,8 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.MYSTIC_PLANKS.get());
         dropSelf.accept(ModBlocks.MYSTIC_LOG.get());
         dropSelf.accept(ModBlocks.MYSTIC_WOOD.get());
-        dropSelf.accept(ModBlocks.STRIPED_MYSTIC_LOG.get());
-        dropSelf.accept(ModBlocks.STRIPED_MYSTIC_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_MYSTIC_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_MYSTIC_WOOD.get());
         dropSelf.accept(ModBlocks.MYSTIC_STAIRS.get());
         dropSelf.accept(ModBlocks.MYSTIC_BUTTON.get());
         dropSelf.accept(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
@@ -73,8 +73,8 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.SKY_PLANKS.get());
         dropSelf.accept(ModBlocks.SKY_LOG.get());
         dropSelf.accept(ModBlocks.SKY_WOOD.get());
-        dropSelf.accept(ModBlocks.STRIPED_SKY_LOG.get());
-        dropSelf.accept(ModBlocks.STRIPED_SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_SKY_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_SKY_WOOD.get());
         dropSelf.accept(ModBlocks.SKY_STAIRS.get());
         dropSelf.accept(ModBlocks.SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.SKY_PRESSURE_PLATE.get());
@@ -93,8 +93,8 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.PALM_PLANKS.get());
         dropSelf.accept(ModBlocks.PALM_LOG.get());
         dropSelf.accept(ModBlocks.PALM_WOOD.get());
-        dropSelf.accept(ModBlocks.STRIPED_PALM_LOG.get());
-        dropSelf.accept(ModBlocks.STRIPED_PALM_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_PALM_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_PALM_WOOD.get());
         dropSelf.accept(ModBlocks.PALM_STAIRS.get());
         dropSelf.accept(ModBlocks.PALM_BUTTON.get());
         dropSelf.accept(ModBlocks.PALM_PRESSURE_PLATE.get());
@@ -113,6 +113,8 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.GILDED_SKY_PLANKS.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_LOG.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_STAIRS.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());

@@ -50,7 +50,7 @@ import java.util.List;
  * "fixed single-axis row" primitive, so this is ported as an ordinary per-chunk scatter matching the same iteration
  * count (10): CountPlacement.of(10) + InSquarePlacement.spread() + HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG)
  * (Bedrock's query.above_top_solid) + BiomeFilter.biome(). This preserves the same flower density per chunk while
- * losing the striped-row visual pattern.
+ * losing the stripped-row visual pattern.
  */
 public class NetherlandsTulipFeatures {
     public static final TagKey<Block> TULIP_REPLACEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_tulip_replaceable"));

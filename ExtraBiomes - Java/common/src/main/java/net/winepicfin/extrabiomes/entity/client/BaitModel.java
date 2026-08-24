@@ -193,8 +193,7 @@ public class BaitModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		// animation.bait.wrigle — every worm's chain of 4 segments flexes in an alternating
-		// +/-45 degree pattern, all in lockstep off abs(sin(life_time*50)).
+		// animation.bait.wrigle: all worm segment chains flex in an alternating +/-45 degree pattern, in lockstep off abs(sin(life_time*50)).
 		float lifeTime = ageInTicks / 20f;
 		float wiggle = Math.abs(Mth.sin(lifeTime * 50f)) * 45f * 0.017453292f;
 		applyWiggle(wiggle, this.head1, this.head2, this.head3, this.body2);

@@ -8,9 +8,7 @@ import java.util.EnumSet;
 import java.util.Comparator;
 import java.util.List;
 
-// Ported from Bedrock extrabiomes:piranha's bait targeting (minecraft:behavior.nearest_attackable_target
-// "bait" entry — priority 0, must_see false, within_radius 25). Bait takes over movement ahead of the
-// melee/swim goals so a thrown bait pulls the school off the player and onto itself instead.
+// Ported from Bedrock's bait targeting; runs ahead of the melee/swim goals so a thrown bait pulls the school off the player.
 public class PiranhaBaitGoal extends Goal {
     private static final double SEARCH_RADIUS = 25.0;
     private static final double GIVE_UP_RADIUS = 35.0;

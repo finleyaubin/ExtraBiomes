@@ -7,9 +7,7 @@ import net.winepicfin.extrabiomes.entity.custom.HoppleshroomEntity;
 
 import java.util.EnumSet;
 
-// Ported from Bedrock extrabiomes:hoppleshroom — travels by hopping like a slime rather than
-// walking: picks a random facing every so often and launches itself with a burst of velocity
-// when it lands, instead of continuously pathing across the ground.
+// Ported from Bedrock: travels by hopping like a slime rather than pathing continuously on the ground.
 public class HoppleshroomHopGoal extends Goal {
     private final HoppleshroomEntity hoppleshroom;
     private int hopDelay;

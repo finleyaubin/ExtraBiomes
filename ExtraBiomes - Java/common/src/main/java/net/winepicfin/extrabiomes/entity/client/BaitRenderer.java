@@ -13,8 +13,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.custom.projectile.BaitProjectileEntity;
 import org.jetbrains.annotations.NotNull;
 
-// Ported from Bedrock's controller.render.bait — swaps between 10 damage-stage textures
-// (array.skins[floor(query.health/10)], the top two slots both bait90) as piranhas chip the bait away.
+// Ported from Bedrock's controller.render.bait: swaps between 10 damage-stage textures as piranhas chip the bait away.
 public class BaitRenderer extends EntityRenderer<BaitProjectileEntity> {
     private static final ResourceLocation[] TEXTURES = {
             texture("bait10"), texture("bait20"), texture("bait30"), texture("bait40"), texture("bait50"),

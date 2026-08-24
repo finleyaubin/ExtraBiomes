@@ -1,6 +1,5 @@
 package net.winepicfin.extrabiomes.worldgen.features.oasis;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -8,13 +7,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -25,6 +22,7 @@ import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructur
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Surface fossils for Grand Oasis, in the spirit of Soul Sand Valley's exposed bone piles rather
@@ -79,7 +77,7 @@ public class OasisFossilFeatures {
             ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, BONE_PIECES[i]);
             context.register(PIECE_KEYS.get(i), new ConfiguredFeature<>(
                     ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                    new SingleStructureConfiguration(structure)
+                    new SingleStructureConfiguration(structure, Optional.empty(), 0, true, List.of(Blocks.SAND, Blocks.RED_SAND))
             ));
         }
 
@@ -108,16 +106,13 @@ public class OasisFossilFeatures {
             context.register(PIECE_PLACED_KEYS.get(i), new PlacedFeature(configuredFeatures.getOrThrow(PIECE_KEYS.get(i)), List.<PlacementModifier>of()));
         }
 
-        // Rare (1-in-48, between vanilla desert fossils' 1-in-64 and boulder/stick_pile's 1-in-10),
-        // scattered once per chunk column attempt, sat directly on the sand/red sand surface -
-        // exposed like Soul Sand Valley's bones instead of buried like vanilla desert fossils.
+        // Bumped from 1-in-48 to 1-in-10 after playtest feedback; floor check moved to SingleStructureConfiguration.
         context.register(SELECT_FOSSIL_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_FOSSIL_KEY),
                 List.of(
-                        RarityFilter.onAverageOnceEvery(48),
+                        RarityFilter.onAverageOnceEvery(10),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.SAND, Blocks.RED_SAND)),
                         BiomeFilter.biome()
                 )
         ));

@@ -62,8 +62,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.MYSTIC_TRAPDOOR.get());
                 pOutput.accept(ModBlocks.MYSTIC_LOG.get());
                 pOutput.accept(ModBlocks.MYSTIC_WOOD.get());
-                pOutput.accept(ModBlocks.STRIPED_MYSTIC_LOG.get());
-                pOutput.accept(ModBlocks.STRIPED_MYSTIC_WOOD.get());
+                pOutput.accept(ModBlocks.STRIPPED_MYSTIC_LOG.get());
+                pOutput.accept(ModBlocks.STRIPPED_MYSTIC_WOOD.get());
                 pOutput.accept(ModBlocks.MYSTIC_SAPLING.get());
                 pOutput.accept(ModBlocks.MYSTIC_LEAVES.get());
                 pOutput.accept(ModBlocks.MYSTIC_SIGN.get());
@@ -80,8 +80,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.SKY_TRAPDOOR.get());
                 pOutput.accept(ModBlocks.SKY_LOG.get());
                 pOutput.accept(ModBlocks.SKY_WOOD.get());
-                pOutput.accept(ModBlocks.STRIPED_SKY_LOG.get());
-                pOutput.accept(ModBlocks.STRIPED_SKY_WOOD.get());
+                pOutput.accept(ModBlocks.STRIPPED_SKY_LOG.get());
+                pOutput.accept(ModBlocks.STRIPPED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.SKY_SAPLING.get());
                 pOutput.accept(ModBlocks.SKY_LEAVES.get());
                 pOutput.accept(ModBlocks.SKY_SIGN.get());
@@ -98,8 +98,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.PALM_TRAPDOOR.get());
                 pOutput.accept(ModBlocks.PALM_LOG.get());
                 pOutput.accept(ModBlocks.PALM_WOOD.get());
-                pOutput.accept(ModBlocks.STRIPED_PALM_LOG.get());
-                pOutput.accept(ModBlocks.STRIPED_PALM_WOOD.get());
+                pOutput.accept(ModBlocks.STRIPPED_PALM_LOG.get());
+                pOutput.accept(ModBlocks.STRIPPED_PALM_WOOD.get());
                 pOutput.accept(ModBlocks.PALM_SAPLING.get());
                 pOutput.accept(ModBlocks.PALM_LEAVES.get());
                 pOutput.accept(ModBlocks.PALM_SIGN.get());
@@ -116,6 +116,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.GILDED_SKY_TRAPDOOR.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_LOG.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_WOOD.get());
+                pOutput.accept(ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
+                pOutput.accept(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_SIGN.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get());
                 // Mushrooms

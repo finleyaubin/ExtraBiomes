@@ -11,6 +11,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -54,6 +56,8 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     private static final int BUCK_CHECK_TICK_CHANCE = 10;
     private static final int BUCK_COOLDOWN_TICKS = 20;
     private static final int TEMPER_GAIN_PER_ATTEMPT = 5;
+    // Bedrock's actual taming method (temper_mod 4 for mossy_pebble); kept alongside the ride-and-buck path.
+    private static final int FEED_TEMPER_GAIN = 4;
 
     private int buckCooldown;
 
@@ -112,6 +116,27 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         }
     }
 
+    // AbstractHorse#mobInteract never routes to feeding, so without this a mossy pebble just mounted it.
+    @Override
+    public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (!this.isTamed() && !this.isBaby() && !this.isVehicle() && stack.is(ModItems.MOSSY_PEBBLE.get())) {
+            if (!this.level().isClientSide) {
+                stack.shrink(1);
+                this.modifyTemper(FEED_TEMPER_GAIN);
+                if (this.getTemper() >= this.getMaxTemper()) {
+                    this.setTamed(true);
+                    this.setOwnerUUID(player.getUUID());
+                    this.spawnTamingParticles(true);
+                } else {
+                    this.spawnTamingParticles(false);
+                }
+            }
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        }
+        return super.mobInteract(player, hand);
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -126,7 +151,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     }
 
     protected void randomizeAttributes(RandomSource random) {
-        Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue((double) generateMaxHealth(random::nextInt));
+        // MAX_HEALTH deliberately not randomized here: Bedrock's puckoo health is a flat 6, not a range.
         Objects.requireNonNull(this.getAttribute(Attributes.MOVEMENT_SPEED)).setBaseValue(generateSpeed(random::nextDouble));
         Objects.requireNonNull(this.getAttribute(Attributes.JUMP_STRENGTH)).setBaseValue(generateBedrockJumpStrength(random::nextDouble));
     }
@@ -199,7 +224,19 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.CHICKEN_AMBIENT;
+        return net.winepicfin.extrabiomes.sound.ModSounds.PUCKOO_AMBIENT.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource damageSource) {
+        return net.winepicfin.extrabiomes.sound.ModSounds.PUCKOO_CRY.get();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return net.winepicfin.extrabiomes.sound.ModSounds.PUCKOO_CRY.get();
     }
 
     private void setTypeVariant(int typeVariant) {

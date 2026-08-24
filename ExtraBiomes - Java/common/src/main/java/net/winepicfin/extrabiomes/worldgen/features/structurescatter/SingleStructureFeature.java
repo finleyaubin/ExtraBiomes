@@ -122,10 +122,8 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             return false;
         }
 
-        // Opt-in "is the whole footprint actually resting on solid ground" check (see
-        // SingleStructureConfiguration's own javadoc). Disabled by default for every existing
-        // convenience constructor.
-        if (config.requireGroundedFloor() && !hasSolidFloor(level, structureBox)) {
+        // Checked at the un-offset heightmap origin so a negative groundOffset doesn't probe underground.
+        if (config.requireGroundedFloor() && !hasSolidFloor(level, structureBox, context.origin().getY() - 1, config.requiredFloorBlocks())) {
             return false;
         }
 
@@ -156,21 +154,17 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
         return total == 0 || (float) clear / total >= minClearFraction;
     }
 
-    /**
-     * True only if every column of {@code box}'s footprint has a solid (non-air) block directly
-     * beneath its lowest row - i.e. the structure's own base row is expected to rest right at
-     * ground level (as with a {@code groundOffset} of 0), not float above or embed below it. A
-     * single-column {@link net.minecraft.world.level.levelgen.placement.HeightmapPlacement} only
-     * verifies the placement origin's own column, so a wide structure can still be placed with
-     * part of its footprint hanging over a ledge, slope, or gap in the terrain - this catches that
-     * before the whole thing gets stamped in regardless.
-     */
-    private static boolean hasSolidFloor(WorldGenLevel level, BoundingBox box) {
+    // Catches wide structures hanging over a ledge that a single-column HeightmapPlacement wouldn't.
+    private static boolean hasSolidFloor(WorldGenLevel level, BoundingBox box, int floorY, java.util.List<Block> requiredFloorBlocks) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int floorY = box.minY() - 1;
         for (int x = box.minX(); x <= box.maxX(); x++) {
             for (int z = box.minZ(); z <= box.maxZ(); z++) {
-                if (level.getBlockState(pos.set(x, floorY, z)).isAir()) {
+                net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos.set(x, floorY, z));
+                if (requiredFloorBlocks.isEmpty()) {
+                    if (state.isAir()) {
+                        return false;
+                    }
+                } else if (!requiredFloorBlocks.contains(state.getBlock())) {
                     return false;
                 }
             }

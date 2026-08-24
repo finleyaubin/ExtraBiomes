@@ -1,6 +1,5 @@
 package net.winepicfin.extrabiomes.worldgen.features.stonepillars;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -13,13 +12,10 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
@@ -77,18 +73,22 @@ public class StonePillarsFeature {
 
     private static final int GROUND_OFFSET = -5; // query.above_top_solid(worldx, worldz) - 5
 
+    // Bedrock's constraints.block_intersection.block_allowlist, checked against each pillar's real post-rotation footprint.
+    private static final List<net.minecraft.world.level.block.Block> ALLOWED_FLOOR_BLOCKS =
+            List.of(Blocks.AIR, Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.WATER, Blocks.STONE);
+
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(STONE_PILLAR_1_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), GROUND_OFFSET)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS)
         ));
         context.register(STONE_PILLAR_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), GROUND_OFFSET)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS)
         ));
         context.register(STONE_PILLAR_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), GROUND_OFFSET)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS)
         ));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -107,21 +107,13 @@ public class StonePillarsFeature {
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // Shared block-below constraint for all three pillar variants + the top-level selector:
-        // Bedrock's constraints.block_intersection.block_allowlist [air, grass, dirt, water, stone].
-        List<PlacementModifier> perPillarModifiers = List.of(
-                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(
-                        new BlockPos(0, -1, 0),
-                        Blocks.AIR, Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.WATER, Blocks.STONE
-                ))
-        );
-
+        // Floor allowlist now enforced per-piece via SingleStructureConfiguration (see bootstrapConfigured).
         context.register(STONE_PILLAR_1_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(STONE_PILLAR_1_KEY), perPillarModifiers));
+                configuredFeatures.getOrThrow(STONE_PILLAR_1_KEY), List.of()));
         context.register(STONE_PILLAR_2_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(STONE_PILLAR_2_KEY), perPillarModifiers));
+                configuredFeatures.getOrThrow(STONE_PILLAR_2_KEY), List.of()));
         context.register(STONE_PILLAR_3_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(STONE_PILLAR_3_KEY), perPillarModifiers));
+                configuredFeatures.getOrThrow(STONE_PILLAR_3_KEY), List.of()));
 
         context.register(STONE_PILLARS_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_STONE_PILLARS_KEY),

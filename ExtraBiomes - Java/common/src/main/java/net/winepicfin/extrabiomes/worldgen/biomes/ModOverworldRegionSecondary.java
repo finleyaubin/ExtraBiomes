@@ -151,6 +151,16 @@ public class ModOverworldRegionSecondary extends Region {
                 .weirdness(variantWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.LUSH_MESA_BRYCE));
 
+        // Volcanic Moss Tundra - moved here from ModOverworldRegion since its box overlapped Cold Mesa's there.
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.FROZEN)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.HUMID))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_2, ParameterUtils.Erosion.EROSION_4))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(Climate.Parameter.span(-1.0F, 0.0F))
+                .build().forEach(point -> builder.add(point, ModBiomes.VOLCANIC_MOSS_TUNDRA));
+
         // Add our points to the mapper
         builder.build().forEach(mapper::accept);
     }

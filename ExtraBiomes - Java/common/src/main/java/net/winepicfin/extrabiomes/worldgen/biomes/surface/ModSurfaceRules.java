@@ -8,25 +8,9 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
-/**
- * Surface rules derived from each biome's "minecraft:surface_builder" component in the
- * Bedrock BP (ExtraBiomes - Bedrock/packs/BP/biomes/*.biome.json).
- *
- * Bedrock's surface_builder gives us three materials per biome: top_material, mid_material
- * and foundation_material. Java's default deep-terrain material is already stone, so a rule
- * is only added below when a biome's top/mid materials differ from vanilla's default
- * grass_block-over-dirt. Biomes whose Bedrock top/mid already match that default (dirt
- * forests, jungles, plains-like biomes, etc.) intentionally have no entry here.
- * <p>
- * Some biomes additionally have a "minecraft:surface_material_adjustments" component: one or
- * more patchy top/mid/sea_floor material overrides gated by a Perlin noise band. Those are
- * layered on top of (checked before, in the same SurfaceRules.sequence) the base material rule
- * above, using {@link ModNoiseParameters}'s shared noises to control patch size - see that
- * class's javadoc for how Bedrock's per-adjustment noise_frequency_scale maps onto them.
- */
+// Rules mirror each biome's Bedrock top/mid/foundation materials; biomes matching vanilla's default grass/dirt have no entry, and surface_material_adjustments noise patches (see ModNoiseParameters) layer on top of the base rule.
 public class ModSurfaceRules {
-    // Shared depth split for sand-topped biomes: top material for the shallow band, that biome's
-    // "sandstone" foundation for the deeper band below it, then normal stone resumes.
+    // Depth split for sand-topped biomes: top material for the shallow band, foundation for the deeper band below it, then normal stone resumes.
     private static final int TOP_DEPTH = 3;
     private static final int FOUNDATION_DEPTH = 10;
 

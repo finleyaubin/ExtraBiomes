@@ -12,8 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.winepicfin.extrabiomes.entity.custom.GiantTortoiseEntity;
 
 public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
-	// Approximate center of the shell mesh (body2's boxes) relative to `body`'s own pivot,
-	// derived from the box coordinates in createBodyLayer(). Tune by eye if the roll still wobbles.
+	// Approximate shell mesh center relative to `body`'s own pivot; tune by eye if the roll still wobbles.
 	private static final float SHELL_PIVOT_DY = 6.3F;
 	private static final float SHELL_PIVOT_DZ = -2.5F;
 	private static final float TUCK_ANGLE = -100F * 0.017453292F;
@@ -80,11 +79,7 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 		boolean charging = entity instanceof GiantTortoiseEntity tortoise && tortoise.isCharging();
 
 		if (charging) {
-			// Rolling state (Terraria Giant Tortoise: retracts into its shell and spins toward
-			// the player). Legs tuck up under the shell rather than disappearing, and the spin
-			// runs at a constant rate off ageInTicks rather than off actual distance moved, so it
-			// reads as a fast continuous tumble regardless of how slowly the entity's real
-			// movement speed is closing the gap.
+			// Spin runs at a constant rate off ageInTicks rather than actual movement, so it reads as a fast tumble regardless of real closing speed.
 			this.leg0.xRot = TUCK_ANGLE;
 			this.leg1.xRot = TUCK_ANGLE;
 			this.leg2.xRot = TUCK_ANGLE;
@@ -93,10 +88,7 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 			float theta = (ageInTicks * 25f) * 0.017453292f; // tune degrees/tick to taste
 			this.body.xRot += theta;
 
-			// `body`'s own pivot (PartPose.offset) sits at leg-mount height near the bottom of the
-			// shell, not the shell's visual center, so spinning it in place swings the shell on an
-			// arc rather than turning it on its own axis. Counter-translate so it rotates around
-			// SHELL_PIVOT_DY/DZ (the shell's approximate center relative to that pivot) instead.
+			// `body`'s pivot sits at leg-mount height, not the shell's visual center, so counter-translate around SHELL_PIVOT_DY/DZ to spin in place instead of on an arc.
 			float cos = Mth.cos(theta);
 			float sin = Mth.sin(theta);
 			this.body.y += SHELL_PIVOT_DY * (cos - 1f) - SHELL_PIVOT_DZ * sin;
