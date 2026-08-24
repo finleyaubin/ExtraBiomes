@@ -68,8 +68,9 @@ public class BryceMesaPillarFeatures {
         context.register(TUFF_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
                 new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(Blocks.TUFF.defaultBlockState()))));
         // Bedrock's jungle_pillars config is flat stone/stone - an empty streak palette collapses the 192-layer array to one repeated colour, still running through the same banding code path.
+        // Grass-capped (see BrycePillarsConfiguration#capMaterial) so JunglePillars.java's existing addJungleTrees/addJungleGrass calls have valid ground to land jungle vegetation on top of these pillars, not just on the flat ground between them.
         context.register(STONE_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of())));
+                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(), java.util.Optional.of(Blocks.GRASS_BLOCK.defaultBlockState()))));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {

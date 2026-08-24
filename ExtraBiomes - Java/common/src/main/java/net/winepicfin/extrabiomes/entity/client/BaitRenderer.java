@@ -38,6 +38,9 @@ public class BaitRenderer extends EntityRenderer<BaitProjectileEntity> {
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
+        // The model's root part uses the humanoid PartPose.offset(0, 24, 0) convention, which LivingEntityRenderer normally un-flips; this renderer has no such base class, so the flip has to happen here.
+        poseStack.scale(-1.0F, -1.0F, 1.0F);
+        poseStack.translate(0.0D, -1.25D, 0.0D);
         VertexConsumer vertexConsumer = buffer.getBuffer(this.model.renderType(getTextureLocation(entity)));
         this.model.setupAnim(entity, 0.0F, 0.0F, entity.tickCount + partialTicks, 0.0F, 0.0F);
         this.model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
@@ -47,7 +50,7 @@ public class BaitRenderer extends EntityRenderer<BaitProjectileEntity> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(BaitProjectileEntity entity) {
-        int index = Mth.clamp(entity.getHealth() / 10, 0, TEXTURES.length - 1);
+        int index = Mth.clamp(entity.getHealth() * TEXTURES.length / entity.getMaxHealth(), 0, TEXTURES.length - 1);
         return TEXTURES[index];
     }
 }

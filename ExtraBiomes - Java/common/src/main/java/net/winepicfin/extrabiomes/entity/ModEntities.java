@@ -52,8 +52,9 @@ public class ModEntities {
             () -> EntityType.Builder.<DiamondRazorFeatherProjectileEntity>of(DiamondRazorFeatherProjectileEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(10).build("diamond_razor_feather"));
     public static final RegistrySupplier<EntityType<NetheriteRazorFeatherProjectileEntity>> NETHERITE_RAZOR_FEATHER = ENTITIES.register("netherite_razor_feather",
             () -> EntityType.Builder.<NetheriteRazorFeatherProjectileEntity>of(NetheriteRazorFeatherProjectileEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(10).build("netherite_razor_feather"));
+    // Sized to match Bedrock's minecraft:collision_box (0.4 wide, 0.5 tall) rather than the 0.25 default other thrown projectiles use, since the worm model spreads well beyond a snowball-sized box.
     public static final RegistrySupplier<EntityType<BaitProjectileEntity>> BAIT_PROJECTILE = ENTITIES.register("bait_projectile",
-            () -> EntityType.Builder.<BaitProjectileEntity>of(BaitProjectileEntity::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(10).build("bait_projectile"));
+            () -> EntityType.Builder.<BaitProjectileEntity>of(BaitProjectileEntity::new, MobCategory.MISC).sized(0.4f, 0.5f).clientTrackingRange(4).updateInterval(10).build("bait_projectile"));
 
     public static void register() {
         ENTITIES.register();

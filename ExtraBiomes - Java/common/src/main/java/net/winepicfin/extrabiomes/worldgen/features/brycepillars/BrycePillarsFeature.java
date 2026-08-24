@@ -141,7 +141,10 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
             double erosionScale = config.erosionStrength() * (0.4D + 0.6D * heightFraction);
             int maxScan = radius + (int) Math.ceil(erosionScale);
             boolean isBaseRow = y == baseY;
-            BlockState material = getBandedMaterial(bands, x, y, z, isBaseRow, anchorState);
+            boolean isTopRow = y == baseY + height - 1;
+            BlockState material = isTopRow && config.capMaterial().isPresent()
+                    ? config.capMaterial().get()
+                    : getBandedMaterial(bands, x, y, z, isBaseRow, anchorState);
             for (int rx = -maxScan; rx <= maxScan; rx++) {
                 for (int rz = -maxScan; rz <= maxScan; rz++) {
                     // The pillar's own core column always survives erosion - otherwise a harsh erosion sample at the tapered tip could carve out the one block holding it up, leaving a disconnected floating cap.

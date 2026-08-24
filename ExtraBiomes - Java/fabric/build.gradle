@@ -38,6 +38,17 @@ loom {
     }
 }
 
+// Same reasoning as forge/build.gradle's clearGameTestWorld: server.properties' level-seed is
+// only honoured when a world is *created*, so a leftover run/world/ save from a previous local
+// run silently keeps its own (untracked) seed instead of the pinned one, making
+// BiomeGenerationGameTests' 15000-block search non-deterministic across repeated local runs.
+tasks.register("clearGameTestWorld", Delete) {
+    delete file("run/world")
+}
+tasks.named("runGameTestServer") {
+    dependsOn "clearGameTestWorld"
+}
+
 fabricApi {
     configureDataGeneration {
         // Same target Forge's own "data" run writes to (see forge/build.gradle) - datapack content

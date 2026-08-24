@@ -49,6 +49,21 @@ loom {
     }
 }
 
+// Minecraft only reads server.properties' level-seed when *creating* a world - a leftover
+// run/world/ save from a previous local run (or from runData leaking into the shared "run" dir,
+// see the comment on the data run config above) silently keeps whatever seed it already has, so
+// the pinned CI/local seed is ignored and BiomeGenerationGameTests' 15000-block search runs
+// against an untracked world instead of the deterministic one the pinned seed is meant to
+// guarantee (confirmed locally: a stale Aug-23 save produced a materially different
+// floating_jungle search result than a fresh world on the same pinned seed). Deleting the save
+// before every runGameTestServer invocation makes that seed pin actually mean something.
+tasks.register("clearGameTestWorld", Delete) {
+    delete file("run/world")
+}
+tasks.named("runGameTestServer") {
+    dependsOn "clearGameTestWorld"
+}
+
 configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.

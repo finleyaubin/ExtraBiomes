@@ -49,6 +49,7 @@ public class PiranhaBaitGoal extends Goal {
     @Override
     public void stop() {
         this.piranha.setChasedBait(null);
+        this.piranha.getNavigation().stop();
         this.bait = null;
     }
 
@@ -57,7 +58,10 @@ public class PiranhaBaitGoal extends Goal {
         this.piranha.getLookControl().setLookAt(this.bait, 30.0F, 30.0F);
         double distSq = this.bait.distanceToSqr(this.piranha);
         if (distSq > BITE_RANGE * BITE_RANGE) {
-            this.piranha.getMoveControl().setWantedPosition(this.bait.getX(), this.bait.getY(), this.bait.getZ(), 1.4);
+            // SmoothSwimmingMoveControl only drives movement while its navigation has an active path,
+            // so this must go through moveTo() rather than setWantedPosition() directly or the piranha
+            // just stares at the bait without ever closing the distance.
+            this.piranha.getNavigation().moveTo(this.bait.getX(), this.bait.getY(), this.bait.getZ(), 1.4);
             return;
         }
         if (this.biteCooldown-- <= 0) {
