@@ -124,14 +124,19 @@ public class ModOverworldRegion extends Region {
                 .build().forEach(point -> builder.add(point, ModBiomes.DEEP_DARK_FOREST));
 
         // Floating Jungle - bedrock temp=0.95, downfall=0.9 (replace_biomes amount 0.2). Placed on
-        // vanilla's actual Peaks recipe (see OverworldBiomeBuilder#pickPeakBiome): erosion index 0
-        // is what produces the jagged mountain-peak terrain shape, not just the PEAK_NORMAL weirdness
-        // point alone - the previous EROSION_4-6 band put this in smooth/flat terrain instead.
+        // vanilla's actual Peaks/Slopes recipe (see OverworldBiomeBuilder#pickPeakBiome/
+        // pickSlopeBiome): erosion index 0-1 is what produces the jagged mountain terrain shape,
+        // not just the PEAK_NORMAL weirdness point alone - the original EROSION_4-6 band put this
+        // in smooth/flat terrain instead. EROSION_0 alone was confirmed placed correctly but landed
+        // right at the edge of (and on some seeds outside) a 15000-block search radius, same
+        // ballpark rarity as the accepted Cold Mesa family/Deep Dark Forest/Green precedent above -
+        // widening to EROSION_0-1 roughly doubles the qualifying climate area while staying within
+        // vanilla's own peak/near-peak erosion range.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.MID_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.EROSION_0)
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_1))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.PEAK_NORMAL)
                 .build().forEach(point -> builder.add(point, ModBiomes.FLOATING_JUNGLE));
