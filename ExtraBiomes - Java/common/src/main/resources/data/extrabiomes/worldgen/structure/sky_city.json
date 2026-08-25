@@ -7,7 +7,7 @@
   "start_height": {
     "absolute": 209
   },
-  "size": 7,
+  "size": 20,
   "max_distance_from_center": 128,
   "use_expansion_hack": false,
   "spawn_overrides": {}
