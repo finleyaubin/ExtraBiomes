@@ -64,46 +64,61 @@ import java.util.Optional;
  *                     feature's original behaviour.
  * @param requiredFloorBlocks when non-empty (and {@code requireGroundedFloor} is set), restricts the
  *                     floor to these specific blocks (e.g. sand) instead of merely non-air.
+ * @param minSubmergedFraction the minimum fraction (0.0-1.0) of the structure's rotated bounding
+ *                     box that must already be water (a water block, or the water side of any
+ *                     waterlogged block - checked via fluid state, not block state) before
+ *                     placement is allowed; {@code 0.0F} (the default for every existing
+ *                     convenience constructor) disables the check entirely. Opt in for subsystems
+ *                     whose template no longer bundles its own explicit water fill (relying
+ *                     instead on the surrounding ocean plus its own waterlogged blocks) and so
+ *                     needs a placement-time guarantee that it's actually landing underwater
+ *                     rather than in air or on dry land.
  */
-public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks) implements FeatureConfiguration {
+public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction) implements FeatureConfiguration {
 
     public SingleStructureConfiguration(ResourceLocation structure) {
-        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of());
+        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Rotation fixedRotation) {
-        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of());
+        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, int groundOffset) {
-        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of());
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F);
+    }
+
+    // Jellycoral-style use: random rotation + a required submerged (water/waterlogged) fraction,
+    // for templates that no longer bundle their own explicit water fill.
+    public SingleStructureConfiguration(ResourceLocation structure, int groundOffset, float minSubmergedFraction) {
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), minSubmergedFraction);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of());
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of());
+        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F);
     }
 
     // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of());
+        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of(), 0.0F);
     }
 
     // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required solid floor.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of());
+        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of(), 0.0F);
     }
 
     // Oasis-puddle-style use: required solid floor restricted to a specific set of blocks.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, BlockPos anchor) {
-        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of());
+        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of(), 0.0F);
     }
 
     public static final Codec<SingleStructureConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -114,6 +129,7 @@ public record SingleStructureConfiguration(ResourceLocation structure, Optional<
             BlockPos.CODEC.optionalFieldOf("anchor").forGetter(SingleStructureConfiguration::anchor),
             Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_clear_fraction", 0.0F).forGetter(SingleStructureConfiguration::minClearFraction),
             Codec.BOOL.optionalFieldOf("require_grounded_floor", false).forGetter(SingleStructureConfiguration::requireGroundedFloor),
-            Codec.list(BuiltInRegistries.BLOCK.byNameCodec()).optionalFieldOf("required_floor_blocks", List.of()).forGetter(SingleStructureConfiguration::requiredFloorBlocks)
+            Codec.list(BuiltInRegistries.BLOCK.byNameCodec()).optionalFieldOf("required_floor_blocks", List.of()).forGetter(SingleStructureConfiguration::requiredFloorBlocks),
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_submerged_fraction", 0.0F).forGetter(SingleStructureConfiguration::minSubmergedFraction)
     ).apply(instance, SingleStructureConfiguration::new));
 }

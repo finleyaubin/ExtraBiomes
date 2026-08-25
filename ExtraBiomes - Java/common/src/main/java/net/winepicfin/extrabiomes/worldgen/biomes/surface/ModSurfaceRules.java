@@ -197,10 +197,12 @@ public class ModSurfaceRules {
                                 grassOverStone))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JUNGLE_PILLARS), grassOverStone),
                 // mud patch is sequenced before grassOverStone so it takes priority when its noise band matches.
+                // abovePreliminarySurface() keeps the patch off cave floors, since stoneDepthCheck/ON_FLOOR alone also match those underground.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.MOORLANDS),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.LARGE_PATCH, 0.50, 0.6), MUD)),
+                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.LARGE_PATCH, 0.50, 0.6), MUD))),
                                 grassOverStone)),
 
                 // No base rule needed (Bedrock top/mid already match vanilla default grass/dirt); only the mycelium noise patch is added.
@@ -209,11 +211,13 @@ public class ModSurfaceRules {
                                 SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.SMALL_PATCH, 0.2, 0.4), MYCELIUM))),
 
                 // No base rule needed (top/mid already match vanilla default); two noise bands split nearly the whole range between packed_mud and mud.
+                // abovePreliminarySurface() keeps these off cave floors, since ON_FLOOR alone also matches underground cave floors.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.DEEP_DARK_FOREST),
                         SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                SurfaceRules.sequence(
-                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, 0.212, 1.0), PACKED_MUD),
-                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, -0.115, 0.212), MUD)))),
+                                SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
+                                        SurfaceRules.sequence(
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, 0.212, 1.0), PACKED_MUD),
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, -0.115, 0.212), MUD))))),
 
                 // Netherrack band capped to 30 blocks (unlike Bedrock's full-column replace), so vanilla cave carving resumes above bedrock and no custom carver is needed on Java.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS),

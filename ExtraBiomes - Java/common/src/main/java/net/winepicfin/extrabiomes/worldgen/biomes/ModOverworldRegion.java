@@ -189,11 +189,14 @@ public class ModOverworldRegion extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.TAIGA_SPIKES));
 
-        // Tropical Island - bedrock temp=1, downfall=0.9, beach/ocean/warm tags
+        // Tropical Island - bedrock temp=1, downfall=0.9, beach/ocean/warm tags.
+        // Widened from a single COAST point (vanilla's own beach-strip band) to COAST-NEAR_INLAND so
+        // the biome has real interior landmass instead of rendering as a thin shoreline; DEEP_OCEAN/OCEAN
+        // are left unclaimed so vanilla warm_ocean (same WARM temperature bucket) surrounds it as open water.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
-                .continentalness(ParameterUtils.Continentalness.COAST)
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.NEAR_INLAND))
                 .erosion(ParameterUtils.Erosion.FULL_RANGE)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)

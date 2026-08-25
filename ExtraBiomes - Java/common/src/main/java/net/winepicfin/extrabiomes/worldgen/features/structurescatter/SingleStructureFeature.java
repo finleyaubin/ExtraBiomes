@@ -8,15 +8,18 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -69,7 +72,12 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 .setMirror(Mirror.NONE)
                 .setIgnoreEntities(false)
                 // Prevents this otherwise-unconditional placement from carving through the bottom bedrock layer near y=-64 - see PreserveBedrockProcessor's javadoc.
-                .addProcessor(PreserveBedrockProcessor.INSTANCE);
+                .addProcessor(PreserveBedrockProcessor.INSTANCE)
+                // minecraft:structure_void placed literally is just another (invisible, no-collision) block - vanilla's
+                // placeInWorld doesn't skip it on its own, so without this a converted template using structure_void as
+                // a "leave this position alone" marker (e.g. jellycoral relying on the surrounding ocean rather than its
+                // own explicit water fill) would overwrite whatever's already there instead of leaving it untouched.
+                .addProcessor(new BlockIgnoreProcessor(List.of(Blocks.STRUCTURE_VOID)));
 
         BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
@@ -97,6 +105,13 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
 
         // Opt-in check (minClearFraction 0.0F by default keeps unrelated subsystems placing unconditionally) - currently only used by huge mushrooms to avoid landing on an already-placed neighbour.
         if (config.minClearFraction() > 0.0F && !hasEnoughClearSpace(level, structureBox, config.minClearFraction())) {
+            return false;
+        }
+
+        // Opt-in check (minSubmergedFraction 0.0F by default keeps unrelated subsystems unaffected) - for templates
+        // (e.g. jellycoral) that no longer bundle their own explicit water fill and so need a placement-time
+        // guarantee that they're actually landing underwater.
+        if (config.minSubmergedFraction() > 0.0F && !isSubmergedEnough(level, structureBox, config.minSubmergedFraction())) {
             return false;
         }
 
@@ -130,6 +145,29 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             }
         }
         return total == 0 || (float) clear / total >= minClearFraction;
+    }
+
+    /**
+     * Fraction of {@code box} that's currently water, checked via fluid state rather than block
+     * state so waterlogged blocks (sea pickles, coral fans, kelp) count as submerged just like a
+     * plain water block does - matching how the structure's own waterlogged pieces hold their
+     * water without needing an adjacent explicit water block.
+     */
+    private static boolean isSubmergedEnough(WorldGenLevel level, BoundingBox box, float minSubmergedFraction) {
+        int total = 0;
+        int submerged = 0;
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = box.minX(); x <= box.maxX(); x++) {
+            for (int y = box.minY(); y <= box.maxY(); y++) {
+                for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                    total++;
+                    if (level.getFluidState(pos.set(x, y, z)).is(net.minecraft.tags.FluidTags.WATER)) {
+                        submerged++;
+                    }
+                }
+            }
+        }
+        return total == 0 || (float) submerged / total >= minSubmergedFraction;
     }
 
     // Catches wide structures hanging over a ledge that a single-column HeightmapPlacement wouldn't.
