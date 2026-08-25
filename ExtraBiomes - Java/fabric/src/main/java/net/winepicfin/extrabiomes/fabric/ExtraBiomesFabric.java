@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -48,6 +49,7 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModEntities.register();
         ModBlockEntities.register();
         ModSounds.register();
+        ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
