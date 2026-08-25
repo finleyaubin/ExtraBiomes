@@ -61,8 +61,14 @@ public class PiranhaBaitGoal extends Goal {
     public void tick() {
         this.piranha.getLookControl().setLookAt(this.bait, 30.0F, 30.0F);
         checkLuredAwayFromThrower();
-        double distSq = this.bait.distanceToSqr(this.piranha);
-        if (distSq > BITE_RANGE * BITE_RANGE) {
+        // Horizontal-only: landed bait floats right at the water's surface, but WaterBoundPathNavigation
+        // won't breach it (SwimNodeEvaluator rejects non-Dolphins going above water), so a piranha
+        // swimming just beneath the surface can never close the full 3D gap to it. Gating the bite on
+        // XZ distance alone lets it still land the bite once it's underneath, as Bedrock's piranhas do.
+        double dx = this.bait.getX() - this.piranha.getX();
+        double dz = this.bait.getZ() - this.piranha.getZ();
+        double horizontalDistSq = dx * dx + dz * dz;
+        if (horizontalDistSq > BITE_RANGE * BITE_RANGE) {
             // SmoothSwimmingMoveControl only drives movement while its navigation has an active path,
             // so this must go through moveTo() rather than setWantedPosition() directly or the piranha
             // just stares at the bait without ever closing the distance.
@@ -71,7 +77,7 @@ public class PiranhaBaitGoal extends Goal {
         }
         if (this.biteCooldown-- <= 0) {
             this.biteCooldown = BITE_INTERVAL;
-            this.bait.bite(1 + this.piranha.getRandom().nextInt(3));
+            this.bait.bite(1 + this.piranha.getRandom().nextInt(3), this.piranha.position());
         }
     }
 

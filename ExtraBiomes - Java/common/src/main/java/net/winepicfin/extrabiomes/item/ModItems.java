@@ -7,6 +7,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.entity.custom.projectile.BaitProjectileEntity;
 import net.winepicfin.extrabiomes.item.custom.BaitItem;
 import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
 import net.winepicfin.extrabiomes.item.custom.DiamondRazorFeatherItem;
@@ -27,7 +28,10 @@ public class ModItems {
     public static final RegistrySupplier<Item> RAZOR_FEATHER = ITEMS.register("razor_feather",()-> new RazorFeatherItem(new Item.Properties()));
     public static final RegistrySupplier<Item> DIAMOND_RAZOR_FEATHER = ITEMS.register("diamond_razor_feather",()-> new DiamondRazorFeatherItem(new Item.Properties()));
     public static final RegistrySupplier<Item> NETHERITE_RAZOR_FEATHER = ITEMS.register("netherite_razor_feather",()-> new NetheriteRazorFeatherItem(new Item.Properties().fireResistant()));
-    public static final RegistrySupplier<Item> BAIT = ITEMS.register("bait",()-> new BaitItem(new Item.Properties().stacksTo(16)));
+    // durability(), not stacksTo() - a picked-back-up bait needs to carry its remaining health as a
+    // damage bar (see BaitProjectileEntity.interact()), and vanilla items can't be both damageable
+    // and stackable, so this now stacks to 1 like any other durability item.
+    public static final RegistrySupplier<Item> BAIT = ITEMS.register("bait",()-> new BaitItem(new Item.Properties().durability(BaitProjectileEntity.MAX_HEALTH)));
     public static final RegistrySupplier<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS)));
     public static final RegistrySupplier<Item> COOKED_FROGS_LEGS = ITEMS.register("cooked_frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.COOKED_FROGS_LEGS)));
     public static final RegistrySupplier<Item> PIRANHA = ITEMS.register("piranha",()-> new Item(new Item.Properties().food(ModFoods.PIRANHA)));

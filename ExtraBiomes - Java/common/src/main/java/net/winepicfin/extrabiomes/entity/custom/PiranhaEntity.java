@@ -29,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
+import net.winepicfin.extrabiomes.Config;
 import net.winepicfin.extrabiomes.entity.ai.PiranhaBaitGoal;
 import net.winepicfin.extrabiomes.entity.custom.projectile.BaitProjectileEntity;
 import org.jetbrains.annotations.Nullable;
@@ -75,7 +76,8 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     }
 
     private static double attackDamageForScale(float scale) {
-        return lerp(scale, PiranhaTuning.ATTACK_DAMAGE_AT_MIN_SCALE, PiranhaTuning.ATTACK_DAMAGE_AT_MAX_SCALE);
+        double damage = lerp(scale, PiranhaTuning.ATTACK_DAMAGE_AT_MIN_SCALE, PiranhaTuning.ATTACK_DAMAGE_AT_MAX_SCALE);
+        return Config.weakerPiranhas ? damage * PiranhaTuning.WEAKER_DAMAGE_MULTIPLIER : damage;
     }
 
     @Override
@@ -88,6 +90,27 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         // Piranhas also go after any other mob that wanders into the water, not just players (Bedrock's "is_family mob && != fish" entry).
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
                 (LivingEntity target) -> !(target instanceof WaterAnimal) && target.isInWater()));
+    }
+
+    // Wraps the platform-registered WaterAnimal::checkSurfaceWaterAnimalSpawnRules with an extra
+    // roll and a hard world-wide cap so Config.weakerPiranhas also thins out how many piranhas
+    // exist at once - the WATER_AMBIENT category cap piranhas otherwise rely on (MobSpawnCapTuning)
+    // is shared with vanilla's schooling fish, so it can't enforce a piranha-only limit on its own.
+    public static boolean checkPiranhaSpawnRules(EntityType<PiranhaEntity> type, ServerLevelAccessor level,
+                                                  MobSpawnType spawnType, net.minecraft.core.BlockPos pos,
+                                                  net.minecraft.util.RandomSource random) {
+        if (Config.weakerPiranhas) {
+            if (random.nextFloat() >= PiranhaTuning.WEAKER_SPAWN_CHANCE) {
+                return false;
+            }
+            int piranhaCount = 0;
+            for (net.minecraft.world.entity.Entity entity : level.getLevel().getAllEntities()) {
+                if (entity instanceof PiranhaEntity && ++piranhaCount >= PiranhaTuning.WEAKER_MOB_CAP) {
+                    return false;
+                }
+            }
+        }
+        return WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, spawnType, pos, random);
     }
 
     @Override

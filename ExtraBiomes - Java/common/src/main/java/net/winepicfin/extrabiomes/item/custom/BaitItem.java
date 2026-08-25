@@ -27,6 +27,9 @@ public class BaitItem extends Item {
         if (!level.isClientSide) {
             BaitProjectileEntity bait = new BaitProjectileEntity(level, player);
             bait.setItem(itemStack);
+            // A bait picked back up via BaitProjectileEntity.interact() carries its remaining health over
+            // as this item's damage value - re-throwing it should start from that same health, not full.
+            bait.setHealth(BaitProjectileEntity.MAX_HEALTH - itemStack.getDamageValue());
             bait.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             level.addFreshEntity(bait);
         }

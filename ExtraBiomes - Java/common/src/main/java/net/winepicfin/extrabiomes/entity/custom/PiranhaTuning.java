@@ -29,6 +29,13 @@ public final class PiranhaTuning {
     // Bedrock "minecraft:behavior.melee_attack" speed_multiplier.
     public static final double MELEE_ATTACK_SPEED = 1.4;
 
+    // Fraction of attempted spawns allowed through when Config.weakerPiranhas is enabled.
+    public static final float WEAKER_SPAWN_CHANCE = 0.4F;
+    // Attack damage multiplier applied when Config.weakerPiranhas is enabled - they still attack, just softer.
+    public static final double WEAKER_DAMAGE_MULTIPLIER = 0.4;
+    // Hard world-wide cap on live piranhas when Config.weakerPiranhas is enabled.
+    public static final int WEAKER_MOB_CAP = 12;
+
     private PiranhaTuning() {
     }
 }

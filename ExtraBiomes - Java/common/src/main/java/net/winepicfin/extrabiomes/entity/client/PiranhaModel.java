@@ -56,7 +56,7 @@ public class PiranhaModel<T extends PiranhaEntity> extends HierarchicalModel<T> 
 
 		// animation.piranha.bite, scaled up from Bedrock's sin(life_time)^2*40 (too slow in raw seconds) into a quick, visible chomp.
 		if (entity.isBiting()) {
-			float t = ageInTicks * 0.3f;
+			float t = ageInTicks * 0.6f;
 			float bite = Mth.sin(t) * Mth.sin(t) * 40f;
 			this.jaw.xRot += bite * 0.017453292f;
 		}
