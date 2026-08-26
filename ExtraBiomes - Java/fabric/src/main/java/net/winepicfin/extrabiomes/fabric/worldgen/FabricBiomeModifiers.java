@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.fabric.worldgen;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biomes;
@@ -10,11 +11,9 @@ import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnWeightTuning;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
-import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
-import net.winepicfin.extrabiomes.util.ModTags;
 
 // Fabric equivalent of forge/.../worldgen/ModBiomeModifiers.java. Forge's datapack-driven
 // BiomeModifier registry (ForgeBiomeModifiers.AddFeaturesBiomeModifier/AddSpawnsBiomeModifier,
@@ -89,15 +88,15 @@ public class FabricBiomeModifiers {
         BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.WATER_AMBIENT,
                 ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE,
                 MobSpawnWeightTuning.PIRANHA_JUNGLE_MIN_GROUP, MobSpawnWeightTuning.PIRANHA_JUNGLE_MAX_GROUP);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP), MobCategory.WATER_AMBIENT,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(ConventionalBiomeTags.SWAMP), MobCategory.WATER_AMBIENT,
                 ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_SWAMP, 2, 5);
         BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.CREATURE,
                 ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_JUNGLE, 2, 3);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP, ModBiomes.MOORLANDS), MobCategory.CREATURE,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.IS_WETLAND), MobCategory.CREATURE,
                 ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_SWAMP, 2, 3);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS, Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST), MobCategory.CREATURE,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM), MobCategory.CREATURE,
                 ModEntities.HOPPLESHROOM.get(), MobSpawnWeightTuning.HOPPLESHROOM, 1, 5);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(ModBiomes.JELLYFISH_FIELDS), MobCategory.WATER_CREATURE,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.SPAWNS_JELLYFISH), MobCategory.WATER_CREATURE,
                 ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH, 3, 8);
         BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_BEACH), MobCategory.WATER_CREATURE,
                 ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH_BEACH, 1, 1);
@@ -105,5 +104,8 @@ public class FabricBiomeModifiers {
                 ModEntities.HARPY.get(), MobSpawnWeightTuning.HARPY, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(), MobCategory.CREATURE,
                 ModEntities.WORM.get(), MobSpawnWeightTuning.WORM, 1, 3);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_BEACH), MobCategory.CREATURE,
+                ModEntities.PUCKOO.get(), MobSpawnWeightTuning.PUCKOO_BEACH,
+                MobSpawnWeightTuning.PUCKOO_BEACH_MIN_GROUP, MobSpawnWeightTuning.PUCKOO_BEACH_MAX_GROUP);
     }
 }

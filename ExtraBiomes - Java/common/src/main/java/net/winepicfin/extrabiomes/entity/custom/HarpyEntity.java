@@ -46,10 +46,11 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
                 .add(Attributes.FOLLOW_RANGE, 64);
     }
 
-    // Harpies only nest near the top of the world, not on the surface.
+    // Harpies only nest high up, not on the surface.
+    public static final int MIN_SPAWN_Y = 192;
+
     public static boolean checkHarpySpawnRules(EntityType<HarpyEntity> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        int worldTop = level.getMaxBuildHeight();
-        return pos.getY() >= worldTop - 20 && Monster.checkAnyLightMonsterSpawnRules(type, level, spawnType, pos, random);
+        return pos.getY() >= MIN_SPAWN_Y && Monster.checkAnyLightMonsterSpawnRules(type, level, spawnType, pos, random);
     }
 
     @Override

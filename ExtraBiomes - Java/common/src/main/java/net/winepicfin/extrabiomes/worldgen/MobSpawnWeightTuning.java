@@ -15,6 +15,9 @@ public final class MobSpawnWeightTuning {
     public static final int JELLYFISH_BEACH = 5;
     public static final int HARPY = 50;
     public static final int WORM = 25;
+    public static final int PUCKOO_BEACH = 10;
+    public static final int PUCKOO_BEACH_MIN_GROUP = 2;
+    public static final int PUCKOO_BEACH_MAX_GROUP = 4;
 
     private MobSpawnWeightTuning() {
     }
