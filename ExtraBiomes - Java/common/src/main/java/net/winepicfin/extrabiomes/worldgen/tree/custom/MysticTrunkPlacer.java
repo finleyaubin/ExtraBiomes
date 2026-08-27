@@ -99,47 +99,97 @@ public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((
         }
 
         List<FoliagePlacer.FoliageAttachment> list = new ArrayList<>();
-        if (flag) {
-            list.add(new FoliagePlacer.FoliageAttachment(pPos.above(l), 0, false));
-        }
+        // Always cap the central trunk with its own canopy - the trunk log column already runs up to
+        // l regardless of branch_count, so without this the 2-in-3 rolls with fewer than 3 branches
+        // left the trunk ending bare with only an off-center branch tuft for leaves.
+        list.add(new FoliagePlacer.FoliageAttachment(pPos.above(l), 0, false));
 
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-        Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(pRandom);
-        Function<BlockState, BlockState> function = (pState) -> {
-            return pState.trySetValue(RotatedPillarBlock.AXIS, direction.getAxis());
-        };
-        list.add(this.generateBranch(pLevel, pBlockSetter, pRandom, pFreeTreeHeight, pPos, pConfig, function, direction, i, i < l - 1, blockpos$mutableblockpos));
+        Direction directionA = Direction.Plane.HORIZONTAL.getRandomDirection(pRandom);
+        Direction directionB = pRandom.nextFloat() < 0.5F ? pickDiagonalPartner(pRandom, directionA) : null;
+        list.add(this.generateBranch(pLevel, pBlockSetter, pRandom, pFreeTreeHeight, pPos, pConfig, directionA, directionB, i, i < l - 1, blockpos$mutableblockpos));
         if (flag1) {
-            list.add(this.generateBranch(pLevel, pBlockSetter, pRandom, pFreeTreeHeight, pPos, pConfig, function, direction.getOpposite(), j, j < l - 1, blockpos$mutableblockpos));
+            // The second branch isn't always sent exactly opposite the first any more - a perpendicular
+            // or diagonal heading (still picked relative to directionA/B so it can't double back on the
+            // first branch) makes multi-branch trees read as asymmetric instead of a mirrored pair.
+            Direction secondA;
+            Direction secondB;
+            float roll = pRandom.nextFloat();
+            if (roll < 0.4F) {
+                secondA = directionA.getOpposite();
+                secondB = directionB == null ? null : directionB.getOpposite();
+            } else if (roll < 0.7F) {
+                secondA = pRandom.nextBoolean() ? directionA.getClockWise() : directionA.getCounterClockWise();
+                secondB = null;
+            } else {
+                secondA = directionA.getOpposite();
+                secondB = pRandom.nextBoolean() ? directionA.getClockWise() : directionA.getCounterClockWise();
+            }
+            list.add(this.generateBranch(pLevel, pBlockSetter, pRandom, pFreeTreeHeight, pPos, pConfig, secondA, secondB, j, j < l - 1, blockpos$mutableblockpos));
         }
 
         return list;
     }
 
-    private FoliagePlacer.FoliageAttachment generateBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig, Function<BlockState, BlockState> pPropertySetter, Direction pDirection, int pOffset, boolean pOffsetExtra, BlockPos.MutableBlockPos pPosMutable) {
+    /** Picks one of the two horizontal directions perpendicular to {@code pDirectionA}, so the pair forms a diagonal (e.g. NORTH+EAST). */
+    private static Direction pickDiagonalPartner(RandomSource pRandom, Direction pDirectionA) {
+        return pRandom.nextBoolean() ? pDirectionA.getClockWise() : pDirectionA.getCounterClockWise();
+    }
+
+    private static Function<BlockState, BlockState> axisSetter(Direction pDirection) {
+        return (pState) -> pState.trySetValue(RotatedPillarBlock.AXIS, pDirection.getAxis());
+    }
+
+    /**
+     * Walks a branch from the trunk out to a target point that may be offset diagonally
+     * ({@code pDirectionB} non-null) as well as vertically, placing logs along the way and finishing
+     * with a foliage attachment. Each step of the walk is chosen from whichever of the remaining X/Z/Y
+     * deltas is largest (weighted by magnitude), which naturally reduces to the old single-axis +
+     * vertical zig-zag when pDirectionB is null (its axis never accumulates any remaining delta).
+     */
+    private FoliagePlacer.FoliageAttachment generateBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig, Direction pDirectionA, Direction pDirectionB, int pOffset, boolean pOffsetExtra, BlockPos.MutableBlockPos pPosMutable) {
         pPosMutable.set(pPos).move(Direction.UP, pOffset);
         int i = pFreeTreeHeight - 1 + this.branchEndOffsetFromTop.sample(pRandom);
         boolean flag = pOffsetExtra || i < pOffset;
         int j = this.branchHorizontalLength.sample(pRandom) + (flag ? 1 : 0);
-        BlockPos blockpos = pPos.relative(pDirection, j).above(i);
+        BlockPos blockpos = pPos.relative(pDirectionA, j);
+        if (pDirectionB != null) {
+            blockpos = blockpos.relative(pDirectionB, j);
+        }
+        blockpos = blockpos.above(i);
         int k = flag ? 2 : 1;
 
+        Function<BlockState, BlockState> propertySetterA = axisSetter(pDirectionA);
         for(int l = 0; l < k; ++l) {
-            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(pDirection), pConfig, pPropertySetter);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(pDirectionA), pConfig, propertySetterA);
+            if (pDirectionB != null) {
+                this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(pDirectionB), pConfig, axisSetter(pDirectionB));
+            }
         }
 
-        Direction direction = blockpos.getY() > pPosMutable.getY() ? Direction.UP : Direction.DOWN;
-
         while(true) {
-            int i1 = pPosMutable.distManhattan(blockpos);
-            if (i1 == 0) {
+            int dx = blockpos.getX() - pPosMutable.getX();
+            int dy = blockpos.getY() - pPosMutable.getY();
+            int dz = blockpos.getZ() - pPosMutable.getZ();
+            int remaining = Math.abs(dx) + Math.abs(dy) + Math.abs(dz);
+            if (remaining == 0) {
                 return new FoliagePlacer.FoliageAttachment(blockpos.above(), 0, false);
             }
 
-            float f = (float)Math.abs(blockpos.getY() - pPosMutable.getY()) / (float)i1;
-            boolean flag1 = pRandom.nextFloat() < f;
-            pPosMutable.move(flag1 ? direction : pDirection);
-            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable, pConfig, flag1 ? Function.identity() : pPropertySetter);
+            float roll = pRandom.nextFloat() * (float)remaining;
+            Direction step;
+            Function<BlockState, BlockState> propertySetter;
+            if (roll < (float)Math.abs(dx)) {
+                step = dx > 0 ? Direction.EAST : Direction.WEST;
+                propertySetter = axisSetter(step);
+            } else if (roll < (float)(Math.abs(dx) + Math.abs(dz))) {
+                step = dz > 0 ? Direction.SOUTH : Direction.NORTH;
+                propertySetter = axisSetter(step);
+            } else {
+                step = dy > 0 ? Direction.UP : Direction.DOWN;
+                propertySetter = Function.identity();
+            }
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(step), pConfig, propertySetter);
         }
     }
 }

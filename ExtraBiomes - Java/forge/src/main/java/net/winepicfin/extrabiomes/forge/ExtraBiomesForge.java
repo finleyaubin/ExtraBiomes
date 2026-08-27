@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -57,8 +56,8 @@ public class ExtraBiomesForge
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public ExtraBiomesForge() {
-        var modEventBus = net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModEventBus();
+    public ExtraBiomesForge(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
+        var modEventBus = context.getModEventBus();
         // Must happen before any DeferredRegister .register() call below - architectury's
         // RegistrarManager looks up the mod's event bus by mod id, which it only knows about
         // once this runs (Forge's own ModList entry for this mod isn't usable for that lookup
@@ -94,7 +93,7 @@ public class ExtraBiomesForge
         MinecraftForge.EVENT_BUS.register(this);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
+        context.registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -
@@ -210,16 +209,10 @@ public class ExtraBiomesForge
             ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
 
-            // Without this, saplings/mushrooms/leaves default to solid() and their texture's
-            // transparent pixels render as opaque black instead of being cut out.
-            for (var block : new net.minecraft.world.level.block.Block[] {
-                    ModBlocks.MYSTIC_SAPLING.get(), ModBlocks.SKY_SAPLING.get(), ModBlocks.PALM_SAPLING.get(),
-                    ModBlocks.BLACK_MUSHROOM.get(), ModBlocks.BLUE_MUSHROOM.get(), ModBlocks.CYAN_MUSHROOM.get(),
-                    ModBlocks.GREEN_MUSHROOM.get(), ModBlocks.ORANGE_MUSHROOM.get(), ModBlocks.PURPLE_MUSHROOM.get(),
-                    ModBlocks.WHITE_MUSHROOM.get(), ModBlocks.YELLOW_MUSHROOM.get(), ModBlocks.GLOW_MUSHROOM.get(),
-                    ModBlocks.MYSTIC_LEAVES.get(), ModBlocks.SKY_LEAVES.get(), ModBlocks.PALM_LEAVES.get() }) {
-                ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
-            }
+            // Saplings/mushrooms/leaves get their cutout render type from their block model's
+            // "render_type" field (set in ModBlockStateProvider's datagen) instead of here -
+            // the runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) overloads are
+            // deprecated for removal in favor of setting render_type on the model itself.
             EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
             EntityRenderers.register(ModEntities.WORM.get(), WormRenderer::new);
             EntityRenderers.register(ModEntities.TREEFROG.get(), TreefrogRenderer::new);
