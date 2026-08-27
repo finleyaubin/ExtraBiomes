@@ -155,7 +155,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     // being cut out. Sets the render type on the block model itself (Forge's replacement for
     // the removed runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) API).
     private void blockWithItemCutout(RegistrySupplier<Block> blockRegistryObject){
-        simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()).renderType("cutout"));
+        simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(name(blockRegistryObject.get()), blockTexture(blockRegistryObject.get())).renderType("cutout"));
     }
 
     private void saplingBlock(RegistrySupplier<Block> blockRegistryObject){
