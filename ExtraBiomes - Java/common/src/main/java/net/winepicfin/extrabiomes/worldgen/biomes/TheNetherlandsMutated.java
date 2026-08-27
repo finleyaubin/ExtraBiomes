@@ -10,7 +10,6 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWaterFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindmillFeature;
 
 public class TheNetherlandsMutated {
 
@@ -41,7 +40,7 @@ public class TheNetherlandsMutated {
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWheatFeatures.WHEAT_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWheatFeatures.HYDRATION_WATER_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWaterFeature.WATER_FEATURE_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
+        // Windmill generation moved off this biome-features list - see TheNetherlands.java's matching comment.
         // No custom cave carver on Java - see TheNetherlands/ModSurfaceRules for why.
         // Bedrock's top material here is plain dirt (no grass) rather than grass_block, reflected in the surface rules.
 

@@ -9,7 +9,6 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindmillFeature;
 
 public class TheNetherlands {
 
@@ -42,7 +41,9 @@ public class TheNetherlands {
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.PINK_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.RED_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.WHITE_TULIP_FLOOR_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
+        // Windmill generation moved off this biome-features list entirely - it's now a real jigsaw
+        // Structure (see WindmillStructures), which attaches to biomes via its own Structure.biomes()
+        // HolderSet rather than a per-biome addFeature call.
         // No custom cave carver on Java: the netherrack band (see ModSurfaceRules) is capped low enough that the vanilla carver already reaches plain stone before bedrock, so Bedrock's netherrack-aware carver isn't needed.
 
         return new Biome.BiomeBuilder()

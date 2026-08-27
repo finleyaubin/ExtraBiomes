@@ -8,7 +8,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindmillFeature;
 
 public class Moorlands {
 
@@ -44,8 +43,9 @@ public class Moorlands {
         // moorland subsystem: waterlily surface fixup (Bedrock surface_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_WATERLILY_PLACED_KEY);
 
-        // the_netherlands subsystem: root-level windmill_feature.json also biome-tags "plains", which Moorlands matches
-        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_PLAINS_PLACED_KEY);
+        // the_netherlands subsystem: windmill generation moved off this biome-features list entirely -
+        // it's now a real jigsaw Structure (WindmillStructures.WINDMILL_PLAINS_KEY) that attaches to this
+        // biome via its own Structure.biomes() HolderSet instead of an addFeature call here.
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)

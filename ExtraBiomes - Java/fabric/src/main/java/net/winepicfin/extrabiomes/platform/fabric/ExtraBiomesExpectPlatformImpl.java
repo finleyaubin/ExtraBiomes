@@ -1,10 +1,12 @@
 package net.winepicfin.extrabiomes.platform.fabric;
 
 import com.mojang.serialization.Codec;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -14,7 +16,9 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.winepicfin.extrabiomes.fabric.compat.create.CreateWindmillCompat;
 import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 import net.winepicfin.extrabiomes.fabric.mixin.WoodTypeAccessor;
 
@@ -56,5 +60,17 @@ public class ExtraBiomesExpectPlatformImpl {
 
     public static Item createFrogHelmetItem(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties) {
         return new net.winepicfin.extrabiomes.fabric.item.custom.FrogHelmetItem(material, type, properties);
+    }
+
+    public static boolean isCreateLoaded() {
+        return FabricLoader.getInstance().isModLoaded("create");
+    }
+
+    // See the forge counterpart of this method for the full rationale - identical gating, just against
+    // FabricLoader instead of ModList.
+    public static void applyWindmillCreateCompat(WorldGenLevel level, BoundingBox box) {
+        if (FabricLoader.getInstance().isModLoaded("create")) {
+            CreateWindmillCompat.apply(level, box);
+        }
     }
 }

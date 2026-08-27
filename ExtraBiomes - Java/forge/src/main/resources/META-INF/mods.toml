@@ -21,3 +21,11 @@ license="MIT License"
     versionRange="[1.0.0.59,)"
     ordering="NONE"
     side="BOTH"
+# Optional - see forge/compat/create/CreateWindmillCompat.java. Not required to play; only enables the
+# windmill structure's Create Windmill Bearing swap when Create happens to also be installed.
+[[dependencies.extrabiomes]]
+    modId="create"
+    mandatory=false
+    versionRange="[6.0.0,)"
+    ordering="AFTER"
+    side="BOTH"

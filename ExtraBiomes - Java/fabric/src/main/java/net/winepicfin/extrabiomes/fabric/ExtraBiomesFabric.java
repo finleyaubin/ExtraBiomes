@@ -24,6 +24,7 @@ import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
+import net.winepicfin.extrabiomes.worldgen.structure.windmill.ModStructureTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import terrablender.api.SurfaceRuleManager;
@@ -53,6 +54,7 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
+        ModStructureTypes.register();
         ModVolcanicPlacementModifiers.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
