@@ -1,34 +1,17 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
-import net.minecraft.world.level.levelgen.placement.CaveSurface;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -38,90 +21,59 @@ import java.util.List;
 /**
  * Bedrock's wheat-field subsystem: "extrabiomes:the_netherlands/wheat_big" / "wheat_small"
  * ({@code minecraft:structure_template_feature}, each a single-block .mcstructure - verified from the
- * block_palette: minecraft:wheat with growth 7 / growth 4), "select_wheat" ({@code minecraft:weighted_random_feature},
- * wheat_big:wheat_small = 5:3), and "wheat_floor_feature" ({@code minecraft:vegetation_patch_feature}) wrapping it,
- * placed via feature_rules "extrabiomes:netherlands_wheat_feature" - which is gated on {@code has_biome_tag "mutated"}
- * in ADDITION to "the_netherlands", i.e. this only applies to TheNetherlandsMutated, not the base TheNetherlands biome.
+ * block_palette: minecraft:wheat with growth 7 / growth 4) and "select_wheat" ({@code minecraft:weighted_random_feature},
+ * wheat_big:wheat_small = 5:3), placed via feature_rules "extrabiomes:netherlands_wheat_feature" - which is gated
+ * on {@code has_biome_tag "mutated"} in ADDITION to "the_netherlands", i.e. this only applies to
+ * TheNetherlandsMutated, not the base TheNetherlands biome.
  * <p>
- * wheat_big -> Blocks.WHEAT with CropBlock.AGE = 7 (fully grown). wheat_small -> CropBlock.AGE = 4.
- * select_wheat's 5:3 weight ratio -> a single {@link WeightedPlacedFeature} of chance 5/8 = 0.625 for wheat_big,
- * falling through to wheat_small as the {@link RandomFeatureConfiguration} default (3/8 = 0.375 remaining chance) -
- * this exactly reproduces the ratio since Feature.RANDOM_SELECTOR rolls each listed WeightedPlacedFeature in order
- * and falls back to the default once none hit.
+ * wheat_big -> Blocks.WHEAT with CropBlock.AGE = 7 (fully grown), 62.5% chance. wheat_small -> AGE = 4,
+ * 37.5% chance - the same 5:3 ratio Bedrock's select_wheat used, now rolled per-column directly inside
+ * {@link NetherlandsWheatFieldFeature} rather than via a wrapping RANDOM_SELECTOR feature.
  * <p>
- * {@code replaceable_blocks: [minecraft:farmland, minecraft:dirt]} -> extrabiomes:netherlands_wheat_replaceable tag.
- * {@code ground_block: minecraft:farmland} -> BlockStateProvider.simple(Blocks.FARMLAND).
- * {@code depth: 1-1} -> ConstantInt.of(1), {@code vertical_range: 2} -> 2, {@code vegetation_chance: 1} -> 1.0F,
- * {@code horizontal_radius: 1-10} -> UniformInt.of(1, 10), {@code extra_edge_column_chance: 0} -> 0.0F.
- * <p>
- * SIMPLIFICATION: feature_rules distribution's y = uniform[heightmap, heightmap+3] (a vertical search band above
- * the surface) has no direct PlacementModifier equivalent for a floor-surface vegetation patch; it is absorbed into
- * the VegetationPatchConfiguration's own vertical_range=2 (which already makes the feature search up/down for valid
- * ground near the heightmap placement point), so the PlacedFeature itself places on HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG).
+ * DEVIATION FROM BEDROCK: Bedrock's ground conversion ("wheat_floor_feature", a {@code minecraft:vegetation_patch_feature}
+ * with a 1-10 block random-radius patch) and its scatter-based placement were both dropped. VEGETATION_PATCH grows
+ * a cross/blob shape per attempt (not a filled rectangle), and even a scattered CountPlacement/InSquarePlacement
+ * combo samples columns independently with replacement, so no attempt count guarantees full coverage - both left
+ * visible gaps of untouched terrain, which defeats the point of a solid wheat field. Instead,
+ * {@link net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules} now paints this biome's entire floor as
+ * FARMLAND directly (deterministic, no gaps by construction), and {@link NetherlandsWheatFieldFeature} is invoked
+ * once per chunk and iterates every column itself - deterministic full coverage, no wasted placement attempts.
+ * Hydration ponds (not from Bedrock) are rolled in that same per-column pass rather than as a separate
+ * feature - see its javadoc for why.
  */
 public class NetherlandsWheatFeatures {
-    public static final TagKey<Block> WHEAT_REPLACEABLE = TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "netherlands_wheat_replaceable"));
+    // Registered in Registries.FEATURE (not just DeferredRegister) so the codec gets a stable registry name for ConfiguredFeature serialization/datagen.
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
 
-    private static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_BIG_KEY = key("netherlands_wheat_big");
-    private static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_SMALL_KEY = key("netherlands_wheat_small");
-    private static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_WHEAT_KEY = key("netherlands_select_wheat");
+    public static final RegistrySupplier<NetherlandsWheatFieldFeature> WHEAT_FIELD_FEATURE =
+            FEATURES.register("netherlands_wheat_field", () -> new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
+
+    /** Must be called once from the mod's main class, e.g. {@code NetherlandsWheatFeatures.register();}. */
+    public static void register() {
+        FEATURES.register();
+    }
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_FLOOR_KEY = key("netherlands_wheat_floor");
-
-    private static final ResourceKey<PlacedFeature> WHEAT_BIG_PLACED_KEY = placedKey("netherlands_wheat_big");
-    private static final ResourceKey<PlacedFeature> WHEAT_SMALL_PLACED_KEY = placedKey("netherlands_wheat_small");
-    private static final ResourceKey<PlacedFeature> SELECT_WHEAT_PLACED_KEY = placedKey("netherlands_select_wheat");
     public static final ResourceKey<PlacedFeature> WHEAT_FLOOR_PLACED_KEY = placedKey("netherlands_wheat_floor");
 
-    // Not from Bedrock - buried water source added per playtest feedback so farmland out of NetherlandsWaterFeature's canal reach doesn't revert to dirt and kill its crop.
-    private static final ResourceKey<ConfiguredFeature<?, ?>> HYDRATION_WATER_KEY = key("netherlands_hydration_water");
-    public static final ResourceKey<PlacedFeature> HYDRATION_WATER_PLACED_KEY = placedKey("netherlands_hydration_water");
-
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(WHEAT_BIG_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WHEAT.defaultBlockState().setValue(CropBlock.AGE, 7)))));
-        context.register(WHEAT_SMALL_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WHEAT.defaultBlockState().setValue(CropBlock.AGE, 4)))));
-
-        HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
-        context.register(SELECT_WHEAT_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
-                List.of(new WeightedPlacedFeature(placedFeatures.getOrThrow(WHEAT_BIG_PLACED_KEY), 0.625F)),
-                placedFeatures.getOrThrow(WHEAT_SMALL_PLACED_KEY))));
-
-        context.register(WHEAT_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                WHEAT_REPLACEABLE, BlockStateProvider.simple(Blocks.FARMLAND), placedFeatures.getOrThrow(SELECT_WHEAT_PLACED_KEY),
-                CaveSurface.FLOOR, ConstantInt.of(1), 0.0F, 2, 1.0F, UniformInt.of(1, 10), 0.0F)));
-
-        context.register(HYDRATION_WATER_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WATER.defaultBlockState()))));
+        context.register(WHEAT_FLOOR_KEY, new ConfiguredFeature<>(WHEAT_FIELD_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
-        context.register(WHEAT_BIG_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_BIG_KEY), List.of()));
-        context.register(WHEAT_SMALL_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_SMALL_KEY), List.of()));
-        context.register(SELECT_WHEAT_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SELECT_WHEAT_KEY), List.of()));
 
-        List<PlacementModifier> scatter = List.of(
-                CountPlacement.of(100), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome());
-        context.register(WHEAT_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_FLOOR_KEY), scatter));
-
-        // Scans down to the dirt beneath the farmland so the water always sits under a solid cap; the horizontal-neighbour check skips field edges to avoid exposing the water.
-        List<PlacementModifier> hydration = List.of(
-                CountPlacement.of(20),
-                InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                EnvironmentScanPlacement.scanningFor(
-                        Direction.DOWN,
-                        BlockPredicate.matchesBlocks(Blocks.DIRT),
-                        BlockPredicate.matchesBlocks(Blocks.AIR, Blocks.FARMLAND, Blocks.WHEAT),
-                        6),
-                BlockPredicateFilter.forPredicate(BlockPredicate.allOf(
-                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(1, 0, 0), Blocks.AIR)),
-                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(-1, 0, 0), Blocks.AIR)),
-                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 1), Blocks.AIR)),
-                        BlockPredicate.not(BlockPredicate.matchesBlocks(new BlockPos(0, 0, -1), Blocks.AIR)))),
-                BiomeFilter.biome());
-        context.register(HYDRATION_WATER_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(HYDRATION_WATER_KEY), hydration));
+        // No CountPlacement/InSquarePlacement: the feature iterates every column of its chunk itself, so
+        // this only needs to run exactly once per chunk. Deliberately no BiomeFilter either - without
+        // CountPlacement/InSquarePlacement this only ever samples ONE random point per chunk, and near a
+        // biome boundary that single sample can land just outside the_netherlands_mutated even though
+        // ModSurfaceRules (which checks biome per-column, not once per chunk) already painted farmland
+        // across most of the chunk - skipping the whole chunk's wheat/hydration pass and leaving bare
+        // farmland with chunk-aligned gaps. The feature's own per-column farmland check already only
+        // ever touches columns ModSurfaceRules actually painted for this biome, so the outer BiomeFilter
+        // was redundant on top of being unreliable.
+        List<PlacementModifier> once = List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG));
+        context.register(WHEAT_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_FLOOR_KEY), once));
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {

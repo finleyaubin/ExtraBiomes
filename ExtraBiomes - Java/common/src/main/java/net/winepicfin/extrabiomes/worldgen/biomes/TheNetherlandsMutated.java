@@ -8,7 +8,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWaterFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
 
 public class TheNetherlandsMutated {
@@ -23,7 +22,7 @@ public class TheNetherlandsMutated {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        ModBiomes.globalOverworldGeneration(biomeBuilder);
+        ModBiomes.globalOverworldGeneration(biomeBuilder, false);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COAL_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COPPER_ORE_PLACED_KEY);
@@ -34,12 +33,13 @@ public class TheNetherlandsMutated {
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.LAPIS_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.QUARTZ_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.REDSTONE_ORE_PLACED_KEY);
-        BiomeDefaultFeatures.addPlainVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
-        // 'mutated' variant gets wheat + the canal/water feature instead of tulips (tulips are base TheNetherlands only)
+        // No addPlainVegetation/addDefaultFlowers here (unlike most other biomes): this biome's whole floor is a
+        // solid wheat field (tulips are base TheNetherlands only), and vanilla grass/flowers placed first would
+        // both break up that coverage AND block wheat placement outright - their non-air blocks raise
+        // WORLD_SURFACE_WG for that column, so wheat lands one block too high with no farmland under it (and gets
+        // popped as a dropped item).
+        // Canal feature dropped on Java - hydration ponds are rolled per-column inside the wheat feature itself.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWheatFeatures.WHEAT_FLOOR_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWheatFeatures.HYDRATION_WATER_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWaterFeature.WATER_FEATURE_PLACED_KEY);
         // Windmill generation moved off this biome-features list - see TheNetherlands.java's matching comment.
         // No custom cave carver on Java - see TheNetherlands/ModSurfaceRules for why.
         // Bedrock's top material here is plain dirt (no grass) rather than grass_block, reflected in the surface rules.

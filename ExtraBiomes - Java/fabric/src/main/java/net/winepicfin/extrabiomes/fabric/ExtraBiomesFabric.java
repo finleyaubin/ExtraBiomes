@@ -20,6 +20,7 @@ import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
@@ -58,6 +59,7 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModVolcanicPlacementModifiers.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
+        NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();
 

@@ -23,7 +23,6 @@ import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWaterFeature;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructures;
 import net.winepicfin.extrabiomes.worldgen.features.jellycoral.JellyCoralFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
@@ -65,7 +64,6 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 NetherlandsOreFeatures.bootstrapConfigured(context);
                 NetherlandsTulipFeatures.bootstrapConfigured(context);
                 NetherlandsWheatFeatures.bootstrapConfigured(context);
-                NetherlandsWaterFeature.bootstrapConfigured(context);
                 JellyCoralFeatures.bootstrapConfigured(context);
                 StonePillarsFeature.bootstrapConfigured(context);
                 TaigaSpikeFeatures.bootstrapConfigured(context);
@@ -91,7 +89,6 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 NetherlandsOreFeatures.bootstrapPlaced(context);
                 NetherlandsTulipFeatures.bootstrapPlaced(context);
                 NetherlandsWheatFeatures.bootstrapPlaced(context);
-                NetherlandsWaterFeature.bootstrapPlaced(context);
                 JellyCoralFeatures.bootstrapPlaced(context);
                 StonePillarsFeature.bootstrapPlaced(context);
                 TaigaSpikeFeatures.bootstrapPlaced(context);

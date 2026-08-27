@@ -3,6 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes.surface;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -39,6 +40,9 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource WHITE_CONCRETE_POWDER = makeStateRule(Blocks.WHITE_CONCRETE_POWDER);
     private static final SurfaceRules.RuleSource WHITE_CONCRETE = makeStateRule(Blocks.WHITE_CONCRETE);
     private static final SurfaceRules.RuleSource NETHERRACK = makeStateRule(Blocks.NETHERRACK);
+    // moisture=7 (not defaultBlockState's 0) so the whole field starts fully hydrated rather than
+    // waiting on random ticks to notice the buried water pockets one at a time.
+    private static final SurfaceRules.RuleSource FARMLAND = SurfaceRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7));
     private static final SurfaceRules.RuleSource MUD = makeStateRule(Blocks.MUD);
     private static final SurfaceRules.RuleSource PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
     private static final SurfaceRules.RuleSource MYCELIUM = makeStateRule(Blocks.MYCELIUM);
@@ -225,10 +229,13 @@ public class ModSurfaceRules {
                                 grassOverDirt,
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(30, false, CaveSurface.FLOOR), NETHERRACK))),
 
+                // Top layer is FARMLAND, not DIRT, so the whole floor is tillable ground and NetherlandsWheatFeatures'
+                // crop scatter never has to convert terrain itself - it just needs a wheat block on top of every
+                // column, so there are no untouched-dirt gaps between its (inherently probabilistic) patches.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), DIRT)),
+                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), FARMLAND)),
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(30, false, CaveSurface.FLOOR), NETHERRACK))),
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.VOLCANIC_MOSS_TUNDRA),

@@ -22,7 +22,7 @@ public class TheNetherlands {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        ModBiomes.globalOverworldGeneration(biomeBuilder);
+        ModBiomes.globalOverworldGeneration(biomeBuilder, false);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COAL_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COPPER_ORE_PLACED_KEY);
@@ -33,8 +33,8 @@ public class TheNetherlands {
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.LAPIS_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.QUARTZ_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.REDSTONE_ORE_PLACED_KEY);
-        BiomeDefaultFeatures.addPlainVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
+        // No addPlainVegetation/addDefaultFlowers: both place fine on plain dirt (not just grass_block),
+        // and Bedrock's reference for this biome has only its tulip fields below, no vanilla grass/flowers.
         // Despite Bedrock's 'nether'/'nether_wastes' spawn-category tags, this biome generates in the OVERWORLD and is themed after the real-world Netherlands (tulips, windmills, wheat, canals).
         // Base (non-mutated) TheNetherlands gets tulip fields; TheNetherlandsMutated gets wheat/canal instead.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.ORANGE_TULIP_FLOOR_PLACED_KEY);
