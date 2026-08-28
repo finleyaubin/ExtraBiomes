@@ -59,7 +59,11 @@ public class ExtraBiomesForge
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public ExtraBiomesForge(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
+    // Forge 48.x (1.20.2) removed constructor-injection of FMLJavaModLoadingContext -
+    // FMLModContainer#constructMod now only ever looks up a no-arg constructor. The context is
+    // still available statically via FMLJavaModLoadingContext.get().
+    public ExtraBiomesForge() {
+        var context = net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get();
         var modEventBus = context.getModEventBus();
         // Must happen before any DeferredRegister .register() call below - architectury's
         // RegistrarManager looks up the mod's event bus by mod id, which it only knows about

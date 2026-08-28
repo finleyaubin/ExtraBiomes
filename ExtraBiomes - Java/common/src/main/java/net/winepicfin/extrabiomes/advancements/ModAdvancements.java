@@ -3,7 +3,6 @@ package net.winepicfin.extrabiomes.advancements;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.ConsumeItemTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -151,7 +150,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                         Component.translatable("advancements.extrabiomes.bait_and_switch.title"),
                         Component.translatable("advancements.extrabiomes.bait_and_switch.description"),
                         null, FrameType.TASK, true, true, false)
-                .addCriterion("lured_piranha_with_bait", (Criterion<?>) (Object) BaitLureTrigger.TriggerInstance.luredPiranhaWithBait())
+                .addCriterion("lured_piranha_with_bait", ModCriteriaTriggers.LURED_PIRANHA_WITH_BAIT.createCriterion(BaitLureTrigger.TriggerInstance.luredPiranhaWithBait()))
                 .build(baitAndSwitchId));
 
         ResourceLocation dutchTreasureId = new ResourceLocation(ExtraBiomes.MOD_ID, "dutch_treasure");

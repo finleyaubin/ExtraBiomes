@@ -132,17 +132,23 @@ dependencies {
     // and dropping the raw unmapped jars straight into run/mods skips Loom's SRG->official remapping
     // entirely, crashing with NoSuchFieldError on Registrate's own vanilla field references. modRuntimeOnly
     // (not plain runtimeOnly) on each local file is what actually triggers that remapping.
-    modRuntimeOnly files("libs/create-local-test/create-1.20.1-6.0.8.jar")
-    modRuntimeOnly files("libs/create-local-test/Registrate-MC1.20-1.3.3.jar")
-    modRuntimeOnly files("libs/create-local-test/Ponder-Forge-1.20.1-1.0.91.jar")
-    modRuntimeOnly files("libs/create-local-test/flywheel-forge-1.20.1-1.0.5.jar")
+    //
+    // Disabled as of 2026-08-28: these are still the 1.20.1 Create jars (no 1.20.2 build exists, see the
+    // modCompileOnly Create entry above), and loading 1.20.1 Create's mixins (e.g. create.mixins.json's
+    // EntityMixin, which targets Entity#isCrouching(Pose) by 1.20.1 SRG/descriptor) against 1.20.2 vanilla
+    // classes throws a hard MixinApplyError at launch - confirmed via `:forge:runData`. Re-enable once
+    // Create ships a 1.20.2 build and the jars below are regenerated against it.
+    // modRuntimeOnly files("libs/create-local-test/create-1.20.1-6.0.8.jar")
+    // modRuntimeOnly files("libs/create-local-test/Registrate-MC1.20-1.3.3.jar")
+    // modRuntimeOnly files("libs/create-local-test/Ponder-Forge-1.20.1-1.0.91.jar")
+    // modRuntimeOnly files("libs/create-local-test/flywheel-forge-1.20.1-1.0.5.jar")
     // mixinextras-forge alone crashes with NoClassDefFoundError on MixinExtrasBootstrap - that class lives
     // in the separate mixinextras-common artifact, and FML's per-mod module system doesn't let
     // mixinextras-forge's module read a separately-declared mixinextras-common dependency's module (same
     // module-visibility problem as this module's GeckoLib/mclib jar above) - so, same fix: hand-merged into
     // one physical jar. Regenerate by re-running the merge in forge/libs/create-local-test/ if bumping the
     // Create pin changes its bundled mixinextras-forge version.
-    modRuntimeOnly files("libs/create-local-test/mixinextras-forge-0.4.1-with-common.jar")
+    // modRuntimeOnly files("libs/create-local-test/mixinextras-forge-0.4.1-with-common.jar")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
