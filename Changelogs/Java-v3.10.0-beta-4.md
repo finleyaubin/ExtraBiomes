@@ -1,7 +1,9 @@
-# ExtraBiomes for Java Edition 3.1.0 Beta 4
+# ExtraBiomes for Java Edition v3.10.0 Beta 4
 # Changes
 
 ## Biomes
+<img width="3200" height="1800" alt="2026-08-28_13 21 16" src="https://github.com/user-attachments/assets/19b20f5b-b189-424e-9dc2-2a771a34220c" />
+
 - Reworked Bryce Pillars generation for sturdier, better-shaped spires.
 - Jungle Pillars' stone spires are now sunk into the ground instead of sitting on top of it.
 - The Netherlands' wheat fields and hydration are now painted deterministically across the whole floor of each chunk column instead of scattering probabilistically, fixing wheat and buried ponds that were sparse or often failed to place at all; vanilla springs and default grass/flowers no longer pollute the farmland biomes' floor.
@@ -13,8 +15,9 @@
 - Jellycoral structures now check that enough of their placement footprint is actually underwater before generating, since their templates no longer bundle their own water fill.
 
 ## Mobs
+<img width="3200" height="1800" alt="2026-08-28_12 42 55" src="https://github.com/user-attachments/assets/9560c1e3-7e48-4ee3-b944-8c414ae2198f" />
 - Piranhas no longer attack players' tamed animals.
-- Piranhas can now be picked up and re-thrown again after landing, and their remaining health carries over as durability instead of resetting.
+- Piranha bait can now be picked up and re-thrown again after landing, and their remaining health carries over as durability instead of resetting.
 - Added a config option to make piranhas more tame (less aggressive).
 - Added an advancement for luring a piranha away with bait.
 - Piranha spawns now have their own local density cap, independent of the shared water-ambient category cap.
@@ -25,6 +28,8 @@
 - Frog Helmet now has proper durability instead of being unbreakable.
 
 ## Compatibility
+<img width="3200" height="1800" alt="2026-08-28_13 19 38" src="https://github.com/user-attachments/assets/20f1a5fb-2511-4305-b7dc-e4613c04aab5" />
+
 - Added a Create mod compatibility windmill: when Create is installed, The Netherlands' windmill generates as a functional Create-powered variant instead of the plain decorative structure.
 
 ## Items & Blocks
