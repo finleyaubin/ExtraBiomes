@@ -2,6 +2,8 @@ package net.winepicfin.extrabiomes.platform.fabric;
 
 import com.mojang.serialization.Codec;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.BucketItem;
@@ -21,6 +23,9 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.winepicfin.extrabiomes.fabric.compat.create.CreateWindmillCompat;
 import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 import net.winepicfin.extrabiomes.fabric.mixin.WoodTypeAccessor;
+import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
+
+import java.util.function.Supplier;
 
 // Fabric's counterpart to forge/.../platform/forge/ExtraBiomesExpectPlatformImpl.java. Unlike
 // Forge, plain vanilla Minecraft (Fabric's compile target) never patches WoodType.register,
@@ -60,6 +65,13 @@ public class ExtraBiomesExpectPlatformImpl {
 
     public static Item createFrogHelmetItem(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties) {
         return new net.winepicfin.extrabiomes.fabric.item.custom.FrogHelmetItem(material, type, properties);
+    }
+
+    // Fabric has no Forge-style automatic pick-block fallback, so unlike the Forge counterpart this
+    // stays on the common module's own ExtraBiomesSpawnEggItem - see MobPickResultMixin for how its
+    // ALL/byType() lookup gets consulted at pick-block time.
+    public static Item createSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
+        return new ExtraBiomesSpawnEggItem(typeSupplier, backgroundColor, highlightColor, properties);
     }
 
     public static boolean isCreateLoaded() {

@@ -8,15 +8,35 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 // `null` is passed to super() because DeferredRegister can't guarantee EntityType is resolved yet; the real type is resolved lazily via typeSupplier. getType()/requiredFeatures() are overridden because vanilla (unlike Forge's patched SpawnEggItem) reads the permanently-null `defaultType` field directly in requiredFeatures(), which otherwise NPEs whenever creative-tab contents rebuild.
 public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
+    // Same null-super() consequence as above, but for pick-block instead of requiredFeatures():
+    // vanilla's SpawnEggItem.byId() (which Mob#getPickResult() calls) only indexes eggs whose
+    // super() type was non-null, so none of these are ever found that way either. ALL lets
+    // Fabric's MobPickResultMixin resolve entity type -> egg item on demand, well after
+    // registration has finished (typeSupplier.get() is unsafe only during construction).
+    private static final List<ExtraBiomesSpawnEggItem> ALL = new ArrayList<>();
+
     private final Supplier<? extends EntityType<? extends Mob>> typeSupplier;
 
     public ExtraBiomesSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
         super(null, backgroundColor, highlightColor, properties);
         this.typeSupplier = typeSupplier;
+        ALL.add(this);
+    }
+
+    @Nullable
+    public static ExtraBiomesSpawnEggItem byType(EntityType<?> type) {
+        for (ExtraBiomesSpawnEggItem egg : ALL) {
+            if (egg.typeSupplier.get() == type) {
+                return egg;
+            }
+        }
+        return null;
     }
 
     @Override

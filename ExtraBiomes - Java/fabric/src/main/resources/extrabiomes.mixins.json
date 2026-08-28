@@ -6,6 +6,7 @@
   "mixins": [
     "MobAccessor",
     "MobCategoryAccessor",
+    "MobPickResultMixin",
     "WoodTypeAccessor"
   ],
   "client": [

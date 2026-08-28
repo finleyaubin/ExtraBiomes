@@ -2,6 +2,8 @@ package net.winepicfin.extrabiomes.platform;
 
 import com.mojang.serialization.Codec;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
@@ -15,6 +17,8 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorTy
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+
+import java.util.function.Supplier;
 
 /**
  * Hooks for the handful of common-module registrations that need a genuinely Forge-patched
@@ -65,6 +69,19 @@ public class ExtraBiomesExpectPlatform {
     // FrogHelmetItem itself lives in forge/ - see its class comment for why.
     @ExpectPlatform
     public static Item createFrogHelmetItem(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties) {
+        throw new AssertionError();
+    }
+
+    /**
+     * On Forge, backed by {@link net.minecraftforge.common.ForgeSpawnEggItem} instead of the common
+     * module's own {@link net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem} - both work
+     * around the same DeferredRegister-ordering problem (a Supplier instead of a resolved EntityType),
+     * but only ForgeSpawnEggItem's own type->egg lookup is what {@code IForgeEntity#getPickedResult}
+     * falls back to when a mob's vanilla getPickResult() misses (see ExtraBiomesSpawnEggItem's own
+     * ALL/byType() for the equivalent Fabric-side lookup, consulted by a mixin instead).
+     */
+    @ExpectPlatform
+    public static Item createSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
         throw new AssertionError();
     }
 

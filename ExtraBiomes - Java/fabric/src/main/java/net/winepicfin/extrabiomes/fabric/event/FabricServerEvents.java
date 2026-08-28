@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.entity.HarpySpawner;
 import net.winepicfin.extrabiomes.entity.PhantomHarpyTargeting;
 import net.winepicfin.extrabiomes.fabric.mixin.MobAccessor;
 import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
@@ -39,6 +40,7 @@ public class FabricServerEvents {
         });
 
         ServerTickEvents.END_WORLD_TICK.register(FabricServerEvents::tickWolves);
+        ServerTickEvents.END_WORLD_TICK.register(HarpySpawner::tick);
 
         // Fabric equivalent of forge/.../event/PhantomHarpyTargetHandler.java.
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
