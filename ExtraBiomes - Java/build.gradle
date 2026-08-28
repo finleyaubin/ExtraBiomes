@@ -20,6 +20,14 @@ subprojects {
     }
 
     repositories {
+        // NeoForge itself - separate from settings.gradle's pluginManagement.repositories entry
+        // of the same URL (that one resolves Gradle *plugins*; this one resolves regular project
+        // *dependencies* like the neoForge "net.neoforged:neoforge:..." coordinate below - two
+        // independent repository lists, needed in both places).
+        maven {
+            name = 'NeoForged'
+            url 'https://maven.neoforged.net/releases/'
+        }
         maven {
             name = 'GeckoLib'
             url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
@@ -133,5 +141,8 @@ allprojects {
     dependencies {
         testImplementation platform('org.junit:junit-bom:5.10.2')
         testImplementation 'org.junit.jupiter:junit-jupiter'
+        // Gradle <9 auto-added this to the test runtime classpath; Gradle 9 requires it declared
+        // explicitly or the test task fails immediately with "Failed to load JUnit Platform".
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 }
