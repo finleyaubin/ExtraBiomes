@@ -77,13 +77,12 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
-// For fabric_loader 0.19.5: sponge-mixin naturally resolves to 0.17.4+mixin.0.8.7 (the latest);
-// keeping the older 0.15.5+mixin.0.8.7 as a known-working fallback if any issues arise with 0.17.4.
-configurations.all {
-    resolutionStrategy {
-        force "net.fabricmc:sponge-mixin:0.15.5+mixin.0.8.7"
-    }
-}
+// The old force (0.15.5+mixin.0.8.7, needed against fabric_loader 0.16.14) actively breaks
+// fabric_loader 0.19.5: forcing it causes a bootstrap-time ClassNotFoundException on
+// org.spongepowered.asm.service.IAdviceProvider, and the gameTestServer run never gets past
+// launch. Removed - sponge-mixin's natural resolution against 0.19.5 (0.17.4+mixin.0.8.7 as of
+// this bump) works correctly; confirmed via a full :fabric:runGameTestServer pass with all
+// mixins applying cleanly and every test passing.
 
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
