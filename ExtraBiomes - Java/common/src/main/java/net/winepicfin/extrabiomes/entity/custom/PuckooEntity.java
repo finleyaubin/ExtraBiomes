@@ -181,12 +181,6 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         return false;
     }
 
-    // AbstractHorse's default (bounding-box height * 0.75) sits the rider well above the model's back;
-    // Bedrock's seat position ([0, 0.5, -0.1]) is the actual intended height.
-    @Override
-    public double getPassengersRidingOffset() {
-        return 0.5D;
-    }
 
     @Nullable
     @Override

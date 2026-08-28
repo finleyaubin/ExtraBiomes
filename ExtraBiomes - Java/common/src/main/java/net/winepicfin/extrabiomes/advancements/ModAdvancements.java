@@ -1,8 +1,10 @@
 package net.winepicfin.extrabiomes.advancements;
 
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.ConsumeItemTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -23,6 +25,7 @@ import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -54,104 +57,114 @@ public class ModAdvancements implements AdvancementSubProvider {
             ModBiomes.TAIGA_SPIKES, ModBiomes.TROPICAL_ISLAND, ModBiomes.VOLCANIC_MOSS_TUNDRA);
 
     @Override
-    public void generate(HolderLookup.Provider registries, Consumer<Advancement> saver) {
-        Advancement root = Advancement.Builder.advancement()
+    public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
+        ResourceLocation rootId = new ResourceLocation(ExtraBiomes.MOD_ID, "root");
+        Advancement.Builder rootBuilder = Advancement.Builder.advancement()
                 .display(ModItems.WORM.get(),
                         Component.translatable("advancements.extrabiomes.root.title"),
                         Component.translatable("advancements.extrabiomes.root.description"),
                         new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
                         FrameType.TASK, false, false, false)
-                .addCriterion("tick", PlayerTrigger.TriggerInstance.tick())
-                .save(saver, advancementId("root"));
+                .addCriterion("tick", PlayerTrigger.TriggerInstance.tick());
+        AdvancementHolder root = rootBuilder.build(rootId);
+        saver.accept(root);
 
-        Advancement.Builder.advancement()
+        ResourceLocation tamePuckooId = new ResourceLocation(ExtraBiomes.MOD_ID, "tame_puckoo");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.PUCKOO_SPAWN_EGG.get(),
                         Component.translatable("advancements.extrabiomes.tame_puckoo.title"),
                         Component.translatable("advancements.extrabiomes.tame_puckoo.description"),
                         null, FrameType.TASK, true, true, false)
                 .addCriterion("tamed_puckoo", TameAnimalTrigger.TriggerInstance.tamedAnimal(
-                        EntityPredicate.Builder.entity().of(ModEntities.PUCKOO.get()).build()))
-                .save(saver, advancementId("tame_puckoo"));
+                        EntityPredicate.Builder.entity().of(ModEntities.PUCKOO.get())))
+                .build(tamePuckooId));
 
-        Advancement.Builder.advancement()
+        ResourceLocation catchWormId = new ResourceLocation(ExtraBiomes.MOD_ID, "catch_worm");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.WORM.get(),
                         Component.translatable("advancements.extrabiomes.catch_worm.title"),
                         Component.translatable("advancements.extrabiomes.catch_worm.description"),
                         null, FrameType.TASK, true, true, false)
                 .addCriterion("has_worm", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.WORM.get()))
-                .save(saver, advancementId("catch_worm"));
+                .build(catchWormId));
 
-        Advancement.Builder.advancement()
+        ResourceLocation gooCollectorId = new ResourceLocation(ExtraBiomes.MOD_ID, "goo_collector");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.BUCKET_OF_GOO.get(),
                         Component.translatable("advancements.extrabiomes.goo_collector.title"),
                         Component.translatable("advancements.extrabiomes.goo_collector.description"),
                         null, FrameType.TASK, true, true, false)
                 .addCriterion("has_goo", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.BUCKET_OF_GOO.get()))
-                .save(saver, advancementId("goo_collector"));
+                .build(gooCollectorId));
 
-        Advancement.Builder.advancement()
+        ResourceLocation mysticWoodworkerId = new ResourceLocation(ExtraBiomes.MOD_ID, "mystic_woodworker");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModBlocks.MYSTIC_PLANKS.get(),
                         Component.translatable("advancements.extrabiomes.mystic_woodworker.title"),
                         Component.translatable("advancements.extrabiomes.mystic_woodworker.description"),
                         null, FrameType.TASK, true, true, false)
                 .addCriterion("has_mystic_planks", InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.MYSTIC_PLANKS.get()))
-                .save(saver, advancementId("mystic_woodworker"));
+                .build(mysticWoodworkerId));
 
-        Advancement.Builder.advancement()
+        ResourceLocation amphibiousArmorId = new ResourceLocation(ExtraBiomes.MOD_ID, "amphibious_armor");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.FROG_HELMET.get(),
                         Component.translatable("advancements.extrabiomes.amphibious_armor.title"),
                         Component.translatable("advancements.extrabiomes.amphibious_armor.description"),
                         null, FrameType.TASK, true, true, false)
                 .addCriterion("has_frog_helmet", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.FROG_HELMET.get()))
-                .save(saver, advancementId("amphibious_armor"));
+                .build(amphibiousArmorId));
 
-        Advancement.Builder.advancement()
+        ResourceLocation piranhaDinnerId = new ResourceLocation(ExtraBiomes.MOD_ID, "piranha_dinner");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.COOKED_PIRANHA.get(),
                         Component.translatable("advancements.extrabiomes.piranha_dinner.title"),
                         Component.translatable("advancements.extrabiomes.piranha_dinner.description"),
                         null, FrameType.TASK, true, true, false)
                 .addCriterion("ate_cooked_piranha", ConsumeItemTrigger.TriggerInstance.usedItem(ModItems.COOKED_PIRANHA.get()))
-                .save(saver, advancementId("piranha_dinner"));
+                .build(piranhaDinnerId));
 
-        // Either biome counts - requirements(OR) so the mutated variant doesn't need its own separate advancement.
-        Advancement visitNetherlands = Advancement.Builder.advancement()
+        ResourceLocation visitNetherlandsId = new ResourceLocation(ExtraBiomes.MOD_ID, "visit_netherlands");
+        AdvancementHolder visitNetherlands = Advancement.Builder.advancement()
                 .parent(root)
                 .display(Items.WHEAT,
                         Component.translatable("advancements.extrabiomes.visit_netherlands.title"),
                         Component.translatable("advancements.extrabiomes.visit_netherlands.description"),
                         null, FrameType.GOAL, true, true, false)
                 .addCriterion("in_netherlands", PlayerTrigger.TriggerInstance.located(
-                        LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS).build()))
+                        LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS)))
                 .addCriterion("in_netherlands_mutated", PlayerTrigger.TriggerInstance.located(
-                        LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS_MUTATED).build()))
-                .requirements(RequirementsStrategy.OR)
-                .save(saver, advancementId("visit_netherlands"));
+                        LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS_MUTATED)))
+                .build(visitNetherlandsId);
+        saver.accept(visitNetherlands);
 
-        Advancement.Builder.advancement()
+        ResourceLocation baitAndSwitchId = new ResourceLocation(ExtraBiomes.MOD_ID, "bait_and_switch");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.BAIT.get(),
                         Component.translatable("advancements.extrabiomes.bait_and_switch.title"),
                         Component.translatable("advancements.extrabiomes.bait_and_switch.description"),
                         null, FrameType.TASK, true, true, false)
-                .addCriterion("lured_piranha_with_bait", BaitLureTrigger.TriggerInstance.luredPiranhaWithBait())
-                .save(saver, advancementId("bait_and_switch"));
+                .addCriterion("lured_piranha_with_bait", (Criterion<?>) (Object) BaitLureTrigger.TriggerInstance.luredPiranhaWithBait())
+                .build(baitAndSwitchId));
 
-        Advancement.Builder.advancement()
+        ResourceLocation dutchTreasureId = new ResourceLocation(ExtraBiomes.MOD_ID, "dutch_treasure");
+        saver.accept(Advancement.Builder.advancement()
                 .parent(visitNetherlands)
                 .display(ModBlocks.NETHER_DIAMOND_ORE.get(),
                         Component.translatable("advancements.extrabiomes.dutch_treasure.title"),
                         Component.translatable("advancements.extrabiomes.dutch_treasure.description"),
                         null, FrameType.CHALLENGE, true, true, false)
                 .addCriterion("has_nether_diamond_ore", InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.NETHER_DIAMOND_ORE.get()))
-                .save(saver, advancementId("dutch_treasure"));
+                .build(dutchTreasureId));
 
-        // Mirrors vanilla's own "Adventuring Time": one location criterion per ModBiomes entry, all required (no requirements() override -> defaults to AND-all).
+        ResourceLocation biomeExplorerId = new ResourceLocation(ExtraBiomes.MOD_ID, "biome_explorer");
         Advancement.Builder biomeExplorer = Advancement.Builder.advancement()
                 .parent(root)
                 .display(Items.FILLED_MAP,
@@ -160,9 +173,9 @@ public class ModAdvancements implements AdvancementSubProvider {
                         null, FrameType.CHALLENGE, true, true, false);
         for (ResourceKey<Biome> biome : ALL_BIOMES) {
             biomeExplorer.addCriterion(biome.location().getPath(), PlayerTrigger.TriggerInstance.located(
-                    LocationPredicate.Builder.location().setBiome(biome).build()));
+                    LocationPredicate.Builder.location().setBiome(biome)));
         }
-        biomeExplorer.save(saver, advancementId("biome_explorer"));
+        saver.accept(biomeExplorer.build(biomeExplorerId));
     }
 
     private static String advancementId(String name) {
