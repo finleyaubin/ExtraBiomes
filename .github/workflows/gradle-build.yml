@@ -21,8 +21,10 @@ jobs:
     # Sum of this job's own step timeouts: downloadAssets(10) + runData(10) + unit tests(10) +
     # Run GameTests(~38, one fresh server boot per test - see that step's own comment for why -
     # worst case 1200s for the biome-generation test + 6x180s for the rest) + Run Fabric
-    # GameTests(50, via its inline `timeout 3000`) + final build(15) = 133 minutes, plus headroom
-    # for checkout/setup-java/setup-gradle/EULA steps (uncapped but fast) and the 180-minute cap
+    # GameTests(50, via its inline `timeout 3000`) + NeoForge downloadAssets(10) + NeoForge
+    # runData(10) + Run NeoForge GameTests(10, via its inline `timeout 600` - a single boot, see
+    # that step's own comment) + final build(15) = 163 minutes, plus headroom for
+    # checkout/setup-java/setup-gradle/EULA steps (uncapped but fast) and the 180-minute cap
     # below. A job timeout below the real sum kills everything with no diagnostics before a slow
     # step's own timeout/watchdog gets a chance to fire. The GameTest steps got wider budgets
     # after raising max-tick-time to 1000s (see the EULA step below) - a real, single-threaded
@@ -235,6 +237,41 @@ jobs:
           path: "ExtraBiomes - Java/fabric-gametest.log"
           if-no-files-found: ignore
 
+      # Same level-seed/max-tick-time reasoning as the Forge EULA step above, own run dir since
+      # :neoforge:runData/:neoforge:runGameTestServer use "neoforge/run"/"neoforge/run-data", not
+      # forge's.
+      - name: Accept Minecraft EULA for the NeoForge test server
+        run: |
+          mkdir -p neoforge/run
+          echo "eula=true" > neoforge/run/eula.txt
+          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > neoforge/run/server.properties
+
+      - name: Download NeoForge Loom assets
+        run: ./gradlew :neoforge:downloadAssets
+        timeout-minutes: 10
+
+      - name: Generate NeoForge data
+        run: ./gradlew :neoforge:runData
+        timeout-minutes: 10
+
+      # Unlike Forge (see the Forge "Run GameTests" step's own comment for the two framework bugs
+      # that force it to drive tests one at a time), NeoForge's GameTestServer here has neither
+      # bug: it auto-runs every registered @GameTest as soon as it boots (like Fabric's) and exits
+      # cleanly afterward, reporting "All N required tests passed :)" - confirmed locally, all 7
+      # tests across the 4 neoforge gametest classes pass on a single boot with no post-pass
+      # crash. A single `timeout`-wrapped run, no fifo/per-test driving needed.
+      - name: Run NeoForge GameTests
+        run: timeout 600 ./gradlew :neoforge:runGameTestServer | tee neoforge-gametest.log
+        shell: bash
+
+      - name: Upload NeoForge GameTest log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-neoforge-gametest-log
+          path: "ExtraBiomes - Java/neoforge-gametest.log"
+          if-no-files-found: ignore
+
       # Runs (and uploads) even when an earlier GameTest step failed - a manually-downloadable jar
       # to test against is useful precisely when the automated biome-placement check disagrees
       # with local results, so a real failure here shouldn't also block getting a jar out.
@@ -257,4 +294,12 @@ jobs:
         with:
           name: extrabiomes-fabric-build
           path: "ExtraBiomes - Java/fabric/build/libs/*.jar"
+          if-no-files-found: ignore
+
+      - name: Upload NeoForge build artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-neoforge-build
+          path: "ExtraBiomes - Java/neoforge/build/libs/*.jar"
           if-no-files-found: ignore

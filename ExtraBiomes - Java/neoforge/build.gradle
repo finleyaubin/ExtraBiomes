@@ -15,9 +15,15 @@ sourceSets.main.java {
 }
 
 loom {
-    // src/main/resources/META-INF/accesstransformer.cfg is picked up automatically by Loom's
-    // neoforge platform, same as forge's (NeoForge 1.20.2 still shares Forge's AT mechanism and
-    // obfuscation mapping data - the two hadn't diverged mapping-wise yet at this MC version).
+    // Unlike Forge's platform (fully automatic pickup), NeoForge needs the AT file registered
+    // explicitly - confirmed via net.fabricmc.loom.api.NeoForgeExtensionAPI#accessTransformer;
+    // without this, FireBlock#setFlammable/WolfModel#head/MobCategory#max all stayed private on
+    // the neoforge-specific merged Minecraft jar even though the identical .cfg content applied
+    // fine automatically on forge/. NeoForge 1.20.2 still shares Forge's AT mechanism and
+    // obfuscation/SRG mapping data (the two hadn't diverged mapping-wise yet at this MC version).
+    neoForge {
+        accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    }
     runs {
         client {
             configName = "NeoForge Client"
@@ -29,19 +35,32 @@ loom {
             server()
             source sourceSets.main
         }
-        // TODO: a "data" run (clientData()) is temporarily omitted here - `loom.runs.data { clientData() }`
-        // throws "RunConfigSettings.clientData() is only usable on NeoForge" even with
-        // `architectury { neoForge() }` already applied, on this exact pinned Loom/plugin build
-        // (1.11.458/3.4.164) - looks like a real gap/bug in this version's NeoForge platform
-        // detection timing for eagerly-evaluated `runs{}` blocks, not a config mistake (forge's
-        // identical-shaped data run works fine). Needs its own investigation; not blocking the
-        // rest of the module scaffold. Datagen for NeoForge can still be produced by copying
-        // common/src/generated/resources from a `:forge:runData` run in the meantime.
+        data {
+            configName = "NeoForge Data"
+            // NeoForge 1.20.2's userdev config.json only defines a single "data" run template
+            // (unlike newer NeoForge, which splits it into dataClient/dataServer) - confirmed via
+            // its config.json's "runs" keys: client/data/gameTestServer/server. clientData() looks
+            // up a "dataClient" template that doesn't exist at this version and fails with
+            // "Could not find Forge run template with name 'dataClient'".
+            data()
+            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            runDir "run-data"
+        }
         gameTestServer {
             configName = "NeoForge Game Test Server"
             server()
             source sourceSets.main
-            vmArgs "-Dforge.enabledGameTestNamespaces=${mod_id}"
+            // NeoForge's GameTestHooks reads its own "neoforge.enabledGameTestNamespaces" system
+            // property (see net.neoforged.neoforge.gametest.GameTestHooks#getEnabledNamespaces),
+            // not Forge's "forge.enabledGameTestNamespaces" - copying forge/build.gradle's vmArg
+            // unchanged left /test entirely unregistered ("Unknown or incomplete command" on
+            // both `/test list` and `/test run <name>`). GameTestHooks#registerGametests also
+            // gates the whole registration on isGametestEnabled(), which additionally requires
+            // "neoforge.gameTestServer" or "neoforge.enableGameTest" (matching the two props
+            // neoforge-20.2.93-userdev.jar's config.json sets on its own "gameTestServer"
+            // template - not reproduced by Loom's generic server() DSL call above, since there is
+            // no dedicated gameTestServer() DSL method to select that whole template).
+            vmArgs "-Dneoforge.enabledGameTestNamespaces=${mod_id}", "-Dneoforge.gameTestServer=true", "-Dneoforge.enableGameTest=true"
         }
     }
 }

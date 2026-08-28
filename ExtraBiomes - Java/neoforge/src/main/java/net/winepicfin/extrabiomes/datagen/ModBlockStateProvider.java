@@ -1,0 +1,227 @@
+package net.winepicfin.extrabiomes.datagen;
+
+import net.minecraft.core.Direction;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.*;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
+import dev.architectury.registry.registries.RegistrySupplier;
+import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
+
+import java.util.Objects;
+
+public class ModBlockStateProvider extends BlockStateProvider {
+    public ModBlockStateProvider(PackOutput output, ExistingFileHelper existingFileHelper){
+        super(output, ExtraBiomes.MOD_ID, existingFileHelper);
+    }
+
+    @Override
+    protected void registerStatesAndModels(){
+        blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
+        blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
+        stairsBlock(((StairBlock) ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
+        slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
+        blockWithItem(ModBlocks.DENSE_CLOUD);
+        fluidBlock(ModBlocks.GOO.get());
+        pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
+        pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
+        stickPileBlock(ModBlocks.STICK_PILE.get());
+        // black sand
+        blockWithItem(ModBlocks.BLACK_SAND);
+        simpleBlockWithItem(ModBlocks.BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top")));
+        simpleBlockWithItem(ModBlocks.CHISELED_BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top")));
+        simpleBlockWithItem(ModBlocks.CUT_BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.CUT_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top")));
+        simpleBlockWithItem(ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), models().cubeAll(name(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top")));
+        stairsBlock(((StairBlock) ModBlocks.BLACK_SANDSTONE_STAIRS.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top"));
+        stairsBlock(((StairBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()), modLoc("block/black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"), modLoc("block/black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_top"));
+        wallBlock(((WallBlock) ModBlocks.BLACK_SANDSTONE_WALL.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()));
+        // mystic wood
+        blockWithItem(ModBlocks.MYSTIC_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.MYSTIC_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_MYSTIC_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.MYSTIC_WOOD.get()), blockTexture(ModBlocks.MYSTIC_LOG.get()),blockTexture(ModBlocks.MYSTIC_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_MYSTIC_WOOD.get()), blockTexture(ModBlocks.STRIPPED_MYSTIC_LOG.get()),blockTexture(ModBlocks.STRIPPED_MYSTIC_LOG.get()));
+        blockWithItemCutout(ModBlocks.MYSTIC_LEAVES);
+        saplingBlock(ModBlocks.MYSTIC_SAPLING);
+        simpleBlockItem(ModBlocks.MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:mystic_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:mystic_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:stripped_mystic_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:stripped_mystic_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.MYSTIC_STAIRS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.MYSTIC_SLAB.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.MYSTIC_BUTTON.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.MYSTIC_PRESSURE_PLATE.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.MYSTIC_FENCE.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.MYSTIC_FENCE_GATE.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.MYSTIC_DOOR.get()), modLoc("block/mystic_door_bottom"),modLoc("block/mystic_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.MYSTIC_TRAPDOOR.get()), modLoc("block/mystic_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.MYSTIC_SIGN.get()),((WallSignBlock) ModBlocks.MYSTIC_WALL_SIGN.get()),blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        hangingSignBlock((ModBlocks.MYSTIC_HANGING_SIGN.get()),( ModBlocks.MYSTIC_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        // sky wood
+        blockWithItem(ModBlocks.SKY_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.SKY_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_SKY_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.SKY_WOOD.get()), blockTexture(ModBlocks.SKY_LOG.get()),blockTexture(ModBlocks.SKY_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_SKY_WOOD.get()), blockTexture(ModBlocks.STRIPPED_SKY_LOG.get()),blockTexture(ModBlocks.STRIPPED_SKY_LOG.get()));
+        blockWithItemCutout(ModBlocks.SKY_LEAVES);
+        saplingBlock(ModBlocks.SKY_SAPLING);
+        simpleBlockItem(ModBlocks.SKY_LOG.get(),models().withExistingParent("extrabiomes:sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.SKY_WOOD.get(),models().withExistingParent("extrabiomes:sky_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_SKY_LOG.get(),models().withExistingParent("extrabiomes:stripped_sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:stripped_sky_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.SKY_STAIRS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.SKY_SLAB.get()), blockTexture(ModBlocks.SKY_PLANKS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.SKY_BUTTON.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.SKY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.SKY_FENCE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.SKY_FENCE_GATE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.SKY_DOOR.get()), modLoc("block/sky_door_bottom"),modLoc("block/sky_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SKY_TRAPDOOR.get()), modLoc("block/sky_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.SKY_SIGN.get()),((WallSignBlock) ModBlocks.SKY_WALL_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
+        hangingSignBlock((ModBlocks.SKY_HANGING_SIGN.get()),( ModBlocks.SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
+        // palm wood
+        blockWithItem(ModBlocks.PALM_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.PALM_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_PALM_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.PALM_WOOD.get()), blockTexture(ModBlocks.PALM_LOG.get()),blockTexture(ModBlocks.PALM_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_PALM_WOOD.get()), blockTexture(ModBlocks.STRIPPED_PALM_LOG.get()),blockTexture(ModBlocks.STRIPPED_PALM_LOG.get()));
+        blockWithItemCutout(ModBlocks.PALM_LEAVES);
+        customSaplingBlock(ModBlocks.PALM_SAPLING, "palm_sapling");
+        simpleBlockItem(ModBlocks.PALM_LOG.get(),models().withExistingParent("extrabiomes:palm_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.PALM_WOOD.get(),models().withExistingParent("extrabiomes:palm_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_PALM_LOG.get(),models().withExistingParent("extrabiomes:stripped_palm_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_PALM_WOOD.get(),models().withExistingParent("extrabiomes:stripped_palm_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.PALM_STAIRS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.PALM_SLAB.get()), blockTexture(ModBlocks.PALM_PLANKS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.PALM_BUTTON.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.PALM_PRESSURE_PLATE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.PALM_FENCE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.PALM_FENCE_GATE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.PALM_DOOR.get()), modLoc("block/palm_door_bottom"),modLoc("block/palm_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.PALM_TRAPDOOR.get()), modLoc("block/palm_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.PALM_SIGN.get()),((WallSignBlock) ModBlocks.PALM_WALL_SIGN.get()),blockTexture(ModBlocks.PALM_PLANKS.get()));
+        hangingSignBlock((ModBlocks.PALM_HANGING_SIGN.get()),( ModBlocks.PALM_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.PALM_PLANKS.get()));
+        // Gilded Sky wood
+        blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.GILDED_SKY_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.GILDED_SKY_WOOD.get()), blockTexture(ModBlocks.GILDED_SKY_LOG.get()),blockTexture(ModBlocks.GILDED_SKY_LOG.get()));
+        simpleBlockItem(ModBlocks.GILDED_SKY_LOG.get(),models().withExistingParent("extrabiomes:gilded_sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.GILDED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:gilded_sky_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.GILDED_SKY_STAIRS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.GILDED_SKY_SLAB.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.GILDED_SKY_BUTTON.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.GILDED_SKY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.GILDED_SKY_FENCE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.GILDED_SKY_FENCE_GATE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.GILDED_SKY_DOOR.get()), modLoc("block/gilded_sky_door_bottom"),modLoc("block/gilded_sky_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.GILDED_SKY_TRAPDOOR.get()), modLoc("block/gilded_sky_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.GILDED_SKY_SIGN.get()),((WallSignBlock) ModBlocks.GILDED_SKY_WALL_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        hangingSignBlock((ModBlocks.GILDED_SKY_HANGING_SIGN.get()),( ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        // Small Mushrooms
+        saplingBlock(ModBlocks.BLACK_MUSHROOM);
+        saplingBlock(ModBlocks.BLUE_MUSHROOM);
+        saplingBlock(ModBlocks.CYAN_MUSHROOM);
+        saplingBlock(ModBlocks.GREEN_MUSHROOM);
+        saplingBlock(ModBlocks.ORANGE_MUSHROOM);
+        saplingBlock(ModBlocks.PURPLE_MUSHROOM);
+        saplingBlock(ModBlocks.WHITE_MUSHROOM);
+        saplingBlock(ModBlocks.YELLOW_MUSHROOM);
+        saplingBlock(ModBlocks.GLOW_MUSHROOM);
+        // Mushrooms
+        blockWithItemCutout(ModBlocks.BLACK_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.BLUE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.CYAN_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.GREEN_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.ORANGE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.PURPLE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.WHITE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.YELLOW_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.GLOW_MUSHROOM_BLOCK);
+    }
+    private void blockWithItem(RegistrySupplier<Block> blockRegistryObject){
+        simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));
+    }
+
+    // Without cutout, transparent pixels in the texture render as opaque black instead of
+    // being cut out. Sets the render type on the block model itself (Forge's replacement for
+    // the removed runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) API).
+    private void blockWithItemCutout(RegistrySupplier<Block> blockRegistryObject){
+        simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(name(blockRegistryObject.get()), blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    private void saplingBlock(RegistrySupplier<Block> blockRegistryObject){
+        simpleBlock(blockRegistryObject.get(),models().cross(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(blockRegistryObject.get())).getPath(),blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    // Palm sapling has its own custom multi-blade geometry on Bedrock, not vanilla's flat
+    // crossed-quad shape - references the static converted model at
+    // common/src/main/resources/assets/extrabiomes/models/block/palm_sapling.json.
+    private void customSaplingBlock(RegistrySupplier<Block> blockRegistryObject, String modelName){
+        simpleBlock(blockRegistryObject.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + modelName)));
+    }
+    public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture){
+        ModelFile sign= models().sign(name(signBlock),texture);
+        hangingSignBlock(signBlock,wallSignBlock,sign);
+    }
+
+    public void hangingSignBlock(Block signBlock, Block wallSignBlock, ModelFile sign){
+        simpleBlock(signBlock,sign);
+        simpleBlock(wallSignBlock,sign);
+    }
+
+    private void pebbleBlock(Block pebbleBlock,String type){
+        getVariantBuilder(pebbleBlock).forAllStates(blockState -> {
+            Integer size = blockState.getValue(PebbleBlock.SIZE);
+            ModelFile modelFile;
+            switch (size){
+                case 1:
+                    modelFile= new ModelFile.UncheckedModelFile(modLoc("block/small_"+type));
+                    break;
+                case 2:
+                    modelFile= new ModelFile.UncheckedModelFile(modLoc("block/medium_"+type));
+                    break;
+                default:
+                    modelFile= new ModelFile.UncheckedModelFile(modLoc("block/large_"+type));
+                    break;
+            }
+            return ConfiguredModel.builder()
+                    .modelFile(modelFile)
+                    .build();
+            }
+        );
+        simpleBlockItem(pebbleBlock, new ModelFile.UncheckedModelFile(modLoc("block/small_"+type)));
+    }
+
+    private void fluidBlock(Block fluidBlock){
+        getVariantBuilder(fluidBlock).partialState().setModels(new ConfiguredModel(models().getExistingFile(mcLoc("block/water"))));
+    }
+
+    private void stickPileBlock(Block stickPile){
+        getVariantBuilder(stickPile).forAllStates(blockState -> {
+            Direction.Axis axis = blockState.getValue(RotatedPillarBlock.AXIS);
+            String suffix = axis == Direction.Axis.X ? "x" : axis == Direction.Axis.Z ? "z" : "y";
+            return ConfiguredModel.builder()
+                    .modelFile(new ModelFile.UncheckedModelFile(modLoc("block/stick_pile_" + suffix)))
+                    .build();
+        });
+        simpleBlockItem(stickPile, new ModelFile.UncheckedModelFile(modLoc("block/stick_pile_y")));
+    }
+
+    private String name(Block block){
+        return key(block).getPath();
+    }
+
+    private ResourceLocation key(Block block){
+        return BuiltInRegistries.BLOCK.getKey(block);
+    }
+
+}
