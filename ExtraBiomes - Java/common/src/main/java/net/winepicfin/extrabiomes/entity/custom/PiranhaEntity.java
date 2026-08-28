@@ -19,14 +19,15 @@ import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -116,9 +117,10 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, PiranhaTuning.RANDOM_SWIM_SPEED, 20));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        // Piranhas also go after any other mob that wanders into the water, not just players (Bedrock's "is_family mob && != fish" entry).
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
-                (LivingEntity target) -> !(target instanceof WaterAnimal) && target.isInWater()));
+        // Piranhas also go after farm animals nearby, including on the shoreline, not just players (Bedrock's "is_family mob && != fish" entry). Tamed pets are exempt.
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Animal.class, 10, true, false,
+                (LivingEntity target) -> !(target instanceof WaterAnimal)
+                        && !(target instanceof TamableAnimal tamable && tamable.isTame())));
     }
 
     @Override
