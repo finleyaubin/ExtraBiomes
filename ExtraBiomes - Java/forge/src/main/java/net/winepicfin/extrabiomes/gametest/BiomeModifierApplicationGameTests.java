@@ -14,8 +14,8 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.gametest.GameTestDontPrefix;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnCapTuning;
@@ -39,11 +39,11 @@ import org.slf4j.Logger;
 // than searching generated chunks. Reuses the same shared 1x1x1 empty structure template as the
 // other gametests in this package.
 @GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
+@GameTestDontPrefix
 public class BiomeModifierApplicationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void jungleGetsUndergroundJungleFeaturesAndSpawns(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: starting");
         Biome jungle = biome(helper, Biomes.JUNGLE);
@@ -67,7 +67,7 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void mushroomFieldsGetsHugeMushroomsAndSpawns(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] mushroomFieldsGetsHugeMushroomsAndSpawns: starting");
         Biome mushroomFields = biome(helper, Biomes.MUSHROOM_FIELDS);
@@ -80,7 +80,7 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void darkForestGetsHugeMushrooms(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: starting");
         Biome darkForest = biome(helper, Biomes.DARK_FOREST);
@@ -91,7 +91,7 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void plainsGetsHarpySpawn(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: starting");
         Biome plains = biome(helper, Biomes.PLAINS);

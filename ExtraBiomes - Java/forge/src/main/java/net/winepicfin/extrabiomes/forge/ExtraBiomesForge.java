@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -58,7 +59,11 @@ public class ExtraBiomesForge
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public ExtraBiomesForge(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
+    // Forge 48.x (1.20.2) removed constructor-injection of FMLJavaModLoadingContext -
+    // FMLModContainer#constructMod now only ever looks up a no-arg constructor. The context is
+    // still available statically via FMLJavaModLoadingContext.get().
+    public ExtraBiomesForge() {
+        var context = net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get();
         var modEventBus = context.getModEventBus();
         // Must happen before any DeferredRegister .register() call below - architectury's
         // RegistrarManager looks up the mod's event bus by mod id, which it only knows about
@@ -96,8 +101,10 @@ public class ExtraBiomesForge
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        context.registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
+        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us.
+        // FMLJavaModLoadingContext#registerConfig was removed in Forge 48.x (1.20.2) - this is now
+        // only on ModLoadingContext.
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -

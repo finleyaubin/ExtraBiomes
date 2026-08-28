@@ -1,0 +1,40 @@
+
+# NOTE: still "mods.toml" (not "neoforge.mods.toml") - 1.20.2 was NeoForge's first supported
+# Minecraft version and that filename rename only happened in a later NeoForge release. Confirmed
+# against NeoForge's own official MDK template, 1.20.2 branch (github.com/neoforged/MDK).
+modLoader="javafml" #mandatory
+loaderVersion="${neoforge_loader_version_range}" #mandatory
+license="MIT License"
+[[mods]]
+    modId="${mod_id}"
+    version="${version}"
+    displayName="${mod_name}"
+    logoFile="extrabiomes_logo.png"
+    authors="${mod_authors}"
+    description='''${mod_description}'''
+[[dependencies.extrabiomes]]
+    modId="neoforge"
+    mandatory=true
+    versionRange="${neoforge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="terrablender"
+    mandatory=true
+    versionRange="[1.0.0.59,)"
+    ordering="NONE"
+    side="BOTH"
+# Optional - see neoforge/compat/create/CreateWindmillCompat.java. Not required to play; only enables
+# the windmill structure's Create Windmill Bearing swap when Create happens to also be installed.
+[[dependencies.extrabiomes]]
+    modId="create"
+    mandatory=false
+    versionRange="[6.0.0,)"
+    ordering="AFTER"
+    side="BOTH"

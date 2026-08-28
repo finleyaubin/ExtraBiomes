@@ -21,7 +21,6 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.ModList;
 import net.winepicfin.extrabiomes.forge.block.custom.ModLogs;
 import net.winepicfin.extrabiomes.forge.block.custom.StickPileBlock;
-import net.winepicfin.extrabiomes.forge.compat.create.CreateWindmillCompat;
 import net.winepicfin.extrabiomes.forge.fluid.ModFluids;
 import net.winepicfin.extrabiomes.forge.item.custom.FrogHelmetItem;
 
@@ -73,11 +72,10 @@ public class ExtraBiomesExpectPlatformImpl {
         return ModList.get().isLoaded("create");
     }
 
-    // CreateWindmillCompat imports real Create classes - only reached (and only then classloaded) once
-    // ModList confirms Create is actually present, so this is safe on a build without Create at all.
+    // CreateWindmillCompat itself is excluded from compilation (see forge/build.gradle) - no
+    // 1.20.2 Create build exists yet (as of 2026-08-28), so the compileOnly Create dependency it
+    // needs isn't available. isCreateLoaded() above will always report false until Create ships
+    // a 1.20.2 build and both this method and the build.gradle exclusion are reverted.
     public static void applyWindmillCreateCompat(WorldGenLevel level, BoundingBox box) {
-        if (ModList.get().isLoaded("create")) {
-            CreateWindmillCompat.apply(level, box);
-        }
     }
 }

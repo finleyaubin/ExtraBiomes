@@ -2,11 +2,9 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.winepicfin.extrabiomes.data.CommonRecipes;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 // Fabric port of forge/datagen/ModRecipeProvider.java. All shared recipe content lives in
 // net.winepicfin.extrabiomes.datagen.CommonRecipes (common module); this class only supplies the
@@ -18,7 +16,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     }
 
     @Override
-    public void buildRecipes(@NotNull Consumer<FinishedRecipe> pWriter) {
+    public void buildRecipes(@NotNull RecipeOutput pWriter) {
         CommonRecipes.build(pWriter);
     }
 }
