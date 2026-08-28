@@ -11,6 +11,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,7 +20,6 @@ import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnWeightTuning;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
-import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
@@ -54,6 +54,7 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_SPAWN_JELLYFISH_BEACH = registerKey("add_spawn_jellyfish_beach");
     public static final ResourceKey<BiomeModifier> ADD_SPAWN_HARPY = registerKey("add_spawn_harpy");
     public static final ResourceKey<BiomeModifier> ADD_SPAWN_WORM = registerKey("add_spawn_worm");
+    public static final ResourceKey<BiomeModifier> ADD_SPAWN_PUCKOO_BEACH = registerKey("add_spawn_puckoo_beach");
 
     private static final TagKey<Biome> IS_OVERWORLD = TagKey.create(Registries.BIOME, ResourceLocation.parse("minecraft:is_overworld"));
 
@@ -166,23 +167,21 @@ public class ModBiomeModifiers {
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE,
                         MobSpawnWeightTuning.PIRANHA_JUNGLE_MIN_GROUP, MobSpawnWeightTuning.PIRANHA_JUNGLE_MAX_GROUP))));
         context.register(ADD_SPAWN_PIRANHA_SWAMP, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MANGROVE_SWAMP), biomes.getOrThrow(ModBiomes.SHATTERED_SWAMP)),
+                biomes.getOrThrow(Tags.Biomes.IS_SWAMP),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_SWAMP, 2, 5))));
         context.register(ADD_SPAWN_TREEFROG_JUNGLE, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_JUNGLE),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_JUNGLE, 2, 3))));
         context.register(ADD_SPAWN_TREEFROG_SWAMP, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.SWAMP), biomes.getOrThrow(Biomes.MANGROVE_SWAMP),
-                        biomes.getOrThrow(ModBiomes.SHATTERED_SWAMP), biomes.getOrThrow(ModBiomes.MOORLANDS)),
+                biomes.getOrThrow(ModTags.Biomes.IS_WETLAND),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_SWAMP, 2, 3))));
         // crimson / warped / mushroom + this mod's nether biomes
         context.register(ADD_SPAWN_HOPPLESHROOM, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS), biomes.getOrThrow(Biomes.CRIMSON_FOREST),
-                        biomes.getOrThrow(Biomes.WARPED_FOREST)),
+                biomes.getOrThrow(ModTags.Biomes.SPAWNS_HOPPLESHROOM),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOPPLESHROOM.get(), MobSpawnWeightTuning.HOPPLESHROOM, 1, 5))));
         // jellyfish: dense in JellyfishFields, rare on beaches
         context.register(ADD_SPAWN_JELLYFISH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(ModBiomes.JELLYFISH_FIELDS)),
+                biomes.getOrThrow(ModTags.Biomes.SPAWNS_JELLYFISH),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH, 3, 8))));
         context.register(ADD_SPAWN_JELLYFISH_BEACH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(BiomeTags.IS_BEACH),
@@ -194,6 +193,11 @@ public class ModBiomeModifiers {
         context.register(ADD_SPAWN_WORM, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
                 biomes.getOrThrow(IS_OVERWORLD),
                 List.of(new MobSpawnSettings.SpawnerData(ModEntities.WORM.get(), MobSpawnWeightTuning.WORM, 1, 3))));
+        // puckoo: any beach-tagged biome, vanilla or modded
+        context.register(ADD_SPAWN_PUCKOO_BEACH, new ForgeBiomeModifiers.AddSpawnsBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_BEACH),
+                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PUCKOO.get(), MobSpawnWeightTuning.PUCKOO_BEACH,
+                        MobSpawnWeightTuning.PUCKOO_BEACH_MIN_GROUP, MobSpawnWeightTuning.PUCKOO_BEACH_MAX_GROUP))));
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {

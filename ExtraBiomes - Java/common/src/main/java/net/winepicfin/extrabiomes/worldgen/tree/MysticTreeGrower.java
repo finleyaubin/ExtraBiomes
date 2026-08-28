@@ -11,6 +11,6 @@ public class MysticTreeGrower extends AbstractTreeGrower {
     @Nullable
     @Override
     protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource random, boolean hasFlowers) {
-        return ModConfigureFeatures.MYSTIC_KEY;
+        return ModConfigureFeatures.MYSTIC_SELECT_KEY;
     }
 }

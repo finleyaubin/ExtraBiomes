@@ -37,6 +37,11 @@ public class DeepDarkForest {
         // shattered_swamp/swamp_huge_mushroom_feature.json applies to swamp OR roofed-forest tagged biomes
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
+        // Same sculk vein + deep dark sculk patch vanilla's underground deep_dark biome uses (BiomeDefaultFeatures.addSculk).
+        // Sculk vein is a multiface growth that clings to any solid surface it can spread onto, including the trunks of this
+        // biome's trees, matching Bedrock's sculk-covered deep dark forest (https://minecraft.wiki/w/Deep_Dark).
+        BiomeDefaultFeatures.addSculk(biomeBuilder);
+
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
                 .downfall(BiomeClimateTuning.DEEP_DARK_FOREST.downfall())

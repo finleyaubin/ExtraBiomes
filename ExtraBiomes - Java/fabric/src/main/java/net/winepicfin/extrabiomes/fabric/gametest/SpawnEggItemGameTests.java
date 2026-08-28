@@ -3,6 +3,7 @@ package net.winepicfin.extrabiomes.fabric.gametest;
 import com.mojang.logging.LogUtils;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -38,8 +39,12 @@ public class SpawnEggItemGameTests {
             LOGGER.info("[SpawnEggItemGameTests] checking {}", item);
             helper.assertTrue(item instanceof ExtraBiomesSpawnEggItem, item + " is not an ExtraBiomesSpawnEggItem");
             item.requiredFeatures();
-            helper.assertTrue(((ExtraBiomesSpawnEggItem) item).getType(null) != null,
-                    item + "#getType(null) returned null");
+            EntityType<?> type = ((ExtraBiomesSpawnEggItem) item).getType(null);
+            helper.assertTrue(type != null, item + "#getType(null) returned null");
+            // Regression coverage for the pick-block fix: MobPickResultMixin resolves entity type ->
+            // egg item through ExtraBiomesSpawnEggItem.byType(), so it must actually find this egg.
+            helper.assertTrue(ExtraBiomesSpawnEggItem.byType(type) == item,
+                    "ExtraBiomesSpawnEggItem.byType(" + type + ") did not resolve back to " + item);
         }
 
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed");

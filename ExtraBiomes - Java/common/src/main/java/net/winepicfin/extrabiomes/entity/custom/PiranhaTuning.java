@@ -29,6 +29,21 @@ public final class PiranhaTuning {
     // Bedrock "minecraft:behavior.melee_attack" speed_multiplier.
     public static final double MELEE_ATTACK_SPEED = 1.4;
 
+    // Fraction of attempted spawns allowed through when Config.weakerPiranhas is enabled.
+    public static final float WEAKER_SPAWN_CHANCE = 0.4F;
+    // Attack damage multiplier applied when Config.weakerPiranhas is enabled - they still attack, just softer.
+    public static final double WEAKER_DAMAGE_MULTIPLIER = 0.4;
+    // Hard world-wide cap on live piranhas when Config.weakerPiranhas is enabled.
+    public static final int WEAKER_MOB_CAP = 12;
+
+    // Piranha shares MobCategory.WATER_AMBIENT with vanilla's schooling fish, so the category-wide
+    // spawn cap (see MobSpawnCapTuning) can't give piranha a population limit independent of cod/
+    // salmon/tropical fish/pufferfish. This is a separate, per-entity check instead: how many
+    // piranha are already nearby, mirroring Bedrock's own spawn_rules density_limit.surface (30).
+    public static final int LOCAL_DENSITY_RADIUS_XZ = 20;
+    public static final int LOCAL_DENSITY_RADIUS_Y = 10;
+    public static final int LOCAL_DENSITY_LIMIT = 30;
+
     private PiranhaTuning() {
     }
 }

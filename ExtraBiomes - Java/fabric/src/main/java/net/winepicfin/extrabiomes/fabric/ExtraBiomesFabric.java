@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.fabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -19,10 +20,12 @@ import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
+import net.winepicfin.extrabiomes.worldgen.structure.windmill.ModStructureTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import terrablender.api.SurfaceRuleManager;
@@ -48,12 +51,15 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModEntities.register();
         ModBlockEntities.register();
         ModSounds.register();
+        ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
+        ModStructureTypes.register();
         ModVolcanicPlacementModifiers.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
+        NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();
 

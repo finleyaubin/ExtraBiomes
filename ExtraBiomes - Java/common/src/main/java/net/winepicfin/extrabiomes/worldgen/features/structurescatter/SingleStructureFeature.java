@@ -4,19 +4,25 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -69,7 +75,12 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 .setMirror(Mirror.NONE)
                 .setIgnoreEntities(false)
                 // Prevents this otherwise-unconditional placement from carving through the bottom bedrock layer near y=-64 - see PreserveBedrockProcessor's javadoc.
-                .addProcessor(PreserveBedrockProcessor.INSTANCE);
+                .addProcessor(PreserveBedrockProcessor.INSTANCE)
+                // minecraft:structure_void placed literally is just another (invisible, no-collision) block - vanilla's
+                // placeInWorld doesn't skip it on its own, so without this a converted template using structure_void as
+                // a "leave this position alone" marker (e.g. jellycoral relying on the surrounding ocean rather than its
+                // own explicit water fill) would overwrite whatever's already there instead of leaving it untouched.
+                .addProcessor(new BlockIgnoreProcessor(List.of(Blocks.STRUCTURE_VOID)));
 
         BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
@@ -86,6 +97,19 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
         }
 
         BoundingBox structureBox = template.getBoundingBox(settings, origin);
+
+        // Re-anchor to the shallowest real stone under the whole footprint instead of the origin
+        // column's dirt/grass surface - see SingleStructureConfiguration#embedInStone.
+        if (config.embedInStone()) {
+            int minStoneTopY = findMinStoneTopY(level, structureBox.minX(), structureBox.maxX(), structureBox.minZ(), structureBox.maxZ());
+            int deltaY = (minStoneTopY + config.groundOffset()) - anchor.getY();
+            if (deltaY != 0) {
+                anchor = anchor.offset(0, deltaY, 0);
+                origin = origin.offset(0, deltaY, 0);
+                structureBox = template.getBoundingBox(settings, origin);
+            }
+        }
+
         if (!fitsWithinSafeWriteArea(structureBox, context.origin())) {
             return false;
         }
@@ -97,6 +121,13 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
 
         // Opt-in check (minClearFraction 0.0F by default keeps unrelated subsystems placing unconditionally) - currently only used by huge mushrooms to avoid landing on an already-placed neighbour.
         if (config.minClearFraction() > 0.0F && !hasEnoughClearSpace(level, structureBox, config.minClearFraction())) {
+            return false;
+        }
+
+        // Opt-in check (minSubmergedFraction 0.0F by default keeps unrelated subsystems unaffected) - for templates
+        // (e.g. jellycoral) that no longer bundle their own explicit water fill and so need a placement-time
+        // guarantee that they're actually landing underwater.
+        if (config.minSubmergedFraction() > 0.0F && !isSubmergedEnough(level, structureBox, config.minSubmergedFraction())) {
             return false;
         }
 
@@ -130,6 +161,58 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             }
         }
         return total == 0 || (float) clear / total >= minClearFraction;
+    }
+
+    /**
+     * Fraction of {@code box} that's currently water, checked via fluid state rather than block
+     * state so waterlogged blocks (sea pickles, coral fans, kelp) count as submerged just like a
+     * plain water block does - matching how the structure's own waterlogged pieces hold their
+     * water without needing an adjacent explicit water block.
+     */
+    private static boolean isSubmergedEnough(WorldGenLevel level, BoundingBox box, float minSubmergedFraction) {
+        int total = 0;
+        int submerged = 0;
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = box.minX(); x <= box.maxX(); x++) {
+            for (int y = box.minY(); y <= box.maxY(); y++) {
+                for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                    total++;
+                    if (level.getFluidState(pos.set(x, y, z)).is(net.minecraft.tags.FluidTags.WATER)) {
+                        submerged++;
+                    }
+                }
+            }
+        }
+        return total == 0 || (float) submerged / total >= minSubmergedFraction;
+    }
+
+    /**
+     * The shallowest stone-like top across every column of {@code [minX,maxX] x [minZ,maxZ]} -
+     * per column, walks down from that column's own {@code WORLD_SURFACE_WG} height through any
+     * {@link BlockTags#DIRT} blocks (grass/dirt/podzol/coarse dirt/mycelium/rooted dirt) until it
+     * hits stone or bedrock. Taking the shallowest (highest) result across the whole footprint,
+     * rather than just the origin column, is what keeps a wide structure from having part of its
+     * base still floating over a dip once it's re-anchored - see embedInStone's javadoc.
+     */
+    private static int findMinStoneTopY(WorldGenLevel level, int minX, int maxX, int minZ, int maxZ) {
+        int minStoneTopY = Integer.MAX_VALUE;
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) - 1;
+                pos.set(x, y, z);
+                while (y > level.getMinBuildHeight()) {
+                    BlockState state = level.getBlockState(pos);
+                    if (!state.isAir() && !state.is(BlockTags.DIRT)) {
+                        break;
+                    }
+                    y--;
+                    pos.set(x, y, z);
+                }
+                minStoneTopY = Math.min(minStoneTopY, y);
+            }
+        }
+        return minStoneTopY == Integer.MAX_VALUE ? level.getMinBuildHeight() : minStoneTopY;
     }
 
     // Catches wide structures hanging over a ledge that a single-column HeightmapPlacement wouldn't.

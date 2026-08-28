@@ -83,11 +83,22 @@ public class ModBiomes
     }
 
     public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
+        globalOverworldGeneration(builder, true);
+    }
+
+    // includeSprings=false skips BiomeDefaultFeatures.addDefaultSprings - used by TheNetherlands/
+    // TheNetherlandsMutated, whose whole floor is farmland one block above a netherrack layer: vanilla's
+    // springs feature buries a water pocket directly under the surface at a high enough count that it
+    // was showing up as water under a huge fraction of the field's farmland, indistinguishable from (and
+    // far more frequent than) the biome's own intentional hydration pockets in NetherlandsWheatFieldFeature.
+    public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder, boolean includeSprings) {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);
         BiomeDefaultFeatures.addDefaultCrystalFormations(builder);
         BiomeDefaultFeatures.addDefaultMonsterRoom(builder);
         BiomeDefaultFeatures.addDefaultUndergroundVariety(builder);
-        BiomeDefaultFeatures.addDefaultSprings(builder);
+        if (includeSprings) {
+            BiomeDefaultFeatures.addDefaultSprings(builder);
+        }
         BiomeDefaultFeatures.addSurfaceFreezing(builder);
         // Bedrock's underground_mushroom rules apply to every overworld biome, so they're wired here rather than per-biome.
         builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.SELECT_MUSHROOM_PLACED_KEY);

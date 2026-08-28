@@ -3,12 +3,14 @@ package net.winepicfin.extrabiomes.gametest;
 import com.mojang.logging.LogUtils;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.item.ModItems;
-import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -47,7 +49,7 @@ public class SpawnEggItemGameTests {
 
         for (Item item : spawnEggs) {
             LOGGER.info("[SpawnEggItemGameTests] checking {}", item);
-            helper.assertTrue(item instanceof ExtraBiomesSpawnEggItem, item + " is not an ExtraBiomesSpawnEggItem");
+            helper.assertTrue(item instanceof ForgeSpawnEggItem, item + " is not a ForgeSpawnEggItem");
             // The regression: this used to throw NullPointerException (null.requiredFeatures())
             // for every one of these. Calling it here is exactly what
             // CreativeModeTabs$Rebuilder.buildContents does for every registered item.
@@ -55,8 +57,13 @@ public class SpawnEggItemGameTests {
             // getType(null) is the other path documented on that class - the tag-less fallback
             // vanilla's own crafting/inventory code exercises constantly (e.g. rendering the item
             // in a creative tab, which needs an EntityType to pick the egg's overlay color).
-            helper.assertTrue(((ExtraBiomesSpawnEggItem) item).getType(null) != null,
+            helper.assertTrue(((SpawnEggItem) item).getType(null) != null,
                     item + "#getType(null) returned null");
+            // Regression coverage for the pick-block fix: ForgeSpawnEggItem.fromEntityType() is what
+            // IForgeEntity#getPickedResult falls back to, so it must actually resolve back to this egg.
+            EntityType<?> type = ((SpawnEggItem) item).getType(null);
+            helper.assertTrue(ForgeSpawnEggItem.fromEntityType(type) == item,
+                    "ForgeSpawnEggItem.fromEntityType(" + type + ") did not resolve back to " + item);
         }
 
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed");

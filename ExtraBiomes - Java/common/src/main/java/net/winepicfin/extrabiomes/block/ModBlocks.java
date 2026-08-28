@@ -37,6 +37,8 @@ public class ModBlocks {
     public static final RegistrySupplier<PebbleBlock> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistrySupplier<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noOcclusion().noLootTable()));
     public static final RegistrySupplier<Block> STICK_PILE = registerBlock("stick_pile", () -> ExtraBiomesExpectPlatform.createStickPileBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG).noOcclusion().strength(StickPileTuning.DESTROY_SECONDS)));
+    // Structure-only worldgen block, see FountainSpoutBlock - no BlockItem needed.
+    public static final RegistrySupplier<Block> FOUNTAIN_SPOUT = BLOCKS.register("fountain_spout", () -> new FountainSpoutBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().noLootTable().strength(-1.0f, 3600000.0f)));
 
     // Bedrock's black_sand has no gravity (engine limitation); Java copies vanilla SAND's falling behaviour instead.
     public static final RegistrySupplier<Block> BLACK_SAND = registerBlock("black_sand", () -> new FallingBlock(BlockBehaviour.Properties.copy(Blocks.SAND).mapColor(MapColor.COLOR_BLACK)));

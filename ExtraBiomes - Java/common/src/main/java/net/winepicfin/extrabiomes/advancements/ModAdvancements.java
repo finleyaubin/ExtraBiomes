@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.advancements;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.ConsumeItemTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -118,6 +119,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("ate_cooked_piranha", ConsumeItemTrigger.TriggerInstance.usedItem(ModItems.COOKED_PIRANHA.get()))
                 .save(saver, advancementId("piranha_dinner"));
 
+        // Either biome counts - requirements(OR) so the mutated variant doesn't need its own separate advancement.
         Advancement visitNetherlands = Advancement.Builder.advancement()
                 .parent(root)
                 .display(Items.WHEAT,
@@ -126,7 +128,19 @@ public class ModAdvancements implements AdvancementSubProvider {
                         null, FrameType.GOAL, true, true, false)
                 .addCriterion("in_netherlands", PlayerTrigger.TriggerInstance.located(
                         LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS).build()))
+                .addCriterion("in_netherlands_mutated", PlayerTrigger.TriggerInstance.located(
+                        LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS_MUTATED).build()))
+                .requirements(RequirementsStrategy.OR)
                 .save(saver, advancementId("visit_netherlands"));
+
+        Advancement.Builder.advancement()
+                .parent(root)
+                .display(ModItems.BAIT.get(),
+                        Component.translatable("advancements.extrabiomes.bait_and_switch.title"),
+                        Component.translatable("advancements.extrabiomes.bait_and_switch.description"),
+                        null, FrameType.TASK, true, true, false)
+                .addCriterion("lured_piranha_with_bait", BaitLureTrigger.TriggerInstance.luredPiranhaWithBait())
+                .save(saver, advancementId("bait_and_switch"));
 
         Advancement.Builder.advancement()
                 .parent(visitNetherlands)

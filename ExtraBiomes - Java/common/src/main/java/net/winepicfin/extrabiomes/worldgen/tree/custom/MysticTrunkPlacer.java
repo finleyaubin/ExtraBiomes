@@ -86,6 +86,12 @@ public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((
         } else {
             l = i + 1;
         }
+        // Sampled once here (rather than inside generateBranch) so the trunk can grow tall enough to
+        // meet whichever branch reaches highest - branches keep their height variation, but the trunk
+        // is always at least as tall, instead of a branch tip poking up above the crown.
+        int branchAEndHeight = pFreeTreeHeight - 1 + this.branchEndOffsetFromTop.sample(pRandom);
+        int branchBEndHeight = flag1 ? pFreeTreeHeight - 1 + this.branchEndOffsetFromTop.sample(pRandom) : Integer.MIN_VALUE;
+        l = Math.min(pFreeTreeHeight, Math.max(l, Math.max(branchAEndHeight, branchBEndHeight) + 1));
         this.placeLog(pLevel, pBlockSetter, pRandom, pPos.north().east(), pConfig);
         this.placeLog(pLevel, pBlockSetter, pRandom, pPos.north().west(), pConfig);
         this.placeLog(pLevel, pBlockSetter, pRandom, pPos.south().east(), pConfig);
@@ -99,47 +105,141 @@ public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((
         }
 
         List<FoliagePlacer.FoliageAttachment> list = new ArrayList<>();
-        if (flag) {
-            list.add(new FoliagePlacer.FoliageAttachment(pPos.above(l), 0, false));
-        }
+        // Always cap the central trunk with its own canopy - the trunk log column already runs up to
+        // l regardless of branch_count, so without this the 2-in-3 rolls with fewer than 3 branches
+        // left the trunk ending bare with only an off-center branch tuft for leaves.
+        list.add(new FoliagePlacer.FoliageAttachment(pPos.above(l), 0, false));
 
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-        Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(pRandom);
-        Function<BlockState, BlockState> function = (pState) -> {
-            return pState.trySetValue(RotatedPillarBlock.AXIS, direction.getAxis());
-        };
-        list.add(this.generateBranch(pLevel, pBlockSetter, pRandom, pFreeTreeHeight, pPos, pConfig, function, direction, i, i < l - 1, blockpos$mutableblockpos));
+        Direction directionA = Direction.Plane.HORIZONTAL.getRandomDirection(pRandom);
+        Direction directionB = pRandom.nextFloat() < 0.5F ? pickDiagonalPartner(pRandom, directionA) : null;
+        list.addAll(this.generateBranch(pLevel, pBlockSetter, pRandom, pPos, pConfig, directionA, directionB, i, i < l - 1, branchAEndHeight, l, blockpos$mutableblockpos));
         if (flag1) {
-            list.add(this.generateBranch(pLevel, pBlockSetter, pRandom, pFreeTreeHeight, pPos, pConfig, function, direction.getOpposite(), j, j < l - 1, blockpos$mutableblockpos));
+            // The second branch isn't always sent exactly opposite the first any more - a perpendicular
+            // or diagonal heading (still picked relative to directionA/B so it can't double back on the
+            // first branch) makes multi-branch trees read as asymmetric instead of a mirrored pair.
+            Direction secondA;
+            Direction secondB;
+            float roll = pRandom.nextFloat();
+            if (roll < 0.4F) {
+                secondA = directionA.getOpposite();
+                secondB = directionB == null ? null : directionB.getOpposite();
+            } else if (roll < 0.7F) {
+                secondA = pRandom.nextBoolean() ? directionA.getClockWise() : directionA.getCounterClockWise();
+                secondB = null;
+            } else {
+                secondA = directionA.getOpposite();
+                secondB = pRandom.nextBoolean() ? directionA.getClockWise() : directionA.getCounterClockWise();
+            }
+            list.addAll(this.generateBranch(pLevel, pBlockSetter, pRandom, pPos, pConfig, secondA, secondB, j, j < l - 1, branchBEndHeight, l, blockpos$mutableblockpos));
         }
 
         return list;
     }
 
-    private FoliagePlacer.FoliageAttachment generateBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig, Function<BlockState, BlockState> pPropertySetter, Direction pDirection, int pOffset, boolean pOffsetExtra, BlockPos.MutableBlockPos pPosMutable) {
+    /** Picks one of the two horizontal directions perpendicular to {@code pDirectionA}, so the pair forms a diagonal (e.g. NORTH+EAST). */
+    private static Direction pickDiagonalPartner(RandomSource pRandom, Direction pDirectionA) {
+        return pRandom.nextBoolean() ? pDirectionA.getClockWise() : pDirectionA.getCounterClockWise();
+    }
+
+    private static Function<BlockState, BlockState> axisSetter(Direction pDirection) {
+        return (pState) -> pState.trySetValue(RotatedPillarBlock.AXIS, pDirection.getAxis());
+    }
+
+    /**
+     * Walks a branch from the trunk out to a target point that may be offset diagonally
+     * ({@code pDirectionB} non-null) as well as vertically, placing logs along the way and finishing
+     * with a foliage attachment. Each step of the walk is chosen from whichever of the remaining X/Z/Y
+     * deltas is largest (weighted by magnitude), which naturally reduces to the old single-axis +
+     * vertical zig-zag when pDirectionB is null (its axis never accumulates any remaining delta).
+     * Partway along the walk it may also sprout a short sub-branch and/or an extra foliage blob, so
+     * a single main branch can read as several smaller leafy limbs rather than one bare rod with a
+     * tuft on the end. The target height ({@code pEndHeight}) is capped at {@code pTrunkHeight - 1}
+     * so a branch can never poke up above the central trunk's own canopy - placeTrunk already grows
+     * the trunk to meet the branches' natural heights, so this only bites in the rare case that would
+     * have pushed the trunk past the tree's overall height cap.
+     */
+    private List<FoliagePlacer.FoliageAttachment> generateBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, BlockPos pPos, TreeConfiguration pConfig, Direction pDirectionA, Direction pDirectionB, int pOffset, boolean pOffsetExtra, int pEndHeight, int pTrunkHeight, BlockPos.MutableBlockPos pPosMutable) {
+        List<FoliagePlacer.FoliageAttachment> attachments = new ArrayList<>();
         pPosMutable.set(pPos).move(Direction.UP, pOffset);
-        int i = pFreeTreeHeight - 1 + this.branchEndOffsetFromTop.sample(pRandom);
+        int i = Math.min(pEndHeight, pTrunkHeight - 1);
         boolean flag = pOffsetExtra || i < pOffset;
         int j = this.branchHorizontalLength.sample(pRandom) + (flag ? 1 : 0);
-        BlockPos blockpos = pPos.relative(pDirection, j).above(i);
+        BlockPos blockpos = pPos.relative(pDirectionA, j);
+        if (pDirectionB != null) {
+            blockpos = blockpos.relative(pDirectionB, j);
+        }
+        blockpos = blockpos.above(i);
         int k = flag ? 2 : 1;
 
+        Function<BlockState, BlockState> propertySetterA = axisSetter(pDirectionA);
         for(int l = 0; l < k; ++l) {
-            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(pDirection), pConfig, pPropertySetter);
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(pDirectionA), pConfig, propertySetterA);
+            if (pDirectionB != null) {
+                this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(pDirectionB), pConfig, axisSetter(pDirectionB));
+            }
         }
 
-        Direction direction = blockpos.getY() > pPosMutable.getY() ? Direction.UP : Direction.DOWN;
+        int totalSteps = pPosMutable.distManhattan(blockpos);
+        int stepsTaken = 0;
+        boolean forkedYet = false;
 
         while(true) {
-            int i1 = pPosMutable.distManhattan(blockpos);
-            if (i1 == 0) {
-                return new FoliagePlacer.FoliageAttachment(blockpos.above(), 0, false);
+            int dx = blockpos.getX() - pPosMutable.getX();
+            int dy = blockpos.getY() - pPosMutable.getY();
+            int dz = blockpos.getZ() - pPosMutable.getZ();
+            int remaining = Math.abs(dx) + Math.abs(dy) + Math.abs(dz);
+            if (remaining == 0) {
+                attachments.add(new FoliagePlacer.FoliageAttachment(blockpos.above(), 0, false));
+                return attachments;
             }
 
-            float f = (float)Math.abs(blockpos.getY() - pPosMutable.getY()) / (float)i1;
-            boolean flag1 = pRandom.nextFloat() < f;
-            pPosMutable.move(flag1 ? direction : pDirection);
-            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable, pConfig, flag1 ? Function.identity() : pPropertySetter);
+            float roll = pRandom.nextFloat() * (float)remaining;
+            Direction step;
+            Function<BlockState, BlockState> propertySetter;
+            if (roll < (float)Math.abs(dx)) {
+                step = dx > 0 ? Direction.EAST : Direction.WEST;
+                propertySetter = axisSetter(step);
+            } else if (roll < (float)(Math.abs(dx) + Math.abs(dz))) {
+                step = dz > 0 ? Direction.SOUTH : Direction.NORTH;
+                propertySetter = axisSetter(step);
+            } else {
+                step = dy > 0 ? Direction.UP : Direction.DOWN;
+                propertySetter = Function.identity();
+            }
+            this.placeLog(pLevel, pBlockSetter, pRandom, pPosMutable.move(step), pConfig, propertySetter);
+            ++stepsTaken;
+
+            // Fork around the branch's midpoint, once, so the offshoot has enough of the branch left
+            // ahead of it to read as a separate limb rather than sitting right on top of the tip.
+            if (!forkedYet && totalSteps >= 4 && stepsTaken >= totalSteps / 2) {
+                forkedYet = true;
+                // Past 9 blocks a branch reads as too long and sparse without a blob to break it up.
+                if (j > 9 || pRandom.nextFloat() < 0.45F) {
+                    attachments.add(new FoliagePlacer.FoliageAttachment(pPosMutable.above().immutable(), 0, false));
+                }
+                if (pRandom.nextFloat() < 0.5F) {
+                    attachments.addAll(this.generateSubBranch(pLevel, pBlockSetter, pRandom, pConfig, pPosMutable.immutable(), pDirectionA));
+                }
+            }
         }
+    }
+
+    /**
+     * A shorter, un-forking offshoot from a point partway along a main branch: a couple of logs
+     * heading off perpendicular to the parent branch, capped with their own foliage attachment.
+     */
+    private List<FoliagePlacer.FoliageAttachment> generateSubBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, TreeConfiguration pConfig, BlockPos pStart, Direction pParentDirection) {
+        Direction direction = pRandom.nextBoolean() ? pParentDirection.getClockWise() : pParentDirection.getCounterClockWise();
+        Function<BlockState, BlockState> propertySetter = axisSetter(direction);
+        int length = 1 + pRandom.nextInt(3);
+        BlockPos.MutableBlockPos cursor = pStart.mutable();
+        for(int l = 0; l < length; ++l) {
+            this.placeLog(pLevel, pBlockSetter, pRandom, cursor.move(direction), pConfig, propertySetter);
+            if (pRandom.nextBoolean()) {
+                this.placeLog(pLevel, pBlockSetter, pRandom, cursor.move(Direction.UP), pConfig, Function.identity());
+            }
+        }
+        return List.of(new FoliagePlacer.FoliageAttachment(cursor.above().immutable(), 0, false));
     }
 }

@@ -1,5 +1,6 @@
 {
   "credit": "Ported from ExtraBiomes - Bedrock/packs/RP/models/blocks/palm_sapling.geo.json",
+  "render_type": "cutout",
   "ambientocclusion": false,
   "texture_size": [
     16,

@@ -44,14 +44,16 @@ public class FabricConfig {
         int biomeWeight = readInt(properties, "biomeWeight", Config.DEFAULT_BIOME_WEIGHT);
         int secondaryBiomeWeight = readInt(properties, "secondaryBiomeWeight", Config.DEFAULT_SECONDARY_BIOME_WEIGHT);
         int rareBiomeWeight = readInt(properties, "rareBiomeWeight", Config.DEFAULT_RARE_BIOME_WEIGHT);
+        boolean weakerPiranhas = readBoolean(properties, "weakerPiranhas", Config.DEFAULT_WEAKER_PIRANHAS);
 
         // Persist the real configured values, not the gametest override, so a gametest run
         // never overwrites a player's saved config with the forced test weight.
         properties.setProperty("biomeWeight", String.valueOf(biomeWeight));
         properties.setProperty("secondaryBiomeWeight", String.valueOf(secondaryBiomeWeight));
         properties.setProperty("rareBiomeWeight", String.valueOf(rareBiomeWeight));
+        properties.setProperty("weakerPiranhas", String.valueOf(weakerPiranhas));
         try (OutputStream out = Files.newOutputStream(CONFIG_PATH)) {
-            properties.store(out, "ExtraBiomes config - biomeWeight/secondaryBiomeWeight/rareBiomeWeight control how frequently this mod's TerraBlender biome regions are picked (see ModTerrablender)");
+            properties.store(out, "ExtraBiomes config - biomeWeight/secondaryBiomeWeight/rareBiomeWeight control how frequently this mod's TerraBlender biome regions are picked (see ModTerrablender); weakerPiranhas makes piranhas deal less damage and spawn less often");
         } catch (IOException e) {
             LOGGER.error("Failed to write {}", CONFIG_PATH, e);
         }
@@ -59,6 +61,7 @@ public class FabricConfig {
         Config.biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : biomeWeight;
         Config.secondaryBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : secondaryBiomeWeight;
         Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : rareBiomeWeight;
+        Config.weakerPiranhas = weakerPiranhas;
 
         Config.load();
     }
@@ -72,5 +75,11 @@ public class FabricConfig {
             LOGGER.warn("Invalid value for {} ({}), using default {}", key, value, defaultValue);
             return defaultValue;
         }
+    }
+
+    private static boolean readBoolean(Properties properties, String key, boolean defaultValue) {
+        String value = properties.getProperty(key);
+        if (value == null) return defaultValue;
+        return Boolean.parseBoolean(value.trim());
     }
 }

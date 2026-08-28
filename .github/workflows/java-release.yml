@@ -18,16 +18,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # Extract a clean version string like "3.1.0-beta-1" from a
-      # "Java-V3.1.0-beta-1" (or "Java-3.1.0-beta-1") style tag
+      # Read the version straight from gradle.properties (the same source of truth the
+      # build itself uses) rather than parsing it out of the tag name. The release tag has
+      # drifted out of sync with mod_version before (e.g. tag "Java-3.10.0-beta-3" vs.
+      # mod_version "3.1.0-beta-3"), which silently broke changelog lookup below since the
+      # changelog files are named after mod_version, not the tag.
       - name: Extract version
         id: version
         run: |
-          TAG="${{ github.ref_name }}"
-          TAG="${TAG#Java-}"
-          TAG="${TAG#v}"
-          TAG="${TAG#V}"
-          echo "VERSION=$TAG" >> $GITHUB_OUTPUT
+          VERSION=$(grep '^mod_version=' gradle.properties | cut -d'=' -f2)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Detect prerelease tag
         id: prerelease
@@ -41,8 +41,8 @@ jobs:
           if [ -f "$FILE" ]; then
             cp "$FILE" /tmp/changelog.md
           else
-            echo "::warning::No changelog file found at $FILE, using placeholder"
-            echo "No changelog was provided for this release." > /tmp/changelog.md
+            echo "::error::No changelog file found at $FILE - add it before tagging a release"
+            exit 1
           fi
 
       # Loom's toolchain compiles for 17, but the Gradle daemon itself needs 21 to run
@@ -121,6 +121,7 @@ jobs:
             terrablender(required){modrinth:terrablender}{curseforge:563928}
             geckolib(required){modrinth:geckolib}{curseforge:388172}
             architectury-api(required){modrinth:architectury-api}{curseforge:419699}
+            create(optional){modrinth:create}{curseforge:328085}
 
       - name: Publish Fabric jar
         uses: Kira-NT/mc-publish@v3
@@ -139,3 +140,4 @@ jobs:
             geckolib(required){modrinth:geckolib}{curseforge:388172}
             architectury-api(required){modrinth:architectury-api}{curseforge:419699}
             fabric-api(required){modrinth:fabric-api}{curseforge:306612}
+            create-fabric(optional){modrinth:create-fabric}{curseforge:624165}

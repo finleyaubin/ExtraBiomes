@@ -30,6 +30,10 @@ public class ForgeConfig
                     "Future Desert, The Netherlands, The Netherlands Mutated), the default value is " + Config.DEFAULT_RARE_BIOME_WEIGHT)
             .defineInRange("Rare Biome Weight", Config.DEFAULT_RARE_BIOME_WEIGHT, 0, Integer.MAX_VALUE);
 
+    private static final ForgeConfigSpec.BooleanValue WEAKERPIRANHAS = BUILDER
+            .comment("When true, piranhas deal less attack damage and spawn less frequently, the default value is " + Config.DEFAULT_WEAKER_PIRANHAS)
+            .define("Weaker Piranhas", Config.DEFAULT_WEAKER_PIRANHAS);
+
     // On the gametest server, a low weight makes narrow/rare biomes impractically hard to find
     // within a reasonable search radius (see BiomeGenerationGameTests), so force it high there
     // regardless of the configured value - real players never see this override.
@@ -43,6 +47,7 @@ public class ForgeConfig
         Config.biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : BIOMEWEIGHT.get();
         Config.secondaryBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : SECONDARYBIOMEWEIGHT.get();
         Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : RAREBIOMEWEIGHT.get();
+        Config.weakerPiranhas = WEAKERPIRANHAS.get();
         Config.load();
     }
 }

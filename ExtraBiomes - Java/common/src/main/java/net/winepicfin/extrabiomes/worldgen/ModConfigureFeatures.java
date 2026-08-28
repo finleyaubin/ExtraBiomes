@@ -1,8 +1,10 @@
 package net.winepicfin.extrabiomes.worldgen;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -14,8 +16,10 @@ import net.minecraft.util.valueproviders.WeightedListInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
@@ -35,20 +39,41 @@ import java.util.List;
 
 public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_KEY = registerKey("mystic");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_LARGE_KEY = registerKey("mystic_large");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_SELECT_KEY = registerKey("mystic_select");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SKY_KEY = registerKey("sky");
     public static final ResourceKey<ConfiguredFeature<?, ?>> CHARRED_KEY = registerKey("charred");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> LUSH_GRASS_KEY = registerKey("lush_grass");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context){
-        // Tuned against the actual Bedrock mystic_tree structures: both show a sprawling 2-branch canopy reaching ~6-9 blocks from the trunk, well beyond a plain vanilla Cherry tree's ~4 block spread.
+        // In-game render showed radius 5 giving every attachment (main top + both branch tips) a
+        // full-size canopy blob that overlapped its neighbours, fusing into one flat continuous mass
+        // instead of a domed crown with separate branch tufts like the Bedrock structure. Shrinking
+        // the per-attachment radius and pushing branch_horizontal_length out past that radius keeps
+        // the branch tufts visually distinct from the main crown, matching the reference screenshot.
         register(context, MYSTIC_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LOG.get()),
-                new MysticTrunkPlacer(9, 5, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(3, 7), UniformInt.of(-5, -3), UniformInt.of(-1, 1)),
+                new MysticTrunkPlacer(9, 5, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(4, 8), UniformInt.of(-5, -3), UniformInt.of(-1, 1)),
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LEAVES.get()),
-                new CherryFoliagePlacer(ConstantInt.of(5), ConstantInt.of(0), ConstantInt.of(6), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
+                new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(5), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
                 new TwoLayersFeatureSize(1,0,2)).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
         );
+        // Rare "elder" variant reviving the scale of Bedrock's unused Large_mystic_tree.mcstructure
+        // (never referenced by any Bedrock feature, so not something to shape-match exactly - just a
+        // nod to its existence as an occasional taller/wider tree among the normal MYSTIC_KEY ones).
+        register(context, MYSTIC_LARGE_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.MYSTIC_LOG.get()),
+                new MysticTrunkPlacer(15, 6, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(6, 10), UniformInt.of(-6, -4), UniformInt.of(-1, 1)),
+                BlockStateProvider.simple(ModBlocks.MYSTIC_LEAVES.get()),
+                new CherryFoliagePlacer(ConstantInt.of(4), ConstantInt.of(0), ConstantInt.of(6), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
+                new TwoLayersFeatureSize(1,0,2)).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
+        );
+        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatureLookup = context.lookup(Registries.CONFIGURED_FEATURE);
+        register(context, MYSTIC_SELECT_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
+                List.of(new WeightedPlacedFeature(PlacementUtils.inlinePlaced(configuredFeatureLookup.getOrThrow(MYSTIC_LARGE_KEY)), 0.08F)),
+                PlacementUtils.inlinePlaced(configuredFeatureLookup.getOrThrow(MYSTIC_KEY))
+        ));
         // sky_tree.mcstructure has a conical/tapered silhouette that SpruceFoliagePlacer matches far better than the round BlobFoliagePlacer this used before.
         register(context, SKY_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.SKY_LOG.get()),

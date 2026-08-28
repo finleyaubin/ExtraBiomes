@@ -91,6 +91,17 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
+    @GameTest(template = "empty")
+    public static void plainsGetsHarpySpawn(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: starting");
+        Biome plains = biome(helper, Biomes.PLAINS);
+
+        assertHasSpawn(helper, plains, MobCategory.MONSTER, ModEntities.HARPY.get());
+
+        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: passed");
+        helper.succeed();
+    }
+
     private static Biome biome(GameTestHelper helper, ResourceKey<Biome> key) {
         ServerLevel level = helper.getLevel();
         return level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(key).value();

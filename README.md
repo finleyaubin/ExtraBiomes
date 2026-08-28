@@ -8,11 +8,16 @@ ExtraBiomes is a world generation addon/mod for Minecraft, available for both Be
 - [mcpedl](https://mcpedl.com/extrabiomes/)
 - [modbay](https://modbay.org/mods/57-extrabiomes.html)
 - [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
+
+#### Required Bedrock Experiments:
+<img width="30%" alt="Required Experiments" src="https://github.com/user-attachments/assets/449765af-892a-45fe-ab0c-0705d6872ba0" />
+
 ### Java:
-- [Modrinth](https://modrinth.com/project/extrabiome)
+- [Curseforge](https://www.curseforge.com/minecraft/mc-mods/extrabiomes)
+- [Modrinth](https://modrinth.com/mod/extrabiome)
 - [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
 
-The Java port is currently in beta and requires [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
+The Java port is currently in beta, supporting only version 1.20.1 at the moment, and requires [architectury-api](https://github.com/architectury/architectury-api), [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
 ## Overworld Surface Biomes
 <table>  
  <tr>
@@ -177,7 +182,7 @@ The Java port is currently in beta and requires [TerraBlender](https://modrinth.
     <img width="100%" alt="The Netherlands" src="https://github.com/user-attachments/assets/8e7191b1-aed9-4c4b-9487-70b068475db9" />
     <br/>
     <i>
-    The Netherlands is based on the real-life Netherlands on the surface, full of tulip fields, windmills and wheat fields, but underground is a mini nether in the overworld
+    The Netherlands is based on the real-life Netherlands on the surface, full of tulip fields, windmills and wheat fields, but underground is a mini nether in the overworld. on java edition, if the create mod is installed, the windmill will also have moving parts.
     </i>
   </tr>
 
@@ -335,8 +340,6 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
 ### Blocks
 Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky, each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
 
-## Experiments
-<img width="50%" alt="Required Experiments" src="https://github.com/user-attachments/assets/449765af-892a-45fe-ab0c-0705d6872ba0" />
 
 ## credits
 All screenshots were taken using [prizma RTX](https://www.curseforge.com/minecraft-bedrock/texture-packs/prizma-pbr-deferred-pack) 

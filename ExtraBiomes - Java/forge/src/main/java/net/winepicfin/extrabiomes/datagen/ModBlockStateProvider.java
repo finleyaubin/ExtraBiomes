@@ -50,7 +50,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_MYSTIC_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.MYSTIC_WOOD.get()), blockTexture(ModBlocks.MYSTIC_LOG.get()),blockTexture(ModBlocks.MYSTIC_LOG.get()));
         axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_MYSTIC_WOOD.get()), blockTexture(ModBlocks.STRIPPED_MYSTIC_LOG.get()),blockTexture(ModBlocks.STRIPPED_MYSTIC_LOG.get()));
-        blockWithItem(ModBlocks.MYSTIC_LEAVES);
+        blockWithItemCutout(ModBlocks.MYSTIC_LEAVES);
         saplingBlock(ModBlocks.MYSTIC_SAPLING);
         simpleBlockItem(ModBlocks.MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:mystic_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:mystic_wood", "minecraft:block/cube_column"));
@@ -72,7 +72,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_SKY_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.SKY_WOOD.get()), blockTexture(ModBlocks.SKY_LOG.get()),blockTexture(ModBlocks.SKY_LOG.get()));
         axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_SKY_WOOD.get()), blockTexture(ModBlocks.STRIPPED_SKY_LOG.get()),blockTexture(ModBlocks.STRIPPED_SKY_LOG.get()));
-        blockWithItem(ModBlocks.SKY_LEAVES);
+        blockWithItemCutout(ModBlocks.SKY_LEAVES);
         saplingBlock(ModBlocks.SKY_SAPLING);
         simpleBlockItem(ModBlocks.SKY_LOG.get(),models().withExistingParent("extrabiomes:sky_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.SKY_WOOD.get(),models().withExistingParent("extrabiomes:sky_wood", "minecraft:block/cube_column"));
@@ -94,7 +94,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_PALM_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.PALM_WOOD.get()), blockTexture(ModBlocks.PALM_LOG.get()),blockTexture(ModBlocks.PALM_LOG.get()));
         axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_PALM_WOOD.get()), blockTexture(ModBlocks.STRIPPED_PALM_LOG.get()),blockTexture(ModBlocks.STRIPPED_PALM_LOG.get()));
-        blockWithItem(ModBlocks.PALM_LEAVES);
+        blockWithItemCutout(ModBlocks.PALM_LEAVES);
         customSaplingBlock(ModBlocks.PALM_SAPLING, "palm_sapling");
         simpleBlockItem(ModBlocks.PALM_LOG.get(),models().withExistingParent("extrabiomes:palm_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.PALM_WOOD.get(),models().withExistingParent("extrabiomes:palm_wood", "minecraft:block/cube_column"));
@@ -137,18 +137,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
         saplingBlock(ModBlocks.YELLOW_MUSHROOM);
         saplingBlock(ModBlocks.GLOW_MUSHROOM);
         // Mushrooms
-        blockWithItem(ModBlocks.BLACK_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.BLUE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.CYAN_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.GREEN_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.ORANGE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.PURPLE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.WHITE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.YELLOW_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.GLOW_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.BLACK_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.BLUE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.CYAN_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.GREEN_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.ORANGE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.PURPLE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.WHITE_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.YELLOW_MUSHROOM_BLOCK);
+        blockWithItemCutout(ModBlocks.GLOW_MUSHROOM_BLOCK);
     }
     private void blockWithItem(RegistrySupplier<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));
+    }
+
+    // Without cutout, transparent pixels in the texture render as opaque black instead of
+    // being cut out. Sets the render type on the block model itself (Forge's replacement for
+    // the removed runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) API).
+    private void blockWithItemCutout(RegistrySupplier<Block> blockRegistryObject){
+        simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(name(blockRegistryObject.get()), blockTexture(blockRegistryObject.get())).renderType("cutout"));
     }
 
     private void saplingBlock(RegistrySupplier<Block> blockRegistryObject){

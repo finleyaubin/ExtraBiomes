@@ -80,15 +80,15 @@ public class StonePillarsFeature {
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
         context.register(STONE_PILLAR_1_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
         ));
         context.register(STONE_PILLAR_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
         ));
         context.register(STONE_PILLAR_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
         ));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);

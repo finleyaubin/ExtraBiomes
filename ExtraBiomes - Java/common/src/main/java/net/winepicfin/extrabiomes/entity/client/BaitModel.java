@@ -8,9 +8,9 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.custom.projectile.BaitProjectileEntity;
 
-public class BaitModel<T extends Entity> extends HierarchicalModel<T> {
+public class BaitModel<T extends BaitProjectileEntity> extends HierarchicalModel<T> {
 	private final ModelPart modelRoot;
 	private final ModelPart body;
 	private final ModelPart worm1;
@@ -193,6 +193,18 @@ public class BaitModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		// Worms fall off one at a time as the bait is bitten down, instead of just fading the shared texture.
+		int visibleWorms = Mth.clamp(Mth.ceil(9f * entity.getHealth() / (float) entity.getMaxHealth()), 0, 9);
+		this.worm1.visible = visibleWorms >= 1;
+		this.worm2.visible = visibleWorms >= 2;
+		this.worm3.visible = visibleWorms >= 3;
+		this.worm4.visible = visibleWorms >= 4;
+		this.worm5.visible = visibleWorms >= 5;
+		this.worm6.visible = visibleWorms >= 6;
+		this.worm7.visible = visibleWorms >= 7;
+		this.worm8.visible = visibleWorms >= 8;
+		this.worm9.visible = visibleWorms >= 9;
+
 		// animation.bait.wrigle: all worm segment chains flex in an alternating +/-45 degree pattern off abs(sin(life_time)); slowed from the Bedrock source's *50 for a calmer wiggle.
 		// Each worm gets a phase offset so the 9 chains don't all flex in lockstep.
 		float lifeTime = ageInTicks / 20f;
@@ -205,6 +217,12 @@ public class BaitModel<T extends Entity> extends HierarchicalModel<T> {
 		applyWiggle(lifeTime, 6, this.head25, this.head26, this.head27, this.body8);
 		applyWiggle(lifeTime, 7, this.head29, this.head30, this.head31, this.body9);
 		applyWiggle(lifeTime, 8, this.head33, this.head34, this.head35, this.body10);
+
+		// Not a LivingEntity, so no automatic hurt shake - fake it with a quick decaying wobble on the whole body.
+		if (entity.getHurtTime() > 0) {
+			float shake = Mth.sin(entity.getHurtTime() * 3.0F) * (entity.getHurtTime() / 10f) * 0.15F;
+			this.body.zRot += shake;
+		}
 	}
 
 	private static void applyWiggle(float lifeTime, int wormIndex, ModelPart first, ModelPart second, ModelPart third, ModelPart fourth) {

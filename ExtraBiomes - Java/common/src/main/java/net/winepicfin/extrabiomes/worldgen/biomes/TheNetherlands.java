@@ -9,7 +9,6 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWindmillFeature;
 
 public class TheNetherlands {
 
@@ -23,7 +22,7 @@ public class TheNetherlands {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        ModBiomes.globalOverworldGeneration(biomeBuilder);
+        ModBiomes.globalOverworldGeneration(biomeBuilder, false);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COAL_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COPPER_ORE_PLACED_KEY);
@@ -34,15 +33,17 @@ public class TheNetherlands {
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.LAPIS_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.QUARTZ_ORE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.REDSTONE_ORE_PLACED_KEY);
-        BiomeDefaultFeatures.addPlainVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
+        // No addPlainVegetation/addDefaultFlowers: both place fine on plain dirt (not just grass_block),
+        // and Bedrock's reference for this biome has only its tulip fields below, no vanilla grass/flowers.
         // Despite Bedrock's 'nether'/'nether_wastes' spawn-category tags, this biome generates in the OVERWORLD and is themed after the real-world Netherlands (tulips, windmills, wheat, canals).
         // Base (non-mutated) TheNetherlands gets tulip fields; TheNetherlandsMutated gets wheat/canal instead.
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.ORANGE_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.PINK_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.RED_TULIP_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.WHITE_TULIP_FLOOR_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, NetherlandsWindmillFeature.WINDMILL_NETHERLANDS_PLACED_KEY);
+        // Windmill generation moved off this biome-features list entirely - it's now a real jigsaw
+        // Structure (see WindmillStructures), which attaches to biomes via its own Structure.biomes()
+        // HolderSet rather than a per-biome addFeature call.
         // No custom cave carver on Java: the netherrack band (see ModSurfaceRules) is capped low enough that the vanilla carver already reaches plain stone before bedrock, so Bedrock's netherrack-aware carver isn't needed.
 
         return new Biome.BiomeBuilder()

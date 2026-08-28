@@ -32,7 +32,7 @@ public class FabricModEvents {
         FabricDefaultAttributeRegistry.register(ModEntities.HARPY.get(), HarpyEntity.createAttributes());
 
         SpawnPlacements.register(ModEntities.WORM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Animal::checkAnimalSpawnRules);
+                WormEntity::checkWormSpawnRules);
         SpawnPlacements.register(ModEntities.TREEFROG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules);
         SpawnPlacements.register(ModEntities.HOPPLESHROOM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
@@ -42,8 +42,10 @@ public class FabricModEvents {
         SpawnPlacements.register(ModEntities.JELLYFISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
         SpawnPlacements.register(ModEntities.PIRANHA.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+                PiranhaEntity::checkPiranhaSpawnRules);
         SpawnPlacements.register(ModEntities.HARPY.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 HarpyEntity::checkHarpySpawnRules);
+        SpawnPlacements.register(ModEntities.PUCKOO.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules);
     }
 }

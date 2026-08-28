@@ -218,5 +218,7 @@
   "advancements.extrabiomes.dutch_treasure.title": "Dutch Treasure",
   "advancements.extrabiomes.dutch_treasure.description": "Mine a Nether Diamond Ore in The Netherlands",
   "advancements.extrabiomes.biome_explorer.title": "Biome Explorer",
-  "advancements.extrabiomes.biome_explorer.description": "Discover every biome ExtraBiomes adds"
+  "advancements.extrabiomes.biome_explorer.description": "Discover every biome ExtraBiomes adds",
+  "advancements.extrabiomes.bait_and_switch.title": "Bait and Switch",
+  "advancements.extrabiomes.bait_and_switch.description": "Use bait to lure a Piranha away from you"
 }

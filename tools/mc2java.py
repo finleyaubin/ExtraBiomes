@@ -259,6 +259,24 @@ def convert(path, warnings, id_counter):
                 warnings.append("unmapped block id: %s states=%s" % (name, states))
                 java_name, props = "minecraft:air", {}
 
+            # Bedrock only actually uses the LOWER door half's direction/hinge for
+            # rendering in-game - the upper half's own direction/door_hinge_bit is
+            # vestigial and frequently stale/inconsistent with the half below it
+            # (confirmed against windmill.mcstructure: its door's lower half has
+            # direction=1/west, upper has direction=0/south). Java's DoorBlock, unlike
+            # Bedrock, renders each half from its OWN stored facing, so copying the
+            # upper half's raw state literally produces a door whose two halves face
+            # different directions (looks visibly broken/split in-world). Overwrite
+            # with the lower half's real facing/hinge instead of trusting the upper's.
+            if name == "minecraft:spruce_door" and states.get("upper_block_bit") in (1, True):
+                below_pidx = layer0[flat - sz] if flat - sz >= 0 else -1
+                if below_pidx is not None and below_pidx >= 0:
+                    below_entry = palette[below_pidx]
+                    if below_entry["name"] == "minecraft:spruce_door":
+                        below_states = below_entry.get("states", {})
+                        props["facing"] = block_map.BED_DIRECTION.get(int(below_states.get("direction", 0)), "south")
+                        props["hinge"] = "right" if below_states.get("door_hinge_bit") in (1, True) else "left"
+
         # --- waterlogging from secondary layer ---
         if "waterlogged" in props and layer1 is not None:
             if is_water_source(layer1[flat]):

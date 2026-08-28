@@ -1,8 +1,10 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -15,20 +17,24 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.winepicfin.extrabiomes.Config;
 import net.winepicfin.extrabiomes.entity.ai.PiranhaBaitGoal;
 import net.winepicfin.extrabiomes.entity.custom.projectile.BaitProjectileEntity;
 import org.jetbrains.annotations.Nullable;
@@ -75,7 +81,33 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     }
 
     private static double attackDamageForScale(float scale) {
-        return lerp(scale, PiranhaTuning.ATTACK_DAMAGE_AT_MIN_SCALE, PiranhaTuning.ATTACK_DAMAGE_AT_MAX_SCALE);
+        double damage = lerp(scale, PiranhaTuning.ATTACK_DAMAGE_AT_MIN_SCALE, PiranhaTuning.ATTACK_DAMAGE_AT_MAX_SCALE);
+        return Config.weakerPiranhas ? damage * PiranhaTuning.WEAKER_DAMAGE_MULTIPLIER : damage;
+    }
+
+    // Piranha's own spawn cap, independent of the shared WATER_AMBIENT category cap that vanilla's
+    // schooling fish also use (see PiranhaTuning.LOCAL_DENSITY_LIMIT and MobSpawnCapTuning). Also
+    // applies Config.weakerPiranhas' extra spawn-chance roll and hard world-wide cap when enabled.
+    public static boolean checkPiranhaSpawnRules(EntityType<PiranhaEntity> type, ServerLevelAccessor level,
+                                                  MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        if (!WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, spawnType, pos, random)) {
+            return false;
+        }
+        if (Config.weakerPiranhas) {
+            if (random.nextFloat() >= PiranhaTuning.WEAKER_SPAWN_CHANCE) {
+                return false;
+            }
+            int piranhaCount = 0;
+            for (Entity entity : level.getLevel().getAllEntities()) {
+                if (entity instanceof PiranhaEntity && ++piranhaCount >= PiranhaTuning.WEAKER_MOB_CAP) {
+                    return false;
+                }
+            }
+        }
+        AABB nearby = new AABB(pos).inflate(PiranhaTuning.LOCAL_DENSITY_RADIUS_XZ, PiranhaTuning.LOCAL_DENSITY_RADIUS_Y,
+                PiranhaTuning.LOCAL_DENSITY_RADIUS_XZ);
+        return level.getEntitiesOfClass(PiranhaEntity.class, nearby, entity -> true).size()
+                < PiranhaTuning.LOCAL_DENSITY_LIMIT;
     }
 
     @Override
@@ -85,9 +117,10 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, PiranhaTuning.RANDOM_SWIM_SPEED, 20));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        // Piranhas also go after any other mob that wanders into the water, not just players (Bedrock's "is_family mob && != fish" entry).
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
-                (LivingEntity target) -> !(target instanceof WaterAnimal) && target.isInWater()));
+        // Piranhas also go after farm animals nearby, including on the shoreline, not just players (Bedrock's "is_family mob && != fish" entry). Tamed pets are exempt.
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Animal.class, 10, true, false,
+                (LivingEntity target) -> !(target instanceof WaterAnimal)
+                        && !(target instanceof TamableAnimal tamable && tamable.isTame())));
     }
 
     @Override

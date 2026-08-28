@@ -59,11 +59,16 @@ import java.util.List;
  *       biome wiring pass adds each PlacedFeature to the JellyfishFields biome directly via
  *       biomeBuilder.addFeature(...), and {@link BiomeFilter#biome()} (last modifier below) is what makes
  *       that per-biome registration actually take effect during generation.</li>
- *   <li>Simplification: the converted .nbt structures reference several Bedrock block ids that
- *       tools/mc2java.py does not yet map (minecraft:coral_block, minecraft:coral_fan,
- *       minecraft:coral_fan_hang, minecraft:kelp, minecraft:sea_pickle - see the conversion warnings
- *       printed for each jellycoral_N.nbt) - these will come through as air in the converted structures
- *       until that mapping table is extended; not something patched as part of this change.</li>
+ *   <li>Deviation from Bedrock: the converted .nbt structures originally carried Bedrock's own explicit
+ *       {@code minecraft:water} fill (needed there since Bedrock structures don't auto-merge with existing
+ *       terrain). On Java, placing that as a literal block unconditionally overwrites whatever's already
+ *       at each position - including air above the natural water surface near coastlines/shallows - which
+ *       reads as the structure locally raising the ocean's surface. The four jellycoral_N.nbt files have
+ *       had their water palette entries replaced with {@code minecraft:structure_void} (leave-as-is), so
+ *       placement now relies on the surrounding ocean plus the structure's own waterlogged coral
+ *       fans/pickles (which hold their water via the {@code waterlogged} state, not an adjacent block) -
+ *       see {@link SingleStructureConfiguration#minSubmergedFraction()}, set to 0.9F below, which rejects
+ *       placement unless the structure's rotated bounding box is at least 90% water/waterlogged.</li>
  * </ul>
  */
 public class JellyCoralFeatures {
@@ -92,10 +97,14 @@ public class JellyCoralFeatures {
         registerConfigured(context, JELLYCORAL_4_KEY, "jellycoral_4");
     }
 
+    // Structures no longer bundle their own water fill (see class javadoc) - require the placement site to
+    // already be almost entirely underwater so the coral/kelp/pickle pieces don't land high and dry.
+    private static final float MIN_SUBMERGED_FRACTION = 0.9F;
+
     private static void registerConfigured(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName) {
         context.register(key, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0)
+                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION)
         ));
     }
 

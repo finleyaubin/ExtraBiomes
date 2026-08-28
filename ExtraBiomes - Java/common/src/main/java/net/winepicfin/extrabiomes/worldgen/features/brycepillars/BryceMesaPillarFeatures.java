@@ -61,16 +61,20 @@ public class BryceMesaPillarFeatures {
                 Blocks.BROWN_TERRACOTTA.defaultBlockState()
         );
 
+        // Per-material geometry, not just per-material colour: real Bryce Canyon-style erosion looks different in soft vs. hard rock, so each entry below tunes height/thickness/edge-roughness to its own material rather than all four sharing BrycePillarsConfiguration's one-size-fits-all defaults. maxRadius is now a fin's thickness basis (BrycePillarsFeature halves it) and erosionStrength is edge wobble, not the old cone's radial noise.
+        // Terracotta is the namesake Bryce Canyon material - kept at the original, moderate tuning every other entry is now tuned relative to.
         context.register(TERRACOTTA_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(Blocks.TERRACOTTA.defaultBlockState(), terracottaStreaks)));
+                new BrycePillarsConfiguration(Blocks.TERRACOTTA.defaultBlockState(), terracottaStreaks, 10, 40, 0.97F, 6, 1.5F, java.util.Optional.empty())));
+        // Sand can't hold a tall thin wall without slumping - shorter cap, a thicker base, and heavier edge wobble so the outline reads as soft/rounded rather than a sandstone-sharp fin.
         context.register(SAND_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(Blocks.SAND.defaultBlockState(), List.of())));
+                new BrycePillarsConfiguration(Blocks.SAND.defaultBlockState(), List.of(), 6, 22, 0.96F, 8, 2.2F, java.util.Optional.empty())));
+        // Tuff is hard rock - taller, thinner fins with a lighter edge wobble so they stay sharp instead of crumbling; this is the material the shattered_swamp/shattered_taiga_spikes reference screenshot is aiming for.
         context.register(TUFF_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(Blocks.TUFF.defaultBlockState()))));
+                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(Blocks.TUFF.defaultBlockState()), 12, 34, 0.97F, 4, 0.9F, java.util.Optional.empty())));
         // Bedrock's jungle_pillars config is flat stone/stone - an empty streak palette collapses the 192-layer array to one repeated colour, still running through the same banding code path.
-        // Grass-capped (see BrycePillarsConfiguration#capMaterial) so JunglePillars.java's existing addJungleTrees/addJungleGrass calls have valid ground to land jungle vegetation on top of these pillars, not just on the flat ground between them.
+        // Grass-capped (see BrycePillarsConfiguration#capMaterial) so JunglePillars.java's existing addJungleTrees/addJungleGrass calls have valid ground to land jungle vegetation on top of these formations, not just on the flat ground between them; kept a bit thicker than tuff so those caps have enough room for trees.
         context.register(STONE_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
-                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(), java.util.Optional.of(Blocks.GRASS_BLOCK.defaultBlockState()))));
+                new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(), 10, 28, 0.97F, 6, 1.0F, java.util.Optional.of(Blocks.GRASS_BLOCK.defaultBlockState()))));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {

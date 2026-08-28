@@ -1,9 +1,12 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.Biomes;
+import net.winepicfin.extrabiomes.util.ModTags;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
 import java.util.concurrent.CompletableFuture;
@@ -65,5 +68,18 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
                 ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES);
         this.tag(BiomeTags.SPAWNS_WHITE_RABBITS).add(ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,
                 ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES);
+
+        // Mob-spawn biome groupings (see FabricBiomeModifiers). Piranha/Treefrog/Hoppleshroom read
+        // the shared cross-loader convention tags (c:swamp, c:mushroom - Forge's own
+        // ModBiomeTagProvider mirrors these onto forge:is_swamp/is_mushroom) directly rather than a
+        // mod-local tag, so a third-party mod's swamp/mushroom biome is picked up automatically
+        // without needing to know ExtraBiomes exists. We also contribute our own biomes into those
+        // same convention tags, the same courtesy other mods extend to us.
+        this.tag(ConventionalBiomeTags.SWAMP).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP);
+        this.tag(ConventionalBiomeTags.MUSHROOM).add(Biomes.MUSHROOM_FIELDS);
+
+        this.tag(ModTags.Biomes.IS_WETLAND).addTag(ConventionalBiomeTags.SWAMP).add(ModBiomes.MOORLANDS);
+        this.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM).addTag(ConventionalBiomeTags.MUSHROOM).add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
+        this.tag(ModTags.Biomes.SPAWNS_JELLYFISH).add(ModBiomes.JELLYFISH_FIELDS);
     }
 }

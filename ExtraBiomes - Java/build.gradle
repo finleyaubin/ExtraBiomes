@@ -35,6 +35,20 @@ subprojects {
             name = 'Modrinth'
             url 'https://api.modrinth.com/maven'
         }
+        // Create's own maven - hosts its Forge jar (Create-Fabric is resolved through Modrinth's proxy
+        // above instead - see fabric/build.gradle). Used only for the optional windmill Create-bearing
+        // compat in each module's compat/create package.
+        maven {
+            name = 'CreateMod'
+            url 'https://maven.createmod.net'
+        }
+        // Registrate - Create's registration library, referenced transitively by forge/build.gradle's
+        // Create dependency (AllBlocks.WINDMILL_BEARING.get() returns Registrate's BlockEntry<T>, so its
+        // class needs to be on the compile classpath even though this mod never calls into it directly).
+        maven {
+            name = 'tterrag'
+            url 'https://maven.tterrag.com'
+        }
     }
 }
 
