@@ -34,3 +34,6 @@ forge*changelog.txt
 /*/src/generated/
 # leftover from the pre-multiloader single-module ForgeGradle layout
 /src/
+
+# architectury-transformer debug log
+.architectury-transformer/
