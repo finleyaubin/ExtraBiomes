@@ -27,6 +27,17 @@ subprojects {
         maven {
             name = 'JitPack'
             url 'https://jitpack.io'
+            // Nothing in this project actually resolves a real com.github.* coordinate through
+            // this repo (the "com.github.johnrengelman.shadow" plugin id is a Gradle plugin,
+            // resolved via pluginManagement, not this block). Left in place in case a future
+            // dependency needs it, but excluded from the "maven.modrinth" group specifically:
+            // JitPack has no such GitHub project, and instead of 401ing quickly (as the comment
+            // below originally observed), it now hangs on a lazy on-demand build attempt for
+            // over two minutes before giving up - excluding the group here skips straight to
+            // Modrinth's own maven proxy below instead of eating that timeout on every resolve.
+            content {
+                excludeGroup 'maven.modrinth'
+            }
         }
         // TerraBlender-forge is fetched through Modrinth's Maven proxy (see common/build.gradle)
         // because JitPack now 401s on the glitchfiend/TerraBlender-forge coordinate — the repo's
