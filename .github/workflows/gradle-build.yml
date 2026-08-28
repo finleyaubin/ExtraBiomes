@@ -183,7 +183,14 @@ jobs:
             mkfifo "gt-$t.fifo"
             timeout "${TEST_TIMEOUTS[$t]}" ./gradlew :forge:runGameTestServer < "gt-$t.fifo" > "gt-$t.log" 2>&1 &
             GPID=$!
-            ( sleep 60; echo "test run $t"; sleep 60; echo "stop" ) > "gt-$t.fifo"
+            # A fast-passing test can crash the server (see the post-pass beacon-placement bug
+            # documented above) before this subshell's second write, closing the fifo's read end -
+            # that write then fails with a broken-pipe SIGPIPE, and since this step's shell runs
+            # under `set -e` (GitHub's default bash mode), an unguarded failure here would abort
+            # the whole loop after just one test (observed: plainsGetsHarpySpawn passing almost
+            # instantly and killing every later iteration). `|| true` on each write, same as
+            # `wait "$GPID" || true` below, makes that expected race harmless instead of fatal.
+            ( sleep 60; echo "test run $t" || true; sleep 60; echo "stop" || true ) > "gt-$t.fifo" || true
             wait "$GPID" || true
 
             if grep -qE ': failed$' "gt-$t.log"; then

@@ -96,10 +96,19 @@ dependencies {
     // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle for why.
     modImplementation "maven.modrinth:terrablender:${terrablender_neoforge_modrinth_id}"
 
-    // GeckoLib has a native NeoForge 1.20.2 artifact (unlike forge/build.gradle's hand-merged
-    // geckolib+mclib jar) - confirmed via Cloudsmith's geckolib-neoforge-1.20.2 maven metadata,
-    // so no jar-in-jar module-visibility workaround is needed here.
-    modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+    // GeckoLib's native NeoForge 1.20.2 artifact still bundles mclib via Jar-in-Jar
+    // (META-INF/jarjar/mclib-20.jar) rather than shipping it directly in its own classes -
+    // same "Loom's dev classpath doesn't extract jar-in-jars, and FML's per-mod module
+    // isolation can't see mclib even when it's resolved as its own dependency" problem as
+    // forge/build.gradle's geckolib+mclib comment (confirmed here too: NoClassDefFoundError
+    // on com.eliotlash.mclib.math.IValue during GeckoLib's animation loading on a real
+    // `runClient`). Same fix: libs/geckolib-neoforge-1.20.2-4.3.1-with-mclib.jar is
+    // geckolib-neoforge-1.20.2-4.3.1.jar with mclib-20.jar's classes merged in (mclib's
+    // META-INF excluded, GeckoLib's kept); regenerate by re-running the equivalent of:
+    //   unzip geckolib-neoforge-1.20.2-4.3.1.jar -d tmp/ && unzip -o mclib-20.jar -d tmp/ -x "META-INF/*"
+    //   (cd tmp && zip -r ../libs/geckolib-neoforge-1.20.2-4.3.1-with-mclib.jar .)
+    // if bumping geckolib_version or mclib's "20".
+    modImplementation files("libs/geckolib-neoforge-1.20.2-4.3.1-with-mclib.jar")
 
     // Optional/soft dependency, compile-only - see neoforge/compat/create/CreateWindmillCompat.java
     // and platform/neoforge/ExtraBiomesExpectPlatformImpl#applyWindmillCreateCompat. Same deal as
