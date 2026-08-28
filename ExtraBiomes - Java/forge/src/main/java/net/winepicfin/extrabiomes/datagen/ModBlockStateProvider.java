@@ -113,9 +113,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
         // Gilded Sky wood
         blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.GILDED_SKY_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.GILDED_SKY_WOOD.get()), blockTexture(ModBlocks.GILDED_SKY_LOG.get()),blockTexture(ModBlocks.GILDED_SKY_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()), blockTexture(ModBlocks.STRIPPED_GILDED_SKY_LOG.get()),blockTexture(ModBlocks.STRIPPED_GILDED_SKY_LOG.get()));
         simpleBlockItem(ModBlocks.GILDED_SKY_LOG.get(),models().withExistingParent("extrabiomes:gilded_sky_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.GILDED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:gilded_sky_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),models().withExistingParent("extrabiomes:stripped_gilded_sky_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:stripped_gilded_sky_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.GILDED_SKY_STAIRS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         slabBlock(((SlabBlock) ModBlocks.GILDED_SKY_SLAB.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.GILDED_SKY_BUTTON.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
