@@ -56,7 +56,7 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_SPAWN_WORM = registerKey("add_spawn_worm");
     public static final ResourceKey<BiomeModifier> ADD_SPAWN_PUCKOO_BEACH = registerKey("add_spawn_puckoo_beach");
 
-    private static final TagKey<Biome> IS_OVERWORLD = TagKey.create(Registries.BIOME, ResourceLocation.parse("minecraft:is_overworld"));
+    private static final TagKey<Biome> IS_OVERWORLD = TagKey.create(Registries.BIOME, new ResourceLocation("minecraft:is_overworld"));
 
     public static void bootstrap(BootstapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -201,6 +201,6 @@ public class ModBiomeModifiers {
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {
-        return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(ForgeRegistries.Keys.BIOME_MODIFIERS, new ResourceLocation(ExtraBiomes.MOD_ID, name));
     }
 }

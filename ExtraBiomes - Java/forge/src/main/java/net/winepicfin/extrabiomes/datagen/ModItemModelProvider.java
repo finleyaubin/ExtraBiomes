@@ -65,7 +65,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.CUT_BLACK_SANDSTONE_SLAB);
         evenSimplerBlockItem(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB);
         withExistingParent(ForgeRegistries.BLOCKS.getKey(ModBlocks.BLACK_SANDSTONE_WALL.get()).getPath(), mcLoc("block/wall_inventory"))
-                .texture("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone"));
+                .texture("wall", new ResourceLocation(ExtraBiomes.MOD_ID, "block/black_sandstone"));
 
         // Mystic Wood
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);
@@ -159,9 +159,9 @@ public class ModItemModelProvider extends ItemModelProvider {
                 String armorItemPath = "item/" + armorItem;
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
-                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, armorItemPath);
-                ResourceLocation trimResLoc = ResourceLocation.parse(trimPath); // minecraft namespace
-                ResourceLocation trimNameResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, currentTrimName);
+                ResourceLocation armorItemResLoc = new ResourceLocation(ExtraBiomes.MOD_ID, armorItemPath);
+                ResourceLocation trimResLoc = new ResourceLocation(trimPath); // minecraft namespace
+                ResourceLocation trimNameResLoc = new ResourceLocation(ExtraBiomes.MOD_ID, currentTrimName);
 
                 // This is used for making the ExistingFileHelper acknowledge that this texture exist, so this will
                 // avoid an IllegalArgumentException
@@ -181,7 +181,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
                         .predicate(mcLoc("trim_type"), trimValue).end()
                         .texture("layer0",
-                                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,
+                                new ResourceLocation(ExtraBiomes.MOD_ID,
                                         "item/" + itemRegistryObject.getId().getPath()));
             });
         }
@@ -189,8 +189,8 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder simpleItem(RegistrySupplier<Item> item){
         return withExistingParent(item.getId().getPath(),
-            ResourceLocation.parse("item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+            new ResourceLocation("item/generated")).texture("layer0",
+                new ResourceLocation(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
     }
     public void evenSimplerBlockItem(RegistrySupplier<Block> block) {
         this.withExistingParent(ExtraBiomes.MOD_ID + ":" + ForgeRegistries.BLOCKS.getKey(block.get()).getPath(),
@@ -204,23 +204,23 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     public void fenceItem(RegistrySupplier<Block> block, RegistrySupplier<Block> baseBlock) {
         this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/fence_inventory"))
-                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
+                .texture("texture",  new ResourceLocation(ExtraBiomes.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
     }
 
     public void buttonItem(RegistrySupplier<Block> block, RegistrySupplier<Block> baseBlock) {
         this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/button_inventory"))
-                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
+                .texture("texture",  new ResourceLocation(ExtraBiomes.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
     }
 
     private ItemModelBuilder simpleBlockItem(RegistrySupplier<Block> item) {
         return withExistingParent(item.getId().getPath(),
-                ResourceLocation.parse("item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+                new ResourceLocation("item/generated")).texture("layer0",
+                new ResourceLocation(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
     }
 
     private ItemModelBuilder saplingItem(RegistrySupplier<Block> item) {
         return withExistingParent(item.getId().getPath(),
-                ResourceLocation.parse("item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"block/" + item.getId().getPath()));
+                new ResourceLocation("item/generated")).texture("layer0",
+                new ResourceLocation(ExtraBiomes.MOD_ID,"block/" + item.getId().getPath()));
     }
 }

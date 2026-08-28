@@ -14,8 +14,8 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.gametest.GameTestDontPrefix;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnCapTuning;
@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 // than searching generated chunks. Reuses the same shared 1x1x1 empty structure template as the
 // other gametests in this package.
 @GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
+@GameTestDontPrefix
 public class BiomeModifierApplicationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 

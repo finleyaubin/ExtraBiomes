@@ -7,8 +7,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.gametest.GameTestDontPrefix;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ import java.util.List;
 // loader-agnostic). A GameTest sidesteps this entirely by reusing the mod's own already-registered
 // live items instead of constructing new ones.
 @GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
+@GameTestDontPrefix
 public class SpawnEggItemGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 

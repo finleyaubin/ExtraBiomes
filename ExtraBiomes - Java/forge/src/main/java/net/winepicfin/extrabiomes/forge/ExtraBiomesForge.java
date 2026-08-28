@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -96,8 +97,10 @@ public class ExtraBiomesForge
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        context.registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
+        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us.
+        // FMLJavaModLoadingContext#registerConfig was removed in Forge 48.x (1.20.2) - this is now
+        // only on ModLoadingContext.
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -

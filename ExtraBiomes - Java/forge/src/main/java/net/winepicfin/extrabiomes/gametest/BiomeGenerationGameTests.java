@@ -9,8 +9,8 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.GameTestSequence;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.gametest.GameTestDontPrefix;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.BiomeClimateTuning;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ import java.util.List;
 // Requires no physical structure, so it uses a shared 1x1x1 air template
 // (data/extrabiomes/structures/empty.nbt) rather than one authored per test.
 @GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
+@GameTestDontPrefix
 public class BiomeGenerationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final int SEARCH_RADIUS_BLOCKS = 15_000;

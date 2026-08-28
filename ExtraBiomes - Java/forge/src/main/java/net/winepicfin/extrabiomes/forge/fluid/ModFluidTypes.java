@@ -19,9 +19,9 @@ import org.joml.Vector3f;
 // instead subscribes a RegisterEvent listener on the given event bus and genuinely defers
 // until that event fires, which is what a registry created this late actually requires.
 public class ModFluidTypes {
-    public static final ResourceLocation WATER_STILL_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_still");
-    public static final ResourceLocation WATER_FLOWING_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_flow");
-    public static final ResourceLocation GOO_OVERLAY_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo");
+    public static final ResourceLocation WATER_STILL_RL = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo_still");
+    public static final ResourceLocation WATER_FLOWING_RL = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo_flow");
+    public static final ResourceLocation GOO_OVERLAY_RL = new ResourceLocation(ExtraBiomes.MOD_ID, "misc/goo");
 
     public static final DeferredRegister<FluidType> FLUID_TYPES =
             DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, ExtraBiomes.MOD_ID);
