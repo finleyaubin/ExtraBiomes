@@ -20,7 +20,6 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.winepicfin.extrabiomes.fabric.compat.create.CreateWindmillCompat;
 import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 import net.winepicfin.extrabiomes.fabric.mixin.WoodTypeAccessor;
 import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
@@ -78,11 +77,11 @@ public class ExtraBiomesExpectPlatformImpl {
         return FabricLoader.getInstance().isModLoaded("create");
     }
 
-    // See the forge counterpart of this method for the full rationale - identical gating, just against
-    // FabricLoader instead of ModList.
+    // CreateWindmillCompat itself is excluded from compilation (see fabric/build.gradle) - no
+    // 1.20.2 Create-Fabric build exists yet (as of 2026-08-28), so the modCompileOnly Create-Fabric
+    // dependency it needs isn't available. isCreateLoaded() above will always report false until
+    // Create-Fabric ships a 1.20.2 build and both this method and the build.gradle exclusion are
+    // reverted.
     public static void applyWindmillCreateCompat(WorldGenLevel level, BoundingBox box) {
-        if (FabricLoader.getInstance().isModLoaded("create")) {
-            CreateWindmillCompat.apply(level, box);
-        }
     }
 }

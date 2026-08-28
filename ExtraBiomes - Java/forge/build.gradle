@@ -7,6 +7,13 @@ architectury {
     forge()
 }
 
+// No 1.20.2 Create build exists yet (see the modCompileOnly Create/Registrate lines below) -
+// CreateWindmillCompat imports real Create classes and can't compile without it. Excluded
+// wholesale rather than left to fail the build; re-include once Create ships for 1.20.2.
+sourceSets.main.java {
+    exclude 'net/winepicfin/extrabiomes/forge/compat/create/**'
+}
+
 loom {
     // src/main/resources/META-INF/accesstransformer.cfg is picked up automatically by Loom's forge platform.
     runs {
@@ -92,16 +99,16 @@ dependencies {
     // own module, so mclib has to physically live inside GeckoLib's jar - exactly what Forge's
     // (non-functional-here) Jar-in-Jar step would normally have done.
     //
-    // libs/geckolib-forge-1.20.1-4.7.3-with-mclib.jar is geckolib-forge-1.20.1-4.7.3.jar with
+    // libs/geckolib-forge-1.20.2-4.3.1-with-mclib.jar is geckolib-forge-1.20.2-4.3.1.jar with
     // mclib-20.jar's classes merged in (mclib's META-INF excluded, GeckoLib's kept). It has to
     // be a real file present before Gradle configures this project - Loom's ModConfigurationRemapper
     // checksums every modImplementation artifact during project configuration, before any task
     // (including one that could build this jar) has run - so it can't be produced by a Gradle
     // task; regenerate it by re-running the equivalent of:
-    //   unzip geckolib-forge-1.20.1-4.7.3.jar -d tmp/ && unzip -o mclib-20.jar -d tmp/ -x "META-INF/*"
-    //   (cd tmp && zip -r ../libs/geckolib-forge-1.20.1-4.7.3-with-mclib.jar .)
+    //   unzip geckolib-forge-1.20.2-4.3.1.jar -d tmp/ && unzip -o mclib-20.jar -d tmp/ -x "META-INF/*"
+    //   (cd tmp && zip -r ../libs/geckolib-forge-1.20.2-4.3.1-with-mclib.jar .)
     // if bumping geckolib_version or mclib's "20".
-    modImplementation files("libs/geckolib-forge-1.20.1-4.7.3-with-mclib.jar")
+    modImplementation files("libs/geckolib-forge-1.20.2-4.3.1-with-mclib.jar")
 
     // Optional/soft dependency, compile-only - see forge/compat/create/CreateWindmillCompat.java and
     // platform/forge/ExtraBiomesExpectPlatformImpl#applyWindmillCreateCompat. Never bundled or required
@@ -109,11 +116,13 @@ dependencies {
     // Create installed. Version/classifier taken from Create's own "depend on Create" docs for 1.20.1 at
     // the time this was added - bump alongside terrablender_version-style pins if Create publishes a
     // newer 1.20.1 build and this stops resolving.
-    modCompileOnly("com.simibubi.create:create-1.20.1:6.0.8-289:slim") { transitive = false }
+    // No 1.20.2 Create build available as of 2026-08-28 - re-enable when one ships.
+    // modCompileOnly("com.simibubi.create:create-1.20.1:6.0.8-289:slim") { transitive = false }
     // Registrate - see root build.gradle's tterrag maven repo comment for why this is needed alongside
     // Create itself. compileOnly (not modCompileOnly): a plain library jar, not a mod, so it needs no
     // Loom remapping.
-    compileOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.3") { transitive = false }
+    // No 1.20.2 Registrate build available as of 2026-08-28 - re-enable when one ships.
+    // compileOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.3") { transitive = false }
 
     // TEMPORARY, local-only: lets the dev client actually load Create so its windmill-bearing compat can
     // be watched running for real. Never commit this block - Create must stay compileOnly-only for the
