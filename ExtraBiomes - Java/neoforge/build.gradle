@@ -1,0 +1,145 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+// No 1.20.2 Create build exists yet (see forge/build.gradle's identical note) - CreateWindmillCompat
+// imports real Create classes and can't compile without it. Excluded wholesale rather than left to
+// fail the build; re-include once Create ships a NeoForge 1.20.2 build.
+sourceSets.main.java {
+    exclude 'net/winepicfin/extrabiomes/neoforge/compat/create/**'
+}
+
+loom {
+    // src/main/resources/META-INF/accesstransformer.cfg is picked up automatically by Loom's
+    // neoforge platform, same as forge's (NeoForge 1.20.2 still shares Forge's AT mechanism and
+    // obfuscation mapping data - the two hadn't diverged mapping-wise yet at this MC version).
+    runs {
+        client {
+            configName = "NeoForge Client"
+            client()
+            source sourceSets.main
+        }
+        server {
+            configName = "NeoForge Server"
+            server()
+            source sourceSets.main
+        }
+        // TODO: a "data" run (clientData()) is temporarily omitted here - `loom.runs.data { clientData() }`
+        // throws "RunConfigSettings.clientData() is only usable on NeoForge" even with
+        // `architectury { neoForge() }` already applied, on this exact pinned Loom/plugin build
+        // (1.11.458/3.4.164) - looks like a real gap/bug in this version's NeoForge platform
+        // detection timing for eagerly-evaluated `runs{}` blocks, not a config mistake (forge's
+        // identical-shaped data run works fine). Needs its own investigation; not blocking the
+        // rest of the module scaffold. Datagen for NeoForge can still be produced by copying
+        // common/src/generated/resources from a `:forge:runData` run in the meantime.
+        gameTestServer {
+            configName = "NeoForge Game Test Server"
+            server()
+            source sourceSets.main
+            vmArgs "-Dforge.enabledGameTestNamespaces=${mod_id}"
+        }
+    }
+}
+
+// Same reasoning as forge/build.gradle's clearGameTestWorld - a leftover run/world/ save from a
+// previous run would silently keep its own untracked seed instead of the pinned one.
+tasks.register("clearGameTestWorld", Delete) {
+    delete file("run/world")
+}
+tasks.named("runGameTestServer") {
+    dependsOn "clearGameTestWorld"
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
+    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+
+    // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle for why.
+    modImplementation "maven.modrinth:terrablender:${terrablender_neoforge_modrinth_id}"
+
+    // GeckoLib has a native NeoForge 1.20.2 artifact (unlike forge/build.gradle's hand-merged
+    // geckolib+mclib jar) - confirmed via Cloudsmith's geckolib-neoforge-1.20.2 maven metadata,
+    // so no jar-in-jar module-visibility workaround is needed here.
+    modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+
+    // Optional/soft dependency, compile-only - see neoforge/compat/create/CreateWindmillCompat.java
+    // and platform/neoforge/ExtraBiomesExpectPlatformImpl#applyWindmillCreateCompat. Same deal as
+    // forge/build.gradle's Create dependency: no 1.20.2 Create build exists for NeoForge either
+    // (as of 2026-08-28) - re-enable when one ships.
+    // modCompileOnly("com.simibubi.create:create-neoforge-1.20.2:...") { transitive = false }
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+    inputs.property "mod_authors", mod_authors
+    inputs.property "mod_description", mod_description
+    inputs.property "neoforge_version_range", neoforge_version_range
+    inputs.property "neoforge_loader_version_range", neoforge_loader_version_range
+    inputs.property "minecraft_version_range", minecraft_version_range
+
+    filesMatching(['META-INF/mods.toml']) {
+        expand([
+                version                       : project.version,
+                mod_id                        : mod_id,
+                mod_name                      : mod_name,
+                mod_authors                   : mod_authors,
+                mod_description               : mod_description,
+                neoforge_version_range        : neoforge_version_range,
+                neoforge_loader_version_range : neoforge_loader_version_range,
+                minecraft_version_range       : minecraft_version_range,
+        ])
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+    archiveFileName = "${archives_base_name}-neoforge-v${mod_version}-${minecraft_version}.jar"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenNeoForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+}
