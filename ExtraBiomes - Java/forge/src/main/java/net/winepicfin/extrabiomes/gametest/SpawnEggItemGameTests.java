@@ -34,7 +34,7 @@ import java.util.List;
 public class SpawnEggItemGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void everySpawnEggResolvesRequiredFeaturesWithoutThrowing(GameTestHelper helper) {
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: starting");
         List<Item> spawnEggs = List.of(

@@ -36,7 +36,7 @@ public class StructureGenerationGameTests {
     // Matches vanilla's own `/locate structure` search radius (LocateCommand.MAX_STRUCTURE_SEARCH_RADIUS), in chunks.
     private static final int SEARCH_RADIUS_CHUNKS = 100;
 
-    @GameTest(template = "empty", timeoutTicks = 60000)
+    @GameTest(template = "empty", timeoutTicks = 60000, batch = "extrabiomes")
     public static void skyCityAppearsInOverworldGeneration(GameTestHelper helper) {
         LOGGER.info("[StructureGenerationGameTests] skyCityAppearsInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();

@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 public class BiomeModifierApplicationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void jungleGetsUndergroundJungleFeaturesAndSpawns(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: starting");
         Biome jungle = biome(helper, Biomes.JUNGLE);
@@ -67,7 +67,7 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void mushroomFieldsGetsHugeMushroomsAndSpawns(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] mushroomFieldsGetsHugeMushroomsAndSpawns: starting");
         Biome mushroomFields = biome(helper, Biomes.MUSHROOM_FIELDS);
@@ -80,7 +80,7 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void darkForestGetsHugeMushrooms(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: starting");
         Biome darkForest = biome(helper, Biomes.DARK_FOREST);
@@ -91,7 +91,7 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GameTest(template = "empty", batch = "extrabiomes")
     public static void plainsGetsHarpySpawn(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: starting");
         Biome plains = biome(helper, Biomes.PLAINS);

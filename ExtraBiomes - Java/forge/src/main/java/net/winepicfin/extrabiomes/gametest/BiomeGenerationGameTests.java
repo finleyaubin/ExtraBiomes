@@ -60,7 +60,7 @@ public class BiomeGenerationGameTests {
     // environment-dependent drift that has nothing to do with the pinned world seed. Anchoring on
     // a fixed coordinate instead makes the search fully reproducible given the same seed,
     // regardless of the runner's hardware.
-    @GameTest(template = "empty", timeoutTicks = 60000)
+    @GameTest(template = "empty", timeoutTicks = 60000, batch = "extrabiomes")
     public static void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
         LOGGER.info("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();
