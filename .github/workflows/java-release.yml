@@ -113,6 +113,8 @@ jobs:
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
+          name: ${{ github.ref_name }}
+          version: ${{ steps.version.outputs.VERSION }}
           loaders: forge
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
@@ -131,6 +133,8 @@ jobs:
           curseforge-id: "1663861"
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
+          name: ${{ github.ref_name }}
+          version: ${{ steps.version.outputs.VERSION }}
           loaders: fabric
           game-versions: 1.20.1
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
