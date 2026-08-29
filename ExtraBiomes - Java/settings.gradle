@@ -11,7 +11,9 @@ pluginManagement {
 }
 
 include("common")
-include("forge")
+// forge is out of scope for this release (Fabric + NeoForge only) - kept out of the build rather
+// than deleted, so a future MC version branch can re-enable it by uncommenting this line.
+// include("forge")
 include("fabric")
 include("neoforge")
 

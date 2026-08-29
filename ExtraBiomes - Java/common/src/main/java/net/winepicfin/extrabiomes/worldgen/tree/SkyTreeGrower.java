@@ -1,16 +1,11 @@
 package net.winepicfin.extrabiomes.worldgen.tree;
 
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.winepicfin.extrabiomes.worldgen.ModConfigureFeatures;
-import org.jetbrains.annotations.Nullable;
 
-public class SkyTreeGrower extends AbstractTreeGrower {
-    @Nullable
-    @Override
-    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource random, boolean hasFlowers) {
-        return ModConfigureFeatures.SKY_KEY;
-    }
+import java.util.Optional;
+
+// See MysticTreeGrower's comment - TreeGrower became final as of 1.20.4.
+public class SkyTreeGrower {
+    public static final TreeGrower GROWER = new TreeGrower("sky", Optional.empty(), Optional.of(ModConfigureFeatures.SKY_KEY), Optional.empty());
 }

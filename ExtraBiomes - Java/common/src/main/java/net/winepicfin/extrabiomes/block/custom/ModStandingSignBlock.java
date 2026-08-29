@@ -10,7 +10,7 @@ import net.winepicfin.extrabiomes.entity.ModSignBlockEntity;
 
 public class ModStandingSignBlock extends StandingSignBlock {
     public ModStandingSignBlock(Properties properties, WoodType woodType) {
-        super(properties, woodType);
+        super(woodType, properties);
     }
 
     @Override

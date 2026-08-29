@@ -1,10 +1,11 @@
 package net.winepicfin.extrabiomes.datagen;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.registries.RegistryPatchGenerator;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,7 +30,14 @@ public class DataGenerators {
         // exist via ModWorldGenProvider.BUILDER's own registry patch) - so tagging our own biomes would
         // fail with "missing following references". Patch the lookup with our biome/feature registries
         // before handing it to the biome tag provider.
-        CompletableFuture<HolderLookup.Provider> biomeTagLookupProvider = lookupProvider.thenApply(provider -> ModWorldGenProvider.BUILDER.buildPatch(RegistryAccess.EMPTY, provider));
+        //
+        // RegistrySetBuilder#buildPatch() gained a required Cloner.Factory arg as of 1.20.4 (and its
+        // return type changed from HolderLookup.Provider to a PatchedRegistries record) - vanilla's own
+        // RegistryPatchGenerator.createLookup() helper does this "patch an existing lookup with a
+        // RegistrySetBuilder" pattern without needing to build that Factory by hand (see forge/'s
+        // identical DataGenerators.java fix for the same issue).
+        CompletableFuture<HolderLookup.Provider> biomeTagLookupProvider = RegistryPatchGenerator.createLookup(lookupProvider, ModWorldGenProvider.BUILDER)
+                .thenApply(RegistrySetBuilder.PatchedRegistries::full);
 
         generator.addProvider(event.includeServer(),new ModRecipeProvider(packOutput, lookupProvider));
         generator.addProvider(event.includeServer(),ModLootTableProvider.create(packOutput));

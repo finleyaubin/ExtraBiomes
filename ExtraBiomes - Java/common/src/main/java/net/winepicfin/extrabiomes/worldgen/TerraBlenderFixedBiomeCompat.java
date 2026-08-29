@@ -12,7 +12,7 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import terrablender.DimensionTypeTags;
-import terrablender.api.RegionType;
+import terrablender.api.SurfaceRuleManager;
 import terrablender.worldgen.IExtendedNoiseGeneratorSettings;
 
 import java.util.Map;
@@ -50,17 +50,20 @@ public class TerraBlenderFixedBiomeCompat {
             if (generator.getBiomeSource() instanceof MultiNoiseBiomeSource) continue;
 
             Holder<DimensionType> dimensionType = stem.type();
-            RegionType regionType;
+            // TerraBlender renamed IExtendedNoiseGeneratorSettings#setRegionType(RegionType) to
+            // #setRuleCategory(SurfaceRuleManager.RuleCategory) between 3.2.0.14 and 3.3.0.12 - same
+            // OVERWORLD/NETHER split, just a different enum type.
+            SurfaceRuleManager.RuleCategory ruleCategory;
             if (dimensionType.is(DimensionTypeTags.NETHER_REGIONS)) {
-                regionType = RegionType.NETHER;
+                ruleCategory = SurfaceRuleManager.RuleCategory.NETHER;
             } else if (dimensionType.is(DimensionTypeTags.OVERWORLD_REGIONS)) {
-                regionType = RegionType.OVERWORLD;
+                ruleCategory = SurfaceRuleManager.RuleCategory.OVERWORLD;
             } else {
                 continue;
             }
 
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
-            ((IExtendedNoiseGeneratorSettings) (Object) settings).setRegionType(regionType);
+            ((IExtendedNoiseGeneratorSettings) (Object) settings).setRuleCategory(ruleCategory);
         }
     }
 }

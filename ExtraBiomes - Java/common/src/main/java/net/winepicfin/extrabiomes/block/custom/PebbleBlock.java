@@ -66,7 +66,7 @@ public class PebbleBlock extends Block {
 
     // Pick-block hands back the placeable pebble item, not the auto-registered "pebble_block" BlockItem.
     @Override
-    public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state) {
+    public @NotNull ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
         return new ItemStack(ModItems.PEBBLE.get());
     }
 

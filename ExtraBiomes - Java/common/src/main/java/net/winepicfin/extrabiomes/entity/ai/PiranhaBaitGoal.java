@@ -86,7 +86,7 @@ public class PiranhaBaitGoal extends Goal {
             return;
         }
         if (this.piranha.distanceToSqr(thrower) >= LURE_AWAY_DISTANCE * LURE_AWAY_DISTANCE) {
-            ModCriteriaTriggers.LURED_PIRANHA_WITH_BAIT.trigger(thrower);
+            ModCriteriaTriggers.LURED_PIRANHA_WITH_BAIT.get().trigger(thrower);
         }
     }
 }

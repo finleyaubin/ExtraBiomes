@@ -7,10 +7,10 @@ architectury {
     fabric()
 }
 
-// No 1.20.2 Create-Fabric build exists yet (see the modCompileOnly create-fabric/Registrate
+// No 1.20.4 Create-Fabric build exists yet (see the modCompileOnly create-fabric/Registrate
 // lines below) - CreateWindmillCompat imports real Create classes and can't compile without it.
 // Excluded wholesale rather than left to fail the build; re-include once Create-Fabric ships
-// for 1.20.2.
+// for 1.20.4.
 sourceSets.main.java {
     exclude 'net/winepicfin/extrabiomes/fabric/compat/create/**'
 }
@@ -69,6 +69,20 @@ fabricApi {
     }
 }
 
+// Forge/NeoForge and Fabric write divergent content into that same shared directory for some
+// blocks (e.g. Forge/NeoForge's ModelBuilder bakes a "render_type" field into blockstate/trapdoor/
+// door/leaves model JSON for cutout rendering; Fabric's own datagen never writes that field,
+// since Fabric sets cutout at runtime via BlockRenderLayerMap instead - see
+// ExtraBiomesFabricClient's putBlocks(RenderType.cutout(), ...) call). Whichever loader's datagen
+// ran most recently "wins" the shared folder, so testing NeoForge/Forge after running Fabric's
+// datagen silently reverts their cutout render_type and can reintroduce black transparent pixels.
+// Making the client/server runs always regenerate this module's own datagen output first closes
+// that gap without needing to physically separate the output directories (which would require
+// excluding the overlap from the "common"/shadowCommon project dependencies that also bundle
+// common/src/generated/resources into this module's own jar - not attempted here).
+tasks.named("runClient") { dependsOn "runDatagen" }
+tasks.named("runServer") { dependsOn "runDatagen" }
+
 configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
@@ -113,7 +127,7 @@ dependencies {
     // Modrinth's Maven proxy instead (same mechanism as terrablender above), version id HAqwA6X1 =
     // create-fabric 6.0.8.1+build.1744-mc1.20.1, the closest Fabric build to forge/build.gradle's
     // 6.0.8-289 pin at the time this was added.
-    // modCompileOnly("maven.modrinth:create-fabric:HAqwA6X1") { transitive = false } // no 1.20.2 Create-Fabric build available as of 2026-08-28 — re-enable when one ships
+    // modCompileOnly("maven.modrinth:create-fabric:HAqwA6X1") { transitive = false } // no 1.20.4 Create-Fabric build available as of 2026-08-28 — re-enable when one ships
     // Registrate - Create-Fabric jar-in-jars this (META-INF/jars/Registrate-1.3.79-MC1.20.1.jar) rather
     // than declaring it as a resolvable Maven dependency anywhere, so unlike forge/build.gradle's separate
     // maven.tterrag.com dependency, there's no coordinate to pull this from here - it isn't published for

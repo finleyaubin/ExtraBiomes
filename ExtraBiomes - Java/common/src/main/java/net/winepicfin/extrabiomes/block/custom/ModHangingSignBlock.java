@@ -9,7 +9,7 @@ import net.winepicfin.extrabiomes.entity.ModHangingSignBlockEntity;
 
 public class ModHangingSignBlock extends CeilingHangingSignBlock {
     public ModHangingSignBlock(Properties properties, WoodType woodType) {
-        super(properties, woodType);
+        super(woodType, properties);
     }
 
     @Override

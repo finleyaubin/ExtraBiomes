@@ -191,6 +191,26 @@ def _build_spawner_be(be):
     return T_comp(d)
 
 
+def _is_pane(java_name):
+    return java_name == "minecraft:glass_pane" or java_name.endswith("_glass_pane")
+
+
+def _is_fence(java_name):
+    return java_name.endswith("_fence") and not java_name.endswith("_fence_gate")
+
+
+# Structures are exported piece-by-piece, so a pane/fence at a piece's edge
+# can't see the neighbor that will sit there once jigsaw assembly places the
+# adjacent piece - and relying on Java's own post-placement shape recompute
+# for this turned out to *not* reliably fire for structure-placed blocks
+# (confirmed empirically: panes/fences shipped with recompute-only state were
+# rendering disconnected in-game). So bake real connection states here from
+# each structure's own neighbor layout - anything solid (non-air) in a
+# cardinal direction counts as connected, matching vanilla's own connect-to-
+# solid-face behavior closely enough for hand-built decorative structures.
+_CONNECT_DELTAS = {"north": (0, 0, -1), "south": (0, 0, 1), "east": (1, 0, 0), "west": (-1, 0, 0)}
+
+
 def convert(path, warnings, id_counter):
     """Read a .mcstructure and return the Java structure root Tag."""
     _, root = load(path)
@@ -230,6 +250,15 @@ def convert(path, warnings, id_counter):
         e = palette[pidx]
         return e["name"] == "minecraft:water" and int(e.get("states", {}).get("liquid_depth", 0)) == 0
 
+    def has_solid_neighbor(flat, direction):
+        x, y, z = coord(flat)
+        dx, dy, dz = _CONNECT_DELTAS[direction]
+        nx, ny, nz = x + dx, y + dy, z + dz
+        if not (0 <= nx < sx and 0 <= ny < sy and 0 <= nz < sz):
+            return False
+        npidx = layer0[(nx * sy + ny) * sz + nz]
+        return npidx >= 0 and palette[npidx]["name"] != "minecraft:air"
+
     blocks = []
     for flat, pidx in enumerate(layer0):
         if pidx < 0:  # void -> emit nothing
@@ -258,6 +287,10 @@ def convert(path, warnings, id_counter):
             if java_name is None:
                 warnings.append("unmapped block id: %s states=%s" % (name, states))
                 java_name, props = "minecraft:air", {}
+
+            if _is_pane(java_name) or _is_fence(java_name):
+                for direction in _CONNECT_DELTAS:
+                    props[direction] = "true" if has_solid_neighbor(flat, direction) else "false"
 
             # Bedrock only actually uses the LOWER door half's direction/hinge for
             # rendering in-game - the upper half's own direction/door_hinge_bit is

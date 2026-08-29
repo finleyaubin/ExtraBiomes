@@ -56,20 +56,25 @@ def _facing_from_cardinal(states, default="north"):
 
 # extrabiomes:direction int -> (Java stair facing, Java stair shape) for the
 # corner variants. Derived from the visible geometry bone's physical quadrant
-# (read from extrabiomes.stairs.geo cube coordinates) mapped to the vanilla Java
-# stair model convention (facing=east,outer_right occupies the NE quadrant):
-#   outer bone = the single filled quadrant; inner bone = the single notch quadrant.
-# Every entry is canonicalised to the "_right" shape (each physical corner has an
-# equivalent _left form at another facing; _right is picked for consistency).
+# (read from extrabiomes.stairs.geo cube coordinates) mapped against the REAL
+# vanilla Java stair models extracted from minecraft-client.jar
+# (assets/minecraft/models/block/outer_stairs.json / inner_stairs.json,
+# cross-checked against oak_stairs.json's per-facing/shape "y" rotations):
+# facing=east,outer_right's filled corner is SE (X 8-16, Z 8-16), NOT NE as a
+# previous derivation assumed - that earlier assumption put every corner entry
+# below one 90 rotation off. outer bone = the single filled quadrant; inner
+# bone = the single notch quadrant. Every entry is canonicalised to the
+# "_right" shape (each physical corner has an equivalent _left form at another
+# facing; _right is picked for consistency).
 STAIR_CORNER = {
-    4: ("west", "outer_right"),   # southwest_outer  (filled SW)
-    5: ("south", "outer_right"),  # southeast_outer  (filled SE)
-    6: ("north", "outer_right"),  # northwest_outer  (filled NW)
-    7: ("east", "outer_right"),   # northeast_outer  (filled NE)
-    8: ("west", "inner_right"),   # northeast_inner  (notch NE)
-    9: ("south", "inner_right"),  # northwest_inner  (notch NW)
-    10: ("east", "inner_right"),  # southwest_inner  (notch SW)
-    11: ("north", "inner_right"), # southeast_inner  (notch SE)
+    4: ("south", "outer_right"),  # southwest_outer  (filled SW)
+    5: ("east", "outer_right"),   # southeast_outer  (filled SE)
+    6: ("west", "outer_right"),   # northwest_outer  (filled NW)
+    7: ("north", "outer_right"),  # northeast_outer  (filled NE)
+    8: ("south", "inner_right"),  # northeast_inner  (notch NE)
+    9: ("east", "inner_right"),   # northwest_inner  (notch NW)
+    10: ("north", "inner_right"), # southwest_inner  (notch SW)
+    11: ("west", "inner_right"),  # southeast_inner  (notch SE)
 }
 
 # golden_rail rail_direction int -> Java rail shape.
@@ -331,8 +336,17 @@ def map_block(name, states, be=None):
         if direction in STAIR_CORNER:
             facing, shape = STAIR_CORNER[direction]
         else:
-            # straight: facing from cardinal_direction with the E<->W mirror.
-            facing, shape = _facing_from_cardinal(states), "straight"
+            # straight: facing = cardinal_direction directly on both axes -
+            # NOT the E<->W mirror used for doors/trapdoors
+            # (_facing_from_cardinal/_EW_SWAP above). Confirmed in-game:
+            # north/south correct as identity, and east/west also needed
+            # identity (not the mirror) once north/south was fixed. NOTE:
+            # these are jigsaw pieces - a single block's facing observed in
+            # the generated world can additionally be rotated 90/180/270 by
+            # jigsaw connector matching at generation time, independent of
+            # what's stored here. Don't "fix" this branch again from a
+            # single F3 reading without first ruling out piece rotation.
+            facing, shape = _s(states.get("minecraft:cardinal_direction", "north")), "straight"
         return name, {
             "facing": facing,
             "half": half,
@@ -369,10 +383,11 @@ def map_block(name, states, be=None):
             "powered": "false",
         }
 
-    # logs / wood -> RotatedPillarBlock. Bedrock stripped_ -> Java striped_.
+    # logs / wood -> RotatedPillarBlock. Id is identical on both sides
+    # (registered Java block is "stripped_sky_log", not "striped_sky_log").
     if name in ("extrabiomes:gilded_sky_log", "extrabiomes:sky_log",
                 "extrabiomes:sky_wood", "extrabiomes:stripped_sky_log"):
-        java_name = "extrabiomes:striped_sky_log" if name == "extrabiomes:stripped_sky_log" else name
+        java_name = name
         face = states.get("minecraft:block_face", "up")
         return java_name, {"axis": BLOCK_FACE_AXIS.get(face, "y")}
 

@@ -95,8 +95,7 @@ public class GiantTortoiseEntity extends Monster {
         return false;
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
+    // canBreatheUnderwater() became final as of 1.20.4, driven by the data-only
+    // #minecraft:can_breathe_under_water entity type tag instead of an override - see
+    // data/minecraft/tags/entity_types/can_breathe_under_water.json.
 }

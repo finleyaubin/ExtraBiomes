@@ -1,7 +1,12 @@
 
-# NOTE: still "mods.toml" (not "neoforge.mods.toml") - 1.20.2 was NeoForge's first supported
-# Minecraft version and that filename rename only happened in a later NeoForge release. Confirmed
-# against NeoForge's own official MDK template, 1.20.2 branch (github.com/neoforged/MDK).
+# NOTE: still "mods.toml" (not "neoforge.mods.toml") - that filename rename only landed in
+# NeoForge 20.5 (MC 1.20.5), one version after this. Confirmed against NeoForge's own official MDK
+# template.
+#
+# NOTE: dependencies use "type" (required "required"|"optional"|"incompatible"|"discouraged"), not
+# the old "mandatory=true/false" - that field is deprecated as of this NeoForge version and fatally
+# rejects the mod file at 20.4.251 ("Deprecated 'mandatory' field is used in dependency (main)"),
+# not just a warning.
 modLoader="javafml" #mandatory
 loaderVersion="${neoforge_loader_version_range}" #mandatory
 license="MIT License"
@@ -14,19 +19,19 @@ license="MIT License"
     description='''${mod_description}'''
 [[dependencies.extrabiomes]]
     modId="neoforge"
-    mandatory=true
+    type="required"
     versionRange="${neoforge_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.extrabiomes]]
     modId="minecraft"
-    mandatory=true
+    type="required"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.extrabiomes]]
     modId="terrablender"
-    mandatory=true
+    type="required"
     versionRange="[1.0.0.59,)"
     ordering="NONE"
     side="BOTH"
@@ -34,7 +39,7 @@ license="MIT License"
 # the windmill structure's Create Windmill Bearing swap when Create happens to also be installed.
 [[dependencies.extrabiomes]]
     modId="create"
-    mandatory=false
+    type="optional"
     versionRange="[6.0.0,)"
     ordering="AFTER"
     side="BOTH"

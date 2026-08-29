@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.advancements;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.critereon.ConsumeItemTrigger;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -63,7 +63,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                         Component.translatable("advancements.extrabiomes.root.title"),
                         Component.translatable("advancements.extrabiomes.root.description"),
                         new ResourceLocation("textures/gui/advancements/backgrounds/stone.png"),
-                        FrameType.TASK, false, false, false)
+                        AdvancementType.TASK, false, false, false)
                 .addCriterion("tick", PlayerTrigger.TriggerInstance.tick());
         AdvancementHolder root = rootBuilder.build(rootId);
         saver.accept(root);
@@ -74,7 +74,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModItems.PUCKOO_SPAWN_EGG.get(),
                         Component.translatable("advancements.extrabiomes.tame_puckoo.title"),
                         Component.translatable("advancements.extrabiomes.tame_puckoo.description"),
-                        null, FrameType.TASK, true, true, false)
+                        null, AdvancementType.TASK, true, true, false)
                 .addCriterion("tamed_puckoo", TameAnimalTrigger.TriggerInstance.tamedAnimal(
                         EntityPredicate.Builder.entity().of(ModEntities.PUCKOO.get())))
                 .build(tamePuckooId));
@@ -85,7 +85,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModItems.WORM.get(),
                         Component.translatable("advancements.extrabiomes.catch_worm.title"),
                         Component.translatable("advancements.extrabiomes.catch_worm.description"),
-                        null, FrameType.TASK, true, true, false)
+                        null, AdvancementType.TASK, true, true, false)
                 .addCriterion("has_worm", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.WORM.get()))
                 .build(catchWormId));
 
@@ -95,7 +95,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModItems.BUCKET_OF_GOO.get(),
                         Component.translatable("advancements.extrabiomes.goo_collector.title"),
                         Component.translatable("advancements.extrabiomes.goo_collector.description"),
-                        null, FrameType.TASK, true, true, false)
+                        null, AdvancementType.TASK, true, true, false)
                 .addCriterion("has_goo", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.BUCKET_OF_GOO.get()))
                 .build(gooCollectorId));
 
@@ -105,7 +105,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModBlocks.MYSTIC_PLANKS.get(),
                         Component.translatable("advancements.extrabiomes.mystic_woodworker.title"),
                         Component.translatable("advancements.extrabiomes.mystic_woodworker.description"),
-                        null, FrameType.TASK, true, true, false)
+                        null, AdvancementType.TASK, true, true, false)
                 .addCriterion("has_mystic_planks", InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.MYSTIC_PLANKS.get()))
                 .build(mysticWoodworkerId));
 
@@ -115,7 +115,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModItems.FROG_HELMET.get(),
                         Component.translatable("advancements.extrabiomes.amphibious_armor.title"),
                         Component.translatable("advancements.extrabiomes.amphibious_armor.description"),
-                        null, FrameType.TASK, true, true, false)
+                        null, AdvancementType.TASK, true, true, false)
                 .addCriterion("has_frog_helmet", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.FROG_HELMET.get()))
                 .build(amphibiousArmorId));
 
@@ -125,7 +125,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModItems.COOKED_PIRANHA.get(),
                         Component.translatable("advancements.extrabiomes.piranha_dinner.title"),
                         Component.translatable("advancements.extrabiomes.piranha_dinner.description"),
-                        null, FrameType.TASK, true, true, false)
+                        null, AdvancementType.TASK, true, true, false)
                 .addCriterion("ate_cooked_piranha", ConsumeItemTrigger.TriggerInstance.usedItem(ModItems.COOKED_PIRANHA.get()))
                 .build(piranhaDinnerId));
 
@@ -135,7 +135,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(Items.WHEAT,
                         Component.translatable("advancements.extrabiomes.visit_netherlands.title"),
                         Component.translatable("advancements.extrabiomes.visit_netherlands.description"),
-                        null, FrameType.GOAL, true, true, false)
+                        null, AdvancementType.GOAL, true, true, false)
                 .addCriterion("in_netherlands", PlayerTrigger.TriggerInstance.located(
                         LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS)))
                 .addCriterion("in_netherlands_mutated", PlayerTrigger.TriggerInstance.located(
@@ -149,8 +149,8 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModItems.BAIT.get(),
                         Component.translatable("advancements.extrabiomes.bait_and_switch.title"),
                         Component.translatable("advancements.extrabiomes.bait_and_switch.description"),
-                        null, FrameType.TASK, true, true, false)
-                .addCriterion("lured_piranha_with_bait", ModCriteriaTriggers.LURED_PIRANHA_WITH_BAIT.createCriterion(BaitLureTrigger.TriggerInstance.luredPiranhaWithBait()))
+                        null, AdvancementType.TASK, true, true, false)
+                .addCriterion("lured_piranha_with_bait", ModCriteriaTriggers.LURED_PIRANHA_WITH_BAIT.get().createCriterion(BaitLureTrigger.TriggerInstance.luredPiranhaWithBait()))
                 .build(baitAndSwitchId));
 
         ResourceLocation dutchTreasureId = new ResourceLocation(ExtraBiomes.MOD_ID, "dutch_treasure");
@@ -159,7 +159,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModBlocks.NETHER_DIAMOND_ORE.get(),
                         Component.translatable("advancements.extrabiomes.dutch_treasure.title"),
                         Component.translatable("advancements.extrabiomes.dutch_treasure.description"),
-                        null, FrameType.CHALLENGE, true, true, false)
+                        null, AdvancementType.CHALLENGE, true, true, false)
                 .addCriterion("has_nether_diamond_ore", InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.NETHER_DIAMOND_ORE.get()))
                 .build(dutchTreasureId));
 
@@ -169,7 +169,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(Items.FILLED_MAP,
                         Component.translatable("advancements.extrabiomes.biome_explorer.title"),
                         Component.translatable("advancements.extrabiomes.biome_explorer.description"),
-                        null, FrameType.CHALLENGE, true, true, false);
+                        null, AdvancementType.CHALLENGE, true, true, false);
         for (ResourceKey<Biome> biome : ALL_BIOMES) {
             biomeExplorer.addCriterion(biome.location().getPath(), PlayerTrigger.TriggerInstance.located(
                     LocationPredicate.Builder.location().setBiome(biome)));
