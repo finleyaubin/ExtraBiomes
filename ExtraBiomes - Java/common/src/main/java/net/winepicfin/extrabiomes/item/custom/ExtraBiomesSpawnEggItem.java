@@ -44,6 +44,9 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
 
     @Override
     public EntityType<?> getType(ItemStack stack) {
+        if (stack == null) {
+            return typeSupplier.get();
+        }
         CustomData customData = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
         if (!customData.isEmpty()) {
             CompoundTag entityTag = customData.copyTag();

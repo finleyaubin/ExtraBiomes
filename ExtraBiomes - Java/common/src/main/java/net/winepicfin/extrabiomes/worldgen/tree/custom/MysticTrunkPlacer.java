@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.tree.custom;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +28,7 @@ public class MysticTrunkPlacer extends TrunkPlacer {
             return "Need at least 2 blocks variation for the branch starts to fit both branches";
         }) : DataResult.success(pUniformInt);
     }).codec();
-public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((pInstance) -> {
+public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((pInstance) -> {
     return trunkPlacerParts(pInstance).and(pInstance.group(IntProvider.codec(1, 3).fieldOf("branch_count").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchCount;
     }), IntProvider.codec(2, 16).fieldOf("branch_horizontal_length").forGetter((pTrunkPlacer) -> {

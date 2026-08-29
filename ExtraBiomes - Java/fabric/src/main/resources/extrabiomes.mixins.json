@@ -7,6 +7,9 @@
     "MobAccessor",
     "MobCategoryAccessor",
     "MobPickResultMixin",
+    "SpawnPlacementsAccessor",
+    "TreeDecoratorTypeAccessor",
+    "TrunkPlacerTypeAccessor",
     "WoodTypeAccessor"
   ],
   "client": [

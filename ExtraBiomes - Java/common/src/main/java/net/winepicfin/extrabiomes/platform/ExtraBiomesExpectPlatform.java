@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.platform;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -46,12 +47,12 @@ public class ExtraBiomesExpectPlatform {
     }
 
     @ExpectPlatform
-    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(Codec<P> codec) {
+    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(MapCodec<P> codec) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(Codec<P> codec) {
+    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(MapCodec<P> codec) {
         throw new AssertionError();
     }
 

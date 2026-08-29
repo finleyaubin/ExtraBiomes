@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.platform.fabric;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -46,12 +46,12 @@ public class ExtraBiomesExpectPlatformImpl {
         return WoodTypeAccessor.invokeRegister(woodType);
     }
 
-    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(Codec<P> codec) {
-        return new TreeDecoratorType<>(codec);
+    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(MapCodec<P> codec) {
+        return net.winepicfin.extrabiomes.fabric.mixin.TreeDecoratorTypeAccessor.invokeNew(codec);
     }
 
-    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(Codec<P> codec) {
-        return new TrunkPlacerType<>(codec);
+    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(MapCodec<P> codec) {
+        return net.winepicfin.extrabiomes.fabric.mixin.TrunkPlacerTypeAccessor.invokeNew(codec);
     }
 
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {

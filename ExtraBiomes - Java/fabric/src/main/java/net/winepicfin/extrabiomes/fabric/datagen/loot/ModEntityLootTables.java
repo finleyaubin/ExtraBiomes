@@ -2,11 +2,13 @@ package net.winepicfin.extrabiomes.fabric.datagen.loot;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.winepicfin.extrabiomes.commondatagen.loot.ModEntityLootTableEntries;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 // Fabric wiring for the shared entity loot table entries in
@@ -20,12 +22,12 @@ import java.util.function.BiConsumer;
 // extends the generic SimpleFabricLootTableProvider and implements the raw BiConsumer callback
 // directly, sidestepping EntityLootSubProvider (and its completeness check) entirely.
 public class ModEntityLootTables extends SimpleFabricLootTableProvider {
-    public ModEntityLootTables(FabricDataOutput output) {
-        super(output, LootContextParamSets.ENTITY);
+    public ModEntityLootTables(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture, LootContextParamSets.ENTITY);
     }
 
     @Override
-    public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
+    public void generate(HolderLookup.Provider registries, BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
         ModEntityLootTableEntries.populate((entityType, builder) -> consumer.accept(entityType.getDefaultLootTable(), builder));
     }
 }

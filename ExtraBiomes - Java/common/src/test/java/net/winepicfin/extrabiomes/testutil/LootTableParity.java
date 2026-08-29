@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -19,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 // JSON diff (which would just fail on the wrapper noise).
 public final class LootTableParity {
     private static final String MINECRAFT_PREFIX = "minecraft:";
+
+    // Items Java renamed (1.20.5's item-component rewrite) that Bedrock still calls by the old
+    // name - a real, permanent naming divergence between editions, not a bug on either side.
+    private static final Map<String, String> JAVA_ITEM_RENAMES = Map.of("scute", "turtle_scute");
 
     public static void assertMatches(JsonObject bedrockRoot, JsonObject javaRoot) {
         compare(bedrockRoot.get("pools"), javaRoot.get("pools"), "pools");
@@ -53,7 +59,8 @@ public final class LootTableParity {
             JsonPrimitive b = bedrock.getAsJsonPrimitive();
             JsonPrimitive j = java.getAsJsonPrimitive();
             if (b.isString()) {
-                assertEquals(stripMinecraftPrefix(b.getAsString()), stripMinecraftPrefix(j.getAsString()), path);
+                String bId = stripMinecraftPrefix(b.getAsString());
+                assertEquals(JAVA_ITEM_RENAMES.getOrDefault(bId, bId), stripMinecraftPrefix(j.getAsString()), path);
             } else {
                 assertEquals(b.getAsDouble(), j.getAsDouble(), 1e-6, path);
             }
