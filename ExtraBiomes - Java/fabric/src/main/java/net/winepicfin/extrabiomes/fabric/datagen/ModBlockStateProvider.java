@@ -303,11 +303,13 @@ public class ModBlockStateProvider implements DataProvider {
                 };
                 int baseRotation = rot(facing);
                 boolean isLeft = shape == StairsShape.INNER_LEFT || shape == StairsShape.OUTER_LEFT;
+                boolean isRight = shape == StairsShape.INNER_RIGHT || shape == StairsShape.OUTER_RIGHT;
                 int bottomRotation = isLeft ? baseRotation - 90 : baseRotation;
                 // Top half is visually mirrored (the model is flipped via X_ROT 180), which swaps
-                // which physical corner "left"/"right" ends up on - the right-side shapes need +90,
-                // not -90 (verified against vanilla's own shipped oak_stairs.json blockstate).
-                int topRotation = isLeft ? baseRotation : baseRotation + 90;
+                // which physical corner "left"/"right" ends up on - only the right-side corner
+                // shapes need the +90 offset; STRAIGHT (and left-side shapes) match the bottom's
+                // rotation unmodified (verified against vanilla's own shipped oak_stairs.json).
+                int topRotation = isRight ? baseRotation + 90 : baseRotation;
 
                 Variant bottomVariant = Variant.variant().with(VariantProperties.MODEL, model);
                 if (bottomRotation != 0) bottomVariant = bottomVariant.with(VariantProperties.Y_ROT, yRot(bottomRotation)).with(VariantProperties.UV_LOCK, true);
@@ -368,9 +370,9 @@ public class ModBlockStateProvider implements DataProvider {
                             ResourceLocation model = inWall ? (isOpen ? wallOpen : wallClosed) : (isOpen ? open : closed);
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.UV_LOCK, true);
                             int y = rot(facing);
-                            // Fence gates face outward the opposite way stairs do (their unrotated
-                            // model already faces "south"), so offset by 180 from the stairs table.
-                            y = (y + 180) % 360;
+                            // Fence gates are offset -90 (not +180) from the stairs table's rot()
+                            // convention (verified against vanilla's oak_fence_gate.json).
+                            y = (y + 270) % 360;
                             if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
                             return v;
                         })));
@@ -408,14 +410,20 @@ public class ModBlockStateProvider implements DataProvider {
                         .generate((face, facing, powered1) -> {
                             ResourceLocation model = powered1 ? powered : unpowered;
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model);
-                            int y = rot(facing);
+                            // rot(facing) is offset by -90 from the button's own facing convention
+                            // (verified against vanilla's oak_button.json); ceiling additionally
+                            // flips the model via X_ROT 180, which needs another +180 on Y to match.
+                            int y = (rot(facing) + 90) % 360;
                             switch (face) {
                                 case FLOOR -> {
                                 }
                                 case WALL -> v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R90);
-                                case CEILING -> v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                case CEILING -> {
+                                    v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                    y = (y + 180) % 360;
+                                }
                             }
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(face == AttachFace.CEILING ? (360 - y) % 360 : y));
+                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
                             return v.with(VariantProperties.UV_LOCK, true);
                         })));
         delegateItemModel(block, inventory);
@@ -445,10 +453,15 @@ public class ModBlockStateProvider implements DataProvider {
                         .generate((facing, open, hinge, half) -> {
                             ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
                             int y = rot(facing);
-                            boolean rightHinge = hinge == DoorHingeSide.RIGHT;
                             if (open) {
-                                y += rightHinge ? 90 : -90;
-                                if (!rightHinge) y += 180;
+                                // +90 matches vanilla's own left-hinge-open rotation exactly; a
+                                // right-hinged door swings to the mirrored side, which vanilla's
+                                // separate right-hinge model expresses as +180 from the left-hinge
+                                // rotation at the same facing (verified against oak_door.json) - the
+                                // old formula collapsed both hinges to the same +90, so a right-hinged
+                                // door opened identically to a left-hinged one instead of mirroring.
+                                y += 90;
+                                if (hinge == DoorHingeSide.RIGHT) y += 180;
                             }
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model);
                             int normalized = ((y % 360) + 360) % 360;
@@ -457,35 +470,42 @@ public class ModBlockStateProvider implements DataProvider {
                         })));
     }
 
-    // ModelTemplates.TRAPDOOR_BOTTOM/TOP/OPEN parent "template_orientable_trapdoor_*" - that's the
-    // iron-trapdoor-style template Mojang uses for textures with a baked-in facing pattern, not the
-    // plain "template_trapdoor_*" every wood trapdoor (and iron's actual bottom/top state, per the
-    // shipped assets) uses. Building the parent references by hand here to get the plain template,
-    // matching vanilla's own oak/iron trapdoor models.
+    // Our trapdoor textures (mystic/sky/palm/gilded_sky) have a directional plank/slat pattern, the
+    // same kind vanilla's acacia/spruce/birch trapdoors use - those all ship on the
+    // "template_orientable_trapdoor_*" parent (verified against the real shipped
+    // birch_trapdoor_bottom.json), which flips the "up" face's V axis and adds the "west"/"east"
+    // face rotations needed to keep the slats reading the same way regardless of facing. The plain
+    // "template_trapdoor_*" parent is only correct for oak/iron's rotationally-symmetric grid
+    // texture - using it here was what made the slats appear to spin between open and closed.
     private void trapdoorBlockState(Block block, ResourceLocation baseModelName) {
         ResourceLocation bottom = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
         ResourceLocation top = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
         ResourceLocation open = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
-        putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseModelName);
-        putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseModelName);
-        putTrapdoorModel(open, "minecraft:block/template_trapdoor_open", baseModelName);
+        putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseModelName);
+        putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseModelName);
+        putTrapdoorModel(open, "minecraft:block/template_orientable_trapdoor_open", baseModelName);
         // Matches vanilla's 3D-look trapdoor item icon (no flat sprite texture is checked in).
         delegateItemModel(block, bottom);
 
-        // Vanilla only y-rotates the "open" model per facing - the closed bottom/top models are the
-        // same flat slab on every side (cullface-only faces), so rotating them does nothing but was
-        // making the wrongly-oriented "orientable" texture spin along with it.
+        // Orientable trapdoors y-rotate every state (including closed) per facing, and additionally
+        // flip the open-on-top state via X_ROT 180 with another +180 on Y - verified field-for-field
+        // against vanilla's real birch_trapdoor.json blockstate.
         blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
                 PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> {
                             ResourceLocation model = isOpen ? open : (half == Half.TOP ? top : bottom);
+                            // rot(facing) is offset by -90 from the trapdoor's own convention
+                            // (verified against vanilla's birch_trapdoor.json - e.g. facing=east is
+                            // y:90, not y:0), same offset as the plain-template open state used.
+                            int y = (rot(facing) + 90) % 360;
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model);
-                            if (isOpen) {
-                                int y = rot(facing);
-                                if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
+                            if (isOpen && half == Half.TOP) {
+                                v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                y = (y + 180) % 360;
                             }
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
+                            return v;
                         })));
     }
 

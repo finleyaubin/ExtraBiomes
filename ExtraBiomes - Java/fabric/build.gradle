@@ -69,6 +69,20 @@ fabricApi {
     }
 }
 
+// Forge/NeoForge and Fabric write divergent content into that same shared directory for some
+// blocks (e.g. Forge/NeoForge's ModelBuilder bakes a "render_type" field into blockstate/trapdoor/
+// door/leaves model JSON for cutout rendering; Fabric's own datagen never writes that field,
+// since Fabric sets cutout at runtime via BlockRenderLayerMap instead - see
+// ExtraBiomesFabricClient's putBlocks(RenderType.cutout(), ...) call). Whichever loader's datagen
+// ran most recently "wins" the shared folder, so testing NeoForge/Forge after running Fabric's
+// datagen silently reverts their cutout render_type and can reintroduce black transparent pixels.
+// Making the client/server runs always regenerate this module's own datagen output first closes
+// that gap without needing to physically separate the output directories (which would require
+// excluding the overlap from the "common"/shadowCommon project dependencies that also bundle
+// common/src/generated/resources into this module's own jar - not attempted here).
+tasks.named("runClient") { dependsOn "runDatagen" }
+tasks.named("runServer") { dependsOn "runDatagen" }
+
 configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.

@@ -83,6 +83,17 @@ tasks.named("runGameTestServer") {
     dependsOn "clearGameTestWorld"
 }
 
+// Forge/NeoForge and Fabric write divergent content into that same shared
+// common/src/generated/resources directory for some blocks (e.g. this module's ModelBuilder bakes
+// a "render_type" field into blockstate/trapdoor/door/leaves model JSON for cutout rendering;
+// Fabric's own datagen never writes that field, since Fabric sets cutout at runtime via
+// BlockRenderLayerMap instead). Whichever loader's datagen ran most recently "wins" the shared
+// folder, so testing this module after running Fabric's datagen silently reverts the cutout
+// render_type and can reintroduce black transparent pixels. Making the client/server runs always
+// regenerate this module's own datagen output first closes that gap.
+tasks.named("runClient") { dependsOn "runData" }
+tasks.named("runServer") { dependsOn "runData" }
+
 configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
