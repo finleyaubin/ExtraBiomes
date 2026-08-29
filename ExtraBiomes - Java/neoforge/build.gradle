@@ -7,9 +7,9 @@ architectury {
     neoForge()
 }
 
-// No 1.20.2 Create build exists yet (see forge/build.gradle's identical note) - CreateWindmillCompat
+// No 1.20.4 Create build exists yet (see forge/build.gradle's identical note) - CreateWindmillCompat
 // imports real Create classes and can't compile without it. Excluded wholesale rather than left to
-// fail the build; re-include once Create ships a NeoForge 1.20.2 build.
+// fail the build; re-include once Create ships a NeoForge 1.20.4 build.
 sourceSets.main.java {
     exclude 'net/winepicfin/extrabiomes/neoforge/compat/create/**'
 }
@@ -19,8 +19,9 @@ loom {
     // explicitly - confirmed via net.fabricmc.loom.api.NeoForgeExtensionAPI#accessTransformer;
     // without this, FireBlock#setFlammable/WolfModel#head/MobCategory#max all stayed private on
     // the neoforge-specific merged Minecraft jar even though the identical .cfg content applied
-    // fine automatically on forge/. NeoForge 1.20.2 still shares Forge's AT mechanism and
-    // obfuscation/SRG mapping data (the two hadn't diverged mapping-wise yet at this MC version).
+    // fine automatically on forge/. NeoForge 1.20.4 still shares Forge's AT mechanism and
+    // obfuscation/SRG mapping data (the two hadn't diverged mapping-wise yet at this MC version -
+    // confirmed via the 20.4.251 userdev config.json, unchanged since the 1.20.2 port).
     neoForge {
         accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
     }
@@ -37,11 +38,11 @@ loom {
         }
         data {
             configName = "NeoForge Data"
-            // NeoForge 1.20.2's userdev config.json only defines a single "data" run template
-            // (unlike newer NeoForge, which splits it into dataClient/dataServer) - confirmed via
-            // its config.json's "runs" keys: client/data/gameTestServer/server. clientData() looks
-            // up a "dataClient" template that doesn't exist at this version and fails with
-            // "Could not find Forge run template with name 'dataClient'".
+            // NeoForge 1.20.4's userdev config.json still only defines a single "data" run
+            // template (unlike newer NeoForge, which splits it into dataClient/dataServer) -
+            // confirmed via its config.json's "runs" keys: client/data/gameTestServer/server.
+            // clientData() looks up a "dataClient" template that doesn't exist at this version
+            // and fails with "Could not find Forge run template with name 'dataClient'".
             data()
             programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
@@ -54,13 +55,21 @@ loom {
             // property (see net.neoforged.neoforge.gametest.GameTestHooks#getEnabledNamespaces),
             // not Forge's "forge.enabledGameTestNamespaces" - copying forge/build.gradle's vmArg
             // unchanged left /test entirely unregistered ("Unknown or incomplete command" on
-            // both `/test list` and `/test run <name>`). GameTestHooks#registerGametests also
-            // gates the whole registration on isGametestEnabled(), which additionally requires
-            // "neoforge.gameTestServer" or "neoforge.enableGameTest" (matching the two props
-            // neoforge-20.2.93-userdev.jar's config.json sets on its own "gameTestServer"
-            // template - not reproduced by Loom's generic server() DSL call above, since there is
-            // no dedicated gameTestServer() DSL method to select that whole template).
-            vmArgs "-Dneoforge.enabledGameTestNamespaces=${mod_id}", "-Dneoforge.gameTestServer=true", "-Dneoforge.enableGameTest=true"
+            // both `/test list` and `/test run <name>`). GameTestHooks#registerGametests gates
+            // registration on isGametestEnabled(), which "-Dneoforge.enableGameTest=true" alone
+            // already satisfies - deliberately NOT setting "-Dneoforge.gameTestServer=true" here.
+            // That flag makes NeoForge's patched net.minecraft.server.Main branch into building
+            // the dedicated server via vanilla's net.minecraft.gametest.framework.GameTestServer
+            // instead of the normal DedicatedServer path - and GameTestServer's own
+            // WorldLoader$WorldDataSupplier unconditionally bakes the world from
+            // WorldPresets.FLAT (confirmed via NeoForge's own Main.java.patch), giving every test
+            // world a single-biome FixedBiomeSource overworld no matter what TerraBlender does -
+            // structurally incapable of ever containing a second biome. Leaving this flag off
+            // boots the same server() run this project already uses elsewhere (normal
+            // DedicatedServer, server.properties' level-type=minecraft:normal, a real
+            // MultiNoiseBiomeSource overworld) with gametests still registered - see the "Run
+            // GameTests" step's own comment for how this drives /test against it.
+            vmArgs "-Dneoforge.enabledGameTestNamespaces=${mod_id}", "-Dneoforge.enableGameTest=true"
         }
     }
 }
@@ -83,38 +92,38 @@ configurations {
 }
 
 dependencies {
-    // NeoForge 1.20.2 (its first supported Minecraft version) is still obfuscated the same way
-    // Forge is - NeoForge only switched to shipping Mojang-mapped/non-obfuscated artifacts
-    // directly in a later version - so this module uses the regular remap-aware
-    // "dev.architectury.loom" plugin and its "mod"-prefixed configurations, same as forge/fabric
-    // (confirmed: applying "dev.architectury.loom-no-remap" here throws "The Minecraft version
-    // '1.20.2' is obfuscated. Forge / NeoForge support for obfuscated Minecraft is through the
-    // regular dev.architectury.loom plugin instead" - an explicit, unambiguous Loom error).
+    // NeoForge 1.20.4 is still obfuscated the same way Forge is - NeoForge didn't remove
+    // obfuscation until the 26.1 line, years after this MC version - so this module uses the
+    // regular remap-aware "dev.architectury.loom" plugin and its "mod"-prefixed configurations,
+    // same as forge/fabric (confirmed on the 1.20.2 port: applying "dev.architectury.loom-no-remap"
+    // here throws "The Minecraft version '...' is obfuscated. Forge / NeoForge support for
+    // obfuscated Minecraft is through the regular dev.architectury.loom plugin instead" - an
+    // explicit, unambiguous Loom error).
     neoForge "net.neoforged:neoforge:${neoforge_version}"
     modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
 
     // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle for why.
     modImplementation "maven.modrinth:terrablender:${terrablender_neoforge_modrinth_id}"
 
-    // GeckoLib's native NeoForge 1.20.2 artifact still bundles mclib via Jar-in-Jar
+    // GeckoLib's native NeoForge 1.20.4 artifact still bundles mclib via Jar-in-Jar
     // (META-INF/jarjar/mclib-20.jar) rather than shipping it directly in its own classes -
     // same "Loom's dev classpath doesn't extract jar-in-jars, and FML's per-mod module
     // isolation can't see mclib even when it's resolved as its own dependency" problem as
     // forge/build.gradle's geckolib+mclib comment (confirmed here too: NoClassDefFoundError
     // on com.eliotlash.mclib.math.IValue during GeckoLib's animation loading on a real
-    // `runClient`). Same fix: libs/geckolib-neoforge-1.20.2-4.3.1-with-mclib.jar is
-    // geckolib-neoforge-1.20.2-4.3.1.jar with mclib-20.jar's classes merged in (mclib's
+    // `runClient`). Same fix: libs/geckolib-neoforge-1.20.4-4.4.4-with-mclib.jar is
+    // geckolib-neoforge-1.20.4-4.4.4.jar with mclib-20.jar's classes merged in (mclib's
     // META-INF excluded, GeckoLib's kept); regenerate by re-running the equivalent of:
-    //   unzip geckolib-neoforge-1.20.2-4.3.1.jar -d tmp/ && unzip -o mclib-20.jar -d tmp/ -x "META-INF/*"
-    //   (cd tmp && zip -r ../libs/geckolib-neoforge-1.20.2-4.3.1-with-mclib.jar .)
+    //   unzip geckolib-neoforge-1.20.4-4.4.4.jar -d tmp/ && unzip -o mclib-20.jar -d tmp/ -x "META-INF/*"
+    //   (cd tmp && zip -r ../libs/geckolib-neoforge-1.20.4-4.4.4-with-mclib.jar .)
     // if bumping geckolib_version or mclib's "20".
-    modImplementation files("libs/geckolib-neoforge-1.20.2-4.3.1-with-mclib.jar")
+    modImplementation files("libs/geckolib-neoforge-1.20.4-4.4.4-with-mclib.jar")
 
     // Optional/soft dependency, compile-only - see neoforge/compat/create/CreateWindmillCompat.java
     // and platform/neoforge/ExtraBiomesExpectPlatformImpl#applyWindmillCreateCompat. Same deal as
-    // forge/build.gradle's Create dependency: no 1.20.2 Create build exists for NeoForge either
+    // forge/build.gradle's Create dependency: no 1.20.4 Create build exists for NeoForge either
     // (as of 2026-08-28) - re-enable when one ships.
-    // modCompileOnly("com.simibubi.create:create-neoforge-1.20.2:...") { transitive = false }
+    // modCompileOnly("com.simibubi.create:create-neoforge-1.20.4:...") { transitive = false }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
