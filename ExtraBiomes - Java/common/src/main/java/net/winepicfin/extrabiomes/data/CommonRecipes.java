@@ -108,9 +108,18 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     // Named modOreCooking (not oreCooking) because vanilla RecipeProvider already declares a static oreCooking with this exact signature - redeclaring it would be a "cannot hide" compile error.
+    //
+    // SimpleCookingRecipeBuilder.generic() gained a trailing AbstractCookingRecipe.Factory<T> arg as of
+    // 1.20.4 (needed to actually construct the T for the codec-based recipe system) - rather than thread
+    // a Factory through every call site, dispatch to the two loader-agnostic convenience methods
+    // (.blasting()/.smelting()) that already bind the right serializer+factory pair, matching this
+    // method's only two real callers below.
     protected static void modOreCooking(RecipeOutput recipeOutput, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
         for (ItemLike itemlike : ingredients) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), category, result, experience, cookingTime, recipeSerializer).group(group).unlockedBy(getHasName(itemlike), has(itemlike))
+            SimpleCookingRecipeBuilder builder = recipeSerializer == RecipeSerializer.BLASTING_RECIPE
+                    ? SimpleCookingRecipeBuilder.blasting(Ingredient.of(itemlike), category, result, experience, cookingTime)
+                    : SimpleCookingRecipeBuilder.smelting(Ingredient.of(itemlike), category, result, experience, cookingTime);
+            builder.group(group).unlockedBy(getHasName(itemlike), has(itemlike))
                     .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(result) + recipeSuffix + "_" + getItemName(itemlike));
         }
     }

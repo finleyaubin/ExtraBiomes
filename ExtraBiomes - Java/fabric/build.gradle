@@ -7,10 +7,10 @@ architectury {
     fabric()
 }
 
-// No 1.20.2 Create-Fabric build exists yet (see the modCompileOnly create-fabric/Registrate
+// No 1.20.4 Create-Fabric build exists yet (see the modCompileOnly create-fabric/Registrate
 // lines below) - CreateWindmillCompat imports real Create classes and can't compile without it.
 // Excluded wholesale rather than left to fail the build; re-include once Create-Fabric ships
-// for 1.20.2.
+// for 1.20.4.
 sourceSets.main.java {
     exclude 'net/winepicfin/extrabiomes/fabric/compat/create/**'
 }
@@ -113,7 +113,7 @@ dependencies {
     // Modrinth's Maven proxy instead (same mechanism as terrablender above), version id HAqwA6X1 =
     // create-fabric 6.0.8.1+build.1744-mc1.20.1, the closest Fabric build to forge/build.gradle's
     // 6.0.8-289 pin at the time this was added.
-    // modCompileOnly("maven.modrinth:create-fabric:HAqwA6X1") { transitive = false } // no 1.20.2 Create-Fabric build available as of 2026-08-28 — re-enable when one ships
+    // modCompileOnly("maven.modrinth:create-fabric:HAqwA6X1") { transitive = false } // no 1.20.4 Create-Fabric build available as of 2026-08-28 — re-enable when one ships
     // Registrate - Create-Fabric jar-in-jars this (META-INF/jars/Registrate-1.3.79-MC1.20.1.jar) rather
     // than declaring it as a resolvable Maven dependency anywhere, so unlike forge/build.gradle's separate
     // maven.tterrag.com dependency, there's no coordinate to pull this from here - it isn't published for

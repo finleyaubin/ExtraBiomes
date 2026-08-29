@@ -59,7 +59,7 @@ import java.util.List;
  * <ul>
  *   <li>minecraft:optional_podzol_feature -> {@link PodzolConversionFeature}: converts the surface
  *       block to podzol if it's grass/dirt/coarse dirt, no-op otherwise.</li>
- *   <li>minecraft:tall_grass_feature -> Feature.SIMPLE_BLOCK placing {@link Blocks#GRASS} (the short
+ *   <li>minecraft:tall_grass_feature -> Feature.SIMPLE_BLOCK placing {@link Blocks#SHORT_GRASS} (the short
  *       grass tuft block in 1.20.1, renamed short_grass in later versions), gated by a
  *       {@code BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)} - the same
  *       guard vanilla's own grass patches use - so each of the up to 900 (30 outer x 30 inner)
@@ -116,7 +116,7 @@ public class MoorlandFeatures {
         // 30/8/4 mirror each Bedrock scatter_feature's own inner gaussian jitter around the outer placement position.
         context.register(MOORLAND_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.GRASS)),
+                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS)),
                                 BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
 
         context.register(MOORLAND_DOUBLE_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,

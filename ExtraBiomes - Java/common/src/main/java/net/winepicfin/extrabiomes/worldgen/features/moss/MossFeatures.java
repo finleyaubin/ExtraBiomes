@@ -57,7 +57,7 @@ import java.util.List;
  *       Bedrock's "gaussian" scatter). Bedrock's {@code minecraft:tall_grass_feature} here places the
  *       single-block short grass tuft (Bedrock has a separate
  *       {@code moorlands_scatter_double_tall_grass_feature.json} for the true double-tall variant),
- *       so the inner placed feature places {@link Blocks#GRASS} (1.20.1's short grass block) via
+ *       so the inner placed feature places {@link Blocks#SHORT_GRASS} (1.20.1's short grass block) via
  *       {@link Feature#SIMPLE_BLOCK}, guarded by a {@code minecraft:air} {@link BlockPredicateFilter}
  *       - again mirroring vanilla's own {@code patch_grass.json} inner feature exactly.</li>
  *   <li>{@code moss/scatter_carpet_feature.json} has iterations 10 but x=y=z=0 (no spread at all),
@@ -96,7 +96,7 @@ public class MossFeatures {
     public static final ResourceKey<PlacedFeature> MOSS_CARPET_SCATTER_PLACED_KEY = placedKey("moss_carpet_scatter");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_KEY = configuredKey("tall_grass");
-    /** Inner air-guarded placement of a single {@link Blocks#GRASS} block - not a top-level decoration by itself. */
+    /** Inner air-guarded placement of a single {@link Blocks#SHORT_GRASS} block - not a top-level decoration by itself. */
     public static final ResourceKey<PlacedFeature> TALL_GRASS_INNER_PLACED_KEY = placedKey("tall_grass_inner");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_PATCH_KEY = configuredKey("tall_grass_patch");
@@ -125,7 +125,7 @@ public class MossFeatures {
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState()))));
 
         context.register(TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.GRASS.defaultBlockState()))));
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS.defaultBlockState()))));
 
         Holder<PlacedFeature> tallGrassInner = placedFeatures.getOrThrow(TALL_GRASS_INNER_PLACED_KEY);
         context.register(TALL_GRASS_PATCH_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,

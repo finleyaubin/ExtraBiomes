@@ -66,7 +66,7 @@ public class MossyPebbleBlock extends Block {
 
     // Pick-block hands back the placeable mossy pebble item, not the auto-registered "mossy_pebble_block" BlockItem.
     @Override
-    public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState state) {
+    public @NotNull ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
         return new ItemStack(ModItems.MOSSY_PEBBLE.get());
     }
 
