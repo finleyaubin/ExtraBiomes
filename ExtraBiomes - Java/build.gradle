@@ -7,6 +7,53 @@ architectury {
     minecraft = rootProject.minecraft_version
 }
 
+// GeckoLib bundles a small math library (mclib) via Forge/NeoForge's Jar-in-Jar mechanism
+// (META-INF/jarjar/<artifact>-<version>.jar), which a real launch unpacks automatically but
+// Loom's dev classpath does not, and declaring mclib as its own dependency doesn't help either -
+// FML's per-mod modules only read the modules their own mods.toml/mods.jar declares, same as a
+// real JPMS `requires`, not "every other module in the layer". The only module GeckoLib's own
+// classes are guaranteed to read is GeckoLib's own module, so mclib has to physically live inside
+// GeckoLib's jar. Used by forge/build.gradle and neoforge/build.gradle.
+//
+// This has to run during configuration, not as a lazy Gradle task: Loom's ModConfigurationRemapper
+// checksums every modImplementation file while configuring the project, before any task -
+// including one that could build this jar - has run. Reads the host jar's own
+// META-INF/jarjar/metadata.json to find the exact bundled artifact/version instead of hardcoding
+// it, so this keeps working across a geckolib_version bump without editing this method, and never
+// needs a binary checked into git - the merged jar is cached under build/ and rebuilt automatically
+// whenever it's missing (a version bump changes the host jar's name, so a stale merge is never
+// silently reused).
+ext.mergeJarInJarDependency = { Project project, String hostDependencyNotation, String jarInJarGroup, String jarInJarArtifact ->
+    def hostJar = project.configurations.detachedConfiguration(project.dependencies.create(hostDependencyNotation)).singleFile
+    def mergedJar = project.file("${project.layout.buildDirectory.get()}/mergedLibs/${hostJar.name[0..-5]}-with-${jarInJarArtifact}.jar")
+    if (!mergedJar.exists()) {
+        mergedJar.parentFile.mkdirs()
+        def metadata
+        new java.util.zip.ZipFile(hostJar).withCloseable { zf ->
+            def entry = zf.getEntry("META-INF/jarjar/metadata.json")
+            if (entry == null) {
+                throw new GradleException("${hostJar.name} has no META-INF/jarjar/metadata.json - can't auto-merge its jar-in-jar dependency (has its packaging changed?)")
+            }
+            metadata = new groovy.json.JsonSlurper().parse(zf.getInputStream(entry))
+        }
+        def nested = metadata.jars.find { it.identifier.group == jarInJarGroup && it.identifier.artifact == jarInJarArtifact }
+        if (nested == null) {
+            throw new GradleException("${hostJar.name}'s jarjar metadata has no ${jarInJarGroup}:${jarInJarArtifact} entry - can't auto-merge it (bundled version/artifact changed upstream?)")
+        }
+        def nestedJar = File.createTempFile("jarjar-${jarInJarArtifact}", ".jar")
+        nestedJar.deleteOnExit()
+        new java.util.zip.ZipFile(hostJar).withCloseable { zf ->
+            nestedJar.withOutputStream { out -> out << zf.getInputStream(zf.getEntry(nested.path)) }
+        }
+        project.logger.lifecycle("Merging ${jarInJarGroup}:${jarInJarArtifact}:${nested.version.artifactVersion} into ${hostJar.name} (FML's per-mod module isolation can't see it as a separate mod) -> ${mergedJar.name}")
+        project.ant.zip(destfile: mergedJar) {
+            zipfileset(src: hostJar, excludes: "META-INF/jarjar/**")
+            zipfileset(src: nestedJar, excludes: "META-INF/**")
+        }
+    }
+    return mergedJar
+}
+
 subprojects {
     apply plugin: "dev.architectury.loom"
 

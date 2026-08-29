@@ -85,30 +85,11 @@ dependencies {
 
     // Resolved through Modrinth's Maven proxy - see common/build.gradle for why.
     modImplementation "maven.modrinth:terrablender:${terrablender_modrinth_id}"
-    // GeckoLib bundles a small math library (mclib) via Forge's Jar-in-Jar mechanism
-    // (META-INF/jarjar/mclib-20.jar), which a real Forge launch unpacks automatically but
-    // Loom's dev classpath does not - every dev run logs "[JarInJarDependencyLocator] No
-    // dependencies to load found", and mclib never shows up as its own "Found mod file" the
-    // way geckolib/terrablender/architectury do. Declaring mclib as its own
-    // (mod)Implementation/include() dependency, or even baking its .class files directly into
-    // this mod's own compiled output, resolves it onto the classpath Gradle sees, but
-    // GeckoLib's module still can't see it at runtime (NoClassDefFoundError on
-    // com.eliotlash.mclib.math.IValue) - FML's per-mod modules only read the modules their own
-    // mods.toml declares a dependency on, same as real JPMS `requires`, not "every other module
-    // in the layer". The only module GeckoLib's own classes are guaranteed to read is GeckoLib's
-    // own module, so mclib has to physically live inside GeckoLib's jar - exactly what Forge's
-    // (non-functional-here) Jar-in-Jar step would normally have done.
-    //
-    // libs/geckolib-forge-1.20.4-4.4.4-with-mclib.jar is geckolib-forge-1.20.4-4.4.4.jar with
-    // mclib-20.jar's classes merged in (mclib's META-INF excluded, GeckoLib's kept). It has to
-    // be a real file present before Gradle configures this project - Loom's ModConfigurationRemapper
-    // checksums every modImplementation artifact during project configuration, before any task
-    // (including one that could build this jar) has run - so it can't be produced by a Gradle
-    // task; regenerate it by re-running the equivalent of:
-    //   unzip geckolib-forge-1.20.4-4.4.4.jar -d tmp/ && unzip -o mclib-20.jar -d tmp/ -x "META-INF/*"
-    //   (cd tmp && zip -r ../libs/geckolib-forge-1.20.4-4.4.4-with-mclib.jar .)
-    // if bumping geckolib_version or mclib's "20".
-    modImplementation files("libs/geckolib-forge-1.20.4-4.4.4-with-mclib.jar")
+    // GeckoLib jar-in-jars mclib; FML's per-mod module isolation needs it merged into GeckoLib's
+    // own jar to see it at all - see root build.gradle's mergeJarInJarDependency for why and how.
+    modImplementation files(rootProject.ext.mergeJarInJarDependency(project,
+        "software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}",
+        "com.eliotlash.mclib", "mclib"))
 
     // Optional/soft dependency, compile-only - see forge/compat/create/CreateWindmillCompat.java and
     // platform/forge/ExtraBiomesExpectPlatformImpl#applyWindmillCreateCompat. Never bundled or required

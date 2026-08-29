@@ -176,15 +176,22 @@ jobs:
       - name: Run GameTests
         if: steps.platforms.outputs.forge == 'true'
         run: |
-          declare -A TEST_TIMEOUTS=(
-            [allmodbiomesappearinoverworldgeneration]=1200
-            [everyspawneggresolvesrequiredfeatureswithoutthrowing]=180
-            [skycityappearsinoverworldgeneration]=180
-            [junglegetsundergroundjunglefeaturesandspawns]=180
-            [mushroomfieldsgetshugemushroomsandspawns]=180
-            [darkforestgetshugemushrooms]=180
-            [plainsgetsharpyspawn]=180
-          )
+          # Discovered from the actual @GameTest methods instead of hand-maintained, so adding or
+          # removing a test can't silently drop out of CI coverage the way a hardcoded list could -
+          # this list previously went stale independently of the source it was meant to mirror.
+          declare -A TEST_TIMEOUTS
+          while IFS= read -r name; do
+            case "$name" in
+              allmodbiomesappearinoverworldgeneration) TEST_TIMEOUTS[$name]=1200 ;;
+              *) TEST_TIMEOUTS[$name]=180 ;;
+            esac
+          done < <(grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' \
+            forge/src/main/java/net/winepicfin/extrabiomes/gametest/*.java | tr '[:upper:]' '[:lower:]')
+
+          if [ "${#TEST_TIMEOUTS[@]}" -eq 0 ]; then
+            echo "::error::No @GameTest methods found under forge/.../gametest - discovery regex is stale"
+            exit 1
+          fi
 
           : > gametest.log
           FAILED=0
@@ -285,18 +292,25 @@ jobs:
           ( sleep 60; echo "test runall" || true ) > neoforge-gametest.fifo &
 
           # Waits on each @GameTest method's own "<name>: passed"/"<name>: failed" log line
-          # (7 total across the 4 neoforge gametest classes - see forge/.../gametest/*.java's
-          # equivalent 7-entry TEST_TIMEOUTS map above), not vanilla's own "N GAME TESTS COMPLETE"/
-          # "required tests passed" summary lines like an earlier revision of this step did -
-          # confirmed via three separate CI runs (the first real runs of this step ever; the CI
-          # rewrite that introduced this fifo-driven approach had never actually completed a run
-          # before) that all 7 tests reliably report passed/failed within the first couple of
-          # server ticks, but the vanilla summary line never printed even 10+ minutes later. Since
-          # "confirmed locally, ... with no post-pass crash" above was apparently verified against
-          # a real interactive terminal, not a piped fifo, that summary banner may depend on a
+          # (see forge/.../gametest/*.java), not vanilla's own "N GAME TESTS COMPLETE"/"required
+          # tests passed" summary lines like an earlier revision of this step did - confirmed via
+          # three separate CI runs (the first real runs of this step ever; the CI rewrite that
+          # introduced this fifo-driven approach had never actually completed a run before) that
+          # every test reliably reports passed/failed within the first couple of server ticks, but
+          # the vanilla summary line never printed even 10+ minutes later. Since "confirmed
+          # locally, ... with no post-pass crash" above was apparently verified against a real
+          # interactive terminal, not a piped fifo, that summary banner may depend on a
           # console/command-source path this driving method doesn't exercise the same way - each
           # test's own log line is the reliable signal, same as Forge's step already relies on.
-          EXPECTED_TESTS=7
+          #
+          # EXPECTED_TESTS is counted from the actual @GameTest methods rather than hardcoded, so
+          # this can't silently under/over-count after a test is added or removed.
+          EXPECTED_TESTS=$(grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' \
+            neoforge/src/main/java/net/winepicfin/extrabiomes/gametest/*.java | wc -l)
+          if [ "$EXPECTED_TESTS" -eq 0 ]; then
+            echo "::error::No @GameTest methods found under neoforge/.../gametest - discovery regex is stale"
+            exit 1
+          fi
           echo "Waiting for all $EXPECTED_TESTS tests to report passed/failed..."
           for i in $(seq 1 2700); do
             REPORTED=$(grep -cE ': (passed|failed)$' neoforge-gametest.log || true)
@@ -349,6 +363,22 @@ jobs:
         run: ./gradlew :fabric:runDatagen
         timeout-minutes: 10
 
+      # Guards the actual bug class that broke this job twice in one day (a prior commit reordered
+      # steps and silently booted Fabric's GameTestServer before any loader had generated
+      # common/src/generated/resources/, crashing on a missing loot table with no hint why). This
+      # dependency is enforced only by which loader's block happens to run first in this file, not
+      # by anything Gradle checks - so a future reorder can reintroduce the same silent breakage.
+      # Fail loudly here instead, right before the first thing in the file that actually needs the
+      # data, rather than relying on comments elsewhere to keep the ordering right forever.
+      - name: Verify shared generated data exists
+        if: steps.platforms.outputs.fabric == 'true'
+        run: |
+          if [ ! -d common/src/generated/resources/data/extrabiomes ] || \
+             [ -z "$(ls -A common/src/generated/resources/data/extrabiomes 2>/dev/null)" ]; then
+            echo "::error::common/src/generated/resources/data/extrabiomes is missing or empty - no enabled loader generated shared data before this step. Check step ordering in this workflow (Forge/NeoForge runData must run before Fabric's GameTestServer boot)."
+            exit 1
+          fi
+
       # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
       # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
       # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
@@ -385,6 +415,14 @@ jobs:
       # common/src/generated/resources/ - always has that data available by the time it runs,
       # regardless of which loader(s) this branch actually has enabled (see gradle.properties'
       # enabled_platforms).
+      - name: Verify shared generated data exists (unit tests)
+        run: |
+          if [ ! -d common/src/generated/resources/data/extrabiomes ] || \
+             [ -z "$(ls -A common/src/generated/resources/data/extrabiomes 2>/dev/null)" ]; then
+            echo "::error::common/src/generated/resources/data/extrabiomes is missing or empty - no enabled loader generated shared data before :common:test. Check step ordering in this workflow."
+            exit 1
+          fi
+
       - name: Run unit tests
         run: ./gradlew :common:test
         continue-on-error: true
