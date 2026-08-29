@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -53,11 +54,16 @@ public class SpawnEggItemGameTests {
             // for every one of these. Calling it here is exactly what
             // CreativeModeTabs$Rebuilder.buildContents does for every registered item.
             item.requiredFeatures();
-            // getType(null) is the other path documented on that class - the tag-less fallback
-            // vanilla's own crafting/inventory code exercises constantly (e.g. rendering the item
-            // in a creative tab, which needs an EntityType to pick the egg's overlay color).
-            helper.assertTrue(((SpawnEggItem) item).getType(null) != null,
-                    item + "#getType(null) returned null");
+            // ItemStack.EMPTY (not a literal null) is the tag-less fallback vanilla's own
+            // crafting/inventory code actually passes (e.g. rendering the item in a creative tab,
+            // which needs an EntityType to pick the egg's overlay color) - DeferredSpawnEggItem
+            // doesn't override getType(ItemStack), only getDefaultType() (see its class source),
+            // so this exercises plain vanilla SpawnEggItem#getType, which never tolerates a real
+            // Java null stack post the 1.20.5 item-component rewrite (ExtraBiomesSpawnEggItem's
+            // own getType(null)-safe override, exercised by Fabric's equivalent test, doesn't
+            // apply here since NeoForge's spawn eggs are DeferredSpawnEggItem, not that class).
+            helper.assertTrue(((SpawnEggItem) item).getType(ItemStack.EMPTY) != null,
+                    item + "#getType(ItemStack.EMPTY) returned null");
             // NeoForge's DeferredSpawnEggItem keeps its EntityType->egg lookup map private (unlike
             // Forge's public static ForgeSpawnEggItem.fromEntityType()), so the pick-block
             // round-trip regression check forge's version of this test has isn't reproducible here
