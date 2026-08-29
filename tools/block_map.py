@@ -56,20 +56,25 @@ def _facing_from_cardinal(states, default="north"):
 
 # extrabiomes:direction int -> (Java stair facing, Java stair shape) for the
 # corner variants. Derived from the visible geometry bone's physical quadrant
-# (read from extrabiomes.stairs.geo cube coordinates) mapped to the vanilla Java
-# stair model convention (facing=east,outer_right occupies the NE quadrant):
-#   outer bone = the single filled quadrant; inner bone = the single notch quadrant.
-# Every entry is canonicalised to the "_right" shape (each physical corner has an
-# equivalent _left form at another facing; _right is picked for consistency).
+# (read from extrabiomes.stairs.geo cube coordinates) mapped against the REAL
+# vanilla Java stair models extracted from minecraft-client.jar
+# (assets/minecraft/models/block/outer_stairs.json / inner_stairs.json,
+# cross-checked against oak_stairs.json's per-facing/shape "y" rotations):
+# facing=east,outer_right's filled corner is SE (X 8-16, Z 8-16), NOT NE as a
+# previous derivation assumed - that earlier assumption put every corner entry
+# below one 90 rotation off. outer bone = the single filled quadrant; inner
+# bone = the single notch quadrant. Every entry is canonicalised to the
+# "_right" shape (each physical corner has an equivalent _left form at another
+# facing; _right is picked for consistency).
 STAIR_CORNER = {
-    4: ("west", "outer_right"),   # southwest_outer  (filled SW)
-    5: ("south", "outer_right"),  # southeast_outer  (filled SE)
-    6: ("north", "outer_right"),  # northwest_outer  (filled NW)
-    7: ("east", "outer_right"),   # northeast_outer  (filled NE)
-    8: ("west", "inner_right"),   # northeast_inner  (notch NE)
-    9: ("south", "inner_right"),  # northwest_inner  (notch NW)
-    10: ("east", "inner_right"),  # southwest_inner  (notch SW)
-    11: ("north", "inner_right"), # southeast_inner  (notch SE)
+    4: ("south", "outer_right"),  # southwest_outer  (filled SW)
+    5: ("east", "outer_right"),   # southeast_outer  (filled SE)
+    6: ("west", "outer_right"),   # northwest_outer  (filled NW)
+    7: ("north", "outer_right"),  # northeast_outer  (filled NE)
+    8: ("south", "inner_right"),  # northeast_inner  (notch NE)
+    9: ("east", "inner_right"),   # northwest_inner  (notch NW)
+    10: ("north", "inner_right"), # southwest_inner  (notch SW)
+    11: ("west", "inner_right"),  # southeast_inner  (notch SE)
 }
 
 # golden_rail rail_direction int -> Java rail shape.
