@@ -10,10 +10,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -26,7 +26,7 @@ import net.winepicfin.extrabiomes.item.ModItems;
  * grants a player wearing it (Bedrock's environment_sensor -> add_frog/remove_frog component
  * groups on skin_id).
  */
-@Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
 public class WolfFrogHatHandler {
     @SubscribeEvent
     public static void onWolfInteract(PlayerInteractEvent.EntityInteract event) {
@@ -52,17 +52,17 @@ public class WolfFrogHatHandler {
             if (!player.getAbilities().instabuild) {
                 heldItem.shrink(1);
             }
-            wolf.level().playSound(null, wolf, SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.NEUTRAL, 1.0F, 1.0F);
+            wolf.level().playSound(null, wolf, SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
         } else {
             wolf.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
             wolf.level().addFreshEntity(new ItemEntity(wolf.level(), wolf.getX(), wolf.getY() + 0.5D, wolf.getZ(), headItem));
-            heldItem.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(event.getHand()));
+            heldItem.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
             wolf.level().playSound(null, wolf, SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
         }
     }
 
     @SubscribeEvent
-    public static void onWolfTick(LivingEvent.LivingTickEvent event) {
+    public static void onWolfTick(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof Wolf wolf) || wolf.level().isClientSide) return;
         if (wolf.getItemBySlot(EquipmentSlot.HEAD).getItem() != ModItems.FROG_HELMET.get()) return;
         if (wolf.isInWaterOrBubble()) return;

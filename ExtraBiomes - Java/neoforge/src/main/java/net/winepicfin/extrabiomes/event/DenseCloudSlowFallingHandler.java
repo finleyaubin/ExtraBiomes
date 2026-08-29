@@ -7,9 +7,9 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 
@@ -25,16 +25,15 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
  * This mirrors that exactly, re-applying the 30-tick effect every tick the condition holds so it
  * persists smoothly through the landing.
  */
-@Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
 public class DenseCloudSlowFallingHandler {
     private static final int MIN_SCAN_DISTANCE = 4;
     private static final int MAX_SCAN_DISTANCE = 40;
     private static final double MIN_FALL_SPEED = 0.5;
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        Player player = event.player;
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
         Level level = player.level();
         if (level.isClientSide) return;
 

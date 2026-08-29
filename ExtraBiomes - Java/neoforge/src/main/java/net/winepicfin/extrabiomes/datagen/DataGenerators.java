@@ -9,14 +9,14 @@ import net.minecraft.data.registries.RegistryPatchGenerator;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.advancements.ModAdvancements;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event){
@@ -40,7 +40,7 @@ public class DataGenerators {
                 .thenApply(RegistrySetBuilder.PatchedRegistries::full);
 
         generator.addProvider(event.includeServer(),new ModRecipeProvider(packOutput, lookupProvider));
-        generator.addProvider(event.includeServer(),ModLootTableProvider.create(packOutput));
+        generator.addProvider(event.includeServer(),ModLootTableProvider.create(packOutput, lookupProvider));
 
         generator.addProvider(event.includeClient(),new ModBlockStateProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(),new ModItemModelProvider(packOutput, existingFileHelper));
@@ -51,7 +51,12 @@ public class DataGenerators {
 
         generator.addProvider(event.includeServer(),new ModWorldGenProvider(packOutput,lookupProvider));
 
-        generator.addProvider(event.includeServer(), new AdvancementProvider(packOutput, lookupProvider,
+        // ModAdvancements resolves biome Holders via registries.lookupOrThrow(Registries.BIOME) (the
+        // 1.20.6 LocationPredicate.Builder.inBiome(Holder<Biome>) rework, replacing the old
+        // setBiome(ResourceKey<Biome>) overload that needed no registry lookup) - same
+        // datapack-registered-biomes gap as ModBiomeTagProvider above, so this needs the patched
+        // lookup too, not the plain one.
+        generator.addProvider(event.includeServer(), new AdvancementProvider(packOutput, biomeTagLookupProvider,
                 List.of(new ModAdvancements())));
     }
 }

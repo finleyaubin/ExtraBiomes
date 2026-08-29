@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.platform.neoforge;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ArmorItem;
@@ -24,6 +24,7 @@ import net.winepicfin.extrabiomes.neoforge.block.custom.StickPileBlock;
 import net.winepicfin.extrabiomes.neoforge.fluid.ModFluids;
 import net.winepicfin.extrabiomes.neoforge.item.custom.FrogHelmetItem;
 
+import java.lang.reflect.Constructor;
 import java.util.function.Supplier;
 
 public class ExtraBiomesExpectPlatformImpl {
@@ -39,20 +40,38 @@ public class ExtraBiomesExpectPlatformImpl {
         return WoodType.register(woodType);
     }
 
-    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(Codec<P> codec) {
-        return new TreeDecoratorType<>(codec);
+    // TreeDecoratorType/TrunkPlacerType's constructors are private in vanilla 1.20.6, and NeoForge
+    // 20.6.139's own accesstransformer.cfg still targets the old Codec-typed constructor (it wasn't
+    // updated for the MapCodec rework), so its public-ification never applies here - reflection is
+    // the only way left to construct a custom entry.
+    @SuppressWarnings("unchecked")
+    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(MapCodec<P> codec) {
+        try {
+            Constructor<TreeDecoratorType> constructor = TreeDecoratorType.class.getDeclaredConstructor(MapCodec.class);
+            constructor.setAccessible(true);
+            return (TreeDecoratorType<P>) constructor.newInstance(codec);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(Codec<P> codec) {
-        return new TrunkPlacerType<>(codec);
+    @SuppressWarnings("unchecked")
+    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(MapCodec<P> codec) {
+        try {
+            Constructor<TrunkPlacerType> constructor = TrunkPlacerType.class.getDeclaredConstructor(MapCodec.class);
+            constructor.setAccessible(true);
+            return (TrunkPlacerType<P>) constructor.newInstance(codec);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {
-        return new LiquidBlock(ModFluids.SOURCE_GOO, properties);
+        return new LiquidBlock(ModFluids.SOURCE_GOO.get(), properties);
     }
 
     public static Item createBucketOfGooItem(Item.Properties properties) {
-        return new BucketItem(ModFluids.SOURCE_GOO, properties);
+        return new BucketItem(ModFluids.SOURCE_GOO.get(), properties);
     }
 
     public static Item createFrogHelmetItem(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties) {

@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -51,7 +52,7 @@ import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
 
-// The value here should match an entry in the META-INF/mods.toml file. This is the Forge
+// The value here should match an entry in the META-INF/neoforge.mods.toml file. This is the Forge
 // bootstrap entry point; ExtraBiomes (common) holds only the loader-agnostic MOD_ID constant.
 @Mod(ExtraBiomes.MOD_ID)
 public class ExtraBiomesForge
@@ -209,7 +210,7 @@ public class ExtraBiomesForge
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
