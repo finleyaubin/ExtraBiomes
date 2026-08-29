@@ -336,15 +336,15 @@ def map_block(name, states, be=None):
         if direction in STAIR_CORNER:
             facing, shape = STAIR_CORNER[direction]
         else:
-            # straight: facing = cardinal_direction directly, NOT mirrored.
-            # A previous derivation applied the same E<->W mirror used for
-            # doors/trapdoors here too, on the assumption stairs share their
-            # mirrored authoring convention - confirmed wrong in-game (east
-            # and west straight stairs, both halves, came out backwards;
-            # north/south - already unmirrored - were correct). The STAIR_CORNER
-            # table above (rederived straight from the real vanilla stair
-            # models, no mirror involved) is the trustworthy reference here.
-            facing, shape = _s(states.get("minecraft:cardinal_direction", "north")), "straight"
+            # straight: facing from cardinal_direction with the E<->W mirror
+            # (see _facing_from_cardinal/_EW_SWAP above). NOTE: these are
+            # jigsaw pieces - a single block's facing observed in the
+            # generated world can be rotated 90/180/270 by jigsaw connector
+            # matching at generation time, independent of what's stored here.
+            # Don't "fix" this branch again from a single F3 reading without
+            # first ruling out piece rotation (e.g. by checking a manually
+            # placed block, or multiple instances of the same piece).
+            facing, shape = _facing_from_cardinal(states), "straight"
         return name, {
             "facing": facing,
             "half": half,
