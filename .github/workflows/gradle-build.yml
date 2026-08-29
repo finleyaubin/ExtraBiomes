@@ -22,14 +22,14 @@ jobs:
     # enabled_platforms and settings.gradle) - dropped from this job entirely rather than just
     # skipped, so a future MC version branch re-adding forge should also restore its steps here.
     #
-    # Sum of this job's own step timeouts: unit tests(10) + Run Fabric GameTests(50, via its
-    # inline `timeout 3000`) + NeoForge downloadAssets(10) + NeoForge runData(10) + Run NeoForge
+    # Sum of this job's own step timeouts: NeoForge downloadAssets(10) + NeoForge runData(10) +
+    # unit tests(10) + Run Fabric GameTests(50, via its inline `timeout 3000`) + Run NeoForge
     # GameTests(50, via its inline `timeout 3000` - a single driven boot, see that step's own
     # comment) + final build(15) = 145 minutes, plus headroom for checkout/setup-java/setup-
     # gradle/EULA steps (uncapped but fast) and the 180-minute cap below. A job timeout below the
     # real sum kills everything with no diagnostics before a slow step's own timeout/watchdog gets
     # a chance to fire. The GameTest steps got wider budgets after raising max-tick-time to 1000s
-    # (see the Fabric seed step below) - a real, single-threaded Perlin-noise search, not a hang,
+    # (see the NeoForge EULA step below) - a real, single-threaded Perlin-noise search, not a hang,
     # so it needs matching wall-clock room rather than a shorter watchdog cutting it off mid-search.
     timeout-minutes: 180
     defaults:
@@ -54,19 +54,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Run unit tests
-        run: ./gradlew :common:test
-        continue-on-error: true
-        timeout-minutes: 10
-
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: extrabiomes-common-test-report
-          path: "ExtraBiomes - Java/common/build/reports/tests/test/"
-          if-no-files-found: ignore
 
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
       # Also pre-seed server.properties with a raised max-tick-time:
@@ -98,6 +85,52 @@ jobs:
       # wired up via ModTerrablender.registerBiomes(), called from FabricConfig.load()) to a real,
       # non-degenerate climate parameter box per biome; it is not a registration/weight bug, just
       # genuine placement rarity at this specific seed.
+      - name: Accept Minecraft EULA for the NeoForge test server
+        run: |
+          mkdir -p neoforge/run
+          echo "eula=true" > neoforge/run/eula.txt
+          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > neoforge/run/server.properties
+
+      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
+      # populated until this runs at least once. Without it, runData's forked JVM throws
+      # "Cannot parse argument '.../fabric-loom/assets' of option assetsDir" and - since Loom's
+      # dev-launch wrapper never calls System.exit() after an early crash like this - just hangs
+      # forever instead of failing, eating the whole job's time budget (see the 2026-08-19 CI run
+      # that hit the 6-hour ceiling on this exact step for the failure mode this step prevents).
+      - name: Download NeoForge Loom assets
+        run: ./gradlew :neoforge:downloadAssets
+        timeout-minutes: 10
+
+      # :neoforge:runData populates common's src/generated/resources (biome JSON, tags, recipes,
+      # loot tables, ...) that :common:test's BiomeRegistrationParityTest reads directly - without
+      # this running first, every case in that test fails with NoSuchFileException. Uses its own
+      # "run-data" directory (see neoforge/build.gradle's data run config), not the "run" dir
+      # shared with runGameTestServer, so it doesn't leave a throwaway world save behind that would
+      # silently override the level-seed pinned above (Minecraft only reads level-seed when
+      # *creating* a world).
+      - name: Generate NeoForge data
+        run: ./gradlew :neoforge:runData
+        timeout-minutes: 10
+
+      - name: Run unit tests
+        run: ./gradlew :common:test
+        continue-on-error: true
+        timeout-minutes: 10
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-common-test-report
+          path: "ExtraBiomes - Java/common/build/reports/tests/test/"
+          if-no-files-found: ignore
+
+      # Same level-seed and max-tick-time reasoning as the NeoForge EULA/seed step above - Fabric's
+      # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
+      # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
+      # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as NeoForge's, so
+      # it needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it
+      # mid-sweep.
       - name: Pin seed for the Fabric test server
         run: |
           mkdir -p fabric/run
@@ -119,22 +152,6 @@ jobs:
           name: extrabiomes-fabric-gametest-log
           path: "ExtraBiomes - Java/fabric-gametest.log"
           if-no-files-found: ignore
-
-      # Same level-seed/max-tick-time reasoning as the Fabric seed step above, own run dir since
-      # :neoforge:runData/:neoforge:runGameTestServer use "neoforge/run"/"neoforge/run-data".
-      - name: Accept Minecraft EULA for the NeoForge test server
-        run: |
-          mkdir -p neoforge/run
-          echo "eula=true" > neoforge/run/eula.txt
-          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > neoforge/run/server.properties
-
-      - name: Download NeoForge Loom assets
-        run: ./gradlew :neoforge:downloadAssets
-        timeout-minutes: 10
-
-      - name: Generate NeoForge data
-        run: ./gradlew :neoforge:runData
-        timeout-minutes: 10
 
       # NeoForge's own -Dneoforge.gameTestServer=true flag would make this boot vanilla's
       # GameTestServer (auto-run/auto-exit, like Fabric's) - but that class unconditionally bakes
