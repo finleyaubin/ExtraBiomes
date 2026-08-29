@@ -39,15 +39,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      # Loom's toolchain compiles for 17, but the Gradle daemon itself needs 21 to run
-      # (a loom dependency requires JVM runtime 21+). Installing both lets Gradle's toolchain
-      # support auto-detect the 17 JDK for compilation while running on 21.
-      - name: Set up JDKs
+      # Minecraft 1.20.6 requires Java 21 (bumped from 17 on this branch's 1.20.4->1.20.6
+      # version bump - confirmed via the merged Minecraft jar's class file version, 65.0).
+      # Loom's toolchain now compiles for 21, and the Gradle daemon itself also needs 21+ to run
+      # (a loom dependency requires JVM runtime 21+), so a single JDK covers both.
+      - name: Set up JDK
         uses: actions/setup-java@v5
         with:
-          java-version: |
-            17
-            21
+          java-version: 21
           distribution: 'temurin'
 
       - name: Setup Gradle
