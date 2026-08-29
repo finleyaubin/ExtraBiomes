@@ -374,10 +374,11 @@ def map_block(name, states, be=None):
             "powered": "false",
         }
 
-    # logs / wood -> RotatedPillarBlock. Bedrock stripped_ -> Java striped_.
+    # logs / wood -> RotatedPillarBlock. Id is identical on both sides
+    # (registered Java block is "stripped_sky_log", not "striped_sky_log").
     if name in ("extrabiomes:gilded_sky_log", "extrabiomes:sky_log",
                 "extrabiomes:sky_wood", "extrabiomes:stripped_sky_log"):
-        java_name = "extrabiomes:striped_sky_log" if name == "extrabiomes:stripped_sky_log" else name
+        java_name = name
         face = states.get("minecraft:block_face", "up")
         return java_name, {"axis": BLOCK_FACE_AXIS.get(face, "y")}
 
