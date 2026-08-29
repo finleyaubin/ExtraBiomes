@@ -136,50 +136,6 @@ jobs:
         run: ./gradlew :forge:runData
         timeout-minutes: 10
 
-      # NeoForge's own datagen writes into the same shared common/src/generated/resources/ as
-      # Forge's, so this can also satisfy :common:test's need for generated biome JSON below when
-      # Forge is disabled. Moved ahead of Fabric/NeoForge's GameTest steps (rather than staying
-      # next to those, where the equivalent step used to sit) specifically so at least one enabled
-      # loader has generated that data before "Run unit tests" runs, whichever loaders this branch
-      # actually has.
-      - name: Accept Minecraft EULA for the NeoForge test server
-        if: steps.platforms.outputs.neoforge == 'true'
-        run: |
-          mkdir -p neoforge/run
-          echo "eula=true" > neoforge/run/eula.txt
-          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > neoforge/run/server.properties
-
-      - name: Download NeoForge Loom assets
-        if: steps.platforms.outputs.neoforge == 'true'
-        run: ./gradlew :neoforge:downloadAssets
-        timeout-minutes: 10
-
-      - name: Generate NeoForge data
-        if: steps.platforms.outputs.neoforge == 'true'
-        run: ./gradlew :neoforge:runData
-        timeout-minutes: 10
-
-      # Fallback for a Fabric-only branch (no Forge, no NeoForge) - Loom's data() run type is
-      # Forge-only, so Fabric API's own fabricApi.configureDataGeneration() extension provides the
-      # equivalent "runDatagen" task instead (see fabric/build.gradle).
-      - name: Generate Fabric data
-        if: steps.platforms.outputs.fabric == 'true' && steps.platforms.outputs.forge == 'false' && steps.platforms.outputs.neoforge == 'false'
-        run: ./gradlew :fabric:runDatagen
-        timeout-minutes: 10
-
-      - name: Run unit tests
-        run: ./gradlew :common:test
-        continue-on-error: true
-        timeout-minutes: 10
-
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: extrabiomes-common-test-report
-          path: "ExtraBiomes - Java/common/build/reports/tests/test/"
-          if-no-files-found: ignore
-
       # As of the Minecraft 1.20.2 / Forge 48.1.0 bump, `/test runall` (batching every registered
       # test into one grid-laid-out run - the approach this step used to take) is unusable: two
       # real, undocumented bugs in vanilla/Forge's own GameTest framework (not this mod's code -
@@ -235,7 +191,11 @@ jobs:
           for t in "${!TEST_TIMEOUTS[@]}"; do
             echo "=== $t ===" | tee -a gametest.log
             mkfifo "gt-$t.fifo"
-            timeout "${TEST_TIMEOUTS[$t]}" ./gradlew :forge:runGameTestServer < "gt-$t.fifo" > "gt-$t.log" 2>&1 &
+            # Streamed live via `tee` (not just redirected to gt-$t.log) so the server's own
+            # progress - world gen percentage, each biome's "found at BlockPos..." line, the
+            # test's own passed/failed line - shows up in this step's live Actions log instead of
+            # only being visible after the fact in the uploaded gametest.log artifact.
+            timeout "${TEST_TIMEOUTS[$t]}" ./gradlew :forge:runGameTestServer < "gt-$t.fifo" 2>&1 | tee "gt-$t.log" &
             GPID=$!
             # A fast-passing test can crash the server (see the post-pass beacon-placement bug
             # documented above) before this subshell's second write, closing the fifo's read end -
@@ -270,12 +230,11 @@ jobs:
           path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
 
-      # Same level-seed and max-tick-time reasoning as the Forge/NeoForge EULA steps above -
-      # Fabric's run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed
-      # for a deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest)
-      # walks the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches, so it
-      # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it
-      # mid-sweep.
+      # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
+      # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
+      # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
+      # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as Forge's, so it
+      # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it mid-sweep.
       - name: Pin seed for the Fabric test server
         if: steps.platforms.outputs.fabric == 'true'
         run: |
@@ -301,6 +260,35 @@ jobs:
           path: "ExtraBiomes - Java/fabric-gametest.log"
           if-no-files-found: ignore
 
+      # Same level-seed/max-tick-time reasoning as the Forge EULA step above, own run dir since
+      # :neoforge:runData/:neoforge:runGameTestServer use "neoforge/run"/"neoforge/run-data", not
+      # forge's. Kept immediately adjacent to "Run NeoForge GameTests" below (rather than moved
+      # earlier alongside Forge/Fabric's own prep) - an earlier revision of this workflow moved
+      # NeoForge's downloadAssets/runData up near the top of the job instead, and the resulting
+      # multi-minute gap before this loader's own GameTestServer boot reproduced a hang twice in a
+      # row (all 7 tests logged "passed", but the vanilla GameTestServer's own "N GAME TESTS
+      # COMPLETE" summary line - which fires in the same tick as the last test elsewhere - never
+      # printed). Restoring the original adjacency fixed it; :common:test's need for generated data
+      # is instead satisfied by moving "Run unit tests" down past every loader's own GameTest
+      # section instead (see below), so at least one enabled loader has already generated it by
+      # then regardless of which loader that ends up being.
+      - name: Accept Minecraft EULA for the NeoForge test server
+        if: steps.platforms.outputs.neoforge == 'true'
+        run: |
+          mkdir -p neoforge/run
+          echo "eula=true" > neoforge/run/eula.txt
+          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > neoforge/run/server.properties
+
+      - name: Download NeoForge Loom assets
+        if: steps.platforms.outputs.neoforge == 'true'
+        run: ./gradlew :neoforge:downloadAssets
+        timeout-minutes: 10
+
+      - name: Generate NeoForge data
+        if: steps.platforms.outputs.neoforge == 'true'
+        run: ./gradlew :neoforge:runData
+        timeout-minutes: 10
+
       # NeoForge's own -Dneoforge.gameTestServer=true flag would make this boot vanilla's
       # GameTestServer (auto-run/auto-exit, like Fabric's) - but that class unconditionally bakes
       # its world from WorldPresets.FLAT, giving the overworld a single-biome FixedBiomeSource
@@ -319,17 +307,30 @@ jobs:
         run: |
           mkfifo neoforge-gametest.fifo
           : > neoforge-gametest.log
-          timeout 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo > neoforge-gametest.log 2>&1 &
+          echo "Booting :neoforge:runGameTestServer (fresh DedicatedServer, will drive /test runall in 60s)..."
+          # Streamed live via `tee` (not just redirected to neoforge-gametest.log) so world gen
+          # progress, each biome's "found at BlockPos..." line, and every test's own passed/failed
+          # line show up in this step's live Actions log as they happen, instead of only being
+          # visible after the fact in the uploaded gametest log artifact.
+          timeout 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo 2>&1 | tee neoforge-gametest.log &
           GPID=$!
 
           ( sleep 60; echo "test runall" || true ) > neoforge-gametest.fifo &
 
+          echo "Waiting for the server to report \"GAME TESTS COMPLETE\"..."
           for i in $(seq 1 2700); do
             if grep -qE 'GAME TESTS COMPLETE' neoforge-gametest.log; then
               break
             fi
+            # A heartbeat every 30s, separate from the tee'd server output above - so a run that's
+            # still genuinely polling (as opposed to one where the server itself has gone silent,
+            # the actual failure mode this is guarding against) is never ambiguous in the log.
+            if (( i % 30 == 0 )); then
+              echo "Still waiting on NeoForge GameTests (${i}s elapsed)..."
+            fi
             sleep 1
           done
+          echo "Sending stop..."
           echo "stop" > neoforge-gametest.fifo || true
           wait "$GPID" || true
           rm -f neoforge-gametest.fifo
@@ -349,6 +350,35 @@ jobs:
         with:
           name: extrabiomes-neoforge-gametest-log
           path: "ExtraBiomes - Java/neoforge-gametest.log"
+          if-no-files-found: ignore
+
+      # Fallback for a Fabric-only branch (no Forge, no NeoForge) - Loom's data() run type is
+      # Forge-only, so Fabric API's own fabricApi.configureDataGeneration() extension provides the
+      # equivalent "runDatagen" task instead (see fabric/build.gradle). Forge's and NeoForge's own
+      # runData above already populate the same shared common/src/generated/resources/ when either
+      # of those is enabled, so this only needs to run when neither is.
+      - name: Generate Fabric data
+        if: steps.platforms.outputs.fabric == 'true' && steps.platforms.outputs.forge == 'false' && steps.platforms.outputs.neoforge == 'false'
+        run: ./gradlew :fabric:runDatagen
+        timeout-minutes: 10
+
+      # Deliberately runs after every enabled loader's own GameTest section above (rather than
+      # right after Forge's runData, where this step used to sit) so :common:test's
+      # BiomeRegistrationParityTest - which reads generated biome JSON from
+      # common/src/generated/resources/ - always has that data available by the time it runs,
+      # regardless of which loader(s) this branch actually has enabled (see gradle.properties'
+      # enabled_platforms).
+      - name: Run unit tests
+        run: ./gradlew :common:test
+        continue-on-error: true
+        timeout-minutes: 10
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-common-test-report
+          path: "ExtraBiomes - Java/common/build/reports/tests/test/"
           if-no-files-found: ignore
 
       # Runs (and uploads) even when an earlier GameTest step failed - a manually-downloadable jar
