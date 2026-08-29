@@ -18,18 +18,19 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Sum of this job's own step timeouts: downloadAssets(10) + runData(10) + unit tests(10) +
-    # Run GameTests(~38, one fresh server boot per test - see that step's own comment for why -
-    # worst case 1200s for the biome-generation test + 6x180s for the rest) + Run Fabric
-    # GameTests(50, via its inline `timeout 3000`) + NeoForge downloadAssets(10) + NeoForge
-    # runData(10) + Run NeoForge GameTests(50, via its inline `timeout 3000` - a single driven
-    # boot, see that step's own comment) + final build(15) = 173 minutes, plus headroom for
-    # checkout/setup-java/setup-gradle/EULA steps (uncapped but fast) and the 180-minute cap
-    # below. A job timeout below the real sum kills everything with no diagnostics before a slow
-    # step's own timeout/watchdog gets a chance to fire. The GameTest steps got wider budgets
-    # after raising max-tick-time to 1000s (see the EULA step below) - a real, single-threaded
-    # Perlin-noise search, not a hang, so it needs matching wall-clock room rather than a shorter
-    # watchdog cutting it off mid-search.
+    # Forge is out of scope for this release (Fabric + NeoForge only - see gradle.properties'
+    # enabled_platforms and settings.gradle) - dropped from this job entirely rather than just
+    # skipped, so a future MC version branch re-adding forge should also restore its steps here.
+    #
+    # Sum of this job's own step timeouts: unit tests(10) + Run Fabric GameTests(50, via its
+    # inline `timeout 3000`) + NeoForge downloadAssets(10) + NeoForge runData(10) + Run NeoForge
+    # GameTests(50, via its inline `timeout 3000` - a single driven boot, see that step's own
+    # comment) + final build(15) = 145 minutes, plus headroom for checkout/setup-java/setup-
+    # gradle/EULA steps (uncapped but fast) and the 180-minute cap below. A job timeout below the
+    # real sum kills everything with no diagnostics before a slow step's own timeout/watchdog gets
+    # a chance to fire. The GameTest steps got wider budgets after raising max-tick-time to 1000s
+    # (see the Fabric seed step below) - a real, single-threaded Perlin-noise search, not a hang,
+    # so it needs matching wall-clock room rather than a shorter watchdog cutting it off mid-search.
     timeout-minutes: 180
     defaults:
       run:
@@ -54,6 +55,19 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Run unit tests
+        run: ./gradlew :common:test
+        continue-on-error: true
+        timeout-minutes: 10
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-common-test-report
+          path: "ExtraBiomes - Java/common/build/reports/tests/test/"
+          if-no-files-found: ignore
+
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
       # Also pre-seed server.properties with a raised max-tick-time:
       # BiomeGenerationGameTests runs each of its 26 mod-biome ServerLevel#findClosestBiome3d
@@ -69,9 +83,7 @@ jobs:
       # crash report + full stack trace rooted in ImprovedNoise.noise/PerlinNoise.getValue - real
       # single-threaded noise computation, not a stuck/looping thread). 1000000ms (1000s) gives a
       # single such sweep generous headroom above that observed worst case while still letting the
-      # watchdog catch a genuinely hung tick eventually, instead of disabling it outright - unlike
-      # before this test was split per-tick, a bounded value is safe again here since it only ever
-      # has to cover one biome's sweep, not the sum of all 26.
+      # watchdog catch a genuinely hung tick eventually, instead of disabling it outright.
       # Also pin level-seed: CI checks out a clean workspace every run, so with no seed set
       # Minecraft generates a brand-new random world each time, and TerraBlender's noise-based
       # biome placement can push most mod biomes outside the fixed 15000-block search box on an
@@ -83,155 +95,19 @@ jobs:
       # with a fixed seed, a handful of biomes (e.g. the Cold Mesa family, Deep Dark
       # Forest/Green) still land outside 15000 blocks on this particular seed - that is TerraBlender
       # correctly applying each Region's configured weight (Config.biomeWeight/rareBiomeWeight,
-      # wired up via ModTerrablender.registerBiomes(), called from both ForgeConfig.load() and
-      # FabricConfig.load()) to a real, non-degenerate climate parameter box per biome; it is not a
-      # registration/weight bug, just genuine placement rarity at this specific seed.
-      - name: Accept Minecraft EULA for the local test server
-        run: |
-          mkdir -p forge/run
-          echo "eula=true" > forge/run/eula.txt
-          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > forge/run/server.properties
-
-      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
-      # populated until this runs at least once. Without it, runData's forked JVM throws
-      # "Cannot parse argument '.../fabric-loom/assets' of option assetsDir" and - since Loom's
-      # dev-launch wrapper never calls System.exit() after an early crash like this - just hangs
-      # forever instead of failing, eating the whole job's time budget (see the 2026-08-19 CI run
-      # that hit the 6-hour ceiling on this exact step for the failure mode this step prevents).
-      - name: Download Loom assets
-        run: ./gradlew :forge:downloadAssets
-        timeout-minutes: 10
-
-      # :forge:runData now uses its own "run-data" directory (see forge/build.gradle's data
-      # run config) instead of the "run" dir shared with runGameTestServer - it was previously
-      # leaving a throwaway world save (forge/run/world/level.dat) behind as a side effect of
-      # bootstrapping structure/registry context, which silently overrode the level-seed pinned
-      # in the EULA step above (Minecraft only reads level-seed when *creating* a world) by the
-      # time runGameTestServer started. That was the actual cause of CI's "17/26 biomes not
-      # found" runs - the pinned seed was never taking effect, not a biome-placement/TerraBlender
-      # issue. Isolating runData's working directory removes the interference at its source.
-      - name: Generate data
-        run: ./gradlew :forge:runData
-        timeout-minutes: 10
-
-      - name: Run unit tests
-        run: ./gradlew :common:test
-        continue-on-error: true
-        timeout-minutes: 10
-
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: extrabiomes-forge-test-report
-          path: "ExtraBiomes - Java/common/build/reports/tests/test/"
-          if-no-files-found: ignore
-
-      # As of the Minecraft 1.20.2 / Forge 48.1.0 bump, `/test runall` (batching every registered
-      # test into one grid-laid-out run - the approach this step used to take) is unusable: two
-      # real, undocumented bugs in vanilla/Forge's own GameTest framework (not this mod's code -
-      # confirmed by disassembling net.minecraft.gametest.framework.* across both Forge 47.4.10
-      # and 48.1.0; a web research pass found no matching Mojang/Forge/NeoForge bug report or
-      # fix in any later 48.x patch - 48.1.0 is the last 48.x release):
-      #   1. `/test runall`'s grid-placement path (GameTestRunner.runTestBatches) fails
-      #      synchronously with NO exception logged anywhere (checked both INFO and full DEBUG
-      #      Forge logs) - the console just prints "An unexpected error occurred trying to
-      #      execute that command" within milliseconds of "Running all N tests..." and not one
-      #      test ever starts.
-      #   2. Running a test individually via `/test run <name>` DOES work correctly - the test's
-      #      own body executes and this mod's own "<name>: passed"/"<name>: failed" log line
-      #      fires - but the moment the vanilla framework's own post-test reporting listener
-      #      (ReportGameListener.testPassed -> spawnBeacon) tries to place a celebratory beacon
-      #      at the test's structure position, GameTestInfo#getStructureBlockPos() returns null
-      #      and the resulting NullPointerException is uncaught in the server tick loop, crashing
-      #      the *entire* dedicated server - not just that one test.
-      # Bug 2 means only one test can ever complete per server boot. So this step boots a fresh
-      # `:forge:runGameTestServer` once per test, drives `/test run <name>` (not `runall`), reads
-      # that one test's own pass/fail log line, and moves on to the next boot - accepting the
-      # post-pass crash as expected/harmless (the log line and gameplay behavior are already
-      # captured by the time it happens; "wait" below is `|| true` specifically to swallow that
-      # crash's non-zero exit rather than fail the step on it).
-      #
-      # Completion is detected via each @GameTest method's own "<name>: passed"/"<name>: failed"
-      # log line (see forge/.../gametest/*.java) - Vanilla's TestCommand summary line ("All
-      # required tests passed :)") was already confirmed, independently of the above, to never
-      # print when driven from a piped console with no player attached.
-      #
-      # allmodbiomesappearinoverworldgeneration gets its own long per-test timeout:
-      # findClosestBiome3d has no early exit for a biome that's absent (or outside the search
-      # box) - it walks the *entire* 15000-block radius, which costs ~30-40s per biome for a
-      # normal FULL_RANGE-depth search, but biomes constrained to ParameterUtils.Depth.FLOOR (see
-      # the EULA/max-tick-time step above) can each individually cost close to the raised 1000s
-      # max-tick-time ceiling. The other 6 tests are cheap structural/registry checks - a much
-      # shorter per-boot timeout is generous headroom for CI-runner variance in boot time alone.
-      - name: Run GameTests
-        run: |
-          declare -A TEST_TIMEOUTS=(
-            [allmodbiomesappearinoverworldgeneration]=1200
-            [everyspawneggresolvesrequiredfeatureswithoutthrowing]=180
-            [skycityappearsinoverworldgeneration]=180
-            [junglegetsundergroundjunglefeaturesandspawns]=180
-            [mushroomfieldsgetshugemushroomsandspawns]=180
-            [darkforestgetshugemushrooms]=180
-            [plainsgetsharpyspawn]=180
-          )
-
-          : > gametest.log
-          FAILED=0
-          for t in "${!TEST_TIMEOUTS[@]}"; do
-            echo "=== $t ===" | tee -a gametest.log
-            mkfifo "gt-$t.fifo"
-            timeout "${TEST_TIMEOUTS[$t]}" ./gradlew :forge:runGameTestServer < "gt-$t.fifo" > "gt-$t.log" 2>&1 &
-            GPID=$!
-            # A fast-passing test can crash the server (see the post-pass beacon-placement bug
-            # documented above) before this subshell's second write, closing the fifo's read end -
-            # that write then fails with a broken-pipe SIGPIPE, and since this step's shell runs
-            # under `set -e` (GitHub's default bash mode), an unguarded failure here would abort
-            # the whole loop after just one test (observed: plainsGetsHarpySpawn passing almost
-            # instantly and killing every later iteration). `|| true` on each write, same as
-            # `wait "$GPID" || true` below, makes that expected race harmless instead of fatal.
-            ( sleep 60; echo "test run $t" || true; sleep 60; echo "stop" || true ) > "gt-$t.fifo" || true
-            wait "$GPID" || true
-
-            if grep -qE ': failed$' "gt-$t.log"; then
-              echo "::error::$t failed - see gametest.log"
-              FAILED=1
-            elif ! grep -qE ': passed$' "gt-$t.log"; then
-              echo "::error::$t never reported pass/fail (server likely didn't boot/finish in time) - see gametest.log"
-              FAILED=1
-            fi
-
-            cat "gt-$t.log" >> gametest.log
-            rm -f "gt-$t.fifo" "gt-$t.log"
-          done
-
-          exit "$FAILED"
-        shell: bash
-
-      - name: Upload GameTest log
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: extrabiomes-forge-gametest-log
-          path: "ExtraBiomes - Java/gametest.log"
-          if-no-files-found: ignore
-
-      # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
-      # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
-      # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
-      # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as Forge's, so it
-      # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it mid-sweep.
+      # wired up via ModTerrablender.registerBiomes(), called from FabricConfig.load()) to a real,
+      # non-degenerate climate parameter box per biome; it is not a registration/weight bug, just
+      # genuine placement rarity at this specific seed.
       - name: Pin seed for the Fabric test server
         run: |
           mkdir -p fabric/run
           printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > fabric/run/server.properties
 
-      # Unlike Forge's dedicated server, Fabric API's gametest server auto-runs every registered
-      # @GameTest as soon as world gen finishes (driven by the -Dfabric-api.gametest=true vmArg in
-      # fabric/build.gradle) and then exits on its own - no interactive console driving needed.
-      # 3000s mirrors the Forge GameTest step's reasoning: most of the 26 biome sweeps cost
-      # 30-40s, but the FLOOR-depth ones can each individually approach the 1000s max-tick-time
-      # ceiling above.
+      # Fabric API's gametest server auto-runs every registered @GameTest as soon as world gen
+      # finishes (driven by the -Dfabric-api.gametest=true vmArg in fabric/build.gradle) and then
+      # exits on its own - no interactive console driving needed. 3000s gives generous headroom:
+      # most of the 26 biome sweeps cost 30-40s, but the FLOOR-depth ones can each individually
+      # approach the 1000s max-tick-time ceiling above.
       - name: Run Fabric GameTests
         run: timeout 3000 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
         shell: bash
@@ -244,9 +120,8 @@ jobs:
           path: "ExtraBiomes - Java/fabric-gametest.log"
           if-no-files-found: ignore
 
-      # Same level-seed/max-tick-time reasoning as the Forge EULA step above, own run dir since
-      # :neoforge:runData/:neoforge:runGameTestServer use "neoforge/run"/"neoforge/run-data", not
-      # forge's.
+      # Same level-seed/max-tick-time reasoning as the Fabric seed step above, own run dir since
+      # :neoforge:runData/:neoforge:runGameTestServer use "neoforge/run"/"neoforge/run-data".
       - name: Accept Minecraft EULA for the NeoForge test server
         run: |
           mkdir -p neoforge/run
@@ -267,13 +142,9 @@ jobs:
       # instead of the normal MultiNoiseBiomeSource, which silently breaks TerraBlender's overworld
       # biome injection (see neoforge/build.gradle's gameTestServer run config comment). Dropping
       # that flag boots a normal DedicatedServer with gametests still registered, so - unlike
-      # Fabric - it needs interactive driving. Unlike Forge (see the Forge "Run GameTests" step's
-      # own comment for the two framework bugs that force it to drive tests one at a time),
-      # NeoForge's GameTestServer here has neither bug, so `test runall` in a single boot is enough
-      # - confirmed locally, all 7 tests across the 4 neoforge gametest classes pass in one run
-      # with no post-pass crash. Poll the log for the "GAME TESTS COMPLETE" line rather than
-      # sleeping a fixed duration before sending `stop`, since the slow biome-generation test's
-      # runtime varies with CI-runner load.
+      # Fabric - it needs interactive driving via `/test runall`. Poll the log for the "GAME TESTS
+      # COMPLETE" line rather than sleeping a fixed duration before sending `stop`, since the slow
+      # biome-generation test's runtime varies with CI-runner load.
       - name: Run NeoForge GameTests
         run: |
           mkfifo neoforge-gametest.fifo
@@ -317,14 +188,6 @@ jobs:
         if: always()
         run: ./gradlew build
         timeout-minutes: 15
-
-      - name: Upload build artifacts
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: extrabiomes-forge-build
-          path: "ExtraBiomes - Java/forge/build/libs/*.jar"
-          if-no-files-found: ignore
 
       - name: Upload Fabric build artifacts
         if: always()
