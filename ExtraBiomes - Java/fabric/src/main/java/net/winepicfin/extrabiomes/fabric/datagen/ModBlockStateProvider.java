@@ -305,10 +305,9 @@ public class ModBlockStateProvider implements DataProvider {
                 boolean isLeft = shape == StairsShape.INNER_LEFT || shape == StairsShape.OUTER_LEFT;
                 int bottomRotation = isLeft ? baseRotation - 90 : baseRotation;
                 // Top half is visually mirrored (the model is flipped via X_ROT 180), which swaps
-                // which physical corner "left"/"right" ends up on - see this class's javadoc for the
-                // caveat around this being a best-effort reconstruction rather than a byte-for-byte
-                // port of vanilla's private createStairs() logic.
-                int topRotation = isLeft ? baseRotation : baseRotation - 90;
+                // which physical corner "left"/"right" ends up on - the right-side shapes need +90,
+                // not -90 (verified against vanilla's own shipped oak_stairs.json blockstate).
+                int topRotation = isLeft ? baseRotation : baseRotation + 90;
 
                 Variant bottomVariant = Variant.variant().with(VariantProperties.MODEL, model);
                 if (bottomRotation != 0) bottomVariant = bottomVariant.with(VariantProperties.Y_ROT, yRot(bottomRotation)).with(VariantProperties.UV_LOCK, true);
@@ -458,27 +457,47 @@ public class ModBlockStateProvider implements DataProvider {
                         })));
     }
 
+    // ModelTemplates.TRAPDOOR_BOTTOM/TOP/OPEN parent "template_orientable_trapdoor_*" - that's the
+    // iron-trapdoor-style template Mojang uses for textures with a baked-in facing pattern, not the
+    // plain "template_trapdoor_*" every wood trapdoor (and iron's actual bottom/top state, per the
+    // shipped assets) uses. Building the parent references by hand here to get the plain template,
+    // matching vanilla's own oak/iron trapdoor models.
     private void trapdoorBlockState(Block block, ResourceLocation baseModelName) {
         ResourceLocation bottom = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
         ResourceLocation top = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
         ResourceLocation open = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, baseModelName);
-        ModelTemplates.TRAPDOOR_BOTTOM.create(bottom, tm, models::put);
-        ModelTemplates.TRAPDOOR_TOP.create(top, tm, models::put);
-        ModelTemplates.TRAPDOOR_OPEN.create(open, tm, models::put);
+        putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseModelName);
+        putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseModelName);
+        putTrapdoorModel(open, "minecraft:block/template_trapdoor_open", baseModelName);
         // Matches vanilla's 3D-look trapdoor item icon (no flat sprite texture is checked in).
         delegateItemModel(block, bottom);
 
+        // Vanilla only y-rotates the "open" model per facing - the closed bottom/top models are the
+        // same flat slab on every side (cullface-only faces), so rotating them does nothing but was
+        // making the wrongly-oriented "orientable" texture spin along with it.
         blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
                 PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> {
                             ResourceLocation model = isOpen ? open : (half == Half.TOP ? top : bottom);
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model);
-                            int y = rot(facing);
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
+                            if (isOpen) {
+                                int y = rot(facing);
+                                if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
+                            }
                             return v.with(VariantProperties.UV_LOCK, true);
                         })));
+    }
+
+    private void putTrapdoorModel(ResourceLocation modelId, String parent, ResourceLocation texture) {
+        models.put(modelId, () -> {
+            JsonObject json = new JsonObject();
+            json.addProperty("parent", parent);
+            JsonObject textures = new JsonObject();
+            textures.addProperty("texture", texture.toString());
+            json.add("textures", textures);
+            return json;
+        });
     }
 
     // Standing/wall signs render their text via a block entity renderer - the blockstate model is
