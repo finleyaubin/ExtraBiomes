@@ -63,37 +63,85 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Single source of truth for which loaders this branch ships (gradle.properties'
+      # enabled_platforms) - which datagen/publish steps below run follows this instead of the
+      # workflow hardcoding which loaders exist, same as gradle-build.yml's identical step.
+      - name: Detect enabled platforms
+        id: platforms
+        run: |
+          PLATFORMS=",$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2),"
+          for p in forge fabric neoforge; do
+            if [[ "$PLATFORMS" == *",$p,"* ]]; then
+              echo "$p=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "$p=false" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
-      # populated until this runs at least once - see gradle-build.yml's identical step. Forge is
-      # out of scope for this release (Fabric + NeoForge only - see gradle.properties'
-      # enabled_platforms), so this targets neoforge instead.
+      # populated until this runs at least once - see gradle-build.yml's identical step.
       - name: Download Loom assets
-        run: ./gradlew :neoforge:downloadAssets
+        if: steps.platforms.outputs.forge == 'true'
+        run: ./gradlew :forge:downloadAssets
         timeout-minutes: 10
 
       # ./gradlew build runs :common:test, and BiomeRegistrationParityTest reads generated
       # biome JSON from src/generated/resources/ - without running runData first, those files
       # don't exist yet and every case in that test fails with NoSuchFileException. Mirrors
-      # the same two steps gradle-build.yml runs before its own build.
+      # the same steps gradle-build.yml runs before its own build - Forge is preferred when
+      # enabled, with NeoForge/Fabric as fallbacks that write to the same shared
+      # common/src/generated/resources/, since only one loader needs to generate it.
       - name: Generate data
+        if: steps.platforms.outputs.forge == 'true'
+        run: ./gradlew :forge:runData
+        timeout-minutes: 10
+
+      - name: Download NeoForge Loom assets
+        if: steps.platforms.outputs.neoforge == 'true' && steps.platforms.outputs.forge == 'false'
+        run: ./gradlew :neoforge:downloadAssets
+        timeout-minutes: 10
+
+      - name: Generate NeoForge data
+        if: steps.platforms.outputs.neoforge == 'true' && steps.platforms.outputs.forge == 'false'
         run: ./gradlew :neoforge:runData
+        timeout-minutes: 10
+
+      - name: Generate Fabric data
+        if: steps.platforms.outputs.fabric == 'true' && steps.platforms.outputs.forge == 'false' && steps.platforms.outputs.neoforge == 'false'
+        run: ./gradlew :fabric:runDatagen
         timeout-minutes: 10
 
       # mod_version in gradle.properties should already match the tag before tagging a
       # release - this doesn't derive the jar version from the tag, it just builds whatever
-      # gradle.properties currently says.
+      # gradle.properties currently says. Which loaders actually get built follows
+      # settings.gradle's `include(...)` list, which should be kept in sync with
+      # enabled_platforms (see gradle.properties).
       - name: Build mod jars
         run: ./gradlew build
         timeout-minutes: 20
+
+      # Composed dynamically rather than a hardcoded three-line list, so a disabled loader's
+      # glob (which would never match a built jar) doesn't need special-casing here.
+      - name: Compose release artifact list
+        id: artifacts
+        # GitHub Actions runs `run:` steps under `bash -e`, but a `cond && echo` whose `cond`
+        # fails is exempted from triggering it (bash only checks the command following the final
+        # `&&`) - a disabled loader's skipped line is safe here, not a step failure.
+        run: |
+          {
+            echo "list<<RELEASE_FILES_EOF"
+            [ "${{ steps.platforms.outputs.forge }}" = "true" ] && echo "ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar"
+            [ "${{ steps.platforms.outputs.fabric }}" = "true" ] && echo "ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar"
+            [ "${{ steps.platforms.outputs.neoforge }}" = "true" ] && echo "ExtraBiomes - Java/neoforge/build/libs/ExtraBiomes-neoforge-v*.jar"
+            echo "RELEASE_FILES_EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
-          files: |
-            ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
-            ExtraBiomes - Java/neoforge/build/libs/ExtraBiomes-neoforge-v*.jar
+          files: ${{ steps.artifacts.outputs.list }}
           body_path: /tmp/changelog.md
           draft: false
           prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
@@ -102,16 +150,36 @@ jobs:
 
       # One mc-publish step per loader rather than a single glob across both build/libs
       # dirs - each has its own `loaders:` value, and splitting keeps a failure on one loader
-      # from being ambiguous about which upload it was. Forge is out of scope for this release
-      # (Fabric + NeoForge only - see gradle.properties' enabled_platforms), so no Forge publish
-      # step here. The ExtraBiomes-<loader>-v*.jar glob only matches remapJar's final output (see
-      # fabric/build.gradle and neoforge/build.gradle's archiveFileName), not the intermediate
-      # -dev-shadow or -sources jars also in build/libs. CurseForge project 1663861 reuses
-      # Bedrock's CF_API_TOKEN (same CurseForge account); Modrinth project "extrabiome" needs its
-      # own PAT in MODRINTH_TOKEN (create one at modrinth.com/settings/pats with the "Create
-      # versions" scope on that project). GitHub release publishing is left to the softprops step
-      # above, so no github-token is passed here.
+      # from being ambiguous about which upload it was. The ExtraBiomes-<loader>-v*.jar glob
+      # only matches remapJar's final output (see forge/build.gradle and fabric/build.gradle's
+      # archiveFileName), not the intermediate -dev-shadow or -sources jars also in build/libs.
+      # CurseForge project 1663861 reuses Bedrock's CF_API_TOKEN (same CurseForge account);
+      # Modrinth project "extrabiome" needs its own PAT in MODRINTH_TOKEN (create one at
+      # modrinth.com/settings/pats with the "Create versions" scope on that project). GitHub
+      # release publishing is left to the softprops step above, so no github-token is passed here.
+      - name: Publish Forge jar
+        if: steps.platforms.outputs.forge == 'true'
+        uses: Kira-NT/mc-publish@v3
+        with:
+          modrinth-id: extrabiome
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: "1663861"
+          curseforge-token: ${{ secrets.CF_API_TOKEN }}
+          files: ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
+          name: ${{ github.ref_name }}
+          version: ${{ steps.version.outputs.VERSION }}
+          loaders: forge
+          game-versions: ${{ steps.version.outputs.MC_VERSION }}
+          version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
+          changelog-file: /tmp/changelog.md
+          dependencies: |
+            terrablender(required){modrinth:terrablender}{curseforge:563928}
+            geckolib(required){modrinth:geckolib}{curseforge:388172}
+            architectury-api(required){modrinth:architectury-api}{curseforge:419699}
+            create(optional){modrinth:create}{curseforge:328085}
+
       - name: Publish Fabric jar
+        if: steps.platforms.outputs.fabric == 'true'
         uses: Kira-NT/mc-publish@v3
         with:
           modrinth-id: extrabiome
@@ -133,6 +201,7 @@ jobs:
             create-fabric(optional){modrinth:create-fabric}{curseforge:624165}
 
       - name: Publish NeoForge jar
+        if: steps.platforms.outputs.neoforge == 'true'
         uses: Kira-NT/mc-publish@v3
         with:
           modrinth-id: extrabiome
