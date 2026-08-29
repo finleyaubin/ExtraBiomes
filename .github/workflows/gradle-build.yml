@@ -230,48 +230,15 @@ jobs:
           path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
 
-      # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
-      # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
-      # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
-      # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as Forge's, so it
-      # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it mid-sweep.
-      - name: Pin seed for the Fabric test server
-        if: steps.platforms.outputs.fabric == 'true'
-        run: |
-          mkdir -p fabric/run
-          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > fabric/run/server.properties
-
-      # Unlike Forge's dedicated server, Fabric API's gametest server auto-runs every registered
-      # @GameTest as soon as world gen finishes (driven by the -Dfabric-api.gametest=true vmArg in
-      # fabric/build.gradle) and then exits on its own - no interactive console driving needed.
-      # 3000s mirrors the Forge GameTest step's reasoning: most of the 26 biome sweeps cost
-      # 30-40s, but the FLOOR-depth ones can each individually approach the 1000s max-tick-time
-      # ceiling above.
-      - name: Run Fabric GameTests
-        if: steps.platforms.outputs.fabric == 'true'
-        run: timeout 3000 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
-        shell: bash
-
-      - name: Upload Fabric GameTest log
-        if: always() && steps.platforms.outputs.fabric == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: extrabiomes-fabric-gametest-log
-          path: "ExtraBiomes - Java/fabric-gametest.log"
-          if-no-files-found: ignore
-
       # Same level-seed/max-tick-time reasoning as the Forge EULA step above, own run dir since
       # :neoforge:runData/:neoforge:runGameTestServer use "neoforge/run"/"neoforge/run-data", not
-      # forge's. Kept immediately adjacent to "Run NeoForge GameTests" below (rather than moved
-      # earlier alongside Forge/Fabric's own prep) - an earlier revision of this workflow moved
-      # NeoForge's downloadAssets/runData up near the top of the job instead, and the resulting
-      # multi-minute gap before this loader's own GameTestServer boot reproduced a hang twice in a
-      # row (all 7 tests logged "passed", but the vanilla GameTestServer's own "N GAME TESTS
-      # COMPLETE" summary line - which fires in the same tick as the last test elsewhere - never
-      # printed). Restoring the original adjacency fixed it; :common:test's need for generated data
-      # is instead satisfied by moving "Run unit tests" down past every loader's own GameTest
-      # section instead (see below), so at least one enabled loader has already generated it by
-      # then regardless of which loader that ends up being.
+      # forge's. Kept immediately adjacent to "Run NeoForge GameTests" below (an earlier revision
+      # of this workflow moved NeoForge's downloadAssets/runData away from its own GameTestServer
+      # boot - up near the top of the job, to generate common's shared data earlier - and the
+      # resulting multi-minute gap reproduced a hang twice in a row: all 7 tests logged "passed",
+      # but the vanilla GameTestServer's own "N GAME TESTS COMPLETE" summary line - which fires in
+      # the same tick as the last test elsewhere - never printed. Restoring this adjacency fixed
+      # it).
       - name: Accept Minecraft EULA for the NeoForge test server
         if: steps.platforms.outputs.neoforge == 'true'
         run: |
@@ -356,11 +323,45 @@ jobs:
       # Forge-only, so Fabric API's own fabricApi.configureDataGeneration() extension provides the
       # equivalent "runDatagen" task instead (see fabric/build.gradle). Forge's and NeoForge's own
       # runData above already populate the same shared common/src/generated/resources/ when either
-      # of those is enabled, so this only needs to run when neither is.
+      # of those is enabled, so this only needs to run when neither is. Placed immediately before
+      # Fabric's own block below (rather than off on its own) since Fabric's GameTestServer boot
+      # needs that data present too, same as :common:test does - Fabric's block runs last of the
+      # three loaders' sections specifically so whichever of Forge/NeoForge/this fallback ran
+      # earlier has already generated it by the time Fabric needs it.
       - name: Generate Fabric data
         if: steps.platforms.outputs.fabric == 'true' && steps.platforms.outputs.forge == 'false' && steps.platforms.outputs.neoforge == 'false'
         run: ./gradlew :fabric:runDatagen
         timeout-minutes: 10
+
+      # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
+      # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
+      # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
+      # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as Forge's, so it
+      # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it mid-sweep.
+      - name: Pin seed for the Fabric test server
+        if: steps.platforms.outputs.fabric == 'true'
+        run: |
+          mkdir -p fabric/run
+          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > fabric/run/server.properties
+
+      # Unlike Forge's dedicated server, Fabric API's gametest server auto-runs every registered
+      # @GameTest as soon as world gen finishes (driven by the -Dfabric-api.gametest=true vmArg in
+      # fabric/build.gradle) and then exits on its own - no interactive console driving needed.
+      # 3000s mirrors the Forge GameTest step's reasoning: most of the 26 biome sweeps cost
+      # 30-40s, but the FLOOR-depth ones can each individually approach the 1000s max-tick-time
+      # ceiling above.
+      - name: Run Fabric GameTests
+        if: steps.platforms.outputs.fabric == 'true'
+        run: timeout 3000 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
+        shell: bash
+
+      - name: Upload Fabric GameTest log
+        if: always() && steps.platforms.outputs.fabric == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-fabric-gametest-log
+          path: "ExtraBiomes - Java/fabric-gametest.log"
+          if-no-files-found: ignore
 
       # Deliberately runs after every enabled loader's own GameTest section above (rather than
       # right after Forge's runData, where this step used to sit) so :common:test's
