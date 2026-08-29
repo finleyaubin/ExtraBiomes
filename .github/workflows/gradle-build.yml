@@ -284,16 +284,30 @@ jobs:
 
           ( sleep 60; echo "test runall" || true ) > neoforge-gametest.fifo &
 
-          echo "Waiting for the server to report \"GAME TESTS COMPLETE\"..."
+          # Waits on each @GameTest method's own "<name>: passed"/"<name>: failed" log line
+          # (7 total across the 4 neoforge gametest classes - see forge/.../gametest/*.java's
+          # equivalent 7-entry TEST_TIMEOUTS map above), not vanilla's own "N GAME TESTS COMPLETE"/
+          # "required tests passed" summary lines like an earlier revision of this step did -
+          # confirmed via three separate CI runs (the first real runs of this step ever; the CI
+          # rewrite that introduced this fifo-driven approach had never actually completed a run
+          # before) that all 7 tests reliably report passed/failed within the first couple of
+          # server ticks, but the vanilla summary line never printed even 10+ minutes later. Since
+          # "confirmed locally, ... with no post-pass crash" above was apparently verified against
+          # a real interactive terminal, not a piped fifo, that summary banner may depend on a
+          # console/command-source path this driving method doesn't exercise the same way - each
+          # test's own log line is the reliable signal, same as Forge's step already relies on.
+          EXPECTED_TESTS=7
+          echo "Waiting for all $EXPECTED_TESTS tests to report passed/failed..."
           for i in $(seq 1 2700); do
-            if grep -qE 'GAME TESTS COMPLETE' neoforge-gametest.log; then
+            REPORTED=$(grep -cE ': (passed|failed)$' neoforge-gametest.log || true)
+            if [ "$REPORTED" -ge "$EXPECTED_TESTS" ]; then
               break
             fi
             # A heartbeat every 30s, separate from the tee'd server output above - so a run that's
             # still genuinely polling (as opposed to one where the server itself has gone silent,
             # the actual failure mode this is guarding against) is never ambiguous in the log.
             if (( i % 30 == 0 )); then
-              echo "Still waiting on NeoForge GameTests (${i}s elapsed)..."
+              echo "Still waiting on NeoForge GameTests (${REPORTED}/${EXPECTED_TESTS} reported, ${i}s elapsed)..."
             fi
             sleep 1
           done
@@ -302,11 +316,13 @@ jobs:
           wait "$GPID" || true
           rm -f neoforge-gametest.fifo
 
-          if grep -qE 'required tests failed' neoforge-gametest.log; then
-            echo "::error::NeoForge GameTests failed - see neoforge-gametest.log"
+          FAILED_COUNT=$(grep -cE ': failed$' neoforge-gametest.log || true)
+          PASSED_COUNT=$(grep -cE ': passed$' neoforge-gametest.log || true)
+          if [ "$FAILED_COUNT" -gt 0 ]; then
+            echo "::error::$FAILED_COUNT NeoForge GameTest(s) failed - see neoforge-gametest.log"
             exit 1
-          elif ! grep -qE 'required tests passed' neoforge-gametest.log; then
-            echo "::error::NeoForge GameTests never reported a pass/fail summary (server likely didn't boot/finish in time) - see neoforge-gametest.log"
+          elif [ "$PASSED_COUNT" -lt "$EXPECTED_TESTS" ]; then
+            echo "::error::Only $PASSED_COUNT/$EXPECTED_TESTS NeoForge GameTests reported passed (server likely didn't boot/finish in time) - see neoforge-gametest.log"
             exit 1
           fi
         shell: bash
