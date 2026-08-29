@@ -116,11 +116,10 @@ dependencies {
     // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle for why.
     modImplementation "maven.modrinth:terrablender:${terrablender_neoforge_modrinth_id}"
 
-    // GeckoLib jar-in-jars mclib; FML's per-mod module isolation needs it merged into GeckoLib's
-    // own jar to see it at all - see root build.gradle's mergeJarInJarDependency for why and how.
-    modImplementation files(rootProject.ext.mergeJarInJarDependency(project,
-        "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}",
-        "com.eliotlash.mclib", "mclib"))
+    // GeckoLib 4.5.4 inlined mclib's math functions into its own package (software.bernie.geckolib.loading.math)
+    // instead of jar-in-jarring the separate mclib artifact, so no merge is needed anymore - see
+    // root build.gradle's mergeJarInJarDependency for the merge this replaces on older GeckoLib builds.
+    modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 
     // Optional/soft dependency, compile-only - see neoforge/compat/create/CreateWindmillCompat.java
     // and platform/neoforge/ExtraBiomesExpectPlatformImpl#applyWindmillCreateCompat. Same deal as

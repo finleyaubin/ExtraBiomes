@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -11,7 +11,7 @@ import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
 
 public class Moorlands {
 
-    public Biome Register(BootstapContext<Biome> context)
+    public Biome Register(BootstrapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 

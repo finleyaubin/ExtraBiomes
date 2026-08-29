@@ -171,11 +171,11 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_VARIANT, 0);
-        this.entityData.define(DATA_SIZE, PiranhaTuning.SIZE_NORMAL_SCALE);
-        this.entityData.define(DATA_BITING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_VARIANT, 0);
+        builder.define(DATA_SIZE, PiranhaTuning.SIZE_NORMAL_SCALE);
+        builder.define(DATA_BITING, false);
     }
 
     public int getVariant() {
@@ -200,8 +200,8 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     }
 
     @Override
-    public net.minecraft.world.entity.EntityDimensions getDimensions(net.minecraft.world.entity.Pose pose) {
-        return super.getDimensions(pose).scale(this.getSizeScale());
+    public float getScale() {
+        return this.getSizeScale();
     }
 
     @Override
@@ -223,10 +223,10 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type,
-                                        @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
+                                        @Nullable SpawnGroupData data) {
         this.setVariant(this.random.nextInt(VARIANT_COUNT));
         this.setSizeScale(rollWeightedScale(this.random));
-        return super.finalizeSpawn(level, difficulty, type, data, tag);
+        return super.finalizeSpawn(level, difficulty, type, data);
     }
 
     // Band wins by SIZE_BAND_WEIGHTS, exact scale is uniform random within the winning band.

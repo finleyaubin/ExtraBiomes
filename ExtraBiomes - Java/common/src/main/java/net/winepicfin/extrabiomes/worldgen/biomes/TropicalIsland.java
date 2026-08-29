@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.AquaticPlacements;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -14,7 +14,7 @@ import net.winepicfin.extrabiomes.worldgen.features.tropical.TropicalIslandFeatu
 
 public class TropicalIsland {
 
-    public Biome Register(BootstapContext<Biome> context)
+    public Biome Register(BootstrapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 

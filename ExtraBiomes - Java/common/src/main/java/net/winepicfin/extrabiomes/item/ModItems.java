@@ -39,7 +39,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> JELLYFISH_JAM_BOTTLE = ITEMS.register("jellyfish_jam_bottle",()-> new JellyfishJamBottleItem(new Item.Properties().food(ModFoods.JELLYFISH_JAM).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_EMPTY = ITEMS.register("jellyfishing_net_empty",()-> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_FULL = ITEMS.register("jellyfishing_net_full",()-> new JellyfishingNetItem(new Item.Properties().stacksTo(1)));
-    public static final RegistrySupplier<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> ExtraBiomesExpectPlatform.createFrogHelmetItem(ModItemMaterials.FROG, ArmorItem.Type.HELMET, new Item.Properties().durability(325)));
+    public static final RegistrySupplier<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> ExtraBiomesExpectPlatform.createFrogHelmetItem(ModItemMaterials.FROG.get(), ArmorItem.Type.HELMET, new Item.Properties().durability(325)));
     public static final RegistrySupplier<Item> MYSTIC_SIGN = ITEMS.register("mystic_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.MYSTIC_SIGN.get(),ModBlocks.MYSTIC_WALL_SIGN.get()));
     public static final RegistrySupplier<Item> MYSTIC_HANGING_SIGN = ITEMS.register("mystic_hanging_sign",()-> new HangingSignItem(ModBlocks.MYSTIC_HANGING_SIGN.get(),ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> PALM_SIGN = ITEMS.register("palm_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.PALM_SIGN.get(),ModBlocks.PALM_WALL_SIGN.get()));
@@ -62,6 +62,7 @@ public class ModItems {
 
 
     public static void register() {
+        ModItemMaterials.register();
         ITEMS.register();
     }
 }

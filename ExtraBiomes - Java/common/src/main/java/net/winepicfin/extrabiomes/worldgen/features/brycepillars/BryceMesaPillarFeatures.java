@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.brycepillars;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -50,7 +50,7 @@ public class BryceMesaPillarFeatures {
     public static final ResourceKey<PlacedFeature> TUFF_PLACED_KEY = placedKey("bryce_pillars_tuff");
     public static final ResourceKey<PlacedFeature> STONE_PLACED_KEY = placedKey("bryce_pillars_stone");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // streakPalette supplies the occasional colour bands scattered through the plain TERRACOTTA background; see generateBands() in BrycePillarsFeature for the distribution.
         List<BlockState> terracottaStreaks = List.of(
                 Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
@@ -77,7 +77,7 @@ public class BryceMesaPillarFeatures {
                 new BrycePillarsConfiguration(Blocks.STONE.defaultBlockState(), List.of(), 10, 28, 0.97F, 6, 1.0F, java.util.Optional.of(Blocks.GRASS_BLOCK.defaultBlockState()))));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         List<net.minecraft.world.level.levelgen.placement.PlacementModifier> modifiers = List.of(BiomeFilter.biome());
 

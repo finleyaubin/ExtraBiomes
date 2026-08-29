@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
@@ -36,7 +36,7 @@ public class ModPlacedFeatures{
     public static final ResourceKey<PlacedFeature> LUSH_GRASS_PLACED_KEY = createKey("lush_grass_placed");
     public static final ResourceKey<PlacedFeature> SKY_PLACED_KEY = createKey("sky_placed");
     // PlacementUtils.countExtra(count, extraChance, extraCount): only the middle argument is a float - passing a float as count silently picks the wrong overload, so keep the literals typed as written below.
-    public static void bootstrap(BootstapContext<PlacedFeature>context){
+    public static void bootstrap(BootstrapContext<PlacedFeature>context){
         HolderGetter<ConfiguredFeature<?, ?>>configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         // Bedrock's mystic_tree_feature.json allows the structure to intersect minecraft:water and
         // extrabiomes:goo (unburied is the only ground constraint) so trees can grow straight out of
@@ -63,7 +63,7 @@ public class ModPlacedFeatures{
         return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
     }
 
-    private static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,List<PlacementModifier> modifiers) {
+    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
     }
 }

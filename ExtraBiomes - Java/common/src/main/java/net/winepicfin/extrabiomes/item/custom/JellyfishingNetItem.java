@@ -34,7 +34,7 @@ public class JellyfishingNetItem extends Item {
             if (jellyfish != null) {
                 jellyfish.moveTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
                         context.getClickedFace() == Direction.UP ? 0.0F : 0.0F, 0.0F);
-                jellyfish.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(pos), MobSpawnType.BUCKET, null, null);
+                jellyfish.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(pos), MobSpawnType.BUCKET, null);
                 serverLevel.addFreshEntity(jellyfish);
                 level.playSound(null, pos, SoundEvents.BUCKET_EMPTY_FISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
                 if (player != null) {

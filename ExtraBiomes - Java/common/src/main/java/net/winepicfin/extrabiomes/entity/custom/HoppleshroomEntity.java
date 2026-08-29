@@ -162,9 +162,9 @@ public class HoppleshroomEntity extends Animal {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_VARIANT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_VARIANT, 0);
     }
 
     public int getVariant() {
@@ -190,9 +190,9 @@ public class HoppleshroomEntity extends Animal {
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type,
-                                        @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
+                                        @Nullable SpawnGroupData data) {
         this.setVariant(this.random.nextInt(VARIANT_COUNT));
-        return super.finalizeSpawn(level, difficulty, type, data, tag);
+        return super.finalizeSpawn(level, difficulty, type, data);
     }
 
     @Override

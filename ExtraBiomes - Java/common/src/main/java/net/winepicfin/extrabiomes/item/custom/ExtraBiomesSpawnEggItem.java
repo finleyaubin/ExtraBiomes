@@ -1,11 +1,14 @@
 package net.winepicfin.extrabiomes.item.custom;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -40,9 +43,10 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
     }
 
     @Override
-    public EntityType<?> getType(@Nullable CompoundTag tag) {
-        if (tag != null && tag.contains("EntityTag", 10)) {
-            CompoundTag entityTag = tag.getCompound("EntityTag");
+    public EntityType<?> getType(ItemStack stack) {
+        CustomData customData = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
+        if (!customData.isEmpty()) {
+            CompoundTag entityTag = customData.copyTag();
             if (entityTag.contains("id", 8)) {
                 return EntityType.byString(entityTag.getString("id")).orElseGet(typeSupplier::get);
             }

@@ -37,8 +37,8 @@ public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaModel<Pir
     // Mirrors vanilla CodRenderer: rolls the body out of water in the renderer rather than the model, matching Bedrock's animation.piranha.flop.
     @Override
     protected void setupRotations(PiranhaEntity entity, PoseStack poseStack, float ageInTicks, float rotationYaw,
-                                  float partialTicks) {
-        super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks);
+                                  float partialTicks, float scale) {
+        super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks, scale);
         poseStack.mulPose(Axis.YP.rotationDegrees(4.3F * Mth.sin(0.6F * ageInTicks)));
         if (!entity.isInWater()) {
             poseStack.translate(0.1F, 0.1F, -0.1F);

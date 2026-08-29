@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.structurescatter;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -69,7 +69,7 @@ public class OasisPuddleFeature {
     public static final ResourceKey<PlacedFeature> OASIS_PUDDLE_SCATTER_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(OASIS_PUDDLE_SCATTER_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "structurescatter/oasis_puddle"),
@@ -77,7 +77,7 @@ public class OasisPuddleFeature {
         ));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         context.register(OASIS_PUDDLE_SCATTER_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(OASIS_PUDDLE_SCATTER_KEY),

@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.winepicfin.extrabiomes.entity.ai.GiantTortoiseChargeGoal;
 
 // Ported from Bedrock extrabiomes:giant_tortoise — a slow amphibious monster that charges and melees players, golems and the warden on sight.
@@ -33,13 +33,13 @@ public class GiantTortoiseEntity extends Monster {
 
     public GiantTortoiseEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
-        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_CHARGING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_CHARGING, false);
     }
 
     public boolean isCharging() {

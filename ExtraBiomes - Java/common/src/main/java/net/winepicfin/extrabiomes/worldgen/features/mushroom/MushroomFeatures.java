@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.mushroom;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -151,7 +151,7 @@ public class MushroomFeatures {
     /** Bedrock's {@code mushroom_surface_mycelium_floor_feature.json} distribution. */
     public static final ResourceKey<PlacedFeature> MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY = pfKey("mushroom_surface_mycelium_floor");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         registerStructure(context, HUGE_BLACK_MUSHROOM_KEY, "huge_black_mushroom", Optional.empty());
         registerStructure(context, HUGE_BLUE_MUSHROOM_KEY, "huge_blue_mushroom", Optional.empty());
         registerStructure(context, HUGE_BROWN_MUSHROOM1_KEY, "huge_brown_mushroom1", Optional.of(Rotation.NONE));
@@ -219,7 +219,7 @@ public class MushroomFeatures {
         ));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // No extra modifiers on these building-block placements - they're only ever placed by a wrapping RANDOM_SELECTOR or another PlacedFeature that supplies its own distribution.
@@ -282,7 +282,7 @@ public class MushroomFeatures {
                 BiomeFilter.biome());
     }
 
-    private static void registerStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {
+    private static void registerStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {
         // centered=true: the stem sits dead-center in its footprint, not at the local (0,0,0) corner, or it lands several blocks from the feature's actual origin.
         SingleStructureConfiguration config = new SingleStructureConfiguration(
                 new ResourceLocation(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
@@ -302,11 +302,11 @@ public class MushroomFeatures {
         return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
     }
 
-    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
+    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
         context.register(key, new ConfiguredFeature<>(feature, configuration));
     }
 
-    private static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, net.minecraft.core.Holder<ConfiguredFeature<?, ?>> configuration, PlacementModifier... modifiers) {
+    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, net.minecraft.core.Holder<ConfiguredFeature<?, ?>> configuration, PlacementModifier... modifiers) {
         context.register(key, new PlacedFeature(configuration, List.of(modifiers)));
     }
 }

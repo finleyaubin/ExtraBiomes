@@ -104,7 +104,7 @@ public class GiantTortoiseChargeGoal extends Goal {
         var attr = this.tortoise.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attr != null && attr.getModifier(CHARGE_SPEED_MODIFIER_ID) == null) {
             attr.addTransientModifier(new AttributeModifier(CHARGE_SPEED_MODIFIER_ID, "Giant tortoise charge speed",
-                    RAM_SPEED_MULTIPLIER, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                    RAM_SPEED_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 

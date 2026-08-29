@@ -1,74 +1,43 @@
 package net.winepicfin.extrabiomes.item;
 
-import net.minecraft.sounds.SoundEvent;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
-import java.util.function.Supplier;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
-public enum ModItemMaterials implements ArmorMaterial {
-    FROG("frog",30, new int[]{2,6,5,2}, 15, SoundEvents.FROGLIGHT_PLACE,0f,0f,()->Ingredient.of(ModItems.FROGS_LEGS.get()));
-    private final String name;
-    private final int durabilityMultiplier;
-    private final int[]protectionAmount;
-    private final int enchantmentValue;
-    private final SoundEvent equipSound;
-    private final float toughness;
-    private final float knockbackResistance;
-    private final Supplier<Ingredient> repairIngredient;
-    private static final int[] BASE_DURABILITY= {11,16,16,13};
+public class ModItemMaterials {
+    public static final DeferredRegister<ArmorMaterial> MATERIALS =
+            DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.ARMOR_MATERIAL);
 
-    ModItemMaterials(String name, int durabilityMultiplier, int[] protectionAmount, int enchantmentValue, SoundEvent equipSound, float toughness, float knockbackResistance, Supplier<Ingredient> repairIngredient) {
-        this.name = name;
-        this.durabilityMultiplier = durabilityMultiplier;
-        this.protectionAmount = protectionAmount;
-        this.enchantmentValue = enchantmentValue;
-        this.equipSound = equipSound;
-        this.toughness = toughness;
-        this.knockbackResistance = knockbackResistance;
-        this.repairIngredient = repairIngredient;
-    }
+    public static final RegistrySupplier<ArmorMaterial> FROG = MATERIALS.register("frog", () -> {
+        Map<ArmorItem.Type, Integer> defense = new EnumMap<>(ArmorItem.Type.class);
+        defense.put(ArmorItem.Type.HELMET, 2);
+        defense.put(ArmorItem.Type.CHESTPLATE, 6);
+        defense.put(ArmorItem.Type.LEGGINGS, 5);
+        defense.put(ArmorItem.Type.BOOTS, 2);
+        defense.put(ArmorItem.Type.BODY, 4);
+        return new ArmorMaterial(
+                defense,
+                15,
+                BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.FROGLIGHT_PLACE),
+                () -> Ingredient.of(ModItems.FROGS_LEGS.get()),
+                List.of(new ArmorMaterial.Layer(new ResourceLocation(ExtraBiomes.MOD_ID, "frog"))),
+                0f,
+                0f
+        );
+    });
 
-    @Override
-    public int getDurabilityForType(ArmorItem.Type pType) {
-        return BASE_DURABILITY[pType.ordinal() * this.durabilityMultiplier];
-    }
-
-    @Override
-    public int getDefenseForType(ArmorItem.Type pType) {
-        return this.protectionAmount[pType.ordinal()];
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return enchantmentValue;
-    }
-
-    @Override
-    public SoundEvent getEquipSound() {
-        return this.equipSound;
-    }
-
-    @Override
-    public Ingredient getRepairIngredient() {
-        return this.repairIngredient.get();
-    }
-
-    @Override
-    public String getName() {
-        return ExtraBiomes.MOD_ID + ":" +this.name;
-    }
-
-    @Override
-    public float getToughness() {
-        return this.toughness;
-    }
-
-    @Override
-    public float getKnockbackResistance() {
-        return this.knockbackResistance;
+    public static void register() {
+        MATERIALS.register();
     }
 }

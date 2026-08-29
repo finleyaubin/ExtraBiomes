@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.structure.windmill;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -44,7 +44,7 @@ import java.util.Optional;
  * JigsawStructure directly.
  */
 public class WindmillStructure extends Structure {
-    public static final Codec<WindmillStructure> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<WindmillStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             settingsCodec(instance),
             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
             StructureTemplatePool.CODEC.fieldOf("create_start_pool").forGetter(structure -> structure.createStartPool),

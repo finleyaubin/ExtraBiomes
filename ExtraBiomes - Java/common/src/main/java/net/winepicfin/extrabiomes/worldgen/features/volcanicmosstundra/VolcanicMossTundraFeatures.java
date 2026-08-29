@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -96,7 +96,7 @@ public class VolcanicMossTundraFeatures {
     private static final String[] ELEPHANT_ROCKS = {"elephant_rock_1", "elephant_rock_2", "elephant_rock_3", "elephant_rock_4"};
     private static final String[] VOLCANOES = {"volcano_1", "volcano_2"};
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         context.register(NO_OP_KEY, new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE));
@@ -143,7 +143,7 @@ public class VolcanicMossTundraFeatures {
                 structurePlaced(placedFeatures, VOLCANOES[1]))));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         context.register(NO_OP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(NO_OP_KEY), List.of()));
@@ -181,13 +181,13 @@ public class VolcanicMossTundraFeatures {
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG), BiomeFilter.biome())));
     }
 
-    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, String name, int groundOffset) {
+    private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, String name, int groundOffset) {
         ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name);
         context.register(configuredKey(name), new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(structure, Optional.<net.minecraft.world.level.block.Rotation>empty(), groundOffset)));
     }
 
-    private static void registerNoModifiers(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, String name) {
+    private static void registerNoModifiers(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, String name) {
         context.register(placedKey(name), new PlacedFeature(configuredFeatures.getOrThrow(configuredKey(name)), List.<PlacementModifier>of()));
     }
 

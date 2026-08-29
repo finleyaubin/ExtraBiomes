@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.undergroundjungle;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.resources.ResourceKey;
@@ -195,7 +195,7 @@ public class UndergroundJungleFeatures {
     /** Bedrock's {@code jungle_surface_grass_floor_upper_feature.json} distribution - register in VEGETAL_DECORATION. */
     public static final ResourceKey<PlacedFeature> GRASS_FLOOR_UPPER_PLACED_KEY = pfKey("grass_floor_upper");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         context.register(FALLEN_JUNGLE_TREE_KEY, new ConfiguredFeature<>(FALLEN_JUNGLE_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
@@ -279,7 +279,7 @@ public class UndergroundJungleFeatures {
         )));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // no modifiers: only ever invoked at an already-chosen position by a wrapping RANDOM_SELECTOR/MultiFeature/VegetationPatchConfiguration
@@ -332,7 +332,7 @@ public class UndergroundJungleFeatures {
         ));
     }
 
-    private static void registerNoModifiers(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration) {
+    private static void registerNoModifiers(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration) {
         context.register(key, new PlacedFeature(configuration, List.of()));
     }
 

@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.biomes.surface;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
@@ -27,7 +27,7 @@ public class ModNoiseParameters {
     public static final ResourceKey<NormalNoise.NoiseParameters> LARGE_PATCH = key("large_patch");
     public static final ResourceKey<NormalNoise.NoiseParameters> REGIONAL_BAND = key("regional_band");
 
-    public static void bootstrap(BootstapContext<NormalNoise.NoiseParameters> context) {
+    public static void bootstrap(BootstrapContext<NormalNoise.NoiseParameters> context) {
         context.register(SMALL_PATCH, new NormalNoise.NoiseParameters(-5, 1.0));
         context.register(MEDIUM_PATCH, new NormalNoise.NoiseParameters(-4, 1.0));
         context.register(LARGE_PATCH, new NormalNoise.NoiseParameters(-3, 1.0));

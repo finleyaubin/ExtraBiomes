@@ -138,14 +138,15 @@ allprojects {
     java {
         withSourcesJar()
 
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
 
         // Pin the toolchain instead of relying on whatever JDK happens to be the
-        // caller's default (Minecraft 1.20.1/Loom requires 17) - keeps the build
-        // reproducible across machines regardless of the system default JDK.
+        // caller's default (Minecraft 1.20.5+ requires 21, confirmed by the merged jar's
+        // class file version being 65.0 - up from 17's 61.0) - keeps the build reproducible
+        // across machines regardless of the system default JDK.
         toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
 
@@ -163,8 +164,8 @@ allprojects {
     // whatever JVM happens to be running the Gradle daemon itself - which on newer JDKs
     // (22+) makes Mixin fail to transform core JDK classes ("Unsupported class file major
     // version", ClassNotFoundException: java.lang.System) before any mod code loads.
-    // Forcing these tasks onto the toolchain-resolved 17 launcher keeps the actual game
-    // process on the JDK Minecraft 1.20.1/Loom expects, auto-detected or auto-provisioned by
+    // Forcing these tasks onto the toolchain-resolved 21 launcher keeps the actual game
+    // process on the JDK Minecraft 1.20.6/Loom expects, auto-detected or auto-provisioned by
     // Gradle rather than hardcoded to a path on this machine.
     //
     // Scoped by task name to Loom's own run tasks rather than every JavaExec in the project:
@@ -181,7 +182,7 @@ allprojects {
     // whole ordering question by never touching IDE-only tasks in the first place.
     tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer', 'runData', 'runDatagen', 'runGameTestServer'] }.configureEach {
         javaLauncher = javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(17)
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
 

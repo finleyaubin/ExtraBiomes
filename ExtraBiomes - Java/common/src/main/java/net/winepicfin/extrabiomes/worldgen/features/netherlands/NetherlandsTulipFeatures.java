@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -75,7 +75,7 @@ public class NetherlandsTulipFeatures {
     public static final ResourceKey<PlacedFeature> RED_TULIP_FLOOR_PLACED_KEY = placedKey("netherlands_red_tulip_floor");
     public static final ResourceKey<PlacedFeature> WHITE_TULIP_FLOOR_PLACED_KEY = placedKey("netherlands_white_tulip_floor");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(ORANGE_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.ORANGE_TULIP))));
         context.register(PINK_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.PINK_TULIP))));
         context.register(RED_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_TULIP))));
@@ -97,7 +97,7 @@ public class NetherlandsTulipFeatures {
                 ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         // The outer vegetation patch feature registered below controls placement of these inner blocks.
         context.register(ORANGE_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(ORANGE_TULIP_KEY), List.of()));

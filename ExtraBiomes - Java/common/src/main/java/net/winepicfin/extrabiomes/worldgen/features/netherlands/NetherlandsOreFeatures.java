@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -61,7 +61,7 @@ public class NetherlandsOreFeatures {
     public static final ResourceKey<PlacedFeature> QUARTZ_ORE_PLACED_KEY = placedKey("netherlands_quartz_ore");
     public static final ResourceKey<PlacedFeature> REDSTONE_ORE_PLACED_KEY = placedKey("netherlands_redstone_ore");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // ModSurfaceRules paints this biome's underground as netherrack, not stone, so these veins must target netherrack to find anything to replace.
         BlockMatchTest replaceNetherrack = new BlockMatchTest(Blocks.NETHERRACK);
         context.register(COAL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.COAL_ORE.defaultBlockState(), 17)));
@@ -75,7 +75,7 @@ public class NetherlandsOreFeatures {
         context.register(REDSTONE_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.REDSTONE_ORE.defaultBlockState(), 8)));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         register(context, configuredFeatures, COAL_ORE_KEY, COAL_ORE_PLACED_KEY, 20, 0, 128);
         register(context, configuredFeatures, COPPER_ORE_KEY, COPPER_ORE_PLACED_KEY, 20, 0, 64);
@@ -88,7 +88,7 @@ public class NetherlandsOreFeatures {
         register(context, configuredFeatures, REDSTONE_ORE_KEY, REDSTONE_ORE_PLACED_KEY, 8, 0, 16);
     }
 
-    private static void register(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
+    private static void register(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
                                   ResourceKey<ConfiguredFeature<?, ?>> configuredKey, ResourceKey<PlacedFeature> placedKey,
                                   int veinsPerChunk, int yMin, int yMax) {
         context.register(placedKey, new PlacedFeature(

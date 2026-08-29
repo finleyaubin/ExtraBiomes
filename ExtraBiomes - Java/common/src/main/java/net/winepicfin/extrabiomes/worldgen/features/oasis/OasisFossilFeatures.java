@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.oasis;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -70,7 +70,7 @@ public class OasisFossilFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_FOSSIL_KEY = configuredKey("select_fossil");
     public static final ResourceKey<PlacedFeature> SELECT_FOSSIL_PLACED_KEY = placedKey("select_fossil");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         for (int i = 0; i < BONE_PIECES.length; i++) {
@@ -96,7 +96,7 @@ public class OasisFossilFeatures {
         )));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // Bone pieces are only ever invoked as a WeightedPlacedFeature entry of SELECT_FOSSIL, which carries the real scatter/surface modifiers.
