@@ -22,8 +22,8 @@ jobs:
     # Run GameTests(~38, one fresh server boot per test - see that step's own comment for why -
     # worst case 1200s for the biome-generation test + 6x180s for the rest) + Run Fabric
     # GameTests(50, via its inline `timeout 3000`) + NeoForge downloadAssets(10) + NeoForge
-    # runData(10) + Run NeoForge GameTests(10, via its inline `timeout 600` - a single boot, see
-    # that step's own comment) + final build(15) = 163 minutes, plus headroom for
+    # runData(10) + Run NeoForge GameTests(50, via its inline `timeout 3000` - a single driven
+    # boot, see that step's own comment) + final build(15) = 173 minutes, plus headroom for
     # checkout/setup-java/setup-gradle/EULA steps (uncapped but fast) and the 180-minute cap
     # below. A job timeout below the real sum kills everything with no diagnostics before a slow
     # step's own timeout/watchdog gets a chance to fire. The GameTest steps got wider budgets
@@ -261,14 +261,45 @@ jobs:
         run: ./gradlew :neoforge:runData
         timeout-minutes: 10
 
-      # Unlike Forge (see the Forge "Run GameTests" step's own comment for the two framework bugs
-      # that force it to drive tests one at a time), NeoForge's GameTestServer here has neither
-      # bug: it auto-runs every registered @GameTest as soon as it boots (like Fabric's) and exits
-      # cleanly afterward, reporting "All N required tests passed :)" - confirmed locally, all 7
-      # tests across the 4 neoforge gametest classes pass on a single boot with no post-pass
-      # crash. A single `timeout`-wrapped run, no fifo/per-test driving needed.
+      # NeoForge's own -Dneoforge.gameTestServer=true flag would make this boot vanilla's
+      # GameTestServer (auto-run/auto-exit, like Fabric's) - but that class unconditionally bakes
+      # its world from WorldPresets.FLAT, giving the overworld a single-biome FixedBiomeSource
+      # instead of the normal MultiNoiseBiomeSource, which silently breaks TerraBlender's overworld
+      # biome injection (see neoforge/build.gradle's gameTestServer run config comment). Dropping
+      # that flag boots a normal DedicatedServer with gametests still registered, so - unlike
+      # Fabric - it needs interactive driving. Unlike Forge (see the Forge "Run GameTests" step's
+      # own comment for the two framework bugs that force it to drive tests one at a time),
+      # NeoForge's GameTestServer here has neither bug, so `test runall` in a single boot is enough
+      # - confirmed locally, all 7 tests across the 4 neoforge gametest classes pass in one run
+      # with no post-pass crash. Poll the log for the "GAME TESTS COMPLETE" line rather than
+      # sleeping a fixed duration before sending `stop`, since the slow biome-generation test's
+      # runtime varies with CI-runner load.
       - name: Run NeoForge GameTests
-        run: timeout 600 ./gradlew :neoforge:runGameTestServer | tee neoforge-gametest.log
+        run: |
+          mkfifo neoforge-gametest.fifo
+          : > neoforge-gametest.log
+          timeout 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo > neoforge-gametest.log 2>&1 &
+          GPID=$!
+
+          ( sleep 60; echo "test runall" || true ) > neoforge-gametest.fifo &
+
+          for i in $(seq 1 2700); do
+            if grep -qE 'GAME TESTS COMPLETE' neoforge-gametest.log; then
+              break
+            fi
+            sleep 1
+          done
+          echo "stop" > neoforge-gametest.fifo || true
+          wait "$GPID" || true
+          rm -f neoforge-gametest.fifo
+
+          if grep -qE 'required tests failed' neoforge-gametest.log; then
+            echo "::error::NeoForge GameTests failed - see neoforge-gametest.log"
+            exit 1
+          elif ! grep -qE 'required tests passed' neoforge-gametest.log; then
+            echo "::error::NeoForge GameTests never reported a pass/fail summary (server likely didn't boot/finish in time) - see neoforge-gametest.log"
+            exit 1
+          fi
         shell: bash
 
       - name: Upload NeoForge GameTest log
