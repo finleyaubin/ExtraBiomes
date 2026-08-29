@@ -285,11 +285,16 @@ jobs:
           # Streamed live via `tee` (not just redirected to neoforge-gametest.log) so world gen
           # progress, each biome's "found at BlockPos..." line, and every test's own passed/failed
           # line show up in this step's live Actions log as they happen, instead of only being
-          # visible after the fact in the uploaded gametest log artifact. Piped through process
-          # substitution (`> >(tee ...)`), not a trailing `| tee ... &`, specifically so `$!` below
-          # captures the actual `timeout .../gradlew` process, not `tee`'s PID - needed so the
-          # forced-kill fallback a few lines down can actually reach the right process.
-          timeout 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo > >(tee neoforge-gametest.log) 2>&1 &
+          # visible after the fact in the uploaded gametest log artifact.
+          #
+          # `setsid` + `timeout --foreground` puts the whole tree (timeout, gradlew, the Gradle
+          # daemon, and whatever JVM(s) Architectury's dev-launch further forks for the actual
+          # game process) into one process group whose PGID equals $GPID - `--foreground` stops
+          # `timeout` from creating its own separate nested group for its child, which would
+          # otherwise put the real game process one group away from the one `kill -- -"$GPID"`
+          # below can reach. This is what lets the force-kill fallback actually reach the real
+          # server process instead of only the outer wrapper.
+          setsid timeout --foreground 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo > >(tee neoforge-gametest.log) 2>&1 &
           GPID=$!
 
           ( sleep 60; echo "test runall" || true ) > neoforge-gametest.fifo &
@@ -328,20 +333,32 @@ jobs:
             fi
             sleep 1
           done
-          # This blocked forever on a real CI run once all tests had already passed: opening a
-          # fifo for writing blocks until a reader connects, and once the server stops reading
-          # stdin (it never crashes here the way Forge's does - it just goes quiet after
-          # `test runall` finishes), there is no reader left to unblock it. That run sat here doing
-          # nothing for the next ~48 minutes until the outer `timeout 3000` above finally killed
-          # the whole pipeline - the step still passed (the tests had already logged "passed"), but
-          # every run paid the full 50-minute timeout instead of finishing in ~1-2 minutes. Bounding
-          # this specific write and force-killing the server directly if it doesn't take fixes that.
+          # Two separate real CI runs have now shown the server not actually shutting down here
+          # once every test has already logged its own passed/failed line: the first attempt
+          # (writing "stop" with no bound) blocked forever opening the fifo for a write with no
+          # reader left; a second attempt (bounding that write, then `kill "$GPID"`) still hung -
+          # the uploaded gametest.log for that run ends right at the last test's "passed" line with
+          # no shutdown message at all, meaning "stop" reaching the console (if it even did) didn't
+          # reliably tear the process down either time. Rather than keep trying to diagnose exactly
+          # where Loom/Architectury's dev-launch stdin plumbing loses it, just don't depend on a
+          # graceful shutdown at all - this is a throwaway CI world with nothing worth saving.
+          # Still attempt "stop" first (bounded, in case it does work and exits cleanly on its
+          # own), then unconditionally force-kill the whole process group (`setsid`/
+          # `timeout --foreground` above put it all under $GPID's own PGID) within a few seconds
+          # regardless of whether the polite attempt took effect.
           echo "Sending stop..."
-          if ! timeout 10 bash -c 'echo "stop" > neoforge-gametest.fifo' 2>/dev/null; then
-            echo "::warning::Writing 'stop' timed out - the server already stopped reading stdin (all tests had passed). Killing it directly instead of waiting on the 3000s timeout."
-            kill "$GPID" 2>/dev/null || true
+          timeout 10 bash -c 'echo "stop" > neoforge-gametest.fifo' 2>/dev/null || true
+          for i in $(seq 1 10); do
+            kill -0 -- -"$GPID" 2>/dev/null || break
+            sleep 1
+          done
+          if kill -0 -- -"$GPID" 2>/dev/null; then
+            echo "::warning::Server didn't exit within 10s of 'stop' - force-killing its process group directly instead of waiting on the 3000s timeout."
+            kill -TERM -- -"$GPID" 2>/dev/null || true
+            sleep 2
+            kill -KILL -- -"$GPID" 2>/dev/null || true
           fi
-          wait "$GPID" || true
+          wait "$GPID" 2>/dev/null || true
           rm -f neoforge-gametest.fifo
 
           FAILED_COUNT=$(grep -cE ': failed$' neoforge-gametest.log || true)
