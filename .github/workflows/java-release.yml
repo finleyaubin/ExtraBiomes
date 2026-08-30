@@ -194,7 +194,7 @@ jobs:
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
           dependencies: |
-            terrablender(required){modrinth:terrablender}{curseforge:563928}
+            terrablender(required){modrinth:terrablender}{curseforge:565956}
             geckolib(required){modrinth:geckolib}{curseforge:388172}
             architectury-api(required){modrinth:architectury-api}{curseforge:419699}
             fabric-api(required){modrinth:fabric-api}{curseforge:306612}
@@ -216,7 +216,7 @@ jobs:
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
           dependencies: |
-            terrablender(required){modrinth:terrablender}{curseforge:563928}
+            terrablender(required){modrinth:terrablender}{curseforge:940057}
             geckolib(required){modrinth:geckolib}{curseforge:388172}
             architectury-api(required){modrinth:architectury-api}{curseforge:419699}
             create(optional){modrinth:create}{curseforge:328085}
