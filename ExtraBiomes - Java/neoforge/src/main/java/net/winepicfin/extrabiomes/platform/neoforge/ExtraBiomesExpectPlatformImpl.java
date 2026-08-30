@@ -7,6 +7,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorTy
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.fml.ModList;
 import net.winepicfin.extrabiomes.neoforge.block.custom.ModLogs;
 import net.winepicfin.extrabiomes.neoforge.block.custom.StickPileBlock;
@@ -79,7 +79,11 @@ public class ExtraBiomesExpectPlatformImpl {
     }
 
     public static Item createSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
-        return new DeferredSpawnEggItem(typeSupplier, backgroundColor, highlightColor, properties);
+        EntityType<? extends Mob> type = typeSupplier.get();
+        if (type == null) {
+            throw new IllegalStateException("EntityType for spawn egg was null - registration order issue? ModEntities.register() must be called before ModItems.register()");
+        }
+        return new SpawnEggItem(type, backgroundColor, highlightColor, properties);
     }
 
     public static boolean isCreateLoaded() {

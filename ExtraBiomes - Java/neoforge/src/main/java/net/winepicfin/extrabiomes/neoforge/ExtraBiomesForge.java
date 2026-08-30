@@ -75,11 +75,11 @@ public class ExtraBiomesForge
         startGameTestExitWatchdogIfRunningGameTestServer();
 
         ModCreativeModeTabs.register();
-        ModItems.register();
-        ModBlocks.register();
         ModFluids.register();
         ModFluidTypes.register(modEventBus);
         ModEntities.register();
+        ModItems.register();
+        ModBlocks.register();
         ModBlockEntities.register();
         ModSounds.register();
         ModCriteriaTriggers.register();

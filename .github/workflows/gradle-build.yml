@@ -213,7 +213,13 @@ jobs:
             ( sleep 60; echo "test run $t" || true; sleep 60; echo "stop" || true ) > "gt-$t.fifo" || true
             wait "$GPID" || true
 
-            if grep -qE ': failed$' "gt-$t.log"; then
+            # Matches both this mod's own "<name>: failed" log line (only reached if the test's
+            # code calls helper.fail()/logs before failing) and vanilla's own
+            # LogTestReporter.onTestFailed line, format "<name> failed at <pos>! <error>" - printed
+            # unconditionally by the vanilla GameTest framework itself whenever a test throws (e.g.
+            # via helper.assertTrue), which is the common case and doesn't reach this mod's own
+            # "failed" logging at all. Relying on only the first form misses that failure entirely.
+            if grep -qE ': failed$| failed at .+!' "gt-$t.log"; then
               echo "::error::$t failed - see gametest.log"
               FAILED=1
             elif ! grep -qE ': passed$' "gt-$t.log"; then
@@ -319,8 +325,16 @@ jobs:
             exit 1
           fi
           echo "Waiting for all $EXPECTED_TESTS tests to report passed/failed..."
+          # Matches both this mod's own "<name>: passed"/"<name>: failed" log lines and vanilla's
+          # own LogTestReporter.onTestFailed line ("<name> failed at <pos>! <error>", no leading
+          # colon, not anchored at line end) - printed unconditionally by the vanilla GameTest
+          # framework itself whenever a test throws (e.g. via helper.assertTrue), which is the
+          # common case and never reaches this mod's own "failed" logging. Without this, a test
+          # that fails in the first few seconds is invisible to this loop, which then burns the
+          # full 2700s before misreporting it below as "server likely didn't boot/finish in time"
+          # instead of as the real failure it is.
           for i in $(seq 1 2700); do
-            REPORTED=$(grep -cE ': (passed|failed)$' neoforge-gametest.log || true)
+            REPORTED=$(grep -cE ': (passed|failed)$| failed at .+!' neoforge-gametest.log || true)
             if [ "$REPORTED" -ge "$EXPECTED_TESTS" ]; then
               break
             fi
@@ -360,7 +374,10 @@ jobs:
           wait "$GPID" 2>/dev/null || true
           rm -f neoforge-gametest.fifo
 
-          FAILED_COUNT=$(grep -cE ': failed$' neoforge-gametest.log || true)
+          # Same widened failure regex as the polling loop above, for the same reason - a vanilla
+          # LogTestReporter failure line must be counted as a failure here too, not silently
+          # dropped in favor of the misleading "didn't boot in time" branch below.
+          FAILED_COUNT=$(grep -cE ': failed$| failed at .+!' neoforge-gametest.log || true)
           PASSED_COUNT=$(grep -cE ': passed$' neoforge-gametest.log || true)
           if [ "$FAILED_COUNT" -gt 0 ]; then
             echo "::error::$FAILED_COUNT NeoForge GameTest(s) failed - see neoforge-gametest.log"
