@@ -3,7 +3,6 @@ package net.winepicfin.extrabiomes.fabric;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
@@ -15,11 +14,9 @@ import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.SpawnEggItem;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
-import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.entity.client.BaitModel;
 import net.winepicfin.extrabiomes.entity.client.BaitRenderer;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseModel;
@@ -114,25 +111,13 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
             }
         });
 
-        // Vanilla's own ItemColors.createDefault() tints every spawn egg by iterating
-        // SpawnEggItem.eggs() (backed by SpawnEggItem's private static BY_ID map), and
-        // SpawnEggItem's constructor only adds itself to that map when its EntityType argument is
-        // non-null. ExtraBiomesSpawnEggItem always passes null to super() (see that class's own
-        // doc comment - architectury's DeferredRegister can't guarantee a resolved EntityType at
-        // construction time), so none of this mod's 8 spawn eggs are ever in SpawnEggItem.eggs(),
-        // and vanilla never registers a tint for them - they render fully untinted (plain white)
-        // instead of their background/highlight colors. Registering each one's color directly
-        // here bypasses SpawnEggItem.eggs() entirely and fixes this regardless of that map. See
-        // forge/.../event/ModEventBusClientEvents.java for the Forge-side equivalent fix.
-        ColorProviderRegistry.ITEM.register((stack, layer) -> ((SpawnEggItem) stack.getItem()).getColor(layer),
-                ModItems.PUCKOO_SPAWN_EGG.get(),
-                ModItems.WORM_SPAWN_EGG.get(),
-                ModItems.TREEFROG_SPAWN_EGG.get(),
-                ModItems.HOPPLESHROOM_SPAWN_EGG.get(),
-                ModItems.GIANT_TORTOISE_SPAWN_EGG.get(),
-                ModItems.JELLYFISH_SPAWN_EGG.get(),
-                ModItems.PIRANHA_SPAWN_EGG.get(),
-                ModItems.HARPY_SPAWN_EGG.get());
+        // createSpawnEggItem eagerly resolves a real EntityType and constructs a plain vanilla
+        // SpawnEggItem (see platform/fabric/ExtraBiomesExpectPlatformImpl#createSpawnEggItem), so
+        // these 8 items are in SpawnEggItem.eggs() and vanilla's own ItemColors.createDefault()
+        // tints them correctly (it wraps in ARGB32.opaque() - our background/highlight colors are
+        // written as bare 0xRRGGBB literals with a zero alpha byte, so a manual registration here
+        // that just forwards getColor(layer) without forcing alpha opaque overrides vanilla's
+        // correct mapping with a fully-transparent one, rendering the eggs invisible).
     }
 
     // Fabric API's BlockEntityRendererRegistry.register requires the renderer's own type parameter
