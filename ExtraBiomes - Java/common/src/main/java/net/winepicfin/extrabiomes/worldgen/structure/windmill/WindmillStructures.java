@@ -5,7 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Vec3i;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -63,7 +63,7 @@ public class WindmillStructures {
     private static final Holder<StructureProcessorList> IGNORE_STRUCTURE_VOID =
             Holder.direct(new StructureProcessorList(List.of(new BlockIgnoreProcessor(List.of(Blocks.STRUCTURE_VOID)))));
 
-    public static void bootstrapTemplatePool(BootstapContext<StructureTemplatePool> context) {
+    public static void bootstrapTemplatePool(BootstrapContext<StructureTemplatePool> context) {
         HolderGetter<StructureTemplatePool> poolLookup = context.lookup(net.minecraft.core.registries.Registries.TEMPLATE_POOL);
         Holder<StructureTemplatePool> fallback = poolLookup.getOrThrow(Pools.EMPTY);
         context.register(WINDMILL_POOL_KEY, new StructureTemplatePool(
@@ -78,7 +78,7 @@ public class WindmillStructures {
         ));
     }
 
-    public static void bootstrapStructure(BootstapContext<Structure> context) {
+    public static void bootstrapStructure(BootstrapContext<Structure> context) {
         HolderGetter<StructureTemplatePool> poolLookup = context.lookup(net.minecraft.core.registries.Registries.TEMPLATE_POOL);
         Holder<StructureTemplatePool> pool = poolLookup.getOrThrow(WINDMILL_POOL_KEY);
         Holder<StructureTemplatePool> createPool = poolLookup.getOrThrow(WINDMILL_CREATE_POOL_KEY);
@@ -100,7 +100,7 @@ public class WindmillStructures {
         ));
     }
 
-    public static void bootstrapStructureSet(BootstapContext<StructureSet> context) {
+    public static void bootstrapStructureSet(BootstrapContext<StructureSet> context) {
         HolderGetter<Structure> structureLookup = context.lookup(net.minecraft.core.registries.Registries.STRUCTURE);
         // spacing/separation is a chunk-grid average, not directly comparable to the old RarityFilter's
         // per-chunk-column odds - these are hand-picked to feel about as (in)frequent in-game as the old

@@ -4,7 +4,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -56,11 +56,11 @@ public class NetherlandsWheatFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_FLOOR_KEY = key("netherlands_wheat_floor");
     public static final ResourceKey<PlacedFeature> WHEAT_FLOOR_PLACED_KEY = placedKey("netherlands_wheat_floor");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(WHEAT_FLOOR_KEY, new ConfiguredFeature<>(WHEAT_FIELD_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // No CountPlacement/InSquarePlacement: the feature iterates every column of its chunk itself, so

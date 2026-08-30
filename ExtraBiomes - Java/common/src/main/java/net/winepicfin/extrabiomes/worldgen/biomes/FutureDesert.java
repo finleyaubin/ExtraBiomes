@@ -2,14 +2,14 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.future.FutureTreeFeatures;
 
 public class FutureDesert {
 
-    public Biome Register(BootstapContext<Biome> context)
+    public Biome Register(BootstrapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 

@@ -20,7 +20,7 @@ public class ModEntityLootTableEntries {
     public static void populate(BiConsumer<EntityType<?>, LootTable.Builder> add) {
         add.accept(ModEntities.GIANT_TORTOISE.get(), LootTable.lootTable().withPool(
                 LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-                        .add(LootItem.lootTableItem(Items.SCUTE)
+                        .add(LootItem.lootTableItem(Items.TURTLE_SCUTE)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
                                 .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))));
 

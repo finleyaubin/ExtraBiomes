@@ -64,9 +64,9 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         this.createInventory();
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_ID_TYPE_VARIANT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_ID_TYPE_VARIANT, 0);
     }
 
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -268,10 +268,10 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     }
 
     @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @javax.annotation.Nullable SpawnGroupData spawnGroupData, @javax.annotation.Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @javax.annotation.Nullable SpawnGroupData spawnGroupData) {
         RandomSource random = level.getRandom();
         PuckooBaseVariants variant = Util.getRandom(PuckooBaseVariants.values(), random);
         this.setVariantAndMarkings(variant, Util.getRandom(PuckooKoiMarkings.values(), random));
-        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData, tag);
+        return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 }

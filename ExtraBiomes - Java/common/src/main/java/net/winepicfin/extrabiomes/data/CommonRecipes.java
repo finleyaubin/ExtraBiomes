@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
@@ -13,6 +14,7 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModItems;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Shared, loader-agnostic recipe content for the Forge and Fabric {@code ModRecipeProvider}s.
@@ -33,8 +35,8 @@ import java.util.List;
  */
 public abstract class CommonRecipes extends RecipeProvider {
 
-    private CommonRecipes(PackOutput packOutput) {
-        super(packOutput);
+    private CommonRecipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
+        super(packOutput, registries);
     }
 
     public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());

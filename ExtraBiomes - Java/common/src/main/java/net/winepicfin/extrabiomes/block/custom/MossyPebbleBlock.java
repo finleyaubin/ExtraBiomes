@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -72,20 +72,18 @@ public class MossyPebbleBlock extends Block {
 
 
     @Override
-    public @NotNull InteractionResult use(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
-        ItemStack heldItem = pPlayer.getItemInHand(pHand);
-
-    if (pState.getValue(SIZE) < 3 && heldItem.getItem() == ModItems.MOSSY_PEBBLE.get()) {
+    protected @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack heldItem, BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
+        if (pState.getValue(SIZE) < 3 && heldItem.getItem() == ModItems.MOSSY_PEBBLE.get()) {
             pLevel.setBlockAndUpdate(pPos, pState.setValue(SIZE, pState.getValue(SIZE) + 1));
 
             if (!pPlayer.isCreative()) {
                 heldItem.shrink(1);
             }
 
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
     }
 

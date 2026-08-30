@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.moss;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -118,7 +118,7 @@ public class MossFeatures {
     public static final ResourceKey<PlacedFeature> JUNGLE_BUSH_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("minecraft", "jungle_bush"));
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         context.register(MOSS_CARPET_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
@@ -132,7 +132,7 @@ public class MossFeatures {
                 new RandomPatchConfiguration(30, 8, 3, tallGrassInner)));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // Bedrock's source feature scatters 10 attempts with 0 spread, which always lands on the same block; collapsed to a single placement.

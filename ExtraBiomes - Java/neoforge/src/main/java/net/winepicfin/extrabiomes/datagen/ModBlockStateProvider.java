@@ -13,6 +13,8 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
+import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 import java.util.Objects;
 
@@ -29,8 +31,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         blockWithItem(ModBlocks.DENSE_CLOUD);
         fluidBlock(ModBlocks.GOO.get());
-        pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
-        pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
+        pebbleBlock(ModBlocks.PEBBLE.get(),"pebble", PebbleBlock.SIZE);
+        pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble", MossyPebbleBlock.SIZE);
         stickPileBlock(ModBlocks.STICK_PILE.get());
         // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
@@ -182,9 +184,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(wallSignBlock,sign);
     }
 
-    private void pebbleBlock(Block pebbleBlock,String type){
+    // PebbleBlock and MossyPebbleBlock each declare their own distinct SIZE IntegerProperty
+    // instance (not a shared/inherited one - MossyPebbleBlock doesn't extend PebbleBlock), so the
+    // caller must pass the property belonging to the actual block being generated for - matches
+    // fabric/'s equivalent ModBlockStateProvider#pebbleBlock, which hit and fixed this same bug.
+    private void pebbleBlock(Block pebbleBlock, String type, IntegerProperty sizeProperty){
         getVariantBuilder(pebbleBlock).forAllStates(blockState -> {
-            Integer size = blockState.getValue(PebbleBlock.SIZE);
+            Integer size = blockState.getValue(sizeProperty);
             ModelFile modelFile;
             switch (size){
                 case 1:

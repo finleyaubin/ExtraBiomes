@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -100,7 +100,7 @@ public class GlacierFeatures {
         return Arrays.stream(sources).map(test -> OreConfiguration.target(test, result)).toList();
     }
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // OreConfiguration's vein-size codec caps at 64, so the packed/top ice veins (90/110 in Bedrock) are clamped.
         context.register(GLACIER_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 30, 0.0F)));
@@ -130,7 +130,7 @@ public class GlacierFeatures {
                 )));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // glacier_ice/glacier_packed_ice span the full underground range (-64..100) so they're wired at UNDERGROUND_ORES in the biome; glacier_top_ice only spans 64..100 so it's wired at LOCAL_MODIFICATIONS instead.

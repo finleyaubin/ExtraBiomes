@@ -2,10 +2,10 @@ package net.winepicfin.extrabiomes.worldgen.tree.custom;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -23,17 +23,17 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class MysticTrunkPlacer extends TrunkPlacer {
-    private static final Codec<UniformInt> BRANCH_START_CODEC = ExtraCodecs.validate(UniformInt.CODEC, (pUniformInt) -> {
+    private static final Codec<UniformInt> BRANCH_START_CODEC = UniformInt.CODEC.validate((pUniformInt) -> {
         return pUniformInt.getMaxValue() - pUniformInt.getMinValue() < 1 ? DataResult.error(() -> {
             return "Need at least 2 blocks variation for the branch starts to fit both branches";
         }) : DataResult.success(pUniformInt);
-    });
-public static final Codec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.create((pInstance) -> {
+    }).codec();
+public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((pInstance) -> {
     return trunkPlacerParts(pInstance).and(pInstance.group(IntProvider.codec(1, 3).fieldOf("branch_count").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchCount;
     }), IntProvider.codec(2, 16).fieldOf("branch_horizontal_length").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchHorizontalLength;
-    }), IntProvider.codec(-16, 0, BRANCH_START_CODEC).fieldOf("branch_start_offset_from_top").forGetter((pTrunkPlacer) -> {
+    }), IntProvider.validateCodec(-16, 0, BRANCH_START_CODEC).fieldOf("branch_start_offset_from_top").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchStartOffsetFromTop;
     }), IntProvider.codec(-16, 16).fieldOf("branch_end_offset_from_top").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchEndOffsetFromTop;

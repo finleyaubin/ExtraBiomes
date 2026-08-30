@@ -2,7 +2,10 @@ package net.winepicfin.extrabiomes.fabric.datagen.loot;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.minecraft.core.HolderLookup;
 import net.winepicfin.extrabiomes.commondatagen.loot.ModBlockLootTableEntries;
+
+import java.util.concurrent.CompletableFuture;
 
 // Fabric wiring for the shared block loot table entries in
 // net.winepicfin.extrabiomes.commondatagen.loot.ModBlockLootTableEntries (common) - see that class's
@@ -15,8 +18,8 @@ import net.winepicfin.extrabiomes.commondatagen.loot.ModBlockLootTableEntries;
 // Fabric API's own FabricBlockLootTableProvider is the documented fix: it overrides that same
 // completeness check to scope by FabricDataOutput#getModId() instead of the full registry.
 public class ModBlockLootTables extends FabricBlockLootTableProvider {
-    public ModBlockLootTables(FabricDataOutput output) {
-        super(output);
+    public ModBlockLootTables(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture);
     }
 
     @Override

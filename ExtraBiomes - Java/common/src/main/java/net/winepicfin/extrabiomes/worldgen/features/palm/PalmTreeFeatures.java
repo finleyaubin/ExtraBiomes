@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.palm;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -57,7 +57,7 @@ public class PalmTreeFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_PALM_KEY =
             ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_palm_tree"));
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // anchor = each structure's measured base-log column (trunks lean, so it isn't local (0,0,0)) so the origin's heightmap/water check tests the trunk's true ground column, not an arbitrary corner.
         context.register(PALM_SMALL_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),

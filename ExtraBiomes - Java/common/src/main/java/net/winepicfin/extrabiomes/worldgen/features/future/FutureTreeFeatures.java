@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.future;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -83,7 +83,7 @@ public class FutureTreeFeatures {
     // Placed flush on the heightmap these small leaf clusters read as floating above the ground; sinking them in slightly keeps their base embedded.
     private static final int GROUND_OFFSET = -1;
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(FUTURE_TREE_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "future/2_tall_white_tree"), GROUND_OFFSET)
@@ -94,7 +94,7 @@ public class FutureTreeFeatures {
         ));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         context.register(FUTURE_TREE_2_PLACED_KEY, new PlacedFeature(

@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
  * around it, and basalt_bank (0.006-0.01) is the next ring out where basalt columns cluster.
  */
 public class RiverNoiseFilter extends PlacementModifier {
-    public static final Codec<RiverNoiseFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<RiverNoiseFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.DOUBLE.fieldOf("min").forGetter(RiverNoiseFilter::min),
             Codec.DOUBLE.fieldOf("max").forGetter(RiverNoiseFilter::max)
     ).apply(instance, RiverNoiseFilter::new));

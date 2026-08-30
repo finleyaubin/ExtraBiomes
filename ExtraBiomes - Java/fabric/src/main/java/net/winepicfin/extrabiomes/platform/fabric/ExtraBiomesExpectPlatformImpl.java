@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.platform.fabric;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -8,6 +8,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -22,7 +23,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 import net.winepicfin.extrabiomes.fabric.mixin.WoodTypeAccessor;
-import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
 
 import java.util.function.Supplier;
 
@@ -46,12 +46,12 @@ public class ExtraBiomesExpectPlatformImpl {
         return WoodTypeAccessor.invokeRegister(woodType);
     }
 
-    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(Codec<P> codec) {
-        return new TreeDecoratorType<>(codec);
+    public static <P extends TreeDecorator> TreeDecoratorType<P> createTreeDecoratorType(MapCodec<P> codec) {
+        return net.winepicfin.extrabiomes.fabric.mixin.TreeDecoratorTypeAccessor.invokeNew(codec);
     }
 
-    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(Codec<P> codec) {
-        return new TrunkPlacerType<>(codec);
+    public static <P extends TrunkPlacer> TrunkPlacerType<P> createTrunkPlacerType(MapCodec<P> codec) {
+        return net.winepicfin.extrabiomes.fabric.mixin.TrunkPlacerTypeAccessor.invokeNew(codec);
     }
 
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {
@@ -66,11 +66,12 @@ public class ExtraBiomesExpectPlatformImpl {
         return new net.winepicfin.extrabiomes.fabric.item.custom.FrogHelmetItem(material, type, properties);
     }
 
-    // Fabric has no Forge-style automatic pick-block fallback, so unlike the Forge counterpart this
-    // stays on the common module's own ExtraBiomesSpawnEggItem - see MobPickResultMixin for how its
-    // ALL/byType() lookup gets consulted at pick-block time.
     public static Item createSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
-        return new ExtraBiomesSpawnEggItem(typeSupplier, backgroundColor, highlightColor, properties);
+        EntityType<? extends Mob> type = typeSupplier.get();
+        if (type == null) {
+            throw new IllegalStateException("EntityType for spawn egg was null - registration order issue? ModEntities.register() must be called before ModItems.register()");
+        }
+        return new SpawnEggItem(type, backgroundColor, highlightColor, properties);
     }
 
     public static boolean isCreateLoaded() {

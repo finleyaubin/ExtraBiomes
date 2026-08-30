@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.taigaspike;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -98,7 +98,7 @@ public class TaigaSpikeFeatures {
     public static final ResourceKey<PlacedFeature> TAIGA_SPIKE_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_taiga_spike"));
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(SPIKE_1_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "taigaspike/spike_1"))
@@ -125,7 +125,7 @@ public class TaigaSpikeFeatures {
         ));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // Shared origin-block constraint for all three variants, mirroring Bedrock's block_intersection.block_allowlist.

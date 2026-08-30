@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.stonepillars;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -77,7 +77,7 @@ public class StonePillarsFeature {
     private static final List<net.minecraft.world.level.block.Block> ALLOWED_FLOOR_BLOCKS =
             List.of(Blocks.AIR, Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.WATER, Blocks.STONE);
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(STONE_PILLAR_1_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
@@ -104,7 +104,7 @@ public class StonePillarsFeature {
         ));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // Floor allowlist now enforced per-piece via SingleStructureConfiguration (see bootstrapConfigured).

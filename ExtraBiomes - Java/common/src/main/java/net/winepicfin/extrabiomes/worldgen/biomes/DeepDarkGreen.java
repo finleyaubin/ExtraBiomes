@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 
 public class DeepDarkGreen {
 
-    public Biome Register(BootstapContext<Biome> context)
+    public Biome Register(BootstrapContext<Biome> context)
     {
         // A cave variant of vanilla's Deep Dark (placed underground via ModOverworldRegion), so it follows deepDark()'s setup but with jungle-flavoured vegetation/colors instead of plain grass and black.
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();

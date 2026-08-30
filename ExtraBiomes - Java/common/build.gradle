@@ -2,6 +2,21 @@ architectury {
     common(rootProject.enabled_platforms.split(","))
 }
 
+// :common:remapJar (Loom's default per-subproject task) tries to remap common's generic jar to
+// official names on its own, independent of any specific loader - but nothing in this build
+// actually consumes that output: fabric/build.gradle and neoforge/build.gradle both depend on
+// common's "namedElements" configuration (the un-remapped dev jar) instead, remapping happens as
+// part of each loader's own transformProduction<Loader>/remapJar via the shadow jar. This task
+// started failing on the 1.20.6 bump with "Unfixable conflicts" from architectury-loom's shared
+// official-mappings resolution colliding on vanilla's new CustomQueryPayload/DiscardedQueryPayload
+// class split (introduced in 1.20.5) against net/minecraftforge/network/ForgePayload - a real
+// upstream Loom bug (architectury/architectury-loom#335, open/unresolved as of this bump, no fix
+// in the newest 1.17.491 build) that reproduces even though Forge isn't in enabled_platforms,
+// since Loom's merged mapping data for a Forge-supporting MC version apparently isn't scoped per
+// project. Disabled rather than worked around, since disabling costs nothing here.
+tasks.named("remapJar") { enabled = false }
+tasks.named("remapSourcesJar") { enabled = false }
+
 // Datagen output (see forge/build.gradle's data run) lands here. Without this, the generated
 // datapack JSON (biomes, tags, recipes, loot tables, ...) only exists on disk for tests to read
 // directly - it's never actually packaged into the mod, so none of it exists at runtime.

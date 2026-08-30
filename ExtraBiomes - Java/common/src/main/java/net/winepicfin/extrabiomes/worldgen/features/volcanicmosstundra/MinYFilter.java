@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
  * {@code minY} - i.e. moss only grows on high ground, matching the biome's summit-only moss theme.
  */
 public class MinYFilter extends PlacementModifier {
-    public static final Codec<MinYFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<MinYFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.fieldOf("min_y").forGetter(MinYFilter::minY)
     ).apply(instance, MinYFilter::new));
 

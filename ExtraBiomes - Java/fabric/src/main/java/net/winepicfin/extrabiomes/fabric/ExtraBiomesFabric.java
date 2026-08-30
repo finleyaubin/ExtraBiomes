@@ -46,9 +46,9 @@ public class ExtraBiomesFabric implements ModInitializer {
 
         ModCreativeModeTabs.register();
         ModFluids.register();
+        ModEntities.register();
         ModBlocks.register();
         ModItems.register();
-        ModEntities.register();
         ModBlockEntities.register();
         ModSounds.register();
         ModCriteriaTriggers.register();

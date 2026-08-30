@@ -10,7 +10,9 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.advancements.critereon.TameAnimalTrigger;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -57,6 +59,7 @@ public class ModAdvancements implements AdvancementSubProvider {
 
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
+        HolderGetter<Biome> biomes = registries.lookupOrThrow(Registries.BIOME);
         ResourceLocation rootId = new ResourceLocation(ExtraBiomes.MOD_ID, "root");
         Advancement.Builder rootBuilder = Advancement.Builder.advancement()
                 .display(ModItems.WORM.get(),
@@ -137,9 +140,9 @@ public class ModAdvancements implements AdvancementSubProvider {
                         Component.translatable("advancements.extrabiomes.visit_netherlands.description"),
                         null, AdvancementType.GOAL, true, true, false)
                 .addCriterion("in_netherlands", PlayerTrigger.TriggerInstance.located(
-                        LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS)))
+                        LocationPredicate.Builder.inBiome(biomes.getOrThrow(ModBiomes.THE_NETHERLANDS))))
                 .addCriterion("in_netherlands_mutated", PlayerTrigger.TriggerInstance.located(
-                        LocationPredicate.Builder.location().setBiome(ModBiomes.THE_NETHERLANDS_MUTATED)))
+                        LocationPredicate.Builder.inBiome(biomes.getOrThrow(ModBiomes.THE_NETHERLANDS_MUTATED))))
                 .build(visitNetherlandsId);
         saver.accept(visitNetherlands);
 
@@ -172,7 +175,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                         null, AdvancementType.CHALLENGE, true, true, false);
         for (ResourceKey<Biome> biome : ALL_BIOMES) {
             biomeExplorer.addCriterion(biome.location().getPath(), PlayerTrigger.TriggerInstance.located(
-                    LocationPredicate.Builder.location().setBiome(biome)));
+                    LocationPredicate.Builder.inBiome(biomes.getOrThrow(biome))));
         }
         saver.accept(biomeExplorer.build(biomeExplorerId));
     }

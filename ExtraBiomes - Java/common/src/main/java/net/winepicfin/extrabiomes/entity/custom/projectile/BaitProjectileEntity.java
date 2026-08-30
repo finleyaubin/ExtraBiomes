@@ -58,11 +58,11 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_HEALTH, MAX_HEALTH);
-        this.entityData.define(DATA_HURT_TIME, 0);
-        this.entityData.define(DATA_LANDED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_HEALTH, MAX_HEALTH);
+        builder.define(DATA_HURT_TIME, 0);
+        builder.define(DATA_LANDED, false);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    protected float getGravity() {
-        return 0.03F;
+    protected double getDefaultGravity() {
+        return 0.03;
     }
 
     // Unlike Pebble/RazorFeather, bait doesn't discard on impact (it needs to sit as a decoy), so motion must be arrested here or gravity keeps pulling it through the ground forever.

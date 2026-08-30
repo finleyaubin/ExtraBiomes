@@ -5,15 +5,12 @@ import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
-import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.entity.client.BaitModel;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseModel;
 import net.winepicfin.extrabiomes.entity.client.HarpyModel;
@@ -27,7 +24,7 @@ import net.winepicfin.extrabiomes.entity.client.layers.PuckooBaseModelLayers;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 import net.winepicfin.extrabiomes.neoforge.entity.client.layers.WolfFrogHatLayer;
 
-@Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
@@ -56,26 +53,11 @@ public class ModEventBusClientEvents {
         }
     }
 
-    // Vanilla's own ItemColors.createDefault() tints every spawn egg by iterating
-    // SpawnEggItem.eggs() (backed by SpawnEggItem's private static BY_ID map), and
-    // SpawnEggItem's constructor only adds itself to that map when its EntityType argument is
-    // non-null. ExtraBiomesSpawnEggItem always passes null to super() (see that class's own doc
-    // comment - architectury's DeferredRegister can't guarantee a resolved EntityType at
-    // construction time), so none of this mod's 8 spawn eggs are ever in SpawnEggItem.eggs(),
-    // and vanilla never registers a tint for them - they render fully untinted (plain white)
-    // instead of their background/highlight colors. Registering each one's ItemColor directly
-    // here bypasses SpawnEggItem.eggs() entirely and fixes this regardless of that map.
-    @SubscribeEvent
-    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        net.minecraft.client.color.item.ItemColor spawnEggColor = (stack, layer) -> ((SpawnEggItem) stack.getItem()).getColor(layer);
-        event.register(spawnEggColor,
-                ModItems.PUCKOO_SPAWN_EGG.get(),
-                ModItems.WORM_SPAWN_EGG.get(),
-                ModItems.TREEFROG_SPAWN_EGG.get(),
-                ModItems.HOPPLESHROOM_SPAWN_EGG.get(),
-                ModItems.GIANT_TORTOISE_SPAWN_EGG.get(),
-                ModItems.JELLYFISH_SPAWN_EGG.get(),
-                ModItems.PIRANHA_SPAWN_EGG.get(),
-                ModItems.HARPY_SPAWN_EGG.get());
-    }
+    // createSpawnEggItem eagerly resolves a real EntityType and constructs a plain vanilla
+    // SpawnEggItem (see platform/neoforge/ExtraBiomesExpectPlatformImpl#createSpawnEggItem), so
+    // these 8 items are in SpawnEggItem.eggs() and vanilla's own ItemColors.createDefault()
+    // tints them correctly (it wraps in ARGB32.opaque() - our background/highlight colors are
+    // written as bare 0xRRGGBB literals with a zero alpha byte, so a manual registration here
+    // that just forwards getColor(layer) without forcing alpha opaque overrides vanilla's
+    // correct mapping with a fully-transparent one, rendering the eggs invisible).
 }

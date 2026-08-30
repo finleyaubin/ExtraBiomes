@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.jellycoral;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -90,7 +90,7 @@ public class JellyCoralFeatures {
     public static final ResourceKey<PlacedFeature> JELLYCORAL_4_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_4"));
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         registerConfigured(context, JELLYCORAL_1_KEY, "jellycoral_1");
         registerConfigured(context, JELLYCORAL_2_KEY, "jellycoral_2");
         registerConfigured(context, JELLYCORAL_3_KEY, "jellycoral_3");
@@ -101,14 +101,14 @@ public class JellyCoralFeatures {
     // already be almost entirely underwater so the coral/kelp/pickle pieces don't land high and dry.
     private static final float MIN_SUBMERGED_FRACTION = 0.9F;
 
-    private static void registerConfigured(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName) {
+    private static void registerConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName) {
         context.register(key, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION)
         ));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         registerPlaced(context, configuredFeatures, JELLYCORAL_1_PLACED_KEY, JELLYCORAL_1_KEY);
         registerPlaced(context, configuredFeatures, JELLYCORAL_2_PLACED_KEY, JELLYCORAL_2_KEY);
@@ -116,7 +116,7 @@ public class JellyCoralFeatures {
         registerPlaced(context, configuredFeatures, JELLYCORAL_4_PLACED_KEY, JELLYCORAL_4_KEY);
     }
 
-    private static void registerPlaced(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
+    private static void registerPlaced(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
                                         ResourceKey<PlacedFeature> placedKey, ResourceKey<ConfiguredFeature<?, ?>> configuredKey) {
         context.register(placedKey, new PlacedFeature(
                 configuredFeatures.getOrThrow(configuredKey),

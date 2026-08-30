@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.mystic;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -43,11 +43,11 @@ public class MysticFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_GOO_KEY = registerKey("mystic_goo_conversion");
     public static final ResourceKey<PlacedFeature> MYSTIC_GOO_PLACED_KEY = createKey("mystic_goo_conversion_placed");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(MYSTIC_GOO_KEY, new ConfiguredFeature<>(GOO_CONVERSION_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         Holder<ConfiguredFeature<?, ?>> configuration = configuredFeatures.getOrThrow(MYSTIC_GOO_KEY);
 

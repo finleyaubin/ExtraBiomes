@@ -59,7 +59,7 @@ public final class HarpySpawner {
         if (!HarpyEntity.checkHarpySpawnRules(ModEntities.HARPY.get(), level, MobSpawnType.NATURAL, pos, random)) {
             return;
         }
-        AABB aabb = ModEntities.HARPY.get().getAABB(x + 0.5, surfaceY, z + 0.5);
+        AABB aabb = ModEntities.HARPY.get().getSpawnAABB(x + 0.5, surfaceY, z + 0.5);
         if (!level.noCollision(aabb) || !level.getEntitiesOfClass(HarpyEntity.class, aabb.inflate(MIN_DISTANCE_BETWEEN_HARPIES)).isEmpty()) {
             return;
         }
@@ -69,7 +69,7 @@ public final class HarpySpawner {
             return;
         }
         harpy.moveTo(x + 0.5, surfaceY, z + 0.5, random.nextFloat() * 360.0F, 0.0F);
-        harpy.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null, null);
+        harpy.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null);
         level.addFreshEntity(harpy);
     }
 

@@ -1,8 +1,4 @@
 
-# NOTE: still "mods.toml" (not "neoforge.mods.toml") - that filename rename only landed in
-# NeoForge 20.5 (MC 1.20.5), one version after this. Confirmed against NeoForge's own official MDK
-# template.
-#
 # NOTE: dependencies use "type" (required "required"|"optional"|"incompatible"|"discouraged"), not
 # the old "mandatory=true/false" - that field is deprecated as of this NeoForge version and fatally
 # rejects the mod file at 20.4.251 ("Deprecated 'mandatory' field is used in dependency (main)"),

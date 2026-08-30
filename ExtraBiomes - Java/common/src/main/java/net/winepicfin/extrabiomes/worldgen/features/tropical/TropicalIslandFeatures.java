@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.tropical;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -71,7 +71,7 @@ public class TropicalIslandFeatures {
      */
     public static final ResourceKey<PlacedFeature> GRASS_FLOOR_PLACED_KEY = placedKey("island_grass_floor");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(MELON_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MELON.defaultBlockState()))));
 
@@ -92,7 +92,7 @@ public class TropicalIslandFeatures {
                 )));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         context.register(MELON_PLACED_KEY, new PlacedFeature(

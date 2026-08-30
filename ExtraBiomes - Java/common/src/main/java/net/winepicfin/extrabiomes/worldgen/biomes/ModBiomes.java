@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
@@ -53,7 +53,7 @@ public class ModBiomes
         return ResourceKey.create(Registries.BIOME, new ResourceLocation(ExtraBiomes.MOD_ID, name));
     }
 
-    public static void boostrap(BootstapContext<Biome> context) {
+    public static void boostrap(BootstrapContext<Biome> context) {
         context.register(CHARRED_FOREST, new CharredForest().Register(context));
         context.register(COLD_MESA, new ColdMesa().Register(context));
         context.register(COLD_MESA_BRYCE, new ColdMesaBryce().Register(context));

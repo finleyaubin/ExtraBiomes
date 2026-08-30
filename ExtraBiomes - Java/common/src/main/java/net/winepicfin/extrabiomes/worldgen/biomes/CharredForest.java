@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
@@ -16,7 +16,7 @@ import net.winepicfin.extrabiomes.worldgen.features.charred.CharredForestFeature
 
 public class CharredForest {
 
-    public Biome Register(BootstapContext<Biome> context)
+    public Biome Register(BootstrapContext<Biome> context)
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 

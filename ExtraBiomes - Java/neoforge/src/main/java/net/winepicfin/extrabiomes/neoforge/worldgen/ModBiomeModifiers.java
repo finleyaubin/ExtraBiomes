@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.neoforge.worldgen;
 
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
@@ -58,7 +58,7 @@ public class ModBiomeModifiers {
 
     private static final TagKey<Biome> IS_OVERWORLD = TagKey.create(Registries.BIOME, new ResourceLocation("minecraft:is_overworld"));
 
-    public static void bootstrap(BootstapContext<BiomeModifier> context) {
+    public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         var biomes = context.lookup(Registries.BIOME);
 

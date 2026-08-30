@@ -35,11 +35,11 @@ public class WolfFrogHatInteractHandler {
                 if (!player.getAbilities().instabuild) {
                     heldItem.shrink(1);
                 }
-                wolf.level().playSound(null, wolf, SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.NEUTRAL, 1.0F, 1.0F);
+                wolf.level().playSound(null, wolf, SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.NEUTRAL, 1.0F, 1.0F);
             } else {
                 wolf.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
                 wolf.level().addFreshEntity(new ItemEntity(wolf.level(), wolf.getX(), wolf.getY() + 0.5D, wolf.getZ(), headItem));
-                heldItem.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                heldItem.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                 wolf.level().playSound(null, wolf, SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL, 1.0F, 1.0F);
             }
             return InteractionResult.SUCCESS;

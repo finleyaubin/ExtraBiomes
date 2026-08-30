@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.tree.custom;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +28,7 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.CaveVineFe
  * uniform 0-{@link GrowingPlantHeadBlock#MAX_AGE} age, body blocks get a 1-in-5 berries roll.
  */
 public class CaveVineTreeDecorator extends TreeDecorator {
-    public static final Codec<CaveVineTreeDecorator> CODEC = RecordCodecBuilder.create(instance ->
+    public static final MapCodec<CaveVineTreeDecorator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     Codec.floatRange(0.0F, 1.0F).fieldOf("probability").forGetter(d -> d.probability),
                     Codec.intRange(1, 32).fieldOf("max_length").forGetter(d -> d.maxLength)

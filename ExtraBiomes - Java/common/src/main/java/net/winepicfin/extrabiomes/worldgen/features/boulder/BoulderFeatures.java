@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.boulder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -174,7 +174,7 @@ public class BoulderFeatures {
     // Not 1.0F: the pile's own floor row against the ground is expected to be non-air, so requiring full clearance would reject nearly all placements.
     private static final float STICK_PILE_MIN_CLEAR_FRACTION = 0.9F;
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         // facing_direction unspecified in Bedrock source -> random rotation here
@@ -237,23 +237,23 @@ public class BoulderFeatures {
         )));
     }
 
-    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation) {
+    private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation) {
         registerSingleStructure(context, key, structurePath, rotation, 0);
     }
 
-    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset) {
+    private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset) {
         ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, structurePath);
         SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset);
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }
 
-    private static void registerSingleStructure(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
+    private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
         ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, structurePath);
         SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset, minClearFraction, requireGroundedFloor);
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }
 
-    private static void registerGroundPatch(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, net.minecraft.world.level.block.state.BlockState groundState, Holder<PlacedFeature> pebbleSelect, boolean isPebblePatch) {
+    private static void registerGroundPatch(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, net.minecraft.world.level.block.state.BlockState groundState, Holder<PlacedFeature> pebbleSelect, boolean isPebblePatch) {
         VegetationPatchConfiguration config = new VegetationPatchConfiguration(
                 BOULDER_REPLACEABLE,
                 BlockStateProvider.simple(groundState),
@@ -269,7 +269,7 @@ public class BoulderFeatures {
         context.register(key, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, config));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // no modifiers: only ever invoked at an already-chosen position, as a vegetation_feature or RANDOM_SELECTOR entry
@@ -321,7 +321,7 @@ public class BoulderFeatures {
         ));
     }
 
-    private static void registerNoModifiers(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, ResourceKey<PlacedFeature> placedKey, ResourceKey<ConfiguredFeature<?, ?>> configuredKey) {
+    private static void registerNoModifiers(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, ResourceKey<PlacedFeature> placedKey, ResourceKey<ConfiguredFeature<?, ?>> configuredKey) {
         context.register(placedKey, new PlacedFeature(configuredFeatures.getOrThrow(configuredKey), List.<PlacementModifier>of()));
     }
 
