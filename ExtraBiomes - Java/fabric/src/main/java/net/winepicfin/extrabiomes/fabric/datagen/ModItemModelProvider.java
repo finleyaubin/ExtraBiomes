@@ -79,7 +79,7 @@ public class ModItemModelProvider implements DataProvider {
         // Black Sandstone Wall - "wall_inventory" parent needs an explicit item entry (walls, unlike
         // most blocks, use a dedicated inventory-only model rather than reusing a placed-block model).
         withExistingParent(ModBlocks.BLACK_SANDSTONE_WALL.getId().getPath(), "minecraft:block/wall_inventory")
-                .add("wall", new ResourceLocation(ExtraBiomes.MOD_ID, "block/black_sandstone").toString());
+                .add("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone").toString());
 
         // Spawn Eggs
         spawnEgg(ModItems.PUCKOO_SPAWN_EGG.get());
@@ -95,7 +95,7 @@ public class ModItemModelProvider implements DataProvider {
     private void simpleItem(Item item) {
         ResourceLocation id = ModelLocationUtils.getModelLocation(item);
         // decorateItemModelLocation(path) defaults to the "minecraft" namespace, not this mod's - producing missing textures.
-        ResourceLocation texture = new ResourceLocation(ExtraBiomes.MOD_ID, "item/" + BuiltInRegistries.ITEM.getKey(item).getPath());
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + BuiltInRegistries.ITEM.getKey(item).getPath());
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -113,7 +113,7 @@ public class ModItemModelProvider implements DataProvider {
     // Minimal withExistingParent-style builder: registers a model whose only content is "parent" plus
     // whatever textures the caller adds.
     private ItemModelBuilder withExistingParent(String path, String parent) {
-        ResourceLocation id = new ResourceLocation(ExtraBiomes.MOD_ID, "item/" + path);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + path);
         ItemModelBuilder builder = new ItemModelBuilder(parent);
         models.put(id, builder::build);
         return builder;
@@ -173,11 +173,11 @@ public class ModItemModelProvider implements DataProvider {
             default -> "";
         };
         String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
-        ResourceLocation itemTexture = new ResourceLocation(ExtraBiomes.MOD_ID, "item/" + itemPath);
+        ResourceLocation itemTexture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + itemPath);
 
         List<Map.Entry<ResourceKey<TrimMaterial>, Float>> entries = List.copyOf(TRIM_MATERIALS.entrySet());
         ItemModelBuilder base = new ItemModelBuilder("minecraft:item/generated").add("layer0", itemTexture.toString());
-        ResourceLocation baseId = new ResourceLocation(ExtraBiomes.MOD_ID, "item/" + itemPath);
+        ResourceLocation baseId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + itemPath);
 
         models.put(baseId, () -> {
             JsonObject json = base.build().getAsJsonObject();
@@ -202,8 +202,8 @@ public class ModItemModelProvider implements DataProvider {
         for (Map.Entry<ResourceKey<TrimMaterial>, Float> entry : entries) {
             String trimName = entry.getKey().location().getPath();
             String modelName = itemPath + "_" + trimName + "_trim";
-            ResourceLocation trimModelId = new ResourceLocation(ExtraBiomes.MOD_ID, "item/" + modelName);
-            ResourceLocation trimTexture = new ResourceLocation("minecraft", "trims/items/" + armorType + "_trim_" + trimName);
+            ResourceLocation trimModelId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + modelName);
+            ResourceLocation trimTexture = ResourceLocation.fromNamespaceAndPath("minecraft", "trims/items/" + armorType + "_trim_" + trimName);
             models.put(trimModelId, () -> {
                 JsonObject json = new JsonObject();
                 json.addProperty("parent", "minecraft:item/generated");

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // bare dropSelf) entries actually wires the loot content the source code intends, catching e.g. a
 // wrong Items.* argument or a swapped block/item reference that dropSelf-only coverage can't.
 class BlockLootTableGenerationTest {
-    private static final String BLOCKS_DIR = "src/generated/resources/data/extrabiomes/loot_tables/blocks/";
+    private static final String BLOCKS_DIR = "src/generated/resources/data/extrabiomes/loot_table/blocks/";
 
     @Test
     void netherDiamondOreDropsDiamondWithFortuneOrOreWithSilkTouch() {

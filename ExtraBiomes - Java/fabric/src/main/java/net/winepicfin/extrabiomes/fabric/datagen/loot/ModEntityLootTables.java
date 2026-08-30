@@ -22,12 +22,15 @@ import java.util.function.BiConsumer;
 // extends the generic SimpleFabricLootTableProvider and implements the raw BiConsumer callback
 // directly, sidestepping EntityLootSubProvider (and its completeness check) entirely.
 public class ModEntityLootTables extends SimpleFabricLootTableProvider {
+    private final CompletableFuture<HolderLookup.Provider> registriesFuture;
+
     public ModEntityLootTables(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture, LootContextParamSets.ENTITY);
+        this.registriesFuture = registriesFuture;
     }
 
     @Override
-    public void generate(HolderLookup.Provider registries, BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        ModEntityLootTableEntries.populate(registries, (entityType, builder) -> consumer.accept(entityType.getDefaultLootTable(), builder));
+    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        ModEntityLootTableEntries.populate(registriesFuture.join(), (entityType, builder) -> consumer.accept(entityType.getDefaultLootTable(), builder));
     }
 }

@@ -23,8 +23,8 @@ public class ModLootTableProvider {
     // Pack.Factory equally well, which javac rejects as ambiguous.
     public static LootTableProvider create(FabricDataOutput out, CompletableFuture<HolderLookup.Provider> registriesFuture){
         return new LootTableProvider(out, Set.of(), List.of(
-                new LootTableProvider.SubProviderEntry(() -> new ModBlockLootTables(out, registriesFuture), LootContextParamSets.BLOCK),
-                new LootTableProvider.SubProviderEntry(() -> new ModEntityLootTables(out, registriesFuture), LootContextParamSets.ENTITY)
+                new LootTableProvider.SubProviderEntry(registries -> new ModBlockLootTables(out, registriesFuture), LootContextParamSets.BLOCK),
+                new LootTableProvider.SubProviderEntry(registries -> new ModEntityLootTables(out, registriesFuture), LootContextParamSets.ENTITY)
         ), registriesFuture);
     }
 }
