@@ -7,7 +7,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +33,7 @@ public class ModLogs extends RotatedPillarBlock {
     }
 
     @Override
-    public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
+    public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility toolAction, boolean simulate) {
         if (context.getItemInHand().getItem() instanceof AxeItem) {
             if (state.is(ModBlocks.MYSTIC_LOG.get())) {
                 return ModBlocks.STRIPPED_MYSTIC_LOG.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));

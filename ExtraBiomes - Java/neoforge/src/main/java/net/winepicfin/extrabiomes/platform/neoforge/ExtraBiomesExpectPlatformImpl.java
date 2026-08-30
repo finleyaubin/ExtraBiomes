@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.neoforged.fml.ModList;
+import net.winepicfin.extrabiomes.neoforge.compat.create.CreateWindmillCompat;
 import net.winepicfin.extrabiomes.neoforge.block.custom.ModLogs;
 import net.winepicfin.extrabiomes.neoforge.block.custom.StickPileBlock;
 import net.winepicfin.extrabiomes.neoforge.fluid.ModFluids;
@@ -91,5 +92,8 @@ public class ExtraBiomesExpectPlatformImpl {
     }
 
     public static void applyWindmillCreateCompat(WorldGenLevel level, BoundingBox box) {
+        if (isCreateLoaded()) {
+            CreateWindmillCompat.apply(level, box);
+        }
     }
 }

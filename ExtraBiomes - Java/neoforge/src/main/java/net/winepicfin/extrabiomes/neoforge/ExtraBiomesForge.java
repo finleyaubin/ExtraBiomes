@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -59,12 +60,9 @@ public class ExtraBiomesForge
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    // Forge 48.x (1.20.2) removed constructor-injection of FMLJavaModLoadingContext -
-    // FMLModContainer#constructMod now only ever looks up a no-arg constructor. The context is
-    // still available statically via FMLJavaModLoadingContext.get().
-    public ExtraBiomesForge() {
-        var context = net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext.get();
-        var modEventBus = context.getModEventBus();
+    // NeoForge 21.1 (1.21.1) removed FMLJavaModLoadingContext entirely - FMLModContainer#constructMod
+    // now injects the mod's IEventBus directly as a constructor argument instead.
+    public ExtraBiomesForge(IEventBus modEventBus) {
         // Unlike forge/'s ExtraBiomesForge, no dev.architectury.platform.forge.EventBuses call
         // here - that class doesn't exist in architectury-neoforge at all (checked: only in
         // architectury-forge). NeoForge's own ModContainer already exposes a discoverable
@@ -103,10 +101,9 @@ public class ExtraBiomesForge
         // EventBus (unlike Forge's) throws IllegalArgumentException registering a listener with
         // none. All actual event handling in this mod lives in @EventBusSubscriber static classes.
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us.
-        // FMLJavaModLoadingContext#registerConfig was removed in Forge 48.x (1.20.2) - this is now
-        // only on ModLoadingContext.
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
+        // Register our mod's ModConfigSpec so that NeoForge can create and load the config file for
+        // us. NeoForge 21.1 moved registerConfig off ModLoadingContext and onto ModContainer.
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -

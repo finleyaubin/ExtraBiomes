@@ -66,7 +66,8 @@ public class WolfFrogHatLayer extends RenderLayer<Wolf, WolfModel<Wolf>> {
         poseStack.scale(1F, 1F, 1F);
         poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
         this.renderer.prepForRender(wolf, headItem, EquipmentSlot.HEAD, this.baseModel);
-        this.renderer.renderToBuffer(poseStack, null, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.renderer.renderToBuffer(poseStack, null, packedLight, OverlayTexture.NO_OVERLAY,
+                net.minecraft.util.FastColor.ARGB32.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F));
         poseStack.popPose();
     }
 }
