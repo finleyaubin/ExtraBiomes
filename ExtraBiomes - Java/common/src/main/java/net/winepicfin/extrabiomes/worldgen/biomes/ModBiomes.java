@@ -50,7 +50,7 @@ public class ModBiomes
 
     private static ResourceKey<Biome> register(String name)
     {
-        return ResourceKey.create(Registries.BIOME, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     public static void boostrap(BootstrapContext<Biome> context) {

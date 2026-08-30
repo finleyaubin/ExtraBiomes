@@ -14,6 +14,6 @@ public class GiantTortoiseRenderer extends MobRenderer<GiantTortoiseEntity, Gian
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(GiantTortoiseEntity entity) {
-        return new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/giant_tortoise.png");
+        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/giant_tortoise.png");
     }
 }

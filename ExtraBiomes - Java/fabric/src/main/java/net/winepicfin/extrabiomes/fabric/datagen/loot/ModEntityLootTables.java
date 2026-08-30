@@ -28,6 +28,6 @@ public class ModEntityLootTables extends SimpleFabricLootTableProvider {
 
     @Override
     public void generate(HolderLookup.Provider registries, BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        ModEntityLootTableEntries.populate((entityType, builder) -> consumer.accept(entityType.getDefaultLootTable(), builder));
+        ModEntityLootTableEntries.populate(registries, (entityType, builder) -> consumer.accept(entityType.getDefaultLootTable(), builder));
     }
 }

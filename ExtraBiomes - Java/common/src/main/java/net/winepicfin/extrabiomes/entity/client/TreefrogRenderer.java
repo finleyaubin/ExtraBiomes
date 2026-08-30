@@ -14,6 +14,6 @@ public class TreefrogRenderer extends MobRenderer<TreefrogEntity, TreefrogModel<
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(TreefrogEntity entity) {
-        return new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/treefrog.png");
+        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/treefrog.png");
     }
 }

@@ -127,12 +127,16 @@ public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
 		float gray = this.grayAmount;
+		float alpha = net.minecraft.util.FastColor.ARGB32.alpha(color) / 255.0f;
+		float red = net.minecraft.util.FastColor.ARGB32.red(color) / 255.0f;
+		float green = net.minecraft.util.FastColor.ARGB32.green(color) / 255.0f;
+		float blue = net.minecraft.util.FastColor.ARGB32.blue(color) / 255.0f;
 		float r = red + (0.5f - red) * gray;
 		float g = green + (0.5f - green) * gray;
 		float b = blue + (0.5f - blue) * gray;
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, r, g, b, alpha);
+		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, r, g, b));
 	}
 
 	@Override

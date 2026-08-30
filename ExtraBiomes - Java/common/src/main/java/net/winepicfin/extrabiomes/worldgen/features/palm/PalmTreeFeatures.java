@@ -46,34 +46,34 @@ import java.util.List;
  */
 public class PalmTreeFeatures {
     private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_SMALL_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "palm_tree_small"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_small"));
     private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_MEDIUM_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "palm_tree_medium"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_medium"));
     private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_WIDE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "palm_tree_wide"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_wide"));
     private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_LARGE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "palm_tree_large"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_large"));
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_PALM_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_palm_tree"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_palm_tree"));
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // anchor = each structure's measured base-log column (trunks lean, so it isn't local (0,0,0)) so the origin's heightmap/water check tests the trunk's true ground column, not an arbitrary corner.
         context.register(PALM_SMALL_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "palm/palm_tree_2"), new BlockPos(1, 0, 1))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_2"), new BlockPos(1, 0, 1))
         ));
         context.register(PALM_MEDIUM_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "palm/palm_tree_1"), new BlockPos(5, 0, 2))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_1"), new BlockPos(5, 0, 2))
         ));
         context.register(PALM_WIDE_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "palm/palm_tree_3"), new BlockPos(4, 0, 5))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_3"), new BlockPos(4, 0, 5))
         ));
         context.register(PALM_LARGE_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "palm/palm_tree_4"), new BlockPos(6, 0, 4))
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_4"), new BlockPos(6, 0, 4))
         ));
 
         context.register(SELECT_PALM_KEY, new ConfiguredFeature<>(

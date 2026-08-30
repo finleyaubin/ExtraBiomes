@@ -31,7 +31,7 @@ public class ModItemMaterials {
                 15,
                 BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.FROGLIGHT_PLACE),
                 () -> Ingredient.of(ModItems.FROGS_LEGS.get()),
-                List.of(new ArmorMaterial.Layer(new ResourceLocation(ExtraBiomes.MOD_ID, "frog"))),
+                List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "frog"))),
                 0f,
                 0f
         );

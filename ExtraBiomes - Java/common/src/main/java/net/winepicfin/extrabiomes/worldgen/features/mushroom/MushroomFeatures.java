@@ -146,7 +146,7 @@ public class MushroomFeatures {
     public static final ResourceKey<PlacedFeature> SELECT_MUSHROOM_PLACED_KEY = pfKey("select_mushroom");
 
     public static final TagKey<Block> MYCELIUM_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
-            new ResourceLocation(ExtraBiomes.MOD_ID, "mycelium_floor_replaceable"));
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mycelium_floor_replaceable"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYCELIUM_FLOOR_KEY = cfKey("mycelium_floor");
     /** Bedrock's {@code mushroom_surface_mycelium_floor_feature.json} distribution. */
     public static final ResourceKey<PlacedFeature> MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY = pfKey("mushroom_surface_mycelium_floor");
@@ -285,7 +285,7 @@ public class MushroomFeatures {
     private static void registerStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {
         // centered=true: the stem sits dead-center in its footprint, not at the local (0,0,0) corner, or it lands several blocks from the feature's actual origin.
         SingleStructureConfiguration config = new SingleStructureConfiguration(
-                new ResourceLocation(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
                 fixedRotation,
                 0,
                 true,
@@ -295,11 +295,11 @@ public class MushroomFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> cfKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> pfKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {

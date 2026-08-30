@@ -53,23 +53,23 @@ import java.util.List;
  */
 public class StonePillarsFeature {
     private static final ResourceKey<ConfiguredFeature<?, ?>> STONE_PILLAR_1_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillar_1"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillar_1"));
     private static final ResourceKey<ConfiguredFeature<?, ?>> STONE_PILLAR_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillar_2"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillar_2"));
     private static final ResourceKey<ConfiguredFeature<?, ?>> STONE_PILLAR_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillar_3"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillar_3"));
 
     private static final ResourceKey<PlacedFeature> STONE_PILLAR_1_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillar_1"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillar_1"));
     private static final ResourceKey<PlacedFeature> STONE_PILLAR_2_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillar_2"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillar_2"));
     private static final ResourceKey<PlacedFeature> STONE_PILLAR_3_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillar_3"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillar_3"));
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_STONE_PILLARS_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_stone_pillars"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_stone_pillars"));
     public static final ResourceKey<PlacedFeature> STONE_PILLARS_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "select_stone_pillars"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_stone_pillars"));
 
     private static final int GROUND_OFFSET = -5; // query.above_top_solid(worldx, worldz) - 5
 
@@ -80,15 +80,15 @@ public class StonePillarsFeature {
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(STONE_PILLAR_1_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
         ));
         context.register(STONE_PILLAR_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
         ));
         context.register(STONE_PILLAR_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
         ));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);

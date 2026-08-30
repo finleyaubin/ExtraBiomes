@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class JellyfishRenderer extends MobRenderer<JellyfishEntity, JellyfishModel<JellyfishEntity>> {
     private static final ResourceLocation[] TEXTURES = {
-            new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish.png"),
-            new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish1.png"),
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish.png"),
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish1.png"),
     };
 
     public JellyfishRenderer(EntityRendererProvider.Context context) {

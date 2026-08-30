@@ -66,7 +66,7 @@ import java.util.Optional;
 public class VolcanicMossTundraFeatures {
 
     public static final TagKey<Block> VOLCANIC_TUNDRA_REPLACEABLE =
-            TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_replaceable"));
+            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_replaceable"));
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> NO_OP_KEY = configuredKey("no_op");
     public static final ResourceKey<PlacedFeature> NO_OP_PLACED_KEY = placedKey("no_op");
@@ -182,7 +182,7 @@ public class VolcanicMossTundraFeatures {
     }
 
     private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, String name, int groundOffset) {
-        ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name);
+        ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name);
         context.register(configuredKey(name), new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(structure, Optional.<net.minecraft.world.level.block.Rotation>empty(), groundOffset)));
     }
@@ -196,10 +196,10 @@ public class VolcanicMossTundraFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
     }
 }

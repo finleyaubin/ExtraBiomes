@@ -11,12 +11,12 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 public class ModTags {
     public static class Blocks{
         public static TagKey<Block> tag(String name){
-            return TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+            return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
     public static class Items{
         public static TagKey<Item> tag(String name){
-            return TagKey.create(Registries.ITEM, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
     public static class Biomes{
@@ -36,7 +36,7 @@ public class ModTags {
         public static final TagKey<Biome> SPAWNS_HOPPLESHROOM = tag("spawns_hoppleshroom");
         public static final TagKey<Biome> SPAWNS_JELLYFISH = tag("spawns_jellyfish");
         public static TagKey<Biome> tag(String name){
-           return TagKey.create(Registries.BIOME, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+           return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
 

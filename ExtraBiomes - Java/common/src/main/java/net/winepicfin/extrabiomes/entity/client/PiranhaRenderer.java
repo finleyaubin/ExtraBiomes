@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaModel<PiranhaEntity>> {
     private static final ResourceLocation[] TEXTURES = {
-            new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha.png"),
-            new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha2.png"),
-            new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha3.png"),
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha.png"),
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha2.png"),
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha3.png"),
     };
 
     public PiranhaRenderer(EntityRendererProvider.Context context) {

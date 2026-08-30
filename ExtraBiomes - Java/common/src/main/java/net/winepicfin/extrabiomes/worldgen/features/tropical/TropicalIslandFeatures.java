@@ -61,7 +61,7 @@ public class TropicalIslandFeatures {
     public static final ResourceKey<PlacedFeature> MELON_PLACED_KEY = placedKey("tropical_melon");
 
     public static final TagKey<Block> ISLAND_GRASS_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
-            new ResourceLocation(ExtraBiomes.MOD_ID, "island_grass_floor_replaceable"));
+            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "island_grass_floor_replaceable"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRASS_FLOOR_KEY = configuredKey("island_grass_floor");
 
     /**
@@ -116,10 +116,10 @@ public class TropicalIslandFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "tropical/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "tropical/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
     }
 }

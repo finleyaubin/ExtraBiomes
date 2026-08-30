@@ -15,6 +15,6 @@ public class ModModelLayers {
     public static final ModelLayerLocation BAIT = layer("bait");
 
     private static ModelLayerLocation layer(String name) {
-        return new ModelLayerLocation(new ResourceLocation(ExtraBiomes.MOD_ID, name), "main");
+        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name), "main");
     }
 }

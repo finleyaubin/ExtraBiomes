@@ -112,11 +112,11 @@ public class GlacierFeatures {
         // SNOW_DRIFT_GROUND_OFFSET sinks the wide, unevenly-shaped drift templates into the ground so uneven terrain under them doesn't read as floating (same technique as OasisPuddleFeature's -4).
         Holder<ConfiguredFeature<?, ?>> snowDrift1 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"), SNOW_DRIFT_GROUND_OFFSET)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"), SNOW_DRIFT_GROUND_OFFSET)
         ));
         Holder<ConfiguredFeature<?, ?>> snowDrift2 = Holder.direct(new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"), SNOW_DRIFT_GROUND_OFFSET)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"), SNOW_DRIFT_GROUND_OFFSET)
         ));
         // inlinePlaced avoids a registration-order problem: PLACED_FEATURE bootstrap runs after CONFIGURED_FEATURE, so these sub-features can't go through the registry here.
         Holder<PlacedFeature> snowDrift1Placed = PlacementUtils.inlinePlaced(snowDrift1);
@@ -172,10 +172,10 @@ public class GlacierFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

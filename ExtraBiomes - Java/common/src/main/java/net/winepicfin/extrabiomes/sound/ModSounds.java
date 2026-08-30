@@ -19,7 +19,7 @@ public class ModSounds {
 
     private static RegistrySupplier<SoundEvent> registerSound(String name) {
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(
-                new ResourceLocation(ExtraBiomes.MOD_ID, name)));
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name)));
     }
 
     public static void register() {

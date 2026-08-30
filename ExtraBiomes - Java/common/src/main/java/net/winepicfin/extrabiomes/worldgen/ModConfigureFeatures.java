@@ -94,7 +94,7 @@ public class ModConfigureFeatures {
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));
     }
     private static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name){
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE,new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE,ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
     private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>>key,F feature, FC configuration){
         context.register(key,new ConfiguredFeature<>(feature,configuration));

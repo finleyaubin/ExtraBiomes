@@ -74,7 +74,7 @@ public class OasisFossilFeatures {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         for (int i = 0; i < BONE_PIECES.length; i++) {
-            ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, BONE_PIECES[i]);
+            ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, BONE_PIECES[i]);
             context.register(PIECE_KEYS.get(i), new ConfiguredFeature<>(
                     ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                     new SingleStructureConfiguration(structure, Optional.empty(), 0, true, List.of(Blocks.SAND, Blocks.RED_SAND))
@@ -117,10 +117,10 @@ public class OasisFossilFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis/" + name));
     }
 }

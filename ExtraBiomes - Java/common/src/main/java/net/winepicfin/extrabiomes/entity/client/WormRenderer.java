@@ -14,6 +14,6 @@ public class WormRenderer extends MobRenderer<WormEntity, WormModel<WormEntity>>
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(WormEntity entity) {
-        return new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/worm.png");
+        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/worm.png");
     }
 }

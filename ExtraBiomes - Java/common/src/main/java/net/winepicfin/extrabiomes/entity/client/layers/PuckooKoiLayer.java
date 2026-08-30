@@ -20,10 +20,10 @@ import java.util.Map;
 
 public class PuckooKoiLayer extends RenderLayer<PuckooEntity,PuckooModel<PuckooEntity>> {
     private static final Map<PuckooKoiMarkings, ResourceLocation> LOCATION_BY_MARKINGS = Util.make(Maps.newEnumMap(PuckooKoiMarkings.class), (map) -> {
-        map.put(PuckooKoiMarkings.BLANK, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi0.png"));
-        map.put(PuckooKoiMarkings.RED, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi1.png"));
-        map.put(PuckooKoiMarkings.FULL_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi2.png"));
-        map.put(PuckooKoiMarkings.SEMI_ORANGE, new ResourceLocation(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi3.png"));
+        map.put(PuckooKoiMarkings.BLANK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi0.png"));
+        map.put(PuckooKoiMarkings.RED, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi1.png"));
+        map.put(PuckooKoiMarkings.FULL_ORANGE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi2.png"));
+        map.put(PuckooKoiMarkings.SEMI_ORANGE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"textures/entity/puckoo/koi3.png"));
     });
 
     public PuckooKoiLayer(RenderLayerParent<PuckooEntity, PuckooModel<PuckooEntity>> entityPuckooModelRenderLayerParent) {
@@ -40,7 +40,7 @@ public class PuckooKoiLayer extends RenderLayer<PuckooEntity,PuckooModel<PuckooE
         ResourceLocation resourcelocation = LOCATION_BY_MARKINGS.get(entity.getMarkings());
         if (resourcelocation != null && !entity.isInvisible()) {
             VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityTranslucent(resourcelocation));
-            this.getParentModel().renderToBuffer(poseStack, vertexconsumer, packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+            this.getParentModel().renderToBuffer(poseStack, vertexconsumer, packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0.0F), net.minecraft.util.FastColor.ARGB32.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F));
         }
     }
 }

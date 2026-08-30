@@ -155,7 +155,7 @@ public class JellyfishEntity extends WaterAnimal {
     }
 
     @Override
-    public boolean canBeLeashed(Player player) {
+    public boolean canBeLeashed() {
         return false;
     }
 

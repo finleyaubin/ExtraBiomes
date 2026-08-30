@@ -73,22 +73,22 @@ import java.util.List;
  */
 public class JellyCoralFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_1_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_1"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_1"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_2"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_2"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_3"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_3"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_4_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_4"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_4"));
 
     public static final ResourceKey<PlacedFeature> JELLYCORAL_1_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_1"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_1"));
     public static final ResourceKey<PlacedFeature> JELLYCORAL_2_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_2"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_2"));
     public static final ResourceKey<PlacedFeature> JELLYCORAL_3_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_3"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_3"));
     public static final ResourceKey<PlacedFeature> JELLYCORAL_4_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_4"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_4"));
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         registerConfigured(context, JELLYCORAL_1_KEY, "jellycoral_1");
@@ -104,7 +104,7 @@ public class JellyCoralFeatures {
     private static void registerConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName) {
         context.register(key, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION)
         ));
     }
 

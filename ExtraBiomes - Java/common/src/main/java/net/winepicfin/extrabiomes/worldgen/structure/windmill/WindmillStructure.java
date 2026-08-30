@@ -27,6 +27,7 @@ import net.minecraft.world.level.levelgen.structure.pools.EmptyPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.winepicfin.extrabiomes.platform.ExtraBiomesExpectPlatform;
 
@@ -104,7 +105,8 @@ public class WindmillStructure extends Structure {
         StructureTemplateManager templateManager = context.structureTemplateManager();
         PoolElementStructurePiece piece = new PoolElementStructurePiece(
                 templateManager, element, origin, element.getGroundLevelDelta(), Rotation.NONE,
-                element.getBoundingBox(templateManager, origin, Rotation.NONE)
+                element.getBoundingBox(templateManager, origin, Rotation.NONE),
+                LiquidSettings.APPLY_WATERLOGGING
         );
         BoundingBox pieceBox = piece.getBoundingBox();
         int centerX = (pieceBox.maxX() + pieceBox.minX()) / 2;
@@ -186,6 +188,6 @@ public class WindmillStructure extends Structure {
     }
 
     static ResourceLocation id(String path) {
-        return new ResourceLocation(net.winepicfin.extrabiomes.ExtraBiomes.MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(net.winepicfin.extrabiomes.ExtraBiomes.MOD_ID, path);
     }
 }
