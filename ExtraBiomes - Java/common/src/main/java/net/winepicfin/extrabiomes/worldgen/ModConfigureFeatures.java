@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
@@ -45,6 +46,7 @@ public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> CHARRED_KEY = registerKey("charred");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> LUSH_GRASS_KEY = registerKey("lush_grass");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GRAND_OASIS_DEAD_BUSH_KEY = registerKey("grand_oasis_dead_bush");
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context){
         // In-game render showed radius 5 giving every attachment (main top + both branch tips) a
@@ -92,6 +94,11 @@ public class ModConfigureFeatures {
         );
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));
+        // Requested addition: a small scattering of dead bush on Grand Oasis's sand - deliberately its own
+        // low-count PlacedFeature (see ModPlacedFeatures.GRAND_OASIS_DEAD_BUSH_PLACED_KEY) rather than
+        // relying on BiomeDefaultFeatures.addDesertVegetation's own dead bush patch, so this biome's count
+        // can be tuned independently of vanilla desert's.
+        register(context, GRAND_OASIS_DEAD_BUSH_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)));
     }
     private static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name){
         return ResourceKey.create(Registries.CONFIGURED_FEATURE,ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
