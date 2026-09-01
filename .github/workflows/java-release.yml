@@ -30,6 +30,14 @@ jobs:
           MC_VERSION=$(grep '^minecraft_version=' gradle.properties | cut -d'=' -f2)
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "MC_VERSION=$MC_VERSION" >> $GITHUB_OUTPUT
+          # One GitHub release per mod version, shared across every game version it's built
+          # for - separate branches/tags build the same mod_version against different
+          # minecraft_version values (e.g. Java-v3.10.0-beta-5+mc1.20.6 vs +mc1.21.1), and
+          # each used to get its own GitHub release since tag_name followed github.ref_name.
+          # Keying the release on VERSION alone instead lets softprops/action-gh-release
+          # reuse the existing release and append this run's (distinctly-named, see
+          # */build.gradle archiveFileName) jars to it instead of creating a duplicate.
+          echo "RELEASE_TAG=Java-v${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Detect prerelease tag
         id: prerelease
@@ -87,8 +95,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          tag_name: ${{ steps.version.outputs.RELEASE_TAG }}
+          name: ${{ steps.version.outputs.RELEASE_TAG }}
           files: |
             ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
             ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
