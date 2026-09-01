@@ -37,3 +37,12 @@ forge*changelog.txt
 
 # architectury-transformer debug log
 .architectury-transformer/
+
+# locally-sourced compileOnly/testOnly jars (e.g. forge/libs/create-local-test) - not build output,
+# but not source either, and too large/binary to belong in the repo
+/*/libs/
+
+# live progress dashboard todo-list state written by the bump-mc-version skill (run artifact, not source)
+/.claude/skills/bump-mc-version/progress.json
+/.claude/skills/bump-mc-version/.venv/
+/.claude/skills/bump-mc-version/__pycache__/
