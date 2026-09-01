@@ -2,15 +2,13 @@ name: Build Mod
 
 on:
   push:
-    branches:
-      - main
-      - Java-Dev
-      - multiloader-architectury
+    branches-ignore:
+      - '**bedrock**'
+      - '**Bedrock**'
   pull_request:
-    branches:
-      - main
-      - Java-Dev
-      - multiloader-architectury
+    branches-ignore:
+      - '**bedrock**'
+      - '**Bedrock**'
 
 permissions:
   contents: read
