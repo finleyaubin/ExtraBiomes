@@ -29,18 +29,21 @@ public class MysticForest {
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         // forestFlowers < defaultFlowers < forestGrass < defaultMushrooms < defaultExtraVegetation is the
         // relative VEGETAL_DECORATION order CharredForest/DeepDarkForest already establish for these same
-        // vanilla features - FeatureSorter shares one global per-step order across all biomes, so this has
-        // to agree with theirs or world load throws a "Feature order cycle" crash.
+        // vanilla features, and swampVegetation < defaultMushrooms is the order ShatteredSwamp already
+        // establishes for that pair - FeatureSorter shares one global per-step order across all biomes, so
+        // this has to agree with both or world load throws a "Feature order cycle" crash (confirmed live:
+        // a CI run crashed with exactly that cycle between mystic_forest and shattered_swamp before this
+        // fix, from addSwampVegetation originally being placed after addDefaultMushrooms here).
         BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addForestGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         // mystic_forest.biome.json carries the "swamp" tag alongside "mystic" (same as ShatteredSwamp/
         // JungleMarsh), which on Bedrock pulls in vanilla's swamp-tagged vegetation/mushroom feature_rules
         // - these were never ported to Java, so this biome was missing them entirely.
         BiomeDefaultFeatures.addSwampVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.MYSTIC_PLACED_KEY);
         // This biome's "sea_material" is goo, which needs a TOP_LAYER_MODIFICATION feature run after lakes/aquifers exist, rather than a direct fluid swap (see GooConversionFeature).
