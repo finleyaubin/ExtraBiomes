@@ -116,24 +116,26 @@ dependencies {
     compileOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.3") { transitive = false }
 
     // TEMPORARY, local-only: lets the dev client actually load Create so its windmill-bearing compat can
-    // be watched running for real. Never commit this block - Create must stay compileOnly-only for the
-    // shipped mod (see the modCompileOnly entry above). Each of the 4 extra jars is one of Create's own
-    // jar-in-jar bundled dependencies (META-INF/jarjar/*.jar inside create-1.20.1-6.0.8.jar) - Loom's dev
-    // classpath doesn't auto-extract jar-in-jars (same issue as this module's GeckoLib/mclib jar above),
-    // and dropping the raw unmapped jars straight into run/mods skips Loom's SRG->official remapping
-    // entirely, crashing with NoSuchFieldError on Registrate's own vanilla field references. modRuntimeOnly
-    // (not plain runtimeOnly) on each local file is what actually triggers that remapping.
-    modRuntimeOnly files("libs/create-local-test/create-1.20.1-6.0.8.jar")
-    modRuntimeOnly files("libs/create-local-test/Registrate-MC1.20-1.3.3.jar")
-    modRuntimeOnly files("libs/create-local-test/Ponder-Forge-1.20.1-1.0.91.jar")
-    modRuntimeOnly files("libs/create-local-test/flywheel-forge-1.20.1-1.0.5.jar")
+    // be watched running for real. Never commit this block active - Create must stay compileOnly-only for
+    // the shipped mod (see the modCompileOnly entry above). Each of these is one of Create's own jar-in-jar
+    // bundled dependencies (META-INF/jarjar/*.jar inside create-1.20.1-6.0.8.jar) - Loom's dev classpath
+    // doesn't auto-extract jar-in-jars (same issue as this module's GeckoLib/mclib jar above), and dropping
+    // the raw unmapped jar straight into run/mods skips Loom's SRG->official remapping entirely, crashing
+    // with NoSuchFieldError on Registrate's own vanilla field references. modRuntimeOnly (not plain
+    // runtimeOnly) is what actually triggers that remapping. Pulled straight from maven.createmod.net
+    // instead of hand-copied local jars, so this needs no local file at all to re-enable.
+    // modRuntimeOnly("com.simibubi.create:create-1.20.1:6.0.8-289:slim") { transitive = false }
+    // modRuntimeOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.3") { transitive = false }
+    // modRuntimeOnly("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.91") { transitive = false }
+    // modRuntimeOnly("dev.engine-room.flywheel:flywheel-forge-1.20.1:1.0.5") { transitive = false }
     // mixinextras-forge alone crashes with NoClassDefFoundError on MixinExtrasBootstrap - that class lives
     // in the separate mixinextras-common artifact, and FML's per-mod module system doesn't let
     // mixinextras-forge's module read a separately-declared mixinextras-common dependency's module (same
-    // module-visibility problem as this module's GeckoLib/mclib jar above) - so, same fix: hand-merged into
-    // one physical jar. Regenerate by re-running the merge in forge/libs/create-local-test/ if bumping the
-    // Create pin changes its bundled mixinextras-forge version.
-    modRuntimeOnly files("libs/create-local-test/mixinextras-forge-0.4.1-with-common.jar")
+    // module-visibility problem as this module's GeckoLib/mclib jar above). Both halves are on Maven
+    // Central (io.github.llamalad7:mixinextras-forge/-common:0.4.1), but the module-visibility problem is
+    // real regardless of where the jars come from - re-enabling this one still needs the two hand-merged
+    // into one physical jar first (see the old forge/libs/create-local-test/ merge script in git history).
+    // modRuntimeOnly files("mixinextras-forge-0.4.1-with-common.jar")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
