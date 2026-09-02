@@ -24,6 +24,7 @@ public class ModVolcanicPlacementModifiers {
     public static final RegistrySupplier<PlacementModifierType<MinYFilter>> MIN_Y_FILTER = MODIFIERS.register("min_y_filter", () -> () -> MinYFilter.CODEC);
 
     public static final RegistrySupplier<BasaltBankFeature> BASALT_BANK = FEATURES.register("basalt_bank", () -> new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<LavaFlowKickstartFeature> LAVA_FLOW_KICKSTART = FEATURES.register("lava_flow_kickstart", () -> new LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
 
     public static void register() {
         MODIFIERS.register();

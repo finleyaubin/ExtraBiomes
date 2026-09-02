@@ -51,6 +51,7 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.FallenJung
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeatureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.BasaltBankFeature;
+import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.MinYFilter;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.RiverNoiseFilter;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructure;
@@ -181,6 +182,7 @@ public final class DatapackRegistries {
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_fallen_jungle_tree", new FallenJungleTreeFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_multi", new MultiFeature(MultiFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "basalt_bank", new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "lava_flow_kickstart", new LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
         BuiltInRegistries.FEATURE.freeze();
 
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
