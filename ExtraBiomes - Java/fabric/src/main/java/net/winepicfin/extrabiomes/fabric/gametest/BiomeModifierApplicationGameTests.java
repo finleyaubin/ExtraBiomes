@@ -94,7 +94,7 @@ public class BiomeModifierApplicationGameTests {
 
     private static Biome biome(GameTestHelper helper, ResourceKey<Biome> key) {
         ServerLevel level = helper.getLevel();
-        return level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(key).value();
+        return level.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(key).value();
     }
 
     private static void assertHasFeature(GameTestHelper helper, Biome biome, GenerationStep.Decoration step, ResourceKey<PlacedFeature> expected) {

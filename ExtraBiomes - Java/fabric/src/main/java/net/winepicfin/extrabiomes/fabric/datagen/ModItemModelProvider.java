@@ -8,10 +8,13 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -164,8 +167,10 @@ public class ModItemModelProvider implements DataProvider {
     }
 
     private void trimmedArmorItem(Item item) {
-        if (!(item instanceof ArmorItem armorItem)) return;
-        String armorType = switch (armorItem.getEquipmentSlot()) {
+        if (!(item instanceof ArmorItem)) return;
+        Equippable equippable = item.getDefaultInstance().get(DataComponents.EQUIPPABLE);
+        EquipmentSlot equipmentSlot = equippable != null ? equippable.slot() : EquipmentSlot.HEAD;
+        String armorType = switch (equipmentSlot) {
             case HEAD -> "helmet";
             case CHEST -> "chestplate";
             case LEGS -> "leggings";

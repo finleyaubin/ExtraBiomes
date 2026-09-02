@@ -58,7 +58,7 @@ public class FabricServerEvents {
 
         int scanDistance = Mth.clamp((int) Math.floor(fallSpeed * 3), MIN_SCAN_DISTANCE, MAX_SCAN_DISTANCE);
         BlockPos playerPos = player.blockPosition();
-        int lowestY = Math.max(level.getMinBuildHeight(), playerPos.getY() - scanDistance);
+        int lowestY = Math.max(level.getMinY(), playerPos.getY() - scanDistance);
 
         for (int y = playerPos.getY(); y >= lowestY; y--) {
             BlockState state = level.getBlockState(new BlockPos(playerPos.getX(), y, playerPos.getZ()));

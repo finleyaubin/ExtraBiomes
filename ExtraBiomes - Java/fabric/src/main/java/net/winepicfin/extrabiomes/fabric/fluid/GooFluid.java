@@ -83,7 +83,7 @@ public abstract class GooFluid extends FlowingFluid {
     }
 
     @Override
-    protected boolean canConvertToSource(net.minecraft.world.level.Level level) {
+    protected boolean canConvertToSource(net.minecraft.server.level.ServerLevel level) {
         return false;
     }
 

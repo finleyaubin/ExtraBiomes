@@ -13,7 +13,9 @@
     "WoodTypeAccessor"
   ],
   "client": [
-    "WolfModelAccessor"
+    "WolfModelAccessor",
+    "WolfRenderStateMixin",
+    "WolfRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
