@@ -104,7 +104,7 @@ public class BiomeModifierApplicationGameTests {
 
     private static Biome biome(GameTestHelper helper, ResourceKey<Biome> key) {
         ServerLevel level = helper.getLevel();
-        return level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(key).value();
+        return level.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(key).value();
     }
 
     // BiomeGenerationSettings only exposes the full per-step feature list (features()), not a

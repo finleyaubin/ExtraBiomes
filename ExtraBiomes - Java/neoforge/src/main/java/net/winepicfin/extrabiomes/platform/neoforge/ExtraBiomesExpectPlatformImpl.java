@@ -3,14 +3,16 @@ package net.winepicfin.extrabiomes.platform.neoforge;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
@@ -19,13 +21,15 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.neoforged.fml.ModList;
-import net.winepicfin.extrabiomes.neoforge.compat.create.CreateWindmillCompat;
 import net.winepicfin.extrabiomes.neoforge.block.custom.ModLogs;
 import net.winepicfin.extrabiomes.neoforge.block.custom.StickPileBlock;
 import net.winepicfin.extrabiomes.neoforge.fluid.ModFluids;
 import net.winepicfin.extrabiomes.neoforge.item.custom.FrogHelmetItem;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class ExtraBiomesExpectPlatformImpl {
@@ -67,6 +71,21 @@ public class ExtraBiomesExpectPlatformImpl {
         }
     }
 
+    // Same private-constructor-via-reflection idiom as createTreeDecoratorType/createTrunkPlacerType
+    // above - BlockEntityType's constructor (and its own register() factory) went private in 1.21.2
+    // with vanilla's bootstrap as the only intended caller, and NeoForge's AT doesn't widen it.
+    @SuppressWarnings("unchecked")
+    public static <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntityType.BlockEntitySupplier<T> factory, Block... validBlocks) {
+        try {
+            Constructor<BlockEntityType> constructor = BlockEntityType.class.getDeclaredConstructor(BlockEntityType.BlockEntitySupplier.class, Set.class);
+            constructor.setAccessible(true);
+            Set<Block> blocks = new LinkedHashSet<>(Arrays.asList(validBlocks));
+            return (BlockEntityType<T>) constructor.newInstance(factory, blocks);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {
         return new LiquidBlock(ModFluids.SOURCE_GOO.get(), properties);
     }
@@ -75,7 +94,7 @@ public class ExtraBiomesExpectPlatformImpl {
         return new BucketItem(ModFluids.SOURCE_GOO.get(), properties);
     }
 
-    public static Item createFrogHelmetItem(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties) {
+    public static Item createFrogHelmetItem(ArmorMaterial material, ArmorType type, Item.Properties properties) {
         return new FrogHelmetItem(material, type, properties);
     }
 
@@ -91,9 +110,10 @@ public class ExtraBiomesExpectPlatformImpl {
         return ModList.get().isLoaded("create");
     }
 
+    // CreateWindmillCompat itself is excluded from compilation (see neoforge/build.gradle) - no
+    // 1.21.3 Create build exists yet (as of 2026-09-01), so the compileOnly Create dependency it
+    // needs isn't available. isCreateLoaded() above will always report false until Create ships
+    // a 1.21.3 build and both this method and the build.gradle exclusion are reverted.
     public static void applyWindmillCreateCompat(WorldGenLevel level, BoundingBox box) {
-        if (isCreateLoaded()) {
-            CreateWindmillCompat.apply(level, box);
-        }
     }
 }

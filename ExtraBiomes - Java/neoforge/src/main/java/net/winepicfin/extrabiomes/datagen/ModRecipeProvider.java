@@ -9,16 +9,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-// NeoForge's vanilla RecipeProvider constructor takes the registry lookup future directly
-// (unlike Forge's patched single-PackOutput-arg convenience constructor forge/'s copy of this
-// class relies on) - this mod doesn't need the lookup for anything, so it's accepted and ignored.
-public class ModRecipeProvider extends RecipeProvider {
+// RecipeProvider itself is no longer a DataProvider as of 1.21.3 (its nested Runner is) - the
+// Runner supplies buildRecipes() with the registries/output pair CommonRecipes.build now needs.
+public class ModRecipeProvider extends RecipeProvider.Runner {
     public ModRecipeProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(packOutput, lookupProvider);
     }
 
     @Override
-    protected void buildRecipes(@NotNull RecipeOutput pWriter) {
-        CommonRecipes.build(pWriter);
+    protected @NotNull RecipeProvider createRecipeProvider(HolderLookup.@NotNull Provider registries, @NotNull RecipeOutput output) {
+        return new RecipeProvider(registries, output) {
+            @Override
+            protected void buildRecipes() {
+                CommonRecipes.build(this.registries, this.output);
+            }
+        };
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return "Recipes";
     }
 }

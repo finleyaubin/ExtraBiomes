@@ -7,6 +7,13 @@ architectury {
     neoForge()
 }
 
+// No 1.21.3 Create build exists yet (see the modCompileOnly Create/Registrate lines below) -
+// CreateWindmillCompat imports real Create classes and can't compile without it. Excluded
+// wholesale rather than left to fail the build; re-include once Create ships for 1.21.3.
+sourceSets.main.java {
+    exclude 'net/winepicfin/extrabiomes/neoforge/compat/create/**'
+}
+
 loom {
     // Unlike Forge's platform (fully automatic pickup), NeoForge needs the AT file registered
     // explicitly - confirmed via net.fabricmc.loom.api.NeoForgeExtensionAPI#accessTransformer;
@@ -114,16 +121,12 @@ dependencies {
     // root build.gradle's mergeJarInJarDependency for the merge this replaces on older GeckoLib builds.
     modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 
-    // Optional/soft dependency, compile-only - see neoforge/compat/create/CreateWindmillCompat.java
-    // and platform/neoforge/ExtraBiomesExpectPlatformImpl#applyWindmillCreateCompat. Never bundled or
-    // required at runtime: gated behind ModList.get().isLoaded("create"), so the mod works fine
-    // without Create installed. Version/classifier from Create's own "depend on Create" docs for
-    // NeoForge 1.21.1 (https://wiki.createmod.net/developers/depend-on-create/neoforge-1.21.1).
-    modCompileOnly("com.simibubi.create:create-1.21.1:6.0.10-280:slim") { transitive = false }
-    // Registrate - Create's registration library, referenced transitively (AllBlocks.WINDMILL_BEARING.get()
-    // returns Registrate's BlockEntry<T>). compileOnly (not modCompileOnly): a plain library jar, not a
-    // mod, so it needs no Loom remapping. Hosted on maven.ithundxr.dev/snapshots - see root build.gradle.
-    compileOnly("com.tterrag.registrate:Registrate:MC1.21-1.3.0+67") { transitive = false }
+    // No 1.21.3 Create or Registrate build available as of 2026-09-01 (Create's own maven and wiki
+    // top out at 1.21.1; Registrate has no MC1.21.x build at all) - re-enable when one ships. See
+    // the sourceSets exclude above for why CreateWindmillCompat itself is excluded wholesale rather
+    // than left to fail the build.
+    // modCompileOnly("com.simibubi.create:create-1.21.1:6.0.10-280:slim") { transitive = false }
+    // compileOnly("com.tterrag.registrate:Registrate:MC1.21-1.3.0+67") { transitive = false }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }

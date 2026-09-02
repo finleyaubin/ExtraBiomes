@@ -41,8 +41,8 @@ public class StructureGenerationGameTests {
         LOGGER.info("[StructureGenerationGameTests] skyCityAppearsInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();
         ChunkGenerator generator = level.getChunkSource().getGenerator();
-        Registry<Structure> structures = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-        Holder<Structure> skyCity = structures.getHolderOrThrow(ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city")));
+        Registry<Structure> structures = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        Holder<Structure> skyCity = structures.getOrThrow(ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city")));
         BlockPos origin = new BlockPos(0, 80, 0);
 
         Pair<BlockPos, Holder<Structure>> found = generator.findNearestMapStructure(level, HolderSet.direct(skyCity), origin, SEARCH_RADIUS_CHUNKS, false);
