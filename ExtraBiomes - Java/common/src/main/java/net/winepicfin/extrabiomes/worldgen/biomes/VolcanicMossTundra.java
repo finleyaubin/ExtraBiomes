@@ -32,6 +32,9 @@ public class VolcanicMossTundra {
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, VolcanicMossTundraFeatures.LAVA_RIVER_BANK_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, VolcanicMossTundraFeatures.SELECT_ROCK_FORMATION_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, VolcanicMossTundraFeatures.SELECT_VOLCANO_PLACED_KEY);
+        // Runs last in this step so its scan sees the columns as every other LOCAL_MODIFICATIONS
+        // feature (rock formations, volcanoes) left them, not a stale heightmap from before they ran.
+        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, VolcanicMossTundraFeatures.LAVA_FLOW_KICKSTART_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, VolcanicMossTundraFeatures.BASALT_BANK_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, VolcanicMossTundraFeatures.HIGH_ELEVATION_MOSS_FLOOR_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VolcanicMossTundraFeatures.ELEVATION_MOSS_PLACED_KEY);
