@@ -60,6 +60,8 @@ public class ModAdvancements implements AdvancementSubProvider {
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<AdvancementHolder> saver) {
         HolderGetter<Biome> biomes = registries.lookupOrThrow(Registries.BIOME);
+        HolderGetter<net.minecraft.world.entity.EntityType<?>> entityTypes = registries.lookupOrThrow(Registries.ENTITY_TYPE);
+        HolderGetter<net.minecraft.world.item.Item> items = registries.lookupOrThrow(Registries.ITEM);
         ResourceLocation rootId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "root");
         Advancement.Builder rootBuilder = Advancement.Builder.advancement()
                 .display(ModItems.WORM.get(),
@@ -79,7 +81,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                         Component.translatable("advancements.extrabiomes.tame_puckoo.description"),
                         null, AdvancementType.TASK, true, true, false)
                 .addCriterion("tamed_puckoo", TameAnimalTrigger.TriggerInstance.tamedAnimal(
-                        EntityPredicate.Builder.entity().of(ModEntities.PUCKOO.get())))
+                        EntityPredicate.Builder.entity().of(entityTypes, ModEntities.PUCKOO.get())))
                 .build(tamePuckooId));
 
         ResourceLocation catchWormId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "catch_worm");
@@ -129,7 +131,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                         Component.translatable("advancements.extrabiomes.piranha_dinner.title"),
                         Component.translatable("advancements.extrabiomes.piranha_dinner.description"),
                         null, AdvancementType.TASK, true, true, false)
-                .addCriterion("ate_cooked_piranha", ConsumeItemTrigger.TriggerInstance.usedItem(ModItems.COOKED_PIRANHA.get()))
+                .addCriterion("ate_cooked_piranha", ConsumeItemTrigger.TriggerInstance.usedItem(items, ModItems.COOKED_PIRANHA.get()))
                 .build(piranhaDinnerId));
 
         ResourceLocation visitNetherlandsId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "visit_netherlands");

@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -31,7 +31,7 @@ public class WormEntity extends Animal {
     }
 
     public static boolean checkWormSpawnRules(EntityType<WormEntity> type, ServerLevelAccessor level,
-                                               MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+                                               EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
         if (!Animal.checkAnimalSpawnRules(type, level, spawnType, pos, random)) {
             return false;
         }

@@ -1,17 +1,14 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from bait.geo.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.winepicfin.extrabiomes.entity.custom.projectile.BaitProjectileEntity;
+import net.winepicfin.extrabiomes.entity.client.state.BaitProjectileRenderState;
 
-public class BaitModel<T extends BaitProjectileEntity> extends HierarchicalModel<T> {
-	private final ModelPart modelRoot;
+public class BaitModel<T extends BaitProjectileRenderState> extends EntityModel<T> {
 	private final ModelPart body;
 	private final ModelPart worm1;
 	private final ModelPart head;
@@ -69,7 +66,7 @@ public class BaitModel<T extends BaitProjectileEntity> extends HierarchicalModel
 	private final ModelPart body10;
 
 	public BaitModel(ModelPart root) {
-		this.modelRoot = root;
+		super(root);
 		this.body = root.getChild("body");
 		this.worm1 = this.body.getChild("worm1");
 		this.head = this.worm1.getChild("head");
@@ -191,10 +188,10 @@ public class BaitModel<T extends BaitProjectileEntity> extends HierarchicalModel
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		// Worms fall off one at a time as the bait is bitten down, instead of just fading the shared texture.
-		int visibleWorms = Mth.clamp(Mth.ceil(9f * entity.getHealth() / (float) entity.getMaxHealth()), 0, 9);
+		int visibleWorms = Mth.clamp(Mth.ceil(9f * state.health / (float) state.maxHealth), 0, 9);
 		this.worm1.visible = visibleWorms >= 1;
 		this.worm2.visible = visibleWorms >= 2;
 		this.worm3.visible = visibleWorms >= 3;
@@ -207,7 +204,7 @@ public class BaitModel<T extends BaitProjectileEntity> extends HierarchicalModel
 
 		// animation.bait.wrigle: all worm segment chains flex in an alternating +/-45 degree pattern off abs(sin(life_time)); slowed from the Bedrock source's *50 for a calmer wiggle.
 		// Each worm gets a phase offset so the 9 chains don't all flex in lockstep.
-		float lifeTime = ageInTicks / 20f;
+		float lifeTime = state.ageInTicks / 20f;
 		applyWiggle(lifeTime, 0, this.head1, this.head2, this.head3, this.body2);
 		applyWiggle(lifeTime, 1, this.head5, this.head6, this.head7, this.body3);
 		applyWiggle(lifeTime, 2, this.head9, this.head10, this.head11, this.body4);
@@ -219,8 +216,8 @@ public class BaitModel<T extends BaitProjectileEntity> extends HierarchicalModel
 		applyWiggle(lifeTime, 8, this.head33, this.head34, this.head35, this.body10);
 
 		// Not a LivingEntity, so no automatic hurt shake - fake it with a quick decaying wobble on the whole body.
-		if (entity.getHurtTime() > 0) {
-			float shake = Mth.sin(entity.getHurtTime() * 3.0F) * (entity.getHurtTime() / 10f) * 0.15F;
+		if (state.hurtTime > 0) {
+			float shake = Mth.sin(state.hurtTime * 3.0F) * (state.hurtTime / 10f) * 0.15F;
 			this.body.zRot += shake;
 		}
 	}
@@ -232,15 +229,5 @@ public class BaitModel<T extends BaitProjectileEntity> extends HierarchicalModel
 		second.xRot -= wiggle;
 		third.xRot -= wiggle;
 		fourth.xRot += wiggle;
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
 	}
 }

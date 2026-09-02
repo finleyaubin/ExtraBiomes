@@ -15,6 +15,10 @@ public class ModTags {
         }
     }
     public static class Items{
+        // Mirrors vanilla's ItemTags.REPAIRS_LEATHER_ARMOR-style convention: ArmorMaterial's repair
+        // ingredient became a TagKey<Item> as of 1.21.2, replacing the old Ingredient.of(...) supplier.
+        public static final TagKey<Item> REPAIRS_FROG_ARMOR = tag("repairs_frog_armor");
+
         public static TagKey<Item> tag(String name){
             return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }

@@ -6,7 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -49,7 +49,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
     // Harpies only nest high up, not on the surface.
     public static final int MIN_SPAWN_Y = 192;
 
-    public static boolean checkHarpySpawnRules(EntityType<HarpyEntity> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+    public static boolean checkHarpySpawnRules(EntityType<HarpyEntity> type, ServerLevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
         return pos.getY() >= MIN_SPAWN_Y && Monster.checkAnyLightMonsterSpawnRules(type, level, spawnType, pos, random);
     }
 

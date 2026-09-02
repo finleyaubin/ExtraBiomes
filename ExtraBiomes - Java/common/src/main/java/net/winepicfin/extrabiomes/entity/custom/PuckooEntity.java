@@ -87,7 +87,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         } else {
             walkAmount = 0f;
         }
-        this.walkAnimation.update(walkAmount, 0.2f);
+        this.walkAnimation.update(walkAmount, 0.2f, this.isBaby() ? 3.0f : 1.0f);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
                     this.broadcastTamingFeedback(false);
                 }
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }
@@ -186,7 +186,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     @Override
     public AgeableMob getBreedOffspring(@NotNull ServerLevel level, @NotNull AgeableMob partner) {
         PuckooEntity other = (PuckooEntity) partner;
-        PuckooEntity baby = ModEntities.PUCKOO.get().create(level);
+        PuckooEntity baby = ModEntities.PUCKOO.get().create(level, EntitySpawnReason.BREEDING);
         if (baby != null) {
             PuckooBaseVariants variant = pickInheritedVariant(other);
             PuckooKoiMarkings markings = pickInheritedMarkings(other);
@@ -268,7 +268,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     }
 
     @javax.annotation.Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @javax.annotation.Nullable SpawnGroupData spawnGroupData) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @javax.annotation.Nullable SpawnGroupData spawnGroupData) {
         RandomSource random = level.getRandom();
         PuckooBaseVariants variant = Util.getRandom(PuckooBaseVariants.values(), random);
         this.setVariantAndMarkings(variant, Util.getRandom(PuckooKoiMarkings.values(), random));

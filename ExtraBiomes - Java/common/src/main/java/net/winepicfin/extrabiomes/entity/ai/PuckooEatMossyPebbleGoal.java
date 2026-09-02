@@ -76,7 +76,9 @@ public class PuckooEatMossyPebbleGoal extends MoveToBlockGoal {
             level.removeBlock(this.blockPos, false);
         }
         level.gameEvent(GameEvent.BLOCK_CHANGE, this.blockPos, GameEvent.Context.of(this.puckoo, state));
-        this.puckoo.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
-        this.puckoo.spawnAtLocation(new ItemStack(ModItems.PEBBLE.get()));
+        this.puckoo.playSound(SoundEvents.GENERIC_EAT.value(), 1.0F, 1.0F);
+        if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            this.puckoo.spawnAtLocation(serverLevel, new ItemStack(ModItems.PEBBLE.get()));
+        }
     }
 }

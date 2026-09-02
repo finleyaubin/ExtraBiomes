@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.entity.ai;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -80,7 +81,7 @@ public class GiantTortoiseChargeGoal extends Goal {
             this.tortoise.getLookControl().setLookAt(target, 30.0F, 30.0F);
             this.tortoise.getNavigation().moveTo(target, 1.0D);
             if (distSqr <= ATTACK_RANGE * ATTACK_RANGE && this.attackCooldown <= 0) {
-                this.tortoise.doHurtTarget(target);
+                this.tortoise.doHurtTarget((ServerLevel) this.tortoise.level(), target);
                 this.attackCooldown = ATTACK_COOLDOWN_TICKS;
                 this.state = State.RETREAT;
                 this.retreatTicks = MAX_RETREAT_TICKS;

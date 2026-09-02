@@ -4,6 +4,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -22,7 +23,8 @@ public class MossyPebbleProjectileEntity extends ThrowableItemProjectile {
     }
 
     public MossyPebbleProjectileEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.MOSSY_PEBBLE_PROJECTILE.get(), shooter, level);
+        super(ModEntities.MOSSY_PEBBLE_PROJECTILE.get(), shooter, level, ItemStack.EMPTY);
+        this.setItem(new ItemStack(this.getDefaultItem()));
     }
 
     @Override

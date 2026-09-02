@@ -1,17 +1,14 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from treefrog.geo.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.client.state.TreefrogRenderState;
 
-public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart modelRoot;
+public class TreefrogModel<T extends TreefrogRenderState> extends EntityModel<T> {
 	private final ModelPart treefrog;
 	private final ModelPart body;
 	private final ModelPart head;
@@ -33,8 +30,8 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart foot3;
 
 	public TreefrogModel(ModelPart root) {
-		this.modelRoot = root;
-		this.treefrog = root.getChild("treefrog");
+		super(root.getChild("treefrog"));
+		this.treefrog = this.root;
 		this.body = this.treefrog.getChild("body");
 		this.head = this.body.getChild("head");
 		this.leg1 = this.body.getChild("leg1");
@@ -91,9 +88,9 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float vspeed = (float) entity.getDeltaMovement().y;
+		float vspeed = state.verticalSpeed;
 
 		// animation.treefrog.jump
 		this.body.xRot += ((vspeed * (-5f))) * 0.017453292f;
@@ -119,15 +116,5 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 		this.leglow3.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-17.5f))) * 0.017453292f;
 		this.leglow3.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-10f))) * 0.017453292f;
 
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
 	}
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -26,11 +27,15 @@ public class RazorFeatherProjectileEntity extends ThrowableItemProjectile {
     }
 
     public RazorFeatherProjectileEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.RAZOR_FEATHER.get(), shooter, level);
+        this(ModEntities.RAZOR_FEATHER.get(), shooter, level);
     }
 
+    // ThrowableItemProjectile no longer derives its own default item from getDefaultItem() for this
+    // constructor shape, so set it explicitly right after super() runs (still polymorphic: each
+    // razor feather subclass's own getDefaultItem() override picks the right item).
     protected RazorFeatherProjectileEntity(EntityType<? extends ThrowableItemProjectile> type, LivingEntity shooter, Level level) {
-        super(type, shooter, level);
+        super(type, shooter, level, ItemStack.EMPTY);
+        this.setItem(new ItemStack(this.getDefaultItem()));
     }
 
     @Override

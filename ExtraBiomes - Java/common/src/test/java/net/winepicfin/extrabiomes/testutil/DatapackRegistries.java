@@ -152,7 +152,8 @@ public final class DatapackRegistries {
         reopenIntrusiveHolders(BuiltInRegistries.ITEM);
         setFrozen(BuiltInRegistries.ITEM, false);
         for (String id : modIds) {
-            net.minecraft.world.item.Item item = new net.minecraft.world.item.Item(new net.minecraft.world.item.Item.Properties());
+            net.minecraft.world.item.Item item = new net.minecraft.world.item.Item(new net.minecraft.world.item.Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id))));
             Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), item);
         }
         BuiltInRegistries.ITEM.freeze();
@@ -164,7 +165,8 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.ENTITY_TYPE, false);
         for (String id : modIds) {
             net.minecraft.world.entity.EntityType<?> entityType =
-                    net.minecraft.world.entity.EntityType.Builder.createNothing(net.minecraft.world.entity.MobCategory.MISC).build(id);
+                    net.minecraft.world.entity.EntityType.Builder.createNothing(net.minecraft.world.entity.MobCategory.MISC)
+                            .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
             register(BuiltInRegistries.ENTITY_TYPE, Registries.ENTITY_TYPE, id, entityType);
         }
         BuiltInRegistries.ENTITY_TYPE.freeze();
@@ -181,6 +183,7 @@ public final class DatapackRegistries {
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_fallen_jungle_tree", new FallenJungleTreeFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_multi", new MultiFeature(MultiFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "basalt_bank", new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "lava_flow_kickstart", new net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
         BuiltInRegistries.FEATURE.freeze();
 
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
@@ -250,7 +253,8 @@ public final class DatapackRegistries {
     // same naming convention ModBlocks itself already follows for every block of that shape
     // (see ModBlocks.registerStandardWoodSet/registerBlock call sites), not a per-id hardcoded list.
     private static Block placeholderBlock(String id) {
-        BlockBehaviour.Properties properties = BlockBehaviour.Properties.of();
+        BlockBehaviour.Properties properties = BlockBehaviour.Properties.of()
+                .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
         if (id.equals("pebble_block")) {
             return new PebbleBlock(properties);
         }
@@ -300,11 +304,23 @@ public final class DatapackRegistries {
         }
     }
 
+    // As of 1.21.3, MappedRegistry.freeze() throws "Tags already present before freezing" if its
+    // allTags field is still bound from the registry's original vanilla-bootstrap freeze() call -
+    // unfreezing here (frozen=false) must also rebind allTags to TagSet.unbound() so the later real
+    // freeze() call (see the register() javadoc above) can bind it fresh instead of tripping that guard.
     private static void setFrozen(Registry<?> registry, boolean frozen) {
         try {
             Field field = net.minecraft.core.MappedRegistry.class.getDeclaredField("frozen");
             field.setAccessible(true);
             field.set(registry, frozen);
+            if (!frozen) {
+                Class<?> tagSetClass = Class.forName("net.minecraft.core.MappedRegistry$TagSet");
+                java.lang.reflect.Method unboundMethod = tagSetClass.getDeclaredMethod("unbound");
+                unboundMethod.setAccessible(true);
+                Field allTagsField = net.minecraft.core.MappedRegistry.class.getDeclaredField("allTags");
+                allTagsField.setAccessible(true);
+                allTagsField.set(registry, unboundMethod.invoke(null));
+            }
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
         }
@@ -326,14 +342,30 @@ public final class DatapackRegistries {
                     root));
         }
         try (MultiPackResourceManager resources = new MultiPackResourceManager(PackType.SERVER_DATA, packs)) {
+            // As of 1.21.3, RegistryDataLoader strictly resolves every tag a loaded element
+            // references (e.g. vanilla's own ancient_city structure processor lists reference
+            // #minecraft:ancient_city_replaceable) instead of tolerating an unbound one - block/item
+            // tags aren't part of registriesToLoad()'s dynamic-registry set, so bind them explicitly
+            // first from the same vanilla+mod packs.
+            setFrozen(BuiltInRegistries.BLOCK, false);
+            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.BLOCK);
+            BuiltInRegistries.BLOCK.freeze();
+            setFrozen(BuiltInRegistries.ITEM, false);
+            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.ITEM);
+            BuiltInRegistries.ITEM.freeze();
+            setFrozen(BuiltInRegistries.ENTITY_TYPE, false);
+            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.ENTITY_TYPE);
+            BuiltInRegistries.ENTITY_TYPE.freeze();
             RegistryAccess base = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-            RegistryAccess.Frozen loaded = RegistryDataLoader.load(resources, base, registriesToLoad());
+            List<net.minecraft.core.HolderLookup.RegistryLookup<?>> baseLookups =
+                    base.registries().<net.minecraft.core.HolderLookup.RegistryLookup<?>>map(entry -> entry.value()).toList();
+            RegistryAccess.Frozen loaded = RegistryDataLoader.load(resources, baseLookups, registriesToLoad());
             // RegistryDataLoader.load()'s result only carries the registries it just loaded
             // (registriesToLoad()) - callers (DatapackSchemaTest) need item/block/enchantment/...
             // lookups too (e.g. loot table/advancement/recipe predicates), so merge base back in.
             return HolderLookup.Provider.create(java.util.stream.Stream.concat(
-                    base.registries().map(entry -> entry.value().asLookup()),
-                    loaded.registries().map(entry -> entry.value().asLookup())));
+                    base.registries().map(entry -> (net.minecraft.core.HolderLookup.RegistryLookup<?>) entry.value()),
+                    loaded.registries().map(entry -> (net.minecraft.core.HolderLookup.RegistryLookup<?>) entry.value())));
         }
     }
 

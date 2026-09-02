@@ -1,23 +1,19 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from giant_tortoise.geo.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.winepicfin.extrabiomes.entity.custom.GiantTortoiseEntity;
+import net.winepicfin.extrabiomes.entity.client.state.GiantTortoiseRenderState;
 
-public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
+public class GiantTortoiseModel<T extends GiantTortoiseRenderState> extends EntityModel<T> {
 	// Approximate shell mesh center relative to `body`'s own pivot; tune by eye if the roll still wobbles.
 	private static final float SHELL_PIVOT_DY = 6.3F;
 	private static final float SHELL_PIVOT_DZ = -2.5F;
 	private static final float TUCK_ANGLE = -100F * 0.017453292F;
 
-	private final ModelPart modelRoot;
 	private final ModelPart body;
 	private final ModelPart body2;
 	private final ModelPart spikes;
@@ -34,7 +30,7 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart leg3;
 
 	public GiantTortoiseModel(ModelPart root) {
-		this.modelRoot = root;
+		super(root);
 		this.body = root.getChild("body");
 		this.body2 = this.body.getChild("body2");
 		this.spikes = this.body2.getChild("spikes");
@@ -74,9 +70,9 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		boolean charging = entity instanceof GiantTortoiseEntity tortoise && tortoise.isCharging();
+		boolean charging = state.isCharging;
 
 		if (charging) {
 			// Spin runs at a constant rate off ageInTicks rather than actual movement, so it reads as a fast tumble regardless of real closing speed.
@@ -85,7 +81,7 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 			this.leg2.xRot = TUCK_ANGLE;
 			this.leg3.xRot = TUCK_ANGLE;
 
-			float theta = (ageInTicks * 25f) * 0.017453292f; // tune degrees/tick to taste
+			float theta = (state.ageInTicks * 25f) * 0.017453292f; // tune degrees/tick to taste
 			this.body.xRot += theta;
 
 			// `body`'s pivot sits at leg-mount height, not the shell's visual center, so counter-translate around SHELL_PIVOT_DY/DZ to spin in place instead of on an arc.
@@ -99,21 +95,11 @@ public class GiantTortoiseModel<T extends Entity> extends HierarchicalModel<T> {
 			this.leg1.visible = true;
 			this.leg2.visible = true;
 			this.leg3.visible = true;
-			this.leg0.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-			this.leg1.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-			this.leg2.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-			this.leg3.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+			this.leg0.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
+			this.leg1.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float)Math.PI) * 1.4F * state.walkAnimationSpeed;
+			this.leg2.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
+			this.leg3.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float)Math.PI) * 1.4F * state.walkAnimationSpeed;
 		}
 
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
 	}
 }

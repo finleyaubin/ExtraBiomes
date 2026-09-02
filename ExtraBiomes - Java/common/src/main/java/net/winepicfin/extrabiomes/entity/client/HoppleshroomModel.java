@@ -1,22 +1,18 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from hoppleshroom.geo.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.world.entity.Entity;
-import net.winepicfin.extrabiomes.entity.custom.HoppleshroomEntity;
+import net.winepicfin.extrabiomes.entity.client.state.HoppleshroomRenderState;
 
-public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart modelRoot;
+public class HoppleshroomModel<T extends HoppleshroomRenderState> extends EntityModel<T> {
 	private final ModelPart leg;
 	private final ModelPart hat;
 
 	public HoppleshroomModel(ModelPart root) {
-		this.modelRoot = root;
+		super(root);
 		this.leg = root.getChild("leg");
 		this.hat = root.getChild("hat");
 	}
@@ -32,10 +28,10 @@ public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float vspeed = (float) entity.getDeltaMovement().y;
-		float squish = (entity instanceof HoppleshroomEntity hoppleshroom) ? hoppleshroom.squish : 0f;
+		float vspeed = state.verticalSpeed;
+		float squish = state.squish;
 
 		// animation.hoppleshroom.jump, plus a landing squash/stretch on top driven by `squish`
 		this.leg.xScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed))))) + squish * 0.3f;
@@ -43,15 +39,5 @@ public class HoppleshroomModel<T extends Entity> extends HierarchicalModel<T> {
 		this.leg.zScale = (1f - ((0.08f * (((vspeed < 0f) ? 0f : vspeed))))) + squish * 0.3f;
 		this.hat.y += -((1f + ((0.1f * (((vspeed < 0f) ? 0f : vspeed)))))) + squish * 1.5f;
 
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
 	}
 }

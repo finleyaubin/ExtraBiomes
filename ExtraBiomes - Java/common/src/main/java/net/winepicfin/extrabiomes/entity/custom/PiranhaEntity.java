@@ -11,7 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -67,7 +67,9 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
                 .add(Attributes.MAX_HEALTH, healthForScale(PiranhaTuning.SIZE_NORMAL_SCALE))
                 .add(Attributes.MOVEMENT_SPEED, PiranhaTuning.MOVEMENT_SPEED)
                 .add(Attributes.ATTACK_DAMAGE, attackDamageForScale(PiranhaTuning.SIZE_NORMAL_SCALE))
-                .add(Attributes.FOLLOW_RANGE, PiranhaTuning.FOLLOW_RANGE);
+                .add(Attributes.FOLLOW_RANGE, PiranhaTuning.FOLLOW_RANGE)
+                // LivingEntity#getScale() became final, driven entirely by this attribute now.
+                .add(Attributes.SCALE, PiranhaTuning.SIZE_NORMAL_SCALE);
     }
 
     private static double lerp(float scale, double atMin, double atMax) {
@@ -89,7 +91,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     // schooling fish also use (see PiranhaTuning.LOCAL_DENSITY_LIMIT and MobSpawnCapTuning). Also
     // applies Config.weakerPiranhas' extra spawn-chance roll and hard world-wide cap when enabled.
     public static boolean checkPiranhaSpawnRules(EntityType<PiranhaEntity> type, ServerLevelAccessor level,
-                                                  MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+                                                  EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
         if (!WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, spawnType, pos, random)) {
             return false;
         }
@@ -119,7 +121,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         // Piranhas also go after farm animals nearby, including on the shoreline, not just players (Bedrock's "is_family mob && != fish" entry). Tamed pets are exempt.
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Animal.class, 10, true, false,
-                (LivingEntity target) -> !(target instanceof WaterAnimal)
+                (net.minecraft.world.entity.ai.targeting.TargetingConditions.Selector) (target, level) -> !(target instanceof WaterAnimal)
                         && !(target instanceof TamableAnimal tamable && tamable.isTame())));
     }
 
@@ -196,12 +198,8 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(healthForScale(scale));
         this.setHealth((float) this.getAttributeValue(Attributes.MAX_HEALTH));
         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(attackDamageForScale(scale));
+        this.getAttribute(Attributes.SCALE).setBaseValue(scale);
         this.refreshDimensions();
-    }
-
-    @Override
-    public float getScale() {
-        return this.getSizeScale();
     }
 
     @Override
@@ -222,7 +220,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type,
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason type,
                                         @Nullable SpawnGroupData data) {
         this.setVariant(this.random.nextInt(VARIANT_COUNT));
         this.setSizeScale(rollWeightedScale(this.random));

@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -72,7 +72,7 @@ public class PebbleBlock extends Block {
 
 
     @Override
-    protected @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack heldItem, BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
+    protected @NotNull InteractionResult useItemOn(@NotNull ItemStack heldItem, BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
         if (pState.getValue(SIZE) < 3 && heldItem.getItem() == ModItems.PEBBLE.get()) {
             pLevel.setBlockAndUpdate(pPos, pState.setValue(SIZE, pState.getValue(SIZE) + 1));
 
@@ -80,10 +80,10 @@ public class PebbleBlock extends Block {
                 heldItem.shrink(1);
             }
 
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
 
     }
 
@@ -94,10 +94,10 @@ public class PebbleBlock extends Block {
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
+    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, net.minecraft.world.level.redstone.Orientation pOrientation, boolean pIsMoving) {
         if (!pIsMoving && !this.canSurvive(pState, pLevel, pPos)) {
             pLevel.destroyBlock(pPos, true);
         }
-        super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
+        super.neighborChanged(pState, pLevel, pPos, pBlock, pOrientation, pIsMoving);
     }
 }

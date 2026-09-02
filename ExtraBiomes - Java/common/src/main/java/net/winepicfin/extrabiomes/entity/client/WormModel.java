@@ -1,17 +1,14 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from worm.geo.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 
-public class WormModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart modelRoot;
+public class WormModel<T extends LivingEntityRenderState> extends EntityModel<T> {
 	private final ModelPart body;
 	private final ModelPart head;
 	private final ModelPart head1;
@@ -21,7 +18,7 @@ public class WormModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart Archie;
 
 	public WormModel(ModelPart root) {
-		this.modelRoot = root;
+		super(root);
 		this.body = root.getChild("body");
 		this.head = this.body.getChild("head");
 		this.head1 = this.head.getChild("head1");
@@ -47,10 +44,11 @@ public class WormModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float limbSwing = state.walkAnimationPos;
 		// "Archie" easter egg: the long extra tail only shows when the worm is renamed to Archie.
-		this.Archie.visible = entity.hasCustomName() && "Archie".equals(entity.getCustomName().getString());
+		this.Archie.visible = state.customName != null && "Archie".equals(state.customName.getString());
 		// animation.worm.move
 		this.head1.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;
 		this.head2.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * (-45f))) * 0.017453292f;
@@ -58,15 +56,5 @@ public class WormModel<T extends Entity> extends HierarchicalModel<T> {
 		this.body2.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;
 		this.body.z += (((((Mth.sin(((limbSwing * 32f)) * 0.017453292f) * 2f)) <= 0f) ? 0f : ((Mth.sin(((limbSwing * 64f)) * 0.017453292f) * 2f))));
 
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
 	}
 }

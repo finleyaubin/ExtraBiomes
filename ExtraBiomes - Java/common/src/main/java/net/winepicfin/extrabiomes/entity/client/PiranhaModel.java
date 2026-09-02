@@ -1,17 +1,14 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from piranha.geo.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.winepicfin.extrabiomes.entity.custom.PiranhaEntity;
+import net.winepicfin.extrabiomes.entity.client.state.PiranhaRenderState;
 
-public class PiranhaModel<T extends PiranhaEntity> extends HierarchicalModel<T> {
-	private final ModelPart modelRoot;
+public class PiranhaModel<T extends PiranhaRenderState> extends EntityModel<T> {
 	private final ModelPart body;
 	private final ModelPart head;
 	private final ModelPart jaw;
@@ -21,7 +18,7 @@ public class PiranhaModel<T extends PiranhaEntity> extends HierarchicalModel<T> 
 	private final ModelPart waist;
 
 	public PiranhaModel(ModelPart root) {
-		this.modelRoot = root;
+		super(root);
 		this.body = root.getChild("body");
 		this.head = this.body.getChild("head");
 		this.jaw = this.head.getChild("jaw");
@@ -47,28 +44,19 @@ public class PiranhaModel<T extends PiranhaEntity> extends HierarchicalModel<T> 
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float ageInTicks = state.ageInTicks;
 		// animation.piranha.swim
 		this.body.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * 2f)) * 0.017453292f;
 		this.head.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * 4f)) * 0.017453292f;
 		this.tailfin.yRot += ((Mth.cos(((ageInTicks * 30f)) * 0.017453292f) * (-25.75f))) * 0.017453292f;
 
 		// animation.piranha.bite, scaled up from Bedrock's sin(life_time)^2*40 (too slow in raw seconds) into a quick, visible chomp.
-		if (entity.isBiting()) {
+		if (state.isBiting) {
 			float t = ageInTicks * 0.6f;
 			float bite = Mth.sin(t) * Mth.sin(t) * 40f;
 			this.jaw.xRot += bite * 0.017453292f;
 		}
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
 	}
 }

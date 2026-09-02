@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.item;
 
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.equipment.ArmorType;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.core.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -31,22 +32,22 @@ public class ModItems {
     // damage bar (see BaitProjectileEntity.interact()), and vanilla items can't be both damageable
     // and stackable, so this now stacks to 1 like any other durability item.
     public static final RegistrySupplier<Item> BAIT = ITEMS.register("bait",()-> new BaitItem(new Item.Properties().durability(BaitProjectileEntity.MAX_HEALTH)));
-    public static final RegistrySupplier<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS)));
+    public static final RegistrySupplier<Item> FROGS_LEGS = ITEMS.register("frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.FROGS_LEGS, ModFoods.FROGS_LEGS_CONSUMABLE)));
     public static final RegistrySupplier<Item> COOKED_FROGS_LEGS = ITEMS.register("cooked_frogs_legs",()-> new Item(new Item.Properties().food(ModFoods.COOKED_FROGS_LEGS)));
     public static final RegistrySupplier<Item> PIRANHA = ITEMS.register("piranha",()-> new Item(new Item.Properties().food(ModFoods.PIRANHA)));
     public static final RegistrySupplier<Item> COOKED_PIRANHA = ITEMS.register("cooked_piranha",()-> new Item(new Item.Properties().food(ModFoods.COOKED_PIRANHA)));
     public static final RegistrySupplier<Item> WORM = ITEMS.register("worm",()-> new WormItem(new Item.Properties()));
-    public static final RegistrySupplier<Item> JELLYFISH_JAM_BOTTLE = ITEMS.register("jellyfish_jam_bottle",()-> new JellyfishJamBottleItem(new Item.Properties().food(ModFoods.JELLYFISH_JAM).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
+    public static final RegistrySupplier<Item> JELLYFISH_JAM_BOTTLE = ITEMS.register("jellyfish_jam_bottle",()-> new JellyfishJamBottleItem(new Item.Properties().food(ModFoods.JELLYFISH_JAM, ModFoods.JELLYFISH_JAM_CONSUMABLE).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_EMPTY = ITEMS.register("jellyfishing_net_empty",()-> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_FULL = ITEMS.register("jellyfishing_net_full",()-> new JellyfishingNetItem(new Item.Properties().stacksTo(1)));
-    public static final RegistrySupplier<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> ExtraBiomesExpectPlatform.createFrogHelmetItem(ModItemMaterials.FROG.get(), ArmorItem.Type.HELMET, new Item.Properties().durability(325)));
-    public static final RegistrySupplier<Item> MYSTIC_SIGN = ITEMS.register("mystic_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.MYSTIC_SIGN.get(),ModBlocks.MYSTIC_WALL_SIGN.get()));
+    public static final RegistrySupplier<Item> FROG_HELMET = ITEMS.register("frog_helmet",()-> ExtraBiomesExpectPlatform.createFrogHelmetItem(ModItemMaterials.FROG, ArmorType.HELMET, new Item.Properties().durability(325)));
+    public static final RegistrySupplier<Item> MYSTIC_SIGN = ITEMS.register("mystic_sign",()-> new SignItem(ModBlocks.MYSTIC_SIGN.get(),ModBlocks.MYSTIC_WALL_SIGN.get(), new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> MYSTIC_HANGING_SIGN = ITEMS.register("mystic_hanging_sign",()-> new HangingSignItem(ModBlocks.MYSTIC_HANGING_SIGN.get(),ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
-    public static final RegistrySupplier<Item> PALM_SIGN = ITEMS.register("palm_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.PALM_SIGN.get(),ModBlocks.PALM_WALL_SIGN.get()));
+    public static final RegistrySupplier<Item> PALM_SIGN = ITEMS.register("palm_sign",()-> new SignItem(ModBlocks.PALM_SIGN.get(),ModBlocks.PALM_WALL_SIGN.get(), new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> PALM_HANGING_SIGN = ITEMS.register("palm_hanging_sign",()-> new HangingSignItem(ModBlocks.PALM_HANGING_SIGN.get(),ModBlocks.PALM_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
-    public static final RegistrySupplier<Item> SKY_SIGN = ITEMS.register("sky_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SKY_SIGN.get(),ModBlocks.SKY_WALL_SIGN.get()));
+    public static final RegistrySupplier<Item> SKY_SIGN = ITEMS.register("sky_sign",()-> new SignItem(ModBlocks.SKY_SIGN.get(),ModBlocks.SKY_WALL_SIGN.get(), new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> SKY_HANGING_SIGN = ITEMS.register("sky_hanging_sign",()-> new HangingSignItem(ModBlocks.SKY_HANGING_SIGN.get(),ModBlocks.SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
-    public static final RegistrySupplier<Item> GILDED_SKY_SIGN = ITEMS.register("gilded_sky_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get()));
+    public static final RegistrySupplier<Item> GILDED_SKY_SIGN = ITEMS.register("gilded_sky_sign",()-> new SignItem(ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get(), new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> GILDED_SKY_HANGING_SIGN = ITEMS.register("gilded_sky_hanging_sign",()-> new HangingSignItem(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     // Colors match the Bedrock addon's spawn_egg base_color/overlay_color exactly (see the entity
     // .entity.json files under ExtraBiomes - Bedrock/packs/RP/entity/) so the egg tint is consistent

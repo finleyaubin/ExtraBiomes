@@ -5,11 +5,13 @@ import com.mojang.serialization.MapCodec;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -67,9 +69,18 @@ public class ExtraBiomesExpectPlatform {
         throw new AssertionError();
     }
 
+    // BlockEntityType's constructor and its own internal register() factory both went private as of
+    // 1.21.2 - vanilla's own bootstrap is now the only caller. Each loader widens access the same way
+    // it already does for WoodType.register/TreeDecoratorType/TrunkPlacerType above (Forge/NeoForge via
+    // access transformer, Fabric via fabric-object-builder-api-v1's FabricBlockEntityTypeBuilder).
+    @ExpectPlatform
+    public static <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntityType.BlockEntitySupplier<T> factory, Block... validBlocks) {
+        throw new AssertionError();
+    }
+
     // FrogHelmetItem itself lives in forge/ - see its class comment for why.
     @ExpectPlatform
-    public static Item createFrogHelmetItem(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties) {
+    public static Item createFrogHelmetItem(ArmorMaterial material, ArmorType type, Item.Properties properties) {
         throw new AssertionError();
     }
 

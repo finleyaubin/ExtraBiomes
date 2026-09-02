@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,11 +30,11 @@ public class JellyfishingNetItem extends Item {
         Player player = context.getPlayer();
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
-            JellyfishEntity jellyfish = ModEntities.JELLYFISH.get().create(serverLevel);
+            JellyfishEntity jellyfish = ModEntities.JELLYFISH.get().create(serverLevel, EntitySpawnReason.BUCKET);
             if (jellyfish != null) {
                 jellyfish.moveTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
                         context.getClickedFace() == Direction.UP ? 0.0F : 0.0F, 0.0F);
-                jellyfish.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(pos), MobSpawnType.BUCKET, null);
+                jellyfish.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(pos), EntitySpawnReason.BUCKET, null);
                 serverLevel.addFreshEntity(jellyfish);
                 level.playSound(null, pos, SoundEvents.BUCKET_EMPTY_FISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
                 if (player != null) {
@@ -49,7 +49,7 @@ public class JellyfishingNetItem extends Item {
                 }
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return level.isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
     }
 
     @Override

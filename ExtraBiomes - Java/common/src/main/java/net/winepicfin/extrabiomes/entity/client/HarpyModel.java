@@ -1,18 +1,15 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from harpy.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 
-public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart modelRoot;
-	private final ModelPart root;
+public class HarpyModel<T extends LivingEntityRenderState> extends EntityModel<T> {
+	private final ModelPart rootPart;
 	private final ModelPart waist;
 	private final ModelPart wings;
 	private final ModelPart right_wing;
@@ -39,9 +36,9 @@ public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart leftLeg;
 
 	public HarpyModel(ModelPart root) {
-		this.modelRoot = root;
-		this.root = root.getChild("root");
-		this.waist = this.root.getChild("waist");
+		super(root);
+		this.rootPart = root.getChild("root");
+		this.waist = this.rootPart.getChild("waist");
 		this.wings = this.waist.getChild("wings");
 		this.right_wing = this.wings.getChild("right_wing");
 		this.support1 = this.right_wing.getChild("support1");
@@ -63,8 +60,8 @@ public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
 		this.head = this.body.getChild("head");
 		this.leftArm = this.body.getChild("leftArm");
 		this.rightArm = this.body.getChild("rightArm");
-		this.rightLeg = this.root.getChild("rightLeg");
-		this.leftLeg = this.root.getChild("leftLeg");
+		this.rightLeg = this.rootPart.getChild("rightLeg");
+		this.leftLeg = this.rootPart.getChild("leftLeg");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -101,8 +98,10 @@ public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float limbSwing = state.walkAnimationPos;
+		float limbSwingAmount = state.walkAnimationSpeed;
 		// animation.harpy.fly
 		this.left_wing.yRot += ((((Mth.sin(((limbSwing * 15f)) * 0.017453292f) * 20f)) + 1.5f)) * 0.017453292f;
 		this.right_wing.yRot += ((((((-1f) * Mth.sin(((limbSwing * 15f)) * 0.017453292f)) * 20f)) + 1.5f)) * 0.017453292f;
@@ -110,17 +109,7 @@ public class HarpyModel<T extends Entity> extends HierarchicalModel<T> {
 		this.support2.yRot += ((((((-1f) * Mth.sin(((limbSwing * 15f)) * 0.017453292f)) * 20f)) + 1.5f)) * 0.017453292f;
 
 		// animation.harpy.tilt
-		this.root.xRot += ((((limbSwingAmount / 1f)) * 45f)) * 0.017453292f;
+		this.rootPart.xRot += ((((limbSwingAmount / 1f)) * 45f)) * 0.017453292f;
 
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
 	}
 }

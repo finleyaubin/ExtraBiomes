@@ -13,7 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -104,7 +104,7 @@ public class JellyfishEntity extends WaterAnimal {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type,
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason type,
                                         @Nullable SpawnGroupData data) {
         this.setVariant(this.random.nextInt(VARIANT_COUNT));
         return super.finalizeSpawn(level, difficulty, type, data);
@@ -139,7 +139,7 @@ public class JellyfishEntity extends WaterAnimal {
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             ItemStack jam = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISH_JAM_BOTTLE.get()));
             player.setItemInHand(hand, jam);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         if (held.is(ModItems.JELLYFISHING_NET_EMPTY.get())) {
             if (!this.level().isClientSide) {
@@ -149,7 +149,7 @@ public class JellyfishEntity extends WaterAnimal {
                 this.playSound(SoundEvents.GENERIC_SPLASH, 1.0F, 1.0F);
                 this.discard();
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }

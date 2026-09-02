@@ -1,7 +1,6 @@
 package net.winepicfin.extrabiomes.data;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -14,17 +13,19 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModItems;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Shared, loader-agnostic recipe content for the Forge and Fabric {@code ModRecipeProvider}s.
  * <p>
  * This extends vanilla {@link RecipeProvider} (rather than being a plain standalone class) purely so
- * its static methods can call the {@code protected static} {@code has(...)} and {@code getHasName(...)}
- * helpers declared on {@link RecipeProvider}. Reusing those vanilla helpers - instead of reimplementing
- * them - guarantees the generated advancement criteria stay byte-identical to the previous per-loader
- * copies. The class is never instantiated for real; its constructor exists only to satisfy
- * {@code RecipeProvider}'s constructor requirement.
+ * its methods can call the {@code protected} {@code has(...)}/{@code shaped(...)}/{@code shapeless(...)}
+ * and {@code static getHasName(...)} helpers declared on {@link RecipeProvider}. Reusing those vanilla
+ * helpers - instead of reimplementing them - guarantees the generated advancement criteria stay
+ * byte-identical to the previous per-loader copies. {@code has()}/{@code shaped()}/{@code shapeless()}
+ * became instance methods as of 1.21.2 (they resolve items through the provider's own item
+ * {@code HolderGetter}), so unlike the old static-only design this now needs a real, if throwaway,
+ * instance - {@link #build} constructs one as an anonymous subclass purely to run {@link #buildRecipes()}
+ * once.
  *
  * <p>Lives in {@code ...extrabiomes.data} rather than the more obvious {@code ...extrabiomes.datagen}
  * because forge/ already owns that package name. Two modules exporting the same package is a JPMS
@@ -35,16 +36,25 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class CommonRecipes extends RecipeProvider {
 
-    private CommonRecipes(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
-        super(packOutput, registries);
+    protected CommonRecipes(HolderLookup.Provider registries, RecipeOutput output) {
+        super(registries, output);
     }
 
     public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
     public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
     public static final List<ItemLike> PIRANHA_SMELTABLES = List.of(ModItems.PIRANHA.get());
 
-    public static void build(RecipeOutput pWriter) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.BAIT.get())
+    public static void build(HolderLookup.Provider registries, RecipeOutput pWriter) {
+        new CommonRecipes(registries, pWriter) {
+            @Override
+            protected void buildRecipes() {
+                this.buildAll(pWriter);
+            }
+        }.buildRecipes();
+    }
+
+    protected void buildAll(RecipeOutput pWriter) {
+        shaped(RecipeCategory.MISC, ModItems.BAIT.get())
                 .pattern("###")
                 .pattern("###")
                 .pattern("###")
@@ -94,14 +104,14 @@ public abstract class CommonRecipes extends RecipeProvider {
                 ));
     }
 
-    protected static void oreBlasting(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean createSmelting) {
+    protected void oreBlasting(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean createSmelting) {
         modOreCooking(recipeOutput, RecipeSerializer.BLASTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_blasting");
         if (createSmelting) {
             modOreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime * 2, group, "_from_smelting");
         }
     }
 
-    protected static void foodCooking(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean campfireAndSmoker) {
+    protected void foodCooking(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean campfireAndSmoker) {
         modOreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_cooking");
         if (campfireAndSmoker) {
             campfireCooking(recipeOutput, "campfire_cooking", 600, ingredients, result, experience);
@@ -109,14 +119,14 @@ public abstract class CommonRecipes extends RecipeProvider {
         }
     }
 
-    // Named modOreCooking (not oreCooking) because vanilla RecipeProvider already declares a static oreCooking with this exact signature - redeclaring it would be a "cannot hide" compile error.
+    // Named modOreCooking (not oreCooking) because vanilla RecipeProvider already declares an instance oreCooking with a similar signature - redeclaring it would be a "cannot hide"/override clash.
     //
     // SimpleCookingRecipeBuilder.generic() gained a trailing AbstractCookingRecipe.Factory<T> arg as of
     // 1.20.4 (needed to actually construct the T for the codec-based recipe system) - rather than thread
     // a Factory through every call site, dispatch to the two loader-agnostic convenience methods
     // (.blasting()/.smelting()) that already bind the right serializer+factory pair, matching this
     // method's only two real callers below.
-    protected static void modOreCooking(RecipeOutput recipeOutput, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
+    protected void modOreCooking(RecipeOutput recipeOutput, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
         for (ItemLike itemlike : ingredients) {
             SimpleCookingRecipeBuilder builder = recipeSerializer == RecipeSerializer.BLASTING_RECIPE
                     ? SimpleCookingRecipeBuilder.blasting(Ingredient.of(itemlike), category, result, experience, cookingTime)
@@ -127,26 +137,26 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     // The save id must carry the "extrabiomes:" namespace explicitly - an unqualified id is parsed as "minecraft:<id>" by RecipeBuilder.save(Consumer, String), silently writing recipes under data/minecraft/recipes/ instead.
-    private static void campfireCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
+    private void campfireCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
         for (ItemLike itemlike : ingredient) {
             SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + cookingType);
         }
     }
 
-    private static void smokingCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
+    private void smokingCooking(RecipeOutput recipeOutput, String cookingType, int cookingTime, List<ItemLike> ingredient, ItemLike output, float experience) {
         for (ItemLike itemlike : ingredient) {
             SimpleCookingRecipeBuilder.smoking(Ingredient.of(itemlike), RecipeCategory.FOOD, output, experience, cookingTime).unlockedBy(getHasName(itemlike), has(itemlike)).save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + cookingType);
         }
     }
 
-    private static void gildRecipes(RecipeOutput recipeOutput, List<Block> nonGilded, List<Block> gilded) {
+    private void gildRecipes(RecipeOutput recipeOutput, List<Block> nonGilded, List<Block> gilded) {
         int recipeNum = 0;
         for (Block currentNonGilded : nonGilded) {
             gild(recipeOutput, currentNonGilded, gilded.get(recipeNum++));
         }
     }
 
-    private static void woodRecipes(RecipeOutput recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block strippedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign) {
+    private void woodRecipes(RecipeOutput recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block strippedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign) {
         List<ItemLike> woods = List.of(log, strippedLog, wood, strippedWood);
         planks(recipeOutput, woods, plank);
         wood(recipeOutput, log, wood);
@@ -163,17 +173,17 @@ public abstract class CommonRecipes extends RecipeProvider {
 
     }
 
-    private static void planks(RecipeOutput recipeOutput, List<ItemLike> ingredients, Block output) {
+    private void planks(RecipeOutput recipeOutput, List<ItemLike> ingredients, Block output) {
         for (ItemLike itemlike : ingredients) {
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, 4)
+            shapeless(RecipeCategory.MISC, output, 4)
                     .requires(itemlike)
                     .unlockedBy(getHasName(itemlike), has(itemlike))
                     .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(itemlike));
         }
     }
 
-    private static void wood(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
+    private void wood(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&&")
                 .pattern("&&")
                 .define('&', ingredient)
@@ -181,8 +191,8 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void stair(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 4)
+    private void stair(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 4)
                 .pattern("&  ")
                 .pattern("&& ")
                 .pattern("&&&")
@@ -191,16 +201,16 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void slab(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 6)
+    private void slab(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 6)
                 .pattern("&&&")
                 .define('&', ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void fence(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
+    private void fence(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&$&")
                 .pattern("&$&")
                 .define('&', ingredient)
@@ -209,8 +219,8 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void fenceGate(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
+    private void fenceGate(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 3)
                 .pattern("$&$")
                 .pattern("$&$")
                 .define('&', ingredient)
@@ -219,8 +229,8 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void door(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
+    private void door(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&&")
                 .pattern("&&")
                 .pattern("&&")
@@ -229,8 +239,8 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void trapDoor(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 2)
+    private void trapDoor(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 2)
                 .pattern("&&&")
                 .pattern("&&&")
                 .define('&', ingredient)
@@ -238,15 +248,15 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void pressurePlate(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 2)
+    private void pressurePlate(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 2)
                 .pattern("&&")
                 .define('&', ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
-    private static void sign(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output, 3)
+    private void sign(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 3)
                 .pattern("&&&")
                 .pattern("&&&")
                 .pattern(" $ ")
@@ -256,15 +266,15 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void oneToOne(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, output, 1)
+    private void oneToOne(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shapeless(RecipeCategory.MISC, output, 1)
                 .requires(ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void brick(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
+    private void brick(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output)
                 .pattern("&&")
                 .pattern("&&")
                 .define('&', ingredient)
@@ -272,9 +282,9 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput);
     }
 
-    private static void blackSandRecipes(RecipeOutput recipeOutput) {
+    private void blackSandRecipes(RecipeOutput recipeOutput) {
         // Not from Bedrock (no equivalent recipe there) - added per playtest request, using vanilla's own "8 around a dye" bulk-dyeing shape.
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SAND.get(), 8)
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SAND.get(), 8)
                 .pattern("###")
                 .pattern("#$#")
                 .pattern("###")
@@ -290,25 +300,25 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE.get()), has(ModBlocks.BLACK_SANDSTONE.get()))
                 .save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SANDSTONE.get())
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SANDSTONE.get())
                 .pattern("##")
                 .pattern("##")
                 .define('#', ModBlocks.BLACK_SAND.get())
                 .unlockedBy(getHasName(ModBlocks.BLACK_SAND.get()), has(ModBlocks.BLACK_SAND.get()))
                 .save(recipeOutput);
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_BLACK_SANDSTONE.get(), 4)
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CUT_BLACK_SANDSTONE.get(), 4)
                 .pattern("##")
                 .pattern("##")
                 .define('#', ModBlocks.BLACK_SANDSTONE.get())
                 .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE.get()), has(ModBlocks.BLACK_SANDSTONE.get()))
                 .save(recipeOutput);
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.CHISELED_BLACK_SANDSTONE.get())
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.CHISELED_BLACK_SANDSTONE.get())
                 .pattern("#")
                 .pattern("#")
                 .define('#', ModBlocks.BLACK_SANDSTONE_SLAB.get())
                 .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE_SLAB.get()), has(ModBlocks.BLACK_SANDSTONE_SLAB.get()))
                 .save(recipeOutput);
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, Items.TNT)
+        shaped(RecipeCategory.COMBAT, Items.TNT)
                 .pattern("#~#")
                 .pattern("~#~")
                 .pattern("#~#")
@@ -334,8 +344,8 @@ public abstract class CommonRecipes extends RecipeProvider {
         stonecutting(recipeOutput, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(), 1);
     }
 
-    private static void wall(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, output, 6)
+    private void wall(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.DECORATIONS, output, 6)
                 .pattern("&&&")
                 .pattern("&&&")
                 .define('&', ingredient)
@@ -343,29 +353,29 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }
 
-    private static void stonecutting(RecipeOutput recipeOutput, Block ingredient, Block output, int count) {
+    private void stonecutting(RecipeOutput recipeOutput, Block ingredient, Block output, int count) {
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(ingredient), RecipeCategory.BUILDING_BLOCKS, output, count)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient) + "_stonecutting");
     }
 
     // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/pebbles/*.json.
-    private static void pebbleRecipes(RecipeOutput recipeOutput) {
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.PEBBLE.get(), 4)
+    private void pebbleRecipes(RecipeOutput recipeOutput) {
+        shapeless(RecipeCategory.MISC, ModItems.PEBBLE.get(), 4)
                 .requires(Items.COBBLESTONE)
                 .unlockedBy(getHasName(Items.COBBLESTONE), has(Items.COBBLESTONE))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":pebble_from_cobble");
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Items.COBBLESTONE)
+        shaped(RecipeCategory.BUILDING_BLOCKS, Items.COBBLESTONE)
                 .pattern("##")
                 .pattern("##")
                 .define('#', ModItems.PEBBLE.get())
                 .unlockedBy(getHasName(ModItems.PEBBLE.get()), has(ModItems.PEBBLE.get()))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":cobble_from_pebble");
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.MOSSY_PEBBLE.get(), 4)
+        shapeless(RecipeCategory.MISC, ModItems.MOSSY_PEBBLE.get(), 4)
                 .requires(Items.MOSSY_COBBLESTONE)
                 .unlockedBy(getHasName(Items.MOSSY_COBBLESTONE), has(Items.MOSSY_COBBLESTONE))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":mossy_pebble_from_cobble");
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Items.MOSSY_COBBLESTONE)
+        shaped(RecipeCategory.BUILDING_BLOCKS, Items.MOSSY_COBBLESTONE)
                 .pattern("##")
                 .pattern("##")
                 .define('#', ModItems.MOSSY_PEBBLE.get())
@@ -374,15 +384,15 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/diamond_razor_feather.json and diamond_razor_feather_to_netherite.json.
-    private static void razorFeatherRecipes(RecipeOutput recipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.DIAMOND_RAZOR_FEATHER.get(), 3)
+    private void razorFeatherRecipes(RecipeOutput recipeOutput) {
+        shaped(RecipeCategory.COMBAT, ModItems.DIAMOND_RAZOR_FEATHER.get(), 3)
                 .pattern("#+")
                 .pattern("##")
                 .define('#', ModItems.RAZOR_FEATHER.get())
                 .define('+', Items.DIAMOND)
                 .unlockedBy(getHasName(ModItems.RAZOR_FEATHER.get()), has(ModItems.RAZOR_FEATHER.get()))
                 .save(recipeOutput);
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.NETHERITE_RAZOR_FEATHER.get(), 8)
+        shaped(RecipeCategory.COMBAT, ModItems.NETHERITE_RAZOR_FEATHER.get(), 8)
                 .pattern("##+")
                 .pattern("###")
                 .pattern("###")
@@ -393,22 +403,22 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     // Ported from ExtraBiomes - Bedrock/packs/BP/recipes/stick_pile_from_stick.json and stick_from_stick_pile.json.
-    private static void stickPileRecipes(RecipeOutput recipeOutput) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.STICK_PILE.get())
+    private void stickPileRecipes(RecipeOutput recipeOutput) {
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.STICK_PILE.get())
                 .pattern("~~~")
                 .pattern("~~~")
                 .pattern("~~~")
                 .define('~', Items.STICK)
                 .unlockedBy(getHasName(Items.STICK), has(Items.STICK))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":stick_pile_from_stick");
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.STICK, 9)
+        shapeless(RecipeCategory.MISC, Items.STICK, 9)
                 .requires(ModBlocks.STICK_PILE.get())
                 .unlockedBy(getHasName(ModBlocks.STICK_PILE.get()), has(ModBlocks.STICK_PILE.get()))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":stick_from_stick_pile");
     }
 
-    private static void gild(RecipeOutput recipeOutput, Block ingredient, Block output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, output)
+    private void gild(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output)
                 .pattern(" * ")
                 .pattern("*^*")
                 .pattern(" * ")

@@ -8,28 +8,23 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
-import net.winepicfin.extrabiomes.entity.custom.PuckooEntity;
-import org.jetbrains.annotations.NotNull;
+import net.winepicfin.extrabiomes.entity.client.state.PuckooRenderState;
 
-public class PuckooSaddleLayer extends RenderLayer<PuckooEntity, PuckooModel<PuckooEntity>> {
+public class PuckooSaddleLayer extends RenderLayer<PuckooRenderState, PuckooModel<PuckooRenderState>> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/puckoo/saddle.png");
 
-    public PuckooSaddleLayer(RenderLayerParent<PuckooEntity, PuckooModel<PuckooEntity>> renderLayerParent) {
+    public PuckooSaddleLayer(RenderLayerParent<PuckooRenderState, PuckooModel<PuckooRenderState>> renderLayerParent) {
         super(renderLayerParent);
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(PuckooEntity entity) {
-        return TEXTURE;
-    }
-
-    @Override
-    public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight, PuckooEntity entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entity.isSaddled() && !entity.isInvisible()) {
+    public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, PuckooRenderState state, float limbSwing, float limbSwingAmount) {
+        if (state.isSaddled && !state.isInvisible) {
             VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.entityTranslucent(TEXTURE));
-            this.getParentModel().renderToBuffer(poseStack, vertexconsumer, packedLight, LivingEntityRenderer.getOverlayCoords(entity, 0.0F), net.minecraft.util.FastColor.ARGB32.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F));
+            this.getParentModel().renderToBuffer(poseStack, vertexconsumer, packedLight, LivingEntityRenderer.getOverlayCoords(state, 0.0F), ARGB.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F));
         }
     }
 }

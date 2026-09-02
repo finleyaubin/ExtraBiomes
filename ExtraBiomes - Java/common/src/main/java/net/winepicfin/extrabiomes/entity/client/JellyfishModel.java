@@ -1,19 +1,14 @@
 package net.winepicfin.extrabiomes.entity.client;
 // Generated from jellyfish.geo.json by tools/geo2java.py
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.winepicfin.extrabiomes.entity.custom.JellyfishEntity;
+import net.winepicfin.extrabiomes.entity.client.state.JellyfishRenderState;
 
-public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
-	private float grayAmount;
-	private final ModelPart modelRoot;
+public class JellyfishModel<T extends JellyfishRenderState> extends EntityModel<T> {
 	private final ModelPart body;
 	private final ModelPart tentacles;
 	private final ModelPart tentacle2;
@@ -37,7 +32,7 @@ public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart head;
 
 	public JellyfishModel(ModelPart root) {
-		this.modelRoot = root;
+		super(root);
 		this.body = root.getChild("body");
 		this.tentacles = this.body.getChild("tentacles");
 		this.tentacle2 = this.tentacles.getChild("tentacle2");
@@ -95,8 +90,10 @@ public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(T state) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
+		float limbSwing = state.walkAnimationPos;
+		float ageInTicks = state.ageInTicks;
 		// animation.jellyfish.swim
 		this.head.xScale = (((Mth.sin(((limbSwing * 15f)) * 0.017453292f) / 3.5f)) + 1.5f);
 		this.head.yScale = (((Mth.sin(((limbSwing * 15f)) * 0.017453292f) / 3.5f)) + 1.5f);
@@ -117,30 +114,6 @@ public class JellyfishModel<T extends Entity> extends HierarchicalModel<T> {
 		this.lower6.zRot += ((Mth.sin((((((ageInTicks / 20.0f) * 30f)) + 180f)) * 0.017453292f) * 45f)) * 0.017453292f;
 
 		// Ported from Bedrock's scaleY/gray_amount pre_animation scripts (flatten + desaturate out of water).
-		if (entity instanceof JellyfishEntity jellyfish) {
-			this.body.yScale = jellyfish.getBodyScaleY();
-			this.grayAmount = jellyfish.getGrayAmount();
-		} else {
-			this.body.yScale = 1.0f;
-			this.grayAmount = 0.0f;
-		}
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-		float gray = this.grayAmount;
-		float alpha = net.minecraft.util.FastColor.ARGB32.alpha(color) / 255.0f;
-		float red = net.minecraft.util.FastColor.ARGB32.red(color) / 255.0f;
-		float green = net.minecraft.util.FastColor.ARGB32.green(color) / 255.0f;
-		float blue = net.minecraft.util.FastColor.ARGB32.blue(color) / 255.0f;
-		float r = red + (0.5f - red) * gray;
-		float g = green + (0.5f - green) * gray;
-		float b = blue + (0.5f - blue) * gray;
-		modelRoot.render(poseStack, vertexConsumer, packedLight, packedOverlay, net.minecraft.util.FastColor.ARGB32.colorFromFloat(alpha, r, g, b));
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.modelRoot;
+		this.body.yScale = state.bodyScaleY;
 	}
 }

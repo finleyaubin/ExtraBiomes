@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,10 +26,10 @@ public class PebbleItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+    public InteractionResult use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemstack = player.getItemInHand(interactionHand);
-        if (player.getCooldowns().isOnCooldown(this)) {
-            return InteractionResultHolder.fail(itemstack);
+        if (player.getCooldowns().isOnCooldown(itemstack)) {
+            return InteractionResult.FAIL;
         }
         if (!level.isClientSide) {
             if (!player.isCrouching()) {
@@ -39,7 +38,7 @@ public class PebbleItem extends Item {
                 pebbleEntity.setItem(itemstack);
                 pebbleEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
                 level.addFreshEntity(pebbleEntity);
-                player.getCooldowns().addCooldown(this, THROW_COOLDOWN_TICKS);
+                player.getCooldowns().addCooldown(itemstack, THROW_COOLDOWN_TICKS);
             }
         }
 
@@ -48,7 +47,7 @@ public class PebbleItem extends Item {
             itemstack.shrink(1);
         }
 
-        return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
+        return level.isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
     }
 
     public InteractionResult useOn(UseOnContext context) {
@@ -73,7 +72,7 @@ public class PebbleItem extends Item {
             ItemStack itemstack = context.getItemInHand();
             if (player instanceof ServerPlayer) {
                 itemstack.shrink(1);
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return level.isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
             } else {
                 return InteractionResult.FAIL;
             }
