@@ -65,8 +65,9 @@ public class ModItems {
 
     // Shared across all 3 loaders' datagen (item tags, item models, creative tab) so the "which wood
     // types have boats, and which texture each uses" list only lives once. BoatModelEntry's texture is
-    // the shared filename stem under textures/entity/boat|item/ - see ModModelLayers' own comment for
-    // why GILDED_SKY currently points at "boat_sky" (no dedicated art yet).
+    // the filename stem under textures/item/ - every boat and chest boat item now has its own editable
+    // file (chest boat icons are placeholder copies of vanilla's oak_chest_boat.png - see
+    // ModItemModelProvider's boatItem() javadoc-comment in each loader for the full texture story).
     public static final List<RegistrySupplier<Item>> BOAT_ITEMS = List.of(MYSTIC_BOAT, PALM_BOAT, SKY_BOAT, GILDED_SKY_BOAT);
     public static final List<RegistrySupplier<Item>> CHEST_BOAT_ITEMS = List.of(MYSTIC_CHEST_BOAT, PALM_CHEST_BOAT, SKY_CHEST_BOAT, GILDED_SKY_CHEST_BOAT);
 
@@ -75,13 +76,13 @@ public class ModItems {
 
     public static final List<BoatModelEntry> BOAT_MODEL_ENTRIES = List.of(
             new BoatModelEntry(MYSTIC_BOAT, "boat_mystic"),
-            new BoatModelEntry(MYSTIC_CHEST_BOAT, "boat_mystic"),
+            new BoatModelEntry(MYSTIC_CHEST_BOAT, "boat_mystic_chest"),
             new BoatModelEntry(PALM_BOAT, "boat_palm"),
-            new BoatModelEntry(PALM_CHEST_BOAT, "boat_palm"),
+            new BoatModelEntry(PALM_CHEST_BOAT, "boat_palm_chest"),
             new BoatModelEntry(SKY_BOAT, "boat_sky"),
-            new BoatModelEntry(SKY_CHEST_BOAT, "boat_sky"),
-            new BoatModelEntry(GILDED_SKY_BOAT, "boat_sky"),
-            new BoatModelEntry(GILDED_SKY_CHEST_BOAT, "boat_sky")
+            new BoatModelEntry(SKY_CHEST_BOAT, "boat_sky_chest"),
+            new BoatModelEntry(GILDED_SKY_BOAT, "boat_gilded_sky"),
+            new BoatModelEntry(GILDED_SKY_CHEST_BOAT, "boat_gilded_sky_chest")
     );
     // Colors match the Bedrock addon's spawn_egg base_color/overlay_color exactly (see the entity
     // .entity.json files under ExtraBiomes - Bedrock/packs/RP/entity/) so the egg tint is consistent

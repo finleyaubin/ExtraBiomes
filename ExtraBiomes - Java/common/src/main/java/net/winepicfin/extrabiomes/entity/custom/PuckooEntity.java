@@ -166,7 +166,10 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
                 .add(Attributes.MOVEMENT_SPEED, 0.35)
                 // Must be declared here since this builds off createLivingAttributes() rather than createBaseHorseAttributes(), or a ridden puckoo can't jump at all.
                 .add(Attributes.JUMP_STRENGTH, BEDROCK_JUMP_STRENGTH_MIN)
-                .add(Attributes.FOLLOW_RANGE, 24);
+                .add(Attributes.FOLLOW_RANGE, 24)
+                // TemptGoal (below) reads this off the attribute map - without it, any tick crashes with
+                // "Can't find attribute minecraft:tempt_range" since createLivingAttributes() doesn't include it.
+                .add(Attributes.TEMPT_RANGE, 10.0);
     }
 
     // Bedrock's flat range, not AbstractHorse#generateJumpStrength's wider 0.4-1.0 curve.

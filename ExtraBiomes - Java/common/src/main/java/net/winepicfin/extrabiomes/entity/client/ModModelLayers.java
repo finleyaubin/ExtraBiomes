@@ -17,20 +17,21 @@ public class ModModelLayers {
     // BoatRenderer (1.21.2+) derives its texture straight from this location's "model" ResourceLocation
     // path, as "textures/entity/<path>.png" - so the path segment here IS the texture path, and must
     // match an actual file under textures/entity/. The "layer" string only needs to be unique per
-    // registered mesh (plain boat vs chest boat), it plays no part in texture resolution. Reusing the
-    // same "boat/boat_<texture>" path for both the boat and chest boat mesh means both render with the
-    // one texture we have per wood type (no separate chest-boat art yet).
-    // GILDED_SKY has no boat art of its own yet - it deliberately points at the sky boat texture as a
-    // placeholder ("gilded_main"/"gilded_chest" keep the layer keys distinct from SKY's own so the two
-    // registrations don't collide). Swap to boatLayer("gilded_sky", ...) once boat_gilded_sky.png exists.
+    // registered mesh (plain boat vs chest boat), it plays no part in texture resolution.
+    //
+    // Every wood type gets its own editable file under textures/entity/boat/ (plain) and
+    // textures/entity/chest_boat/ (chest) - mystic/palm/sky's plain-boat file is the real art ported
+    // from the Bedrock module; every chest-boat file, and gilded_sky's plain-boat file, are placeholder
+    // copies of vanilla's own boat/chest_boat oak.png (there's no dedicated or Bedrock-ported chest boat
+    // art at all, and no Bedrock gilded_sky art) ready to be repainted.
     public static final ModelLayerLocation MYSTIC_BOAT = boatLayer("mystic", "main");
-    public static final ModelLayerLocation MYSTIC_CHEST_BOAT = boatLayer("mystic", "chest");
+    public static final ModelLayerLocation MYSTIC_CHEST_BOAT = chestBoatLayer("mystic", "chest");
     public static final ModelLayerLocation PALM_BOAT = boatLayer("palm", "main");
-    public static final ModelLayerLocation PALM_CHEST_BOAT = boatLayer("palm", "chest");
+    public static final ModelLayerLocation PALM_CHEST_BOAT = chestBoatLayer("palm", "chest");
     public static final ModelLayerLocation SKY_BOAT = boatLayer("sky", "main");
-    public static final ModelLayerLocation SKY_CHEST_BOAT = boatLayer("sky", "chest");
-    public static final ModelLayerLocation GILDED_SKY_BOAT = boatLayer("sky", "gilded_main");
-    public static final ModelLayerLocation GILDED_SKY_CHEST_BOAT = boatLayer("sky", "gilded_chest");
+    public static final ModelLayerLocation SKY_CHEST_BOAT = chestBoatLayer("sky", "chest");
+    public static final ModelLayerLocation GILDED_SKY_BOAT = boatLayer("gilded_sky", "main");
+    public static final ModelLayerLocation GILDED_SKY_CHEST_BOAT = chestBoatLayer("gilded_sky", "chest");
 
     private static ModelLayerLocation layer(String name) {
         return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name), "main");
@@ -38,5 +39,9 @@ public class ModModelLayers {
 
     private static ModelLayerLocation boatLayer(String texture, String layer) {
         return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boat/boat_" + texture), layer);
+    }
+
+    private static ModelLayerLocation chestBoatLayer(String texture, String layer) {
+        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "chest_boat/boat_" + texture), layer);
     }
 }
