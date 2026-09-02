@@ -8,9 +8,11 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.entity.EntityType;
@@ -89,6 +91,14 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.BAIT, BaitModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.MYSTIC_BOAT, BoatModel::createBoatModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.MYSTIC_CHEST_BOAT, BoatModel::createChestBoatModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PALM_BOAT, BoatModel::createBoatModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PALM_CHEST_BOAT, BoatModel::createChestBoatModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_BOAT, BoatModel::createBoatModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBoatModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
 
         EntityRendererRegistry.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
         EntityRendererRegistry.register(ModEntities.WORM.get(), WormRenderer::new);
@@ -104,6 +114,14 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.DIAMOND_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
         EntityRendererRegistry.register(ModEntities.NETHERITE_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
         EntityRendererRegistry.register(ModEntities.BAIT_PROJECTILE.get(), BaitRenderer::new);
+        EntityRendererRegistry.register(ModEntities.MYSTIC_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.MYSTIC_BOAT));
+        EntityRendererRegistry.register(ModEntities.MYSTIC_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.MYSTIC_CHEST_BOAT));
+        EntityRendererRegistry.register(ModEntities.PALM_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.PALM_BOAT));
+        EntityRendererRegistry.register(ModEntities.PALM_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.PALM_CHEST_BOAT));
+        EntityRendererRegistry.register(ModEntities.SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_BOAT));
+        EntityRendererRegistry.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT));
+        EntityRendererRegistry.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
+        EntityRendererRegistry.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
 
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
             if (entityType == EntityType.WOLF && entityRenderer instanceof WolfRenderer wolfRenderer) {

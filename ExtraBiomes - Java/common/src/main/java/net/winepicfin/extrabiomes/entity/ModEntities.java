@@ -22,6 +22,12 @@ import net.winepicfin.extrabiomes.entity.custom.projectile.MossyPebbleProjectile
 import net.winepicfin.extrabiomes.entity.custom.projectile.NetheriteRazorFeatherProjectileEntity;
 import net.winepicfin.extrabiomes.entity.custom.projectile.PebbleProjectileEntity;
 import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectileEntity;
+import net.winepicfin.extrabiomes.item.ModItems;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.ChestBoat;
+import net.minecraft.world.item.Item;
+
+import java.util.function.Supplier;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.ENTITY_TYPE);
@@ -57,6 +63,33 @@ public class ModEntities {
     // Sized to match Bedrock's minecraft:collision_box (0.4 wide, 0.5 tall) rather than the 0.25 default other thrown projectiles use, since the worm model spreads well beyond a snowball-sized box.
     public static final RegistrySupplier<EntityType<BaitProjectileEntity>> BAIT_PROJECTILE = ENTITIES.register("bait_projectile",
             () -> EntityType.Builder.<BaitProjectileEntity>of(BaitProjectileEntity::new, MobCategory.MISC).sized(0.4f, 0.5f).clientTrackingRange(4).updateInterval(10).build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "bait_projectile"))));
+
+    // Vanilla (1.21.2+) keys boats to a dedicated EntityType per wood rather than a shared Boat.Type
+    // enum - Boat/ChestBoat themselves are plain vanilla classes, no subclass needed. sized/eyeHeight/
+    // clientTrackingRange/noLootTable mirror vanilla's own oak_boat/oak_chest_boat registration exactly
+    // (boats drop themselves via getDropItem(), never a loot table).
+    public static final RegistrySupplier<EntityType<Boat>> MYSTIC_BOAT = registerBoat("mystic_boat", () -> ModItems.MYSTIC_BOAT.get());
+    public static final RegistrySupplier<EntityType<ChestBoat>> MYSTIC_CHEST_BOAT = registerChestBoat("mystic_chest_boat", () -> ModItems.MYSTIC_CHEST_BOAT.get());
+    public static final RegistrySupplier<EntityType<Boat>> PALM_BOAT = registerBoat("palm_boat", () -> ModItems.PALM_BOAT.get());
+    public static final RegistrySupplier<EntityType<ChestBoat>> PALM_CHEST_BOAT = registerChestBoat("palm_chest_boat", () -> ModItems.PALM_CHEST_BOAT.get());
+    public static final RegistrySupplier<EntityType<Boat>> SKY_BOAT = registerBoat("sky_boat", () -> ModItems.SKY_BOAT.get());
+    public static final RegistrySupplier<EntityType<ChestBoat>> SKY_CHEST_BOAT = registerChestBoat("sky_chest_boat", () -> ModItems.SKY_CHEST_BOAT.get());
+    public static final RegistrySupplier<EntityType<Boat>> GILDED_SKY_BOAT = registerBoat("gilded_sky_boat", () -> ModItems.GILDED_SKY_BOAT.get());
+    public static final RegistrySupplier<EntityType<ChestBoat>> GILDED_SKY_CHEST_BOAT = registerChestBoat("gilded_sky_chest_boat", () -> ModItems.GILDED_SKY_CHEST_BOAT.get());
+
+    private static RegistrySupplier<EntityType<Boat>> registerBoat(String name, Supplier<Item> dropItem) {
+        return ENTITIES.register(name, () -> EntityType.Builder.<Boat>of(
+                        (type, level) -> new Boat(type, level, dropItem), MobCategory.MISC)
+                .noLootTable().sized(1.375F, 0.5625F).eyeHeight(0.5625F).clientTrackingRange(10)
+                .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name))));
+    }
+
+    private static RegistrySupplier<EntityType<ChestBoat>> registerChestBoat(String name, Supplier<Item> dropItem) {
+        return ENTITIES.register(name, () -> EntityType.Builder.<ChestBoat>of(
+                        (type, level) -> new ChestBoat(type, level, dropItem), MobCategory.MISC)
+                .noLootTable().sized(1.375F, 0.5625F).eyeHeight(0.5625F).clientTrackingRange(10)
+                .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name))));
+    }
 
     public static void register() {
         ENTITIES.register();

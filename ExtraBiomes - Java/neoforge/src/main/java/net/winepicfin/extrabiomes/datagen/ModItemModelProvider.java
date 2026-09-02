@@ -57,6 +57,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.JELLYFISHING_NET_EMPTY);
         simpleItem(ModItems.JELLYFISHING_NET_FULL);
         simpleItem(ModItems.BUCKET_OF_GOO);
+        // Boat items - see ModItems.BOAT_MODEL_ENTRIES (common) for which wood type uses which texture.
+        ModItems.BOAT_MODEL_ENTRIES.forEach(entry -> boatItem(entry.item(), entry.texture()));
         trimmedArmorItem(ModItems.FROG_HELMET);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_SLAB);
@@ -199,6 +201,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         return withExistingParent(item.getId().getPath(),
             ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
                 ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+    }
+
+    // Unlike simpleItem(), the texture stem is passed explicitly rather than derived from the item's
+    // own registry path - boat items are named "<wood>_boat" (matching this mod's other wood items),
+    // but the pre-staged art (ported from the Bedrock module) is named "boat_<wood>", so the two don't
+    // match by convention.
+    private ItemModelBuilder boatItem(RegistrySupplier<Item> item, String texture) {
+        return withExistingParent(item.getId().getPath(),
+                ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + texture));
     }
     public void evenSimplerBlockItem(RegistrySupplier<Block> block) {
         this.withExistingParent(ExtraBiomes.MOD_ID + ":" + BuiltInRegistries.BLOCK.getKey(block.get()).getPath(),
