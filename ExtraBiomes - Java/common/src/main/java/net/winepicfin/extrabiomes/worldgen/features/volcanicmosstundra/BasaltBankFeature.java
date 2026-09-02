@@ -59,7 +59,12 @@ public class BasaltBankFeature extends Feature<NoneFeatureConfiguration> {
             int worldX = origin.getX() + offset[0];
             int worldZ = origin.getZ() + offset[1];
             int height = offset[2];
-            int baseY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, worldX, worldZ) - 2;
+            int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, worldX, worldZ);
+            BlockState surfaceState = level.getBlockState(new BlockPos(worldX, surfaceY - 1, worldZ));
+            if (surfaceState.is(Blocks.LAVA) || surfaceState.is(Blocks.MAGMA_BLOCK)) {
+                continue;
+            }
+            int baseY = surfaceY - 2;
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(worldX, baseY, worldZ);
             for (int i = 0; i < height; i++) {
                 level.setBlock(pos, Blocks.BASALT.defaultBlockState(), 2);
