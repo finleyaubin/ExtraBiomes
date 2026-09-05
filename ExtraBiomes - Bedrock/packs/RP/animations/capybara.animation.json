@@ -1,0 +1,28 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.capybara.walking": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [0, 0, 0]
+				},
+				"legs": {
+					"rotation": [0, 0, "q.modified_move_speed"]
+				},
+				"front right": {
+					"rotation": [0, 0, "q.modified_move_speed"]
+				},
+				"front left": {
+					"rotation": [0, 0, "q.modified_move_speed"]
+				},
+				"back right": {
+					"rotation": [0, 0, "q.modified_move_speed"]
+				},
+				"back left": {
+					"rotation": [0, 0, "q.modified_move_speed"]
+				}
+			}
+		}
+	}
+}
