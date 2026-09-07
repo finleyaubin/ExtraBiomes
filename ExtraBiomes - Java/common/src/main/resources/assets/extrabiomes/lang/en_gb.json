@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Spawn Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Stripped Mystic Log",
-  "block.extrabiomes.glow_mushroom": "Glow Mushroom"
+  "block.extrabiomes.glow_mushroom": "Glow Mushroom",
+  "entity.extrabiomes.mystic_chest_boat": "Mystic Chest Boat",
+  "item.extrabiomes.mystic_chest_boat": "Mystic Chest Boat",
+  "entity.extrabiomes.palm_chest_boat": "Palm Chest Boat",
+  "item.extrabiomes.palm_chest_boat": "Palm Chest Boat",
+  "entity.extrabiomes.sky_chest_boat": "Sky Chest Boat",
+  "item.extrabiomes.sky_chest_boat": "Sky Chest Boat",
+  "entity.extrabiomes.gilded_sky_boat": "§eGilded Sky Boat§r",
+  "item.extrabiomes.gilded_sky_boat": "§eGilded Sky Boat§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eGilded Sky Chest Boat§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eGilded Sky Chest Boat§r"
 }

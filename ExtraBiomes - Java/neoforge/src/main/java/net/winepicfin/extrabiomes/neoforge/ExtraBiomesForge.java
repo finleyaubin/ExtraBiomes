@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,6 +24,8 @@ import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.entity.client.BaitRenderer;
+import net.winepicfin.extrabiomes.entity.client.ModBoatRenderer;
+import net.winepicfin.extrabiomes.entity.client.ModModelLayers;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseRenderer;
 import net.winepicfin.extrabiomes.entity.client.HarpyRenderer;
 import net.winepicfin.extrabiomes.entity.client.HoppleshroomRenderer;
@@ -237,6 +240,14 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.DIAMOND_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
             EntityRenderers.register(ModEntities.NETHERITE_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
             EntityRenderers.register(ModEntities.BAIT_PROJECTILE.get(), BaitRenderer::new);
+            EntityRenderers.register(ModEntities.MYSTIC_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.MYSTIC_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_mystic.png"), false));
+            EntityRenderers.register(ModEntities.MYSTIC_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.MYSTIC_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_mystic.png"), true));
+            EntityRenderers.register(ModEntities.PALM_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.PALM_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_palm.png"), false));
+            EntityRenderers.register(ModEntities.PALM_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.PALM_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_palm.png"), true));
+            EntityRenderers.register(ModEntities.SKY_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.SKY_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_sky.png"), false));
+            EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_sky.png"), true));
+            EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_gilded_sky.png"), false));
+            EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_gilded_sky.png"), true));
         }
     }
 }
