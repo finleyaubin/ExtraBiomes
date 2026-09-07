@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Spawn Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Afbarket Mystisk Træstamme",
-  "block.extrabiomes.glow_mushroom": "Glødende Svamp"
+  "block.extrabiomes.glow_mushroom": "Glødende Svamp",
+  "entity.extrabiomes.mystic_chest_boat": "Mystisk Båd med kiste",
+  "item.extrabiomes.mystic_chest_boat": "Mystisk Båd med kiste",
+  "entity.extrabiomes.palm_chest_boat": "Palme- Båd med kiste",
+  "item.extrabiomes.palm_chest_boat": "Palme- Båd med kiste",
+  "entity.extrabiomes.sky_chest_boat": "Himmel- Båd med kiste",
+  "item.extrabiomes.sky_chest_boat": "Himmel- Båd med kiste",
+  "entity.extrabiomes.gilded_sky_boat": "§eForgyldt Himmel- Båd§r",
+  "item.extrabiomes.gilded_sky_boat": "§eForgyldt Himmel- Båd§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eForgyldt Himmel- Båd med kiste§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eForgyldt Himmel- Båd med kiste§r"
 }
