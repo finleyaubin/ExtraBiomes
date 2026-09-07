@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Genera Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Tronco Scortecciato di Mistico",
-  "block.extrabiomes.glow_mushroom": "Fungo Luminoso"
+  "block.extrabiomes.glow_mushroom": "Fungo Luminoso",
+  "entity.extrabiomes.mystic_chest_boat": "Barca con baule Mistico",
+  "item.extrabiomes.mystic_chest_boat": "Barca con baule Mistico",
+  "entity.extrabiomes.palm_chest_boat": "Barca con baule di Palma",
+  "item.extrabiomes.palm_chest_boat": "Barca con baule di Palma",
+  "entity.extrabiomes.sky_chest_boat": "Barca con baule del Cielo",
+  "item.extrabiomes.sky_chest_boat": "Barca con baule del Cielo",
+  "entity.extrabiomes.gilded_sky_boat": "§eBarca Dorato del Cielo§r",
+  "item.extrabiomes.gilded_sky_boat": "§eBarca Dorato del Cielo§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eBarca con baule Dorato del Cielo§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eBarca con baule Dorato del Cielo§r"
 }

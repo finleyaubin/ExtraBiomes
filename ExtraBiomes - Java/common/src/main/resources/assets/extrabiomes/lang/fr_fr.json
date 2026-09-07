@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Faire Apparaître : Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Bois de Écorcé Mystique",
-  "block.extrabiomes.glow_mushroom": "Champignon Lumineux"
+  "block.extrabiomes.glow_mushroom": "Champignon Lumineux",
+  "entity.extrabiomes.mystic_chest_boat": "Barque de stockage Mystique",
+  "item.extrabiomes.mystic_chest_boat": "Barque de stockage Mystique",
+  "entity.extrabiomes.palm_chest_boat": "Barque de stockage de Palmier",
+  "item.extrabiomes.palm_chest_boat": "Barque de stockage de Palmier",
+  "entity.extrabiomes.sky_chest_boat": "Barque de stockage du Ciel",
+  "item.extrabiomes.sky_chest_boat": "Barque de stockage du Ciel",
+  "entity.extrabiomes.gilded_sky_boat": "§eBarque Doré du Ciel§r",
+  "item.extrabiomes.gilded_sky_boat": "§eBarque Doré du Ciel§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eBarque de stockage Doré du Ciel§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eBarque de stockage Doré du Ciel§r"
 }
