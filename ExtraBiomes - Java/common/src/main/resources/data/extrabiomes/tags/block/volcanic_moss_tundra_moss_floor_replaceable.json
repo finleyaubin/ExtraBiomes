@@ -5,8 +5,7 @@
     "minecraft:stone",
     "minecraft:gravel",
     "minecraft:grass_block",
-    "minecraft:moss_block",
-    "minecraft:magma_block",
+    "minecraft:podzol",
     "extrabiomes:black_sand",
     "extrabiomes:black_sandstone"
   ]
