@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Olustur: Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Soyulmus Mistik Kutuk",
-  "block.extrabiomes.glow_mushroom": "Parlayan Mantar"
+  "block.extrabiomes.glow_mushroom": "Parlayan Mantar",
+  "entity.extrabiomes.mystic_chest_boat": "Sandikli Mistik Kayik",
+  "item.extrabiomes.mystic_chest_boat": "Sandikli Mistik Kayik",
+  "entity.extrabiomes.palm_chest_boat": "Sandikli Palmiye Kayik",
+  "item.extrabiomes.palm_chest_boat": "Sandikli Palmiye Kayik",
+  "entity.extrabiomes.sky_chest_boat": "Sandikli Gok Kayik",
+  "item.extrabiomes.sky_chest_boat": "Sandikli Gok Kayik",
+  "entity.extrabiomes.gilded_sky_boat": "§eYaldizli Gok Kayik§r",
+  "item.extrabiomes.gilded_sky_boat": "§eYaldizli Gok Kayik§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eSandikli Yaldizli Gok Kayik§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eSandikli Yaldizli Gok Kayik§r"
 }

@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "召喚普庫",
   "entity.extrabiomes.puckoo": "普庫",
   "block.extrabiomes.mystic_stripped_log": "去皮祕術原木",
-  "block.extrabiomes.glow_mushroom": "發光蘑菇"
+  "block.extrabiomes.glow_mushroom": "發光蘑菇",
+  "entity.extrabiomes.mystic_chest_boat": "儲物箱祕術船",
+  "item.extrabiomes.mystic_chest_boat": "儲物箱祕術船",
+  "entity.extrabiomes.palm_chest_boat": "儲物箱棕櫚船",
+  "item.extrabiomes.palm_chest_boat": "儲物箱棕櫚船",
+  "entity.extrabiomes.sky_chest_boat": "儲物箱天空船",
+  "item.extrabiomes.sky_chest_boat": "儲物箱天空船",
+  "entity.extrabiomes.gilded_sky_boat": "§e鍍金天空船§r",
+  "item.extrabiomes.gilded_sky_boat": "§e鍍金天空船§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§e儲物箱鍍金天空船§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§e儲物箱鍍金天空船§r"
 }

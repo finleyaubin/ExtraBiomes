@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Spawne Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Entrindeter Mystischer Stamm",
-  "block.extrabiomes.glow_mushroom": "Leuchtende Pilz"
+  "block.extrabiomes.glow_mushroom": "Leuchtende Pilz",
+  "entity.extrabiomes.mystic_chest_boat": "Mystischer Truhenboot",
+  "item.extrabiomes.mystic_chest_boat": "Mystischer Truhenboot",
+  "entity.extrabiomes.palm_chest_boat": "Palmen- Truhenboot",
+  "item.extrabiomes.palm_chest_boat": "Palmen- Truhenboot",
+  "entity.extrabiomes.sky_chest_boat": "Himmels- Truhenboot",
+  "item.extrabiomes.sky_chest_boat": "Himmels- Truhenboot",
+  "entity.extrabiomes.gilded_sky_boat": "§eVergoldeter Himmels- Boot§r",
+  "item.extrabiomes.gilded_sky_boat": "§eVergoldeter Himmels- Boot§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eVergoldeter Himmels- Truhenboot§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eVergoldeter Himmels- Truhenboot§r"
 }

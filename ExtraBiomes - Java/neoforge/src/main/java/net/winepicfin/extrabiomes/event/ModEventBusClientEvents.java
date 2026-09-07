@@ -1,5 +1,7 @@
 package net.winepicfin.extrabiomes.event;
 
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -43,6 +45,14 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.BAIT, BaitModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.MYSTIC_BOAT, BoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.MYSTIC_CHEST_BOAT, ChestBoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.PALM_BOAT, BoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.PALM_CHEST_BOAT, ChestBoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.SKY_BOAT, BoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.GILDED_SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
     }
 
     @SubscribeEvent
