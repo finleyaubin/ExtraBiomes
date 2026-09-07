@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Idezes: Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Hantolt Miszikus Rond",
-  "block.extrabiomes.glow_mushroom": "Vilagito Gomba"
+  "block.extrabiomes.glow_mushroom": "Vilagito Gomba",
+  "entity.extrabiomes.mystic_chest_boat": "Miszikus Csonak ládával",
+  "item.extrabiomes.mystic_chest_boat": "Miszikus Csonak ládával",
+  "entity.extrabiomes.palm_chest_boat": "Palma Csonak ládával",
+  "item.extrabiomes.palm_chest_boat": "Palma Csonak ládával",
+  "entity.extrabiomes.sky_chest_boat": "Egi Csonak ládával",
+  "item.extrabiomes.sky_chest_boat": "Egi Csonak ládával",
+  "entity.extrabiomes.gilded_sky_boat": "§eAranyozott Egi Csonak§r",
+  "item.extrabiomes.gilded_sky_boat": "§eAranyozott Egi Csonak§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eAranyozott Egi Csonak ládával§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eAranyozott Egi Csonak ládával§r"
 }

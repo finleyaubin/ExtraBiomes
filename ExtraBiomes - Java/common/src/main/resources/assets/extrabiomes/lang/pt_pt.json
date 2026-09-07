@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Gerar Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Tora Descascada de Místico",
-  "block.extrabiomes.glow_mushroom": "Cogumelo Luminoso"
+  "block.extrabiomes.glow_mushroom": "Cogumelo Luminoso",
+  "entity.extrabiomes.mystic_chest_boat": "Barco com Baú Místico",
+  "item.extrabiomes.mystic_chest_boat": "Barco com Baú Místico",
+  "entity.extrabiomes.palm_chest_boat": "Barco com Baú de Palmeira",
+  "item.extrabiomes.palm_chest_boat": "Barco com Baú de Palmeira",
+  "entity.extrabiomes.sky_chest_boat": "Barco com Baú do Céu",
+  "item.extrabiomes.sky_chest_boat": "Barco com Baú do Céu",
+  "entity.extrabiomes.gilded_sky_boat": "§eBarco Dourado do Céu§r",
+  "item.extrabiomes.gilded_sky_boat": "§eBarco Dourado do Céu§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eBarco com Baú Dourado do Céu§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eBarco com Baú Dourado do Céu§r"
 }

@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Framkalla Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Barkad Mystisk Stock",
-  "block.extrabiomes.glow_mushroom": "Glödande Svamp"
+  "block.extrabiomes.glow_mushroom": "Glödande Svamp",
+  "entity.extrabiomes.mystic_chest_boat": "Mystisk Båt med kista",
+  "item.extrabiomes.mystic_chest_boat": "Mystisk Båt med kista",
+  "entity.extrabiomes.palm_chest_boat": "Palm- Båt med kista",
+  "item.extrabiomes.palm_chest_boat": "Palm- Båt med kista",
+  "entity.extrabiomes.sky_chest_boat": "Himmel- Båt med kista",
+  "item.extrabiomes.sky_chest_boat": "Himmel- Båt med kista",
+  "entity.extrabiomes.gilded_sky_boat": "§eFörgylld Himmel- Båt§r",
+  "item.extrabiomes.gilded_sky_boat": "§eFörgylld Himmel- Båt§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eFörgylld Himmel- Båt med kista§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eFörgylld Himmel- Båt med kista§r"
 }

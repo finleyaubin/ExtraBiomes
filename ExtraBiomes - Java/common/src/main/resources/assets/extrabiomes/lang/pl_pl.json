@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Przywolaj Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Okorowana Mistyczna Kloda",
-  "block.extrabiomes.glow_mushroom": "Swiecacy Grzyb"
+  "block.extrabiomes.glow_mushroom": "Swiecacy Grzyb",
+  "entity.extrabiomes.mystic_chest_boat": "Mistyczna Lodz ze skrzynia",
+  "item.extrabiomes.mystic_chest_boat": "Mistyczna Lodz ze skrzynia",
+  "entity.extrabiomes.palm_chest_boat": "Palmowa Lodz ze skrzynia",
+  "item.extrabiomes.palm_chest_boat": "Palmowa Lodz ze skrzynia",
+  "entity.extrabiomes.sky_chest_boat": "Niebianska Lodz ze skrzynia",
+  "item.extrabiomes.sky_chest_boat": "Niebianska Lodz ze skrzynia",
+  "entity.extrabiomes.gilded_sky_boat": "§eZlocona Niebianska Lodz§r",
+  "item.extrabiomes.gilded_sky_boat": "§eZlocona Niebianska Lodz§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eZlocona Niebianska Lodz ze skrzynia§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eZlocona Niebianska Lodz ze skrzynia§r"
 }
