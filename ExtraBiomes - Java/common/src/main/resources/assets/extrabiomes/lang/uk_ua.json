@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Створити Пукку",
   "entity.extrabiomes.puckoo": "Пукку",
   "block.extrabiomes.mystic_stripped_log": "Очищене Містичний Колода",
-  "block.extrabiomes.glow_mushroom": "Світний Гриб"
+  "block.extrabiomes.glow_mushroom": "Світний Гриб",
+  "entity.extrabiomes.mystic_chest_boat": "Містичний Човен зі скринею",
+  "item.extrabiomes.mystic_chest_boat": "Містичний Човен зі скринею",
+  "entity.extrabiomes.palm_chest_boat": "Пальмовий Човен зі скринею",
+  "item.extrabiomes.palm_chest_boat": "Пальмовий Човен зі скринею",
+  "entity.extrabiomes.sky_chest_boat": "Небесний Човен зі скринею",
+  "item.extrabiomes.sky_chest_boat": "Небесний Човен зі скринею",
+  "entity.extrabiomes.gilded_sky_boat": "§eПозолочений Небесний Човен§r",
+  "item.extrabiomes.gilded_sky_boat": "§eПозолочений Небесний Човен§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eПозолочений Небесний Човен зі скринею§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eПозолочений Небесний Човен зі скринею§r"
 }

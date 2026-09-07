@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Spawn Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Geschilde Mystiek Stam",
-  "block.extrabiomes.glow_mushroom": "Lichtgevende Paddenstoel"
+  "block.extrabiomes.glow_mushroom": "Lichtgevende Paddenstoel",
+  "entity.extrabiomes.mystic_chest_boat": "Mystiek Boot met kist",
+  "item.extrabiomes.mystic_chest_boat": "Mystiek Boot met kist",
+  "entity.extrabiomes.palm_chest_boat": "Palm- Boot met kist",
+  "item.extrabiomes.palm_chest_boat": "Palm- Boot met kist",
+  "entity.extrabiomes.sky_chest_boat": "Hemel- Boot met kist",
+  "item.extrabiomes.sky_chest_boat": "Hemel- Boot met kist",
+  "entity.extrabiomes.gilded_sky_boat": "§eVergulde Hemel- Boot§r",
+  "item.extrabiomes.gilded_sky_boat": "§eVergulde Hemel- Boot§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eVergulde Hemel- Boot met kist§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eVergulde Hemel- Boot met kist§r"
 }

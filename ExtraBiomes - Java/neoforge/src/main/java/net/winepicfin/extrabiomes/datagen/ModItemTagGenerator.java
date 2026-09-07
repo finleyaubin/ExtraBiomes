@@ -4,10 +4,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +25,9 @@ public class ModItemTagGenerator extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         //this.tag(ItemTags.TRIMMABLE_ARMOR).add(ModItems.FROG_HELMET.get()); does now work with the gecolib model
+
+        this.tag(ItemTags.BOATS).add(ModItems.BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
+        this.tag(ItemTags.CHEST_BOATS).add(ModItems.CHEST_BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
 
         this.tag(ItemTags.FENCES).add(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
