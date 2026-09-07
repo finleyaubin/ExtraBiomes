@@ -84,6 +84,9 @@ public class ModItemModelProvider implements DataProvider {
         withExistingParent(ModBlocks.BLACK_SANDSTONE_WALL.getId().getPath(), "minecraft:block/wall_inventory")
                 .add("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone").toString());
 
+        // Boat items - see ModItems.BOAT_MODEL_ENTRIES (common) for which wood type uses which texture.
+        ModItems.BOAT_MODEL_ENTRIES.forEach(entry -> boatItem(entry.item().get(), entry.texture()));
+
         // Spawn Eggs
         spawnEgg(ModItems.PUCKOO_SPAWN_EGG.get());
         spawnEgg(ModItems.WORM_SPAWN_EGG.get());
@@ -104,6 +107,23 @@ public class ModItemModelProvider implements DataProvider {
             json.addProperty("parent", "minecraft:item/generated");
             JsonObject textures = new JsonObject();
             textures.addProperty("layer0", texture.toString());
+            json.add("textures", textures);
+            return json;
+        });
+    }
+
+    // Unlike simpleItem(), the texture stem is passed explicitly rather than derived from the item's
+    // own registry path - boat items are named "<wood>_boat" (matching this mod's other wood items),
+    // but the pre-staged art (ported from the Bedrock module) is named "boat_<wood>", so the two don't
+    // match by convention.
+    private void boatItem(Item item, String texture) {
+        ResourceLocation id = ModelLocationUtils.getModelLocation(item);
+        ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + texture);
+        models.put(id, () -> {
+            JsonObject json = new JsonObject();
+            json.addProperty("parent", "minecraft:item/generated");
+            JsonObject textures = new JsonObject();
+            textures.addProperty("layer0", textureLocation.toString());
             json.add("textures", textures);
             return json;
         });

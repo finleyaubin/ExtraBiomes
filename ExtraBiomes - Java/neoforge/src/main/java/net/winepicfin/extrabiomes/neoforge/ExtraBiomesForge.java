@@ -4,8 +4,10 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.winepicfin.extrabiomes.entity.client.ModModelLayers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -237,6 +239,14 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.DIAMOND_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
             EntityRenderers.register(ModEntities.NETHERITE_RAZOR_FEATHER.get(), RazorFeatherRenderer::new);
             EntityRenderers.register(ModEntities.BAIT_PROJECTILE.get(), BaitRenderer::new);
+            EntityRenderers.register(ModEntities.MYSTIC_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.MYSTIC_BOAT));
+            EntityRenderers.register(ModEntities.MYSTIC_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.MYSTIC_CHEST_BOAT));
+            EntityRenderers.register(ModEntities.PALM_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.PALM_BOAT));
+            EntityRenderers.register(ModEntities.PALM_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.PALM_CHEST_BOAT));
+            EntityRenderers.register(ModEntities.SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_BOAT));
+            EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT));
+            EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
+            EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
         }
     }
 }

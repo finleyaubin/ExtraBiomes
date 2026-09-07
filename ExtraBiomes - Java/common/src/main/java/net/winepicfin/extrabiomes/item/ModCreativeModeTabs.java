@@ -113,6 +113,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_SIGN.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get());
+                ModItems.BOAT_ITEMS.forEach(boat -> pOutput.accept(boat.get()));
+                ModItems.CHEST_BOAT_ITEMS.forEach(chestBoat -> pOutput.accept(chestBoat.get()));
                 pOutput.accept(ModBlocks.BLACK_MUSHROOM.get());
                 pOutput.accept(ModBlocks.BLUE_MUSHROOM.get());
                 pOutput.accept(ModBlocks.CYAN_MUSHROOM.get());

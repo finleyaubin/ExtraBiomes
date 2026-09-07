@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -70,6 +71,10 @@ public abstract class CommonRecipes extends RecipeProvider {
         woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_WOOD.get(), ModBlocks.MYSTIC_STAIRS.get(), ModBlocks.MYSTIC_SLAB.get(), ModBlocks.MYSTIC_BUTTON.get(), ModBlocks.MYSTIC_PRESSURE_PLATE.get(), ModBlocks.MYSTIC_FENCE_GATE.get(), ModBlocks.MYSTIC_FENCE.get(), ModBlocks.MYSTIC_DOOR.get(), ModBlocks.MYSTIC_TRAPDOOR.get(),ModBlocks.MYSTIC_SIGN.get());
         woodRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModBlocks.PALM_LOG.get(), ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPPED_PALM_LOG.get(), ModBlocks.STRIPPED_PALM_WOOD.get(), ModBlocks.PALM_STAIRS.get(), ModBlocks.PALM_SLAB.get(), ModBlocks.PALM_BUTTON.get(), ModBlocks.PALM_PRESSURE_PLATE.get(), ModBlocks.PALM_FENCE_GATE.get(), ModBlocks.PALM_FENCE.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.PALM_SIGN.get());
         woodRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModBlocks.SKY_LOG.get(), ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_LOG.get(), ModBlocks.STRIPPED_SKY_WOOD.get(), ModBlocks.SKY_STAIRS.get(), ModBlocks.SKY_SLAB.get(), ModBlocks.SKY_BUTTON.get(), ModBlocks.SKY_PRESSURE_PLATE.get(), ModBlocks.SKY_FENCE_GATE.get(), ModBlocks.SKY_FENCE.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.SKY_TRAPDOOR.get(),ModBlocks.SKY_SIGN.get());
+        boatRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModItems.MYSTIC_BOAT.get(), ModItems.MYSTIC_CHEST_BOAT.get());
+        boatRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModItems.PALM_BOAT.get(), ModItems.PALM_CHEST_BOAT.get());
+        boatRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModItems.SKY_BOAT.get(), ModItems.SKY_CHEST_BOAT.get());
+        boatRecipes(pWriter, ModBlocks.GILDED_SKY_PLANKS.get(), ModItems.GILDED_SKY_BOAT.get(), ModItems.GILDED_SKY_CHEST_BOAT.get());
         brick(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_BRICK.get());
         stair(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
@@ -264,6 +269,23 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .define('$', Items.STICK)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
+    }
+
+    // Matches vanilla's own oak_boat/oak_chest_boat recipes: 5 planks shaped into a boat, then a chest onto a boat shapeless.
+    private void boatRecipes(RecipeOutput recipeOutput, Block plank, Item boat, Item chestBoat) {
+        shaped(RecipeCategory.MISC, boat)
+                .pattern("& &")
+                .pattern("&&&")
+                .define('&', plank)
+                .group("boat")
+                .unlockedBy(getHasName(plank), has(plank))
+                .save(recipeOutput);
+        shapeless(RecipeCategory.MISC, chestBoat)
+                .requires(Items.CHEST)
+                .requires(boat)
+                .group("chest_boat")
+                .unlockedBy(getHasName(boat), has(boat))
+                .save(recipeOutput);
     }
 
     private void oneToOne(RecipeOutput recipeOutput, Block ingredient, Block output) {
