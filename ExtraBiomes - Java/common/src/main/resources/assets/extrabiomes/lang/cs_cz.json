@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Privolat Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Odkornena Mysticky Klada",
-  "block.extrabiomes.glow_mushroom": "Zarici Houba"
+  "block.extrabiomes.glow_mushroom": "Zarici Houba",
+  "entity.extrabiomes.mystic_chest_boat": "Mysticky Lodka s truhlou",
+  "item.extrabiomes.mystic_chest_boat": "Mysticky Lodka s truhlou",
+  "entity.extrabiomes.palm_chest_boat": "Palmovy Lodka s truhlou",
+  "item.extrabiomes.palm_chest_boat": "Palmovy Lodka s truhlou",
+  "entity.extrabiomes.sky_chest_boat": "Nebesky Lodka s truhlou",
+  "item.extrabiomes.sky_chest_boat": "Nebesky Lodka s truhlou",
+  "entity.extrabiomes.gilded_sky_boat": "§ePozlaceny Nebesky Lodka§r",
+  "item.extrabiomes.gilded_sky_boat": "§ePozlaceny Nebesky Lodka§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§ePozlaceny Nebesky Lodka s truhlou§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§ePozlaceny Nebesky Lodka s truhlou§r"
 }

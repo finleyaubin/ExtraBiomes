@@ -16,7 +16,10 @@ import net.winepicfin.extrabiomes.item.custom.NetheriteRazorFeatherItem;
 import net.winepicfin.extrabiomes.item.custom.PebbleItem;
 import net.winepicfin.extrabiomes.item.custom.RazorFeatherItem;
 import net.winepicfin.extrabiomes.item.custom.WormItem;
+import net.winepicfin.extrabiomes.item.custom.ModBoatItem;
 import net.winepicfin.extrabiomes.platform.ExtraBiomesExpectPlatform;
+
+import java.util.List;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
@@ -48,6 +51,35 @@ public class ModItems {
     public static final RegistrySupplier<Item> SKY_HANGING_SIGN = ITEMS.register("sky_hanging_sign",()-> new HangingSignItem(ModBlocks.SKY_HANGING_SIGN.get(),ModBlocks.SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> GILDED_SKY_SIGN = ITEMS.register("gilded_sky_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get()));
     public static final RegistrySupplier<Item> GILDED_SKY_HANGING_SIGN = ITEMS.register("gilded_sky_hanging_sign",()-> new HangingSignItem(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
+
+    public static final RegistrySupplier<Item> MYSTIC_BOAT = ITEMS.register("mystic_boat",()-> new ModBoatItem(ModEntities.MYSTIC_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> MYSTIC_CHEST_BOAT = ITEMS.register("mystic_chest_boat",()-> new ModBoatItem(ModEntities.MYSTIC_CHEST_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> PALM_BOAT = ITEMS.register("palm_boat",()-> new ModBoatItem(ModEntities.PALM_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> PALM_CHEST_BOAT = ITEMS.register("palm_chest_boat",()-> new ModBoatItem(ModEntities.PALM_CHEST_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> SKY_BOAT = ITEMS.register("sky_boat",()-> new ModBoatItem(ModEntities.SKY_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> SKY_CHEST_BOAT = ITEMS.register("sky_chest_boat",()-> new ModBoatItem(ModEntities.SKY_CHEST_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> GILDED_SKY_BOAT = ITEMS.register("gilded_sky_boat",()-> new ModBoatItem(ModEntities.GILDED_SKY_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> GILDED_SKY_CHEST_BOAT = ITEMS.register("gilded_sky_chest_boat",()-> new ModBoatItem(ModEntities.GILDED_SKY_CHEST_BOAT, new Item.Properties().stacksTo(1)));
+
+    // Item id (path) is "<wood>_boat" - matching this mod's other wood items - but the pre-staged
+    // art (ported from the Bedrock module) is named "boat_<wood>", so ModItemModelProvider's
+    // boatItem() datagen helper takes the texture stem explicitly rather than deriving it.
+    public static final List<RegistrySupplier<Item>> BOAT_ITEMS = List.of(MYSTIC_BOAT, PALM_BOAT, SKY_BOAT, GILDED_SKY_BOAT);
+    public static final List<RegistrySupplier<Item>> CHEST_BOAT_ITEMS = List.of(MYSTIC_CHEST_BOAT, PALM_CHEST_BOAT, SKY_CHEST_BOAT, GILDED_SKY_CHEST_BOAT);
+
+    public record BoatModelEntry(RegistrySupplier<Item> item, String texture) {
+    }
+
+    public static final List<BoatModelEntry> BOAT_MODEL_ENTRIES = List.of(
+            new BoatModelEntry(MYSTIC_BOAT, "boat_mystic"),
+            new BoatModelEntry(MYSTIC_CHEST_BOAT, "boat_mystic_chest"),
+            new BoatModelEntry(PALM_BOAT, "boat_palm"),
+            new BoatModelEntry(PALM_CHEST_BOAT, "boat_palm_chest"),
+            new BoatModelEntry(SKY_BOAT, "boat_sky"),
+            new BoatModelEntry(SKY_CHEST_BOAT, "boat_sky_chest"),
+            new BoatModelEntry(GILDED_SKY_BOAT, "boat_gilded_sky"),
+            new BoatModelEntry(GILDED_SKY_CHEST_BOAT, "boat_gilded_sky_chest")
+    );
     // Colors match the Bedrock addon's spawn_egg base_color/overlay_color exactly (see the entity
     // .entity.json files under ExtraBiomes - Bedrock/packs/RP/entity/) so the egg tint is consistent
     // across both editions.

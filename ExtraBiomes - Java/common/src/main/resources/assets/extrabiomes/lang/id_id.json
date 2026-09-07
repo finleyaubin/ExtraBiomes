@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Munculkan Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Kayu Gelondongan Kupas Mistis",
-  "block.extrabiomes.glow_mushroom": "Jamur Bercahaya"
+  "block.extrabiomes.glow_mushroom": "Jamur Bercahaya",
+  "entity.extrabiomes.mystic_chest_boat": "Perahu dengan Peti Mistis",
+  "item.extrabiomes.mystic_chest_boat": "Perahu dengan Peti Mistis",
+  "entity.extrabiomes.palm_chest_boat": "Perahu dengan Peti Palem",
+  "item.extrabiomes.palm_chest_boat": "Perahu dengan Peti Palem",
+  "entity.extrabiomes.sky_chest_boat": "Perahu dengan Peti Langit",
+  "item.extrabiomes.sky_chest_boat": "Perahu dengan Peti Langit",
+  "entity.extrabiomes.gilded_sky_boat": "§ePerahu Emas Langit§r",
+  "item.extrabiomes.gilded_sky_boat": "§ePerahu Emas Langit§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§ePerahu dengan Peti Emas Langit§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§ePerahu dengan Peti Emas Langit§r"
 }
