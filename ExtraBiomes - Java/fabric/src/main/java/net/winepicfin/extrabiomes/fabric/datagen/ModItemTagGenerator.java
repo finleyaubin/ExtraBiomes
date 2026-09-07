@@ -4,7 +4,9 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.ItemTags;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -22,6 +24,9 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         //this.tag(ItemTags.TRIMMABLE_ARMOR).add(ModItems.FROG_HELMET.get()); does now work with the gecolib model
+
+        this.tag(ItemTags.BOATS).add(keys(ModItems.BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
+        this.tag(ItemTags.CHEST_BOATS).add(keys(ModItems.CHEST_BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
 
         this.tag(ItemTags.FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
