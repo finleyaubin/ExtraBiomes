@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "プックーを召喚",
   "entity.extrabiomes.puckoo": "プックー",
   "block.extrabiomes.mystic_stripped_log": "皮を剥いだミスティックの原木",
-  "block.extrabiomes.glow_mushroom": "発光キノコ"
+  "block.extrabiomes.glow_mushroom": "発光キノコ",
+  "entity.extrabiomes.mystic_chest_boat": "チェスト付きのミスティックのボート",
+  "item.extrabiomes.mystic_chest_boat": "チェスト付きのミスティックのボート",
+  "entity.extrabiomes.palm_chest_boat": "チェスト付きのヤシのボート",
+  "item.extrabiomes.palm_chest_boat": "チェスト付きのヤシのボート",
+  "entity.extrabiomes.sky_chest_boat": "チェスト付きのスカイのボート",
+  "item.extrabiomes.sky_chest_boat": "チェスト付きのスカイのボート",
+  "entity.extrabiomes.gilded_sky_boat": "§e金箔のスカイのボート§r",
+  "item.extrabiomes.gilded_sky_boat": "§e金箔のスカイのボート§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eチェスト付きの金箔のスカイのボート§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eチェスト付きの金箔のスカイのボート§r"
 }

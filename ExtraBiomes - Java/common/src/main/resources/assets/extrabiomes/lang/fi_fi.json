@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Manaa Puckoo",
   "entity.extrabiomes.puckoo": "Puckoo",
   "block.extrabiomes.mystic_stripped_log": "Kuorittu Mystinen Tukki",
-  "block.extrabiomes.glow_mushroom": "Hohtava Sieni"
+  "block.extrabiomes.glow_mushroom": "Hohtava Sieni",
+  "entity.extrabiomes.mystic_chest_boat": "Mystinen Vene arkulla",
+  "item.extrabiomes.mystic_chest_boat": "Mystinen Vene arkulla",
+  "entity.extrabiomes.palm_chest_boat": "Palmu- Vene arkulla",
+  "item.extrabiomes.palm_chest_boat": "Palmu- Vene arkulla",
+  "entity.extrabiomes.sky_chest_boat": "Taivas- Vene arkulla",
+  "item.extrabiomes.sky_chest_boat": "Taivas- Vene arkulla",
+  "entity.extrabiomes.gilded_sky_boat": "§eKullattu Taivas- Vene§r",
+  "item.extrabiomes.gilded_sky_boat": "§eKullattu Taivas- Vene§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eKullattu Taivas- Vene arkulla§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eKullattu Taivas- Vene arkulla§r"
 }

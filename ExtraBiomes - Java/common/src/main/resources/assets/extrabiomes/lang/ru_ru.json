@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Призвать Пуку",
   "entity.extrabiomes.puckoo": "Пуку",
   "block.extrabiomes.mystic_stripped_log": "Очищенное Мистический Бревно",
-  "block.extrabiomes.glow_mushroom": "Светящийся Гриб"
+  "block.extrabiomes.glow_mushroom": "Светящийся Гриб",
+  "entity.extrabiomes.mystic_chest_boat": "Мистический грузовая Лодка",
+  "item.extrabiomes.mystic_chest_boat": "Мистический грузовая Лодка",
+  "entity.extrabiomes.palm_chest_boat": "Пальмовый грузовая Лодка",
+  "item.extrabiomes.palm_chest_boat": "Пальмовый грузовая Лодка",
+  "entity.extrabiomes.sky_chest_boat": "Небесный грузовая Лодка",
+  "item.extrabiomes.sky_chest_boat": "Небесный грузовая Лодка",
+  "entity.extrabiomes.gilded_sky_boat": "§eПозолоченный Небесный Лодка§r",
+  "item.extrabiomes.gilded_sky_boat": "§eПозолоченный Небесный Лодка§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eПозолоченный Небесный грузовая Лодка§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eПозолоченный Небесный грузовая Лодка§r"
 }

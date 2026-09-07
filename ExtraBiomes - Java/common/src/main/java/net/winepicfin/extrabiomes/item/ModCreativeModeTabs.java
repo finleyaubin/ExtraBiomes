@@ -64,6 +64,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.MYSTIC_LEAVES.get());
                 pOutput.accept(ModBlocks.MYSTIC_SIGN.get());
                 pOutput.accept(ModBlocks.MYSTIC_HANGING_SIGN.get());
+                pOutput.accept(ModItems.MYSTIC_BOAT.get());
+                pOutput.accept(ModItems.MYSTIC_CHEST_BOAT.get());
                 pOutput.accept(ModBlocks.SKY_PLANKS.get());
                 pOutput.accept(ModBlocks.SKY_STAIRS.get());
                 pOutput.accept(ModBlocks.SKY_SLAB.get());
@@ -81,6 +83,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.SKY_LEAVES.get());
                 pOutput.accept(ModBlocks.SKY_SIGN.get());
                 pOutput.accept(ModBlocks.SKY_HANGING_SIGN.get());
+                pOutput.accept(ModItems.SKY_BOAT.get());
+                pOutput.accept(ModItems.SKY_CHEST_BOAT.get());
                 pOutput.accept(ModBlocks.PALM_PLANKS.get());
                 pOutput.accept(ModBlocks.PALM_STAIRS.get());
                 pOutput.accept(ModBlocks.PALM_SLAB.get());
@@ -98,6 +102,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.PALM_LEAVES.get());
                 pOutput.accept(ModBlocks.PALM_SIGN.get());
                 pOutput.accept(ModBlocks.PALM_HANGING_SIGN.get());
+                pOutput.accept(ModItems.PALM_BOAT.get());
+                pOutput.accept(ModItems.PALM_CHEST_BOAT.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_PLANKS.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_STAIRS.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_SLAB.get());
@@ -113,6 +119,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_SIGN.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get());
+                pOutput.accept(ModItems.GILDED_SKY_BOAT.get());
+                pOutput.accept(ModItems.GILDED_SKY_CHEST_BOAT.get());
                 pOutput.accept(ModBlocks.BLACK_MUSHROOM.get());
                 pOutput.accept(ModBlocks.BLUE_MUSHROOM.get());
                 pOutput.accept(ModBlocks.CYAN_MUSHROOM.get());

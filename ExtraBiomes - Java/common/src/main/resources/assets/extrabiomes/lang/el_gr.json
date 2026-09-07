@@ -122,5 +122,15 @@
   "item.spawn_egg.entity.extrabiomes.puckoo": "Δημιουργία: Πούκου",
   "entity.extrabiomes.puckoo": "Πούκου",
   "block.extrabiomes.mystic_stripped_log": "Ξεφλουδισμένο Μυστικιστικό Κορμός",
-  "block.extrabiomes.glow_mushroom": "Φωσφορίζον Μανιτάρι"
+  "block.extrabiomes.glow_mushroom": "Φωσφορίζον Μανιτάρι",
+  "entity.extrabiomes.mystic_chest_boat": "Μυστικιστικό Βάρκα με Σεντούκι",
+  "item.extrabiomes.mystic_chest_boat": "Μυστικιστικό Βάρκα με Σεντούκι",
+  "entity.extrabiomes.palm_chest_boat": "Φοίνικα Βάρκα με Σεντούκι",
+  "item.extrabiomes.palm_chest_boat": "Φοίνικα Βάρκα με Σεντούκι",
+  "entity.extrabiomes.sky_chest_boat": "Ουράνιο Βάρκα με Σεντούκι",
+  "item.extrabiomes.sky_chest_boat": "Ουράνιο Βάρκα με Σεντούκι",
+  "entity.extrabiomes.gilded_sky_boat": "§eΕπίχρυσο Ουράνιο Βάρκα§r",
+  "item.extrabiomes.gilded_sky_boat": "§eΕπίχρυσο Ουράνιο Βάρκα§r",
+  "entity.extrabiomes.gilded_sky_chest_boat": "§eΕπίχρυσο Ουράνιο Βάρκα με Σεντούκι§r",
+  "item.extrabiomes.gilded_sky_chest_boat": "§eΕπίχρυσο Ουράνιο Βάρκα με Σεντούκι§r"
 }

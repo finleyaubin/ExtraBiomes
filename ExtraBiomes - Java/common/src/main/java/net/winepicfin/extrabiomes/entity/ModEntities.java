@@ -20,6 +20,13 @@ import net.winepicfin.extrabiomes.entity.custom.projectile.MossyPebbleProjectile
 import net.winepicfin.extrabiomes.entity.custom.projectile.NetheriteRazorFeatherProjectileEntity;
 import net.winepicfin.extrabiomes.entity.custom.projectile.PebbleProjectileEntity;
 import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectileEntity;
+import net.winepicfin.extrabiomes.entity.custom.ModBoatEntity;
+import net.winepicfin.extrabiomes.entity.custom.ModChestBoatEntity;
+import net.winepicfin.extrabiomes.item.ModItems;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
+
+import java.util.function.Supplier;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.ENTITY_TYPE);
@@ -55,6 +62,29 @@ public class ModEntities {
     // Sized to match Bedrock's minecraft:collision_box (0.4 wide, 0.5 tall) rather than the 0.25 default other thrown projectiles use, since the worm model spreads well beyond a snowball-sized box.
     public static final RegistrySupplier<EntityType<BaitProjectileEntity>> BAIT_PROJECTILE = ENTITIES.register("bait_projectile",
             () -> EntityType.Builder.<BaitProjectileEntity>of(BaitProjectileEntity::new, MobCategory.MISC).sized(0.4f, 0.5f).clientTrackingRange(4).updateInterval(10).build("bait_projectile"));
+
+    // Vanilla (pre-1.21.2) keys boats to the closed Boat.Type enum - see ModBoatEntity/
+    // ModChestBoatEntity for why this registers a dedicated EntityType per wood instead.
+    public static final RegistrySupplier<EntityType<ModBoatEntity>> MYSTIC_BOAT = registerBoat("mystic_boat", () -> ModItems.MYSTIC_BOAT.get());
+    public static final RegistrySupplier<EntityType<ModChestBoatEntity>> MYSTIC_CHEST_BOAT = registerChestBoat("mystic_chest_boat", () -> ModItems.MYSTIC_CHEST_BOAT.get());
+    public static final RegistrySupplier<EntityType<ModBoatEntity>> PALM_BOAT = registerBoat("palm_boat", () -> ModItems.PALM_BOAT.get());
+    public static final RegistrySupplier<EntityType<ModChestBoatEntity>> PALM_CHEST_BOAT = registerChestBoat("palm_chest_boat", () -> ModItems.PALM_CHEST_BOAT.get());
+    public static final RegistrySupplier<EntityType<ModBoatEntity>> SKY_BOAT = registerBoat("sky_boat", () -> ModItems.SKY_BOAT.get());
+    public static final RegistrySupplier<EntityType<ModChestBoatEntity>> SKY_CHEST_BOAT = registerChestBoat("sky_chest_boat", () -> ModItems.SKY_CHEST_BOAT.get());
+    public static final RegistrySupplier<EntityType<ModBoatEntity>> GILDED_SKY_BOAT = registerBoat("gilded_sky_boat", () -> ModItems.GILDED_SKY_BOAT.get());
+    public static final RegistrySupplier<EntityType<ModChestBoatEntity>> GILDED_SKY_CHEST_BOAT = registerChestBoat("gilded_sky_chest_boat", () -> ModItems.GILDED_SKY_CHEST_BOAT.get());
+
+    private static RegistrySupplier<EntityType<ModBoatEntity>> registerBoat(String name, Supplier<Item> dropItem) {
+        return ENTITIES.register(name, () -> EntityType.Builder.<ModBoatEntity>of(
+                (type, level) -> new ModBoatEntity(type, level, dropItem), MobCategory.MISC)
+                .sized(1.375F, 0.5625F).clientTrackingRange(10).build(name));
+    }
+
+    private static RegistrySupplier<EntityType<ModChestBoatEntity>> registerChestBoat(String name, Supplier<Item> dropItem) {
+        return ENTITIES.register(name, () -> EntityType.Builder.<ModChestBoatEntity>of(
+                (type, level) -> new ModChestBoatEntity(type, level, dropItem), MobCategory.MISC)
+                .sized(1.375F, 0.5625F).clientTrackingRange(10).build(name));
+    }
 
     public static void register() {
         ENTITIES.register();
