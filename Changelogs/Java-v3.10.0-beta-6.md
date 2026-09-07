@@ -1,6 +1,10 @@
 # ExtraBiomes for Java Edition v3.10.0 Beta 6
 # Changes
+## Boats
 
+<img width="3200" alt="2026-09-07_23 27 46" src="https://github.com/user-attachments/assets/6d8ada43-6cb1-4c52-86c6-676fe73b51a5" />
+
+- added boats, with new textures created by by brother Alex for the guilded sky boat
 ## Biomes
 - Mystic Forest: added the swamp-tagged vegetation, huge mushrooms, forest flowers, and tall grass that Bedrock's biome tags implied but the Java port was missing.
 - The Netherlands Mutated: fixed farmland tilling onto ocean floors below sea level - it's now restricted to dry land.
