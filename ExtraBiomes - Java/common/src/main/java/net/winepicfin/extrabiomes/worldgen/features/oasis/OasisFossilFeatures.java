@@ -104,11 +104,12 @@ public class OasisFossilFeatures {
             context.register(PIECE_PLACED_KEYS.get(i), new PlacedFeature(configuredFeatures.getOrThrow(PIECE_KEYS.get(i)), List.<PlacementModifier>of()));
         }
 
-        // Bumped from 1-in-48 to 1-in-10 after playtest feedback; floor check moved to SingleStructureConfiguration.
+        // Bumped from 1-in-48 to 1-in-10 after playtest feedback, then again to 1-in-4 to make fossils a
+        // more common sight; floor check moved to SingleStructureConfiguration.
         context.register(SELECT_FOSSIL_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_FOSSIL_KEY),
                 List.of(
-                        RarityFilter.onAverageOnceEvery(10),
+                        RarityFilter.onAverageOnceEvery(4),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome()

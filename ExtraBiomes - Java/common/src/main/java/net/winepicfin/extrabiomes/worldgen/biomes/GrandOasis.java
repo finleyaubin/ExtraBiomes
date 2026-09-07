@@ -27,6 +27,7 @@ public class GrandOasis {
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GRAND_OASIS_PALM_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GRAND_OASIS_DEAD_BUSH_PLACED_KEY);
 
         // oasis subsystem: scattered puddle structure_template (Bedrock oasis_puddle_placer)
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OasisPuddleFeature.OASIS_PUDDLE_SCATTER_PLACED_KEY);
