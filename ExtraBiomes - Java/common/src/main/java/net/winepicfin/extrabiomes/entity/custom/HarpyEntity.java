@@ -72,7 +72,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
         FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
         navigation.setCanOpenDoors(false);
         navigation.setCanFloat(true);
-        navigation.setCanPassDoors(true);
+        navigation.getNodeEvaluator().setCanPassDoors(true);
         return navigation;
     }
 
