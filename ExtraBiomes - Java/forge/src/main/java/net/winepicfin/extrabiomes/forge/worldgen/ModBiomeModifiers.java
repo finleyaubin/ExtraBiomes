@@ -89,19 +89,21 @@ public class ModBiomeModifiers {
         // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
         // orders for the same pair of features and vanilla's FeatureSorter crashes with
         // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        // Custom huge mushroom variants added to vanilla's own mushroom-themed biomes, mirroring how
-        // FungleJungle/DeepDarkForest already use these same placed features for this mod's biomes.
+        // Tag-based (Tags.Biomes.IS_MUSHROOM, same convention tag ModBiomeTagProvider already folds
+        // Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome list, matching
+        // ADD_BOULDER_JUNGLE/ADD_UNDERGROUND_JUNGLE_VEGETATION below - any biome (vanilla, this
+        // mod's, or a third-party mod's) carrying the tag gets these, not just vanilla's own biome.
         context.register(ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
+                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
         // Small mod-added mushroom variants (via the mycelium-floor-patch mechanism -
         // MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY's vegetationFeature is SELECT_MUSHROOM_KEY) were
-        // already wired into FungleJungle directly, but vanilla mushroom fields only ever got the huge
-        // mushroom modifier above - it had no path to this mod's own small mushroom colours at all.
-        // Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
+        // already wired into FungleJungle directly, but mushroom-tagged vanilla/modded biomes only
+        // ever got the huge mushroom modifier above - they had no path to this mod's own small
+        // mushroom colours at all. Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
         context.register(ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
+                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY)),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS));
         context.register(ADD_DARK_FOREST_HUGE_MUSHROOMS, new ForgeBiomeModifiers.AddFeaturesBiomeModifier(

@@ -46,7 +46,11 @@ import java.util.List;
  * {@link SingleStructureConfiguration} infra (one ConfiguredFeature per pillar variant, each with
  * random rotation since Bedrock's structure_template_feature entries specify no fixed
  * facing_direction, and groundOffset -5 matching "above_top_solid - 5"), wrapped in a single
- * vanilla {@link Feature#RANDOM_SELECTOR} ConfiguredFeature for the equal 1:1:1 weighting.
+ * vanilla {@link Feature#RANDOM_SELECTOR} ConfiguredFeature for the equal 1:1:1 weighting. Each
+ * variant is placed exactly as converted (the raw .nbt is untouched) with
+ * {@code weatheredVariation} opted in, so the bDubs-style weathered-stone reskin and
+ * vines/moss-carpet growth happen live during placement via coherent noise - see
+ * {@link net.winepicfin.extrabiomes.worldgen.features.stonepillars.PillarWeatheringProcessor}.
  * <p>
  * Applies only to the JunglePillars Java biome, which wires it in via
  * {@code biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, STONE_PILLARS_PLACED_KEY)}.
@@ -80,15 +84,15 @@ public class StonePillarsFeature {
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(STONE_PILLAR_1_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_1"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true, true)
         ));
         context.register(STONE_PILLAR_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_2"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true, true)
         ));
         context.register(STONE_PILLAR_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "stone_pillars/stone_pillar_3"), java.util.Optional.empty(), GROUND_OFFSET, true, ALLOWED_FLOOR_BLOCKS, true, true)
         ));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);

@@ -49,6 +49,12 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         this.tag(BiomeTags.IS_HILL).add(ModBiomes.GRAND_OASIS);
         this.tag(BiomeTags.IS_MOUNTAIN).add(ModBiomes.GRAND_OASIS);
 
+        // Lets vanilla village structure sets spawn in ExtraBiomes biomes whose climate/terrain reads as
+        // that village type - only biomes with genuinely flat, open ground like their vanilla counterpart.
+        this.tag(BiomeTags.HAS_VILLAGE_PLAINS).add(ModBiomes.MOORLANDS);
+        this.tag(BiomeTags.HAS_VILLAGE_TAIGA).add(ModBiomes.DEEP_DARK_FOREST, ModBiomes.TAIGA_SPIKES, ModBiomes.SHATTERED_TAIGA_SPIKES);
+        this.tag(BiomeTags.HAS_VILLAGE_SAVANNA).add(ModBiomes.GRAND_OASIS);
+
         this.tag(BiomeTags.HAS_TRAIL_RUINS).add(ModBiomes.DEEP_DARK_FOREST);
         this.tag(BiomeTags.MINESHAFT_BLOCKING).add(ModBiomes.DEEP_DARK_GREEN);
         this.tag(BiomeTags.WITHOUT_PATROL_SPAWNS).add(ModBiomes.FUNGLE_JUNGLE);

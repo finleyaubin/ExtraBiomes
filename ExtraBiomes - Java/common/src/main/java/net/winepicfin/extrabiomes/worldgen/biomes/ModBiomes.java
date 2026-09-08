@@ -101,7 +101,7 @@ public class ModBiomes
         }
         BiomeDefaultFeatures.addSurfaceFreezing(builder);
         // Bedrock's underground_mushroom rules apply to every overworld biome, so they're wired here rather than per-biome.
-        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.SELECT_MUSHROOM_PLACED_KEY);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.SELECT_MUSHROOM_UNDERGROUND_PLACED_KEY);
         builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, MushroomFeatures.HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY);
     }
 
