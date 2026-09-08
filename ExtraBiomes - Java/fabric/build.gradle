@@ -66,22 +66,33 @@ fabricApi {
         // sourceSet, so nothing needs adding to *this* module's resources for it to take effect.
         outputDirectory = project(':common').file('src/generated/resources')
         addToResources = false
+        // 1.21.4 moved block/item model generation (BlockModelGenerators, PropertyDispatch,
+        // ModelProvider, etc.) into the client-only net.minecraft.client.data.models package, so
+        // running datagen under the plain server environment (this task's old default) now throws
+        // "Cannot load class ... in environment type SERVER" for ModBlockStateProvider/
+        // ModItemModelProvider. client = true switches the generated runDatagen run to the client
+        // environment, which both providers need.
+        client = true
     }
 }
 
-// Forge/NeoForge and Fabric write divergent content into that same shared directory for some
-// blocks (e.g. Forge/NeoForge's ModelBuilder bakes a "render_type" field into blockstate/trapdoor/
-// door/leaves model JSON for cutout rendering; Fabric's own datagen never writes that field,
-// since Fabric sets cutout at runtime via BlockRenderLayerMap instead - see
-// ExtraBiomesFabricClient's putBlocks(RenderType.cutout(), ...) call). Whichever loader's datagen
-// ran most recently "wins" the shared folder, so testing NeoForge/Forge after running Fabric's
-// datagen silently reverts their cutout render_type and can reintroduce black transparent pixels.
-// Making the client/server runs always regenerate this module's own datagen output first closes
-// that gap without needing to physically separate the output directories (which would require
-// excluding the overlap from the "common"/shadowCommon project dependencies that also bundle
-// common/src/generated/resources into this module's own jar - not attempted here).
-tasks.named("runClient") { dependsOn "runDatagen" }
-tasks.named("runServer") { dependsOn "runDatagen" }
+// NOT wiring runClient/runServer to dependsOn "runDatagen" here, unlike neoforge/build.gradle's
+// equivalent (which is safe - NeoForge's dataClient/dataServer are separate userdev-launched JVMs
+// that don't share any state with its runClient). Fabric API's configureDataGeneration above sets
+// client = true (needed since 1.21.4 moved block/item model generation into a client-only
+// package - see the comment on that block), which makes the generated "datagen" run config
+// dev.architectury.loom's Loom .inherit() the SAME "client" RunConfigSettings runClient itself
+// uses. Both runs are launched through Architectury Transformer, which stages its handoff through
+// a single project-scoped file (fabric/.gradle/architectury/.main_class - not per-run-config)
+// telling TransformerRuntime.main() what real entrypoint to reflectively invoke after prepping the
+// dev classpath. Chaining runDatagen into runClient's own task graph runs both through that shared
+// file within one Gradle invocation; confirmed via jstack that this leaves it self-referencing
+// TransformerRuntime instead of KnotClient, so TransformerRuntime.main() recursively invokes
+// itself (redoing its classpath transform prep every level) until it OOMs - the "[Architectury
+// Transformer] Listening at ..." loop. Standalone `:fabric:runDatagen` (not chained into
+// runClient) doesn't hit this: confirmed clean, ~10s. Run `:fabric:runDatagen` by hand before
+// testing renders instead of relying on an automatic pre-run regen.
+
 
 configurations {
     common

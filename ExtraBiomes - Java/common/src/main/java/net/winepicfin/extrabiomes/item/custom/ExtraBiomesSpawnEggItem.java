@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.item.custom;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
@@ -27,7 +28,9 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
     private final Supplier<? extends EntityType<? extends Mob>> typeSupplier;
 
     public ExtraBiomesSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
-        super(null, backgroundColor, highlightColor, properties);
+        // backgroundColor/highlightColor no longer go through the Item itself in 1.21.4 - egg colors
+        // are now item-model tints (see the generated spawn egg item model JSON), so they're unused here.
+        super(null, properties);
         this.typeSupplier = typeSupplier;
         ALL.add(this);
     }
@@ -43,7 +46,7 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
     }
 
     @Override
-    public EntityType<?> getType(ItemStack stack) {
+    public EntityType<?> getType(HolderLookup.Provider registries, ItemStack stack) {
         if (stack == null) {
             return typeSupplier.get();
         }

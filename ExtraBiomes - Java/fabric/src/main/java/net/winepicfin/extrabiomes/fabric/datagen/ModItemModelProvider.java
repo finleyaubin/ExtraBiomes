@@ -5,7 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.component.DataComponents;
@@ -37,11 +37,36 @@ import java.util.Map;
 // spawn eggs, and the black sandstone wall's item icon.
 public class ModItemModelProvider implements DataProvider {
     private final PackOutput.PathProvider modelPathProvider;
+    // 1.21.4 added a required indirection layer: an item no longer resolves its rendered model
+    // directly from models/item/<id>.json by convention - it now needs an explicit
+    // assets/<ns>/items/<id>.json "client item" file pointing at that model (introduced in snapshot
+    // 24w45a, see minecraft.wiki/w/Items_model_definition). There's no fallback deriving one from
+    // the old models/item/ path anymore, so every item registered below needs a matching entry here
+    // via clientItem(), or it silently renders as a missing/no-model item with zero warning at
+    // datagen time - only a runtime "No model loaded for default item ID" warning gives it away.
+    private final PackOutput.PathProvider itemPathProvider;
     private final Map<ResourceLocation, Supplier<JsonElement>> models = new HashMap<>();
+    private final Map<ResourceLocation, Supplier<JsonElement>> items = new HashMap<>();
 
     public ModItemModelProvider(net.fabricmc.fabric.api.datagen.v1.FabricDataOutput output) {
         this.modelPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "models");
+        this.itemPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "items");
         registerModels();
+    }
+
+    // Registers the assets/<ns>/items/<itemId>.json wrapper pointing at an already-registered
+    // models/item/<modelId>.json - the simple "minecraft:model" case that covers every item here
+    // except the trimmed armor's per-trim selection (see trimmedArmorItem, which builds its own
+    // "minecraft:select" items/ entry directly instead of calling this).
+    private void clientItem(ResourceLocation itemId, ResourceLocation modelId) {
+        items.put(itemId, () -> {
+            JsonObject model = new JsonObject();
+            model.addProperty("type", "minecraft:model");
+            model.addProperty("model", modelId.toString());
+            JsonObject json = new JsonObject();
+            json.add("model", model);
+            return json;
+        });
     }
 
     private void registerModels() {
@@ -110,6 +135,7 @@ public class ModItemModelProvider implements DataProvider {
             json.add("textures", textures);
             return json;
         });
+        clientItem(BuiltInRegistries.ITEM.getKey(item), id);
     }
 
     // Unlike simpleItem(), the texture stem is passed explicitly rather than derived from the item's
@@ -127,6 +153,7 @@ public class ModItemModelProvider implements DataProvider {
             json.add("textures", textures);
             return json;
         });
+        clientItem(BuiltInRegistries.ITEM.getKey(item), id);
     }
 
     private void spawnEgg(Item item) {
@@ -139,6 +166,7 @@ public class ModItemModelProvider implements DataProvider {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + path);
         ItemModelBuilder builder = new ItemModelBuilder(parent);
         models.put(id, builder::build);
+        clientItem(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, path), id);
         return builder;
     }
 
@@ -204,23 +232,36 @@ public class ModItemModelProvider implements DataProvider {
         ItemModelBuilder base = new ItemModelBuilder("minecraft:item/generated").add("layer0", itemTexture.toString());
         ResourceLocation baseId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + itemPath);
 
-        models.put(baseId, () -> {
-            JsonObject json = base.build().getAsJsonObject();
-            JsonObject overrides = new JsonObject();
-            // Vanilla's override list format ({"predicate": {...}, "model": "..."}) needs a raw array,
-            // built directly here since ItemModelBuilder only handles the simple parent+textures shape.
-            com.google.gson.JsonArray overrideArray = new com.google.gson.JsonArray();
+        models.put(baseId, base::build);
+
+        // 1.21.4 moved trim-material selection out of the model file's legacy "overrides" predicate
+        // array (which the new item-model resolver no longer reads) and into the items/*.json client
+        // item itself via a "minecraft:select" node keyed on the "minecraft:trim_material" property -
+        // same shape vanilla's own trimmed armor (e.g. iron_helmet.json) uses. "when" takes the trim
+        // material's own resource location, not the old float priority value.
+        items.put(BuiltInRegistries.ITEM.getKey(item), () -> {
+            com.google.gson.JsonArray cases = new com.google.gson.JsonArray();
             for (Map.Entry<ResourceKey<TrimMaterial>, Float> entry : entries) {
                 String trimName = entry.getKey().location().getPath();
                 String modelName = itemPath + "_" + trimName + "_trim";
-                JsonObject override = new JsonObject();
-                JsonObject predicate = new JsonObject();
-                predicate.addProperty("trim_type", entry.getValue());
-                override.add("predicate", predicate);
-                override.addProperty("model", ExtraBiomes.MOD_ID + ":item/" + modelName);
-                overrideArray.add(override);
+                JsonObject caseModel = new JsonObject();
+                caseModel.addProperty("type", "minecraft:model");
+                caseModel.addProperty("model", ExtraBiomes.MOD_ID + ":item/" + modelName);
+                JsonObject caseEntry = new JsonObject();
+                caseEntry.add("model", caseModel);
+                caseEntry.addProperty("when", entry.getKey().location().toString());
+                cases.add(caseEntry);
             }
-            json.add("overrides", overrideArray);
+            JsonObject fallback = new JsonObject();
+            fallback.addProperty("type", "minecraft:model");
+            fallback.addProperty("model", baseId.toString());
+            JsonObject select = new JsonObject();
+            select.addProperty("type", "minecraft:select");
+            select.addProperty("property", "minecraft:trim_material");
+            select.add("cases", cases);
+            select.add("fallback", fallback);
+            JsonObject json = new JsonObject();
+            json.add("model", select);
             return json;
         });
 
@@ -245,6 +286,7 @@ public class ModItemModelProvider implements DataProvider {
     public CompletableFuture<?> run(CachedOutput cache) {
         java.util.List<CompletableFuture<?>> futures = new java.util.ArrayList<>();
         models.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), modelPathProvider.json(id))));
+        items.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), itemPathProvider.json(id))));
         return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
 

@@ -11,7 +11,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentModel;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.world.level.Level;
 import net.winepicfin.extrabiomes.fabric.entity.client.armour.FrogHelmetRenderer;
 import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
@@ -67,7 +67,7 @@ public final class FrogHelmetItem extends ArmorItem implements GeoItem {
             private GeoArmorRenderer<?> renderer;
 
             @Override
-            public <E extends LivingEntity, S extends HumanoidRenderState> HumanoidModel<?> getGeoArmorRenderer(E livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, EquipmentModel.LayerType type, HumanoidModel<S> original) {
+            public <E extends LivingEntity, S extends HumanoidRenderState> HumanoidModel<?> getGeoArmorRenderer(E livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, EquipmentClientInfo.LayerType type, HumanoidModel<S> original) {
                 if (this.renderer == null)
                     this.renderer = new FrogHelmetRenderer();
 

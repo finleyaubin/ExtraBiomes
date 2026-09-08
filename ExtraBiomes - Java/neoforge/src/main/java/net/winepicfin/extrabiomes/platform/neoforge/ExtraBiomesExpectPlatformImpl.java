@@ -98,12 +98,15 @@ public class ExtraBiomesExpectPlatformImpl {
         return new FrogHelmetItem(material, type, properties);
     }
 
+    // backgroundColor/highlightColor no longer go through the Item itself in 1.21.4 - egg colors
+    // are now item-model tints (see common's ExtraBiomesSpawnEggItem for the equivalent comment;
+    // see fabric's identical fix in its own ExtraBiomesExpectPlatformImpl).
     public static Item createSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
         EntityType<? extends Mob> type = typeSupplier.get();
         if (type == null) {
             throw new IllegalStateException("EntityType for spawn egg was null - registration order issue? ModEntities.register() must be called before ModItems.register()");
         }
-        return new SpawnEggItem(type, backgroundColor, highlightColor, properties);
+        return new SpawnEggItem(type, properties);
     }
 
     public static boolean isCreateLoaded() {
