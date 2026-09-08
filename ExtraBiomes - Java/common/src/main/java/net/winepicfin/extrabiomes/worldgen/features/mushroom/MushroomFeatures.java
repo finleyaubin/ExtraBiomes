@@ -78,19 +78,13 @@ import java.util.Optional;
  *       {@link #MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY}.</li>
  * </ul>
  * <p>
- * <b>NOT ported (missing blocks, not invented here):</b> Bedrock's per-color small-mushroom scatter
- * chain - {@code features/mushroom/mushroom_custom_feature.json} (the "extra custom mushroom" weighted
- * selector), the 9 {@code features/mushroom/scatter_<color>_mushroom.json} /
- * {@code <color>_mushroom_patch.json} pairs, {@code features/mushroom/glow_mushroom_patch.json} /
- * {@code scatter_glow_mushroom.json}, and the two feature_rules that only exist to place
- * {@code mushroom_custom_feature} ({@code mushroom_island_custom_mushroom_feature.json} and
- * {@code overworld_surface_extra_custom_mushroom_feature.json}). Every one of these places a Bedrock
- * "{@code extrabiomes:<color>_mushroom_placed}" block - a small individual mushroom decoration distinct
- * from the huge-mushroom cap blocks - and NONE of those "_placed" blocks exist in ModBlocks (only the
- * 9 huge-mushroom CAP blocks do: BLACK/BLUE/CYAN/GREEN/ORANGE/PURPLE/WHITE/YELLOW/GLOW_MUSHROOM_BLOCK,
- * which this class already reuses for the huge structures above). Per project convention, no new blocks
- * were invented to cover this gap - add the missing small mushroom blocks to ModBlocks first, then wire
- * up this second chain the same way as {@link #SELECT_HUGE_MUSHROOM_KEY} below.
+ * Bedrock's per-color small-mushroom scatter chain ({@code features/mushroom/scatter_<color>_mushroom.json}
+ * / {@code <color>_mushroom_patch.json} etc., each placing a small individual "{@code <color>_mushroom_placed}"
+ * decoration distinct from the huge-mushroom cap) is folded into {@link #VANILLA_SMALL_MUSHROOM_KEY}
+ * below rather than kept as Bedrock's separate always-on scatter feature: {@code ModBlocks.<COLOR>_MUSHROOM}
+ * (each a vanilla {@code MushroomBlock} that bonemeal-grows into the matching {@code HUGE_<COLOR>_MUSHROOM_KEY})
+ * is mixed into the small-mushroom weighted pool alongside vanilla red/brown, same ~3:1 custom-favoring
+ * convention as {@link #SELECT_HUGE_MUSHROOM_KEY}.
  */
 public class MushroomFeatures {
 
@@ -142,8 +136,30 @@ public class MushroomFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_SMALL_MUSHROOM_KEY = cfKey("vanilla_small_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_SMALL_MUSHROOM_PLACED_KEY = pfKey("vanilla_small_mushroom");
 
+    // This mod's own colour variants of the small mushroom (ModBlocks.<COLOR>_MUSHROOM) - each bonemeal-grows into the matching HUGE_<COLOR>_MUSHROOM_KEY above.
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_BLACK_MUSHROOM_KEY = cfKey("small_black_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_BLUE_MUSHROOM_KEY = cfKey("small_blue_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_CYAN_MUSHROOM_KEY = cfKey("small_cyan_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_GREEN_MUSHROOM_KEY = cfKey("small_green_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_ORANGE_MUSHROOM_KEY = cfKey("small_orange_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_PURPLE_MUSHROOM_KEY = cfKey("small_purple_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_WHITE_MUSHROOM_KEY = cfKey("small_white_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_YELLOW_MUSHROOM_KEY = cfKey("small_yellow_mushroom");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_GLOW_MUSHROOM_KEY = cfKey("small_glow_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_BLACK_MUSHROOM_PLACED_KEY = pfKey("small_black_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_BLUE_MUSHROOM_PLACED_KEY = pfKey("small_blue_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_CYAN_MUSHROOM_PLACED_KEY = pfKey("small_cyan_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_GREEN_MUSHROOM_PLACED_KEY = pfKey("small_green_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_ORANGE_MUSHROOM_PLACED_KEY = pfKey("small_orange_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_PURPLE_MUSHROOM_PLACED_KEY = pfKey("small_purple_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_WHITE_MUSHROOM_PLACED_KEY = pfKey("small_white_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_YELLOW_MUSHROOM_PLACED_KEY = pfKey("small_yellow_mushroom");
+    public static final ResourceKey<PlacedFeature> SMALL_GLOW_MUSHROOM_PLACED_KEY = pfKey("small_glow_mushroom");
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_MUSHROOM_KEY = cfKey("select_mushroom");
     public static final ResourceKey<PlacedFeature> SELECT_MUSHROOM_PLACED_KEY = pfKey("select_mushroom");
+    /** Standalone underground scatter for {@link #SELECT_MUSHROOM_PLACED_KEY}, used directly by {@code ModBiomes} - the bare key above has no modifiers since it also serves as {@link #MYCELIUM_FLOOR_KEY}'s nested vegetation feature. */
+    public static final ResourceKey<PlacedFeature> SELECT_MUSHROOM_UNDERGROUND_PLACED_KEY = pfKey("select_mushroom_underground");
 
     public static final TagKey<Block> MYCELIUM_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
             new ResourceLocation(ExtraBiomes.MOD_ID, "mycelium_floor_replaceable"));
@@ -191,15 +207,47 @@ public class MushroomFeatures {
 
         register(context, VANILLA_SMALL_RED_MUSHROOM_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM)));
         register(context, VANILLA_SMALL_BROWN_MUSHROOM_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM)));
+        // The 9 custom-colour small mushrooms (ModBlocks.<COLOR>_MUSHROOM) already exist and already
+        // bonemeal-grow into their matching huge mushroom (see ModBlocks, each is a vanilla
+        // MushroomBlock tied to this class's own HUGE_<COLOR>_MUSHROOM_KEY) - they just were never
+        // referenced by world-gen, so the small-mushroom roll always fell back to vanilla red/brown.
+        registerSmallMushroom(context, SMALL_BLACK_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.BLACK_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_BLUE_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.BLUE_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_CYAN_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.CYAN_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_GREEN_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.GREEN_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_ORANGE_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.ORANGE_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_PURPLE_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.PURPLE_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_WHITE_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.WHITE_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_YELLOW_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.YELLOW_MUSHROOM.get());
+        registerSmallMushroom(context, SMALL_GLOW_MUSHROOM_KEY, net.winepicfin.extrabiomes.block.ModBlocks.GLOW_MUSHROOM.get());
+
         HolderGetter<PlacedFeature> placedFeatures2 = context.lookup(Registries.PLACED_FEATURE);
+        // Same sequential-trial weighting convention as SELECT_HUGE_MUSHROOM_KEY above (~3:1 favoring
+        // custom colours over vanilla): 9 customs at weight 3 each (27) + vanilla red at weight 5 (10
+        // remaining, 5 to red / 5 as the guaranteed brown default) = 37 total.
         register(context, VANILLA_SMALL_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
-                List.of(new WeightedPlacedFeature(placedFeatures2.getOrThrow(VANILLA_SMALL_RED_MUSHROOM_PLACED_KEY), 0.5f)),
+                List.of(
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_BLACK_MUSHROOM_PLACED_KEY), 3f / 37f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_BLUE_MUSHROOM_PLACED_KEY), 3f / 34f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_CYAN_MUSHROOM_PLACED_KEY), 3f / 31f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_GREEN_MUSHROOM_PLACED_KEY), 3f / 28f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_ORANGE_MUSHROOM_PLACED_KEY), 3f / 25f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_PURPLE_MUSHROOM_PLACED_KEY), 3f / 22f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_WHITE_MUSHROOM_PLACED_KEY), 3f / 19f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_YELLOW_MUSHROOM_PLACED_KEY), 3f / 16f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_GLOW_MUSHROOM_PLACED_KEY), 3f / 13f),
+                        new WeightedPlacedFeature(placedFeatures2.getOrThrow(VANILLA_SMALL_RED_MUSHROOM_PLACED_KEY), 5f / 10f)
+                ),
                 placedFeatures2.getOrThrow(VANILLA_SMALL_BROWN_MUSHROOM_PLACED_KEY)
         ));
 
         HolderGetter<PlacedFeature> placedFeatures3 = context.lookup(Registries.PLACED_FEATURE);
+        // Was a 50/50 split with small mushrooms - fine when almost nothing grew (the
+        // MYCELIUM_FLOOR_REPLACEABLE bug), but at real density a huge mushroom's multi-block cap
+        // dominates the view far more than a single small block does, so it reads as "too many huge
+        // mushrooms" well before the raw growth-event count looks high. Tilted toward small.
         register(context, SELECT_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
-                List.of(new WeightedPlacedFeature(placedFeatures3.getOrThrow(SELECT_HUGE_MUSHROOM_PLACED_KEY), 0.5f)),
+                List.of(new WeightedPlacedFeature(placedFeatures3.getOrThrow(SELECT_HUGE_MUSHROOM_PLACED_KEY), 0.15f)),
                 placedFeatures3.getOrThrow(VANILLA_SMALL_MUSHROOM_PLACED_KEY)
         ));
 
@@ -213,7 +261,11 @@ public class MushroomFeatures {
                 ConstantInt.of(1),
                 0.0f,
                 5,
-                0.008f,
+                // The original 0.008 wasn't the bug (the missing grass_block/mycelium entries in
+                // MYCELIUM_FLOOR_REPLACEABLE were) - but once that's fixed, 0.008 combined with this
+                // feature's 256 patch attempts/chunk still reads as too dense (even for just the
+                // small mushrooms, after also tilting the huge/small split below). Halved again.
+                0.004f,
                 UniformInt.of(4, 8),
                 0.3f
         ));
@@ -238,6 +290,15 @@ public class MushroomFeatures {
         register(context, VANILLA_HUGE_BROWN_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(VANILLA_HUGE_BROWN_MUSHROOM_KEY));
         register(context, VANILLA_SMALL_RED_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(VANILLA_SMALL_RED_MUSHROOM_KEY));
         register(context, VANILLA_SMALL_BROWN_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(VANILLA_SMALL_BROWN_MUSHROOM_KEY));
+        register(context, SMALL_BLACK_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_BLACK_MUSHROOM_KEY));
+        register(context, SMALL_BLUE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_BLUE_MUSHROOM_KEY));
+        register(context, SMALL_CYAN_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_CYAN_MUSHROOM_KEY));
+        register(context, SMALL_GREEN_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_GREEN_MUSHROOM_KEY));
+        register(context, SMALL_ORANGE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_ORANGE_MUSHROOM_KEY));
+        register(context, SMALL_PURPLE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_PURPLE_MUSHROOM_KEY));
+        register(context, SMALL_WHITE_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_WHITE_MUSHROOM_KEY));
+        register(context, SMALL_YELLOW_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_YELLOW_MUSHROOM_KEY));
+        register(context, SMALL_GLOW_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SMALL_GLOW_MUSHROOM_KEY));
         register(context, VANILLA_SMALL_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(VANILLA_SMALL_MUSHROOM_KEY));
 
         // No BiomeFilter here - only ever referenced as a nested ingredient (inside SELECT_MUSHROOM_KEY's config); a BiomeFilter on a nested feature causes "Tried to biome check an unregistered feature" at runtime.
@@ -274,9 +335,25 @@ public class MushroomFeatures {
         // No BiomeFilter here either - only ever referenced nested, as MYCELIUM_FLOOR_KEY's vegetationFeature.
         register(context, SELECT_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MUSHROOM_KEY));
 
+        // Standalone underground scatter (used directly by ModBiomes) - mirrors HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY's spread/height/floor-snap instead of placing once at a fixed unscattered spot.
+        register(context, SELECT_MUSHROOM_UNDERGROUND_PLACED_KEY, configuredFeatures.getOrThrow(SELECT_MUSHROOM_KEY),
+                CountPlacement.of(1),
+                InSquarePlacement.spread(),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
+                EnvironmentScanPlacement.scanningFor(
+                        Direction.DOWN,
+                        BlockPredicate.solid(),
+                        BlockPredicate.matchesBlocks(Blocks.AIR, Blocks.CAVE_AIR),
+                        2),
+                BiomeFilter.biome());
+
         // CountPlacement's IntProvider codec caps at 256 - Bedrock's 400 iterations/chunk has no exact Java equivalent, so this is clamped to the engine max.
+        // Was 256 (Bedrock's 400 iterations, engine-capped) - each attempt converts a whole
+        // xzRadius-4-8 patch of floor to mycelium regardless of vegetationChance, so 256
+        // overlapping attempts per chunk converted essentially the entire floor, not just scattered
+        // mushroom-growth spots. Cut hard so most of the floor stays untouched between patches.
         register(context, MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY, configuredFeatures.getOrThrow(MYCELIUM_FLOOR_KEY),
-                CountPlacement.of(256),
+                CountPlacement.of(24),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(60)),
                 BiomeFilter.biome());
@@ -292,6 +369,10 @@ public class MushroomFeatures {
                 0.9F
         );
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+    }
+
+    private static void registerSmallMushroom(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, net.minecraft.world.level.block.Block block) {
+        context.register(key, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(block))));
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> cfKey(String name) {
