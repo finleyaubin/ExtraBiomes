@@ -7,9 +7,10 @@ architectury {
     neoForge()
 }
 
-// No 1.21.3 Create build exists yet (see the modCompileOnly Create/Registrate lines below) -
-// CreateWindmillCompat imports real Create classes and can't compile without it. Excluded
-// wholesale rather than left to fail the build; re-include once Create ships for 1.21.3.
+// No 1.21.4 Create or Registrate build exists yet (see the modCompileOnly Create/Registrate lines
+// below - Create tops out at 1.21.1, Registrate at 1.20) - CreateWindmillCompat imports real Create
+// classes and can't compile without it. Excluded wholesale rather than left to fail the build;
+// re-include once Create ships for 1.21.4.
 sourceSets.main.java {
     exclude 'net/winepicfin/extrabiomes/neoforge/compat/create/**'
 }
@@ -36,14 +37,23 @@ loom {
             server()
             source sourceSets.main
         }
-        data {
-            configName = "NeoForge Data"
-            // NeoForge 1.20.4's userdev config.json still only defines a single "data" run
-            // template (unlike newer NeoForge, which splits it into dataClient/dataServer) -
-            // confirmed via its config.json's "runs" keys: client/data/gameTestServer/server.
-            // clientData() looks up a "dataClient" template that doesn't exist at this version
-            // and fails with "Could not find Forge run template with name 'dataClient'".
-            data()
+        // NeoForge 21.4's userdev config.json split the old single "data" run template into
+        // "clientData"/"serverData" (confirmed via its config.json "runs" keys: client/clientData/
+        // serverData/gameTestServer/server/junit - the 1.20.4-era single "data" template used below
+        // this comment at the 1.21.3 bump no longer exists, so plain data() now fails with "Could
+        // not find Forge run template with name 'data'"). This matches the GatherDataEvent.Client/
+        // GatherDataEvent.Server split in DataGenerators.java - each half now boots its own JVM
+        // process to fire only that event, rather than one process firing one event with
+        // includeClient()/includeServer() booleans on it.
+        dataClient {
+            configName = "NeoForge Data Client"
+            clientData()
+            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            runDir "run-data"
+        }
+        dataServer {
+            configName = "NeoForge Data Server"
+            serverData()
             programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
         }
@@ -83,13 +93,17 @@ tasks.named("runGameTestServer") {
     dependsOn "clearGameTestWorld"
 }
 
+// Aggregate task so ":neoforge:runData" keeps working as the one-shot verify command even though
+// NeoForge 21.4 splits datagen into two separate JVM launches (runDataClient/runDataServer - see
+// the "runs" block's dataClient/dataServer comment above).
+tasks.register("runData") {
+    dependsOn "runDataClient", "runDataServer"
+}
+
 // Forge/NeoForge and Fabric write divergent content into that same shared
-// common/src/generated/resources directory for some blocks (e.g. this module's ModelBuilder bakes
-// a "render_type" field into blockstate/trapdoor/door/leaves model JSON for cutout rendering;
-// Fabric's own datagen never writes that field, since Fabric sets cutout at runtime via
-// BlockRenderLayerMap instead). Whichever loader's datagen ran most recently "wins" the shared
-// folder, so testing this module after running Fabric's datagen silently reverts the cutout
-// render_type and can reintroduce black transparent pixels. Making the client/server runs always
+// common/src/generated/resources directory for some blocks. Whichever loader's datagen ran most
+// recently "wins" the shared folder, so testing this module after running Fabric's datagen could
+// silently revert content this module's own datagen writes. Making the client/server runs always
 // regenerate this module's own datagen output first closes that gap.
 tasks.named("runClient") { dependsOn "runData" }
 tasks.named("runServer") { dependsOn "runData" }
@@ -121,7 +135,7 @@ dependencies {
     // root build.gradle's mergeJarInJarDependency for the merge this replaces on older GeckoLib builds.
     modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 
-    // No 1.21.3 Create or Registrate build available as of 2026-09-01 (Create's own maven and wiki
+    // No 1.21.4 Create or Registrate build available as of 2026-09-08 (Create's own maven and wiki
     // top out at 1.21.1; Registrate has no MC1.21.x build at all) - re-enable when one ships. See
     // the sourceSets exclude above for why CreateWindmillCompat itself is excluded wholesale rather
     // than left to fail the build.

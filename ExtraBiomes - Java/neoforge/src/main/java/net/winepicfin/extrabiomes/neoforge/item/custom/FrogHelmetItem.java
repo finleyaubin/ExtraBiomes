@@ -3,6 +3,7 @@ package net.winepicfin.extrabiomes.neoforge.item.custom;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -12,7 +13,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentModel;
 import net.minecraft.world.level.Level;
 import net.winepicfin.extrabiomes.entity.client.armour.FrogHelmetRenderer;
 import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
@@ -87,7 +87,7 @@ public final class FrogHelmetItem extends ArmorItem implements GeoItem {
             private GeoArmorRenderer<?> renderer;
 
             @Override
-            public <E extends LivingEntity, S extends HumanoidRenderState> @Nullable HumanoidModel<?> getGeoArmorRenderer(@Nullable E livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, EquipmentModel.LayerType type, HumanoidModel<S> original) {
+            public <E extends LivingEntity, S extends HumanoidRenderState> @Nullable HumanoidModel<?> getGeoArmorRenderer(@Nullable E livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, EquipmentClientInfo.LayerType type, HumanoidModel<S> original) {
                 if (this.renderer == null)
                     this.renderer = new FrogHelmetRenderer();
 
