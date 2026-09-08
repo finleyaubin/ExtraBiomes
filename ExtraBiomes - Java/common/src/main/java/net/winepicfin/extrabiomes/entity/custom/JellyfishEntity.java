@@ -42,6 +42,7 @@ public class JellyfishEntity extends WaterAnimal {
     private static final EntityDataAccessor<Integer> DATA_VARIANT =
             SynchedEntityData.defineId(JellyfishEntity.class, EntityDataSerializers.INT);
 
+    // Beta 7's beach-washing SpawnPlacementType needs a spawn-placement refactor 1.20.4 doesn't have yet; kept plain water spawning.
     private float grayAmount;
     private float scaleY = 1.0F;
 
@@ -157,6 +158,11 @@ public class JellyfishEntity extends WaterAnimal {
     @Override
     public boolean canBeLeashed(Player player) {
         return false;
+    }
+
+    // Never drowns if stranded on land - tick()'s grayAmount/scaleY shows it drying out instead.
+    @Override
+    protected void handleAirSupply(int preTickAirSupply) {
     }
 
     @Override
