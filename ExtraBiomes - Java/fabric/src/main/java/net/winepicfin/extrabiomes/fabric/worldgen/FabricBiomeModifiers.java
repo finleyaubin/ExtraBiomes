@@ -43,9 +43,12 @@ public class FabricBiomeModifiers {
         // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
         // orders for the same pair of features and vanilla's FeatureSorter crashes with
         // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS),
+        // Tag-based (ConventionalBiomeTags.MUSHROOM, same convention tag FabricBiomeTagProvider
+        // already folds Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome key - any biome
+        // (vanilla, this mod's, or a third-party mod's) carrying the tag gets these.
+        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.MUSHROOM),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS),
+        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.MUSHROOM),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.DARK_FOREST),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
