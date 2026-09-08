@@ -30,7 +30,8 @@ public class SkyCityStructureEditGameTests {
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
-    @GameTest(template = "sky_city_edit_void", timeoutTicks = 60000, batch = "extrabiomes")
+    // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
+    @GameTest(template = "sky_city_edit_void", timeoutTicks = 60000, batch = "extrabiomes", manualOnly = true)
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();
