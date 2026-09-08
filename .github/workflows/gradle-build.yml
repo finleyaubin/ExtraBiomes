@@ -15,6 +15,10 @@ permissions:
 
 jobs:
   build:
+    # Skip pull_request runs for same-repo PRs - the branch's own push event already
+    # triggered this build, so without this an in-repo PR builds twice. External-fork
+    # PRs have no push event here, so they still need the pull_request trigger.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     # Sum of this job's own step timeouts, worst case with every loader enabled (see the "Detect
     # enabled platforms" step - a loader's own steps are skipped entirely when gradle.properties'
