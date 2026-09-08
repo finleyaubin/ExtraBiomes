@@ -47,13 +47,34 @@ import java.util.function.Supplier;
 public class ModBlockStateProvider implements DataProvider {
     private final PackOutput.PathProvider blockStatePathProvider;
     private final PackOutput.PathProvider modelPathProvider;
+    // 1.21.4 added a required indirection layer: an item no longer resolves its rendered model
+    // directly from models/item/<id>.json by convention - it now needs an explicit
+    // assets/<ns>/items/<id>.json "client item" file pointing at that model (introduced in snapshot
+    // 24w45a, see minecraft.wiki/w/Items_model_definition). Every block-item model this class writes
+    // via delegateItemModel()/saplingItemModel() needs a matching entry here, or that block's item
+    // silently renders as a missing/no-model item.
+    private final PackOutput.PathProvider itemPathProvider;
     private final Map<Block, BlockStateGenerator> blockStates = new HashMap<>();
     private final Map<ResourceLocation, Supplier<JsonElement>> models = new HashMap<>();
+    private final Map<ResourceLocation, Supplier<JsonElement>> items = new HashMap<>();
 
     public ModBlockStateProvider(net.fabricmc.fabric.api.datagen.v1.FabricDataOutput output) {
         this.blockStatePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "blockstates");
         this.modelPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "models");
+        this.itemPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "items");
         registerStatesAndModels();
+    }
+
+    private void clientItem(Block block, ResourceLocation modelId) {
+        ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
+        items.put(itemId, () -> {
+            JsonObject model = new JsonObject();
+            model.addProperty("type", "minecraft:model");
+            model.addProperty("model", modelId.toString());
+            JsonObject json = new JsonObject();
+            json.add("model", model);
+            return json;
+        });
     }
 
     private void registerStatesAndModels() {
@@ -211,6 +232,7 @@ public class ModBlockStateProvider implements DataProvider {
             json.addProperty("parent", blockModel.toString());
             return json;
         });
+        clientItem(block, itemModelId);
     }
 
     // Passing the same texture for both sides put bark on the cut ends too; use the dedicated "_top" texture.
@@ -262,6 +284,7 @@ public class ModBlockStateProvider implements DataProvider {
             json.add("textures", textures);
             return json;
         });
+        clientItem(block, itemModelId);
     }
 
     private static int rot(Direction facing) {
@@ -586,6 +609,7 @@ public class ModBlockStateProvider implements DataProvider {
             futures.add(DataProvider.saveStable(cache, generator.get(), blockStatePathProvider.json(id)));
         });
         models.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), modelPathProvider.json(id))));
+        items.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), itemPathProvider.json(id))));
         return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
 

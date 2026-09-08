@@ -45,16 +45,21 @@ loom {
         // GatherDataEvent.Server split in DataGenerators.java - each half now boots its own JVM
         // process to fire only that event, rather than one process firing one event with
         // includeClient()/includeServer() booleans on it.
+        //
+        // Each half writes to its OWN private build/ output dir, not directly to the shared
+        // common/src/generated/resources - see mergeGeneratedData below for why. --existing still
+        // points at common's real resources so each half's own "does this already exist"
+        // validation still works.
         dataClient {
             configName = "NeoForge Data Client"
             clientData()
-            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            programArgs '--mod', mod_id, '--all', '--output', layout.buildDirectory.dir("datagen/client").get().asFile.absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
         }
         dataServer {
             configName = "NeoForge Data Server"
             serverData()
-            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            programArgs '--mod', mod_id, '--all', '--output', layout.buildDirectory.dir("datagen/server").get().asFile.absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
         }
         gameTestServer {
@@ -93,11 +98,29 @@ tasks.named("runGameTestServer") {
     dependsOn "clearGameTestWorld"
 }
 
+// dataClient and dataServer each run vanilla's own DataGenerator/HashCache, which - when pointed
+// at the SAME output directory - treats the OTHER half's files as stale and deletes them at the
+// end of its own run (each half's cache only knows about the providers IT registered). Confirmed
+// empirically: running dataServer after dataClient reported "removed stale: 431", deleting every
+// asset dataClient had just written, and the reverse order deletes every data/ file instead -
+// whichever half runs second always wins and wipes the other. Routing each half to its own
+// private output dir (see the dataClient/dataServer run configs above) gives each its own
+// cache, so neither can see (and delete) the other's files - then this Sync merges both into the
+// real shared common/src/generated/resources afterward. Sync (not Copy) so a file removed from
+// this mod's own datagen output between runs still gets cleaned up here, matching the old
+// single-output-dir behavior for content this task actually owns.
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runDataClient", "runDataServer"
+    from layout.buildDirectory.dir("datagen/client")
+    from layout.buildDirectory.dir("datagen/server")
+    into project(':common').file('src/generated/resources')
+}
+
 // Aggregate task so ":neoforge:runData" keeps working as the one-shot verify command even though
 // NeoForge 21.4 splits datagen into two separate JVM launches (runDataClient/runDataServer - see
 // the "runs" block's dataClient/dataServer comment above).
 tasks.register("runData") {
-    dependsOn "runDataClient", "runDataServer"
+    dependsOn "mergeGeneratedData"
 }
 
 // Forge/NeoForge and Fabric write divergent content into that same shared
