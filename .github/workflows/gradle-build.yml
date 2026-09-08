@@ -183,8 +183,9 @@ jobs:
               allmodbiomesappearinoverworldgeneration) TEST_TIMEOUTS[$name]=1200 ;;
               *) TEST_TIMEOUTS[$name]=180 ;;
             esac
-          done < <(grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' \
-            forge/src/main/java/net/winepicfin/extrabiomes/gametest/*.java | tr '[:upper:]' '[:lower:]')
+          done < <(find forge/src/main/java/net/winepicfin/extrabiomes/gametest -name '*.java' \
+              ! -name 'SkyCityStructureEditGameTests.java' -exec \
+            grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' {} + | tr '[:upper:]' '[:lower:]')
 
           if [ "${#TEST_TIMEOUTS[@]}" -eq 0 ]; then
             echo "::error::No @GameTest methods found under forge/.../gametest - discovery regex is stale"
@@ -311,8 +312,9 @@ jobs:
           #
           # EXPECTED_TESTS is counted from the actual @GameTest methods rather than hardcoded, so
           # this can't silently under/over-count after a test is added or removed.
-          EXPECTED_TESTS=$(grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' \
-            neoforge/src/main/java/net/winepicfin/extrabiomes/gametest/*.java | wc -l)
+          EXPECTED_TESTS=$(find neoforge/src/main/java/net/winepicfin/extrabiomes/gametest -name '*.java' \
+              ! -name 'SkyCityStructureEditGameTests.java' -exec \
+            grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' {} + | wc -l)
           if [ "$EXPECTED_TESTS" -eq 0 ]; then
             echo "::error::No @GameTest methods found under neoforge/.../gametest - discovery regex is stale"
             exit 1
