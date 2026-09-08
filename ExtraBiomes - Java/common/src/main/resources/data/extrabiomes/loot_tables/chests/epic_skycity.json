@@ -3,8 +3,8 @@
   "pools": [
     {
       "rolls": {
-        "min": 6,
-        "max": 9
+        "min": 3,
+        "max": 5
       },
       "entries": [
         {
@@ -37,6 +37,20 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minecraft:emerald",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0,
+                "max": 3
+              }
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
           "name": "minecraft:diamond",
           "functions": [
             {
@@ -47,7 +61,7 @@
               }
             }
           ],
-          "weight": 1
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -62,10 +76,29 @@
             }
           ],
           "weight": 1
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "min": 2,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "extrabiomes:netherite_razor_feather",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            }
+          ],
+          "weight": 1
         },
         {
           "type": "minecraft:item",
-          "name": "extrabiomes:razor_feather",
+          "name": "extrabiomes:diamond_razor_feather",
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -75,7 +108,39 @@
               }
             }
           ],
-          "weight": 3
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_golden_apple",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:golden_apple",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "weight": 1
         },
         {
           "type": "minecraft:item",
@@ -106,6 +171,9 @@
             {
               "function": "minecraft:set_count",
               "count": 1
+            },
+            {
+              "function": "minecraft:enchant_randomly"
             }
           ],
           "weight": 1
