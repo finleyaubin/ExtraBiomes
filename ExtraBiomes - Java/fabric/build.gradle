@@ -66,6 +66,13 @@ fabricApi {
         // sourceSet, so nothing needs adding to *this* module's resources for it to take effect.
         outputDirectory = project(':common').file('src/generated/resources')
         addToResources = false
+        // 1.21.4 moved block/item model generation (BlockModelGenerators, PropertyDispatch,
+        // ModelProvider, etc.) into the client-only net.minecraft.client.data.models package, so
+        // running datagen under the plain server environment (this task's old default) now throws
+        // "Cannot load class ... in environment type SERVER" for ModBlockStateProvider/
+        // ModItemModelProvider. client = true switches the generated runDatagen run to the client
+        // environment, which both providers need.
+        client = true
     }
 }
 

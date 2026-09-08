@@ -8,15 +8,15 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.models.blockstates.BlockStateGenerator;
-import net.minecraft.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.data.models.blockstates.PropertyDispatch;
-import net.minecraft.data.models.blockstates.Variant;
-import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.client.data.models.blockstates.BlockStateGenerator;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.blockstates.Variant;
+import net.minecraft.client.data.models.blockstates.VariantProperties;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
@@ -35,14 +35,14 @@ import java.util.function.Supplier;
 
 // Fabric port of forge/datagen/ModBlockStateProvider.java. Forge's BlockStateProvider (and its
 // ConfiguredModel/ModelFile/ExistingFileHelper machinery) is a Forge-only convenience API with no
-// Fabric equivalent, and vanilla's own net.minecraft.data.models.BlockModelGenerators - the class
+// Fabric equivalent, and vanilla's own net.minecraft.client.data.models.BlockModelGenerators - the class
 // Fabric's FabricModelProvider hands you an instance of - only exposes a handful of its per-block
 // helper methods as public (createTrivialCube/createTrivialBlock/createAxisAlignedPillarBlock/
 // createHangingSign/createGenericCube/createSimpleFlatItemModel); everything else needed here
 // (stairs/slabs/fences/gates/doors/trapdoors/buttons/plates/walls) is package-private in that class
 // and inaccessible from mod code. So instead of fighting that, this is a standalone DataProvider built
 // directly on the *public* low-level model-gen API (ModelTemplates/TextureMapping/
-// MultiVariantGenerator/PropertyDispatch/Variant - see net.minecraft.data.models.{blockstates,model}) -
+// MultiVariantGenerator/PropertyDispatch/Variant - see net.minecraft.client.data.models.{blockstates,model}) -
 // the same public building blocks BlockModelGenerators itself is written on top of.
 public class ModBlockStateProvider implements DataProvider {
     private final PackOutput.PathProvider blockStatePathProvider;
@@ -348,12 +348,12 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation side = ModelTemplates.FENCE_SIDE.create(block, tm, models::put);
         ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.create(block, tm, models::put);
 
-        blockStates.put(block, net.minecraft.data.models.blockstates.MultiPartGenerator.multiPart(block)
+        blockStates.put(block, net.minecraft.client.data.models.blockstates.MultiPartGenerator.multiPart(block)
                 .with(Variant.variant().with(VariantProperties.MODEL, post))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.NORTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.EAST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.SOUTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.WEST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.NORTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.EAST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.SOUTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.WEST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
         delegateItemModel(block, inventory);
     }
 
@@ -386,16 +386,16 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation tall = ModelTemplates.WALL_TALL_SIDE.create(block, tm, models::put);
         ResourceLocation inventory = ModelTemplates.WALL_INVENTORY.create(block, tm, models::put);
 
-        blockStates.put(block, net.minecraft.data.models.blockstates.MultiPartGenerator.multiPart(block)
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.UP, true), Variant.variant().with(VariantProperties.MODEL, post))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.NORTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.EAST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.WEST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.NORTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.EAST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.data.models.blockstates.Condition.condition().term(WallBlock.WEST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
+        blockStates.put(block, net.minecraft.client.data.models.blockstates.MultiPartGenerator.multiPart(block)
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.UP, true), Variant.variant().with(VariantProperties.MODEL, post))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.NORTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.EAST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.WEST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.NORTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.EAST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
+                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.WEST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
         delegateItemModel(block, inventory);
     }
 

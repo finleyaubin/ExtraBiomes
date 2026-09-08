@@ -41,11 +41,14 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
     @Override
     public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int packedLight, @NotNull WolfRenderState state,
                         float limbSwing, float limbSwingAmount) {
-        ItemStack headItem = state.headItem;
-        if (headItem.getItem() != ModItems.FROG_HELMET.get() || state.isInvisibleToPlayer) return;
-
         Wolf wolf = ((WolfRenderStateExtension) state).extrabiomes$getWolf();
         if (wolf == null) return;
+
+        // LivingEntityRenderState#headItem became a baked ItemStackRenderState in 1.21.4 (no
+        // longer carries the raw ItemStack), so the actual stack is read back off the live Wolf
+        // entity instead - same entity already recovered above for GeoArmorRenderer#prepForRender.
+        ItemStack headItem = wolf.getItemBySlot(EquipmentSlot.HEAD);
+        if (headItem.getItem() != ModItems.FROG_HELMET.get() || state.isInvisibleToPlayer) return;
 
         if (this.renderer == null)
             this.renderer = new FrogHelmetRenderer();
