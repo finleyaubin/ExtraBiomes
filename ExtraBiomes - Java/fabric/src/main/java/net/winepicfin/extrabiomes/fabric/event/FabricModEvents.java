@@ -3,7 +3,6 @@ package net.winepicfin.extrabiomes.fabric.event;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -40,8 +39,8 @@ public class FabricModEvents {
                 Animal::checkAnimalSpawnRules);
         SpawnPlacementsAccessor.invokeRegister(ModEntities.GIANT_TORTOISE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules);
-        SpawnPlacementsAccessor.invokeRegister(ModEntities.JELLYFISH.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        SpawnPlacementsAccessor.invokeRegister(ModEntities.JELLYFISH.get(), JellyfishEntity.SPAWN_PLACEMENT, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                JellyfishEntity::checkJellyfishSpawnRules);
         SpawnPlacementsAccessor.invokeRegister(ModEntities.PIRANHA.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 PiranhaEntity::checkPiranhaSpawnRules);
         SpawnPlacementsAccessor.invokeRegister(ModEntities.HARPY.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
