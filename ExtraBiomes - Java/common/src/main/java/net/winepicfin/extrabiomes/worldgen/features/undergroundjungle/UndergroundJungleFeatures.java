@@ -337,14 +337,14 @@ public class UndergroundJungleFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> cfKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "underground_jungle/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "underground_jungle/" + name));
     }
 
     private static ResourceKey<PlacedFeature> pfKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "underground_jungle/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "underground_jungle/" + name));
     }
 
     private static TagKey<Block> tagKey(String name) {
-        return TagKey.create(Registries.BLOCK, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

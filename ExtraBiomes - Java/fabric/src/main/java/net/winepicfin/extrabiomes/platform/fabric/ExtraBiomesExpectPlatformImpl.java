@@ -1,18 +1,21 @@
 package net.winepicfin.extrabiomes.platform.fabric;
 
 import com.mojang.serialization.MapCodec;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
@@ -54,6 +57,10 @@ public class ExtraBiomesExpectPlatformImpl {
         return net.winepicfin.extrabiomes.fabric.mixin.TrunkPlacerTypeAccessor.invokeNew(codec);
     }
 
+    public static <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntityType.BlockEntitySupplier<T> factory, Block... validBlocks) {
+        return FabricBlockEntityTypeBuilder.create(factory::create, validBlocks).build();
+    }
+
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {
         return new LiquidBlock((FlowingFluid) ModFluids.SOURCE_GOO.get(), properties);
     }
@@ -62,7 +69,7 @@ public class ExtraBiomesExpectPlatformImpl {
         return new BucketItem(ModFluids.SOURCE_GOO.get(), properties);
     }
 
-    public static Item createFrogHelmetItem(ArmorMaterial material, ArmorItem.Type type, Item.Properties properties) {
+    public static Item createFrogHelmetItem(ArmorMaterial material, ArmorType type, Item.Properties properties) {
         return new net.winepicfin.extrabiomes.fabric.item.custom.FrogHelmetItem(material, type, properties);
     }
 

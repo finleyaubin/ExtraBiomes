@@ -43,7 +43,8 @@ import java.util.List;
  *       {@link SingleStructureConfiguration}'s {@code (structure, groundOffset)} constructor is used,
  *       which implies {@code Optional.empty()} rotation (uniformly random per placement).</li>
  *   <li>{@code iterations: 20} + {@code scatter_chance: 100.0} (always run, up to 20 scatter attempts
- *       per chunk) -> {@link CountPlacement#of(int)} with 20.</li>
+ *       per chunk) -> {@link CountPlacement#of(int)}, deliberately tuned down to 4 (see
+ *       {@link #registerPlaced} for why) rather than matched 1:1 to Bedrock's 20.</li>
  *   <li>{@code x/z uniform [0,16]} -> {@link InSquarePlacement#spread()}.</li>
  *   <li>The Bedrock {@code y} expression ({@code uniform [0, heightmap*2]}) is effectively overridden by
  *       the {@code grounded} constraint, which snaps the placement down onto solid ground/seafloor
@@ -73,22 +74,22 @@ import java.util.List;
  */
 public class JellyCoralFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_1_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_1"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_1"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_2"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_2"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_3"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_3"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_4_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_4"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_4"));
 
     public static final ResourceKey<PlacedFeature> JELLYCORAL_1_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_1"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_1"));
     public static final ResourceKey<PlacedFeature> JELLYCORAL_2_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_2"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_2"));
     public static final ResourceKey<PlacedFeature> JELLYCORAL_3_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_3"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_3"));
     public static final ResourceKey<PlacedFeature> JELLYCORAL_4_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral_4"));
+            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_4"));
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         registerConfigured(context, JELLYCORAL_1_KEY, "jellycoral_1");
@@ -104,7 +105,7 @@ public class JellyCoralFeatures {
     private static void registerConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName) {
         context.register(key, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(new ResourceLocation(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION)
+                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION)
         ));
     }
 
@@ -121,7 +122,10 @@ public class JellyCoralFeatures {
         context.register(placedKey, new PlacedFeature(
                 configuredFeatures.getOrThrow(configuredKey),
                 List.of(
-                        CountPlacement.of(20),
+                        // Reduced from Bedrock's ported iterations:20 (see class javadoc) - at 20 attempts/chunk
+                        // per variant (4 variants, so up to 80 rolls/chunk total) these structures were far too
+                        // common on the jellyfish fields sea floor; 4 keeps them showing up without carpeting it.
+                        CountPlacement.of(4),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
                         BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), Blocks.WATER, Blocks.SEAGRASS, Blocks.KELP)),

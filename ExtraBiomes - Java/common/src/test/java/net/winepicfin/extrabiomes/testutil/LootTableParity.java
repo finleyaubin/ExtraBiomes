@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 // Compares a Bedrock loot table (packs/BP/loot_tables/...) against the equivalent Java datapack
 // loot table (generated via `runData` under
-// src/generated/resources/data/extrabiomes/loot_tables/...). The two schemas wrap the same drop
+// src/generated/resources/data/extrabiomes/loot_table/...). The two schemas wrap the same drop
 // data differently - Java prefixes function/condition/type ids with "minecraft:" that Bedrock
 // omits, adds wrapper keys Bedrock doesn't have (type, bonus_rolls, random_sequence, add, and a
 // default weight of 1 that Bedrock always writes explicitly but Java's datagen omits), and
@@ -22,9 +22,13 @@ import static org.junit.jupiter.api.Assertions.fail;
 public final class LootTableParity {
     private static final String MINECRAFT_PREFIX = "minecraft:";
 
-    // Items Java renamed (1.20.5's item-component rewrite) that Bedrock still calls by the old
-    // name - a real, permanent naming divergence between editions, not a bug on either side.
-    private static final Map<String, String> JAVA_ITEM_RENAMES = Map.of("scute", "turtle_scute");
+    // Ids Java renamed (items in 1.20.5's item-component rewrite, loot function/condition ids in
+    // 1.21's enchantment-registry rework) that Bedrock still calls by the old name - a real,
+    // permanent naming divergence between editions, not a bug on either side.
+    private static final Map<String, String> JAVA_ITEM_RENAMES = Map.of(
+            "scute", "turtle_scute",
+            "looting_enchant", "enchanted_count_increase",
+            "random_chance_with_looting", "random_chance_with_enchanted_bonus");
 
     public static void assertMatches(JsonObject bedrockRoot, JsonObject javaRoot) {
         compare(bedrockRoot.get("pools"), javaRoot.get("pools"), "pools");
@@ -45,7 +49,7 @@ public final class LootTableParity {
                 compare(b.get(i), j.get(i), path + "[" + i + "]");
             }
         } else if (bedrock.isJsonObject()) {
-            JsonObject b = bedrock.getAsJsonObject();
+            JsonObject b = normalizeLootingCondition(bedrock.getAsJsonObject());
             JsonObject j = java.getAsJsonObject();
             for (String key : b.keySet()) {
                 JsonElement bVal = b.get(key);
@@ -65,6 +69,29 @@ public final class LootTableParity {
                 assertEquals(b.getAsDouble(), j.getAsDouble(), 1e-6, path);
             }
         }
+    }
+
+    // Bedrock's random_chance_with_looting condition ({"chance": c, "looting_multiplier": m}) maps
+    // to Java 1.21's random_chance_with_enchanted_bonus, which restructures the same two numbers
+    // into unenchanted_chance=c and a linear enchanted_chance curve where base=c+m (the level-1
+    // value) and per_level_above_first=m - same formula, different shape. Reshape Bedrock's object
+    // to Java's so the generic key-walk below can compare them directly.
+    private static JsonObject normalizeLootingCondition(JsonObject bedrock) {
+        if (!bedrock.has("chance") || !bedrock.has("looting_multiplier")) {
+            return bedrock;
+        }
+        double chance = bedrock.get("chance").getAsDouble();
+        double multiplier = bedrock.get("looting_multiplier").getAsDouble();
+        JsonObject reshaped = bedrock.deepCopy();
+        reshaped.remove("chance");
+        reshaped.remove("looting_multiplier");
+        reshaped.addProperty("unenchanted_chance", chance);
+        JsonObject enchantedChance = new JsonObject();
+        enchantedChance.addProperty("type", "linear");
+        enchantedChance.addProperty("base", chance + multiplier);
+        enchantedChance.addProperty("per_level_above_first", multiplier);
+        reshaped.add("enchanted_chance", enchantedChance);
+        return reshaped;
     }
 
     // Both sides may express a fixed count as either {"min": n, "max": n} or a bare number n.

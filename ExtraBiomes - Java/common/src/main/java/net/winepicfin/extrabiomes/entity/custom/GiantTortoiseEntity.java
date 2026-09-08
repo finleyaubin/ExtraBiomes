@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.animal.IronGolem;
@@ -78,11 +79,11 @@ public class GiantTortoiseEntity extends Monster {
 
     // Bedrock's lightning damage_sensor multiplies damage by 2000, an instant kill on a 70-HP tortoise however it's dealt.
     @Override
-    public boolean hurt(@NotNull DamageSource source, float amount) {
+    public boolean hurtServer(@NotNull ServerLevel level, @NotNull DamageSource source, float amount) {
         if (source.is(DamageTypes.LIGHTNING_BOLT)) {
             amount *= GiantTortoiseTuning.LIGHTNING_DAMAGE_MULTIPLIER;
         }
-        return super.hurt(source, amount);
+        return super.hurtServer(level, source, amount);
     }
 
     @Override

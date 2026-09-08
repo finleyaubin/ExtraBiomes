@@ -201,7 +201,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             for (int z = minZ; z <= maxZ; z++) {
                 int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z) - 1;
                 pos.set(x, y, z);
-                while (y > level.getMinBuildHeight()) {
+                while (y > level.getMinY()) {
                     BlockState state = level.getBlockState(pos);
                     if (!state.isAir() && !state.is(BlockTags.DIRT)) {
                         break;
@@ -212,7 +212,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 minStoneTopY = Math.min(minStoneTopY, y);
             }
         }
-        return minStoneTopY == Integer.MAX_VALUE ? level.getMinBuildHeight() : minStoneTopY;
+        return minStoneTopY == Integer.MAX_VALUE ? level.getMinY() : minStoneTopY;
     }
 
     // Catches wide structures hanging over a ledge that a single-column HeightmapPlacement wouldn't.

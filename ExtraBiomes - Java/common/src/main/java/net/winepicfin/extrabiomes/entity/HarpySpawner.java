@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -56,7 +56,7 @@ public final class HarpySpawner {
         }
 
         BlockPos pos = new BlockPos(x, surfaceY, z);
-        if (!HarpyEntity.checkHarpySpawnRules(ModEntities.HARPY.get(), level, MobSpawnType.NATURAL, pos, random)) {
+        if (!HarpyEntity.checkHarpySpawnRules(ModEntities.HARPY.get(), level, EntitySpawnReason.NATURAL, pos, random)) {
             return;
         }
         AABB aabb = ModEntities.HARPY.get().getSpawnAABB(x + 0.5, surfaceY, z + 0.5);
@@ -64,12 +64,12 @@ public final class HarpySpawner {
             return;
         }
 
-        HarpyEntity harpy = ModEntities.HARPY.get().create(level);
+        HarpyEntity harpy = ModEntities.HARPY.get().create(level, EntitySpawnReason.NATURAL);
         if (harpy == null) {
             return;
         }
         harpy.moveTo(x + 0.5, surfaceY, z + 0.5, random.nextFloat() * 360.0F, 0.0F);
-        harpy.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null);
+        harpy.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
         level.addFreshEntity(harpy);
     }
 

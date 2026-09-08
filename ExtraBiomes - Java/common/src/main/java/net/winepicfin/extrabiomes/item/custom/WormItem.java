@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,14 +36,14 @@ public class WormItem extends Item {
                 ? clickedPos
                 : clickedPos.relative(clickedFace);
 
-        WormEntity worm = ModEntities.WORM.get().create(serverLevel);
+        WormEntity worm = ModEntities.WORM.get().create(serverLevel, EntitySpawnReason.BUCKET);
         if (worm == null) {
             return InteractionResult.FAIL;
         }
 
         float yaw = Mth.wrapDegrees(level.random.nextFloat() * 360.0F);
         worm.moveTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, yaw, 0.0F);
-        worm.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(spawnPos), MobSpawnType.BUCKET, null);
+        worm.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(spawnPos), EntitySpawnReason.BUCKET, null);
         serverLevel.addFreshEntity(worm);
 
         Player player = context.getPlayer();
@@ -54,6 +54,6 @@ public class WormItem extends Item {
             }
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return level.isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
     }
 }

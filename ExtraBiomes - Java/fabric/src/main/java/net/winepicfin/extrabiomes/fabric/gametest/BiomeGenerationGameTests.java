@@ -28,7 +28,7 @@ import java.util.List;
 // "fabric-gametest" entrypoint in fabric.mod.json instead of Forge's @GameTestHolder; run with
 // `./gradlew :fabric:runGameTestServer` (requires -Dfabric-api.gametest=true, wired into that
 // run's vmArgs in fabric/build.gradle). Reuses the same shared empty structure template as forge
-// (common/src/main/resources/data/extrabiomes/structures/empty.nbt) - unlike Forge's
+// (common/src/main/resources/data/extrabiomes/structure/empty.nbt) - unlike Forge's
 // @PrefixGameTestTemplate, Fabric does not auto-prefix the template name with the mod id, so the
 // namespace is spelled out explicitly below.
 //

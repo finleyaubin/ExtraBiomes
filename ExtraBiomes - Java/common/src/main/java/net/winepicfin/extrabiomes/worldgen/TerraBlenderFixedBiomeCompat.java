@@ -41,7 +41,7 @@ import java.util.Map;
  */
 public class TerraBlenderFixedBiomeCompat {
     public static void applyToFixedBiomeSourceLevels(RegistryAccess registryAccess) {
-        Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
+        Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
 
         for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : levelStemRegistry.entrySet()) {
             LevelStem stem = entry.getValue();

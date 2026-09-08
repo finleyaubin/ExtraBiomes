@@ -177,7 +177,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private ResourceLocation modLoc(String path) {
-        return new ResourceLocation(ExtraBiomes.MOD_ID, "block/" + path);
+        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + path);
     }
 
     private void blockWithItem(RegistrySupplier<Block> blockRegistryObject) {
@@ -216,7 +216,7 @@ public class ModBlockStateProvider implements DataProvider {
     // Passing the same texture for both sides put bark on the cut ends too; use the dedicated "_top" texture.
     private void logBlock(Block block) {
         ResourceLocation side = blockTexture(block);
-        ResourceLocation end = new ResourceLocation(side.getNamespace(), side.getPath() + "_top");
+        ResourceLocation end = ResourceLocation.fromNamespaceAndPath(side.getNamespace(), side.getPath() + "_top");
         axisBlock(block, side, end);
     }
 
@@ -478,9 +478,9 @@ public class ModBlockStateProvider implements DataProvider {
     // "template_trapdoor_*" parent is only correct for oak/iron's rotationally-symmetric grid
     // texture - using it here was what made the slats appear to spin between open and closed.
     private void trapdoorBlockState(Block block, ResourceLocation baseModelName) {
-        ResourceLocation bottom = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
-        ResourceLocation top = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
-        ResourceLocation open = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
         putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseModelName);
         putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseModelName);
@@ -523,7 +523,7 @@ public class ModBlockStateProvider implements DataProvider {
     // Standing/wall signs render their text via a block entity renderer - the blockstate model is
     // just an invisible placeholder, same as vanilla's own sign blocks.
     private void signBlockState(Block signBlock, Block wallSignBlock) {
-        ResourceLocation air = new ResourceLocation("minecraft", "block/air");
+        ResourceLocation air = ResourceLocation.fromNamespaceAndPath("minecraft", "block/air");
         simpleBlockState(signBlock, air);
         simpleBlockState(wallSignBlock, air);
     }
@@ -575,7 +575,7 @@ public class ModBlockStateProvider implements DataProvider {
     // helper, which pointed at the same existing "minecraft:block/water" model rather than generating
     // one).
     private void fluidBlock(Block block) {
-        simpleBlockState(block, new ResourceLocation("minecraft", "block/water"));
+        simpleBlockState(block, ResourceLocation.fromNamespaceAndPath("minecraft", "block/water"));
     }
 
     @Override

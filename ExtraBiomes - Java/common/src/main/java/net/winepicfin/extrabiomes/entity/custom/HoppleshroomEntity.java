@@ -7,12 +7,13 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -121,7 +122,9 @@ public class HoppleshroomEntity extends Animal {
     // Ported from Bedrock's spore_dust particle, but tinted to the hoppleshroom's own colour instead of the single fixed tan tint Bedrock used for every variant.
     private void spawnLandingParticles() {
         Vector3f color = DUST_COLORS[Math.floorMod(this.getVariant(), DUST_COLORS.length)];
-        DustParticleOptions options = new DustParticleOptions(color, 1.0F);
+        // DustParticleOptions dropped its Vector3f constructor overload in favor of a packed int color.
+        int packedColor = ARGB.color((int) (color.x() * 255.0F), (int) (color.y() * 255.0F), (int) (color.z() * 255.0F));
+        DustParticleOptions options = new DustParticleOptions(packedColor, 1.0F);
         for (int i = 0; i < 8; i++) {
             float angle = (float) (i * (Math.PI * 2.0 / 8.0));
             double dx = Mth.cos(angle);
@@ -189,7 +192,7 @@ public class HoppleshroomEntity extends Animal {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type,
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason type,
                                         @Nullable SpawnGroupData data) {
         this.setVariant(this.random.nextInt(VARIANT_COUNT));
         return super.finalizeSpawn(level, difficulty, type, data);

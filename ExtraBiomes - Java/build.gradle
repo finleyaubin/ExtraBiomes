@@ -115,6 +115,13 @@ subprojects {
             name = 'tterrag'
             url 'https://maven.tterrag.com'
         }
+        // Registrate's NeoForge 1.21.1 build (MC1.21-1.3.0+67) isn't published to maven.tterrag.com -
+        // it's hosted on ITHundxr's own snapshots repo instead, per Create's own NeoForge 1.21.1
+        // "depend on Create" docs (https://wiki.createmod.net/developers/depend-on-create/neoforge-1.21.1).
+        maven {
+            name = 'ITHundxr'
+            url 'https://maven.ithundxr.dev/snapshots'
+        }
     }
 }
 

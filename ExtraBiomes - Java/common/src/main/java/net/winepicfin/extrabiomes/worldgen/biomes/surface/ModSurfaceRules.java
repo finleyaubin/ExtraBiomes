@@ -232,10 +232,17 @@ public class ModSurfaceRules {
                 // Top layer is FARMLAND, not DIRT, so the whole floor is tillable ground and NetherlandsWheatFeatures'
                 // crop scatter never has to convert terrain itself - it just needs a wheat block on top of every
                 // column, so there are no untouched-dirt gaps between its (inherently probabilistic) patches.
+                // Gated to dry columns only (isAtOrBelowWaterLevel, same check grassOverDirt uses above), falling
+                // back to plain DIRT when submerged - without this, low points of this biome that dip below sea
+                // level got farmland tilled straight onto the sea floor, since ON_FLOOR/abovePreliminarySurface()
+                // alone don't distinguish dry land from underwater.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), FARMLAND)),
+                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
+                                                SurfaceRules.sequence(
+                                                        SurfaceRules.ifTrue(isAtOrBelowWaterLevel, FARMLAND),
+                                                        DIRT))),
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(30, false, CaveSurface.FLOOR), NETHERRACK))),
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.VOLCANIC_MOSS_TUNDRA),

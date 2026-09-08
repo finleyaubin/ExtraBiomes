@@ -1,15 +1,18 @@
 package net.winepicfin.extrabiomes.event;
 
+import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.neoforge.fluid.BaseFluidType;
+import net.winepicfin.extrabiomes.neoforge.fluid.ModFluidTypes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.client.BaitModel;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseModel;
@@ -43,13 +46,30 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.BAIT, BaitModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.MYSTIC_BOAT, BoatModel::createBoatModel);
+        event.registerLayerDefinition(ModModelLayers.MYSTIC_CHEST_BOAT, BoatModel::createChestBoatModel);
+        event.registerLayerDefinition(ModModelLayers.PALM_BOAT, BoatModel::createBoatModel);
+        event.registerLayerDefinition(ModModelLayers.PALM_CHEST_BOAT, BoatModel::createChestBoatModel);
+        event.registerLayerDefinition(ModModelLayers.SKY_BOAT, BoatModel::createBoatModel);
+        event.registerLayerDefinition(ModModelLayers.SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
+        event.registerLayerDefinition(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBoatModel);
+        event.registerLayerDefinition(ModModelLayers.GILDED_SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
     }
 
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        EntityRenderer<?> wolfRenderer = event.getRenderer(EntityType.WOLF);
-        if (wolfRenderer instanceof WolfRenderer renderer) {
-            renderer.addLayer(new WolfFrogHatLayer(renderer));
+        WolfRenderer wolfRenderer = event.getRenderer(EntityType.WOLF);
+        if (wolfRenderer != null) {
+            wolfRenderer.addLayer(new WolfFrogHatLayer(wolfRenderer));
+        }
+    }
+
+    // FluidType lost its own initializeClient(Consumer) hook - client extensions for fluid types
+    // (as well as blocks/items/mob effects) all register centrally here instead.
+    @SubscribeEvent
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        if (ModFluidTypes.GOO_FLUID_TYPE.get() instanceof BaseFluidType gooFluidType) {
+            event.registerFluidType(gooFluidType, gooFluidType);
         }
     }
 

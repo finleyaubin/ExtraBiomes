@@ -4,7 +4,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +21,7 @@ public class RazorFeatherItem extends Item {
         return new RazorFeatherProjectileEntity(level, player);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand){
+    public InteractionResult use(Level level, Player player, InteractionHand hand){
         ItemStack itemStack = player.getItemInHand(hand);
         level.playSound(null, player.getX(),player.getY(),player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.5F,0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         if (!level.isClientSide) {
@@ -35,6 +35,6 @@ public class RazorFeatherItem extends Item {
                 itemStack.shrink(1);
             }
 
-        return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
+        return level.isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
     }
 }

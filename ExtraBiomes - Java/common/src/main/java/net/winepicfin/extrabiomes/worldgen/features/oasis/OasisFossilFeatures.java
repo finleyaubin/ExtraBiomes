@@ -74,7 +74,7 @@ public class OasisFossilFeatures {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         for (int i = 0; i < BONE_PIECES.length; i++) {
-            ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, BONE_PIECES[i]);
+            ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, BONE_PIECES[i]);
             context.register(PIECE_KEYS.get(i), new ConfiguredFeature<>(
                     ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                     new SingleStructureConfiguration(structure, Optional.empty(), 0, true, List.of(Blocks.SAND, Blocks.RED_SAND))
@@ -104,11 +104,12 @@ public class OasisFossilFeatures {
             context.register(PIECE_PLACED_KEYS.get(i), new PlacedFeature(configuredFeatures.getOrThrow(PIECE_KEYS.get(i)), List.<PlacementModifier>of()));
         }
 
-        // Bumped from 1-in-48 to 1-in-10 after playtest feedback; floor check moved to SingleStructureConfiguration.
+        // Bumped from 1-in-48 to 1-in-10 after playtest feedback, then again to 1-in-4 to make fossils a
+        // more common sight; floor check moved to SingleStructureConfiguration.
         context.register(SELECT_FOSSIL_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(SELECT_FOSSIL_KEY),
                 List.of(
-                        RarityFilter.onAverageOnceEvery(10),
+                        RarityFilter.onAverageOnceEvery(4),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome()
@@ -117,10 +118,10 @@ public class OasisFossilFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, "oasis/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis/" + name));
     }
 }

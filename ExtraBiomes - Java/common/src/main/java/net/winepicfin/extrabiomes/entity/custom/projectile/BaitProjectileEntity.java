@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -53,8 +54,11 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
         super(ModEntities.BAIT_PROJECTILE.get(), level);
     }
 
+    // ThrowableItemProjectile no longer derives its own default item from getDefaultItem() for this
+    // constructor shape, so set it explicitly right after super() runs.
     public BaitProjectileEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.BAIT_PROJECTILE.get(), shooter, level);
+        super(ModEntities.BAIT_PROJECTILE.get(), shooter, level, ItemStack.EMPTY);
+        this.setItem(new ItemStack(this.getDefaultItem()));
     }
 
     @Override
@@ -174,13 +178,13 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
             }
             this.discard();
         }
-        return InteractionResult.sidedSuccess(this.level().isClientSide);
+        return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
     }
 
     // Lets players and other mobs damage the landed decoy through the normal combat path, on top of PiranhaBaitGoal's direct bite() calls (piranhas aren't LivingEntity attackers, so they can't route through hurt()).
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (!isLanded() || this.level().isClientSide || this.isInvulnerableTo(source)) {
+    public boolean hurtServer(@NotNull ServerLevel level, DamageSource source, float amount) {
+        if (!isLanded() || this.isInvulnerableToBase(source)) {
             return false;
         }
         bite(Math.max(1, Math.round(amount)), source.getSourcePosition());

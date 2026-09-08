@@ -1,13 +1,16 @@
 package net.winepicfin.extrabiomes.datagen;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -54,6 +57,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.JELLYFISHING_NET_EMPTY);
         simpleItem(ModItems.JELLYFISHING_NET_FULL);
         simpleItem(ModItems.BUCKET_OF_GOO);
+        // Boat items - see ModItems.BOAT_MODEL_ENTRIES (common) for which wood type uses which texture.
+        ModItems.BOAT_MODEL_ENTRIES.forEach(entry -> boatItem(entry.item(), entry.texture()));
         trimmedArmorItem(ModItems.FROG_HELMET);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_SLAB);
@@ -65,7 +70,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.CUT_BLACK_SANDSTONE_SLAB);
         evenSimplerBlockItem(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB);
         withExistingParent(BuiltInRegistries.BLOCK.getKey(ModBlocks.BLACK_SANDSTONE_WALL.get()).getPath(), mcLoc("block/wall_inventory"))
-                .texture("wall", new ResourceLocation(ExtraBiomes.MOD_ID, "block/black_sandstone"));
+                .texture("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone"));
 
         // Mystic Wood
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);
@@ -148,7 +153,9 @@ public class ModItemModelProvider extends ItemModelProvider {
                 ResourceKey<TrimMaterial> trimMaterial = entry.getKey();
                 float trimValue = entry.getValue();
 
-                String armorType = switch (armorItem.getEquipmentSlot()) {
+                Equippable equippable = itemRegistryObject.get().getDefaultInstance().get(DataComponents.EQUIPPABLE);
+                EquipmentSlot equipmentSlot = equippable != null ? equippable.slot() : EquipmentSlot.HEAD;
+                String armorType = switch (equipmentSlot) {
                     case HEAD -> "helmet";
                     case CHEST -> "chestplate";
                     case LEGS -> "leggings";
@@ -162,9 +169,9 @@ public class ModItemModelProvider extends ItemModelProvider {
                 String armorItemPath = "item/" + itemRegistryObject.getId().getPath();
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
-                ResourceLocation armorItemResLoc = new ResourceLocation(ExtraBiomes.MOD_ID, armorItemPath);
-                ResourceLocation trimResLoc = new ResourceLocation(trimPath); // minecraft namespace
-                ResourceLocation trimNameResLoc = new ResourceLocation(ExtraBiomes.MOD_ID, currentTrimName);
+                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, armorItemPath);
+                ResourceLocation trimResLoc = ResourceLocation.withDefaultNamespace(trimPath);
+                ResourceLocation trimNameResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, currentTrimName);
 
                 // This is used for making the ExistingFileHelper acknowledge that this texture exist, so this will
                 // avoid an IllegalArgumentException
@@ -184,7 +191,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
                         .predicate(mcLoc("trim_type"), trimValue).end()
                         .texture("layer0",
-                                new ResourceLocation(ExtraBiomes.MOD_ID,
+                                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,
                                         "item/" + itemRegistryObject.getId().getPath()));
             });
         }
@@ -192,8 +199,18 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder simpleItem(RegistrySupplier<Item> item){
         return withExistingParent(item.getId().getPath(),
-            new ResourceLocation("item/generated")).texture("layer0",
-                new ResourceLocation(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+            ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+    }
+
+    // Unlike simpleItem(), the texture stem is passed explicitly rather than derived from the item's
+    // own registry path - boat items are named "<wood>_boat" (matching this mod's other wood items),
+    // but the pre-staged art (ported from the Bedrock module) is named "boat_<wood>", so the two don't
+    // match by convention.
+    private ItemModelBuilder boatItem(RegistrySupplier<Item> item, String texture) {
+        return withExistingParent(item.getId().getPath(),
+                ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + texture));
     }
     public void evenSimplerBlockItem(RegistrySupplier<Block> block) {
         this.withExistingParent(ExtraBiomes.MOD_ID + ":" + BuiltInRegistries.BLOCK.getKey(block.get()).getPath(),
@@ -207,23 +224,23 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     public void fenceItem(RegistrySupplier<Block> block, RegistrySupplier<Block> baseBlock) {
         this.withExistingParent(BuiltInRegistries.BLOCK.getKey(block.get()).getPath(), mcLoc("block/fence_inventory"))
-                .texture("texture",  new ResourceLocation(ExtraBiomes.MOD_ID, "block/" + BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath()));
+                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath()));
     }
 
     public void buttonItem(RegistrySupplier<Block> block, RegistrySupplier<Block> baseBlock) {
         this.withExistingParent(BuiltInRegistries.BLOCK.getKey(block.get()).getPath(), mcLoc("block/button_inventory"))
-                .texture("texture",  new ResourceLocation(ExtraBiomes.MOD_ID, "block/" + BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath()));
+                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath()));
     }
 
     private ItemModelBuilder simpleBlockItem(RegistrySupplier<Block> item) {
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/generated")).texture("layer0",
-                new ResourceLocation(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+                ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
     }
 
     private ItemModelBuilder saplingItem(RegistrySupplier<Block> item) {
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/generated")).texture("layer0",
-                new ResourceLocation(ExtraBiomes.MOD_ID,"block/" + item.getId().getPath()));
+                ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"block/" + item.getId().getPath()));
     }
 }

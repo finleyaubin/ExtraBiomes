@@ -1,17 +1,19 @@
 package net.winepicfin.extrabiomes.entity.ai;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.custom.GiantTortoiseEntity;
 
 import java.util.EnumSet;
-import java.util.UUID;
 
 // Ported from Bedrock's ram_attack: runs the full charge/hit/retreat/re-charge cycle itself instead of handing off to a separate melee goal.
 public class GiantTortoiseChargeGoal extends Goal {
-    private static final UUID CHARGE_SPEED_MODIFIER_ID = UUID.fromString("23a748af-3d91-45e8-b502-545165bdedc4");
+    private static final ResourceLocation CHARGE_SPEED_MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "giant_tortoise_charge_speed");
     private static final double MIN_RAM_DISTANCE = 4.0D;
     private static final double RAM_DISTANCE = 7.0D;
     private static final double RAM_SPEED_MULTIPLIER = 1.0D; // +100% => 2x base, matches ram_speed:2 vs run_speed:1
@@ -79,7 +81,7 @@ public class GiantTortoiseChargeGoal extends Goal {
             this.tortoise.getLookControl().setLookAt(target, 30.0F, 30.0F);
             this.tortoise.getNavigation().moveTo(target, 1.0D);
             if (distSqr <= ATTACK_RANGE * ATTACK_RANGE && this.attackCooldown <= 0) {
-                this.tortoise.doHurtTarget(target);
+                this.tortoise.doHurtTarget((ServerLevel) this.tortoise.level(), target);
                 this.attackCooldown = ATTACK_COOLDOWN_TICKS;
                 this.state = State.RETREAT;
                 this.retreatTicks = MAX_RETREAT_TICKS;
@@ -103,7 +105,7 @@ public class GiantTortoiseChargeGoal extends Goal {
     private void applySpeedBoost() {
         var attr = this.tortoise.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attr != null && attr.getModifier(CHARGE_SPEED_MODIFIER_ID) == null) {
-            attr.addTransientModifier(new AttributeModifier(CHARGE_SPEED_MODIFIER_ID, "Giant tortoise charge speed",
+            attr.addTransientModifier(new AttributeModifier(CHARGE_SPEED_MODIFIER_ID,
                     RAM_SPEED_MULTIPLIER, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
