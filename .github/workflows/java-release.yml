@@ -107,15 +107,11 @@ jobs:
       - name: Check whether this version was already released
         id: existing
         run: |
-          # TEMPORARY, revert right after Java-v3.10.0-beta-7+mc1.20.1 ships: beta 7's release
-          # was created by the 1.21.4 run before announcements existed, so the real check below
-          # would suppress the one announcement this version is owed.
-          echo "EXISTS=false" >> $GITHUB_OUTPUT
-          # if gh release view "${{ steps.version.outputs.RELEASE_TAG }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-          #   echo "EXISTS=true" >> $GITHUB_OUTPUT
-          # else
-          #   echo "EXISTS=false" >> $GITHUB_OUTPUT
-          # fi
+          if gh release view "${{ steps.version.outputs.RELEASE_TAG }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "EXISTS=false" >> $GITHUB_OUTPUT
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -184,8 +180,10 @@ jobs:
             create-fabric(optional){modrinth:create-fabric}{curseforge:624165}
 
       # Skipped silently when DISCORD_WEBHOOK isn't set, so forks and the initial rollout don't
-      # fail the release. Discord caps an embed description at 4096 chars; iconv -c drops the
-      # partial multi-byte char head -c can leave behind, which would otherwise break jq.
+      # fail the release. The changelog's <img> tags render as literal text in an embed, so they
+      # are stripped and the first screenshot becomes the embed's image instead. Discord caps an
+      # embed description at 4096 chars; iconv -c drops the partial multi-byte char head -c can
+      # leave behind, which would otherwise break jq.
       - name: Announce on Discord
         if: steps.existing.outputs.EXISTS == 'false'
         env:
@@ -194,10 +192,12 @@ jobs:
           COLOR: ${{ steps.prerelease.outputs.IS_PRERELEASE == 'true' && '16098851' || '3066993' }}
         run: |
           [ -n "$WEBHOOK" ] || exit 0
-          BODY=$(head -c 4000 /tmp/changelog.md | iconv -f utf-8 -t utf-8 -c)
-          jq -n --arg t "$TAG" --arg b "$BODY" --argjson c "$COLOR" \
+          BODY=$(sed 's/<[^>]*>//g' /tmp/changelog.md | head -c 4000 | iconv -f utf-8 -t utf-8 -c)
+          IMAGE=$(grep -om1 'src="[^"]*"' /tmp/changelog.md | cut -d'"' -f2)
+          jq -n --arg t "$TAG" --arg b "$BODY" --argjson c "$COLOR" --arg i "$IMAGE" \
                 --arg u "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$TAG" \
-            '{embeds:[{title:$t,url:$u,description:$b,color:$c}]}' \
+            '{embeds:[{title:$t,url:$u,description:$b,color:$c}
+                      + (if $i == "" then {} else {image:{url:$i}} end)]}' \
             | curl -sSf -X POST -H 'Content-Type: application/json' -d @- "$WEBHOOK"
 
       - name: Render story slides
@@ -209,15 +209,34 @@ jobs:
           python3 ../tools/render_slides.py /tmp/changelog.md \
             --version "${{ steps.version.outputs.VERSION }}" --edition Java --out /tmp/slides
 
-      # Meta cURLs image_url from its own servers, so each slide has to be public at publish
-      # time - the release on this public repo is the one host we already have. --clobber keeps
-      # a re-run from failing on assets that are already there.
-      - name: Upload slides to the release
+      # Meta cURLs image_url from its own servers, so each slide has to be public at publish time.
+      # Release assets are the wrong host for it: releases/download/... answers with a 302 to a
+      # signed, expiring objects.githubusercontent.com URL, and Meta's fetcher follows that only
+      # sometimes - which shows up as an intermittent subcode 2207052, "the media could not be
+      # fetched from this URI", on a different slide each attempt. raw.githubusercontent serves
+      # the bytes directly as image/jpeg with no redirect and nothing to expire, so the slides
+      # are committed here and posted from there, pinned to this commit.
+      # ponytail: a few MB of JPEGs per release land in branch history. Move them to one orphan
+      # media branch if that growth starts to matter.
+      - name: Commit slides for a stable public URL
+        id: slides
         if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
+        working-directory: .
         env:
           IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ steps.version.outputs.RELEASE_TAG }}" /tmp/slides/*.jpg --clobber --repo "$GITHUB_REPOSITORY"
+        run: |
+          DIR="media-slides/${{ steps.version.outputs.VERSION }}"
+          mkdir -p "$DIR"
+          cp /tmp/slides/*.jpg "$DIR/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$DIR"
+          git commit -qm "Story slides for ${{ steps.version.outputs.RELEASE_TAG }}" || echo "no slide changes"
+          git push -q origin "HEAD:$GITHUB_REF_NAME"
+          # Pinned to the SHA, not the branch: raw.githubusercontent caches per ref and a branch
+          # URL can still answer 404 for a short while after the push.
+          echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          echo "DIR=$DIR" >> $GITHUB_OUTPUT
 
       - name: Post Instagram stories
         if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
@@ -227,18 +246,59 @@ jobs:
           TAG: ${{ steps.version.outputs.RELEASE_TAG }}
         run: |
           API="https://graph.instagram.com/v25.0"
-          for slide in /tmp/slides/*.jpg; do
-            IMAGE="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$TAG/$(basename "$slide")"
-            CONTAINER=$(curl -sSf -X POST "$API/$IG_USER_ID/media" \
-              -d "media_type=STORIES" -d "image_url=$IMAGE" -d "access_token=$IG_TOKEN" | jq -r .id)
+          RAW="https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${{ steps.slides.outputs.SHA }}/${{ steps.slides.outputs.DIR }}"
+          # Meta answers failures with a JSON error body and a 4xx, so this reads the body rather
+          # than using curl -f, which would discard the one thing worth logging. It returns rather
+          # than exits, because every caller runs it in a command substitution where an exit would
+          # only kill the subshell and let the step carry on with an empty value; and it writes to
+          # stderr, because a caller capturing stdout would otherwise swallow the message.
+          call() {
+            RESPONSE=$(curl -sS -w '\n%{http_code}' "$@")
+            CODE=$(printf '%s' "$RESPONSE" | tail -n1)
+            RESPONSE=$(printf '%s' "$RESPONSE" | sed '$d')
+            if ! printf '%s' "$RESPONSE" | jq -e . >/dev/null 2>&1; then
+              echo "HTTP $CODE, non-JSON body: $RESPONSE" >&2
+              return 1
+            fi
+            if printf '%s' "$RESPONSE" | jq -e '.error' >/dev/null 2>&1; then
+              echo "HTTP $CODE, API error: $RESPONSE" >&2
+              return 1
+            fi
+            printf '%s' "$RESPONSE"
+          }
+          # sort -V, because a plain glob orders these slide-1, slide-10, slide-2, ... and the
+          # story sequence comes out with slide 10 in second place.
+          FIRST=1
+          for slide in $(ls /tmp/slides/*.jpg | sort -V); do
+            NAME=$(basename "$slide")
+            # Meta fetches each image itself, so the slides are spaced out and each container
+            # creation retried - a fetch that fails once often succeeds moments later.
+            [ "$FIRST" = 1 ] || sleep 10
+            FIRST=0
+            IMAGE="$RAW/$NAME"
+            echo "--- $NAME -> $IMAGE"
+            CONTAINER=""
+            for attempt in 1 2 3; do
+              BODY=$(call -X POST "$API/$IG_USER_ID/media" \
+                -d "media_type=STORIES" -d "image_url=$IMAGE" -d "access_token=$IG_TOKEN") || BODY=""
+              CONTAINER=$(printf '%s' "$BODY" | jq -r '.id // empty' 2>/dev/null)
+              [ -n "$CONTAINER" ] && break
+              sleep $((attempt * 10))
+            done
+            [ -n "$CONTAINER" ] || { echo "::error::$NAME container creation failed"; exit 1; }
             # A container isn't publishable the instant it's created; docs say poll status_code,
             # once a minute for at most five. Images finish in seconds, so this polls faster.
             for _ in 1 2 3 4 5 6 7 8 9 10; do
-              STATUS=$(curl -sSf "$API/$CONTAINER?fields=status_code&access_token=$IG_TOKEN" | jq -r .status_code)
+              BODY=$(call "$API/$CONTAINER?fields=status_code&access_token=$IG_TOKEN") \
+                || { echo "::error::$NAME status poll failed"; exit 1; }
+              STATUS=$(printf '%s' "$BODY" | jq -r '.status_code // empty')
               [ "$STATUS" = "FINISHED" ] && break
-              case "$STATUS" in ERROR|EXPIRED) echo "::error::$(basename "$slide") container $STATUS"; exit 1;; esac
+              case "$STATUS" in ERROR|EXPIRED) echo "::error::$NAME container $STATUS: $BODY"; exit 1;; esac
               sleep 6
             done
-            curl -sSf -X POST "$API/$IG_USER_ID/media_publish" \
-              -d "creation_id=$CONTAINER" -d "access_token=$IG_TOKEN" > /dev/null
+            [ "$STATUS" = "FINISHED" ] || { echo "::error::$NAME never reached FINISHED (last: $STATUS)"; exit 1; }
+            call -X POST "$API/$IG_USER_ID/media_publish" \
+              -d "creation_id=$CONTAINER" -d "access_token=$IG_TOKEN" >/dev/null \
+              || { echo "::error::$NAME publish failed"; exit 1; }
+            echo "published $NAME"
           done
