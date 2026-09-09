@@ -19,5 +19,10 @@
 - Jellyfish: beach spawns now wash up on the sand instead of appearing in the water, and no longer take drowning damage while stranded there.
 - Worm: shift-right-clicking a worm now picks it up as an item, matching the Bedrock addon. A renamed worm keeps its name across the item/entity round-trip.
 
+## Compatibility
+- Boulders/stick piles: no longer added to every third-party mod's forest/jungle/plains biome via the broad vanilla tags - a large enough modpack could hit a "Feature order cycle found" world-load crash once another mod's biome happened to share one of these features (seen with Ars Elemental and Biomes We've Gone). Now added only to vanilla's and this mod's own biomes via a curated list.
+- Mystic Forest: no longer shares its flowers, grass, or mushroom patches with vanilla's versions of those features, for the same cross-mod crash reason above.
+- Fixed a crash placing structures (huge mushrooms, Jungle Pillars, glacier snow drifts, etc.) whenever Ars Nouveau was installed alongside this mod.
+
 ## Beta status
 Still a beta release - the Java port remains newer and less battle-tested than the Bedrock addon, so please keep reporting anything that looks wrong on the GitHub issue tracker.
