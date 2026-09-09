@@ -1,11 +1,15 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -102,6 +106,18 @@ public class JellyfishEntity extends WaterAnimal {
         this.setVariant(tag.getInt("Variant"));
     }
 
+    // 1.20.2's SpawnPlacements.Type is a fixed enum (no custom SpawnPlacementType hook like newer
+    // versions have), so jellyfish is registered with NO_RESTRICTIONS and both position checks -
+    // a dry-sand check on beach, a real-water check everywhere else - are done here by hand
+    // instead of via a custom placement type.
+    public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, MobSpawnType reason,
+                                                     BlockPos pos, RandomSource random) {
+        if (level.getBiome(pos).is(BiomeTags.IS_BEACH)) {
+            return level.getFluidState(pos).isEmpty() && level.getBlockState(pos.below()).isSolid();
+        }
+        return level.getFluidState(pos).is(FluidTags.WATER) && WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
+    }
+
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType type,
@@ -157,6 +173,13 @@ public class JellyfishEntity extends WaterAnimal {
     @Override
     public boolean canBeLeashed(Player player) {
         return false;
+    }
+
+    // Washed-up beach jellyfish (see checkJellyfishSpawnRules) shouldn't drown on the sand - vanilla
+    // WaterAnimal.handleAirSupply() deals drowning damage once air runs out; tick()'s
+    // grayAmount/scaleY already shows it drying out visually instead.
+    @Override
+    protected void handleAirSupply(int preTickAirSupply) {
     }
 
     @Override

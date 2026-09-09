@@ -3,7 +3,6 @@ package net.winepicfin.extrabiomes.fabric.event;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -39,8 +38,11 @@ public class FabricModEvents {
                 Animal::checkAnimalSpawnRules);
         SpawnPlacements.register(ModEntities.GIANT_TORTOISE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules);
-        SpawnPlacements.register(ModEntities.JELLYFISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                WaterAnimal::checkSurfaceWaterAnimalSpawnRules);
+        // NO_RESTRICTIONS - unlike newer versions, 1.20.2's SpawnPlacements.Type has no custom-type
+        // hook, so both the beach (ON_GROUND) and open-water (IN_WATER) position checks are done by
+        // hand inside checkJellyfishSpawnRules instead.
+        SpawnPlacements.register(ModEntities.JELLYFISH.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                JellyfishEntity::checkJellyfishSpawnRules);
         SpawnPlacements.register(ModEntities.PIRANHA.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 PiranhaEntity::checkPiranhaSpawnRules);
         SpawnPlacements.register(ModEntities.HARPY.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
