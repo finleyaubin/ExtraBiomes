@@ -41,6 +41,11 @@ public class WormItem extends Item {
             return InteractionResult.FAIL;
         }
 
+        ItemStack heldStack = context.getItemInHand();
+        if (heldStack.hasCustomHoverName()) {
+            worm.setCustomName(heldStack.getHoverName());
+        }
+
         float yaw = Mth.wrapDegrees(level.random.nextFloat() * 360.0F);
         worm.moveTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, yaw, 0.0F);
         worm.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(spawnPos), MobSpawnType.BUCKET, null, null);

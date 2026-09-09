@@ -83,6 +83,16 @@ jobs:
         run: ./gradlew :forge:runData
         timeout-minutes: 10
 
+      # Always run when Fabric is enabled, not just when it's the sole loader - Fabric's own
+      # ModBiomeTagProvider is the only one that writes Fabric's convention tags (c:mushroom,
+      # c:swamp, ...), so skipping this whenever another loader is also enabled silently shipped
+      # released Fabric jars without those tags populated at all (see the matching fix/comment in
+      # gradle-build.yml).
+      - name: Generate Fabric data
+        if: steps.platforms.outputs.fabric == 'true'
+        run: ./gradlew :fabric:runDatagen
+        timeout-minutes: 10
+
       # mod_version in gradle.properties should already match the tag before tagging a
       # release - this doesn't derive the jar version from the tag, it just builds whatever
       # gradle.properties currently says.
