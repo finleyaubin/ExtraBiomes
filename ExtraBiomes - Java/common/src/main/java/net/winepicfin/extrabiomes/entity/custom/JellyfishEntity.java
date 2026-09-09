@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
@@ -108,15 +108,14 @@ public class JellyfishEntity extends WaterAnimal {
 
     // 1.20.2's SpawnPlacements.Type is a fixed enum (no custom SpawnPlacementType hook like newer
     // versions have), so jellyfish is registered with NO_RESTRICTIONS and both position checks -
-    // ON_GROUND's dry-sand check on beach, IN_WATER's check everywhere else - are done here by
-    // hand instead of via a custom placement type.
+    // a dry-sand check on beach, a real-water check everywhere else - are done here by hand
+    // instead of via a custom placement type.
     public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, MobSpawnType reason,
                                                      BlockPos pos, RandomSource random) {
-        boolean beach = level.getBiome(pos).is(BiomeTags.IS_BEACH);
-        boolean positionOk = beach
-                ? SpawnPlacements.Type.ON_GROUND.isSpawnPositionOk(level, pos, type)
-                : SpawnPlacements.Type.IN_WATER.isSpawnPositionOk(level, pos, type);
-        return positionOk && (beach || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random));
+        if (level.getBiome(pos).is(BiomeTags.IS_BEACH)) {
+            return level.getFluidState(pos).isEmpty() && level.getBlockState(pos.below()).isSolid();
+        }
+        return level.getFluidState(pos).is(FluidTags.WATER) && WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
     }
 
     @Nullable

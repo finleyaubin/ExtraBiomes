@@ -31,7 +31,11 @@ public class SkyCityStructureEditGameTests {
     private static final int MARGIN = 4;
 
     // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000, manualOnly = true)
+    // Dev tool only, not a regression test. 1.20.2's @GameTest predates the manualOnly attribute -
+    // see forge/gametest/SkyCityStructureEditGameTests.java's comment for the full rationale. It
+    // still runs harmlessly under Fabric's blanket "run every registered test" boot (it always
+    // calls succeed() promptly, no hang risk).
+    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000)
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();

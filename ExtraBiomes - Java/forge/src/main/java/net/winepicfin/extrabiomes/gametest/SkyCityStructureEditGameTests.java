@@ -30,8 +30,13 @@ public class SkyCityStructureEditGameTests {
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
-    // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = "sky_city_edit_void", timeoutTicks = 60000, batch = "extrabiomes", manualOnly = true)
+    // Dev tool only, not a regression test. 1.20.2's @GameTest predates the manualOnly attribute
+    // (added in later versions specifically for this kind of rig) - excluded instead from forge's
+    // hardcoded per-test CI driver (gradle-build.yml's TEST_TIMEOUTS map), which never lists this
+    // test's name, so it's simply never launched there. It still runs harmlessly under
+    // Fabric/NeoForge's blanket "run every registered test" boot (it always calls succeed()
+    // promptly, no hang risk).
+    @GameTest(template = "sky_city_edit_void", timeoutTicks = 60000, batch = "extrabiomes")
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();

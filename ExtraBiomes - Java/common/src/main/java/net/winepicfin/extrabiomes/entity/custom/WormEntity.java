@@ -1,7 +1,6 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -74,7 +73,7 @@ public class WormEntity extends Animal {
             if (!this.level().isClientSide) {
                 ItemStack wormItem = new ItemStack(ModItems.WORM.get());
                 if (this.hasCustomName()) {
-                    wormItem.set(DataComponents.CUSTOM_NAME, this.getCustomName());
+                    wormItem.setHoverName(this.getCustomName());
                 }
                 if (!player.getInventory().add(wormItem)) {
                     player.drop(wormItem, false);
