@@ -31,11 +31,8 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_LUSH_GRASS = registerKey("add_lush_grass");
     public static final ResourceKey<BiomeModifier> ADD_UNDERGROUND_JUNGLE_VEGETATION = registerKey("add_underground_jungle_vegetation");
     public static final ResourceKey<BiomeModifier> ADD_UNDERGROUND_JUNGLE_CAVE_VINES = registerKey("add_underground_jungle_cave_vines");
-    public static final ResourceKey<BiomeModifier> ADD_BOULDER_PLAINS = registerKey("add_boulder_plains");
-    public static final ResourceKey<BiomeModifier> ADD_BOULDER_FOREST = registerKey("add_boulder_forest");
-    public static final ResourceKey<BiomeModifier> ADD_BOULDER_JUNGLE = registerKey("add_boulder_jungle");
-    public static final ResourceKey<BiomeModifier> ADD_STICK_PILE_FOREST = registerKey("add_stick_pile_forest");
-    public static final ResourceKey<BiomeModifier> ADD_STICK_PILE_JUNGLE = registerKey("add_stick_pile_jungle");
+    public static final ResourceKey<BiomeModifier> ADD_BOULDER = registerKey("add_boulder");
+    public static final ResourceKey<BiomeModifier> ADD_STICK_PILE = registerKey("add_stick_pile");
     public static final ResourceKey<BiomeModifier> REMOVE_STICK_PILE_DARK_FOREST = registerKey("remove_stick_pile_dark_forest");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS = registerKey("add_mushroom_fields_huge_mushrooms");
     public static final ResourceKey<BiomeModifier> ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS = registerKey("add_mushroom_fields_small_mushrooms");
@@ -89,19 +86,21 @@ public class ModBiomeModifiers {
         // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
         // orders for the same pair of features and vanilla's FeatureSorter crashes with
         // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        // Custom huge mushroom variants added to vanilla's own mushroom-themed biomes, mirroring how
-        // FungleJungle/DeepDarkForest already use these same placed features for this mod's biomes.
+        // Tag-based (Tags.Biomes.IS_MUSHROOM, same convention tag ModBiomeTagProvider already folds
+        // Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome list, matching
+        // ADD_BOULDER/ADD_UNDERGROUND_JUNGLE_VEGETATION below - any biome (vanilla, this
+        // mod's, or a third-party mod's) carrying the tag gets these, not just vanilla's own biome.
         context.register(ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
+                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
         // Small mod-added mushroom variants (via the mycelium-floor-patch mechanism -
         // MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY's vegetationFeature is SELECT_MUSHROOM_KEY) were
-        // already wired into FungleJungle directly, but vanilla mushroom fields only ever got the huge
-        // mushroom modifier above - it had no path to this mod's own small mushroom colours at all.
-        // Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
+        // already wired into FungleJungle directly, but mushroom-tagged vanilla/modded biomes only
+        // ever got the huge mushroom modifier above - they had no path to this mod's own small
+        // mushroom colours at all. Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
         context.register(ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.MUSHROOM_FIELDS)),
+                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY)),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS));
         context.register(ADD_DARK_FOREST_HUGE_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
@@ -116,32 +115,18 @@ public class ModBiomeModifiers {
         // warnings during world generation). See ModSurfaceRules.makeRules() javadoc.
 
         // Bedrock's boulder_placer/stick_pile_placer feature_rules (packs/BP/feature_rules/boulder/)
-        // gate on has_biome_tag alone (boulder: plains/forest/jungle, stick_pile: forest/jungle), not
-        // a fixed biome list - so any biome (vanilla, this mod's, or a third-party mod's) carrying one
-        // of those tags gets the feature, same mechanism as ADD_UNDERGROUND_JUNGLE_VEGETATION above.
-        // Passing the tag's own HolderSet (not a snapshot of its current members) is what makes this
-        // dynamic: a biome another mod tags into IS_JUNGLE etc. after this runs still gets included.
-        // Previously hardcoded onto 9 of this mod's own biomes individually (see git history) - moved
-        // here so vanilla Plains/Forest/Jungle and any other mod's tagged biomes get them too, and so
-        // this mod's own biomes only need the tag (ModBiomeTagProvider) to opt in.
-        context.register(ADD_BOULDER_PLAINS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(ModTags.Biomes.IS_PLAINS),
+        // gate on has_biome_tag alone (boulder: plains/forest/jungle, stick_pile: forest/jungle).
+        // GETS_BOULDERS/GETS_STICK_PILES are this mod's own curated tags (see ModTags.Biomes'
+        // javadoc for why - broad vanilla-tag membership repeatedly produced cross-mod "Feature
+        // order cycle found" crashes once a third-party mod's biome shared one of these features),
+        // so only vanilla + this mod's own biomes are covered, not every third-party mod's tagged
+        // biome.
+        context.register(ADD_BOULDER, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(ModTags.Biomes.GETS_BOULDERS),
                 HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_BOULDER_PLACED_KEY)),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS));
-        context.register(ADD_BOULDER_FOREST, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(BiomeTags.IS_FOREST),
-                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_BOULDER_PLACED_KEY)),
-                GenerationStep.Decoration.LOCAL_MODIFICATIONS));
-        context.register(ADD_BOULDER_JUNGLE, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_BOULDER_PLACED_KEY)),
-                GenerationStep.Decoration.LOCAL_MODIFICATIONS));
-        context.register(ADD_STICK_PILE_FOREST, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(BiomeTags.IS_FOREST),
-                HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY)),
-                GenerationStep.Decoration.VEGETAL_DECORATION));
-        context.register(ADD_STICK_PILE_JUNGLE, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(BiomeTags.IS_JUNGLE),
+        context.register(ADD_STICK_PILE, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(ModTags.Biomes.GETS_STICK_PILES),
                 HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
         // Dark Forest specifically triggers vanilla's FeatureSorter "Feature order cycle found"
@@ -151,8 +136,8 @@ public class ModBiomeModifiers {
         // hunting a multi-hop contradiction through vanilla's own biome/feature graph, Dark Forest
         // is excluded here). Forge applies BiomeModifiers by Phase (ADD, then REMOVE), not
         // registration order, so this REMOVE always runs after every ADD above regardless of where
-        // it's registered - every other IS_FOREST biome still gets stick piles from
-        // ADD_STICK_PILE_FOREST.
+        // it's registered - every other GETS_STICK_PILES biome still gets stick piles from
+        // ADD_STICK_PILE.
         context.register(REMOVE_STICK_PILE_DARK_FOREST, BiomeModifiers.RemoveFeaturesBiomeModifier.allSteps(
                 HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST)),
                 HolderSet.direct(placedFeatures.getOrThrow(BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY))));

@@ -81,6 +81,9 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 // a "leave this position alone" marker (e.g. jellycoral relying on the surrounding ocean rather than its
                 // own explicit water fill) would overwrite whatever's already there instead of leaving it untouched.
                 .addProcessor(new BlockIgnoreProcessor(List.of(Blocks.STRUCTURE_VOID)));
+        if (config.weatheredVariation()) {
+            settings.addProcessor(net.winepicfin.extrabiomes.worldgen.features.stonepillars.PillarWeatheringProcessor.INSTANCE);
+        }
 
         BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
@@ -136,7 +139,12 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             return false;
         }
 
-        return template.placeInWorld(level, origin, anchor, settings, random, Block.UPDATE_CLIENTS);
+        boolean placed = template.placeInWorld(level, origin, anchor, settings, random, Block.UPDATE_CLIENTS);
+        // Real exterior faces are only knowable once the structure is actually in the world - see PillarWeatheringProcessor's javadoc for why this can't be done as a processBlock transform.
+        if (placed && config.weatheredVariation()) {
+            net.winepicfin.extrabiomes.worldgen.features.stonepillars.PillarWeatheringProcessor.growVegetation(level, structureBox, random);
+        }
+        return placed;
     }
 
     /**

@@ -43,9 +43,15 @@ public class FabricBiomeModifiers {
         // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
         // orders for the same pair of features and vanilla's FeatureSorter crashes with
         // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS),
+        // Tag-based (ConventionalBiomeTags.MUSHROOM, same convention tag FabricBiomeTagProvider
+        // already folds Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome key - any biome
+        // (vanilla, this mod's, or a third-party mod's) carrying the tag gets these. Requires
+        // Fabric's own datagen to have actually run (gradle-build.yml/java-release.yml's "Generate
+        // Fabric data" step, unconditional now - it used to skip whenever another loader was also
+        // enabled, which shipped Fabric builds with this tag empty).
+        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.MUSHROOM),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS),
+        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.MUSHROOM),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.DARK_FOREST),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
@@ -58,13 +64,14 @@ public class FabricBiomeModifiers {
 
         // Bedrock's boulder_placer/stick_pile_placer feature_rules gate on has_biome_tag alone
         // (boulder: plains/forest/jungle, stick_pile: forest/jungle) - see ModBiomeModifiers (forge)
-        // for the full rationale. ModTags.Biomes.IS_PLAINS is this mod's own tag since vanilla has
-        // no BiomeTags.IS_PLAINS equivalent.
-        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.IS_PLAINS),
-                GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_FOREST),
-                GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
+        // for the full rationale. GETS_BOULDERS/GETS_STICK_PILES are this mod's own curated tags
+        // (see ModTags.Biomes' javadoc) rather than the broad vanilla IS_FOREST/IS_JUNGLE/old
+        // IS_PLAINS tags - keying off those broad tags directly pulled every third-party mod's
+        // tagged biome in too, which repeatedly produced cross-mod "Feature order cycle found"
+        // crashes as new mods got added to this pack (confirmed against Ars Elemental's
+        // flourishing_forest and Biomes We've Gone's coconino_meadow/temperate_grove/ebony_woods -
+        // see git history). Only vanilla + this mod's own biomes are covered now.
+        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.GETS_BOULDERS),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS, BoulderFeatures.SELECT_BOULDER_PLACED_KEY);
         // Dark Forest specifically (bisected empirically: IS_FOREST alone reproduces "Feature
         // order cycle found [dark_forest, jungle_marsh]"; the same call with IS_JUNGLE, or with
@@ -77,10 +84,8 @@ public class FabricBiomeModifiers {
         // Reordering (e.g. the swamp_huge_mushroom-before-stick_pile fix elsewhere in this method)
         // did not resolve it, so rather than continue hunting a knock-on chain through vanilla's
         // own biome list, Dark Forest specifically is excluded from getting stick piles - every
-        // other IS_FOREST biome (forest, flower_forest, birch_forest, etc.) still gets them.
-        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_FOREST).and(BiomeSelectors.excludeByKey(Biomes.DARK_FOREST)),
-                GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
+        // other GETS_STICK_PILES biome (forest, flower_forest, birch_forest, etc.) still gets them.
+        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.GETS_STICK_PILES).and(BiomeSelectors.excludeByKey(Biomes.DARK_FOREST)),
                 GenerationStep.Decoration.VEGETAL_DECORATION, BoulderFeatures.SELECT_STICK_PILE_PLACED_KEY);
 
         BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.MONSTER,
