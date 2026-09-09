@@ -27,22 +27,29 @@ public class MysticForest {
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
-        // forestFlowers < defaultFlowers < forestGrass < defaultMushrooms < defaultExtraVegetation is the
-        // relative VEGETAL_DECORATION order CharredForest/DeepDarkForest already establish for these same
-        // vanilla features, and swampVegetation < defaultMushrooms is the order ShatteredSwamp already
-        // establishes for that pair - FeatureSorter shares one global per-step order across all biomes, so
-        // this has to agree with both or world load throws a "Feature order cycle" crash (confirmed live:
-        // a CI run crashed with exactly that cycle between mystic_forest and shattered_swamp before this
-        // fix, from addSwampVegetation originally being placed after addDefaultMushrooms here).
-        BiomeDefaultFeatures.addForestFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
-        BiomeDefaultFeatures.addForestGrass(biomeBuilder);
+        // swampVegetation < defaultMushrooms is the order ShatteredSwamp already establishes for that
+        // pair - FeatureSorter shares one global per-step order across all biomes, so this has to
+        // agree or world load throws a "Feature order cycle" crash (confirmed live: a CI run crashed
+        // with exactly that cycle between mystic_forest and shattered_swamp before this fix, from
+        // addSwampVegetation originally being placed after addDefaultMushrooms here).
+        //
+        // The old addForestFlowers/addDefaultFlowers/addForestGrass/addDefaultMushrooms calls
+        // (vanilla's shared forest_flowers/flower_default/patch_grass_forest/brown_mushroom_normal/
+        // red_mushroom_normal features) are gone - see MysticFeatures.MYSTIC_FLOWERS_KEY's javadoc
+        // for why: sharing any of these with any other mod's biome pulled mystic_forest into a
+        // global ordering graph that eventually cycled against Biomes We've Gone's biomes, and no
+        // amount of reordering these calls could fix a contradiction that wasn't even between this
+        // biome and theirs directly. Swapping flowers alone didn't clear the cycle, so grass and
+        // both mushroom patches got the same treatment.
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MysticFeatures.MYSTIC_FLOWERS_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MysticFeatures.MYSTIC_GRASS_PLACED_KEY);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         // mystic_forest.biome.json carries the "swamp" tag alongside "mystic" (same as ShatteredSwamp/
         // JungleMarsh), which on Bedrock pulls in vanilla's swamp-tagged vegetation/mushroom feature_rules
         // - these were never ported to Java, so this biome was missing them entirely.
         BiomeDefaultFeatures.addSwampVegetation(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MysticFeatures.MYSTIC_BROWN_MUSHROOM_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MysticFeatures.MYSTIC_RED_MUSHROOM_PLACED_KEY);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.MYSTIC_PLACED_KEY);
