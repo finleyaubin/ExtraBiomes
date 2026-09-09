@@ -107,11 +107,15 @@ jobs:
       - name: Check whether this version was already released
         id: existing
         run: |
-          if gh release view "${{ steps.version.outputs.RELEASE_TAG }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "EXISTS=true" >> $GITHUB_OUTPUT
-          else
-            echo "EXISTS=false" >> $GITHUB_OUTPUT
-          fi
+          # TEMPORARY, revert right after Java-v3.10.0-beta-7+mc1.20.1 ships: beta 7's release
+          # was created by the 1.21.4 run before announcements existed, so the real check below
+          # would suppress the one announcement this version is owed.
+          echo "EXISTS=false" >> $GITHUB_OUTPUT
+          # if gh release view "${{ steps.version.outputs.RELEASE_TAG }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+          #   echo "EXISTS=true" >> $GITHUB_OUTPUT
+          # else
+          #   echo "EXISTS=false" >> $GITHUB_OUTPUT
+          # fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
