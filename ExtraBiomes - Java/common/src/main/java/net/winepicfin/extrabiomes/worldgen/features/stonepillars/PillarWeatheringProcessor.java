@@ -36,8 +36,9 @@ import java.util.Set;
  * instead of a speckled per-block roll.
  * <p>
  * Runtime-only, like {@link net.winepicfin.extrabiomes.worldgen.features.structurescatter.PreserveBedrockProcessor} -
- * never serialized, only ever constructed once and passed to
- * {@link StructureTemplate#placeInWorld}.
+ * never serialized, only ever constructed once and passed to {@link StructureTemplate#placeInWorld}.
+ * See that class's javadoc for why {@link #getType()} returns {@link StructureProcessorType#NOP}
+ * rather than throwing or registering a real type of its own.
  */
 public final class PillarWeatheringProcessor extends StructureProcessor {
     public static final PillarWeatheringProcessor INSTANCE = new PillarWeatheringProcessor();
@@ -233,6 +234,6 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        throw new UnsupportedOperationException("PillarWeatheringProcessor is runtime-only and is never serialized");
+        return StructureProcessorType.NOP;
     }
 }
