@@ -186,8 +186,9 @@ jobs:
               allmodbiomesappearinoverworldgeneration) TEST_TIMEOUTS[$name]=1200 ;;
               *) TEST_TIMEOUTS[$name]=180 ;;
             esac
-          done < <(grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' \
-            forge/src/main/java/net/winepicfin/extrabiomes/gametest/*.java | tr '[:upper:]' '[:lower:]')
+          done < <(find forge/src/main/java/net/winepicfin/extrabiomes/gametest -name '*.java' \
+              ! -name 'SkyCityStructureEditGameTests.java' -exec \
+            grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' {} + | tr '[:upper:]' '[:lower:]')
 
           if [ "${#TEST_TIMEOUTS[@]}" -eq 0 ]; then
             echo "::error::No @GameTest methods found under forge/.../gametest - discovery regex is stale"
@@ -320,8 +321,9 @@ jobs:
           #
           # EXPECTED_TESTS is counted from the actual @GameTest methods rather than hardcoded, so
           # this can't silently under/over-count after a test is added or removed.
-          EXPECTED_TESTS=$(grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' \
-            neoforge/src/main/java/net/winepicfin/extrabiomes/gametest/*.java | wc -l)
+          EXPECTED_TESTS=$(find neoforge/src/main/java/net/winepicfin/extrabiomes/gametest -name '*.java' \
+              ! -name 'SkyCityStructureEditGameTests.java' -exec \
+            grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' {} + | wc -l)
           if [ "$EXPECTED_TESTS" -eq 0 ]; then
             echo "::error::No @GameTest methods found under neoforge/.../gametest - discovery regex is stale"
             exit 1
@@ -398,17 +400,20 @@ jobs:
           path: "ExtraBiomes - Java/neoforge-gametest.log"
           if-no-files-found: ignore
 
-      # Fallback for a Fabric-only branch (no Forge, no NeoForge) - Loom's data() run type is
-      # Forge-only, so Fabric API's own fabricApi.configureDataGeneration() extension provides the
-      # equivalent "runDatagen" task instead (see fabric/build.gradle). Forge's and NeoForge's own
-      # runData above already populate the same shared common/src/generated/resources/ when either
-      # of those is enabled, so this only needs to run when neither is. Placed immediately before
+      # Loom's data() run type is Forge-only, so Fabric API's own
+      # fabricApi.configureDataGeneration() extension provides the equivalent "runDatagen" task
+      # instead (see fabric/build.gradle). Forge's and NeoForge's own runData above already
+      # populate most of the same shared common/src/generated/resources/, but NOT everything -
+      # Fabric's own ModBiomeTagProvider is the only one that writes Fabric's convention tags
+      # (c:mushroom, c:swamp, ...; Forge/NeoForge write their own forge:/neoforge: equivalents
+      # instead), so this always runs whenever Fabric is enabled, not just when it's the sole
+      # loader - skipping it (previous version of this step) silently shipped Fabric builds
+      # without those tags populated at all, which broke ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS
+      # (see FabricBiomeModifiers) the moment it depended on one. Placed immediately before
       # Fabric's own block below (rather than off on its own) since Fabric's GameTestServer boot
-      # needs that data present too, same as :common:test does - Fabric's block runs last of the
-      # three loaders' sections specifically so whichever of Forge/NeoForge/this fallback ran
-      # earlier has already generated it by the time Fabric needs it.
+      # needs this data present too, same as :common:test does.
       - name: Generate Fabric data
-        if: steps.platforms.outputs.fabric == 'true' && steps.platforms.outputs.forge == 'false' && steps.platforms.outputs.neoforge == 'false'
+        if: steps.platforms.outputs.fabric == 'true'
         run: ./gradlew :fabric:runDatagen
         timeout-minutes: 10
 

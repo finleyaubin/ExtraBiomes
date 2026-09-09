@@ -1,11 +1,14 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,6 +18,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.SpawnPlacementType;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
@@ -41,6 +46,15 @@ public class JellyfishEntity extends WaterAnimal {
     public static final int VARIANT_COUNT = 2;
     private static final EntityDataAccessor<Integer> DATA_VARIANT =
             SynchedEntityData.defineId(JellyfishEntity.class, EntityDataSerializers.INT);
+
+    // Beach spawns are washed up on dry sand instead of floating in water; everywhere else
+    // (e.g. JellyfishFields) spawns like a normal water creature. Same EntityType can only have
+    // one global placement, so the branch has to live in the placement type itself, not the
+    // per-biome AddSpawnsBiomeModifier entries in ModBiomeModifiers.
+    public static final SpawnPlacementType SPAWN_PLACEMENT = (level, pos, type) ->
+            level.getBiome(pos).is(BiomeTags.IS_BEACH)
+                    ? SpawnPlacementTypes.ON_GROUND.isSpawnPositionOk(level, pos, type)
+                    : SpawnPlacementTypes.IN_WATER.isSpawnPositionOk(level, pos, type);
 
     private float grayAmount;
     private float scaleY = 1.0F;
@@ -102,6 +116,13 @@ public class JellyfishEntity extends WaterAnimal {
         this.setVariant(tag.getInt("Variant"));
     }
 
+    // No extra restriction on beach (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
+    // elsewhere, keep the normal water-creature light/depth check.
+    public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, EntitySpawnReason reason,
+                                                     BlockPos pos, RandomSource random) {
+        return level.getBiome(pos).is(BiomeTags.IS_BEACH) || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
+    }
+
     @Nullable
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason type,
@@ -157,6 +178,13 @@ public class JellyfishEntity extends WaterAnimal {
     @Override
     public boolean canBeLeashed() {
         return false;
+    }
+
+    // Washed-up beach jellyfish (SPAWN_PLACEMENT) shouldn't drown on the sand - vanilla
+    // WaterAnimal.handleAirSupply() deals drowning damage once air runs out; tick()'s
+    // grayAmount/scaleY already shows it drying out visually instead.
+    @Override
+    protected void handleAirSupply(int preTickAirSupply) {
     }
 
     @Override
