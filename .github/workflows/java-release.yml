@@ -141,6 +141,21 @@ jobs:
             echo "RELEASE_FILES_EOF"
           } >> "$GITHUB_OUTPUT"
 
+      # A mod_version gets tagged once per Minecraft version (Java-v3.10.0-beta-5+mc1.20.6,
+      # +mc1.21.1, ...) and every one of those runs reuses the same RELEASE_TAG release. Whether
+      # that release already exists is therefore the "have we announced this version yet?" flag -
+      # only the first tag to land finds it missing, so only that run posts to Discord below.
+      - name: Check whether this version was already released
+        id: existing
+        run: |
+          if gh release view "${{ steps.version.outputs.RELEASE_TAG }}" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "EXISTS=true" >> $GITHUB_OUTPUT
+          else
+            echo "EXISTS=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -225,3 +240,63 @@ jobs:
             geckolib(required){modrinth:geckolib}{curseforge:388172}
             architectury-api(required){modrinth:architectury-api}{curseforge:419699}
             create(optional){modrinth:create}{curseforge:328085}
+
+      # Skipped silently when DISCORD_WEBHOOK isn't set, so forks and the initial rollout don't
+      # fail the release. Discord caps an embed description at 4096 chars; iconv -c drops the
+      # partial multi-byte char head -c can leave behind, which would otherwise break jq.
+      - name: Announce on Discord
+        if: steps.existing.outputs.EXISTS == 'false'
+        env:
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          TAG: ${{ steps.version.outputs.RELEASE_TAG }}
+          COLOR: ${{ steps.prerelease.outputs.IS_PRERELEASE == 'true' && '16098851' || '3066993' }}
+        run: |
+          [ -n "$WEBHOOK" ] || exit 0
+          BODY=$(head -c 4000 /tmp/changelog.md | iconv -f utf-8 -t utf-8 -c)
+          jq -n --arg t "$TAG" --arg b "$BODY" --argjson c "$COLOR" \
+                --arg u "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$TAG" \
+            '{embeds:[{title:$t,url:$u,description:$b,color:$c}]}' \
+            | curl -sSf -X POST -H 'Content-Type: application/json' -d @- "$WEBHOOK"
+
+      - name: Render story slides
+        if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
+        env:
+          IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+        run: |
+          pip install --quiet pillow
+          python3 ../tools/render_slides.py /tmp/changelog.md \
+            --version "${{ steps.version.outputs.VERSION }}" --edition Java --out /tmp/slides
+
+      # Meta cURLs image_url from its own servers, so each slide has to be public at publish
+      # time - the release on this public repo is the one host we already have. --clobber keeps
+      # a re-run from failing on assets that are already there.
+      - name: Upload slides to the release
+        if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
+        env:
+          IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ steps.version.outputs.RELEASE_TAG }}" /tmp/slides/*.jpg --clobber --repo "$GITHUB_REPOSITORY"
+
+      - name: Post Instagram stories
+        if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
+        env:
+          IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          IG_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          TAG: ${{ steps.version.outputs.RELEASE_TAG }}
+        run: |
+          API="https://graph.instagram.com/v25.0"
+          for slide in /tmp/slides/*.jpg; do
+            IMAGE="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$TAG/$(basename "$slide")"
+            CONTAINER=$(curl -sSf -X POST "$API/$IG_USER_ID/media" \
+              -d "media_type=STORIES" -d "image_url=$IMAGE" -d "access_token=$IG_TOKEN" | jq -r .id)
+            # A container isn't publishable the instant it's created; docs say poll status_code,
+            # once a minute for at most five. Images finish in seconds, so this polls faster.
+            for _ in 1 2 3 4 5 6 7 8 9 10; do
+              STATUS=$(curl -sSf "$API/$CONTAINER?fields=status_code&access_token=$IG_TOKEN" | jq -r .status_code)
+              [ "$STATUS" = "FINISHED" ] && break
+              case "$STATUS" in ERROR|EXPIRED) echo "::error::$(basename "$slide") container $STATUS"; exit 1;; esac
+              sleep 6
+            done
+            curl -sSf -X POST "$API/$IG_USER_ID/media_publish" \
+              -d "creation_id=$CONTAINER" -d "access_token=$IG_TOKEN" > /dev/null
+          done
