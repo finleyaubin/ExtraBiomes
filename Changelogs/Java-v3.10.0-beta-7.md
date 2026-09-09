@@ -16,7 +16,7 @@
 
 ## Mobs
 - Puckoo: doubled beach spawn weight - noticeably more common along the shore.
-- Jellyfish: beach spawns now wash up on the sand instead of appearing in the water, and no longer take drowning damage while stranded there.
+- Jellyfish: no longer take drowning damage if stranded out of water. (Upstream also washes beach spawns up onto dry sand; that needs a spawn-placement API this branch's Minecraft version doesn't have yet, so jellyfish still spawn in water here.)
 
 ## Beta status
 Still a beta release - the Java port remains newer and less battle-tested than the Bedrock addon, so please keep reporting anything that looks wrong on the GitHub issue tracker.
