@@ -26,8 +26,21 @@ public class ModTags {
     public static class Biomes{
         public static final TagKey<Biome> LUSH_MESA = tag("lush_mesa");
         public static final TagKey<Biome> MYSTIC_FOREST = tag("mystic_forest");
-        // Vanilla has no BiomeTags.IS_PLAINS equivalent (only HAS_VILLAGE_PLAINS); needed to port Bedrock's boulder_placer.json biome_filter - see ModBiomeModifiers' ADD_BOULDER_PLAINS.
-        public static final TagKey<Biome> IS_PLAINS = tag("is_plains");
+        // Curated (hand-authored, not dynamically inherited from BiomeTags.IS_FOREST/IS_JUNGLE or the
+        // old ModTags.Biomes.IS_PLAINS) membership lists for select_boulder/select_stick_pile - see
+        // ModBiomeModifiers' ADD_BOULDER/ADD_STICK_PILE. Those used to key off the broad vanilla tags
+        // directly, so any third-party mod's biome carrying is_forest/is_jungle got these features
+        // automatically - which repeatedly produced vanilla's "Feature order cycle found" crash once a
+        // large enough modpack's cross-mod feature-ordering graph got a new shared edge stitched into
+        // it (confirmed against Ars Elemental's flourishing_forest and Biomes We've Gone's
+        // coconino_meadow/temperate_grove/ebony_woods - see git history). Hand-curating this list to
+        // vanilla + this mod's own biomes only (the same membership the old tags already had at this
+        // mod's own datagen time, before any third-party mod's dynamic tag contributions) keeps the
+        // feature but removes ExtraBiomes as a contributor to that whole bug class - a third-party
+        // biome now needs this mod's explicit knowledge, not just a shared vanilla tag, to get boulders
+        // or stick piles.
+        public static final TagKey<Biome> GETS_BOULDERS = tag("gets_boulders");
+        public static final TagKey<Biome> GETS_STICK_PILES = tag("gets_stick_piles");
         // Piranha's swamp spawn reads forge:is_swamp / c:swamp directly (see ModBiomeModifiers/
         // FabricBiomeModifiers) - those cross-loader convention tags already cover any third-party
         // mod's swamp biome, so there's no need for our own equivalent. This tag is just that
