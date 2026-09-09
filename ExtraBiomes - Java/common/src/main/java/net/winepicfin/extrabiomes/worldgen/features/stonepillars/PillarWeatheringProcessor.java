@@ -175,7 +175,7 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
             } else if (topRoll < 0.34F) {
                 level.setBlock(above, (mossy ? Blocks.FLOWERING_AZALEA : Blocks.AZALEA).defaultBlockState(), Block.UPDATE_CLIENTS);
             } else if (topRoll < 0.55F) {
-                level.setBlock(above, (mossy ? Blocks.FERN : Blocks.SHORT_GRASS).defaultBlockState(), Block.UPDATE_CLIENTS);
+                level.setBlock(above, (mossy ? Blocks.FERN : Blocks.GRASS).defaultBlockState(), Block.UPDATE_CLIENTS);
             }
             // else: bare grass/moss patch, no topper.
         }

@@ -104,7 +104,7 @@ public class MysticFeatures {
         // Same shape as vanilla's PATCH_GRASS (grassPatch(SHORT_GRASS, 32) -> tries 32, xz/y spread 7/3).
         context.register(MYSTIC_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(
                 32, 7, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS))))));
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.GRASS))))));
         // Same shape as vanilla's PATCH_BROWN_MUSHROOM/PATCH_RED_MUSHROOM (simplePatchConfiguration's
         // default tries 96, xz/y spread 7/3).
         context.register(MYSTIC_BROWN_MUSHROOM_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(

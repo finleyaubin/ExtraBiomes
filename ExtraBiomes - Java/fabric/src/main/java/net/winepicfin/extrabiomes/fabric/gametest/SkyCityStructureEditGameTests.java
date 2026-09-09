@@ -30,8 +30,10 @@ public class SkyCityStructureEditGameTests {
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
-    // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000, manualOnly = true)
+    // @GameTest has no manualOnly on this MC version (added later upstream) to exclude this dev
+    // tool from Fabric's auto-run - harmless here regardless, since it calls helper.succeed()
+    // immediately and just adds one extra fast "passed" line CI's hardcoded count check tolerates.
+    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000)
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();
@@ -48,7 +50,7 @@ public class SkyCityStructureEditGameTests {
         int xCursor = 1;
         int maxDepth = 0;
         for (String name : names) {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/" + subfolder + "/" + name);
+            ResourceLocation id = new ResourceLocation(ExtraBiomes.MOD_ID, "sky_city/" + subfolder + "/" + name);
             StructureTemplate template = templates.getOrCreate(id);
             Vec3i size = template.getSize();
 
