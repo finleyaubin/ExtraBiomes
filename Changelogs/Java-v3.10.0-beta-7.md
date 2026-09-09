@@ -17,6 +17,7 @@
 ## Mobs
 - Puckoo: doubled beach spawn weight - noticeably more common along the shore.
 - Jellyfish: beach spawns now wash up on the sand instead of appearing in the water, and no longer take drowning damage while stranded there.
+- Worm: shift-right-clicking a worm now picks it up as an item, matching the Bedrock addon. A renamed worm keeps its name across the item/entity round-trip.
 
 ## Beta status
 Still a beta release - the Java port remains newer and less battle-tested than the Bedrock addon, so please keep reporting anything that looks wrong on the GitHub issue tracker.
