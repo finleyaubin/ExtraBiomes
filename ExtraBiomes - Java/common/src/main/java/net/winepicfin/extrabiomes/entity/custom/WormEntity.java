@@ -1,8 +1,12 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -17,6 +21,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.winepicfin.extrabiomes.item.ModItems;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 // Ported from Bedrock extrabiomes:worm — a tiny passive ground critter.
@@ -60,6 +66,25 @@ public class WormEntity extends Animal {
     @Override
     public boolean isFood(ItemStack stack) {
         return false;
+    }
+
+    @Override
+    public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (player.isSecondaryUseActive() && hand == InteractionHand.MAIN_HAND) {
+            if (!this.level().isClientSide) {
+                ItemStack wormItem = new ItemStack(ModItems.WORM.get());
+                if (this.hasCustomName()) {
+                    wormItem.set(DataComponents.CUSTOM_NAME, this.getCustomName());
+                }
+                if (!player.getInventory().add(wormItem)) {
+                    player.drop(wormItem, false);
+                }
+                this.playSound(SoundEvents.ITEM_PICKUP, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 1.4F + 2.0F) * 2.0F);
+                this.discard();
+            }
+            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+        }
+        return super.mobInteract(player, hand);
     }
 
     @Nullable
