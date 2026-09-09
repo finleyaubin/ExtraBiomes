@@ -118,7 +118,7 @@ public class JellyfishEntity extends WaterAnimal {
 
     // No extra restriction on beach (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
     // elsewhere, keep the normal water-creature light/depth check.
-    public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, EntitySpawnReason reason,
+    public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, MobSpawnType reason,
                                                      BlockPos pos, RandomSource random) {
         return level.getBiome(pos).is(BiomeTags.IS_BEACH) || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
     }
