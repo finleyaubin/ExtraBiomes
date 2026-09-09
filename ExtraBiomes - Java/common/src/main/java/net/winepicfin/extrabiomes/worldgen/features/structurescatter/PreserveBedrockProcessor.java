@@ -27,9 +27,21 @@ import javax.annotation.Nullable;
  * fixed margin the way a Y-range placement modifier would have to.
  * <p>
  * Runtime-only: constructed once and passed directly to {@link StructureTemplate#placeInWorld} at
- * generation time. It's never attached to anything Codec-serialized, so it deliberately doesn't
- * register a real {@link StructureProcessorType} - {@link #getType()} would only matter for that
- * serialization path, which this processor never goes through.
+ * generation time, never attached to anything Codec-serialized - so {@link #getType()} originally
+ * just threw. That broke once Ars Nouveau's own StructureTemplate.placeInWorld mixin (its
+ * preventAutoWaterlogging check) turned out to call {@code getType()} on every processor in the
+ * active settings unconditionally, serialization or not - any structure placed alongside this
+ * processor while Ars Nouveau is installed crashed world generation outright. Registering a real
+ * {@link StructureProcessorType} to fix that (as this class used to) doesn't work either:
+ * {@code BuiltInRegistries.STRUCTURE_PROCESSOR} freezes during vanilla's own bootstrap, before any
+ * mod constructor has even run, so a mod can never register into it at all, at any point in its
+ * lifecycle - "Registry is already frozen" fires immediately regardless of how early the
+ * registration call is moved. Returning an existing vanilla type instead sidesteps that
+ * entirely - {@link StructureProcessorType#NOP} was picked simply because it's the type vanilla
+ * itself uses for its own no-op/identity processor, so its semantics ("this processor doesn't
+ * need special handling") already match how this processor is actually used - Ars Nouveau's own
+ * check only needs getType() to return *something* without throwing, not a value unique to this
+ * processor.
  */
 public final class PreserveBedrockProcessor extends StructureProcessor {
     public static final PreserveBedrockProcessor INSTANCE = new PreserveBedrockProcessor();
@@ -46,6 +58,6 @@ public final class PreserveBedrockProcessor extends StructureProcessor {
 
     @Override
     protected StructureProcessorType<?> getType() {
-        throw new UnsupportedOperationException("PreserveBedrockProcessor is runtime-only and is never serialized");
+        return StructureProcessorType.NOP;
     }
 }
