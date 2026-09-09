@@ -2,7 +2,6 @@ package net.winepicfin.extrabiomes.item.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
@@ -43,8 +42,8 @@ public class WormItem extends Item {
         }
 
         ItemStack heldStack = context.getItemInHand();
-        if (heldStack.has(DataComponents.CUSTOM_NAME)) {
-            worm.setCustomName(heldStack.get(DataComponents.CUSTOM_NAME));
+        if (heldStack.hasCustomHoverName()) {
+            worm.setCustomName(heldStack.getHoverName());
         }
 
         float yaw = Mth.wrapDegrees(level.random.nextFloat() * 360.0F);

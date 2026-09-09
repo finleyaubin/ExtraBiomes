@@ -14,7 +14,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraftforge.gametest.GameTestDontPrefix;
-import net.minecraftforge.gametest.GameTestHolder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import org.slf4j.Logger;
 
@@ -22,7 +21,10 @@ import org.slf4j.Logger;
 // a void, laid out in rows, each with its own SAVE-mode structure block already pointed at the
 // right structure id and size, so fixing a mis-ported trapdoor/stair is "run this test, walk over,
 // fix the block, click Save in the structure block GUI" instead of hand-editing the .nbt bytes.
-@GameTestHolder(ExtraBiomes.MOD_ID)
+//
+// No @GameTestHolder here on purpose: 1.20.4's @GameTest has no manualOnly (added later), so the
+// only way to keep this out of CI's `/test runall` is to not let Forge's classpath scan find it at
+// all. Add @GameTestHolder(ExtraBiomes.MOD_ID) back locally when you actually need to run this.
 @GameTestDontPrefix
 public class SkyCityStructureEditGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -30,8 +32,7 @@ public class SkyCityStructureEditGameTests {
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
-    // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = "sky_city_edit_void", timeoutTicks = 60000, batch = "extrabiomes", manualOnly = true)
+    @GameTest(template = "sky_city_edit_void", timeoutTicks = 60000, batch = "extrabiomes")
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();

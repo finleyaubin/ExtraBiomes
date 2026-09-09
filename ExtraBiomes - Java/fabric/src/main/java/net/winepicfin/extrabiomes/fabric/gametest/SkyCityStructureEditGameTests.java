@@ -30,8 +30,9 @@ public class SkyCityStructureEditGameTests {
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
-    // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000, manualOnly = true)
+    // Not wired into fabric.mod.json's "fabric-gametest" entrypoint list, so Fabric never
+    // auto-discovers or runs this - 1.20.4's @GameTest has no manualOnly (added later) to lean on.
+    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000)
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();
