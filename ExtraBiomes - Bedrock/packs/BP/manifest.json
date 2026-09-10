@@ -2,7 +2,7 @@
     "format_version": 2,
     "header": {
         "description": "adds more biomes, mobs, Items and blocks to the game as well as improving upon some existing biomes",
-        "min_engine_version": [1,21,0],
+        "min_engine_version": [1,26,30],
         "name": "ExtraBiomes",
         "uuid": "ba061c91-c0c6-47f7-82d4-a29f8b3e2859",
         "version": [3,1,0]

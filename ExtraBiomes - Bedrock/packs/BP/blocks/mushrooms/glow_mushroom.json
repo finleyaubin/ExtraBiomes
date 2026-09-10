@@ -1,5 +1,5 @@
 {
-	"format_version": "1.20.100",
+	"format_version": "1.26.30",
 	"minecraft:block": {
 		"description": {
 			"identifier": "extrabiomes:glow_mushroom_placed",
@@ -63,7 +63,13 @@
 			},
 			"minecraft:map_color": "#070841",
 			"minecraft:loot": "loot_tables/blocks/mushroom/glow_mushroom.json",
-      		"extrabiomes:mushroom_grow": {} 
+			"minecraft:support": {
+				"shape": "fence"
+			},
+			"minecraft:precipitation_interactions": {
+				"precipitation_behavior": "snowlogging"
+			},
+      		"extrabiomes:mushroom_grow": {}
 		}
 	}
 }

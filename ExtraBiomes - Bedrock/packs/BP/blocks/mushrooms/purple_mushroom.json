@@ -1,5 +1,5 @@
 {
-	"format_version": "1.20.100",
+	"format_version": "1.26.30",
 	"minecraft:block": {
 		"description": {
 			"identifier": "extrabiomes:purple_mushroom_placed",
@@ -61,6 +61,12 @@
 			},
 			"minecraft:map_color": "#6c0b8a",
 			"minecraft:loot": "loot_tables/blocks/mushroom/purple_mushroom.json",
+			"minecraft:support": {
+				"shape": "fence"
+			},
+			"minecraft:precipitation_interactions": {
+				"precipitation_behavior": "snowlogging"
+			},
 			"extrabiomes:mushroom_grow": {}
 		}
 	}
