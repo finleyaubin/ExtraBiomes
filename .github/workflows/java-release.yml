@@ -71,6 +71,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Single source of truth for which loaders this branch ships (gradle.properties'
+      # enabled_platforms) - which datagen steps below run follows this instead of the workflow
+      # hardcoding which loaders exist, same as gradle-build.yml's identical step.
+      - name: Detect enabled platforms
+        id: platforms
+        run: |
+          PLATFORMS=",$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2),"
+          for p in forge fabric neoforge; do
+            if [[ "$PLATFORMS" == *",$p,"* ]]; then
+              echo "$p=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "$p=false" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
       # populated until this runs at least once - see gradle-build.yml's identical step.
       - name: Download Loom assets
@@ -83,6 +98,16 @@ jobs:
       # the same two steps gradle-build.yml runs before its own build.
       - name: Generate data
         run: ./gradlew :forge:runData
+        timeout-minutes: 10
+
+      # Always run when Fabric is enabled - Fabric's own ModBiomeTagProvider is the only place
+      # that writes Fabric's convention tags (c:mushroom, c:swamp, ...); Forge's runData above
+      # only writes Forge's own forge: equivalents into the same shared
+      # common/src/generated/resources/, so skipping this shipped released Fabric jars without
+      # Fabric's tags populated at all (see the matching fix/comment in gradle-build.yml).
+      - name: Generate Fabric data
+        if: steps.platforms.outputs.fabric == 'true'
+        run: ./gradlew :fabric:runDatagen
         timeout-minutes: 10
 
       # mod_version in gradle.properties should already match the tag before tagging a

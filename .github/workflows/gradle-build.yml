@@ -52,6 +52,23 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Single source of truth for which loaders this branch ships (gradle.properties'
+      # enabled_platforms, read by common/build.gradle's `architectury { common(...) }` call too)
+      # - every loader-specific step below is gated on this instead of the workflow hardcoding
+      # which loaders exist, so a version bump that drops/adds a loader only needs to change
+      # enabled_platforms, not this file.
+      - name: Detect enabled platforms
+        id: platforms
+        run: |
+          PLATFORMS=",$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2),"
+          for p in forge fabric neoforge; do
+            if [[ "$PLATFORMS" == *",$p,"* ]]; then
+              echo "$p=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "$p=false" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
       # Also pre-seed server.properties with a raised max-tick-time:
       # BiomeGenerationGameTests runs each of its 26 mod-biome ServerLevel#findClosestBiome3d
@@ -213,6 +230,37 @@ jobs:
           name: extrabiomes-forge-gametest-log
           path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
+
+      # Loom's data() run type is Forge-only, so Fabric API's own
+      # fabricApi.configureDataGeneration() extension provides the equivalent "runDatagen" task
+      # instead (see fabric/build.gradle). Forge's own runData above already populates most of
+      # the same shared common/src/generated/resources/, but NOT everything - Fabric's own
+      # ModBiomeTagProvider is the only one that writes Fabric's convention tags (c:mushroom,
+      # c:swamp, ...; Forge/NeoForge write their own forge:/neoforge: equivalents instead), so
+      # this always runs whenever Fabric is enabled, not just when it's the sole loader -
+      # skipping it silently shipped Fabric builds without those tags populated at all. Placed
+      # immediately before Fabric's own block below since Fabric's GameTestServer boot needs
+      # this data present too, same as :common:test does.
+      - name: Generate Fabric data
+        if: steps.platforms.outputs.fabric == 'true'
+        run: ./gradlew :fabric:runDatagen
+        timeout-minutes: 10
+
+      # Guards the actual bug class that broke this job twice in one day (a prior commit reordered
+      # steps and silently booted Fabric's GameTestServer before any loader had generated
+      # common/src/generated/resources/, crashing on a missing loot table with no hint why). This
+      # dependency is enforced only by which loader's block happens to run first in this file, not
+      # by anything Gradle checks - so a future reorder can reintroduce the same silent breakage.
+      # Fail loudly here instead, right before the first thing in the file that actually needs the
+      # data, rather than relying on comments elsewhere to keep the ordering right forever.
+      - name: Verify shared generated data exists
+        if: steps.platforms.outputs.fabric == 'true'
+        run: |
+          if [ ! -d common/src/generated/resources/data/extrabiomes ] || \
+             [ -z "$(ls -A common/src/generated/resources/data/extrabiomes 2>/dev/null)" ]; then
+            echo "::error::common/src/generated/resources/data/extrabiomes is missing or empty - no enabled loader generated shared data before this step. Check step ordering in this workflow (Forge's runData must run before Fabric's GameTestServer boot)."
+            exit 1
+          fi
 
       # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
       # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
