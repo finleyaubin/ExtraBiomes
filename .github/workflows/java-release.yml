@@ -69,6 +69,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Single source of truth for which loaders this branch ships (gradle.properties'
+      # enabled_platforms) - which datagen/publish steps below run follows this instead of the
+      # workflow hardcoding which loaders exist, same as gradle-build.yml's identical step.
+      - name: Detect enabled platforms
+        id: platforms
+        run: |
+          PLATFORMS=",$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2),"
+          for p in forge fabric neoforge; do
+            if [[ "$PLATFORMS" == *",$p,"* ]]; then
+              echo "$p=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "$p=false" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
       # populated until this runs at least once - see gradle-build.yml's identical step.
       - name: Download Loom assets

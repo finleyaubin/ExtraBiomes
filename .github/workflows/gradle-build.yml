@@ -48,6 +48,23 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # Single source of truth for which loaders this branch ships (gradle.properties'
+      # enabled_platforms, read by common/build.gradle's `architectury { common(...) }` call too)
+      # - every loader-specific step below is gated on this instead of the workflow hardcoding
+      # which loaders exist, so a version bump that drops/adds a loader (e.g. this release
+      # dropping Forge) only needs to change enabled_platforms, not this file.
+      - name: Detect enabled platforms
+        id: platforms
+        run: |
+          PLATFORMS=",$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2),"
+          for p in forge fabric neoforge; do
+            if [[ "$PLATFORMS" == *",$p,"* ]]; then
+              echo "$p=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "$p=false" >> "$GITHUB_OUTPUT"
+            fi
+          done
+
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
       # Also pre-seed server.properties with a raised max-tick-time:
       # BiomeGenerationGameTests runs each of its 26 mod-biome ServerLevel#findClosestBiome3d
