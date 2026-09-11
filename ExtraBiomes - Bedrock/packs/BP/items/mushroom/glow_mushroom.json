@@ -1,32 +1,32 @@
 {
-	"format_version": "1.20.20",
-	"minecraft:item": {
-		"description": {
-			"identifier": "extrabiomes:glow_mushroom",
-			"menu_category":{
-				"group": "itemGroup.name.mushroom",
-				"category": "Nature"
-			}
-		},
-		"components": {
-			"minecraft:icon": {
-				"texture": "extrabiomes:glow_mushroom"
-			},
-			"minecraft:block_placer": {
-				"block": "extrabiomes:glow_mushroom_placed",
-				"use_on": [
-					"minecraft:dirt",
-					"minecraft:grass",
-					"minecraft:farmland",
-					"minecraft:mycelium",
-					"minecraft:stone",
-					"minecraft:deepslate",
-					"minecraft:netherrack",
-					"minecraft:blackstone",
-					"minecraft:basalt",
-					"minecraft:grass"
-				]
-			}
-		}
-	}
+    "format_version": "1.20.20",
+    "minecraft:item": {
+        "description": {
+            "identifier": "extrabiomes:glow_mushroom",
+            "menu_category": {
+                "group": "itemGroup.name.mushroom",
+                "category": "Nature"
+            }
+        },
+        "components": {
+            "minecraft:icon": {
+                "texture": "extrabiomes:glow_mushroom"
+            },
+            "minecraft:block_placer": {
+                "block": "extrabiomes:glow_mushroom_placed",
+                "use_on": [
+                    "minecraft:dirt",
+                    "minecraft:grass",
+                    "minecraft:farmland",
+                    "minecraft:mycelium",
+                    "minecraft:stone",
+                    "minecraft:deepslate",
+                    "minecraft:netherrack",
+                    "minecraft:blackstone",
+                    "minecraft:basalt",
+                    "minecraft:grass"
+                ]
+            }
+        }
+    }
 }

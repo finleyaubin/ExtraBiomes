@@ -1,26 +1,26 @@
 {
-  "format_version": "1.21.100",
-  "minecraft:block": {
-    "description": {
-      "identifier": "extrabiomes:glow_mushroom_block",
-      "menu_category": {
-        "category": "nature",
-        "group": "minecraft:itemGroup.name.mushroom"
-      }
-    },
-    
-    "components": {
-      "minecraft:geometry": "minecraft:geometry.full_block",
-      "minecraft:material_instances": {
-        "*": {
-          "texture": "extrabiomes_glow_mushroom_block",
-          "render_method": "opaque"
+    "format_version": "1.21.100",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:glow_mushroom_block",
+            "menu_category": {
+                "category": "nature",
+                "group": "minecraft:itemGroup.name.mushroom"
+            }
+        },
+
+        "components": {
+            "minecraft:geometry": "minecraft:geometry.full_block",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_glow_mushroom_block",
+                    "render_method": "opaque"
+                }
+            },
+            "minecraft:light_emission": 13,
+            "minecraft:loot": "loot_tables/empty.json",
+            "minecraft:map_color": "#0000FF",
+            "extrabiomes:mushroom_loot": {}
         }
-      },
-      "minecraft:light_emission": 13,
-      "minecraft:loot": "loot_tables/empty.json",
-      "minecraft:map_color": "#0000FF",
-      "extrabiomes:mushroom_loot": {}
     }
-  }
 }

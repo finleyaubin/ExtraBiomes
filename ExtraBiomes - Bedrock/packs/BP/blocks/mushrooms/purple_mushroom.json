@@ -1,73 +1,63 @@
 {
-	"format_version": "1.26.30",
-	"minecraft:block": {
-		"description": {
-			"identifier": "extrabiomes:purple_mushroom_placed",
-			"menu_category": {
-				"category": "none"
-			}
-		},
-		"components": {
-			"minecraft:collision_box": false,
-			"minecraft:selection_box": {
-				"origin": [
-					-8,
-					0,
-					-8
-				],
-				"size": [
-					16,
-					2,
-					16
-				]
-			},
-			"minecraft:geometry": "geometry.sapling_model",
-			"minecraft:material_instances": {
-				"*": {
-					"texture": "extrabiomes_purple_mushroom",
-					"render_method": "alpha_test",
-					"face_dimming": false,
-					"ambient_occlusion": true
-				}
-			},
-			"minecraft:light_dampening": 0,
-			"minecraft:placement_filter": {
-				"conditions": [
-					{
-						"block_filter": [
-							"minecraft:dirt",
-							"minecraft:farmland",
-							"minecraft:mycelium",
-							"minecraft:stone",
-							"minecraft:deepslate",
-							"minecraft:netherrack",
-							"minecraft:blackstone",
-							"minecraft:basalt"
-						],
-						"allowed_faces": [
-							"up"
-						]
-					}
-				]
-			},
-			"minecraft:liquid_detection": {
-				"detection_rules": [
-					{
-						"can_contain_liquid": true,
-						"liquid_type": "water",
-						"on_liquid_touches": "popped"
-					}
-				]
-			},
-			"minecraft:map_color": "#6c0b8a",
-			"minecraft:loot": "loot_tables/blocks/mushroom/purple_mushroom.json",
-			"minecraft:support": {
-				"shape": "fence"
-			},
-			"minecraft:precipitation_interactions": {
-				"precipitation_behavior": "snowlogging"
-			},
-			"extrabiomes:mushroom_grow": {}
-		}
-	}
+    "format_version": "1.26.30",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:purple_mushroom_placed",
+            "menu_category": {
+                "category": "none"
+            }
+        },
+        "components": {
+            "minecraft:collision_box": false,
+            "minecraft:selection_box": {
+                "origin": [-8, 0, -8],
+                "size": [16, 2, 16]
+            },
+            "minecraft:geometry": "geometry.sapling_model",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_purple_mushroom",
+                    "render_method": "alpha_test",
+                    "face_dimming": false,
+                    "ambient_occlusion": true
+                }
+            },
+            "minecraft:light_dampening": 0,
+            "minecraft:placement_filter": {
+                "conditions": [
+                    {
+                        "block_filter": [
+                            "minecraft:dirt",
+                            "minecraft:farmland",
+                            "minecraft:mycelium",
+                            "minecraft:stone",
+                            "minecraft:deepslate",
+                            "minecraft:netherrack",
+                            "minecraft:blackstone",
+                            "minecraft:basalt"
+                        ],
+                        "allowed_faces": ["up"]
+                    }
+                ]
+            },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "can_contain_liquid": true,
+                        "liquid_type": "water",
+                        "on_liquid_touches": "popped"
+                    }
+                ]
+            },
+            "minecraft:map_color": "#6c0b8a",
+            "minecraft:loot": "loot_tables/blocks/mushroom/purple_mushroom.json",
+            "minecraft:support": {
+                "shape": "fence"
+            },
+            "minecraft:precipitation_interactions": {
+                "precipitation_behavior": "snowlogging"
+            },
+            "extrabiomes:mushroom_grow": {}
+        }
+    }
 }
