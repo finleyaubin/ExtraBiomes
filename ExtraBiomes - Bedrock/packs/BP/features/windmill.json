@@ -1,25 +1,25 @@
 {
-	"format_version": "1.14.0",
-	"minecraft:structure_template_feature": {
-		"description": {
-			"identifier": "extrabiomes:windmill"
-		},
-		"structure_name": "extrabiomes:windmill",
-		"facing_direction": "south",
-		"constraints": {
-			"unburied": {},
-			"block_intersection": {
-				"block_allowlist": [
-					"minecraft:air",
-					"minecraft:wheat",
-					"red_flower",
-					"orange_tulip",
-					"pink_tulip",
-					"white_tulip",
-					"red_tulip"
-				]
-			},
-			"grounded": {}
-		}
-	}
+    "format_version": "1.14.0",
+    "minecraft:structure_template_feature": {
+        "description": {
+            "identifier": "extrabiomes:windmill"
+        },
+        "structure_name": "extrabiomes:windmill",
+        "facing_direction": "south",
+        "constraints": {
+            "unburied": {},
+            "block_intersection": {
+                "block_allowlist": [
+                    "minecraft:air",
+                    "minecraft:wheat",
+                    "red_flower",
+                    "orange_tulip",
+                    "pink_tulip",
+                    "white_tulip",
+                    "red_tulip"
+                ]
+            },
+            "grounded": {}
+        }
+    }
 }

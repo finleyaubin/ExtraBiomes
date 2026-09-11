@@ -69,83 +69,58 @@
             "textures": "textures/blocks/mushrooms/yellow_mushroom"
         },
         "extrabiomes:green_mushroom_block": {
-            "textures": [
-                "textures/blocks/mushrooms/green_mushroom_block"
-            ]
+            "textures": ["textures/blocks/mushrooms/green_mushroom_block"]
         },
         "extrabiomes:green_mushroom": {
-            "textures": [
-                "textures/blocks/mushrooms/green_mushroom"
-            ]
+            "textures": ["textures/blocks/mushrooms/green_mushroom"]
         },
         "extrabiomes:cyan_mushroom_block": {
-            "textures": [
-                "textures/blocks/mushrooms/cyan_mushroom_block"
-            ]
+            "textures": ["textures/blocks/mushrooms/cyan_mushroom_block"]
         },
         "extrabiomes:cyan_mushroom": {
-            "textures": [
-                "textures/blocks/mushrooms/cyan_mushroom"
-            ]
+            "textures": ["textures/blocks/mushrooms/cyan_mushroom"]
         },
         "extrabiomes:white_mushroom_block": {
-            "textures": [
-                "textures/blocks/mushrooms/white_mushroom_block"
-            ]
+            "textures": ["textures/blocks/mushrooms/white_mushroom_block"]
         },
         "extrabiomes:white_mushroom": {
-            "textures": [
-                "textures/blocks/mushrooms/white_mushroom"
-            ]
+            "textures": ["textures/blocks/mushrooms/white_mushroom"]
         },
         "extrabiomes:black_mushroom_block": {
-            "textures": [
-                "textures/blocks/mushrooms/black_mushroom_block"
-            ]
+            "textures": ["textures/blocks/mushrooms/black_mushroom_block"]
         },
         "extrabiomes:black_mushroom": {
-            "textures": [
-                "textures/blocks/mushrooms/black_mushroom"
-            ]
+            "textures": ["textures/blocks/mushrooms/black_mushroom"]
         },
         "extrabiomes:orange_mushroom_block": {
-            "textures": [
-                "textures/blocks/mushrooms/orange_mushroom_block"
-            ]
+            "textures": ["textures/blocks/mushrooms/orange_mushroom_block"]
         },
         "extrabiomes:orange_mushroom": {
-            "textures": [
-                "textures/blocks/mushrooms/orange_mushroom"
-            ]
+            "textures": ["textures/blocks/mushrooms/orange_mushroom"]
         },
         "extrabiomes:glow_mushroom_block": {
-            "textures": [
-                "textures/blocks/mushrooms/glow_mushroom_block"
-            ]
+            "textures": ["textures/blocks/mushrooms/glow_mushroom_block"]
         },
         "extrabiomes:glow_mushroom": {
-            "textures": [
-                "textures/blocks/mushrooms/glow_mushroom"
-            ]
+            "textures": ["textures/blocks/mushrooms/glow_mushroom"]
         },
         "extrabiomes:mystic_door": {
-			"textures": ["textures/blocks/mystic wood/mystic_door"]
-		},
+            "textures": ["textures/blocks/mystic wood/mystic_door"]
+        },
         "extrabiomes:gilded_sky_door": {
-			"textures": ["textures/blocks/gilded sky wood/gilded_sky_door"]
-		},
+            "textures": ["textures/blocks/gilded sky wood/gilded_sky_door"]
+        },
         "extrabiomes:sky_door": {
-			"textures": ["textures/blocks/sky wood/sky_door"]
-		},
+            "textures": ["textures/blocks/sky wood/sky_door"]
+        },
         "extrabiomes:palm_door": {
-			"textures": ["textures/blocks/palm wood/palm_door"]
-		},
+            "textures": ["textures/blocks/palm wood/palm_door"]
+        },
         "extrabiomes:pebble": {
-			"textures": ["textures/items/pebble"]
-		},
+            "textures": ["textures/items/pebble"]
+        },
         "extrabiomes:mossy_pebble": {
-			"textures": ["textures/items/pebble_mossy"]
-		}
-        
+            "textures": ["textures/items/pebble_mossy"]
+        }
     }
 }

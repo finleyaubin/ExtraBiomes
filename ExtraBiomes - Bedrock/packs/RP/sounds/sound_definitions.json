@@ -1,32 +1,25 @@
 {
-   "format_version" : "1.14.0",
-   "sound_definitions" : {
-      "mob.treefrog.idle" : {
-         "category" : "neutral",
-         "sounds" : [
-            "sounds/mob/treefrog/idle"
-         ]
-      },
-      "mob.hoppleshroom.jump" : {
-         "category" : "neutral",
-         "sounds" : [
-            "sounds/mob/hoppleshroom/jump"
-         ]
-      },
-      "mob.puckoo.ambient" : {
-         "category" : "neutral",
-         "sounds" : [
-            "sounds/mob/puckoo/idle1",
-            "sounds/mob/puckoo/idle2",
-            "sounds/mob/puckoo/idle3"
-         ]
-      },
-      "mob.puckoo.cry" : {
-         "category" : "neutral",
-         "sounds" : [
-            "sounds/mob/puckoo/cry1",
-            "sounds/mob/puckoo/cry2"
-         ]
-      }
-   }
+    "format_version": "1.14.0",
+    "sound_definitions": {
+        "mob.treefrog.idle": {
+            "category": "neutral",
+            "sounds": ["sounds/mob/treefrog/idle"]
+        },
+        "mob.hoppleshroom.jump": {
+            "category": "neutral",
+            "sounds": ["sounds/mob/hoppleshroom/jump"]
+        },
+        "mob.puckoo.ambient": {
+            "category": "neutral",
+            "sounds": [
+                "sounds/mob/puckoo/idle1",
+                "sounds/mob/puckoo/idle2",
+                "sounds/mob/puckoo/idle3"
+            ]
+        },
+        "mob.puckoo.cry": {
+            "category": "neutral",
+            "sounds": ["sounds/mob/puckoo/cry1", "sounds/mob/puckoo/cry2"]
+        }
+    }
 }
