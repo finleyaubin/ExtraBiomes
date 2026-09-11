@@ -1,0 +1,18 @@
+{
+    "format_version": "1.10.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "extrabiomes:sign_text",
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "textures": {
+                "default": "textures/blocks/air"
+            },
+            "geometry": {
+                "default": "geometry.extrabiomes_empty"
+            },
+            "render_controllers": ["controller.render.default"]
+        }
+    }
+}

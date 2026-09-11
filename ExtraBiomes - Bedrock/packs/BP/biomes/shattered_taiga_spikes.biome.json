@@ -41,6 +41,9 @@
                     }
                 ]
             },
+            "minecraft:village_type": {
+                "type": "taiga"
+            },
             "minecraft:tags": {
                 "tags": [
                     "caves",

@@ -3,7 +3,7 @@
     "sound_definitions": {
         "mob.treefrog.idle": {
             "category": "neutral",
-            "sounds": ["sounds/mob/treefrog/idle"]
+            "sounds": ["sounds/mob/frog/idle"]
         },
         "mob.hoppleshroom.jump": {
             "category": "neutral",

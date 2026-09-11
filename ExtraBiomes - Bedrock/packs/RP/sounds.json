@@ -1,16 +1,18 @@
 {
     "entity_sounds": {
         "entities": {
-            "extrabiomes:frog": {
+            "extrabiomes:treefrog": {
                 "events": {
-                    "ambient": "mob.frog.idle"
+                    "ambient": "mob.treefrog.idle"
                 },
                 "pitch": [0.8, 1.2],
                 "volume": 1.0
             },
             "extrabiomes:puckoo": {
                 "events": {
-                    "ambient": "mob.puckoo.ambient"
+                    "ambient": "mob.puckoo.ambient",
+                    "hurt": "mob.puckoo.cry",
+                    "death": "mob.puckoo.cry"
                 },
                 "pitch": [0.9, 1.1],
                 "volume": 1.0

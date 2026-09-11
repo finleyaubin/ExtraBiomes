@@ -12,10 +12,12 @@ import { OpenComponent } from "./blocks/Components/open.js";
 import { fence } from "./blocks/Components/fence_place.js";
 import { wall } from "./blocks/Components/wall_place.js";
 import { DoorCloseComponent, DoorOnPlace, DoorOpenComponent, ResetTop, ResetBottom } from "./blocks/Components/door.js";
+import { SignTextComponent } from "./blocks/Components/sign_text.js";
 
 //Import item components
 import { JellyfishReleaseComponent } from "./items/jellyfish_release.js";
 import { DrinkJellyfishJamComponent } from "./items/drink_jellyfish_jam.js";
+import { BaitThrowComponent } from "./items/bait.js";
 
 //Runs Scripts
 import "./blocks/dense_cloud_effect.js";
@@ -41,8 +43,10 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
   blockComponentRegistry.registerCustomComponent("extrabiomes:door_open",DoorOpenComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:reset_top",ResetTop);
   blockComponentRegistry.registerCustomComponent("extrabiomes:reset_bottom",ResetBottom);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:sign_text",SignTextComponent);
 
   //Registers item components
   itemComponentRegistry.registerCustomComponent("extrabiomes:jellyfish_release",JellyfishReleaseComponent);
   itemComponentRegistry.registerCustomComponent("extrabiomes:drink_jellyfish_jam",DrinkJellyfishJamComponent);
+  itemComponentRegistry.registerCustomComponent("extrabiomes:bait_throw",BaitThrowComponent);
 });

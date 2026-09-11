@@ -1,0 +1,76 @@
+{
+    "format_version": "1.12.0",
+    "minecraft:geometry": [
+        {
+            "description": {
+                "identifier": "geometry.extrabiomes_sign",
+                "texture_width": 64,
+                "texture_height": 32
+            },
+            "bones": [
+                {
+                    "name": "sign",
+                    "pivot": [8, 0, 8],
+                    "cubes": [
+                        { "origin": [7, 0, 7], "size": [2, 14, 2], "uv": [0, 14] },
+                        { "origin": [-4, 14, 7], "size": [24, 12, 2], "uv": [0, 0] }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": {
+                "identifier": "geometry.extrabiomes_wall_sign",
+                "texture_width": 64,
+                "texture_height": 32
+            },
+            "bones": [
+                {
+                    "name": "sign",
+                    "pivot": [8, 8, 16],
+                    "cubes": [
+                        { "origin": [-4, 4, 14], "size": [24, 12, 2], "uv": [0, 0] }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": {
+                "identifier": "geometry.extrabiomes_hanging_sign",
+                "texture_width": 64,
+                "texture_height": 32
+            },
+            "bones": [
+                {
+                    "name": "sign",
+                    "pivot": [8, 0, 8],
+                    "cubes": [
+                        { "origin": [0, 14, 6], "size": [16, 2, 4], "uv": [0, 0] },
+                        { "origin": [4, 12, 8], "size": [3, 6, 0], "uv": [0, 6] },
+                        { "origin": [9, 12, 8], "size": [3, 6, 0], "uv": [6, 6] },
+                        { "origin": [1, 2, 7], "size": [14, 10, 2], "uv": [0, 12] }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": {
+                "identifier": "geometry.extrabiomes_wall_hanging_sign",
+                "texture_width": 64,
+                "texture_height": 32
+            },
+            "bones": [
+                {
+                    "name": "sign",
+                    "pivot": [8, 0, 8],
+                    "cubes": [
+                        { "origin": [6, 14, 10], "size": [4, 2, 6], "uv": [0, 0] },
+                        { "origin": [4, 12, 8], "size": [3, 6, 0], "uv": [0, 6] },
+                        { "origin": [9, 12, 8], "size": [3, 6, 0], "uv": [6, 6] },
+                        { "origin": [1, 2, 7], "size": [14, 10, 2], "uv": [0, 12] }
+                    ]
+                }
+            ]
+        }
+    ]
+}

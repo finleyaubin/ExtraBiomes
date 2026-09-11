@@ -80,6 +80,14 @@
             {
                 "element": {
                     "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/paths/statue",
+                    "projection": "rigid"
+                },
+                "weight": 1
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
                     "location": "extrabiomes/sky_city/buildings/house_1",
                     "projection": "rigid"
                 },

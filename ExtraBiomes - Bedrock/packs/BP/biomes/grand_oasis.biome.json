@@ -52,6 +52,9 @@
                     "sea_material": "minecraft:water"
                 }
             },
+            "minecraft:village_type": {
+                "type": "savanna"
+            },
             "minecraft:tags": {
                 "tags": [
                     "caves",

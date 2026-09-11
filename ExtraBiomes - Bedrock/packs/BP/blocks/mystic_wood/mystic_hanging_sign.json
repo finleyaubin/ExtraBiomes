@@ -1,0 +1,130 @@
+{
+    "format_version": "1.20.100",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:mystic_hanging_sign",
+            "traits": {
+                "minecraft:placement_direction": {
+                    "enabled_states": [
+                        "minecraft:cardinal_direction"
+                    ]
+                }
+            },
+            "menu_category": {
+                "category": "construction",
+                "group": "itemGroup.name.sign"
+            }
+        },
+        "components": {
+            "minecraft:geometry": {
+                "identifier": "geometry.extrabiomes_hanging_sign"
+            },
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_mystic_hanging_sign",
+                    "render_method": "alpha_test",
+                    "ambient_occlusion": false
+                }
+            },
+            "minecraft:transformation": {
+                "scale": [
+                    0.667,
+                    0.667,
+                    0.667
+                ],
+                "scale_pivot": [
+                    8,
+                    16,
+                    8
+                ]
+            },
+            "minecraft:collision_box": {
+                "size": [
+                    14,
+                    16,
+                    2
+                ],
+                "origin": [
+                    -7,
+                    0,
+                    -1
+                ]
+            },
+            "minecraft:selection_box": {
+                "size": [
+                    14,
+                    16,
+                    2
+                ],
+                "origin": [
+                    -7,
+                    0,
+                    -1
+                ]
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 1
+            },
+            "tag:minecraft:is_axe_item_destructible": {},
+            "minecraft:flammable": {
+                "destroy_chance_modifier": 45,
+                "catch_chance_modifier": 80
+            },
+            "minecraft:map_color": "#5A3E6B",
+            "minecraft:light_dampening": 0,
+            "tag:wood": {},
+            "tag:extrabiomes:no_fence_join": {},
+            "extrabiomes:sign_text": {}
+        },
+        "permutations": [
+            {
+                "condition": "query.block_state('minecraft:cardinal_direction') == 'south'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "query.block_state('minecraft:cardinal_direction') == 'west'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            90,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "query.block_state('minecraft:cardinal_direction') == 'north'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            180,
+                            0
+                        ]
+                    }
+                }
+            },
+            {
+                "condition": "query.block_state('minecraft:cardinal_direction') == 'east'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [
+                            0,
+                            270,
+                            0
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}

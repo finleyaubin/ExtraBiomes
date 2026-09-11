@@ -1,0 +1,14 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "extrabiomes:palm_chest_boat"
+        },
+        "tags": ["crafting_table"],
+        "ingredients": [{ "item": "minecraft:chest" }, { "item": "extrabiomes:palm_boat" }],
+        "result": {
+            "item": "extrabiomes:palm_chest_boat",
+            "count": 1
+        }
+    }
+}

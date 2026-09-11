@@ -42,6 +42,9 @@
                     "sea_material": "minecraft:water"
                 }
             },
+            "minecraft:village_type": {
+                "type": "default"
+            },
             "minecraft:tags": {
                 "tags": [
                     "animal",
