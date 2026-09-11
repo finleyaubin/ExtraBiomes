@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.item.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
@@ -39,6 +40,11 @@ public class WormItem extends Item {
         WormEntity worm = ModEntities.WORM.get().create(serverLevel, EntitySpawnReason.BUCKET);
         if (worm == null) {
             return InteractionResult.FAIL;
+        }
+
+        ItemStack heldStack = context.getItemInHand();
+        if (heldStack.has(DataComponents.CUSTOM_NAME)) {
+            worm.setCustomName(heldStack.get(DataComponents.CUSTOM_NAME));
         }
 
         float yaw = Mth.wrapDegrees(level.random.nextFloat() * 360.0F);
