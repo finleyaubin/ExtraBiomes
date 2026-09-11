@@ -10,8 +10,8 @@
         "components": {
             "minecraft:collision_box": false,
             "minecraft:selection_box": {
-                "origin": [-8, 0, -8],
-                "size": [16, 2, 16]
+                "origin": [-3, 0, -3],
+                "size": [6, 8, 6]
             },
             "minecraft:geometry": "geometry.sapling_model",
             "minecraft:material_instances": {
