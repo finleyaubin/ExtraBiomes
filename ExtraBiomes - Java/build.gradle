@@ -1,0 +1,203 @@
+plugins {
+    id "architectury-plugin" version "${architectury_plugin_version}"
+    id "dev.architectury.loom" version "${architectury_loom_version}" apply false
+}
+
+architectury {
+    minecraft = rootProject.minecraft_version
+}
+
+// GeckoLib bundles a small math library (mclib) via Forge/NeoForge's Jar-in-Jar mechanism
+// (META-INF/jarjar/<artifact>-<version>.jar), which a real launch unpacks automatically but
+// Loom's dev classpath does not, and declaring mclib as its own dependency doesn't help either -
+// FML's per-mod modules only read the modules their own mods.toml/mods.jar declares, same as a
+// real JPMS `requires`, not "every other module in the layer". The only module GeckoLib's own
+// classes are guaranteed to read is GeckoLib's own module, so mclib has to physically live inside
+// GeckoLib's jar. Used by forge/build.gradle and neoforge/build.gradle.
+//
+// This has to run during configuration, not as a lazy Gradle task: Loom's ModConfigurationRemapper
+// checksums every modImplementation file while configuring the project, before any task -
+// including one that could build this jar - has run. Reads the host jar's own
+// META-INF/jarjar/metadata.json to find the exact bundled artifact/version instead of hardcoding
+// it, so this keeps working across a geckolib_version bump without editing this method, and never
+// needs a binary checked into git - the merged jar is cached under build/ and rebuilt automatically
+// whenever it's missing (a version bump changes the host jar's name, so a stale merge is never
+// silently reused).
+ext.mergeJarInJarDependency = { Project project, String hostDependencyNotation, String jarInJarGroup, String jarInJarArtifact ->
+    def hostJar = project.configurations.detachedConfiguration(project.dependencies.create(hostDependencyNotation)).singleFile
+    def mergedJar = project.file("${project.layout.buildDirectory.get()}/mergedLibs/${hostJar.name[0..-5]}-with-${jarInJarArtifact}.jar")
+    if (!mergedJar.exists()) {
+        mergedJar.parentFile.mkdirs()
+        def metadata
+        new java.util.zip.ZipFile(hostJar).withCloseable { zf ->
+            def entry = zf.getEntry("META-INF/jarjar/metadata.json")
+            if (entry == null) {
+                throw new GradleException("${hostJar.name} has no META-INF/jarjar/metadata.json - can't auto-merge its jar-in-jar dependency (has its packaging changed?)")
+            }
+            metadata = new groovy.json.JsonSlurper().parse(zf.getInputStream(entry))
+        }
+        def nested = metadata.jars.find { it.identifier.group == jarInJarGroup && it.identifier.artifact == jarInJarArtifact }
+        if (nested == null) {
+            throw new GradleException("${hostJar.name}'s jarjar metadata has no ${jarInJarGroup}:${jarInJarArtifact} entry - can't auto-merge it (bundled version/artifact changed upstream?)")
+        }
+        def nestedJar = File.createTempFile("jarjar-${jarInJarArtifact}", ".jar")
+        nestedJar.deleteOnExit()
+        new java.util.zip.ZipFile(hostJar).withCloseable { zf ->
+            nestedJar.withOutputStream { out -> out << zf.getInputStream(zf.getEntry(nested.path)) }
+        }
+        project.logger.lifecycle("Merging ${jarInJarGroup}:${jarInJarArtifact}:${nested.version.artifactVersion} into ${hostJar.name} (FML's per-mod module isolation can't see it as a separate mod) -> ${mergedJar.name}")
+        project.ant.zip(destfile: mergedJar) {
+            zipfileset(src: hostJar, excludes: "META-INF/jarjar/**")
+            zipfileset(src: nestedJar, excludes: "META-INF/**")
+        }
+    }
+    return mergedJar
+}
+
+subprojects {
+    apply plugin: "dev.architectury.loom"
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.officialMojangMappings()
+    }
+
+    repositories {
+        // NeoForge itself - separate from settings.gradle's pluginManagement.repositories entry
+        // of the same URL (that one resolves Gradle *plugins*; this one resolves regular project
+        // *dependencies* like the neoForge "net.neoforged:neoforge:..." coordinate below - two
+        // independent repository lists, needed in both places).
+        maven {
+            name = 'NeoForged'
+            url 'https://maven.neoforged.net/releases/'
+        }
+        maven {
+            name = 'GeckoLib'
+            url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        }
+        maven {
+            name = 'JitPack'
+            url 'https://jitpack.io'
+            // Nothing in this project actually resolves a real com.github.* coordinate through
+            // this repo (the "com.github.johnrengelman.shadow" plugin id is a Gradle plugin,
+            // resolved via pluginManagement, not this block). Left in place in case a future
+            // dependency needs it, but excluded from the "maven.modrinth" group specifically:
+            // JitPack has no such GitHub project, and instead of 401ing quickly (as the comment
+            // below originally observed), it now hangs on a lazy on-demand build attempt for
+            // over two minutes before giving up - excluding the group here skips straight to
+            // Modrinth's own maven proxy below instead of eating that timeout on every resolve.
+            content {
+                excludeGroup 'maven.modrinth'
+            }
+        }
+        // TerraBlender-forge is fetched through Modrinth's Maven proxy (see common/build.gradle)
+        // because JitPack now 401s on the glitchfiend/TerraBlender-forge coordinate — the repo's
+        // versioning scheme moved on and JitPack never rebuilt this old tag.
+        maven {
+            name = 'Modrinth'
+            url 'https://api.modrinth.com/maven'
+        }
+        // Create's own maven - hosts its Forge jar (Create-Fabric is resolved through Modrinth's proxy
+        // above instead - see fabric/build.gradle). Used only for the optional windmill Create-bearing
+        // compat in each module's compat/create package.
+        maven {
+            name = 'CreateMod'
+            url 'https://maven.createmod.net'
+        }
+        // Registrate - Create's registration library, referenced transitively by forge/build.gradle's
+        // Create dependency (AllBlocks.WINDMILL_BEARING.get() returns Registrate's BlockEntry<T>, so its
+        // class needs to be on the compile classpath even though this mod never calls into it directly).
+        maven {
+            name = 'tterrag'
+            url 'https://maven.tterrag.com'
+        }
+        // Registrate's NeoForge 1.21.1 build (MC1.21-1.3.0+67) isn't published to maven.tterrag.com -
+        // it's hosted on ITHundxr's own snapshots repo instead, per Create's own NeoForge 1.21.1
+        // "depend on Create" docs (https://wiki.createmod.net/developers/depend-on-create/neoforge-1.21.1).
+        maven {
+            name = 'ITHundxr'
+            url 'https://maven.ithundxr.dev/snapshots'
+        }
+    }
+}
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "idea"
+    apply plugin: "maven-publish"
+
+    base {
+        archivesName = rootProject.archives_base_name
+    }
+
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    java {
+        withSourcesJar()
+
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+
+        // Pin the toolchain instead of relying on whatever JDK happens to be the
+        // caller's default (Minecraft 1.20.5+ requires 21, confirmed by the merged jar's
+        // class file version being 65.0 - up from 17's 61.0) - keeps the build reproducible
+        // across machines regardless of the system default JDK.
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    tasks.named('test', Test).configure {
+        useJUnitPlatform()
+        testLogging {
+            exceptionFormat = 'full'
+            events "passed", "skipped", "failed"
+        }
+    }
+
+    // Gradle auto-wires the toolchain above into compileJava/test/javadoc, but Loom's run
+    // tasks (runClient/runServer/runDatagen/runGameTestServer) are plain JavaExec subclasses
+    // that don't request a toolchain launcher, so left alone they fork the game using
+    // whatever JVM happens to be running the Gradle daemon itself - which on newer JDKs
+    // (22+) makes Mixin fail to transform core JDK classes ("Unsupported class file major
+    // version", ClassNotFoundException: java.lang.System) before any mod code loads.
+    // Forcing these tasks onto the toolchain-resolved 21 launcher keeps the actual game
+    // process on the JDK Minecraft 1.20.6/Loom expects, auto-detected or auto-provisioned by
+    // Gradle rather than hardcoded to a path on this machine.
+    //
+    // Scoped by task name to Loom's own run tasks rather than every JavaExec in the project:
+    // a blanket tasks.withType(JavaExec).configureEach { javaLauncher = ... } also caught
+    // IntelliJ's own generated Gradle run configurations (e.g. running a Loom task's
+    // dev.architectury.transformer.TransformerRuntime.main() straight from the IDE), which set
+    // their own explicit `executable` pointing at whatever JDK IDEA has configured - JavaExec
+    // rejects having both `executable` and `javaLauncher` set to different JDKs ("Toolchain
+    // from `executable` property does not match toolchain from `javaLauncher` property").
+    // Checking `executable == null` before assigning doesn't reliably dodge this either: it
+    // has to happen at configuration time (javaLauncher is finalized before any doFirst runs,
+    // so that's too late even for Loom's own tasks), and configuration order between this
+    // block and the IDE's own task setup isn't guaranteed. Matching by name sidesteps the
+    // whole ordering question by never touching IDE-only tasks in the first place.
+    tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer', 'runData', 'runDatagen', 'runGameTestServer'] }.configureEach {
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+    dependencies {
+        testImplementation platform('org.junit:junit-bom:5.10.2')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        // Gradle <9 auto-added this to the test runtime classpath; Gradle 9 requires it declared
+        // explicitly or the test task fails immediately with "Failed to load JUnit Platform".
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+}

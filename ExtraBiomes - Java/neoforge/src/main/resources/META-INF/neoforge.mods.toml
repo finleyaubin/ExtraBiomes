@@ -1,0 +1,41 @@
+
+# NOTE: dependencies use "type" (required "required"|"optional"|"incompatible"|"discouraged"), not
+# the old "mandatory=true/false" - that field is deprecated as of this NeoForge version and fatally
+# rejects the mod file at 20.4.251 ("Deprecated 'mandatory' field is used in dependency (main)"),
+# not just a warning.
+modLoader="javafml" #mandatory
+loaderVersion="${neoforge_loader_version_range}" #mandatory
+license="MIT License"
+[[mods]]
+    modId="${mod_id}"
+    version="${version}"
+    displayName="${mod_name}"
+    logoFile="extrabiomes_logo.png"
+    authors="${mod_authors}"
+    description='''${mod_description}'''
+[[dependencies.extrabiomes]]
+    modId="neoforge"
+    type="required"
+    versionRange="${neoforge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="terrablender"
+    type="required"
+    versionRange="[1.0.0.59,)"
+    ordering="NONE"
+    side="BOTH"
+# Optional - see neoforge/compat/create/CreateWindmillCompat.java. Not required to play; only enables
+# the windmill structure's Create Windmill Bearing swap when Create happens to also be installed.
+[[dependencies.extrabiomes]]
+    modId="create"
+    type="optional"
+    versionRange="[6.0.0,)"
+    ordering="AFTER"
+    side="BOTH"

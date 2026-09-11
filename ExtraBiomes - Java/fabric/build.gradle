@@ -1,0 +1,209 @@
+plugins {
+    id "com.gradleup.shadow" version "9.6.1"
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+// No 1.20.4 Create-Fabric build exists yet (see the modCompileOnly create-fabric/Registrate
+// lines below) - CreateWindmillCompat imports real Create classes and can't compile without it.
+// Excluded wholesale rather than left to fail the build; re-include once Create-Fabric ships
+// for 1.20.4.
+sourceSets.main.java {
+    exclude 'net/winepicfin/extrabiomes/fabric/compat/create/**'
+}
+
+loom {
+    // src/main/resources/extrabiomes.mixins.json is picked up automatically by Loom's fabric platform
+    // (declared as a "mixins" entry in fabric.mod.json).
+    runs {
+        client {
+            configName = "Fabric Client"
+            client()
+            source sourceSets.main
+        }
+        server {
+            configName = "Fabric Server"
+            server()
+            source sourceSets.main
+        }
+        gameTestServer {
+            configName = "Fabric Game Test Server"
+            server()
+            source sourceSets.main
+            // Fabric API only registers @GameTest methods (and skips the EULA/headless-server
+            // prompts) when this system property is present at all - see
+            // FabricGameTestHelper's static initializer / MainMixin.isEulaAgreedTo. Test
+            // classes themselves are discovered via the "fabric-gametest" entrypoint in
+            // fabric.mod.json, not this property.
+            vmArg "-Dfabric-api.gametest=true"
+        }
+        // Fabric datagen: Loom's data() run type is Forge-only, so Fabric API's own
+        // fabricApi.configureDataGeneration() extension (below) provides the equivalent "runDatagen"
+        // run instead, driving the "fabric-datagen" entrypoint registered in fabric.mod.json.
+    }
+}
+
+// Same reasoning as forge/build.gradle's clearGameTestWorld: server.properties' level-seed is
+// only honoured when a world is *created*, so a leftover run/world/ save from a previous local
+// run silently keeps its own (untracked) seed instead of the pinned one, making
+// BiomeGenerationGameTests' 15000-block search non-deterministic across repeated local runs.
+tasks.register("clearGameTestWorld", Delete) {
+    delete file("run/world")
+}
+tasks.named("runGameTestServer") {
+    dependsOn "clearGameTestWorld"
+}
+
+fabricApi {
+    configureDataGeneration {
+        // Same target Forge's own "data" run writes to (see forge/build.gradle) - datapack content
+        // (biomes, tags, recipes, loot tables) and resource-pack content (blockstates, models) are
+        // loader-agnostic and shouldn't be generated twice per loader or diverge between them.
+        // common's own build.gradle already wires src/generated/resources into its resources
+        // sourceSet, so nothing needs adding to *this* module's resources for it to take effect.
+        outputDirectory = project(':common').file('src/generated/resources')
+        addToResources = false
+        // 1.21.4 moved block/item model generation (BlockModelGenerators, PropertyDispatch,
+        // ModelProvider, etc.) into the client-only net.minecraft.client.data.models package, so
+        // running datagen under the plain server environment (this task's old default) now throws
+        // "Cannot load class ... in environment type SERVER" for ModBlockStateProvider/
+        // ModItemModelProvider. client = true switches the generated runDatagen run to the client
+        // environment, which both providers need.
+        client = true
+    }
+}
+
+// NOT wiring runClient/runServer to dependsOn "runDatagen" here, unlike neoforge/build.gradle's
+// equivalent (which is safe - NeoForge's dataClient/dataServer are separate userdev-launched JVMs
+// that don't share any state with its runClient). Fabric API's configureDataGeneration above sets
+// client = true (needed since 1.21.4 moved block/item model generation into a client-only
+// package - see the comment on that block), which makes the generated "datagen" run config
+// dev.architectury.loom's Loom .inherit() the SAME "client" RunConfigSettings runClient itself
+// uses. Both runs are launched through Architectury Transformer, which stages its handoff through
+// a single project-scoped file (fabric/.gradle/architectury/.main_class - not per-run-config)
+// telling TransformerRuntime.main() what real entrypoint to reflectively invoke after prepping the
+// dev classpath. Chaining runDatagen into runClient's own task graph runs both through that shared
+// file within one Gradle invocation; confirmed via jstack that this leaves it self-referencing
+// TransformerRuntime instead of KnotClient, so TransformerRuntime.main() recursively invokes
+// itself (redoing its classpath transform prep every level) until it OOMs - the "[Architectury
+// Transformer] Listening at ..." loop. Standalone `:fabric:runDatagen` (not chained into
+// runClient) doesn't hit this: confirmed clean, ~10s. Run `:fabric:runDatagen` by hand before
+// testing renders instead of relying on an automatic pre-run regen.
+
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+// The old force (0.15.5+mixin.0.8.7, needed against fabric_loader 0.16.14) actively breaks
+// fabric_loader 0.19.5: forcing it causes a bootstrap-time ClassNotFoundException on
+// org.spongepowered.asm.service.IAdviceProvider, and the gameTestServer run never gets past
+// launch. Removed - sponge-mixin's natural resolution against 0.19.5 (0.17.4+mixin.0.8.7 as of
+// this bump) works correctly; confirmed via a full :fabric:runGameTestServer pass with all
+// mixins applying cleanly and every test passing.
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_api_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+
+    // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle
+    // for why (JitPack 401s on the old glitchfiend/TerraBlender coordinate).
+    modImplementation "maven.modrinth:terrablender:${terrablender_fabric_modrinth_id}"
+
+    // TerraBlender-fabric jar-in-jars its own nightconfig (core+toml 3.6.7, per its
+    // fabric.mod.json "jars" entries) rather than declaring it as a normal Maven dependency -
+    // Architectury Loom's dev-launch classpath doesn't extract those nested jars the way a real
+    // Fabric Loader launch would, so TerraBlenderFabric's entrypoint throws NoClassDefFoundError
+    // on com.electronwill.nightconfig.core.ConfigFormat at dev-run time without this. Plain
+    // (non-mod) library, not remapped.
+    implementation "com.electronwill.night-config:core:3.6.7"
+    implementation "com.electronwill.night-config:toml:3.6.7"
+
+    // GeckoLib has no Forge-style module-layer isolation problem on Fabric, so unlike the forge
+    // module's hand-merged jar (see forge/build.gradle), a plain dependency is enough here.
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_fabric_version}"
+
+    // Optional/soft dependency, compile-only - see fabric/compat/create/CreateWindmillCompat.java. Same
+    // deal as forge/build.gradle's Create dependency, gated behind FabricLoader.isModLoaded("create")
+    // instead of ModList. Unlike the Forge build, Create-Fabric (a separate port, "Create Fabric" on
+    // Modrinth, project slug create-fabric) isn't published to maven.createmod.net - resolved through
+    // Modrinth's Maven proxy instead (same mechanism as terrablender above), version id HAqwA6X1 =
+    // create-fabric 6.0.8.1+build.1744-mc1.20.1, the closest Fabric build to forge/build.gradle's
+    // 6.0.8-289 pin at the time this was added.
+    // modCompileOnly("maven.modrinth:create-fabric:HAqwA6X1") { transitive = false } // no 1.20.4 Create-Fabric build available as of 2026-08-28 — re-enable when one ships
+    // Registrate - Create-Fabric jar-in-jars this (META-INF/jars/Registrate-1.3.79-MC1.20.1.jar) rather
+    // than declaring it as a resolvable Maven dependency anywhere, so unlike forge/build.gradle's separate
+    // maven.tterrag.com dependency, there's no coordinate to pull this from here - it isn't published for
+    // Fabric at all. libs/Registrate-fabric-1.3.79-MC1.20.1.jar is that same embedded jar extracted
+    // as-is (same "hand-extract a jar-in-jar" situation as this module's own GeckoLib/mclib jar - see
+    // forge/build.gradle's geckolib-with-mclib comment for the general pattern); regenerate by
+    // re-running: unzip -p <the create-fabric jar> META-INF/jars/Registrate-1.3.79-MC1.20.1.jar > libs/Registrate-fabric-1.3.79-MC1.20.1.jar
+    // if bumping the create-fabric pin above changes its bundled Registrate version. modCompileOnly (not
+    // plain compileOnly) because this jar is itself a real Fabric mod (has its own fabric.mod.json) still
+    // in intermediary names - Loom needs to remap it the same as any other mod dependency.
+    // modCompileOnly files("libs/Registrate-fabric-1.3.79-MC1.20.1.jar")
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+    inputs.property "mod_authors", mod_authors
+    inputs.property "mod_description", mod_description
+
+    filesMatching(['fabric.mod.json']) {
+        expand([
+                version         : project.version,
+                mod_id          : mod_id,
+                mod_name        : mod_name,
+                mod_authors     : mod_authors,
+                mod_description : mod_description,
+        ])
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+    archiveFileName = "${archives_base_name}-fabric-v${mod_version}-${minecraft_version}.jar"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+}

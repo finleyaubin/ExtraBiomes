@@ -1,6 +1,6 @@
 # Contributing to ExtraBiomes
 
-Thanks for your interest in contributing to ExtraBiomes! This mod ships in two forms — a **Bedrock addon** and a **Java (Forge) port** — and the repo is structured around that split. Please read this doc before opening a PR so your changes land in the right place and get reviewed quickly.
+Thanks for your interest in contributing to ExtraBiomes! This mod ships in two forms — a **Bedrock addon** and a **Java port** (Forge and Fabric, via Architectury) — and the repo is structured around that split. Please read this doc before opening a PR so your changes land in the right place and get reviewed quickly.
 
 ## Branch structure
 
@@ -8,7 +8,7 @@ Thanks for your interest in contributing to ExtraBiomes! This mod ships in two f
 |---|---|
 | `main` | Stable, released code. Reflects what's live on CurseForge/MCPEDL and the latest Java build. **Do not target this branch directly.** |
 | `Bedrock-Dev` | Active development for the Bedrock addon (`ExtraBiomes - Bedrock`). |
-| `Java-Dev` | Active development for the Java/Forge port (`ExtraBiomes - Forge`). |
+| `Java-Dev` | Active development for the Java port (`ExtraBiomes - Java`, Forge & Fabric). |
 
 Open your pull request against `Bedrock-Dev` or `Java-Dev`, whichever matches the part of the mod you're working on. Changes are merged into `main` as part of a release, not per-PR.
 
@@ -36,17 +36,24 @@ Open your pull request against `Bedrock-Dev` or `Java-Dev`, whichever matches th
 - Keep biome, entity, and block identifiers namespaced consistently with the existing content (e.g. `extrabiomes:` prefix) to avoid collisions.
 - If you're adding new entities/mobs, please include the associated resource pack assets (models, textures, animations) in the same PR — partial content (behavior only, or resource only) is hard to review and test.
 
-## Working on the Java (Forge) port
+## Working on the Java port
 
-- Source lives in `ExtraBiomes - Forge/`.
-- Build with Gradle:
+- Source lives in `ExtraBiomes - Java/`, an Architectury multiloader project split into three modules:
+  - `common/` — shared code that isn't loader-specific. Put new logic here by default.
+  - `forge/` — Forge-only code (mixins/access transformers, loader glue).
+  - `fabric/` — Fabric-only code (mixins, loader glue).
+- Build both loaders with Gradle:
   ```bash
+  cd "ExtraBiomes - Java"
   ./gradlew build
   ```
-- Run a local test client with:
+- Run a local test client for a specific loader:
   ```bash
-  ./gradlew runClient
+  ./gradlew :forge:runClient
+  ./gradlew :fabric:runClient
   ```
+- Requires [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) on the classpath — both are `modImplementation` dependencies (see `forge/build.gradle` and `fabric/build.gradle`), not shaded into the jar. Don't bundle them.
+- Prefer putting new code in `common/` and only drop into `forge/`/`fabric/` when the loaders genuinely diverge (e.g. spawn-cap access transformers on Forge vs. mixins on Fabric). If you do add loader-specific code, implement and test it on both loaders in the same PR.
 - Match the existing package structure and naming conventions when adding new blocks, items, biomes, or entities.
 - The Java port is still catching up to Bedrock feature parity — if you're porting a Bedrock feature over, it's worth mentioning that in your PR description so it's clear what it's based on.
 

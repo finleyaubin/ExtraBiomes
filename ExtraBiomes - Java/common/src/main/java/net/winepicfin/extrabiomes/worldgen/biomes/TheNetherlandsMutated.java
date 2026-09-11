@@ -1,0 +1,63 @@
+package net.winepicfin.extrabiomes.worldgen.biomes;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsOreFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
+
+public class TheNetherlandsMutated {
+
+    public Biome Register(BootstrapContext<Biome> context)
+    {
+        MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
+
+        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.BEE, 4, 2, 3));
+
+        BiomeDefaultFeatures.farmAnimals(spawnBuilder);
+        BiomeDefaultFeatures.commonSpawns(spawnBuilder);
+
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        ModBiomes.globalOverworldGeneration(biomeBuilder, false);
+        BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COAL_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.COPPER_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.DIAMOND_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.EMERALD_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.GOLD_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.IRON_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.LAPIS_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.QUARTZ_ORE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, NetherlandsOreFeatures.REDSTONE_ORE_PLACED_KEY);
+        // No addPlainVegetation/addDefaultFlowers here (unlike most other biomes): this biome's whole floor is a
+        // solid wheat field (tulips are base TheNetherlands only), and vanilla grass/flowers placed first would
+        // both break up that coverage AND block wheat placement outright - their non-air blocks raise
+        // WORLD_SURFACE_WG for that column, so wheat lands one block too high with no farmland under it (and gets
+        // popped as a dropped item).
+        // Canal feature dropped on Java - hydration ponds are rolled per-column inside the wheat feature itself.
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsWheatFeatures.WHEAT_FLOOR_PLACED_KEY);
+        // Windmill generation moved off this biome-features list - see TheNetherlands.java's matching comment.
+        // No custom cave carver on Java - see TheNetherlands/ModSurfaceRules for why.
+        // Bedrock's top material here is plain dirt (no grass) rather than grass_block, reflected in the surface rules.
+
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(true)
+                .downfall(BiomeClimateTuning.THE_NETHERLANDS_MUTATED.downfall())
+                .temperature(BiomeClimateTuning.THE_NETHERLANDS_MUTATED.temperature())
+                .generationSettings(biomeBuilder.build())
+                .mobSpawnSettings(spawnBuilder.build())
+                .specialEffects((new BiomeSpecialEffects.Builder())
+                        .waterColor(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.waterColor())
+                        .waterFogColor(0x113290)
+                        .skyColor(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.skyColor())
+                        .fogColor(0xC0D8FF)
+                        .foliageColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.foliageColor())
+                        .grassColorOverride(BiomeAppearanceTuning.THE_NETHERLANDS_MUTATED.grassColor())
+                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                .build();
+    }
+}

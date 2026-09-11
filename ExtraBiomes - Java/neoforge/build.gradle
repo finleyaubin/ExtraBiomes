@@ -1,0 +1,229 @@
+plugins {
+    id "com.gradleup.shadow" version "9.6.1"
+}
+
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+// No 1.21.4 Create or Registrate build exists yet (see the modCompileOnly Create/Registrate lines
+// below - Create tops out at 1.21.1, Registrate at 1.20) - CreateWindmillCompat imports real Create
+// classes and can't compile without it. Excluded wholesale rather than left to fail the build;
+// re-include once Create ships for 1.21.4.
+sourceSets.main.java {
+    exclude 'net/winepicfin/extrabiomes/neoforge/compat/create/**'
+}
+
+loom {
+    // Unlike Forge's platform (fully automatic pickup), NeoForge needs the AT file registered
+    // explicitly - confirmed via net.fabricmc.loom.api.NeoForgeExtensionAPI#accessTransformer;
+    // without this, FireBlock#setFlammable/WolfModel#head/MobCategory#max all stayed private on
+    // the neoforge-specific merged Minecraft jar even though the identical .cfg content applied
+    // fine automatically on forge/. NeoForge 1.20.4 still shares Forge's AT mechanism and
+    // obfuscation/SRG mapping data (the two hadn't diverged mapping-wise yet at this MC version -
+    // confirmed via the 20.4.251 userdev config.json, unchanged since the 1.20.2 port).
+    neoForge {
+        accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    }
+    runs {
+        client {
+            configName = "NeoForge Client"
+            client()
+            source sourceSets.main
+        }
+        server {
+            configName = "NeoForge Server"
+            server()
+            source sourceSets.main
+        }
+        // NeoForge 21.4's userdev config.json split the old single "data" run template into
+        // "clientData"/"serverData" (confirmed via its config.json "runs" keys: client/clientData/
+        // serverData/gameTestServer/server/junit - the 1.20.4-era single "data" template used below
+        // this comment at the 1.21.3 bump no longer exists, so plain data() now fails with "Could
+        // not find Forge run template with name 'data'"). This matches the GatherDataEvent.Client/
+        // GatherDataEvent.Server split in DataGenerators.java - each half now boots its own JVM
+        // process to fire only that event, rather than one process firing one event with
+        // includeClient()/includeServer() booleans on it.
+        //
+        // Each half writes to its OWN private build/ output dir, not directly to the shared
+        // common/src/generated/resources - see mergeGeneratedData below for why. --existing still
+        // points at common's real resources so each half's own "does this already exist"
+        // validation still works.
+        dataClient {
+            configName = "NeoForge Data Client"
+            clientData()
+            programArgs '--mod', mod_id, '--all', '--output', layout.buildDirectory.dir("datagen/client").get().asFile.absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            runDir "run-data"
+        }
+        dataServer {
+            configName = "NeoForge Data Server"
+            serverData()
+            programArgs '--mod', mod_id, '--all', '--output', layout.buildDirectory.dir("datagen/server").get().asFile.absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            runDir "run-data"
+        }
+        gameTestServer {
+            configName = "NeoForge Game Test Server"
+            server()
+            source sourceSets.main
+            // NeoForge's GameTestHooks reads its own "neoforge.enabledGameTestNamespaces" system
+            // property (see net.neoforged.neoforge.gametest.GameTestHooks#getEnabledNamespaces),
+            // not Forge's "forge.enabledGameTestNamespaces" - copying forge/build.gradle's vmArg
+            // unchanged left /test entirely unregistered ("Unknown or incomplete command" on
+            // both `/test list` and `/test run <name>`). GameTestHooks#registerGametests gates
+            // registration on isGametestEnabled(), which "-Dneoforge.enableGameTest=true" alone
+            // already satisfies - deliberately NOT setting "-Dneoforge.gameTestServer=true" here.
+            // That flag makes NeoForge's patched net.minecraft.server.Main branch into building
+            // the dedicated server via vanilla's net.minecraft.gametest.framework.GameTestServer
+            // instead of the normal DedicatedServer path - and GameTestServer's own
+            // WorldLoader$WorldDataSupplier unconditionally bakes the world from
+            // WorldPresets.FLAT (confirmed via NeoForge's own Main.java.patch), giving every test
+            // world a single-biome FixedBiomeSource overworld no matter what TerraBlender does -
+            // structurally incapable of ever containing a second biome. Leaving this flag off
+            // boots the same server() run this project already uses elsewhere (normal
+            // DedicatedServer, server.properties' level-type=minecraft:normal, a real
+            // MultiNoiseBiomeSource overworld) with gametests still registered - see the "Run
+            // GameTests" step's own comment for how this drives /test against it.
+            vmArgs "-Dneoforge.enabledGameTestNamespaces=${mod_id}", "-Dneoforge.enableGameTest=true"
+        }
+    }
+}
+
+// Same reasoning as forge/build.gradle's clearGameTestWorld - a leftover run/world/ save from a
+// previous run would silently keep its own untracked seed instead of the pinned one.
+tasks.register("clearGameTestWorld", Delete) {
+    delete file("run/world")
+}
+tasks.named("runGameTestServer") {
+    dependsOn "clearGameTestWorld"
+}
+
+// dataClient and dataServer each run vanilla's own DataGenerator/HashCache, which - when pointed
+// at the SAME output directory - treats the OTHER half's files as stale and deletes them at the
+// end of its own run (each half's cache only knows about the providers IT registered). Confirmed
+// empirically: running dataServer after dataClient reported "removed stale: 431", deleting every
+// asset dataClient had just written, and the reverse order deletes every data/ file instead -
+// whichever half runs second always wins and wipes the other. Routing each half to its own
+// private output dir (see the dataClient/dataServer run configs above) gives each its own
+// cache, so neither can see (and delete) the other's files - then this Sync merges both into the
+// real shared common/src/generated/resources afterward. Sync (not Copy) so a file removed from
+// this mod's own datagen output between runs still gets cleaned up here, matching the old
+// single-output-dir behavior for content this task actually owns.
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runDataClient", "runDataServer"
+    from layout.buildDirectory.dir("datagen/client")
+    from layout.buildDirectory.dir("datagen/server")
+    into project(':common').file('src/generated/resources')
+}
+
+// Aggregate task so ":neoforge:runData" keeps working as the one-shot verify command even though
+// NeoForge 21.4 splits datagen into two separate JVM launches (runDataClient/runDataServer - see
+// the "runs" block's dataClient/dataServer comment above).
+tasks.register("runData") {
+    dependsOn "mergeGeneratedData"
+}
+
+// Forge/NeoForge and Fabric write divergent content into that same shared
+// common/src/generated/resources directory for some blocks. Whichever loader's datagen ran most
+// recently "wins" the shared folder, so testing this module after running Fabric's datagen could
+// silently revert content this module's own datagen writes. Making the client/server runs always
+// regenerate this module's own datagen output first closes that gap.
+tasks.named("runClient") { dependsOn "runData" }
+tasks.named("runServer") { dependsOn "runData" }
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+dependencies {
+    // NeoForge 1.20.4 is still obfuscated the same way Forge is - NeoForge didn't remove
+    // obfuscation until the 26.1 line, years after this MC version - so this module uses the
+    // regular remap-aware "dev.architectury.loom" plugin and its "mod"-prefixed configurations,
+    // same as forge/fabric (confirmed on the 1.20.2 port: applying "dev.architectury.loom-no-remap"
+    // here throws "The Minecraft version '...' is obfuscated. Forge / NeoForge support for
+    // obfuscated Minecraft is through the regular dev.architectury.loom plugin instead" - an
+    // explicit, unambiguous Loom error).
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
+    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+
+    // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle for why.
+    modImplementation "maven.modrinth:terrablender:${terrablender_neoforge_modrinth_id}"
+
+    // GeckoLib 4.5.4 inlined mclib's math functions into its own package (software.bernie.geckolib.loading.math)
+    // instead of jar-in-jarring the separate mclib artifact, so no merge is needed anymore - see
+    // root build.gradle's mergeJarInJarDependency for the merge this replaces on older GeckoLib builds.
+    modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+
+    // No 1.21.4 Create or Registrate build available as of 2026-09-08 (Create's own maven and wiki
+    // top out at 1.21.1; Registrate has no MC1.21.x build at all) - re-enable when one ships. See
+    // the sourceSets exclude above for why CreateWindmillCompat itself is excluded wholesale rather
+    // than left to fail the build.
+    // modCompileOnly("com.simibubi.create:create-1.21.1:6.0.10-280:slim") { transitive = false }
+    // compileOnly("com.tterrag.registrate:Registrate:MC1.21-1.3.0+67") { transitive = false }
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mod_id", mod_id
+    inputs.property "mod_name", mod_name
+    inputs.property "mod_authors", mod_authors
+    inputs.property "mod_description", mod_description
+    inputs.property "neoforge_version_range", neoforge_version_range
+    inputs.property "neoforge_loader_version_range", neoforge_loader_version_range
+    inputs.property "minecraft_version_range", minecraft_version_range
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand([
+                version                       : project.version,
+                mod_id                        : mod_id,
+                mod_name                      : mod_name,
+                mod_authors                   : mod_authors,
+                mod_description               : mod_description,
+                neoforge_version_range        : neoforge_version_range,
+                neoforge_loader_version_range : neoforge_loader_version_range,
+                minecraft_version_range       : minecraft_version_range,
+        ])
+    }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+    archiveFileName = "${archives_base_name}-neoforge-v${mod_version}-${minecraft_version}.jar"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenNeoForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-" + project.name
+            from components.java
+        }
+    }
+}

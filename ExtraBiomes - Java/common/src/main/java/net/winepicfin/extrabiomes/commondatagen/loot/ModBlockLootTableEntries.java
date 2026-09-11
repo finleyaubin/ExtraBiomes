@@ -1,0 +1,181 @@
+package net.winepicfin.extrabiomes.commondatagen.loot;
+
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
+import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
+import net.winepicfin.extrabiomes.item.ModItems;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+// Shared body of both loaders' block loot table generators; dropSelf/add/createXTable are protected BlockLootSubProvider members a plain external helper can't call directly, so this takes bound method references that each loader's own subclass creates and hands in.
+public class ModBlockLootTableEntries {
+    public static void populate(
+            Consumer<Block> dropSelf,
+            BiConsumer<Block, Function<Block, LootTable.Builder>> add,
+            Function<Block, LootTable.Builder> createSlabItemTable,
+            Function<Block, LootTable.Builder> createDoorTable,
+            BiFunctionLeaves createLeavesDrops,
+            BiFunctionOre createOreDrop,
+            Function<net.minecraft.world.level.ItemLike, LootTable.Builder> createSingleItemTable,
+            BiFunctionMushroom createMushroomBlockDrop) {
+        dropSelf.accept(ModBlocks.DENSE_CLOUD.get());
+        dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
+        dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
+        add.accept(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()));
+        add.accept(ModBlocks.NETHER_DIAMOND_ORE.get(), block -> createOreDrop.apply(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
+        dropSelf.accept(ModBlocks.STICK_PILE.get());
+        add.accept(ModBlocks.PEBBLE.get(), block -> createPebbleTable(block, PebbleBlock.SIZE, ModItems.PEBBLE.get()));
+        add.accept(ModBlocks.MOSSY_PEBBLE.get(), block -> createPebbleTable(block, MossyPebbleBlock.SIZE, ModItems.MOSSY_PEBBLE.get()));
+
+        dropSelf.accept(ModBlocks.BLACK_SAND.get());
+        dropSelf.accept(ModBlocks.BLACK_SANDSTONE.get());
+        dropSelf.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
+        dropSelf.accept(ModBlocks.CUT_BLACK_SANDSTONE.get());
+        dropSelf.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE.get());
+        dropSelf.accept(ModBlocks.BLACK_SANDSTONE_STAIRS.get());
+        dropSelf.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get());
+        dropSelf.accept(ModBlocks.BLACK_SANDSTONE_WALL.get());
+        add.accept(ModBlocks.BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.BLACK_SANDSTONE_SLAB.get()));
+        add.accept(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()));
+        add.accept(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()));
+
+        dropSelf.accept(ModBlocks.MYSTIC_PLANKS.get());
+        dropSelf.accept(ModBlocks.MYSTIC_LOG.get());
+        dropSelf.accept(ModBlocks.MYSTIC_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_MYSTIC_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_MYSTIC_WOOD.get());
+        dropSelf.accept(ModBlocks.MYSTIC_STAIRS.get());
+        dropSelf.accept(ModBlocks.MYSTIC_BUTTON.get());
+        dropSelf.accept(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
+        dropSelf.accept(ModBlocks.MYSTIC_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.MYSTIC_FENCE.get());
+        dropSelf.accept(ModBlocks.MYSTIC_FENCE_GATE.get());
+        add.accept(ModBlocks.MYSTIC_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.MYSTIC_SLAB.get()));
+        add.accept(ModBlocks.MYSTIC_DOOR.get(), block -> createDoorTable.apply(ModBlocks.MYSTIC_DOOR.get()));
+        dropSelf.accept(ModBlocks.MYSTIC_SAPLING.get());
+        add.accept(ModBlocks.MYSTIC_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.MYSTIC_SAPLING.get()));
+        add.accept(ModBlocks.MYSTIC_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_SIGN.get()));
+        add.accept(ModBlocks.MYSTIC_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_SIGN.get()));
+        add.accept(ModBlocks.MYSTIC_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_HANGING_SIGN.get()));
+        add.accept(ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.MYSTIC_HANGING_SIGN.get()));
+        dropSelf.accept(ModBlocks.SKY_PLANKS.get());
+        dropSelf.accept(ModBlocks.SKY_LOG.get());
+        dropSelf.accept(ModBlocks.SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_SKY_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.SKY_STAIRS.get());
+        dropSelf.accept(ModBlocks.SKY_BUTTON.get());
+        dropSelf.accept(ModBlocks.SKY_PRESSURE_PLATE.get());
+        dropSelf.accept(ModBlocks.SKY_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.SKY_FENCE.get());
+        dropSelf.accept(ModBlocks.SKY_FENCE_GATE.get());
+        add.accept(ModBlocks.SKY_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.SKY_SLAB.get()));
+        add.accept(ModBlocks.SKY_DOOR.get(), block -> createDoorTable.apply(ModBlocks.SKY_DOOR.get()));
+        dropSelf.accept(ModBlocks.SKY_SAPLING.get());
+        add.accept(ModBlocks.SKY_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.SKY_SAPLING.get()));
+        add.accept(ModBlocks.SKY_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_SIGN.get()));
+        add.accept(ModBlocks.SKY_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_SIGN.get()));
+        add.accept(ModBlocks.SKY_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_HANGING_SIGN.get()));
+        add.accept(ModBlocks.SKY_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.SKY_HANGING_SIGN.get()));
+        dropSelf.accept(ModBlocks.PALM_PLANKS.get());
+        dropSelf.accept(ModBlocks.PALM_LOG.get());
+        dropSelf.accept(ModBlocks.PALM_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_PALM_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_PALM_WOOD.get());
+        dropSelf.accept(ModBlocks.PALM_STAIRS.get());
+        dropSelf.accept(ModBlocks.PALM_BUTTON.get());
+        dropSelf.accept(ModBlocks.PALM_PRESSURE_PLATE.get());
+        dropSelf.accept(ModBlocks.PALM_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.PALM_FENCE.get());
+        dropSelf.accept(ModBlocks.PALM_FENCE_GATE.get());
+        add.accept(ModBlocks.PALM_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.PALM_SLAB.get()));
+        add.accept(ModBlocks.PALM_DOOR.get(), block -> createDoorTable.apply(ModBlocks.PALM_DOOR.get()));
+        dropSelf.accept(ModBlocks.PALM_SAPLING.get());
+        add.accept(ModBlocks.PALM_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.PALM_SAPLING.get()));
+        add.accept(ModBlocks.PALM_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_SIGN.get()));
+        add.accept(ModBlocks.PALM_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_SIGN.get()));
+        add.accept(ModBlocks.PALM_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_HANGING_SIGN.get()));
+        add.accept(ModBlocks.PALM_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.PALM_HANGING_SIGN.get()));
+        dropSelf.accept(ModBlocks.GILDED_SKY_PLANKS.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_LOG.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_STAIRS.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_BUTTON.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_FENCE.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_FENCE_GATE.get());
+        add.accept(ModBlocks.GILDED_SKY_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.GILDED_SKY_SLAB.get()));
+        add.accept(ModBlocks.GILDED_SKY_DOOR.get(), block -> createDoorTable.apply(ModBlocks.GILDED_SKY_DOOR.get()));
+        add.accept(ModBlocks.GILDED_SKY_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_SIGN.get()));
+        add.accept(ModBlocks.GILDED_SKY_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_SIGN.get()));
+        add.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_HANGING_SIGN.get()));
+        add.accept(ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_HANGING_SIGN.get()));
+        dropSelf.accept(ModBlocks.BLACK_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.BLUE_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.CYAN_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.GREEN_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.ORANGE_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.PURPLE_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.WHITE_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.YELLOW_MUSHROOM.get());
+        dropSelf.accept(ModBlocks.GLOW_MUSHROOM.get());
+        // Huge mushroom blocks now drop the small mushroom item (like vanilla red/brown mushroom blocks) instead of dropSelf, which dropped the much-harder-to-farm huge block itself.
+        add.accept(ModBlocks.BLACK_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.BLACK_MUSHROOM.get()));
+        add.accept(ModBlocks.BLUE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.BLUE_MUSHROOM.get()));
+        add.accept(ModBlocks.CYAN_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.CYAN_MUSHROOM.get()));
+        add.accept(ModBlocks.GREEN_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.GREEN_MUSHROOM.get()));
+        add.accept(ModBlocks.ORANGE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.ORANGE_MUSHROOM.get()));
+        add.accept(ModBlocks.PURPLE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.PURPLE_MUSHROOM.get()));
+        add.accept(ModBlocks.WHITE_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.WHITE_MUSHROOM.get()));
+        add.accept(ModBlocks.YELLOW_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.YELLOW_MUSHROOM.get()));
+        add.accept(ModBlocks.GLOW_MUSHROOM_BLOCK.get(), block -> createMushroomBlockDrop.apply(block, ModBlocks.GLOW_MUSHROOM.get()));
+    }
+
+    // Pebble blocks store their pile size (1-3) as a block state and must drop that many pebble items.
+    private static LootTable.Builder createPebbleTable(Block block, IntegerProperty sizeProperty, Item item) {
+        LootTable.Builder table = LootTable.lootTable();
+        for (int size = 1; size <= 3; size++) {
+            table.withPool(LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1))
+                    .when(ExplosionCondition.survivesExplosion())
+                    .add(LootItem.lootTableItem(item)
+                            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(size)))
+                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(sizeProperty, size)))));
+        }
+        return table;
+    }
+
+    // createLeavesDrops/createOreDrop take more parameters than stock BiFunction shapes support, so each loader binds a tiny adapter lambda around its own protected method instead.
+    @FunctionalInterface
+    public interface BiFunctionLeaves {
+        LootTable.Builder apply(Block leavesBlock, Block saplingBlock);
+    }
+
+    @FunctionalInterface
+    public interface BiFunctionOre {
+        LootTable.Builder apply(Block oreBlock, net.minecraft.world.item.Item item);
+    }
+
+    @FunctionalInterface
+    public interface BiFunctionMushroom {
+        LootTable.Builder apply(Block mushroomBlock, net.minecraft.world.level.ItemLike smallMushroomItem);
+    }
+}

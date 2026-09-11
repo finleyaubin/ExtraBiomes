@@ -3,3 +3,11 @@
 /.idea
 /tools/__pycache__/
 .claude/
+/graphify-out/
+CLAUDE.md
+
+# Krita autosave / backup files
+*~
+*.kra-autosave
+*.kra.autosave
+*.autosave
