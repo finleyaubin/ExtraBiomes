@@ -19,7 +19,7 @@
                     "texture": "extrabiomes_green_mushroom",
                     "render_method": "alpha_test",
                     "face_dimming": false,
-                    "ambient_occlusion": true
+                    "ambient_occlusion": 1.0
                 }
             },
             "minecraft:light_dampening": 0,

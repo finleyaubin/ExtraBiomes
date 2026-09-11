@@ -5,7 +5,7 @@
             "identifier": "extrabiomes:dense_cloud_brick_slab",
             "menu_category": {
                 "category": "construction",
-                "group": "itemGroup.name.slab"
+                "group": "minecraft:itemGroup.name.slab"
             },
             "states": {
                 "extrabiomes:is_double": [false, true]
@@ -17,6 +17,7 @@
             }
         },
         "components": {
+            "minecraft:geometry": "geometry.slab_down",
             "minecraft:map_color": "#ff78f8",
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 2
