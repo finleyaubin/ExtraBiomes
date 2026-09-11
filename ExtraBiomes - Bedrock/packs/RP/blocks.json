@@ -1,319 +1,319 @@
 {
-    "format_version": "1.1.0",
-    "extrabiomes:grass_stone": {
-        "sound": "stone"
-    },
-    "extrabiomes:goo": {
-        "sound": "slime"
-    },
-    "extrabiomes:mystic_door_bottom": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_door_bottom_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_door_top": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_door_top_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_trapdoor": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_planks": {
-        "sound": "wood",
-        "textures": "extrabiomes_mystic_planks"
-    },
-    "extrabiomes:mystic_slab": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_stairs": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_leaves": {
-        "sound": "grass",
-        "isotropic": true,
-        "textures": "extrabiomes_mystic_leaves"
-    },
-    "extrabiomes:mystic_sapling_block": {
-        "sound": "grass"
-    },
-    "extrabiomes:stripped_mystic_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:stripped_mystic_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_fence_gate": {
-        "sound": "wood"
-    },
-    "extrabiomes:mystic_fence": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_door_bottom": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_door_bottom_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_door_top": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_door_top_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_trapdoor": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_planks": {
-        "sound": "wood",
-        "textures": "extrabiomes_palm_planks"
-    },
-    "extrabiomes:palm_slab": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_stairs": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_leaves": {
-        "sound": "grass",
-        "isotropic": true,
-        "textures": "extrabiomes_palm_leaves"
-    },
-    "extrabiomes:palm_sapling_block": {
-        "sound": "grass"
-    },
-    "extrabiomes:stripped_palm_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:stripped_palm_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_fence_gate": {
-        "sound": "wood"
-    },
-    "extrabiomes:palm_fence": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_door_bottom": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_door_bottom_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_door_top": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_door_top_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_trapdoor": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_planks": {
-        "sound": "wood",
-        "textures": "extrabiomes_sky_planks"
-    },
-    "extrabiomes:sky_slab": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_stairs": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_leaves": {
-        "sound": "grass",
-        "isotropic": true,
-        "textures": "extrabiomes_sky_leaves"
-    },
-    "extrabiomes:sky_sapling_block": {
-        "sound": "grass"
-    },
-    "extrabiomes:stripped_sky_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:stripped_sky_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_fence_gate": {
-        "sound": "wood"
-    },
-    "extrabiomes:sky_fence": {
-        "sound": "wood"
-    },
-    "extrabiomes:dense_cloud": {
-        "sound": "cloth"
-    },
-    "extrabiomes:dense_cloud_brick": {
-        "sound": "cloth"
-    },
-    "extrabiomes:black_sand": {
-        "sound": "sand"
-    },
-    "extrabiomes:black_sandstone": {
-        "sound": "stone"
-    },
-    "extrabiomes:chiseled_black_sandstone": {
-        "sound": "stone"
-    },
-    "extrabiomes:cut_black_sandstone": {
-        "sound": "stone"
-    },
-    "extrabiomes:smooth_black_sandstone": {
-        "sound": "stone"
-    },
-    "extrabiomes:black_sandstone_stairs": {
-        "sound": "stone"
-    },
-    "extrabiomes:black_sandstone_slab": {
-        "sound": "stone"
-    },
-    "extrabiomes:smooth_black_sandstone_stairs": {
-        "sound": "stone"
-    },
-    "extrabiomes:smooth_black_sandstone_slab": {
-        "sound": "stone"
-    },
-    "extrabiomes:cut_black_sandstone_slab": {
-        "sound": "stone"
-    },
-    "extrabiomes:black_sandstone_wall": {
-        "sound": "stone"
-    },
-    "extrabiomes:gilded_sky_door_bottom": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_door_bottom_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_door_top": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_door_top_flipped": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_planks": {
-        "sound": "wood",
-        "textures": "extrabiomes_gilded_sky_planks"
-    },
-    "extrabiomes:gilded_sky_slab": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_stairs": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_trapdoor": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:gilded_sky_fence_gate": {
-        "sound": "wood"
-    },
-    "extrabiomes:stripped_gilded_sky_log": {
-        "sound": "wood"
-    },
-    "extrabiomes:stripped_gilded_sky_wood": {
-        "sound": "wood"
-    },
-    "extrabiomes:blue_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:blue_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:purple_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:purple_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:yellow_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:yellow_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:green_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:green_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:cyan_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:cyan_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:white_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:white_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:black_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:black_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:orange_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:orange_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:glow_mushroom_block": {
-        "sound": "shroomlight"
-    },
-    "extrabiomes:glow_mushroom_placed": {
-        "sound": "grass"
-    },
-    "extrabiomes:nether_coal_ore": {
-        "sound": "nether_gold_ore"
-    },
-    "extrabiomes:nether_copper_ore": {
-        "sound": "nether_gold_ore"
-    },
-    "extrabiomes:nether_diamond_ore": {
-        "sound": "nether_gold_ore"
-    },
-    "extrabiomes:nether_iron_ore": {
-        "sound": "nether_gold_ore"
-    },
-    "extrabiomes:nether_gold_ore": {
-        "sound": "nether_gold_ore"
-    },
-    "extrabiomes:nether_lapis_ore": {
-        "sound": "nether_gold_ore"
-    },
-    "extrabiomes:nether_emerald_ore": {
-        "sound": "nether_gold_ore"
-    },
-    "extrabiomes:nether_redstone_ore": {
-        "sound": "nether_gold_ore"
-    }
+	"format_version": "1.1.0",
+	"extrabiomes:grass_stone": {
+		"sound": "stone"
+	},
+	"extrabiomes:goo": {
+		"sound": "slime"
+	},
+	"extrabiomes:mystic_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_door_top_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_trapdoor": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_planks": {
+		"sound": "wood",
+		"textures": "extrabiomes_mystic_planks"
+	},
+	"extrabiomes:mystic_slab": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_stairs": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_leaves": {
+		"sound": "grass",
+		"isotropic": true,
+		"textures": "extrabiomes_mystic_leaves"
+	},
+	"extrabiomes:mystic_sapling_block": {
+		"sound": "grass"
+	},
+	"extrabiomes:stripped_mystic_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:stripped_mystic_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_fence_gate": {
+		"sound": "wood"
+	},
+	"extrabiomes:mystic_fence": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_door_top_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_trapdoor": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_planks": {
+		"sound": "wood",
+		"textures": "extrabiomes_palm_planks"
+	},
+	"extrabiomes:palm_slab": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_stairs": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_leaves": {
+		"sound": "grass",
+		"isotropic": true,
+		"textures": "extrabiomes_palm_leaves"
+	},
+	"extrabiomes:palm_sapling_block": {
+		"sound": "grass"
+	},
+	"extrabiomes:stripped_palm_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:stripped_palm_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_fence_gate": {
+		"sound": "wood"
+	},
+	"extrabiomes:palm_fence": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_door_top_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_trapdoor": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_planks": {
+		"sound": "wood",
+		"textures": "extrabiomes_sky_planks"
+	},
+	"extrabiomes:sky_slab": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_stairs": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_leaves": {
+		"sound": "grass",
+		"isotropic": true,
+		"textures": "extrabiomes_sky_leaves"
+	},
+	"extrabiomes:sky_sapling_block": {
+		"sound": "grass"
+	},
+	"extrabiomes:stripped_sky_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:stripped_sky_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_fence_gate": {
+		"sound": "wood"
+	},
+	"extrabiomes:sky_fence": {
+		"sound": "wood"
+	},
+	"extrabiomes:dense_cloud": {
+		"sound": "cloth"
+	},
+	"extrabiomes:dense_cloud_brick": {
+		"sound": "cloth"
+	},
+	"extrabiomes:black_sand": {
+		"sound": "sand"
+	},
+	"extrabiomes:black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:chiseled_black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:cut_black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:smooth_black_sandstone": {
+		"sound": "stone"
+	},
+	"extrabiomes:black_sandstone_stairs": {
+		"sound": "stone"
+	},
+	"extrabiomes:black_sandstone_slab": {
+		"sound": "stone"
+	},
+	"extrabiomes:smooth_black_sandstone_stairs": {
+		"sound": "stone"
+	},
+	"extrabiomes:smooth_black_sandstone_slab": {
+		"sound": "stone"
+	},
+	"extrabiomes:cut_black_sandstone_slab": {
+		"sound": "stone"
+	},
+	"extrabiomes:black_sandstone_wall": {
+		"sound": "stone"
+	},
+	"extrabiomes:gilded_sky_door_bottom": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_door_bottom_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_door_top": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_door_top_flipped": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_planks": {
+		"sound": "wood",
+		"textures": "extrabiomes_gilded_sky_planks"
+	},
+	"extrabiomes:gilded_sky_slab": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_stairs": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_trapdoor": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:gilded_sky_fence_gate": {
+		"sound": "wood"
+	},
+	"extrabiomes:stripped_gilded_sky_log": {
+		"sound": "wood"
+	},
+	"extrabiomes:stripped_gilded_sky_wood": {
+		"sound": "wood"
+	},
+	"extrabiomes:blue_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:blue_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:purple_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:purple_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:yellow_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:yellow_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:green_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:green_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:cyan_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:cyan_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:white_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:white_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:black_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:black_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:orange_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:orange_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:glow_mushroom_block": {
+		"sound": "shroomlight"
+	},
+	"extrabiomes:glow_mushroom_placed": {
+		"sound": "grass"
+	},
+	"extrabiomes:nether_coal_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_copper_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_diamond_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_iron_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_gold_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_lapis_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_emerald_ore": {
+		"sound": "nether_gold_ore"
+	},
+	"extrabiomes:nether_redstone_ore": {
+		"sound": "nether_gold_ore"
+	}
 }

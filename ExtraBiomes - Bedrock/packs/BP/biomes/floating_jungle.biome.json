@@ -1,61 +1,69 @@
 {
-    "format_version": "1.21.110",
-    "minecraft:biome": {
-        "description": {
-            "identifier": "extrabiomes:floating_jungle"
+  "format_version": "1.21.110",
+  "minecraft:biome": {
+    "description": {
+      "identifier": "extrabiomes:floating_jungle"
+    },
+    "components": {
+      "minecraft:climate": {
+        "downfall": 0.9,
+        "snow_accumulation": [
+          0,
+          0.125
+        ],
+        "temperature": 0.95
+      },
+      "minecraft:overworld_height": {
+        "noise_params": [
+          5,
+          10
+        ]
+      },
+      "minecraft:mountain_parameters": {
+        "steep_material_adjustment": {
+          "material": "minecraft:stone",
+          "north_slopes": true,
+          "east_slopes": true
         },
-        "components": {
-            "minecraft:climate": {
-                "downfall": 0.9,
-                "snow_accumulation": [0, 0.125],
-                "temperature": 0.95
-            },
-            "minecraft:overworld_height": {
-                "noise_params": [5, 10]
-            },
-            "minecraft:mountain_parameters": {
-                "steep_material_adjustment": {
-                    "material": "minecraft:stone",
-                    "north_slopes": true,
-                    "east_slopes": true
-                },
-                "top_slide": {
-                    "enabled": false
-                }
-            },
-            "minecraft:replace_biomes": {
-                "replacements": [
-                    {
-                        "dimension": "minecraft:overworld",
-                        "targets": ["minecraft:stony_peaks"],
-                        "amount": 0.2,
-                        "noise_frequency_scale": 1.2
-                    }
-                ]
-            },
-            "minecraft:surface_builder": {
-                "builder": {
-                    "type": "minecraft:overworld",
-                    "foundation_material": "minecraft:stone",
-                    "mid_material": "minecraft:dirt",
-                    "top_material": "minecraft:grass",
-                    "sea_floor_depth": 7,
-                    "sea_floor_material": "minecraft:gravel",
-                    "sea_material": "minecraft:water"
-                }
-            },
-            "minecraft:tags": {
-                "tags": [
-                    "animal",
-                    "caves",
-                    "jungle",
-                    "monster",
-                    "overworld",
-                    "rare",
-                    "spawns_jungle_mobs",
-                    "spawns_warm_variant_farm_animals"
-                ]
-            }
+        "top_slide": {
+          "enabled": false
         }
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:stony_peaks"
+            ],
+            "amount": 0.2,
+            "noise_frequency_scale": 1.2
+          }
+        ]
+      },
+      "minecraft:surface_builder": {
+        "builder": {
+          "type": "minecraft:overworld",
+          "foundation_material": "minecraft:stone",
+          "mid_material": "minecraft:dirt",
+          "top_material": "minecraft:grass",
+          "sea_floor_depth": 7,
+          "sea_floor_material": "minecraft:gravel",
+          "sea_material": "minecraft:water"
+        }
+      },
+      "minecraft:tags": {
+        "tags": [
+          "animal",
+          "caves",
+          "jungle",
+          "monster",
+          "overworld",
+          "rare",
+          "spawns_jungle_mobs",
+          "spawns_warm_variant_farm_animals"
+        ]
+      }
     }
+  }
 }

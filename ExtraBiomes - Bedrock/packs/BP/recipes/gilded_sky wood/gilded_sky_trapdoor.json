@@ -1,21 +1,26 @@
 {
-    "format_version": "1.16.0",
-    "minecraft:recipe_shaped": {
-        "description": {
-            "identifier": "extrabiomes:gilded_sky_trapdoor"
-        },
-        "tags": ["crafting_table"],
-        "pattern": ["~~~", "~~~"],
-        "key": {
-            "~": {
-                "item": "extrabiomes:gilded_sky_planks"
-            }
-        },
-        "result": [
-            {
-                "item": "extrabiomes:gilded_sky_trapdoor",
-                "count": 2
-            }
-        ]
-    }
+	"format_version": "1.16.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "extrabiomes:gilded_sky_trapdoor"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			"~~~",
+			"~~~"
+		],
+		"key": {
+			"~": {
+				"item": "extrabiomes:gilded_sky_planks"
+			}
+		},
+		"result": [
+			{
+				"item": "extrabiomes:gilded_sky_trapdoor",
+				"count": 2
+			}
+		]
+	}
 }

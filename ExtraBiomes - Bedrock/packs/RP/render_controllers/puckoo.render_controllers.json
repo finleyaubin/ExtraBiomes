@@ -1,57 +1,63 @@
 {
-    "format_version": "1.8.0",
-    "render_controllers": {
-        "controller.render.puckoo.base": {
-            "arrays": {
-                "textures": {
-                    "Array.base": [
-                        "Texture.base0",
-                        "Texture.base1",
-                        "Texture.base2",
-                        "Texture.base3"
-                    ]
-                }
-            },
-            "geometry": "geometry.default",
-            "part_visibility": [
-                {
-                    "whiskers": "q.property('extrabiomes:gender')=='male'"
-                }
-            ],
-            "materials": [
-                {
-                    "*": "material.default"
-                }
-            ],
-            "textures": ["Array.base[q.skin_id]"]
-        },
-        "controller.render.puckoo.koi": {
-            "arrays": {
-                "textures": {
-                    "Array.koi": [
-                        "Texture.koi_1",
-                        "Texture.koi_2",
-                        "Texture.koi_3",
-                        "Texture.koi_0"
-                    ]
-                }
-            },
-            "geometry": "geometry.default",
-            "materials": [
-                {
-                    "*": "material.default"
-                }
-            ],
-            "textures": ["Array.koi[q.variant]"]
-        },
-        "controller.render.puckoo.saddled": {
-            "geometry": "geometry.default",
-            "materials": [
-                {
-                    "*": "material.default"
-                }
-            ],
-            "textures": ["Texture.saddled"]
-        }
-    }
+	"format_version": "1.8.0",
+	"render_controllers": {
+		"controller.render.puckoo.base": {
+			"arrays": {
+				"textures": {
+					"Array.base": [
+						"Texture.base0",
+						"Texture.base1",
+						"Texture.base2",
+						"Texture.base3"
+					]
+				}
+			},
+			"geometry": "geometry.default",
+			"part_visibility": [
+				{
+					"whiskers": "q.property('extrabiomes:gender')=='male'"
+				}
+			],
+			"materials": [
+				{
+					"*": "material.default"
+				}
+			],
+			"textures": [
+				"Array.base[q.skin_id]"
+			]
+		},
+		"controller.render.puckoo.koi": {
+			"arrays": {
+				"textures": {
+					"Array.koi": [
+						"Texture.koi_1",
+						"Texture.koi_2",
+						"Texture.koi_3",
+						"Texture.koi_0"
+					]
+				}
+			},
+			"geometry": "geometry.default",
+			"materials": [
+				{
+					"*": "material.default"
+				}
+			],
+			"textures": [
+				"Array.koi[q.variant]"
+			]
+		},
+		"controller.render.puckoo.saddled": {
+			"geometry": "geometry.default",
+			"materials": [
+				{
+					"*": "material.default"
+				}
+			],
+			"textures": [
+				"Texture.saddled"
+			]
+		}
+	}
 }

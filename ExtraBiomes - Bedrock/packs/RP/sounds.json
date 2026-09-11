@@ -1,32 +1,44 @@
 {
-    "entity_sounds": {
-        "entities": {
-            "extrabiomes:frog": {
-                "events": {
-                    "ambient": "mob.frog.idle"
-                },
-                "pitch": [0.8, 1.2],
-                "volume": 1.0
+   "entity_sounds": {
+      "entities": {
+         "extrabiomes:frog": {
+            "events": {
+               "ambient": "mob.frog.idle"
             },
-            "extrabiomes:puckoo": {
-                "events": {
-                    "ambient": "mob.puckoo.ambient"
-                },
-                "pitch": [0.9, 1.1],
-                "volume": 1.0
+            "pitch": [
+               0.80,
+               1.20
+            ],
+            "volume": 1.0
+         },
+         "extrabiomes:puckoo": {
+            "events": {
+               "ambient": "mob.puckoo.ambient"
             },
-            "extrabiomes:hoppleshroom": {
-                "events": {
-                    "fall.small": "mob.hoppleshroom.jump",
-                    "fall.big": "mob.hoppleshroom.jump",
-                    "hurt": "mob.hoppleshroom.jump",
-                    "death": "mob.hoppleshroom.jump",
-                    "jump": "mob.hoppleshroom.jump",
-                    "ambient": "mob.hoppleshroom.jump"
-                },
-                "pitch": [0.9, 1.5],
-                "volume": [0.5, 1]
-            }
-        }
-    }
+            "pitch": [
+               0.90,
+               1.10
+            ],
+            "volume": 1.0
+         },
+         "extrabiomes:hoppleshroom": {
+            "events": {
+               "fall.small": "mob.hoppleshroom.jump",
+               "fall.big": "mob.hoppleshroom.jump",
+               "hurt": "mob.hoppleshroom.jump",
+               "death": "mob.hoppleshroom.jump",
+               "jump": "mob.hoppleshroom.jump",
+               "ambient": "mob.hoppleshroom.jump"
+            },
+            "pitch": [
+               0.90,
+               1.50
+            ],
+            "volume": [
+               0.5,
+               1
+            ]
+         }
+      }
+   }
 }

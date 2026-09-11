@@ -1,31 +1,31 @@
 {
-    "format_version": "1.20.100",
-    "minecraft:block": {
-        "description": {
-            "identifier": "extrabiomes:nether_redstone_ore",
-            "menu_category": {
-                "category": "nature",
-                "group": "itemGroup.name.ore"
-            }
-        },
-        "components": {
-            "minecraft:geometry": "minecraft:geometry.full_block",
-            "minecraft:material_instances": {
-                "*": {
-                    "texture": "extrabiomes_nether_redstone_ore",
-                    "render_method": "opaque"
-                }
-            },
-            "minecraft:loot": "loot_tables/blocks/redstone_ore.json",
-            "minecraft:destructible_by_mining": {
-                "seconds_to_destroy": 8
-            },
-            "tag:minecraft:is_pickaxe_item_destructible": {},
-            "minecraft:destructible_by_explosion": {
-                "explosion_resistance": 3
-            },
-            "minecraft:light_dampening": 15,
-            "extrabiomes:xp_reward_component": {}
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:nether_redstone_ore",
+      "menu_category": {
+        "category": "nature",
+        "group": "itemGroup.name.ore"
+      }
+    },
+    "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "extrabiomes_nether_redstone_ore",
+          "render_method": "opaque"
         }
+      },
+      "minecraft:loot": "loot_tables/blocks/redstone_ore.json",
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 8
+      },
+      "tag:minecraft:is_pickaxe_item_destructible": {},
+      "minecraft:destructible_by_explosion": {
+        "explosion_resistance": 3
+      },
+      "minecraft:light_dampening": 15,
+      "extrabiomes:xp_reward_component": {}
     }
+  }
 }

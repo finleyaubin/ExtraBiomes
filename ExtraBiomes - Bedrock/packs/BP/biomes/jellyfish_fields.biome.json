@@ -1,68 +1,77 @@
 {
-    "format_version": "1.21.110",
-    "minecraft:biome": {
-        "description": {
-            "identifier": "extrabiomes:jellyfish_fields"
-        },
-        "components": {
-            "minecraft:climate": {
-                "downfall": 0.5,
-                "snow_accumulation": [0, 0.125],
-                "temperature": 0.5
+  "format_version": "1.21.110",
+  "minecraft:biome": {
+    "description": {
+      "identifier": "extrabiomes:jellyfish_fields"
+    },
+    "components": {
+      "minecraft:climate": {
+        "downfall": 0.5,
+        "snow_accumulation": [
+          0,
+          0.125
+        ],
+        "temperature": 0.5
+      },
+      "minecraft:overworld_height": {
+        "noise_params": [
+          -1.9,
+          0.13
+        ]
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:ocean",
+              "minecraft:deep_ocean",
+              "minecraft:warm_ocean"
+            ],
+            "amount": 0.08,
+            "noise_frequency_scale": 0.6
+          }
+        ]
+      },
+      "minecraft:surface_material_adjustments": {
+        "adjustments": [
+          {
+            "materials": {
+              "sea_floor_material": "minecraft:moss_block"
             },
-            "minecraft:overworld_height": {
-                "noise_params": [-1.9, 0.13]
-            },
-            "minecraft:replace_biomes": {
-                "replacements": [
-                    {
-                        "dimension": "minecraft:overworld",
-                        "targets": [
-                            "minecraft:ocean",
-                            "minecraft:deep_ocean",
-                            "minecraft:warm_ocean"
-                        ],
-                        "amount": 0.08,
-                        "noise_frequency_scale": 0.6
-                    }
-                ]
-            },
-            "minecraft:surface_material_adjustments": {
-                "adjustments": [
-                    {
-                        "materials": {
-                            "sea_floor_material": "minecraft:moss_block"
-                        },
-                        "noise_frequency_scale": 0.09,
-                        "noise_range": [0.1, 0.3]
-                    }
-                ]
-            },
-            "minecraft:surface_builder": {
-                "builder": {
-                    "type": "minecraft:overworld",
-                    "foundation_material": "minecraft:stone",
-                    "mid_material": "minecraft:stone",
-                    "top_material": "minecraft:grass",
-                    "sea_floor_depth": 3,
-                    "sea_floor_material": "extrabiomes:grass_stone",
-                    "sea_material": "minecraft:water"
-                }
-            },
-            "minecraft:tags": {
-                "tags": [
-                    "caves",
-                    "jellyfish",
-                    "ocean",
-                    "monster",
-                    "overworld",
-                    "warm",
-                    "spawns_warm_variant_farm_animals",
-                    "spawns_warm_variant_frogs",
-                    "fast_fishing",
-                    "high_seas"
-                ]
-            }
+            "noise_frequency_scale": 0.09,
+            "noise_range": [
+              0.1,
+              0.3
+            ]
+          }
+        ]
+      },
+      "minecraft:surface_builder": {
+        "builder": {
+          "type": "minecraft:overworld",
+          "foundation_material": "minecraft:stone",
+          "mid_material": "minecraft:stone",
+          "top_material": "minecraft:grass",
+          "sea_floor_depth": 3,
+          "sea_floor_material": "extrabiomes:grass_stone",
+          "sea_material": "minecraft:water"
         }
+      },
+      "minecraft:tags": {
+        "tags": [
+          "caves",
+          "jellyfish",
+          "ocean",
+          "monster",
+          "overworld",
+          "warm",
+          "spawns_warm_variant_farm_animals",
+          "spawns_warm_variant_frogs",
+          "fast_fishing",
+          "high_seas"
+        ]
+      }
     }
+  }
 }

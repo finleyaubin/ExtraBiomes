@@ -1,78 +1,92 @@
 {
-    "format_version": "1.20.100",
-    "minecraft:block": {
-        "description": {
-            "identifier": "extrabiomes:stick_pile",
-            "menu_category": {
-                "category": "construction",
-                "group": "itemGroup.name.planks"
-            },
-            "traits": {
-                "minecraft:placement_position": {
-                    "enabled_states": ["minecraft:block_face"]
-                }
-            }
-        },
-        "permutations": [
-            // X axis
-            {
-                "condition": "q.block_state('minecraft:block_face') == 'west' || q.block_state('minecraft:block_face') == 'east'",
-                "components": {
-                    "minecraft:transformation": {
-                        "rotation": [90, 0, 0]
-                    }
-                }
-            },
-            // Y axis
-            {
-                "condition": "q.block_state('minecraft:block_face') == 'down' || q.block_state('minecraft:block_face') == 'up'",
-                "components": {
-                    "minecraft:transformation": {
-                        "rotation": [0, 0, 90]
-                    }
-                }
-            },
-            // Z axis
-            {
-                "condition": "q.block_state('minecraft:block_face') == 'north' || q.block_state('minecraft:block_face') == 'south'",
-                "components": {
-                    "minecraft:transformation": {
-                        "rotation": [0, 90, 0]
-                    }
-                }
-            }
-        ],
-        "components": {
-            "minecraft:geometry": "geometry.stick_pile",
-            "minecraft:material_instances": {
-                "*": {
-                    "texture": "log_side",
-                    "render_method": "opaque"
-                },
-                "log_side": {
-                    "texture": "log_top",
-                    "render_method": "opaque"
-                }
-            },
-            "minecraft:flammable": {
-                "burn_odds": 50,
-                "flame_odds": 50
-            },
-            "minecraft:map_color": "#ff78f8",
-            "tag:wood": {},
-            "minecraft:destructible_by_mining": {
-                "seconds_to_destroy": 2.5
-            },
-            "tag:minecraft:is_axe_item_destructible": {},
-            "minecraft:liquid_detection": {
-                "detection_rules": [
-                    {
-                        "liquid_type": "water",
-                        "can_contain_liquid": true, // Waterloggable
-                        "on_liquid_touches": "no_reaction" // Water flows through the block like air
-                    }
-                ]
-            }
+  "format_version": "1.20.100",
+  "minecraft:block": {
+    "description": {
+      "identifier": "extrabiomes:stick_pile",
+      "menu_category": {
+        "category": "construction",
+        "group": "itemGroup.name.planks"
+      },
+      "traits": {
+        "minecraft:placement_position": {
+          "enabled_states": [
+            "minecraft:block_face"
+          ]
         }
+      }
+    },
+    "permutations": [
+      // X axis
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'west' || q.block_state('minecraft:block_face') == 'east'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              90,
+              0,
+              0
+            ]
+          }
+        }
+      },
+      // Y axis
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'down' || q.block_state('minecraft:block_face') == 'up'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              0,
+              90
+            ]
+          }
+        }
+      },
+      // Z axis
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'north' || q.block_state('minecraft:block_face') == 'south'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              90,
+              0
+            ]
+          }
+        }
+      }
+    ],
+    "components": {
+      "minecraft:geometry": "geometry.stick_pile",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "log_side",
+          "render_method": "opaque"
+        },
+        "log_side": {
+          "texture": "log_top",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:flammable": {
+        "burn_odds": 50,
+        "flame_odds": 50
+      },
+      "minecraft:map_color": "#ff78f8",
+      "tag:wood": {},
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2.5
+      },
+      "tag:minecraft:is_axe_item_destructible":{},
+      "minecraft:liquid_detection": {
+        "detection_rules": [
+          {
+            "liquid_type": "water",
+            "can_contain_liquid": true, // Waterloggable
+            "on_liquid_touches": "no_reaction" // Water flows through the block like air
+          }
+        ]
+      }
     }
+  }
 }

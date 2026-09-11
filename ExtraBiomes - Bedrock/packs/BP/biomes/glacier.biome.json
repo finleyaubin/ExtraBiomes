@@ -1,52 +1,60 @@
 {
-    "format_version": "1.21.110",
-    "minecraft:biome": {
-        "description": {
-            "identifier": "extrabiomes:glacier"
-        },
-        "components": {
-            "minecraft:climate": {
-                "downfall": 1,
-                "snow_accumulation": [0.5, 1.5],
-                "temperature": 0
-            },
-            "minecraft:overworld_height": {
-                "noise_params": [2, 0]
-            },
-            "minecraft:surface_builder": {
-                "builder": {
-                    "type": "minecraft:overworld",
-                    "foundation_material": "minecraft:stone",
-                    "mid_material": "minecraft:ice",
-                    "top_material": "minecraft:snow",
-                    "sea_floor_depth": 7,
-                    "sea_floor_material": "minecraft:gravel",
-                    "sea_material": "minecraft:water"
-                }
-            },
-            "minecraft:replace_biomes": {
-                "replacements": [
-                    {
-                        "dimension": "minecraft:overworld",
-                        "targets": ["minecraft:ice_plains"],
-                        "amount": 0.7,
-                        "noise_frequency_scale": 0.2
-                    }
-                ]
-            },
-            "minecraft:tags": {
-                "tags": [
-                    "caves",
-                    "frozen",
-                    "glacier",
-                    "monster",
-                    "overworld",
-                    "spawns_cold_variant_farm_animals",
-                    "spawns_cold_variant_frogs",
-                    "spawns_snow_foxes",
-                    "spawns_white_rabbits"
-                ]
-            }
+  "format_version": "1.21.110",
+  "minecraft:biome": {
+    "description": {
+      "identifier": "extrabiomes:glacier"
+    },
+    "components": {
+      "minecraft:climate": {
+        "downfall": 1,
+        "snow_accumulation": [
+          0.5,
+          1.5
+        ],
+        "temperature": 0
+      },
+      "minecraft:overworld_height": {
+        "noise_params": [
+          2,
+          0
+        ]
+      },
+      "minecraft:surface_builder": {
+        "builder": {
+          "type": "minecraft:overworld",
+          "foundation_material": "minecraft:stone",
+          "mid_material": "minecraft:ice",
+          "top_material": "minecraft:snow",
+          "sea_floor_depth": 7,
+          "sea_floor_material": "minecraft:gravel",
+          "sea_material": "minecraft:water"
         }
+      },
+      "minecraft:replace_biomes": {
+        "replacements": [
+          {
+            "dimension": "minecraft:overworld",
+            "targets": [
+              "minecraft:ice_plains"
+            ],
+            "amount": 0.7,
+            "noise_frequency_scale": 0.2
+          }
+        ]
+      },
+      "minecraft:tags": {
+        "tags": [
+          "caves",
+          "frozen",
+          "glacier",
+          "monster",
+          "overworld",
+          "spawns_cold_variant_farm_animals",
+          "spawns_cold_variant_frogs",
+          "spawns_snow_foxes",
+          "spawns_white_rabbits"
+        ]
+      }
     }
+  }
 }
