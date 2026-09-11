@@ -19,6 +19,8 @@ import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -143,19 +145,19 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
             }
         }
 
+        Map<BlockPos, Set<Direction>> vines = new HashMap<>();
         for (BlockPos p : stonePositions) {
-            Map<Direction, Boolean> faces = null;
             for (Direction dir : Direction.Plane.HORIZONTAL) {
                 BlockPos n = p.relative(dir);
                 if (!isOpen(level, n) || !isOpen(level, n.relative(dir)) || !isExteriorFace(level, n, dir)) continue;
                 double density = vegetationDensity(n);
                 float chance = ((n.getY() - box.minY()) < sy * 0.45D ? VINE_CHANCE_LOW : VINE_CHANCE_HIGH) * (float) density;
                 if (random.nextFloat() >= chance) continue;
-                if (faces == null) faces = new EnumMap<>(Direction.class);
-                faces.put(dir.getOpposite(), Boolean.TRUE);
-            }
-            if (faces != null) {
-                placeVine(level, p, faces.keySet());
+                // The vine belongs in the open cell, attached to the rock face it was reached from.
+                // Putting it at p would swap that exposed stone for a see-through block, hollowing
+                // out the pillar's own silhouette - and two neighbouring faces of the same air cell
+                // have to merge into one multi-face vine rather than overwrite each other.
+                vines.computeIfAbsent(n, unused -> EnumSet.noneOf(Direction.class)).add(dir.getOpposite());
             }
 
             BlockPos above = p.above();
@@ -179,6 +181,14 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
             }
             // else: bare grass/moss patch, no topper.
         }
+
+        // Deferred so the loop's own grass/topper writes can't be read as "this cell is taken"
+        // halfway through; a cell a topper actually landed in is skipped rather than overwritten.
+        vines.forEach((pos, faces) -> {
+            if (isOpen(level, pos)) {
+                placeVine(level, pos, faces);
+            }
+        });
     }
 
     /**
