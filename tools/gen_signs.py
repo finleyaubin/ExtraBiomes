@@ -85,8 +85,10 @@ SHAPES = [
      {"size": [16, 8, 2], "origin": [-8, 4, 6]}, [8, 8, 16], False),
     ("hanging_sign", "geometry.extrabiomes_hanging_sign", "hanging_sign",
      {"size": [14, 16, 2], "origin": [-7, 0, -1]}, [8, 16, 8], True),
+    # Depth 9, not 10: the box must stay inside (-8,0,-8)..(8,16,8), and the wall bar
+    # already reaches z=8. The board sits at z=-1, so -1..8 covers bar and board both.
     ("wall_hanging_sign", "geometry.extrabiomes_wall_hanging_sign", "hanging_sign",
-     {"size": [14, 16, 10], "origin": [-7, 0, -1]}, [8, 16, 8], False),
+     {"size": [14, 16, 9], "origin": [-7, 0, -1]}, [8, 16, 8], False),
 ]
 
 
