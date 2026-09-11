@@ -16,10 +16,13 @@
                 }
             },
             "minecraft:geometry": "geometry.pebble",
-            "minecraft:collision_box": false,
+            "minecraft:collision_box": {
+                "origin": [-8, 0, -8],
+                "size": [16, 3, 16]
+            },
             "minecraft:selection_box": {
                 "origin": [-8, 0, -8],
-                "size": [16, 2, 16]
+                "size": [16, 3, 16]
             },
             "minecraft:loot": "loot_tables/blocks/pebble/2pebble.json",
             "minecraft:destructible_by_mining": {
