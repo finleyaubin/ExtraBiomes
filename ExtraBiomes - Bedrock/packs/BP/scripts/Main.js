@@ -12,7 +12,6 @@ import { OpenComponent } from "./blocks/Components/open.js";
 import { fence } from "./blocks/Components/fence_place.js";
 import { wall } from "./blocks/Components/wall_place.js";
 import { DoorCloseComponent, DoorOnPlace, DoorOpenComponent, ResetTop, ResetBottom } from "./blocks/Components/door.js";
-import { SignTextComponent } from "./blocks/Components/sign_text.js";
 
 //Import item components
 import { JellyfishReleaseComponent } from "./items/jellyfish_release.js";
@@ -43,7 +42,6 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
   blockComponentRegistry.registerCustomComponent("extrabiomes:door_open",DoorOpenComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:reset_top",ResetTop);
   blockComponentRegistry.registerCustomComponent("extrabiomes:reset_bottom",ResetBottom);
-  blockComponentRegistry.registerCustomComponent("extrabiomes:sign_text",SignTextComponent);
 
   //Registers item components
   itemComponentRegistry.registerCustomComponent("extrabiomes:jellyfish_release",JellyfishReleaseComponent);

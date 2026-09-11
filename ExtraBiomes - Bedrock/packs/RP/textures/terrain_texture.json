@@ -4,30 +4,6 @@
     "resource_pack_name": "Extra Biomes",
     "texture_name": "atlas.terrain",
     "texture_data": {
-        "extrabiomes_mystic_sign": {
-            "textures": "textures/blocks/signs/mystic"
-        },
-        "extrabiomes_mystic_hanging_sign": {
-            "textures": "textures/blocks/signs/hanging/mystic"
-        },
-        "extrabiomes_palm_sign": {
-            "textures": "textures/blocks/signs/palm"
-        },
-        "extrabiomes_palm_hanging_sign": {
-            "textures": "textures/blocks/signs/hanging/palm"
-        },
-        "extrabiomes_sky_sign": {
-            "textures": "textures/blocks/signs/sky"
-        },
-        "extrabiomes_sky_hanging_sign": {
-            "textures": "textures/blocks/signs/hanging/sky"
-        },
-        "extrabiomes_gilded_sky_sign": {
-            "textures": "textures/blocks/signs/gilded_sky"
-        },
-        "extrabiomes_gilded_sky_hanging_sign": {
-            "textures": "textures/blocks/signs/hanging/gilded_sky"
-        },
         "extrabiomes_grass_stone_side": {
             "textures": "textures/blocks/grass_stone_side"
         },
