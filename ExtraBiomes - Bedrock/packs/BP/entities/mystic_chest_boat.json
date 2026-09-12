@@ -16,9 +16,13 @@
                     "priority": 0,
                     "seats": [
                         {
-                            "position": [0.2, 0.4, 0],
+                            "position": [
+                                0.2,
+                                0.4,
+                                0
+                            ],
                             "lock_rider_rotation": 90,
-                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? 90 : 0",
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? 0 : 90",
                             "min_rider_count": 0,
                             "max_rider_count": 1
                         }
@@ -33,9 +37,13 @@
                     "priority": 0,
                     "seats": [
                         {
-                            "position": [0.2, 0.2, 0],
+                            "position": [
+                                0.2,
+                                0.2,
+                                0
+                            ],
                             "lock_rider_rotation": 90,
-                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? 90 : 0",
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? 0 : 90",
                             "min_rider_count": 0,
                             "max_rider_count": 1
                         }
@@ -99,23 +107,71 @@
             },
             "minecraft:loot": {
                 "table": "loot_tables/entities/mystic_chest_boat.json"
+            },
+            "minecraft:type_family": {
+                "family": [
+                    "boat",
+                    "inanimate"
+                ]
+            },
+            "minecraft:hurt_on_condition": {
+                "damage_conditions": [
+                    {
+                        "cause": "lava",
+                        "damage_per_tick": 4,
+                        "filters": {
+                            "subject": "self",
+                            "test": "in_lava"
+                        }
+                    }
+                ]
+            },
+            "minecraft:balloonable": {},
+            "minecraft:is_stackable": {},
+            "minecraft:conditional_bandwidth_optimization": {
+                "conditional_values": [
+                    {
+                        "conditional_values": [
+                            {
+                                "subject": "self",
+                                "test": "is_moving"
+                            }
+                        ],
+                        "max_dropped_ticks": 0,
+                        "max_optimized_distance": 0.0,
+                        "use_motion_prediction_hints": true
+                    }
+                ],
+                "default_values": {
+                    "max_dropped_ticks": 20,
+                    "max_optimized_distance": 60.0,
+                    "use_motion_prediction_hints": true
+                }
             }
         },
         "events": {
             "extrabiomes:water_ride": {
                 "remove": {
-                    "component_groups": ["extrabiomes:land_ride"]
+                    "component_groups": [
+                        "extrabiomes:land_ride"
+                    ]
                 },
                 "add": {
-                    "component_groups": ["extrabiomes:water_ride"]
+                    "component_groups": [
+                        "extrabiomes:water_ride"
+                    ]
                 }
             },
             "extrabiomes:land_ride": {
                 "remove": {
-                    "component_groups": ["extrabiomes:water_ride"]
+                    "component_groups": [
+                        "extrabiomes:water_ride"
+                    ]
                 },
                 "add": {
-                    "component_groups": ["extrabiomes:land_ride"]
+                    "component_groups": [
+                        "extrabiomes:land_ride"
+                    ]
                 }
             }
         }

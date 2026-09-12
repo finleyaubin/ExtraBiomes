@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=Tora Descascada de Místico
 tile.extrabiomes:stripped_mystic_wood.name=Madeira Descascada de Místico
 entity.extrabiomes:mystic_boat.name=Barco Místico
 item.extrabiomes:mystic_boat=Barco Místico
+entity.extrabiomes:mystic_chest_boat.name=Barco Baú Místico
+item.extrabiomes:mystic_chest_boat=Barco Baú Místico
 item.extrabiomes:mystic_door=Porta Místico
 
 tile.extrabiomes:palm_log.name=Tora de Palmeira
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=Muda de Palmeira
 item.extrabiomes:palm_sapling=Muda de Palmeira
 entity.extrabiomes:palm_boat.name=Barco de Palmeira
 item.extrabiomes:palm_boat=Barco de Palmeira
+entity.extrabiomes:palm_chest_boat.name=Barco Baú de Palmeira
+item.extrabiomes:palm_chest_boat=Barco Baú de Palmeira
 item.extrabiomes:palm_door=Porta de Palmeira
 
 tile.extrabiomes:sky_log.name=Tora do Céu
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=Muda do Céu
 item.extrabiomes:sky_sapling=Muda do Céu
 entity.extrabiomes:sky_boat.name=Barco do Céu
 item.extrabiomes:sky_boat=Barco do Céu
+entity.extrabiomes:sky_chest_boat.name=Barco Baú do Céu
+item.extrabiomes:sky_chest_boat=Barco Baú do Céu
 item.extrabiomes:sky_door=Porta do Céu
 
 tile.extrabiomes:gilded_sky_log.name= §eTora Dourado do Céu§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§eEscada Dourado do Céu§r
 tile.extrabiomes:gilded_sky_trapdoor.name=§eAlçapão Dourado do Céu§r
 tile.extrabiomes:gilded_sky_wood.name=§eMadeira Dourado do Céu§r
 item.extrabiomes:gilded_sky_door=§ePorta Dourado do Céu§r
+entity.extrabiomes:gilded_sky_boat.name=§eBarco Dourado do Céu§r
+item.extrabiomes:gilded_sky_boat=§eBarco Dourado do Céu§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§eBarco Baú Dourado do Céu§r
+item.extrabiomes:gilded_sky_chest_boat=§eBarco Baú Dourado do Céu§r
 
 tile.extrabiomes:stick_pile.name=Gravetos Pilha de
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=Seixo Musgoso
 item.extrabiomes:pebble=Seixo
 item.spawn_egg.entity.extrabiomes:puckoo.name=Gerar Puckoo
 entity.extrabiomes:puckoo.name=Puckoo
+
+action.hint.exit.extrabiomes:mystic_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:mystic_boat=Toca em :_input_key.jump: para sair do barco
+action.hint.exit.extrabiomes:mystic_chest_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:mystic_chest_boat=Toca em :_input_key.jump: para sair do barco
+action.hint.exit.extrabiomes:palm_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:palm_boat=Toca em :_input_key.jump: para sair do barco
+action.hint.exit.extrabiomes:palm_chest_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:palm_chest_boat=Toca em :_input_key.jump: para sair do barco
+action.hint.exit.extrabiomes:sky_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:sky_boat=Toca em :_input_key.jump: para sair do barco
+action.hint.exit.extrabiomes:sky_chest_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:sky_chest_boat=Toca em :_input_key.jump: para sair do barco
+action.hint.exit.extrabiomes:gilded_sky_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:gilded_sky_boat=Toca em :_input_key.jump: para sair do barco
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=Toca em saltar para sair do barco
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=Toca em :_input_key.jump: para sair do barco

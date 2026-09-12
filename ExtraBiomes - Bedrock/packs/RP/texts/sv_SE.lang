@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=Barkad Mystisk Stock
 tile.extrabiomes:stripped_mystic_wood.name=Barkad Mystisk Trä
 entity.extrabiomes:mystic_boat.name=Mystisk Båt
 item.extrabiomes:mystic_boat=Mystisk Båt
+entity.extrabiomes:mystic_chest_boat.name=Mystisk Kista- Båt
+item.extrabiomes:mystic_chest_boat=Mystisk Kista- Båt
 item.extrabiomes:mystic_door=Mystisk Dörr
 
 tile.extrabiomes:palm_log.name=Palm- Stock
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=Palm- Planta
 item.extrabiomes:palm_sapling=Palm- Planta
 entity.extrabiomes:palm_boat.name=Palm- Båt
 item.extrabiomes:palm_boat=Palm- Båt
+entity.extrabiomes:palm_chest_boat.name=Palm- Kista- Båt
+item.extrabiomes:palm_chest_boat=Palm- Kista- Båt
 item.extrabiomes:palm_door=Palm- Dörr
 
 tile.extrabiomes:sky_log.name=Himmel- Stock
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=Himmel- Planta
 item.extrabiomes:sky_sapling=Himmel- Planta
 entity.extrabiomes:sky_boat.name=Himmel- Båt
 item.extrabiomes:sky_boat=Himmel- Båt
+entity.extrabiomes:sky_chest_boat.name=Himmel- Kista- Båt
+item.extrabiomes:sky_chest_boat=Himmel- Kista- Båt
 item.extrabiomes:sky_door=Himmel- Dörr
 
 tile.extrabiomes:gilded_sky_log.name= §eFörgylld Himmel- Stock§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§eFörgylld Himmel- Trappa§r
 tile.extrabiomes:gilded_sky_trapdoor.name=§eFörgylld Himmel- Fallucka§r
 tile.extrabiomes:gilded_sky_wood.name=§eFörgylld Himmel- Trä§r
 item.extrabiomes:gilded_sky_door=§eFörgylld Himmel- Dörr§r
+entity.extrabiomes:gilded_sky_boat.name=§eFörgylld Himmel- Båt§r
+item.extrabiomes:gilded_sky_boat=§eFörgylld Himmel- Båt§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§eFörgylld Himmel- Kista- Båt§r
+item.extrabiomes:gilded_sky_chest_boat=§eFörgylld Himmel- Kista- Båt§r
 
 tile.extrabiomes:stick_pile.name=Pinnar Hög
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=Mossig Sten
 item.extrabiomes:pebble=Sten
 item.spawn_egg.entity.extrabiomes:puckoo.name=Framkalla Puckoo
 entity.extrabiomes:puckoo.name=Puckoo
+
+action.hint.exit.extrabiomes:mystic_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:mystic_boat=Tryck på :_input_key.jump: för att lämna båten
+action.hint.exit.extrabiomes:mystic_chest_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:mystic_chest_boat=Tryck på :_input_key.jump: för att lämna båten
+action.hint.exit.extrabiomes:palm_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:palm_boat=Tryck på :_input_key.jump: för att lämna båten
+action.hint.exit.extrabiomes:palm_chest_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:palm_chest_boat=Tryck på :_input_key.jump: för att lämna båten
+action.hint.exit.extrabiomes:sky_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:sky_boat=Tryck på :_input_key.jump: för att lämna båten
+action.hint.exit.extrabiomes:sky_chest_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:sky_chest_boat=Tryck på :_input_key.jump: för att lämna båten
+action.hint.exit.extrabiomes:gilded_sky_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:gilded_sky_boat=Tryck på :_input_key.jump: för att lämna båten
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=Tryck på hoppa för att lämna båten
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=Tryck på :_input_key.jump: för att lämna båten
