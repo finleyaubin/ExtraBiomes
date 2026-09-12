@@ -1,29 +1,29 @@
 {
-	"format_version": "1.20.20",
-	"minecraft:item": {
-		"description": {
-			"identifier": "extrabiomes:frog_helmet",
-			"menu_category": {
-				"group": "itemGroup.name.helmet",
-				"category": "Equipment"
-			}
-		},
-		"components": {
-			"minecraft:max_stack_size": 1,
-			"minecraft:enchantable": {
-				"value": 25,
-				"slot": "armor_head"
-			},
-			"minecraft:wearable": {
-				"slot": "slot.armor.head",
-				"protection": 3
-			},
-			"minecraft:icon": {
-				"texture": "extrabiomes:frog_hat"
-			},
-			"minecraft:durability": {
-				"max_durability": 325
-			}
-		}
-	}
+    "format_version": "1.20.20",
+    "minecraft:item": {
+        "description": {
+            "identifier": "extrabiomes:frog_helmet",
+            "menu_category": {
+                "group": "itemGroup.name.helmet",
+                "category": "Equipment"
+            }
+        },
+        "components": {
+            "minecraft:max_stack_size": 1,
+            "minecraft:enchantable": {
+                "value": 25,
+                "slot": "armor_head"
+            },
+            "minecraft:wearable": {
+                "slot": "slot.armor.head",
+                "protection": 3
+            },
+            "minecraft:icon": {
+                "texture": "extrabiomes:frog_hat"
+            },
+            "minecraft:durability": {
+                "max_durability": 325
+            }
+        }
+    }
 }

@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=Обелен Мистичен Труп
 tile.extrabiomes:stripped_mystic_wood.name=Обелен Мистичен Дърво
 entity.extrabiomes:mystic_boat.name=Мистичен Лодка
 item.extrabiomes:mystic_boat=Мистичен Лодка
+entity.extrabiomes:mystic_chest_boat.name=Мистичен Сандък Лодка
+item.extrabiomes:mystic_chest_boat=Мистичен Сандък Лодка
 item.extrabiomes:mystic_door=Мистичен Врата
 
 tile.extrabiomes:palm_log.name=Палмов Труп
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=Палмов Фиданка
 item.extrabiomes:palm_sapling=Палмов Фиданка
 entity.extrabiomes:palm_boat.name=Палмов Лодка
 item.extrabiomes:palm_boat=Палмов Лодка
+entity.extrabiomes:palm_chest_boat.name=Палмов Сандък Лодка
+item.extrabiomes:palm_chest_boat=Палмов Сандък Лодка
 item.extrabiomes:palm_door=Палмов Врата
 
 tile.extrabiomes:sky_log.name=Небесен Труп
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=Небесен Фиданка
 item.extrabiomes:sky_sapling=Небесен Фиданка
 entity.extrabiomes:sky_boat.name=Небесен Лодка
 item.extrabiomes:sky_boat=Небесен Лодка
+entity.extrabiomes:sky_chest_boat.name=Небесен Сандък Лодка
+item.extrabiomes:sky_chest_boat=Небесен Сандък Лодка
 item.extrabiomes:sky_door=Небесен Врата
 
 tile.extrabiomes:gilded_sky_log.name= §eПозлатен Небесен Труп§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§eПозлатен Небесен Ст�
 tile.extrabiomes:gilded_sky_trapdoor.name=§eПозлатен Небесен Капак§r
 tile.extrabiomes:gilded_sky_wood.name=§eПозлатен Небесен Дърво§r
 item.extrabiomes:gilded_sky_door=§eПозлатен Небесен Врата§r
+entity.extrabiomes:gilded_sky_boat.name=§eПозлатен Небесен Лодка§r
+item.extrabiomes:gilded_sky_boat=§eПозлатен Небесен Лодка§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§eПозлатен Небесен Сандък Лодка§r
+item.extrabiomes:gilded_sky_chest_boat=§eПозлатен Небесен Сандък Лодка§r
 
 tile.extrabiomes:stick_pile.name=Пръчки Купчина
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=Мъхест Камъче
 item.extrabiomes:pebble=Камъче
 item.spawn_egg.entity.extrabiomes:puckoo.name=Призови Пъкку
 entity.extrabiomes:puckoo.name=Пъкку
+
+action.hint.exit.extrabiomes:mystic_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:mystic_boat=Натиснете :_input_key.jump:, за да слезете от лодката
+action.hint.exit.extrabiomes:mystic_chest_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:mystic_chest_boat=Натиснете :_input_key.jump:, за да слезете от лодката
+action.hint.exit.extrabiomes:palm_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:palm_boat=Натиснете :_input_key.jump:, за да слезете от лодката
+action.hint.exit.extrabiomes:palm_chest_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:palm_chest_boat=Натиснете :_input_key.jump:, за да слезете от лодката
+action.hint.exit.extrabiomes:sky_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:sky_boat=Натиснете :_input_key.jump:, за да слезете от лодката
+action.hint.exit.extrabiomes:sky_chest_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:sky_chest_boat=Натиснете :_input_key.jump:, за да слезете от лодката
+action.hint.exit.extrabiomes:gilded_sky_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:gilded_sky_boat=Натиснете :_input_key.jump:, за да слезете от лодката
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=Докоснете „скок“, за да слезете от лодката
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=Натиснете :_input_key.jump:, за да слезете от лодката

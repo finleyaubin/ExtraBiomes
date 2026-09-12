@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=Odkornena Mysticky Klada
 tile.extrabiomes:stripped_mystic_wood.name=Odkornena Mysticky Drevo
 entity.extrabiomes:mystic_boat.name=Mysticky Lodka
 item.extrabiomes:mystic_boat=Mysticky Lodka
+entity.extrabiomes:mystic_chest_boat.name=Mysticky Truhla Lodka
+item.extrabiomes:mystic_chest_boat=Mysticky Truhla Lodka
 item.extrabiomes:mystic_door=Mysticky Dvere
 
 tile.extrabiomes:palm_log.name=Palmovy Klada
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=Palmovy Sadenica
 item.extrabiomes:palm_sapling=Palmovy Sadenica
 entity.extrabiomes:palm_boat.name=Palmovy Lodka
 item.extrabiomes:palm_boat=Palmovy Lodka
+entity.extrabiomes:palm_chest_boat.name=Palmovy Truhla Lodka
+item.extrabiomes:palm_chest_boat=Palmovy Truhla Lodka
 item.extrabiomes:palm_door=Palmovy Dvere
 
 tile.extrabiomes:sky_log.name=Nebesky Klada
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=Nebesky Sadenica
 item.extrabiomes:sky_sapling=Nebesky Sadenica
 entity.extrabiomes:sky_boat.name=Nebesky Lodka
 item.extrabiomes:sky_boat=Nebesky Lodka
+entity.extrabiomes:sky_chest_boat.name=Nebesky Truhla Lodka
+item.extrabiomes:sky_chest_boat=Nebesky Truhla Lodka
 item.extrabiomes:sky_door=Nebesky Dvere
 
 tile.extrabiomes:gilded_sky_log.name= §ePozlateny Nebesky Klada§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§ePozlateny Nebesky Schody§r
 tile.extrabiomes:gilded_sky_trapdoor.name=§ePozlateny Nebesky Padacie Dvere§r
 tile.extrabiomes:gilded_sky_wood.name=§ePozlateny Nebesky Drevo§r
 item.extrabiomes:gilded_sky_door=§ePozlateny Nebesky Dvere§r
+entity.extrabiomes:gilded_sky_boat.name=§ePozlateny Nebesky Lodka§r
+item.extrabiomes:gilded_sky_boat=§ePozlateny Nebesky Lodka§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§ePozlateny Nebesky Truhla Lodka§r
+item.extrabiomes:gilded_sky_chest_boat=§ePozlateny Nebesky Truhla Lodka§r
 
 tile.extrabiomes:stick_pile.name=Palice Hromada
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=Zarasteny Oblocik
 item.extrabiomes:pebble=Oblocik
 item.spawn_egg.entity.extrabiomes:puckoo.name=Vyvolat Puckoo
 entity.extrabiomes:puckoo.name=Puckoo
+
+action.hint.exit.extrabiomes:mystic_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:mystic_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
+action.hint.exit.extrabiomes:mystic_chest_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:mystic_chest_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
+action.hint.exit.extrabiomes:palm_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:palm_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
+action.hint.exit.extrabiomes:palm_chest_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:palm_chest_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
+action.hint.exit.extrabiomes:sky_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:sky_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
+action.hint.exit.extrabiomes:sky_chest_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:sky_chest_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
+action.hint.exit.extrabiomes:gilded_sky_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:gilded_sky_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=Ak chcete vystúpiť z člna, ťuknite na položku Vyskočiť
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=Ak chcete vystúpiť z člna, stlačte tlačidlo :_input_key.jump:
