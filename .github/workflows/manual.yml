@@ -159,8 +159,8 @@ jobs:
       # are committed here and posted from there, pinned to this commit. Nested under
       # media-slides/bedrock/ rather than Java-Dev's bare media-slides/<version>/, since Bedrock
       # and Java version strings aren't guaranteed unique against each other.
-      # ponytail: a few MB of JPEGs per release land in branch history. Move them to one orphan
-      # media branch if that growth starts to matter.
+      # An orphan branch, not the triggering ref: on a tag-triggered run GITHUB_REF_NAME is the
+      # tag itself, and tags are immutable, so pushing a slides commit onto it always fails.
       - name: Commit slides for a stable public URL
         id: slides
         if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
@@ -168,13 +168,19 @@ jobs:
           IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
         run: |
           DIR="media-slides/bedrock/${{ steps.version.outputs.VERSION }}"
-          mkdir -p "$DIR"
-          cp /tmp/slides/*.jpg "$DIR/"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch origin media-slides 2>/dev/null; then
+            git checkout -B media-slides origin/media-slides
+          else
+            git checkout --orphan media-slides
+            git reset --hard
+          fi
+          mkdir -p "$DIR"
+          cp /tmp/slides/*.jpg "$DIR/"
           git add "$DIR"
           git commit -qm "Story slides for ${{ github.ref_name }}" || echo "no slide changes"
-          git push -q origin "HEAD:$GITHUB_REF_NAME"
+          git push -q origin media-slides
           # Pinned to the SHA, not the branch: raw.githubusercontent caches per ref and a branch
           # URL can still answer 404 for a short while after the push.
           echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
