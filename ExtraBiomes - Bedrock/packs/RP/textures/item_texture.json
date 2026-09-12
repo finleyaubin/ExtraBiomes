@@ -23,6 +23,9 @@
         "extrabiomes:mystic_boat": {
             "textures": "textures/items/boat_mystic"
         },
+        "extrabiomes:mystic_chest_boat": {
+            "textures": "textures/items/boat_mystic_chest"
+        },
         "extrabiomes:frogs_legs": {
             "textures": "textures/items/frogs_legs"
         },
@@ -44,11 +47,23 @@
         "extrabiomes:palm_boat": {
             "textures": "textures/items/boat_palm"
         },
+        "extrabiomes:palm_chest_boat": {
+            "textures": "textures/items/boat_palm_chest"
+        },
         "extrabiomes:sky_sapling": {
             "textures": "textures/blocks/sky wood/sapling_sky"
         },
         "extrabiomes:sky_boat": {
             "textures": "textures/items/boat_sky"
+        },
+        "extrabiomes:sky_chest_boat": {
+            "textures": "textures/items/boat_sky_chest"
+        },
+        "extrabiomes:gilded_sky_boat": {
+            "textures": "textures/items/boat_gilded_sky"
+        },
+        "extrabiomes:gilded_sky_chest_boat": {
+            "textures": "textures/items/boat_gilded_sky_chest"
         },
         "extrabiomes:razor_feather": {
             "textures": "textures/items/razor_feather"
