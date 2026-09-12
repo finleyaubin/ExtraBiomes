@@ -247,7 +247,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("changelog", nargs="?", type=Path)
     parser.add_argument("--version", default="")
-    parser.add_argument("--footer", default="Out now on Modrinth & CurseForge")
+    parser.add_argument("--footer", default=None)
     parser.add_argument("--out", type=Path, default=Path("slides"))
     parser.add_argument("--theme", choices=sorted(THEMES), default="glacier")
     parser.add_argument("--edition", choices=["Java", "Bedrock"],
@@ -262,7 +262,9 @@ def main():
     EDITION = args.edition or (prefix if prefix in ("Java", "Bedrock") else "Java")
     if not args.changelog:
         parser.error("changelog path required")
-    for path in render(args.changelog.read_text(), args.version, args.footer, args.out):
+    footer = args.footer or (
+        "Out now on mcpedl & CurseForge" if EDITION == "Bedrock" else "Out now on Modrinth & CurseForge")
+    for path in render(args.changelog.read_text(), args.version, footer, args.out):
         print(path)
 
 
