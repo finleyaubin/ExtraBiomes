@@ -17,16 +17,22 @@
                     "seats": [
                         {
                             "position": [0, 0.4, 0],
+                            "lock_rider_rotation": 90,
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? -90 : 0",
                             "min_rider_count": 0,
                             "max_rider_count": 1
                         },
                         {
-                            "position": [0, 0.4, 0.1],
+                            "position": [0.2, 0.4, 0],
+                            "lock_rider_rotation": 90,
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? -90 : 0",
                             "min_rider_count": 2,
                             "max_rider_count": 2
                         },
                         {
-                            "position": [0, 0.4, -0.7],
+                            "position": [-0.6, 0.4, 0],
+                            "lock_rider_rotation": 90,
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? -90 : 0",
                             "min_rider_count": 2,
                             "max_rider_count": 2
                         }
@@ -42,16 +48,22 @@
                     "seats": [
                         {
                             "position": [0, 0.2, 0],
+                            "lock_rider_rotation": 90,
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? -90 : 0",
                             "min_rider_count": 0,
                             "max_rider_count": 1
                         },
                         {
-                            "position": [0, 0.2, 0.1],
+                            "position": [0.2, 0.2, 0],
+                            "lock_rider_rotation": 90,
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? -90 : 0",
                             "min_rider_count": 2,
                             "max_rider_count": 2
                         },
                         {
-                            "position": [0, 0.2, -0.7],
+                            "position": [-0.6, 0.2, 0],
+                            "lock_rider_rotation": 90,
+                            "rotate_rider_by": "query.has_any_family('blaze', 'creeper', 'enderman', 'illager', 'magmacube', 'piglin', 'player', 'skeleton', 'slime', 'villager', 'wandering_trader', 'witch', 'zombie', 'zombie_pigman') ? -90 : 0",
                             "min_rider_count": 2,
                             "max_rider_count": 2
                         }
