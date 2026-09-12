@@ -24,7 +24,7 @@
                     "*": "material.default"
                 }
             ],
-            "textures": ["array.skins[math.floor(query.health/30)]"]
+            "textures": ["array.skins[math.clamp(math.floor(query.health/30), 0, 9)]"]
         }
     }
 }

@@ -16,12 +16,13 @@ import { DoorCloseComponent, DoorOnPlace, DoorOpenComponent, ResetTop, ResetBott
 //Import item components
 import { JellyfishReleaseComponent } from "./items/jellyfish_release.js";
 import { DrinkJellyfishJamComponent } from "./items/drink_jellyfish_jam.js";
-import { BaitThrowComponent } from "./items/bait.js";
+import "./items/bait.js";
 
 //Runs Scripts
 import "./blocks/dense_cloud_effect.js";
 import "./blocks/stairs.js"
 import { LeafDecay } from "./blocks/leaf_decay.js";
+import "./entities/worm.js";
 
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRegistry }) => {
   //Registers block components
@@ -46,5 +47,4 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
   //Registers item components
   itemComponentRegistry.registerCustomComponent("extrabiomes:jellyfish_release",JellyfishReleaseComponent);
   itemComponentRegistry.registerCustomComponent("extrabiomes:drink_jellyfish_jam",DrinkJellyfishJamComponent);
-  itemComponentRegistry.registerCustomComponent("extrabiomes:bait_throw",BaitThrowComponent);
 });

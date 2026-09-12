@@ -1,28 +1,30 @@
-import { EquipmentSlot, GameMode, ItemStack, system, world } from "@minecraft/server";
+import { GameMode, ItemStack, system, world } from "@minecraft/server";
 
 const BAIT = "extrabiomes:bait";
 const BAIT_PROJECTILE = "extrabiomes:bait_projectile";
 const MAX_HEALTH = 300;
 
 // A thrown bait's remaining health rides on the item as durability damage, but the engine
-// spawns the projectile itself - there is no owner link to read at spawn time. onUse records
-// the damage of the stack the player just threw; the spawn handler claims it by proximity,
-// which is unambiguous because the projectile appears at that player's eye on the same tick.
+// spawns the projectile itself - there is no owner link to read at spawn time. beforeEvents.itemUse
+// fires before the built-in throwable behavior consumes the item, so it's the only reliable
+// place left to read the stack's damage - by the custom item component's onUse, the mainhand
+// slot is already empty. The spawn handler then claims the recorded throw by proximity, which
+// is unambiguous because the projectile appears at that player's eye on the same tick.
+// Entries are only ever removed by a successful claim or by going stale - never on a fixed
+// timer - so a slow tick can't delete a pending throw before its entitySpawn event arrives.
 const pendingThrows = new Map();
+const PENDING_TIMEOUT_TICKS = 20;
 
-/** @type {import("@minecraft/server").ItemCustomComponent} */
-export const BaitThrowComponent = {
-    onUse(event) {
-        const { itemStack, source } = event;
-        if (!source?.isValid) return;
-        const durability = itemStack?.getComponent("minecraft:durability");
-        pendingThrows.set(source.id, {
-            player: source,
-            health: Math.max(1, MAX_HEALTH - (durability?.damage ?? 0)),
-        });
-        system.run(() => pendingThrows.delete(source.id));
-    }
-};
+world.beforeEvents.itemUse.subscribe((event) => {
+    const { source, itemStack } = event;
+    if (itemStack?.typeId !== BAIT || !source?.isValid) return;
+    const durability = itemStack.getComponent("minecraft:durability");
+    pendingThrows.set(source.id, {
+        player: source,
+        health: Math.max(1, MAX_HEALTH - (durability?.damage ?? 0)),
+        tick: system.currentTick,
+    });
+});
 
 world.afterEvents.entitySpawn.subscribe(({ entity }) => {
     if (entity?.typeId !== BAIT_PROJECTILE) return;
@@ -36,7 +38,7 @@ function claimNearestThrow(projectile) {
     let best = null;
     let bestDistance = Infinity;
     for (const [id, pending] of pendingThrows) {
-        if (!pending.player.isValid) {
+        if (!pending.player.isValid || system.currentTick - pending.tick > PENDING_TIMEOUT_TICKS) {
             pendingThrows.delete(id);
             continue;
         }

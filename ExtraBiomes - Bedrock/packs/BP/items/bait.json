@@ -21,8 +21,7 @@
             "minecraft:cooldown": {
                 "category": "extrabiomes:bait_throw",
                 "duration": 10
-            },
-            "extrabiomes:bait_throw": {}
+            }
         }
     }
 }
