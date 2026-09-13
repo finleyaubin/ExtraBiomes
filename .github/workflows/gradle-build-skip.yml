@@ -1,0 +1,32 @@
+name: Build Mod (skip stub)
+
+# gradle-build.yml's paths-ignore means it never runs for a workflow/changelog/markdown-only
+# change, so its "build" required status check never reports and blocks merge forever. This
+# workflow triggers on exactly the inverse paths and reports the same "build" check name as an
+# instant pass, so the required check is always satisfied one way or the other.
+on:
+  push:
+    branches-ignore:
+      - '**bedrock**'
+      - '**Bedrock**'
+    paths:
+      - '.github/workflows/**'
+      - 'Changelogs/**'
+      - '**.md'
+  pull_request:
+    branches-ignore:
+      - '**bedrock**'
+      - '**Bedrock**'
+    paths:
+      - '.github/workflows/**'
+      - 'Changelogs/**'
+      - '**.md'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Skipping build - only workflow/changelog/markdown files changed."
