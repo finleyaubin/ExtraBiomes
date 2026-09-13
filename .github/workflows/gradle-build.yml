@@ -5,10 +5,18 @@ on:
     branches-ignore:
       - '**bedrock**'
       - '**Bedrock**'
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'Changelogs/**'
+      - '**.md'
   pull_request:
     branches-ignore:
       - '**bedrock**'
       - '**Bedrock**'
+    paths-ignore:
+      - '.github/workflows/**'
+      - 'Changelogs/**'
+      - '**.md'
 
 permissions:
   contents: read
