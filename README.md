@@ -52,10 +52,10 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
   </tr>
 
   <tr>
-    <img width="100%" alt="Deep Dark Green" src="https://github.com/user-attachments/assets/ffd4c843-aa69-4fab-b176-daa3614c24d1" />
+    <img width="100%" alt="Deep Dark Forest" src="https://github.com/user-attachments/assets/9baed5de-de75-4b0d-82d6-04d4913b24a1" />
     <br/>
     <i>
-    The deep dark green is a once beautiful forest biome, now corrupted by sculk.
+    The deep dark forest is a once beautiful forest biome, now corrupted by sculk.
     </i>
   </tr>
 
@@ -68,7 +68,7 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
   </tr>
 
   <tr>
-    <img width="100%" alt="Jungle Pillars" src="https://github.com/user-attachments/assets/090ede40-8518-4ea0-989a-48dcab3ebb46" />
+    <img width="100%" alt="Jungle Pillars" src="https://github.com/user-attachments/assets/2dfcdfb4-b3ab-4067-a173-7663a088f583" />
     <br/>
     <i>
     This biome is a jungle with gigantic pillars of stone shooting up through the skyline
@@ -219,7 +219,7 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
 
 
   <tr>
-    <img width="100%" alt="Volcanic Moss Tundra" src="https://github.com/user-attachments/assets/0adcf10e-aff7-4e7e-b168-02d5f6839b96" />
+    <img width="100%" alt="Volcanic Moss Tundra" src="https://github.com/user-attachments/assets/a73b9cf4-dfc8-49ef-8f75-a94f43913b95" />
     <br/>
     <i>
      The volcanic moss tundra is a biome inspred by the landscapes found in iceland. They feature black sand and black sandstone floors, with blackstone rocks scattering the landscape. moss grows more the higher up you go in the biome. and maga flows with bassalt walls can be found here.
@@ -361,5 +361,6 @@ Around 100 new blocks and 30+ items, including three full wood sets (mystic, pal
 
 ## credits
 most screenshots were taken on bedrock using [prizma RTX](https://www.curseforge.com/minecraft-bedrock/texture-packs/prizma-pbr-deferred-pack) 
+a few screenshots were taken on java with [rethinking Voxels](https://modrinth.com/shader/rethinking-voxels) or [Bliss Shaders](https://www.curseforge.com/minecraft/shaders/bliss-shader)
 
-All other credits can be found in the ExtraBiomes - Bedrock/credits.txt in the github repo
+All other credits can be found in the credits.md in the github repo
