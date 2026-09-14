@@ -52,6 +52,14 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
   </tr>
 
   <tr>
+    <img width="100%" alt="Deep Dark Green" src="https://github.com/user-attachments/assets/ffd4c843-aa69-4fab-b176-daa3614c24d1" />
+    <br/>
+    <i>
+    The deep dark green is a once beautiful forest biome, now corrupted by sculk.
+    </i>
+  </tr>
+
+  <tr>
     <img width="100%" alt="Jungle Marsh" src="https://github.com/user-attachments/assets/0ae25be8-3c0b-4d26-862c-161f072a22a5" />
     <br/>
     <i>
@@ -208,6 +216,15 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
     The tropical island biomes can be found in warm oceans. They are sandy islands covered with grass and vegetation like moss carpets and melons, as well as palm trees which are a custom tree type that can be found here and they are surrounded by coral.
     </i>
   </tr>
+
+
+  <tr>
+    <img width="100%" alt="Volcanic Moss Tundra" src="https://github.com/user-attachments/assets/0adcf10e-aff7-4e7e-b168-02d5f6839b96" />
+    <br/>
+    <i>
+     The volcanic moss tundra is a biome inspred by the landscapes found in iceland. They feature black sand and black sandstone floors, with blackstone rocks scattering the landscape. moss grows more the higher up you go in the biome. and maga flows with bassalt walls can be found here.
+    </i>
+  </tr>
 </table>
 
 
@@ -342,5 +359,6 @@ Around 100 new blocks and 30+ items, including three full wood sets (mystic, pal
 
 
 ## credits
-All screenshots were taken using [prizma RTX](https://www.curseforge.com/minecraft-bedrock/texture-packs/prizma-pbr-deferred-pack) 
+most screenshots were taken on bedrock using [prizma RTX](https://www.curseforge.com/minecraft-bedrock/texture-packs/prizma-pbr-deferred-pack) 
+
 All other credits can be found in the ExtraBiomes - Bedrock/credits.txt in the github repo
