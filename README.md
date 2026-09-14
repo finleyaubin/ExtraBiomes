@@ -354,8 +354,9 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
   </tr>
 </table>
 
-### Blocks
+## Blocks
 Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky, each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
+<img width="100%" alt="All of the blocks added by the mod" src="https://github.com/user-attachments/assets/b664a534-c310-4971-bcfc-e02434d9d464" />
 
 
 ## credits
