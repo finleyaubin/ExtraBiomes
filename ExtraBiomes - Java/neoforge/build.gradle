@@ -109,11 +109,21 @@ tasks.named("runGameTestServer") {
 // real shared common/src/generated/resources afterward. Sync (not Copy) so a file removed from
 // this mod's own datagen output between runs still gets cleaned up here, matching the old
 // single-output-dir behavior for content this task actually owns.
+// preserve excludes data/c/** (Fabric's own convention-tag namespace, see
+// fabric/build.gradle's equivalent mergeGeneratedData) from Sync's normal "delete anything not in
+// 'from'" behavior - without it, this Sync deletes Fabric's tags the same way vanilla's own
+// HashCache deletes NeoForge's (see that comment) whenever this task runs after Fabric's. Only
+// this task's own namespace (data/neoforge/**, plus the loader-agnostic data/extrabiomes,
+// data/minecraft, etc. every loader's datagen writes identically) should ever be cleaned up here.
 tasks.register("mergeGeneratedData", Sync) {
     dependsOn "runDataClient", "runDataServer"
     from layout.buildDirectory.dir("datagen/client")
     from layout.buildDirectory.dir("datagen/server")
     into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/c/**'
+        include 'data/forge/**'
+    }
 }
 
 // Aggregate task so ":neoforge:runData" keeps working as the one-shot verify command even though
@@ -130,6 +140,14 @@ tasks.register("runData") {
 // regenerate this module's own datagen output first closes that gap.
 tasks.named("runClient") { dependsOn "runData" }
 tasks.named("runServer") { dependsOn "runData" }
+
+// NOT wiring :common:processResources to dependsOn this task, tempting as that looks - it creates
+// a real circular dependency: runDataClient/runDataServer need :common:jar on their launch
+// classpath, :common:jar needs :common:classes, and :common:classes already depends on
+// :common:processResources by default (confirmed: "Circular dependency between the following
+// tasks" from Gradle itself when this was tried). The "preserve" block above is what actually
+// keeps this safe regardless of step order - see the CI workflow's own comment on its final build
+// step for how that combination replaces needing this dependency at all.
 
 configurations {
     common
