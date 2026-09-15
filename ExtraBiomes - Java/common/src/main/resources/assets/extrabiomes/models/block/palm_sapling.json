@@ -26,9 +26,9 @@
 			}
 		},
 		{
-			"from": [7.5, 4, 5],
-			"to": [7.5, 6, 10],
-			"rotation": {"x": 90, "y": 90, "z": 0, "origin": [8, 5, 7.5]},
+			"from": [7, 4, 5],
+			"to": [7, 6, 10],
+			"rotation": {"x": 90, "y": 90, "z": 0, "origin": [8, 5, 7]},
 			"faces": {
 				"east": {"uv": [5, 8, 7, 13], "rotation": 270, "texture": "#leaves"},
 				"west": {"uv": [5, 8, 7, 13], "rotation": 270, "texture": "#leaves"}
