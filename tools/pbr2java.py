@@ -3,10 +3,10 @@
 + optional heightmap, described by each *.texture_set.json) into LabPBR-format textures
 for the Java resource pack, so Iris/Oculus shaders pick up matching materials.
 
-Run with the Windows python.exe (has Pillow + numpy):
-    python.exe tools/pbr2java.py --list                 # show Bedrock/Java name matches
-    python.exe tools/pbr2java.py black_sandstone_top     # convert one texture (test case)
-    python.exe tools/pbr2java.py --all                   # convert every matched texture
+Requires Pillow + numpy (pip install pillow numpy). Run with any python3:
+    python3 tools/pbr2java.py --list                 # show Bedrock/Java name matches
+    python3 tools/pbr2java.py black_sandstone_top     # convert one texture (test case)
+    python3 tools/pbr2java.py --all                   # convert every matched texture
 
 Output: for a matched Java texture assets/extrabiomes/textures/block/<name>.png, writes
 <name>_n.png (LabPBR normal+AO+height) and <name>_s.png (LabPBR specular) next to it.
