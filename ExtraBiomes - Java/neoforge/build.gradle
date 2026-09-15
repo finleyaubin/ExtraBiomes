@@ -44,7 +44,7 @@ loom {
             // clientData() looks up a "dataClient" template that doesn't exist at this version
             // and fails with "Could not find Forge run template with name 'dataClient'".
             data()
-            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            programArgs '--mod', mod_id, '--all', '--output', layout.buildDirectory.dir("datagen").get().asFile.absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
         }
         gameTestServer {
@@ -83,6 +83,20 @@ tasks.named("runGameTestServer") {
     dependsOn "clearGameTestWorld"
 }
 
+// Merges the data run's private output into the shared folder; preserve keeps Fabric's data/c/** (issue #135).
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runData"
+    from layout.buildDirectory.dir("datagen")
+    into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/c/**'
+        include 'data/forge/**'
+    }
+}
+
+// runData is Loom's task for the single 1.21.3 "data" run, so merge after it to keep ":neoforge:runData" one-shot.
+tasks.named("runData") { finalizedBy "mergeGeneratedData" }
+
 // Forge/NeoForge and Fabric write divergent content into that same shared
 // common/src/generated/resources directory for some blocks (e.g. this module's ModelBuilder bakes
 // a "render_type" field into blockstate/trapdoor/door/leaves model JSON for cutout rendering;
@@ -93,6 +107,14 @@ tasks.named("runGameTestServer") {
 // regenerate this module's own datagen output first closes that gap.
 tasks.named("runClient") { dependsOn "runData" }
 tasks.named("runServer") { dependsOn "runData" }
+
+// NOT wiring :common:processResources to dependsOn this task, tempting as that looks - it creates
+// a real circular dependency: runData needs :common:jar on its launch
+// classpath, :common:jar needs :common:classes, and :common:classes already depends on
+// :common:processResources by default (confirmed: "Circular dependency between the following
+// tasks" from Gradle itself when this was tried). The "preserve" block above is what actually
+// keeps this safe regardless of step order - see the CI workflow's own comment on its final build
+// step for how that combination replaces needing this dependency at all.
 
 configurations {
     common
