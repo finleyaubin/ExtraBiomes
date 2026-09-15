@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=Очищенное Мистическ�
 tile.extrabiomes:stripped_mystic_wood.name=Очищенное Мистический Древесина
 entity.extrabiomes:mystic_boat.name=Мистический Лодка
 item.extrabiomes:mystic_boat=Мистический Лодка
+entity.extrabiomes:mystic_chest_boat.name=Мистический Сундук Лодка
+item.extrabiomes:mystic_chest_boat=Мистический Сундук Лодка
 item.extrabiomes:mystic_door=Мистический Дверь
 
 tile.extrabiomes:palm_log.name=Пальмовый Бревно
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=Пальмовый Саженец
 item.extrabiomes:palm_sapling=Пальмовый Саженец
 entity.extrabiomes:palm_boat.name=Пальмовый Лодка
 item.extrabiomes:palm_boat=Пальмовый Лодка
+entity.extrabiomes:palm_chest_boat.name=Пальмовый Сундук Лодка
+item.extrabiomes:palm_chest_boat=Пальмовый Сундук Лодка
 item.extrabiomes:palm_door=Пальмовый Дверь
 
 tile.extrabiomes:sky_log.name=Небесный Бревно
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=Небесный Саженец
 item.extrabiomes:sky_sapling=Небесный Саженец
 entity.extrabiomes:sky_boat.name=Небесный Лодка
 item.extrabiomes:sky_boat=Небесный Лодка
+entity.extrabiomes:sky_chest_boat.name=Небесный Сундук Лодка
+item.extrabiomes:sky_chest_boat=Небесный Сундук Лодка
 item.extrabiomes:sky_door=Небесный Дверь
 
 tile.extrabiomes:gilded_sky_log.name= §eПозолоченный Небесный Бревно§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§eПозолоченный Небесн
 tile.extrabiomes:gilded_sky_trapdoor.name=§eПозолоченный Небесный Люк§r
 tile.extrabiomes:gilded_sky_wood.name=§eПозолоченный Небесный Древесина§r
 item.extrabiomes:gilded_sky_door=§eПозолоченный Небесный Дверь§r
+entity.extrabiomes:gilded_sky_boat.name=§eПозолоченный Небесный Лодка§r
+item.extrabiomes:gilded_sky_boat=§eПозолоченный Небесный Лодка§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§eПозолоченный Небесный Сундук Лодка§r
+item.extrabiomes:gilded_sky_chest_boat=§eПозолоченный Небесный Сундук Лодка§r
 
 tile.extrabiomes:stick_pile.name=Палки Куча
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=Замшелая Галька
 item.extrabiomes:pebble=Галька
 item.spawn_egg.entity.extrabiomes:puckoo.name=Призвать Пуку
 entity.extrabiomes:puckoo.name=Пуку
+
+action.hint.exit.extrabiomes:mystic_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:mystic_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки
+action.hint.exit.extrabiomes:mystic_chest_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:mystic_chest_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки
+action.hint.exit.extrabiomes:palm_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:palm_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки
+action.hint.exit.extrabiomes:palm_chest_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:palm_chest_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки
+action.hint.exit.extrabiomes:sky_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:sky_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки
+action.hint.exit.extrabiomes:sky_chest_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:sky_chest_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки
+action.hint.exit.extrabiomes:gilded_sky_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:gilded_sky_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=Чтобы выйти из лодки, нажмите «Прыжок».
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=Нажмите кнопку :_input_key.jump:, чтобы выйти из лодки

@@ -1,40 +1,35 @@
 {
-	"format_version": "1.10.0",
-	"minecraft:client_entity": {
-		"description": {
-			"identifier": "extrabiomes:jellyfish",
-			"min_engine_version": "1.8.0",
-			"materials": {
-				"default": "entity_alphablend"
-			},
-			"textures": {
-				"pink": "textures/entity/fish/jellyfish",
-				"purple": "textures/entity/fish/jellyfish1"
-			},
-			"geometry": {
-				"default": "geometry.jellyfish"
-			},
-			"scripts": {
-				"pre_animation": [
-					"v.gray_amount = v.gray_amount ?? 0.0; v.target_gray = !query.is_in_water ? 1.0 : 0.0; v.step_gray = query.delta_time / 8.0; v.gray_amount = v.gray_amount + math.clamp(v.target_gray - v.gray_amount, -v.step_gray, v.step_gray);"
-				],
-				"animate": [
-					"swim",
-					"jiggle"
-				],
-				"scaleY": "v.target = !query.is_in_water ? 0.1 : 1.0; v.scale_y = v.scale_y ?? 1.0; v.step = 0.9 * query.delta_time / 8.0; v.scale_y = v.scale_y + math.clamp(v.target - v.scale_y, -v.step, v.step); return v.scale_y;"
-			},
-			"animations": {
-				"swim": "animation.jellyfish.swim",
-				"jiggle": "animation.jellyfish.jiggle"
-			},
-			"render_controllers": [
-				"controller.render.jellyfish"
-			],
-			"spawn_egg": {
-				"base_color": "#932A9E",
-				"overlay_color": "#DC7CE6"
-			}
-		}
-	}
+    "format_version": "1.10.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "extrabiomes:jellyfish",
+            "min_engine_version": "1.8.0",
+            "materials": {
+                "default": "entity_alphablend"
+            },
+            "textures": {
+                "pink": "textures/entity/fish/jellyfish",
+                "purple": "textures/entity/fish/jellyfish1"
+            },
+            "geometry": {
+                "default": "geometry.jellyfish"
+            },
+            "scripts": {
+                "pre_animation": [
+                    "v.gray_amount = v.gray_amount ?? 0.0; v.target_gray = !query.is_in_water ? 1.0 : 0.0; v.step_gray = query.delta_time / 8.0; v.gray_amount = v.gray_amount + math.clamp(v.target_gray - v.gray_amount, -v.step_gray, v.step_gray);"
+                ],
+                "animate": ["swim", "jiggle"],
+                "scaleY": "v.target = !query.is_in_water ? 0.1 : 1.0; v.scale_y = v.scale_y ?? 1.0; v.step = 0.9 * query.delta_time / 8.0; v.scale_y = v.scale_y + math.clamp(v.target - v.scale_y, -v.step, v.step); return v.scale_y;"
+            },
+            "animations": {
+                "swim": "animation.jellyfish.swim",
+                "jiggle": "animation.jellyfish.jiggle"
+            },
+            "render_controllers": ["controller.render.jellyfish"],
+            "spawn_egg": {
+                "base_color": "#932A9E",
+                "overlay_color": "#DC7CE6"
+            }
+        }
+    }
 }

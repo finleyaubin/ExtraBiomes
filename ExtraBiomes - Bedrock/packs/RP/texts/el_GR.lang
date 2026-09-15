@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=Ξεφλουδισμένο Μυστι�
 tile.extrabiomes:stripped_mystic_wood.name=Ξεφλουδισμένο Μυστικιστικό Ξύλο
 entity.extrabiomes:mystic_boat.name=Μυστικιστικό Βάρκα
 item.extrabiomes:mystic_boat=Μυστικιστικό Βάρκα
+entity.extrabiomes:mystic_chest_boat.name=Μυστικιστικό Κιβώτιο Βάρκα
+item.extrabiomes:mystic_chest_boat=Μυστικιστικό Κιβώτιο Βάρκα
 item.extrabiomes:mystic_door=Μυστικιστικό Πόρτα
 
 tile.extrabiomes:palm_log.name=Φοίνικα Κορμός
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=Φοίνικα Δενδρύλλιο
 item.extrabiomes:palm_sapling=Φοίνικα Δενδρύλλιο
 entity.extrabiomes:palm_boat.name=Φοίνικα Βάρκα
 item.extrabiomes:palm_boat=Φοίνικα Βάρκα
+entity.extrabiomes:palm_chest_boat.name=Φοίνικα Κιβώτιο Βάρκα
+item.extrabiomes:palm_chest_boat=Φοίνικα Κιβώτιο Βάρκα
 item.extrabiomes:palm_door=Φοίνικα Πόρτα
 
 tile.extrabiomes:sky_log.name=Ουράνιο Κορμός
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=Ουράνιο Δενδρύλλιο
 item.extrabiomes:sky_sapling=Ουράνιο Δενδρύλλιο
 entity.extrabiomes:sky_boat.name=Ουράνιο Βάρκα
 item.extrabiomes:sky_boat=Ουράνιο Βάρκα
+entity.extrabiomes:sky_chest_boat.name=Ουράνιο Κιβώτιο Βάρκα
+item.extrabiomes:sky_chest_boat=Ουράνιο Κιβώτιο Βάρκα
 item.extrabiomes:sky_door=Ουράνιο Πόρτα
 
 tile.extrabiomes:gilded_sky_log.name= §eΕπίχρυσο Ουράνιο Κορμός§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§eΕπίχρυσο Ουράνιο Σκ�
 tile.extrabiomes:gilded_sky_trapdoor.name=§eΕπίχρυσο Ουράνιο Καταπακτή§r
 tile.extrabiomes:gilded_sky_wood.name=§eΕπίχρυσο Ουράνιο Ξύλο§r
 item.extrabiomes:gilded_sky_door=§eΕπίχρυσο Ουράνιο Πόρτα§r
+entity.extrabiomes:gilded_sky_boat.name=§eΕπίχρυσο Ουράνιο Βάρκα§r
+item.extrabiomes:gilded_sky_boat=§eΕπίχρυσο Ουράνιο Βάρκα§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§eΕπίχρυσο Ουράνιο Κιβώτιο Βάρκα§r
+item.extrabiomes:gilded_sky_chest_boat=§eΕπίχρυσο Ουράνιο Κιβώτιο Βάρκα§r
 
 tile.extrabiomes:stick_pile.name=Ξυλαράκια Σωρός
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=Βρυώδες Βότσαλο
 item.extrabiomes:pebble=Βότσαλο
 item.spawn_egg.entity.extrabiomes:puckoo.name=Δημιουργία: Πούκου
 entity.extrabiomes:puckoo.name=Πούκου
+
+action.hint.exit.extrabiomes:mystic_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:mystic_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα
+action.hint.exit.extrabiomes:mystic_chest_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:mystic_chest_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα
+action.hint.exit.extrabiomes:palm_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:palm_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα
+action.hint.exit.extrabiomes:palm_chest_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:palm_chest_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα
+action.hint.exit.extrabiomes:sky_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:sky_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα
+action.hint.exit.extrabiomes:sky_chest_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:sky_chest_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα
+action.hint.exit.extrabiomes:gilded_sky_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:gilded_sky_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=Πάτησε άλμα για να βγεις από τη βάρκα
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=Πάτησε :_input_key.jump: για να βγεις από τη βάρκα

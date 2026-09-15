@@ -1,38 +1,38 @@
 {
-  "format_version": "1.26.30",
-  "minecraft:block": {
-    "description": {
-      "identifier": "extrabiomes:grass_stone"
-    },
-    "components": {
-      "minecraft:friction": 0.6,
-      "minecraft:flammable": false,
-      "minecraft:map_color": "#008425",
-      "minecraft:geometry": "minecraft:geometry.full_block",
-      "minecraft:material_instances": {
-        "*": {
-          "texture": "extrabiomes_grass_stone_side",
-          "render_method": "opaque"
+    "format_version": "1.26.30",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:grass_stone"
         },
-        "up": {
-          "texture": "extrabiomes_grass_stone_top",
-          "render_method": "opaque"
-        },
-        "down": {
-          "texture": "extrabiomes_grass_stone_bottom",
-          "render_method": "opaque"
+        "components": {
+            "minecraft:friction": 0.6,
+            "minecraft:flammable": false,
+            "minecraft:map_color": "#008425",
+            "minecraft:geometry": "minecraft:geometry.full_block",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_grass_stone_side",
+                    "render_method": "opaque"
+                },
+                "up": {
+                    "texture": "extrabiomes_grass_stone_top",
+                    "render_method": "opaque"
+                },
+                "down": {
+                    "texture": "extrabiomes_grass_stone_bottom",
+                    "render_method": "opaque"
+                }
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 3
+            },
+            "minecraft:destructible_by_explosion": {
+                "explosion_resistance": 3
+            },
+
+            "minecraft:light_dampening": 0,
+            "minecraft:light_emission": 0,
+            "minecraft:tags": ["minecraft:is_pickaxe_item_destructible"]
         }
-      },
-      "minecraft:destructible_by_mining": {
-        "seconds_to_destroy": 3
-      },
-      "minecraft:destructible_by_explosion": {
-        "explosion_resistance": 3
-      },
-      
-      "minecraft:light_dampening": 0,
-      "minecraft:light_emission": 0,
-      "minecraft:tags":["minecraft:is_pickaxe_item_destructible"]
     }
-  }
 }

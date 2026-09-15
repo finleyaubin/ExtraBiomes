@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=Stripped Mystic Log
 tile.extrabiomes:stripped_mystic_wood.name=Stripped Mystic Wood
 entity.extrabiomes:mystic_boat.name=Mystic Boat
 item.extrabiomes:mystic_boat=Mystic Boat
+entity.extrabiomes:mystic_chest_boat.name=Mystic Chest Boat
+item.extrabiomes:mystic_chest_boat=Mystic Chest Boat
 item.extrabiomes:mystic_door=Mystic Door
 
 tile.extrabiomes:palm_log.name=Palm Log
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=Palm Sapling
 item.extrabiomes:palm_sapling=Palm Sapling
 entity.extrabiomes:palm_boat.name=Palm Boat
 item.extrabiomes:palm_boat=Palm Boat
+entity.extrabiomes:palm_chest_boat.name=Palm Chest Boat
+item.extrabiomes:palm_chest_boat=Palm Chest Boat
 item.extrabiomes:palm_door=Palm Door
 
 tile.extrabiomes:sky_log.name=Sky Log
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=Sky Sapling
 item.extrabiomes:sky_sapling=Sky Sapling
 entity.extrabiomes:sky_boat.name=Sky Boat
 item.extrabiomes:sky_boat=Sky Boat
+entity.extrabiomes:sky_chest_boat.name=Sky Chest Boat
+item.extrabiomes:sky_chest_boat=Sky Chest Boat
 item.extrabiomes:sky_door=sky Door
 
 tile.extrabiomes:gilded_sky_log.name= §eGilded sky log§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§eGilded Sky Stairs§r
 tile.extrabiomes:gilded_sky_trapdoor.name=§eGilded Sky Trapdoor§r
 tile.extrabiomes:gilded_sky_wood.name=§eGilded Sky Wood§r
 item.extrabiomes:gilded_sky_door=§eGilded Sky Door§r
+entity.extrabiomes:gilded_sky_boat.name=§eGilded Sky Boat§r
+item.extrabiomes:gilded_sky_boat=§eGilded Sky Boat§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§eGilded Sky Chest Boat§r
+item.extrabiomes:gilded_sky_chest_boat=§eGilded Sky Chest Boat§r
 
 tile.extrabiomes:stick_pile.name=Stick Pile
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=Mossy Pebble
 item.extrabiomes:pebble=Pebble
 item.spawn_egg.entity.extrabiomes:puckoo.name=Spawn Puckoo
 entity.extrabiomes:puckoo.name=Puckoo
+
+action.hint.exit.extrabiomes:mystic_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:mystic_boat=Press :_input_key.jump: to exit the boat
+action.hint.exit.extrabiomes:mystic_chest_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:mystic_chest_boat=Press :_input_key.jump: to exit the boat
+action.hint.exit.extrabiomes:palm_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:palm_boat=Press :_input_key.jump: to exit the boat
+action.hint.exit.extrabiomes:palm_chest_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:palm_chest_boat=Press :_input_key.jump: to exit the boat
+action.hint.exit.extrabiomes:sky_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:sky_boat=Press :_input_key.jump: to exit the boat
+action.hint.exit.extrabiomes:sky_chest_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:sky_chest_boat=Press :_input_key.jump: to exit the boat
+action.hint.exit.extrabiomes:gilded_sky_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:gilded_sky_boat=Press :_input_key.jump: to exit the boat
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=Tap jump to exit the boat
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=Press :_input_key.jump: to exit the boat

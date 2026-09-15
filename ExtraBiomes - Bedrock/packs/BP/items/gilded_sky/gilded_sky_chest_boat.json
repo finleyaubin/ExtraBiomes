@@ -1,0 +1,26 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:item": {
+        "description": {
+            "identifier": "extrabiomes:gilded_sky_chest_boat",
+            "menu_category": {
+                "group": "itemGroup.name.boat",
+                "category": "Items"
+            }
+        },
+        "components": {
+            "minecraft:max_stack_size": 1,
+            "minecraft:entity_placer": {
+                "dispense_on": ["water"],
+                "entity": "extrabiomes:gilded_sky_chest_boat"
+            },
+            "minecraft:liquid_clipped": true,
+            "minecraft:icon": {
+                "texture": "extrabiomes:gilded_sky_chest_boat"
+            },
+            "minecraft:fuel": {
+                "duration": 60
+            }
+        }
+    }
+}

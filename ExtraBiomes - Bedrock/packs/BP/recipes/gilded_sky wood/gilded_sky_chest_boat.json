@@ -1,0 +1,14 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "extrabiomes:gilded_sky_chest_boat"
+        },
+        "tags": ["crafting_table"],
+        "ingredients": [{ "item": "minecraft:chest" }, { "item": "extrabiomes:gilded_sky_boat" }],
+        "result": {
+            "item": "extrabiomes:gilded_sky_chest_boat",
+            "count": 1
+        }
+    }
+}

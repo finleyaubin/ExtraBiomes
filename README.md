@@ -52,6 +52,14 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
   </tr>
 
   <tr>
+    <img width="100%" alt="Deep Dark Forest" src="https://github.com/user-attachments/assets/9baed5de-de75-4b0d-82d6-04d4913b24a1" />
+    <br/>
+    <i>
+    The deep dark forest is a once beautiful forest biome, now corrupted by sculk.
+    </i>
+  </tr>
+
+  <tr>
     <img width="100%" alt="Jungle Marsh" src="https://github.com/user-attachments/assets/0ae25be8-3c0b-4d26-862c-161f072a22a5" />
     <br/>
     <i>
@@ -60,7 +68,7 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
   </tr>
 
   <tr>
-    <img width="100%" alt="Jungle Pillars" src="https://github.com/user-attachments/assets/090ede40-8518-4ea0-989a-48dcab3ebb46" />
+    <img width="100%" alt="Jungle Pillars" src="https://github.com/user-attachments/assets/2dfcdfb4-b3ab-4067-a173-7663a088f583" />
     <br/>
     <i>
     This biome is a jungle with gigantic pillars of stone shooting up through the skyline
@@ -208,6 +216,15 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
     The tropical island biomes can be found in warm oceans. They are sandy islands covered with grass and vegetation like moss carpets and melons, as well as palm trees which are a custom tree type that can be found here and they are surrounded by coral.
     </i>
   </tr>
+
+
+  <tr>
+    <img width="100%" alt="Volcanic Moss Tundra" src="https://github.com/user-attachments/assets/a73b9cf4-dfc8-49ef-8f75-a94f43913b95" />
+    <br/>
+    <i>
+     The volcanic moss tundra is a biome inspred by the landscapes found in iceland. They feature black sand and black sandstone floors, with blackstone rocks scattering the landscape. moss grows more the higher up you go in the biome. and maga flows with bassalt walls can be found here.
+    </i>
+  </tr>
 </table>
 
 
@@ -337,10 +354,13 @@ High above the mountains, the Sky City generates as a jigsaw structure: floating
   </tr>
 </table>
 
-### Blocks
+## Blocks
 Around 100 new blocks and 30+ items, including three full wood sets (mystic, palm, and sky, each with planks, doors, stairs, fences, trapdoors, and boats), 12 colors of mushrooms with matching huge mushroom variants, dense cloud bricks, pebbles, and nether ore variants.
+<img width="100%" alt="All of the blocks added by the mod" src="https://github.com/user-attachments/assets/b664a534-c310-4971-bcfc-e02434d9d464" />
 
 
 ## credits
-All screenshots were taken using [prizma RTX](https://www.curseforge.com/minecraft-bedrock/texture-packs/prizma-pbr-deferred-pack) 
-All other credits can be found in the ExtraBiomes - Bedrock/credits.txt in the github repo
+most screenshots were taken on bedrock using [prizma RTX](https://www.curseforge.com/minecraft-bedrock/texture-packs/prizma-pbr-deferred-pack) 
+a few screenshots were taken on java with [rethinking Voxels](https://modrinth.com/shader/rethinking-voxels) or [Bliss Shaders](https://www.curseforge.com/minecraft/shaders/bliss-shader)
+
+All other credits can be found in the credits.md in the github repo

@@ -1,34 +1,32 @@
 {
-	"format_version": "1.8.0",
-	"render_controllers": {
-		"controller.render.hoppleshroom": {
-			"arrays": {
-				"textures": {
-					"array.skins": [
-						"texture.warped",
-						"texture.crimson",
-						"texture.red",
-						"texture.brown",
-						"texture.black",
-						"texture.blue",
-						"texture.cyan",
-						"texture.green",
-						"texture.orange",
-						"texture.purple",
-						"texture.white",
-						"texture.yellow"
-					]
-				}
-			},
-			"geometry": "geometry.default",
-			"materials": [
-				{
-					"*": "material.default"
-				}
-			],
-			"textures": [
-				"array.skins[query.variant]"
-			]
-		}
-	}
+    "format_version": "1.8.0",
+    "render_controllers": {
+        "controller.render.hoppleshroom": {
+            "arrays": {
+                "textures": {
+                    "array.skins": [
+                        "texture.warped",
+                        "texture.crimson",
+                        "texture.red",
+                        "texture.brown",
+                        "texture.black",
+                        "texture.blue",
+                        "texture.cyan",
+                        "texture.green",
+                        "texture.orange",
+                        "texture.purple",
+                        "texture.white",
+                        "texture.yellow"
+                    ]
+                }
+            },
+            "geometry": "geometry.default",
+            "materials": [
+                {
+                    "*": "material.default"
+                }
+            ],
+            "textures": ["array.skins[query.variant]"]
+        }
+    }
 }

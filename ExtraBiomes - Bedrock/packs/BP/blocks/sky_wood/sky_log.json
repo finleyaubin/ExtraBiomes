@@ -1,89 +1,75 @@
 {
-  "format_version": "1.20.100",
-  "minecraft:block": {
-    "description": {
-      "identifier": "extrabiomes:sky_log",
-      "menu_category": {
-        "category": "nature",
-        "group": "itemGroup.name.log"
-      },
-      "traits": {
-        "minecraft:placement_position": {
-          "enabled_states": [
-            "minecraft:block_face"
-          ]
-        }
-      }
-    },
-    "permutations": [
-      // X axis
-      {
-        "condition": "q.block_state('minecraft:block_face') == 'west' || q.block_state('minecraft:block_face') == 'east'",
-        "components": {
-          "minecraft:transformation": {
-            "rotation": [
-              0,
-              0,
-              90
-            ]
-          }
-        }
-      },
-      // Y axis
-      {
-        "condition": "q.block_state('minecraft:block_face') == 'down' || q.block_state('minecraft:block_face') == 'up'",
-        "components": {
-          "minecraft:transformation": {
-            "rotation": [
-              0,
-              0,
-              0
-            ]
-          }
-        }
-      },
-      // Z axis
-      {
-        "condition": "q.block_state('minecraft:block_face') == 'north' || q.block_state('minecraft:block_face') == 'south'",
-        "components": {
-          "minecraft:transformation": {
-            "rotation": [
-              90,
-              0,
-              0
-            ]
-          }
-        }
-      }
-    ],
-    "components": {
-      "minecraft:geometry": "minecraft:geometry.full_block",
-      "minecraft:material_instances": {
-        "*": {
-          "texture": "extrabiomes_sky_log",
-          "render_method": "opaque"
+    "format_version": "1.20.100",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:sky_log",
+            "menu_category": {
+                "category": "nature",
+                "group": "itemGroup.name.log"
+            },
+            "traits": {
+                "minecraft:placement_position": {
+                    "enabled_states": ["minecraft:block_face"]
+                }
+            }
         },
-        "up": {
-          "texture": "extrabiomes_sky_log_top",
-          "render_method": "opaque"
-        },
-        "down": {
-          "texture": "extrabiomes_sky_log_top",
-          "render_method": "opaque"
+        "permutations": [
+            // X axis
+            {
+                "condition": "q.block_state('minecraft:block_face') == 'west' || q.block_state('minecraft:block_face') == 'east'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [0, 0, 90]
+                    }
+                }
+            },
+            // Y axis
+            {
+                "condition": "q.block_state('minecraft:block_face') == 'down' || q.block_state('minecraft:block_face') == 'up'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [0, 0, 0]
+                    }
+                }
+            },
+            // Z axis
+            {
+                "condition": "q.block_state('minecraft:block_face') == 'north' || q.block_state('minecraft:block_face') == 'south'",
+                "components": {
+                    "minecraft:transformation": {
+                        "rotation": [90, 0, 0]
+                    }
+                }
+            }
+        ],
+        "components": {
+            "minecraft:geometry": "minecraft:geometry.full_block",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_sky_log",
+                    "render_method": "opaque"
+                },
+                "up": {
+                    "texture": "extrabiomes_sky_log_top",
+                    "render_method": "opaque"
+                },
+                "down": {
+                    "texture": "extrabiomes_sky_log_top",
+                    "render_method": "opaque"
+                }
+            },
+            "minecraft:flammable": {
+                "burn_odds": 50,
+                "flame_odds": 50
+            },
+            "minecraft:map_color": "#ff78f8",
+            "tag:wood": {},
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 2
+            },
+            "extrabiomes:stripper_component": {},
+
+            "tag:minecraft:is_axe_item_destructible": {}
         }
-      },
-      "minecraft:flammable": {
-        "burn_odds": 50,
-        "flame_odds": 50
-      },
-      "minecraft:map_color": "#ff78f8",
-      "tag:wood": {},
-      "minecraft:destructible_by_mining": {
-        "seconds_to_destroy": 2
-      },
-      "extrabiomes:stripper_component":{},
-      
-      "tag:minecraft:is_axe_item_destructible":{}
     }
-  }
 }

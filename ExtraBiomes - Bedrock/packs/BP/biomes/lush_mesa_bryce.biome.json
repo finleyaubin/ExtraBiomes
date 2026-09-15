@@ -1,65 +1,56 @@
 {
-  "format_version": "1.21.110",
-  "minecraft:biome": {
-    "description": {
-      "identifier": "extrabiomes:lush_mesa_bryce"
-    },
-    "components": {
-      "minecraft:climate": {
-        "downfall": 0.7,
-        "snow_accumulation": [
-          0,
-          0.125
-        ],
-        "temperature": 2
-      },
-      "minecraft:overworld_height": {
-        "noise_params": [
-          0.04,
-          0.15
-        ]
-      },
-      "minecraft:surface_builder": {
-        "builder": {
-          "type": "minecraft:mesa",
-          "foundation_material": "minecraft:stained_hardened_clay",
-          "mid_material": "minecraft:hardened_clay",
-          "top_material": "minecraft:grass",
-          "sea_floor_depth": 7,
-          "sea_floor_material": "minecraft:gravel",
-          "sea_material": "minecraft:water",
-          "clay_material": "minecraft:stained_hardened_clay",
-          "hard_clay_material": "minecraft:hardened_clay",
-          "bryce_pillars": true,
-          "has_forest": false
+    "format_version": "1.21.110",
+    "minecraft:biome": {
+        "description": {
+            "identifier": "extrabiomes:lush_mesa_bryce"
+        },
+        "components": {
+            "minecraft:climate": {
+                "downfall": 0.7,
+                "snow_accumulation": [0, 0.125],
+                "temperature": 2
+            },
+            "minecraft:overworld_height": {
+                "noise_params": [0.04, 0.15]
+            },
+            "minecraft:surface_builder": {
+                "builder": {
+                    "type": "minecraft:mesa",
+                    "foundation_material": "minecraft:stained_hardened_clay",
+                    "mid_material": "minecraft:hardened_clay",
+                    "top_material": "minecraft:grass",
+                    "sea_floor_depth": 7,
+                    "sea_floor_material": "minecraft:gravel",
+                    "sea_material": "minecraft:water",
+                    "clay_material": "minecraft:stained_hardened_clay",
+                    "hard_clay_material": "minecraft:hardened_clay",
+                    "bryce_pillars": true,
+                    "has_forest": false
+                }
+            },
+            "minecraft:replace_biomes": {
+                "replacements": [
+                    {
+                        "dimension": "minecraft:overworld",
+                        "targets": ["minecraft:mesa", "minecraft:mesa_bryce"],
+                        "amount": 0.3,
+                        "noise_frequency_scale": 0.5
+                    }
+                ]
+            },
+            "minecraft:tags": {
+                "tags": [
+                    "animal",
+                    "caves",
+                    "jungle",
+                    "mesa",
+                    "monster",
+                    "overworld",
+                    "spawns_mesa_mobs",
+                    "spawns_jungle_mobs",
+                    "spawns_warm_variant_farm_animals"
+                ]
+            }
         }
-      },
-      "minecraft:replace_biomes": {
-        "replacements": [
-          {
-            "dimension": "minecraft:overworld",
-            "targets": [
-              "minecraft:mesa",
-              "minecraft:mesa_bryce"
-            ],
-            "amount": 0.3,
-            "noise_frequency_scale": 0.5
-          }
-        ]
-      },
-      "minecraft:tags": {
-        "tags": [
-          "animal",
-          "caves",
-          "jungle",
-          "mesa",
-          "monster",
-          "overworld",
-          "spawns_mesa_mobs",
-          "spawns_jungle_mobs",
-          "spawns_warm_variant_farm_animals"
-        ]
-      }
     }
-  }
 }

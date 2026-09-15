@@ -69,6 +69,8 @@ tile.extrabiomes:stripped_mystic_log.name=去皮祕術原木
 tile.extrabiomes:stripped_mystic_wood.name=去皮祕術木塊
 entity.extrabiomes:mystic_boat.name=祕術船
 item.extrabiomes:mystic_boat=祕術船
+entity.extrabiomes:mystic_chest_boat.name=祕術運輸船
+item.extrabiomes:mystic_chest_boat=祕術運輸船
 item.extrabiomes:mystic_door=祕術門
 
 tile.extrabiomes:palm_log.name=棕櫚原木
@@ -87,6 +89,8 @@ tile.extrabiomes:palm_sapling_block.name=棕櫚樹苗
 item.extrabiomes:palm_sapling=棕櫚樹苗
 entity.extrabiomes:palm_boat.name=棕櫚船
 item.extrabiomes:palm_boat=棕櫚船
+entity.extrabiomes:palm_chest_boat.name=棕櫚運輸船
+item.extrabiomes:palm_chest_boat=棕櫚運輸船
 item.extrabiomes:palm_door=棕櫚門
 
 tile.extrabiomes:sky_log.name=天空原木
@@ -105,6 +109,8 @@ tile.extrabiomes:sky_sapling_block.name=天空樹苗
 item.extrabiomes:sky_sapling=天空樹苗
 entity.extrabiomes:sky_boat.name=天空船
 item.extrabiomes:sky_boat=天空船
+entity.extrabiomes:sky_chest_boat.name=天空運輸船
+item.extrabiomes:sky_chest_boat=天空運輸船
 item.extrabiomes:sky_door=天空門
 
 tile.extrabiomes:gilded_sky_log.name=§e鍍金天空原木§r
@@ -116,6 +122,10 @@ tile.extrabiomes:gilded_sky_stairs.name=§e鍍金天空樓梯§r
 tile.extrabiomes:gilded_sky_trapdoor.name=§e鍍金天空活板門§r
 tile.extrabiomes:gilded_sky_wood.name=§e鍍金天空木塊§r
 item.extrabiomes:gilded_sky_door=§e鍍金天空門§r
+entity.extrabiomes:gilded_sky_boat.name=§e鍍金天空船§r
+item.extrabiomes:gilded_sky_boat=§e鍍金天空船§r
+entity.extrabiomes:gilded_sky_chest_boat.name=§e鍍金天空運輸船§r
+item.extrabiomes:gilded_sky_chest_boat=§e鍍金天空運輸船§r
 
 tile.extrabiomes:stick_pile.name=木棍堆
 
@@ -157,3 +167,20 @@ item.extrabiomes:mossy_pebble=長滿苔蘚的卵石
 item.extrabiomes:pebble=卵石
 item.spawn_egg.entity.extrabiomes:puckoo.name=召喚普庫
 entity.extrabiomes:puckoo.name=普庫
+
+action.hint.exit.extrabiomes:mystic_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:mystic_boat=按 :_input_key.jump: 離開小船
+action.hint.exit.extrabiomes:mystic_chest_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:mystic_chest_boat=按 :_input_key.jump: 離開小船
+action.hint.exit.extrabiomes:palm_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:palm_boat=按 :_input_key.jump: 離開小船
+action.hint.exit.extrabiomes:palm_chest_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:palm_chest_boat=按 :_input_key.jump: 離開小船
+action.hint.exit.extrabiomes:sky_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:sky_boat=按 :_input_key.jump: 離開小船
+action.hint.exit.extrabiomes:sky_chest_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:sky_chest_boat=按 :_input_key.jump: 離開小船
+action.hint.exit.extrabiomes:gilded_sky_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:gilded_sky_boat=按 :_input_key.jump: 離開小船
+action.hint.exit.extrabiomes:gilded_sky_chest_boat=按一下跳躍離開小船
+action.hint.exit.console.extrabiomes:gilded_sky_chest_boat=按 :_input_key.jump: 離開小船

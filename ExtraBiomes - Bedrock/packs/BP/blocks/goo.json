@@ -1,41 +1,33 @@
 {
-  "format_version": "1.20.100",
-  "minecraft:block": {
-    "description": {
-      "identifier": "extrabiomes:goo",
-      "is_experimental": true,
-      "menu_category": {
-        "category": "Construction"
-      }
-    },
-    "components": {
-      "minecraft:geometry": "minecraft:geometry.full_block",
-      "minecraft:friction": 0.1,
-      "minecraft:flammable": {
-        "flame_odds": 300,
-        "burn_odds": 50
-      },
-      "minecraft:material_instances": {
-        "*": {
-          "texture": "extrabiomes_goo",
-          "render_method": "blend"
+    "format_version": "1.20.100",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:goo",
+            "is_experimental": true,
+            "menu_category": {
+                "category": "Construction"
+            }
+        },
+        "components": {
+            "minecraft:geometry": "minecraft:geometry.full_block",
+            "minecraft:friction": 0.1,
+            "minecraft:flammable": {
+                "flame_odds": 300,
+                "burn_odds": 50
+            },
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_goo",
+                    "render_method": "blend"
+                }
+            },
+            "minecraft:collision_box": {
+                "origin": [-8, 0, -8],
+                "size": [16, 14, 16]
+            },
+            "minecraft:map_color": "#CE5CA4",
+            "minecraft:light_dampening": 3,
+            "minecraft:light_emission": 0
         }
-      },
-      "minecraft:collision_box": {
-        "origin": [
-          -8,
-          0,
-          -8
-        ],
-        "size": [
-          16,
-          14,
-          16
-        ]
-      },
-      "minecraft:map_color": "#CE5CA4",
-      "minecraft:light_dampening": 3,
-      "minecraft:light_emission": 0
     }
-  }
 }
