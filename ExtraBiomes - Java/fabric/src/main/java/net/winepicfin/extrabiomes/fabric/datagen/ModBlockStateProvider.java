@@ -94,7 +94,7 @@ public class ModBlockStateProvider implements DataProvider {
         fenceGateBlock(ModBlocks.MYSTIC_FENCE_GATE.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         doorBlockState(ModBlocks.MYSTIC_DOOR.get(), modLoc("mystic_door_bottom"), modLoc("mystic_door_top"));
         trapdoorBlockState(ModBlocks.MYSTIC_TRAPDOOR.get(), modLoc("mystic_trapdoor"));
-        signBlockState(ModBlocks.MYSTIC_SIGN.get(), ModBlocks.MYSTIC_WALL_SIGN.get());
+        signBlockState(ModBlocks.MYSTIC_SIGN.get(), ModBlocks.MYSTIC_WALL_SIGN.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         hangingSignBlockState(ModBlocks.MYSTIC_HANGING_SIGN.get(), ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         // sky wood
         blockWithItem(ModBlocks.SKY_PLANKS);
@@ -112,7 +112,7 @@ public class ModBlockStateProvider implements DataProvider {
         fenceGateBlock(ModBlocks.SKY_FENCE_GATE.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         doorBlockState(ModBlocks.SKY_DOOR.get(), modLoc("sky_door_bottom"), modLoc("sky_door_top"));
         trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), modLoc("sky_trapdoor"));
-        signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get());
+        signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.SKY_HANGING_SIGN.get(), ModBlocks.SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
@@ -130,7 +130,7 @@ public class ModBlockStateProvider implements DataProvider {
         fenceGateBlock(ModBlocks.PALM_FENCE_GATE.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         doorBlockState(ModBlocks.PALM_DOOR.get(), modLoc("palm_door_bottom"), modLoc("palm_door_top"));
         trapdoorBlockState(ModBlocks.PALM_TRAPDOOR.get(), modLoc("palm_trapdoor"));
-        signBlockState(ModBlocks.PALM_SIGN.get(), ModBlocks.PALM_WALL_SIGN.get());
+        signBlockState(ModBlocks.PALM_SIGN.get(), ModBlocks.PALM_WALL_SIGN.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         hangingSignBlockState(ModBlocks.PALM_HANGING_SIGN.get(), ModBlocks.PALM_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         // Gilded Sky wood
         blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
@@ -146,7 +146,7 @@ public class ModBlockStateProvider implements DataProvider {
         fenceGateBlock(ModBlocks.GILDED_SKY_FENCE_GATE.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         doorBlockState(ModBlocks.GILDED_SKY_DOOR.get(), modLoc("gilded_sky_door_bottom"), modLoc("gilded_sky_door_top"));
         trapdoorBlockState(ModBlocks.GILDED_SKY_TRAPDOOR.get(), modLoc("gilded_sky_trapdoor"));
-        signBlockState(ModBlocks.GILDED_SKY_SIGN.get(), ModBlocks.GILDED_SKY_WALL_SIGN.get());
+        signBlockState(ModBlocks.GILDED_SKY_SIGN.get(), ModBlocks.GILDED_SKY_WALL_SIGN.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.GILDED_SKY_HANGING_SIGN.get(), ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         // Small Mushrooms
         saplingBlock(ModBlocks.BLACK_MUSHROOM.get());
@@ -521,11 +521,19 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // Standing/wall signs render their text via a block entity renderer - the blockstate model is
-    // just an invisible placeholder, same as vanilla's own sign blocks.
-    private void signBlockState(Block signBlock, Block wallSignBlock) {
-        ResourceLocation air = new ResourceLocation("minecraft", "block/air");
-        simpleBlockState(signBlock, air);
-        simpleBlockState(wallSignBlock, air);
+    // just an invisible placeholder, same as vanilla's own sign blocks. It still needs a "particle"
+    // texture key though, or break particles fall back to the missing-texture sprite.
+    private void signBlockState(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
+        ResourceLocation modelId = ModelLocationUtils.getModelLocation(signBlock);
+        models.put(modelId, () -> {
+            JsonObject json = new JsonObject();
+            JsonObject textures = new JsonObject();
+            textures.addProperty("particle", texture.toString());
+            json.add("textures", textures);
+            return json;
+        });
+        simpleBlockState(signBlock, modelId);
+        simpleBlockState(wallSignBlock, modelId);
     }
 
     // No "minecraft:block/hanging_sign" parent exists; the chain/plank mesh is block-entity-rendered like regular signs.
