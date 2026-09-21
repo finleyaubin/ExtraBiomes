@@ -67,6 +67,7 @@ public abstract class CommonRecipes extends RecipeProvider {
         brick(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_BRICK.get());
         stair(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
+        grassStoneRecipe(pWriter);
         blackSandRecipes(pWriter);
         gildRecipes(pWriter,
                 List.of(
@@ -281,6 +282,17 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .pattern("&&")
                 .define('&', ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput);
+    }
+
+    private static void grassStoneRecipe(Consumer<FinishedRecipe> recipeOutput) {
+        // Not from Bedrock (no equivalent recipe there) - added per playtest request.
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.GRASS_STONE.get())
+                .pattern("#")
+                .pattern("S")
+                .define('#', Items.GRASS)
+                .define('S', Items.STONE)
+                .unlockedBy(getHasName(Items.STONE), has(Items.STONE))
                 .save(recipeOutput);
     }
 

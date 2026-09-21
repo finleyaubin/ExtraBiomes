@@ -28,6 +28,7 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.NETHER_DIAMOND_ORE.get(), block -> createOreDrop.apply(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
         dropSelf.accept(ModBlocks.STICK_PILE.get());
 
+        dropSelf.accept(ModBlocks.GRASS_STONE.get());
         dropSelf.accept(ModBlocks.BLACK_SAND.get());
         dropSelf.accept(ModBlocks.BLACK_SANDSTONE.get());
         dropSelf.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
