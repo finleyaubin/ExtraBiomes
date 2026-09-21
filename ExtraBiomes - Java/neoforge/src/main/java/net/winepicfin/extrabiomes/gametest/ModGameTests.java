@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.gametest;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.FunctionGameTestInstance;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -66,9 +67,15 @@ public final class ModGameTests {
     }
 
     private static void registerInstances(RegisterGameTestsEvent event) {
-        var environment = event.registerEnvironment(
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "default"),
-                new TestEnvironmentDefinition.AllOf(List.of()));
+        Holder<TestEnvironmentDefinition> environment;
+        try {
+            environment = event.registerEnvironment(
+                    ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "default"),
+                    new TestEnvironmentDefinition.AllOf(List.of()));
+        } catch (IllegalStateException registryFrozen) {
+            // A dedicated server re-fires this event from handleServerStarting after RegistryDataLoader already fired it and froze the registries
+            return;
+        }
         for (Test test : TESTS) {
             var data = new TestData<>(environment, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, test.template()),
                     test.maxTicks(), 0, true, Rotation.NONE, test.manualOnly(), 1, 1, false);
