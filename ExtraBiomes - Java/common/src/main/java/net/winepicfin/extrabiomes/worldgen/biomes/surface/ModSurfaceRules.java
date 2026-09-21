@@ -46,6 +46,7 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource MUD = makeStateRule(Blocks.MUD);
     private static final SurfaceRules.RuleSource PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
     private static final SurfaceRules.RuleSource MYCELIUM = makeStateRule(Blocks.MYCELIUM);
+    private static final SurfaceRules.RuleSource GRASS_STONE = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.GRASS_STONE.get());
     private static final SurfaceRules.RuleSource MOSS_BLOCK = makeStateRule(Blocks.MOSS_BLOCK);
     private static final SurfaceRules.RuleSource SANDSTONE = makeStateRule(Blocks.SANDSTONE);
     private static final SurfaceRules.RuleSource BLACK_SAND = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.BLACK_SAND.get());
@@ -192,12 +193,14 @@ public class ModSurfaceRules {
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SNOW_BLOCK),
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), ICE))),
 
-                // moss_block patch is sequenced before the submerged fallback so it takes priority when its noise band matches.
+                // moss_block patch is sequenced before the grass_stone sea floor so it takes priority when its noise band matches.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JELLYFISH_FIELDS),
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.sequence(
                                         SurfaceRules.ifTrue(isSubmerged,
-                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.1, 0.3), MOSS_BLOCK)),
+                                                SurfaceRules.sequence(
+                                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.1, 0.3), MOSS_BLOCK),
+                                                        GRASS_STONE)),
                                 grassOverStone))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JUNGLE_PILLARS), grassOverStone),
                 // mud patch is sequenced before grassOverStone so it takes priority when its noise band matches.

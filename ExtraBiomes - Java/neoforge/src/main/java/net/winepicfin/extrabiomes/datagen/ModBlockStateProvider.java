@@ -87,6 +87,7 @@ public class ModBlockStateProvider implements DataProvider {
         pebbleBlock(ModBlocks.PEBBLE.get(), "pebble", PebbleBlock.SIZE);
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(), "mossy_pebble", MossyPebbleBlock.SIZE);
         stickPileBlock(ModBlocks.STICK_PILE.get());
+        grassStoneBlock(ModBlocks.GRASS_STONE.get());
         // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
         cubeBottomTopBlock(ModBlocks.BLACK_SANDSTONE.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("black_sandstone_bottom"), modLoc("black_sandstone_top"));
@@ -224,6 +225,17 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, tm, models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
+    }
+
+    private void grassStoneBlock(Block block) {
+        TextureMapping common = new TextureMapping().put(TextureSlot.SIDE, modLoc("grass_stone_side")).put(TextureSlot.BOTTOM, modLoc("grass_stone_bottom")).put(TextureSlot.TOP, modLoc("grass_stone_top"));
+        TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, modLoc("grass_stone_side")).put(TextureSlot.BOTTOM, modLoc("grass_stone_bottom")).put(TextureSlot.TOP, modLoc("grass_stone_top_egg"));
+        ResourceLocation commonModel = ModelTemplates.CUBE_BOTTOM_TOP.create(block, common, models::put);
+        ResourceLocation eggModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_egg", egg, models::put);
+        blockStates.put(block, MultiVariantGenerator.multiVariant(block,
+                Variant.variant().with(VariantProperties.MODEL, commonModel).with(VariantProperties.WEIGHT, 1200),
+                Variant.variant().with(VariantProperties.MODEL, eggModel).with(VariantProperties.WEIGHT, 1)));
+        delegateItemModel(block, commonModel);
     }
 
     private void simpleBlockState(Block block, ResourceLocation model) {
