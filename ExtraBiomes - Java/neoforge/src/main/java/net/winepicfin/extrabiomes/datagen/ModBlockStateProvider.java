@@ -32,6 +32,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
         stickPileBlock(ModBlocks.STICK_PILE.get());
+        grassStoneBlock(ModBlocks.GRASS_STONE.get());
         // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
         simpleBlockWithItem(ModBlocks.BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top")));
@@ -172,6 +173,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
     private void customSaplingBlock(RegistrySupplier<Block> blockRegistryObject, String modelName){
         simpleBlock(blockRegistryObject.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + modelName)));
     }
+    private void grassStoneBlock(Block block) {
+        ModelFile common = models().cubeBottomTop(name(block), modLoc("block/grass_stone_side"), modLoc("block/grass_stone_bottom"), modLoc("block/grass_stone_top"));
+        ModelFile egg = models().cubeBottomTop(name(block) + "_egg", modLoc("block/grass_stone_side"), modLoc("block/grass_stone_bottom"), modLoc("block/grass_stone_top_egg"));
+        getVariantBuilder(block).partialState().setModels(
+                ConfiguredModel.builder().modelFile(common).weight(1200).nextModel().modelFile(egg).weight(1).build());
+        simpleBlockItem(block, common);
+    }
+
     public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture){
         ModelFile sign= models().sign(name(signBlock),texture);
         hangingSignBlock(signBlock,wallSignBlock,sign);
