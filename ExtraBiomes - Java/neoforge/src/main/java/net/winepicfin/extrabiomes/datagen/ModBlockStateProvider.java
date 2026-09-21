@@ -34,6 +34,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble", PebbleBlock.SIZE);
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble", MossyPebbleBlock.SIZE);
         stickPileBlock(ModBlocks.STICK_PILE.get());
+        grassStoneBlock(ModBlocks.GRASS_STONE.get());
         // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
         simpleBlockWithItem(ModBlocks.BLACK_SANDSTONE.get(), models().cubeBottomTop(name(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("block/black_sandstone_bottom"), modLoc("block/black_sandstone_top")));
@@ -166,6 +167,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void saplingBlock(RegistrySupplier<Block> blockRegistryObject){
         simpleBlock(blockRegistryObject.get(),models().cross(Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(blockRegistryObject.get())).getPath(),blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    private void grassStoneBlock(Block block) {
+        ModelFile common = models().cubeBottomTop(name(block), modLoc("block/grass_stone_side"), modLoc("block/grass_stone_bottom"), modLoc("block/grass_stone_top"));
+        ModelFile egg = models().cubeBottomTop(name(block) + "_egg", modLoc("block/grass_stone_side"), modLoc("block/grass_stone_bottom"), modLoc("block/grass_stone_top_egg"));
+        getVariantBuilder(block).partialState().setModels(
+                ConfiguredModel.builder().modelFile(common).weight(1200).nextModel().modelFile(egg).weight(1).build());
+        simpleBlockItem(block, common);
     }
 
     // Palm sapling has its own custom multi-blade geometry on Bedrock, not vanilla's flat
