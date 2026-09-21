@@ -258,7 +258,7 @@ jobs:
         run: |
           mkdir -p neoforge/run
           echo "eula=true" > neoforge/run/eula.txt
-          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > neoforge/run/server.properties
+          printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\npause-when-empty-seconds=-1\n' > neoforge/run/server.properties
 
       - name: Download NeoForge Loom assets
         if: steps.platforms.outputs.neoforge == 'true'
@@ -278,7 +278,7 @@ jobs:
       # that flag boots a normal DedicatedServer with gametests still registered, so - unlike
       # Fabric - it needs interactive driving. Unlike Forge (see the Forge "Run GameTests" step's
       # own comment for the two framework bugs that force it to drive tests one at a time),
-      # NeoForge's GameTestServer here has neither bug, so `test runall` in a single boot is enough
+      # NeoForge's GameTestServer here has neither bug, so `test run extrabiomes:*` (1.21.5 removed `runall`) in a single boot is enough
       # - confirmed locally, all 7 tests across the 4 neoforge gametest classes pass in one run
       # with no post-pass crash. Poll the log for the "GAME TESTS COMPLETE" line rather than
       # sleeping a fixed duration before sending `stop`, since the slow biome-generation test's
@@ -288,7 +288,7 @@ jobs:
         run: |
           mkfifo neoforge-gametest.fifo
           : > neoforge-gametest.log
-          echo "Booting :neoforge:runGameTestServer (fresh DedicatedServer, will drive /test runall in 60s)..."
+          echo "Booting :neoforge:runGameTestServer (fresh DedicatedServer, will drive /test run extrabiomes:* in 60s)..."
           # Streamed live via `tee` (not just redirected to neoforge-gametest.log) so world gen
           # progress, each biome's "found at BlockPos..." line, and every test's own passed/failed
           # line show up in this step's live Actions log as they happen, instead of only being
@@ -304,7 +304,7 @@ jobs:
           setsid timeout --foreground 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo > >(tee neoforge-gametest.log) 2>&1 &
           GPID=$!
 
-          ( sleep 60; echo "test runall" || true ) > neoforge-gametest.fifo &
+          ( sleep 60; echo "test run extrabiomes:*" || true ) > neoforge-gametest.fifo &
 
           # Waits on each @GameTest method's own "<name>: passed"/"<name>: failed" log line
           # (see forge/.../gametest/*.java), not vanilla's own "N GAME TESTS COMPLETE"/"required
