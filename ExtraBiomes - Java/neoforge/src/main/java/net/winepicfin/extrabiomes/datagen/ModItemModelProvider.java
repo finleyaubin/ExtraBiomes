@@ -13,7 +13,6 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
@@ -234,9 +233,9 @@ public class ModItemModelProvider implements DataProvider {
     }
 
     private void trimmedArmorItem(Item item) {
-        if (!(item instanceof ArmorItem)) return;
         Equippable equippable = item.getDefaultInstance().get(DataComponents.EQUIPPABLE);
-        EquipmentSlot equipmentSlot = equippable != null ? equippable.slot() : EquipmentSlot.HEAD;
+        if (equippable == null) return;
+        EquipmentSlot equipmentSlot = equippable.slot();
         String armorType = switch (equipmentSlot) {
             case HEAD -> "helmet";
             case CHEST -> "chestplate";

@@ -8,11 +8,18 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.client.data.models.blockstates.BlockStateGenerator;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
+import net.minecraft.client.data.models.blockstates.ConditionBuilder;
+import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.blockstates.Variant;
-import net.minecraft.client.data.models.blockstates.VariantProperties;
+import net.minecraft.client.renderer.block.model.BlockModelDefinition;
+import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.renderer.block.model.VariantMutator;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
@@ -54,7 +61,7 @@ public class ModBlockStateProvider implements DataProvider {
     // via delegateItemModel()/saplingItemModel() needs a matching entry here, or that block's item
     // silently renders as a missing/no-model item.
     private final PackOutput.PathProvider itemPathProvider;
-    private final Map<Block, BlockStateGenerator> blockStates = new HashMap<>();
+    private final Map<Block, BlockModelDefinitionGenerator> blockStates = new HashMap<>();
     private final Map<ResourceLocation, Supplier<JsonElement>> models = new HashMap<>();
     private final Map<ResourceLocation, Supplier<JsonElement>> items = new HashMap<>();
 
@@ -224,14 +231,14 @@ public class ModBlockStateProvider implements DataProvider {
         TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, modLoc("grass_stone_side")).put(TextureSlot.BOTTOM, modLoc("grass_stone_bottom")).put(TextureSlot.TOP, modLoc("grass_stone_top_egg"));
         ResourceLocation commonModel = ModelTemplates.CUBE_BOTTOM_TOP.create(block, common, models::put);
         ResourceLocation eggModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_egg", egg, models::put);
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block,
-                Variant.variant().with(VariantProperties.MODEL, commonModel).with(VariantProperties.WEIGHT, 1200),
-                Variant.variant().with(VariantProperties.MODEL, eggModel).with(VariantProperties.WEIGHT, 1)));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block, new MultiVariant(WeightedList.of(
+                new Weighted<>(new Variant(commonModel), 1200),
+                new Weighted<>(new Variant(eggModel), 1)))));
         delegateItemModel(block, commonModel);
     }
 
     private void simpleBlockState(Block block, ResourceLocation model) {
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, model)));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block, plain(model)));
     }
 
     // Auto-derives an item model that just reuses the block model (matching Forge's
@@ -261,11 +268,11 @@ public class ModBlockStateProvider implements DataProvider {
     private void axisBlock(Block block, ResourceLocation side, ResourceLocation end) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.END, end);
         ResourceLocation model = ModelTemplates.CUBE_COLUMN.create(block, tm, models::put);
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(RotatedPillarBlock.AXIS)
-                        .select(Direction.Axis.Y, Variant.variant().with(VariantProperties.MODEL, model))
-                        .select(Direction.Axis.Z, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                        .select(Direction.Axis.X, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(RotatedPillarBlock.AXIS)
+                        .select(Direction.Axis.Y, plain(model))
+                        .select(Direction.Axis.Z, plain(model).with(BlockModelGenerators.X_ROT_90).with(BlockModelGenerators.UV_LOCK))
+                        .select(Direction.Axis.X, plain(model).with(BlockModelGenerators.X_ROT_90).with(BlockModelGenerators.Y_ROT_90).with(BlockModelGenerators.UV_LOCK))));
         delegateItemModel(block, model);
     }
 
@@ -309,12 +316,16 @@ public class ModBlockStateProvider implements DataProvider {
         };
     }
 
-    private static VariantProperties.Rotation yRot(int degrees) {
+    private static MultiVariant plain(ResourceLocation model) {
+        return BlockModelGenerators.plainVariant(model);
+    }
+
+    private static VariantMutator yRot(int degrees) {
         return switch (((degrees % 360) + 360) % 360) {
-            case 90 -> VariantProperties.Rotation.R90;
-            case 180 -> VariantProperties.Rotation.R180;
-            case 270 -> VariantProperties.Rotation.R270;
-            default -> VariantProperties.Rotation.R0;
+            case 90 -> BlockModelGenerators.Y_ROT_90;
+            case 180 -> BlockModelGenerators.Y_ROT_180;
+            case 270 -> BlockModelGenerators.Y_ROT_270;
+            default -> BlockModelGenerators.NOP;
         };
     }
 
@@ -328,7 +339,7 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation inner = ModelTemplates.STAIRS_INNER.create(block, tm, models::put);
         ResourceLocation outer = ModelTemplates.STAIRS_OUTER.create(block, tm, models::put);
 
-        PropertyDispatch.C3<Direction, Half, StairsShape> dispatch = PropertyDispatch.properties(StairBlock.FACING, StairBlock.HALF, StairBlock.SHAPE);
+        PropertyDispatch.C3<MultiVariant, Direction, Half, StairsShape> dispatch = PropertyDispatch.initial(StairBlock.FACING, StairBlock.HALF, StairBlock.SHAPE);
         for (Direction facing : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
             for (StairsShape shape : StairsShape.values()) {
                 ResourceLocation model = switch (shape) {
@@ -346,16 +357,15 @@ public class ModBlockStateProvider implements DataProvider {
                 // rotation unmodified (verified against vanilla's own shipped oak_stairs.json).
                 int topRotation = isRight ? baseRotation + 90 : baseRotation;
 
-                Variant bottomVariant = Variant.variant().with(VariantProperties.MODEL, model);
-                if (bottomRotation != 0) bottomVariant = bottomVariant.with(VariantProperties.Y_ROT, yRot(bottomRotation)).with(VariantProperties.UV_LOCK, true);
+                MultiVariant bottomVariant = plain(model);
+                if (bottomRotation != 0) bottomVariant = bottomVariant.with(yRot(bottomRotation)).with(BlockModelGenerators.UV_LOCK);
                 dispatch.select(facing, Half.BOTTOM, shape, bottomVariant);
 
-                Variant topVariant = Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true);
-                if (topRotation != 0) topVariant = topVariant.with(VariantProperties.Y_ROT, yRot(topRotation));
+                MultiVariant topVariant = plain(model).with(BlockModelGenerators.X_ROT_180).with(BlockModelGenerators.UV_LOCK).with(yRot(topRotation));
                 dispatch.select(facing, Half.TOP, shape, topVariant);
             }
         }
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(dispatch));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(dispatch));
         delegateItemModel(block, straight);
     }
 
@@ -369,11 +379,11 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation topModel = ModelTemplates.SLAB_TOP.create(block, tm, models::put);
         ResourceLocation doubleModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_double", tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(SlabBlock.TYPE)
-                        .select(SlabType.BOTTOM, Variant.variant().with(VariantProperties.MODEL, bottomModel))
-                        .select(SlabType.TOP, Variant.variant().with(VariantProperties.MODEL, topModel))
-                        .select(SlabType.DOUBLE, Variant.variant().with(VariantProperties.MODEL, doubleModel))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(SlabBlock.TYPE)
+                        .select(SlabType.BOTTOM, plain(bottomModel))
+                        .select(SlabType.TOP, plain(topModel))
+                        .select(SlabType.DOUBLE, plain(doubleModel))));
         delegateItemModel(block, bottomModel);
     }
 
@@ -383,12 +393,12 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation side = ModelTemplates.FENCE_SIDE.create(block, tm, models::put);
         ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.create(block, tm, models::put);
 
-        blockStates.put(block, net.minecraft.client.data.models.blockstates.MultiPartGenerator.multiPart(block)
-                .with(Variant.variant().with(VariantProperties.MODEL, post))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.NORTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.EAST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.SOUTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(CrossCollisionBlock.WEST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
+        blockStates.put(block, MultiPartGenerator.multiPart(block)
+                .with(plain(post))
+                .with(new ConditionBuilder().term(CrossCollisionBlock.NORTH, true), plain(side).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(CrossCollisionBlock.EAST, true), plain(side).with(BlockModelGenerators.Y_ROT_90).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(CrossCollisionBlock.SOUTH, true), plain(side).with(BlockModelGenerators.Y_ROT_180).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(CrossCollisionBlock.WEST, true), plain(side).with(BlockModelGenerators.Y_ROT_270).with(BlockModelGenerators.UV_LOCK)));
         delegateItemModel(block, inventory);
     }
 
@@ -399,17 +409,14 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation wallClosed = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(block, tm, models::put);
         ResourceLocation wallOpen = ModelTemplates.FENCE_GATE_WALL_OPEN.create(block, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(FenceGateBlock.FACING, FenceGateBlock.IN_WALL, FenceGateBlock.OPEN)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(FenceGateBlock.FACING, FenceGateBlock.IN_WALL, FenceGateBlock.OPEN)
                         .generate((facing, inWall, isOpen) -> {
                             ResourceLocation model = inWall ? (isOpen ? wallOpen : wallClosed) : (isOpen ? open : closed);
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.UV_LOCK, true);
-                            int y = rot(facing);
                             // Fence gates are offset -90 (not +180) from the stairs table's rot()
                             // convention (verified against vanilla's oak_fence_gate.json).
-                            y = (y + 270) % 360;
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
-                            return v;
+                            int y = (rot(facing) + 270) % 360;
+                            return plain(model).with(BlockModelGenerators.UV_LOCK).with(yRot(y));
                         })));
         delegateItemModel(block, closed);
     }
@@ -421,16 +428,16 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation tall = ModelTemplates.WALL_TALL_SIDE.create(block, tm, models::put);
         ResourceLocation inventory = ModelTemplates.WALL_INVENTORY.create(block, tm, models::put);
 
-        blockStates.put(block, net.minecraft.client.data.models.blockstates.MultiPartGenerator.multiPart(block)
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.UP, true), Variant.variant().with(VariantProperties.MODEL, post))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.NORTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.EAST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.WEST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.NORTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.EAST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(net.minecraft.client.data.models.blockstates.Condition.condition().term(WallBlock.WEST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
+        blockStates.put(block, MultiPartGenerator.multiPart(block)
+                .with(new ConditionBuilder().term(WallBlock.UP, true), plain(post))
+                .with(new ConditionBuilder().term(WallBlock.NORTH, WallSide.LOW), plain(low).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(WallBlock.EAST, WallSide.LOW), plain(low).with(BlockModelGenerators.Y_ROT_90).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(WallBlock.SOUTH, WallSide.LOW), plain(low).with(BlockModelGenerators.Y_ROT_180).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(WallBlock.WEST, WallSide.LOW), plain(low).with(BlockModelGenerators.Y_ROT_270).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(WallBlock.NORTH, WallSide.TALL), plain(tall).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(WallBlock.EAST, WallSide.TALL), plain(tall).with(BlockModelGenerators.Y_ROT_90).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(WallBlock.SOUTH, WallSide.TALL), plain(tall).with(BlockModelGenerators.Y_ROT_180).with(BlockModelGenerators.UV_LOCK))
+                .with(new ConditionBuilder().term(WallBlock.WEST, WallSide.TALL), plain(tall).with(BlockModelGenerators.Y_ROT_270).with(BlockModelGenerators.UV_LOCK)));
         delegateItemModel(block, inventory);
     }
 
@@ -440,11 +447,11 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation powered = ModelTemplates.BUTTON_PRESSED.create(block, tm, models::put);
         ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.create(block, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(ButtonBlock.FACE, ButtonBlock.FACING, ButtonBlock.POWERED)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(ButtonBlock.FACE, ButtonBlock.FACING, ButtonBlock.POWERED)
                         .generate((face, facing, powered1) -> {
                             ResourceLocation model = powered1 ? powered : unpowered;
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model);
+                            MultiVariant v = plain(model);
                             // rot(facing) is offset by -90 from the button's own facing convention
                             // (verified against vanilla's oak_button.json); ceiling additionally
                             // flips the model via X_ROT 180, which needs another +180 on Y to match.
@@ -452,14 +459,13 @@ public class ModBlockStateProvider implements DataProvider {
                             switch (face) {
                                 case FLOOR -> {
                                 }
-                                case WALL -> v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R90);
+                                case WALL -> v = v.with(BlockModelGenerators.X_ROT_90);
                                 case CEILING -> {
-                                    v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                    v = v.with(BlockModelGenerators.X_ROT_180);
                                     y = (y + 180) % 360;
                                 }
                             }
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            return v.with(yRot(y)).with(BlockModelGenerators.UV_LOCK);
                         })));
         delegateItemModel(block, inventory);
     }
@@ -469,10 +475,10 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation up = ModelTemplates.PRESSURE_PLATE_UP.create(block, tm, models::put);
         ResourceLocation down = ModelTemplates.PRESSURE_PLATE_DOWN.create(block, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(PressurePlateBlock.POWERED)
-                        .select(false, Variant.variant().with(VariantProperties.MODEL, up))
-                        .select(true, Variant.variant().with(VariantProperties.MODEL, down))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(PressurePlateBlock.POWERED)
+                        .select(false, plain(up))
+                        .select(true, plain(down))));
         delegateItemModel(block, up);
     }
 
@@ -483,8 +489,8 @@ public class ModBlockStateProvider implements DataProvider {
         ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
         ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
                             ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
                             int y = rot(facing);
@@ -498,10 +504,7 @@ public class ModBlockStateProvider implements DataProvider {
                                 y += 90;
                                 if (hinge == DoorHingeSide.RIGHT) y += 180;
                             }
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model);
-                            int normalized = ((y % 360) + 360) % 360;
-                            if (normalized != 0) v = v.with(VariantProperties.Y_ROT, yRot(normalized));
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            return plain(model).with(yRot(y)).with(BlockModelGenerators.UV_LOCK);
                         })));
     }
 
@@ -526,21 +529,20 @@ public class ModBlockStateProvider implements DataProvider {
         // Orientable trapdoors y-rotate every state (including closed) per facing, and additionally
         // flip the open-on-top state via X_ROT 180 with another +180 on Y - verified field-for-field
         // against vanilla's real birch_trapdoor.json blockstate.
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> {
                             ResourceLocation model = isOpen ? open : (half == Half.TOP ? top : bottom);
                             // rot(facing) is offset by -90 from the trapdoor's own convention
                             // (verified against vanilla's birch_trapdoor.json - e.g. facing=east is
                             // y:90, not y:0), same offset as the plain-template open state used.
                             int y = (rot(facing) + 90) % 360;
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model);
+                            MultiVariant v = plain(model);
                             if (isOpen && half == Half.TOP) {
-                                v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                v = v.with(BlockModelGenerators.X_ROT_180);
                                 y = (y + 180) % 360;
                             }
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
-                            return v;
+                            return v.with(yRot(y));
                         })));
     }
 
@@ -597,20 +599,20 @@ public class ModBlockStateProvider implements DataProvider {
     // though both are named "size" with the same value range) throws "Property ... is not defined
     // for block ...".
     private void pebbleBlock(Block block, String type, IntegerProperty sizeProperty) {
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(sizeProperty)
-                        .select(1, Variant.variant().with(VariantProperties.MODEL, modLoc("small_" + type)))
-                        .select(2, Variant.variant().with(VariantProperties.MODEL, modLoc("medium_" + type)))
-                        .select(3, Variant.variant().with(VariantProperties.MODEL, modLoc("large_" + type)))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(sizeProperty)
+                        .select(1, plain(modLoc("small_" + type)))
+                        .select(2, plain(modLoc("medium_" + type)))
+                        .select(3, plain(modLoc("large_" + type)))));
         delegateItemModel(block, modLoc("small_" + type));
     }
 
     private void stickPileBlock(Block block) {
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(RotatedPillarBlock.AXIS)
-                        .select(Direction.Axis.X, Variant.variant().with(VariantProperties.MODEL, modLoc("stick_pile_x")))
-                        .select(Direction.Axis.Y, Variant.variant().with(VariantProperties.MODEL, modLoc("stick_pile_y")))
-                        .select(Direction.Axis.Z, Variant.variant().with(VariantProperties.MODEL, modLoc("stick_pile_z")))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(RotatedPillarBlock.AXIS)
+                        .select(Direction.Axis.X, plain(modLoc("stick_pile_x")))
+                        .select(Direction.Axis.Y, plain(modLoc("stick_pile_y")))
+                        .select(Direction.Axis.Z, plain(modLoc("stick_pile_z")))));
         delegateItemModel(block, modLoc("stick_pile_y"));
     }
 
@@ -626,7 +628,7 @@ public class ModBlockStateProvider implements DataProvider {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         blockStates.forEach((block, generator) -> {
             ResourceLocation id = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
-            futures.add(DataProvider.saveStable(cache, generator.get(), blockStatePathProvider.json(id)));
+            futures.add(DataProvider.saveStable(cache, BlockModelDefinition.CODEC, generator.create(), blockStatePathProvider.json(id)));
         });
         models.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), modelPathProvider.json(id))));
         items.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), itemPathProvider.json(id))));

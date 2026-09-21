@@ -28,7 +28,19 @@ license="MIT License"
 [[dependencies.extrabiomes]]
     modId="terrablender"
     type="required"
-    versionRange="[1.0.0.59,)"
+    versionRange="[5.0.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="geckolib"
+    type="required"
+    versionRange="[5.1,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="architectury"
+    type="required"
+    versionRange="[16,)"
     ordering="NONE"
     side="BOTH"
 # Optional - see neoforge/compat/create/CreateWindmillCompat.java. Not required to play; only enables
