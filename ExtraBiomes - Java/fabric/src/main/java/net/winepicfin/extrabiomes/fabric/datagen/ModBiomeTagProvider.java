@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
@@ -81,11 +81,11 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         // mod-local tag, so a third-party mod's swamp/mushroom biome is picked up automatically
         // without needing to know ExtraBiomes exists. We also contribute our own biomes into those
         // same convention tags, the same courtesy other mods extend to us.
-        this.tag(ConventionalBiomeTags.SWAMP).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP);
-        this.tag(ConventionalBiomeTags.MUSHROOM).add(Biomes.MUSHROOM_FIELDS);
+        this.tag(ConventionalBiomeTags.IS_SWAMP).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP);
+        this.tag(ConventionalBiomeTags.IS_MUSHROOM).add(Biomes.MUSHROOM_FIELDS);
 
-        this.tag(ModTags.Biomes.IS_WETLAND).addTag(ConventionalBiomeTags.SWAMP).add(ModBiomes.MOORLANDS);
-        this.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM).addTag(ConventionalBiomeTags.MUSHROOM).add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
+        this.tag(ModTags.Biomes.IS_WETLAND).addTag(ConventionalBiomeTags.IS_SWAMP).add(ModBiomes.MOORLANDS);
+        this.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM).addTag(ConventionalBiomeTags.IS_MUSHROOM).add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
         this.tag(ModTags.Biomes.SPAWNS_JELLYFISH).add(ModBiomes.JELLYFISH_FIELDS);
     }
 }
