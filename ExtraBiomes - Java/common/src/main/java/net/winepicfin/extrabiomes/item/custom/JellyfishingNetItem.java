@@ -32,7 +32,7 @@ public class JellyfishingNetItem extends Item {
         if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
             JellyfishEntity jellyfish = ModEntities.JELLYFISH.get().create(serverLevel, EntitySpawnReason.BUCKET);
             if (jellyfish != null) {
-                jellyfish.moveTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+                jellyfish.snapTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
                         context.getClickedFace() == Direction.UP ? 0.0F : 0.0F, 0.0F);
                 jellyfish.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(pos), EntitySpawnReason.BUCKET, null);
                 serverLevel.addFreshEntity(jellyfish);

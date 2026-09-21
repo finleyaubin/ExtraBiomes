@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
@@ -53,7 +53,7 @@ public class CaveVineFeature extends Feature<NoneFeatureConfiguration> {
 
     /** cave_vine_feature.json's height_distribution, ported verbatim as a weighted list of ranges. */
     private static final IntProvider HEIGHT_DISTRIBUTION = new WeightedListInt(
-            SimpleWeightedRandomList.<IntProvider>builder()
+            WeightedList.<IntProvider>builder()
                     .add(UniformInt.of(1, 13), 2)
                     .add(UniformInt.of(1, 2), 3)
                     .add(UniformInt.of(1, 7), 10)

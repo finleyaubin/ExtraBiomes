@@ -7,7 +7,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -85,7 +85,7 @@ public class MysticFeatures {
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(MYSTIC_GOO_KEY, new ConfiguredFeature<>(GOO_CONVERSION_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
-        WeightedStateProvider flowers = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+        WeightedStateProvider flowers = new WeightedStateProvider(WeightedList.<BlockState>builder()
                 .add(Blocks.DANDELION.defaultBlockState(), 2)
                 .add(Blocks.POPPY.defaultBlockState(), 2)
                 .add(Blocks.ALLIUM.defaultBlockState(), 2)

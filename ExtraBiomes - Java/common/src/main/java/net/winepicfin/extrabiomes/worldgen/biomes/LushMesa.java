@@ -23,7 +23,7 @@ public class LushMesa {
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         BiomeDefaultFeatures.addJungleMelons(biomeBuilder);

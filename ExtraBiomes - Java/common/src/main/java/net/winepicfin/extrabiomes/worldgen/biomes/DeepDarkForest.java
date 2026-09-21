@@ -31,7 +31,7 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.addForestGrass(biomeBuilder);
         BiomeDefaultFeatures.addGiantTaigaVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         // Bedrock's 'has_structure_trail_ruins' tag is handled via structure_set/biome tags (see ModBiomeTagProvider), not here.
 
         // shattered_swamp/swamp_huge_mushroom_feature.json applies to swamp OR roofed-forest tagged biomes

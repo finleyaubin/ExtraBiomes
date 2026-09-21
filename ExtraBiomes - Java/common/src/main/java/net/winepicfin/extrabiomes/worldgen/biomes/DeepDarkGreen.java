@@ -17,7 +17,7 @@ public class DeepDarkGreen {
         // A cave variant of vanilla's Deep Dark (placed underground via ModOverworldRegion), so it follows deepDark()'s setup but with jungle-flavoured vegetation/colors instead of plain grass and black.
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FROG, 5, 2, 4));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityType.FROG, 2, 4));
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
@@ -27,7 +27,7 @@ public class DeepDarkGreen {
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         BiomeDefaultFeatures.addSculk(biomeBuilder);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)

@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
@@ -113,7 +114,7 @@ public class JellyfishEntity extends WaterAnimal {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariant(tag.getInt("Variant"));
+        this.setVariant(tag.getIntOr("Variant", 0));
     }
 
     // No extra restriction on beach (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
@@ -184,11 +185,11 @@ public class JellyfishEntity extends WaterAnimal {
     // WaterAnimal.handleAirSupply() deals drowning damage once air runs out; tick()'s
     // grayAmount/scaleY already shows it drying out visually instead.
     @Override
-    protected void handleAirSupply(int preTickAirSupply) {
+    protected void handleAirSupply(ServerLevel level, int preTickAirSupply) {
     }
 
     @Override
-    protected boolean isAffectedByFluids() {
+    public boolean isAffectedByFluids() {
         return true;
     }
 

@@ -53,9 +53,7 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
         CustomData customData = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
         if (!customData.isEmpty()) {
             CompoundTag entityTag = customData.copyTag();
-            if (entityTag.contains("id", 8)) {
-                return EntityType.byString(entityTag.getString("id")).orElseGet(typeSupplier::get);
-            }
+            return entityTag.getString("id").flatMap(EntityType::byString).orElseGet(typeSupplier::get);
         }
         return typeSupplier.get();
     }
