@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
@@ -84,6 +85,9 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
         if (config.weatheredVariation()) {
             settings.addProcessor(net.winepicfin.extrabiomes.worldgen.features.stonepillars.PillarWeatheringProcessor.INSTANCE);
         }
+        if (config.followTerrain()) {
+            settings.addProcessor(new GravityProcessor(Heightmap.Types.OCEAN_FLOOR_WG, config.groundOffset()));
+        }
 
         BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
@@ -119,6 +123,11 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
 
         // Skip the whole placement rather than letting PreserveBedrockProcessor drop individual blocks - block-by-block skipping produced a floating-cap/clipped-through-walls look.
         if (structureBox.minY() < BEDROCK_MARGIN_Y) {
+            return false;
+        }
+
+        // Skip rather than let the world silently drop everything above the build limit (e.g. the 150-tall snow spire on high ground).
+        if (structureBox.maxY() > level.getMaxY()) {
             return false;
         }
 
