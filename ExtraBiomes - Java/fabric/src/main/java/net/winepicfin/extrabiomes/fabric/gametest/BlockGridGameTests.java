@@ -37,7 +37,7 @@ public class BlockGridGameTests {
     @GameTest(template = ExtraBiomes.MOD_ID + ":block_grid_void", timeoutTicks = 60000, manualOnly = true)
     public static void layoutEveryBlockStateForInspection(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK);
+        Registry<Block> blockRegistry = level.registryAccess().lookupOrThrow(Registries.BLOCK);
 
         List<Block> modBlocks = new ArrayList<>();
         for (Block block : blockRegistry) {
