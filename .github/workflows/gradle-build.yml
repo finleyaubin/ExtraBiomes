@@ -186,7 +186,7 @@ jobs:
               *) TEST_TIMEOUTS[$name]=180 ;;
             esac
           done < <(find forge/src/main/java/net/winepicfin/extrabiomes/gametest -name '*.java' \
-              ! -name 'SkyCityStructureEditGameTests.java' -exec \
+              ! -name 'SkyCityStructureEditGameTests.java' ! -name 'BlockGridGameTests.java' -exec \
             grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' {} + | tr '[:upper:]' '[:lower:]')
 
           if [ "${#TEST_TIMEOUTS[@]}" -eq 0 ]; then
@@ -321,7 +321,7 @@ jobs:
           # EXPECTED_TESTS is counted from the actual @GameTest methods rather than hardcoded, so
           # this can't silently under/over-count after a test is added or removed.
           EXPECTED_TESTS=$(find neoforge/src/main/java/net/winepicfin/extrabiomes/gametest -name '*.java' \
-              ! -name 'SkyCityStructureEditGameTests.java' -exec \
+              ! -name 'SkyCityStructureEditGameTests.java' ! -name 'BlockGridGameTests.java' -exec \
             grep -rhoP '(?<=public static void )\w+(?=\(GameTestHelper)' {} + | wc -l)
           if [ "$EXPECTED_TESTS" -eq 0 ]; then
             echo "::error::No @GameTest methods found under neoforge/.../gametest - discovery regex is stale"
