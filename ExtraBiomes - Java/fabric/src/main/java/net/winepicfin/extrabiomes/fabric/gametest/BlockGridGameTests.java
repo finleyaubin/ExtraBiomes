@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -34,7 +34,7 @@ public class BlockGridGameTests {
     private static final int ROW_GAP = 3; // empty rows between one block's sub-grid and the next block's
 
     // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = ExtraBiomes.MOD_ID + ":block_grid_void", timeoutTicks = 60000, manualOnly = true)
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":block_grid_void", maxTicks = 60000, manualOnly = true)
     public static void layoutEveryBlockStateForInspection(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Registry<Block> blockRegistry = level.registryAccess().lookupOrThrow(Registries.BLOCK);
