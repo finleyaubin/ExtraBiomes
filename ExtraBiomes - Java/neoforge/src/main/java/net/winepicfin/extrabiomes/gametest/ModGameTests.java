@@ -41,6 +41,8 @@ public final class ModGameTests {
                     StructureGenerationGameTests::skyCityAppearsInOverworldGeneration, "empty", LONG_MAX_TICKS, false),
             new Test(SkyCityStructureEditGameTests.class, "layoutSkyCityBuildingsForEditing",
                     SkyCityStructureEditGameTests::layoutSkyCityBuildingsForEditing, "sky_city_edit_void", LONG_MAX_TICKS, true),
+            new Test(BlockGridGameTests.class, "layoutEveryBlockStateForInspection",
+                    BlockGridGameTests::layoutEveryBlockStateForInspection, "block_grid_void", LONG_MAX_TICKS, true),
             new Test(SpawnEggItemGameTests.class, "everySpawnEggResolvesRequiredFeaturesWithoutThrowing",
                     SpawnEggItemGameTests::everySpawnEggResolvesRequiredFeaturesWithoutThrowing),
             new Test(BiomeModifierApplicationGameTests.class, "jungleGetsUndergroundJungleFeaturesAndSpawns",
