@@ -4,14 +4,11 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import org.slf4j.Logger;
 
@@ -25,19 +22,20 @@ import java.util.List;
 // per row so a block with hundreds of states (walls, doors) doesn't produce one absurdly long row.
 // Each state gets an empty gap block on every side so connecting blocks (fences/walls/panes) don't
 // visually fuse into their neighbour and hide their own shape.
-@GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
+//
+// Registered manually via ModGameTests.TESTS (this NeoForge version's test discovery is the
+// DeferredRegister<Consumer<GameTestHelper>> + RegisterGameTestsEvent pipeline, not an annotation
+// scan - see SkyCityStructureEditGameTests for the same manualOnly pattern), not via @GameTest/
+// @GameTestHolder like the Forge sibling.
 public class BlockGridGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final int CELL_SPACING = 2; // 1 block + 1 gap, so connecting blocks don't fuse
     private static final int MAX_COLUMNS = 16;
     private static final int ROW_GAP = 3; // empty rows between one block's sub-grid and the next block's
 
-    // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = "block_grid_void", timeoutTicks = 60000, batch = "extrabiomes", manualOnly = true)
     public static void layoutEveryBlockStateForInspection(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        Registry<Block> blockRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK);
+        Registry<Block> blockRegistry = level.registryAccess().lookupOrThrow(Registries.BLOCK);
 
         List<Block> modBlocks = new ArrayList<>();
         for (Block block : blockRegistry) {
