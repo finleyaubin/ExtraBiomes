@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.block;
 
 import net.minecraft.util.ColorRGBA;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -34,6 +35,12 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE_BRICK_SLAB).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE_BRICK_STAIRS).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore", () -> new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_COAL_ORE = registerBlock("nether_coal_ore", () -> new DropExperienceBlock(UniformInt.of(0, 2), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_COPPER_ORE = registerBlock("nether_copper_ore", () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_EMERALD_ORE = registerBlock("nether_emerald_ore", () -> new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_IRON_ORE = registerBlock("nether_iron_ore", () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_LAPIS_ORE = registerBlock("nether_lapis_ore", () -> new DropExperienceBlock(UniformInt.of(2, 5), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_REDSTONE_ORE = registerBlock("nether_redstone_ore", () -> new DropExperienceBlock(UniformInt.of(1, 5), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops()));
     public static final RegistrySupplier<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> ExtraBiomesExpectPlatform.createGooLiquidBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.WATER).sound(SoundType.SLIME_BLOCK).noLootTable()));
     public static final RegistrySupplier<PebbleBlock> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).noOcclusion()));
     public static final RegistrySupplier<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).noOcclusion()));
