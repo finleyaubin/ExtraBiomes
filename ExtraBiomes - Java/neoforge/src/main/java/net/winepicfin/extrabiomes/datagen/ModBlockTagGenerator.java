@@ -205,7 +205,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 Blocks.WHITE_GLAZED_TERRACOTTA,
                 Blocks.ORANGE_GLAZED_TERRACOTTA,
                 Blocks.RED_GLAZED_TERRACOTTA,
-                Blocks.BLACK_GLAZED_TERRACOTTA
+                Blocks.BLACK_GLAZED_TERRACOTTA,
+                // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
+                Blocks.NETHERRACK
         );
 
 
