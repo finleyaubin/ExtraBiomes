@@ -229,25 +229,26 @@ public class ModSurfaceRules {
                                                 SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, -0.115, 0.212), MUD))))),
 
                 // abovePreliminarySurface() keeps grass off cave floors, which ON_FLOOR alone also matches.
+                // No dirt fallback underwater: Bedrock's sea_floor_depth is 0 here, so sea floors are bare netherrack.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS),
                         SurfaceRules.sequence(
-                                SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), grassOverDirt),
+                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
+                                                SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK))),
                                 netherrackDownToBedrock)),
 
                 // Top layer is FARMLAND, not DIRT, so the whole floor is tillable ground and NetherlandsWheatFeatures'
                 // crop scatter never has to convert terrain itself - it just needs a wheat block on top of every
                 // column, so there are no untouched-dirt gaps between its (inherently probabilistic) patches.
-                // Gated to dry columns only (isAtOrBelowWaterLevel, same check grassOverDirt uses above), falling
-                // back to plain DIRT when submerged - without this, low points of this biome that dip below sea
-                // level got farmland tilled straight onto the sea floor, since ON_FLOOR/abovePreliminarySurface()
-                // alone don't distinguish dry land from underwater.
+                // Gated to dry columns only (isAtOrBelowWaterLevel) - without this, low points of this biome that
+                // dip below sea level got farmland tilled straight onto the sea floor, since
+                // ON_FLOOR/abovePreliminarySurface() alone don't distinguish dry land from underwater. Submerged
+                // floors fall through to netherrack, matching Bedrock's sea_floor_depth of 0.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
-                                                SurfaceRules.sequence(
-                                                        SurfaceRules.ifTrue(isAtOrBelowWaterLevel, FARMLAND),
-                                                        DIRT))),
+                                                SurfaceRules.ifTrue(isAtOrBelowWaterLevel, FARMLAND))),
                                 netherrackDownToBedrock)),
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.VOLCANIC_MOSS_TUNDRA),
