@@ -58,6 +58,7 @@ public class NetherlandsOreFeatures {
     public static final ResourceKey<PlacedFeature> BLACKSTONE_BLOBS_PLACED_KEY = placedKey("netherlands_blackstone_blobs");
     public static final ResourceKey<PlacedFeature> BASALT_PILLAR_PLACED_KEY = placedKey("netherlands_basalt_pillar");
 
+    private static final int WORLD_BOTTOM_Y = -64;
     // Keeps the basalt/blackstone decoration well under this lowland biome's ~sea-level surface.
     private static final VerticalAnchor DECORATION_TOP = VerticalAnchor.absolute(40);
 
@@ -109,10 +110,12 @@ public class NetherlandsOreFeatures {
 
     private static void register(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
                                   ResourceKey<ConfiguredFeature<?, ?>> configuredKey, ResourceKey<PlacedFeature> placedKey,
-                                  int veinsPerChunk, int yMin, int yMax) {
+                                  int bedrockVeinsPerChunk, int bedrockYMin, int yMax) {
+        // Netherrack reaches bedrock on Java, so Bedrock's range is stretched down to the world bottom with veins scaled to keep its density.
+        int veinsPerChunk = Math.round((float) bedrockVeinsPerChunk * (yMax - WORLD_BOTTOM_Y) / (yMax - bedrockYMin));
         context.register(placedKey, new PlacedFeature(
                 configuredFeatures.getOrThrow(configuredKey),
-                ModOrePlacement.commonOrePlacement(veinsPerChunk, HeightRangePlacement.uniform(VerticalAnchor.absolute(yMin), VerticalAnchor.absolute(yMax)))
+                ModOrePlacement.commonOrePlacement(veinsPerChunk, HeightRangePlacement.uniform(VerticalAnchor.absolute(WORLD_BOTTOM_Y), VerticalAnchor.absolute(yMax)))
         ));
     }
 
