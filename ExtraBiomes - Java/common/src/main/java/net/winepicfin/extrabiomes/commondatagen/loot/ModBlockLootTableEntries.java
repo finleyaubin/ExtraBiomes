@@ -20,12 +20,21 @@ public class ModBlockLootTableEntries {
             BiFunctionLeaves createLeavesDrops,
             BiFunctionOre createOreDrop,
             Function<net.minecraft.world.level.ItemLike, LootTable.Builder> createSingleItemTable,
-            BiFunctionMushroom createMushroomBlockDrop) {
+            BiFunctionMushroom createMushroomBlockDrop,
+            Function<Block, LootTable.Builder> createCopperOreDrops,
+            Function<Block, LootTable.Builder> createLapisOreDrops,
+            Function<Block, LootTable.Builder> createRedstoneOreDrops) {
         dropSelf.accept(ModBlocks.DENSE_CLOUD.get());
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         add.accept(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()));
         add.accept(ModBlocks.NETHER_DIAMOND_ORE.get(), block -> createOreDrop.apply(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
+        add.accept(ModBlocks.NETHER_COAL_ORE.get(), block -> createOreDrop.apply(block, Items.COAL));
+        add.accept(ModBlocks.NETHER_EMERALD_ORE.get(), block -> createOreDrop.apply(block, Items.EMERALD));
+        add.accept(ModBlocks.NETHER_IRON_ORE.get(), block -> createOreDrop.apply(block, Items.RAW_IRON));
+        add.accept(ModBlocks.NETHER_COPPER_ORE.get(), createCopperOreDrops);
+        add.accept(ModBlocks.NETHER_LAPIS_ORE.get(), createLapisOreDrops);
+        add.accept(ModBlocks.NETHER_REDSTONE_ORE.get(), createRedstoneOreDrops);
         dropSelf.accept(ModBlocks.STICK_PILE.get());
 
         dropSelf.accept(ModBlocks.GRASS_STONE.get());

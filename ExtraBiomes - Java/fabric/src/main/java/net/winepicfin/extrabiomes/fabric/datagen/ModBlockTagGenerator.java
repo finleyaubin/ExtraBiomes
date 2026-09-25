@@ -25,9 +25,15 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
-        this.tag(BlockTags.NEEDS_STONE_TOOL);
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(keys(
+                ModBlocks.NETHER_COPPER_ORE.get(),
+                ModBlocks.NETHER_IRON_ORE.get(),
+                ModBlocks.NETHER_LAPIS_ORE.get()
+        ));
 
         this.tag(BlockTags.NEEDS_IRON_TOOL).add(keys(
+                ModBlocks.NETHER_EMERALD_ORE.get(),
+                ModBlocks.NETHER_REDSTONE_ORE.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get()
         ));
 
@@ -38,6 +44,12 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(),
                 ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get(),
+                ModBlocks.NETHER_COAL_ORE.get(),
+                ModBlocks.NETHER_COPPER_ORE.get(),
+                ModBlocks.NETHER_EMERALD_ORE.get(),
+                ModBlocks.NETHER_IRON_ORE.get(),
+                ModBlocks.NETHER_LAPIS_ORE.get(),
+                ModBlocks.NETHER_REDSTONE_ORE.get(),
                 ModBlocks.PEBBLE.get(),
                 ModBlocks.MOSSY_PEBBLE.get(),
                 ModBlocks.GRASS_STONE.get(),
