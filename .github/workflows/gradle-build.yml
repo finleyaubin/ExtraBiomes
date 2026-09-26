@@ -85,8 +85,7 @@ jobs:
           java-version: 21
           distribution: 'temurin'
 
-      - &gradle
-        name: Setup Gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
           # The default only saves from the default branch (main), which rarely builds, so each job here
@@ -94,8 +93,19 @@ jobs:
           cache-read-only: false
 
       - &gradlew
-        name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        name: Prepare Gradle
+        # The build cache lets later jobs reuse classes datagen already compiled.
+        run: |
+          chmod +x gradlew
+          echo "org.gradle.caching=true" >> ~/.gradle/gradle.properties
+
+      # Loom keeps each project's mapped Minecraft jars here, outside the Gradle home setup-gradle saves.
+      - &loomcache
+        name: Cache Loom project files
+        uses: actions/cache@v6
+        with:
+          path: "ExtraBiomes - Java/.gradle/loom-cache"
+          key: loom-cache-${{ runner.os }}-${{ hashFiles('ExtraBiomes - Java/**/*.gradle', 'ExtraBiomes - Java/gradle.properties') }}
 
       # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
       # populated until this runs at least once. Without it, runData's forked JVM throws
@@ -185,8 +195,14 @@ jobs:
     steps:
       - *checkout
       - *jdk
-      - *gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+          # Only jobs that launch Minecraft need Loom's assets; leaving them out shrinks this job's cache restore.
+          gradle-home-cache-excludes: ${{ matrix.suite == 'unit' && 'caches/fabric-loom/assets' || '' }}
       - *gradlew
+      - *loomcache
       - name: Download generated data
         uses: actions/download-artifact@v8
         with:
@@ -544,10 +560,8 @@ jobs:
           if-no-files-found: ignore
 
   build:
-    needs: [setup, datagen, test]
-    # Still builds and uploads jars when tests failed (a jar to test by hand is most useful then);
-    # the last step then fails this job so the run stays red.
-    if: always() && needs.datagen.result == 'success'
+    # Runs beside the test stage rather than after it; the status job below gates the run on both.
+    needs: [setup, datagen]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -556,8 +570,14 @@ jobs:
     steps:
       - *checkout
       - *jdk
-      - *gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+          # Only jobs that launch Minecraft need Loom's assets; leaving them out shrinks this job's cache restore.
+          gradle-home-cache-excludes: caches/fabric-loom/assets
       - *gradlew
+      - *loomcache
       - name: Download generated data
         uses: actions/download-artifact@v8
         with:
@@ -565,8 +585,7 @@ jobs:
           path: "ExtraBiomes - Java/common/src/generated/resources"
 
       - name: Build with Gradle
-        if: always()
-        run: ./gradlew build
+        run: ./gradlew build -x test
         timeout-minutes: 15
 
       - name: Upload build artifacts
@@ -593,8 +612,13 @@ jobs:
           path: "ExtraBiomes - Java/neoforge/build/libs/*.jar"
           if-no-files-found: ignore
 
-      - name: Fail if the test stage failed
-        if: needs.test.result != 'success'
+
+  status:
+    needs: [setup, datagen, test, build]
+    if: always() && needs.setup.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check every stage passed
         run: |
-          echo "::error::Test stage result: ${{ needs.test.result }}"
-          exit 1
+          echo "datagen=${{ needs.datagen.result }} test=${{ needs.test.result }} build=${{ needs.build.result }}"
+          [ "${{ needs.datagen.result }}" = success ] && [ "${{ needs.test.result }}" = success ] && [ "${{ needs.build.result }}" = success ]
