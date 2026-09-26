@@ -37,7 +37,7 @@ loom {
             // clientData() looks up a "dataClient" template that doesn't exist at this version
             // and fails with "Could not find Forge run template with name 'dataClient'".
             data()
-            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            programArgs '--mod', mod_id, '--all', '--output', layout.buildDirectory.dir("datagen").get().asFile.absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
         }
         gameTestServer {
@@ -76,6 +76,21 @@ tasks.named("runGameTestServer") {
     dependsOn "clearGameTestWorld"
 }
 
+// runData writes to a private dir because vanilla's HashCache deletes every file under its output root it
+// didn't write itself - pointed at the shared folder, it wiped Fabric's data/c tags (issue #135). This Sync
+// merges it into the shared folder instead; preserve keeps Fabric's/Forge's own namespaces.
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runData"
+    from layout.buildDirectory.dir("datagen")
+    into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/c/**'
+        include 'data/forge/**'
+    }
+}
+
+// Not wired into :common:processResources: runData needs :common:jar, so that would be a circular dependency.
+
 // Forge/NeoForge and Fabric write divergent content into that same shared
 // common/src/generated/resources directory for some blocks (e.g. this module's ModelBuilder bakes
 // a "render_type" field into blockstate/trapdoor/door/leaves model JSON for cutout rendering;
@@ -84,8 +99,8 @@ tasks.named("runGameTestServer") {
 // folder, so testing this module after running Fabric's datagen silently reverts the cutout
 // render_type and can reintroduce black transparent pixels. Making the client/server runs always
 // regenerate this module's own datagen output first closes that gap.
-tasks.named("runClient") { dependsOn "runData" }
-tasks.named("runServer") { dependsOn "runData" }
+tasks.named("runClient") { dependsOn "mergeGeneratedData" }
+tasks.named("runServer") { dependsOn "mergeGeneratedData" }
 
 configurations {
     common

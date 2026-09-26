@@ -59,15 +59,35 @@ tasks.named("runGameTestServer") {
 
 fabricApi {
     configureDataGeneration {
-        // Same target Forge's own "data" run writes to (see forge/build.gradle) - datapack content
-        // (biomes, tags, recipes, loot tables) and resource-pack content (blockstates, models) are
-        // loader-agnostic and shouldn't be generated twice per loader or diverge between them.
-        // common's own build.gradle already wires src/generated/resources into its resources
-        // sourceSet, so nothing needs adding to *this* module's resources for it to take effect.
-        outputDirectory = project(':common').file('src/generated/resources')
+        // Private staging dir, NOT common/src/generated/resources directly - vanilla's own
+        // DataGenerator/HashCache behind "runDatagen" deletes any file under its output root it
+        // doesn't recognize as its own, with no way to scope that to just this mod's own
+        // providers (unlike Gradle's Sync task, which supports "preserve"). Pointed directly at
+        // the shared folder, that wiped NeoForge-only content (e.g.
+        // data/neoforge/tags/block/needs_wood_tool.json) every time this ran after NeoForge's own
+        // datagen - see the mergeGeneratedData task below, which merges this private output into
+        // the shared folder with an explicit preserve instead.
+        outputDirectory = layout.buildDirectory.dir("datagen").get().asFile
         addToResources = false
     }
 }
+
+// Merges runDatagen's private output into the shared common/src/generated/resources; preserve keeps NeoForge's/Forge's own files from being deleted by Sync (issue #135).
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runDatagen"
+    from layout.buildDirectory.dir("datagen")
+    into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/neoforge/**'
+        include 'data/forge/**'
+        // NeoForge's biome modifiers (data/extrabiomes/neoforge/biome_modifier) and its own c:is_* biome tags.
+        include 'data/*/neoforge/**'
+        include 'data/*/forge/**'
+        include 'data/c/**'
+    }
+}
+
+// Not wired into :common:processResources: runDatagen needs :common:jar, so that would be a circular dependency.
 
 // Forge/NeoForge and Fabric write divergent content into that same shared directory for some
 // blocks (e.g. Forge/NeoForge's ModelBuilder bakes a "render_type" field into blockstate/trapdoor/
@@ -77,11 +97,9 @@ fabricApi {
 // ran most recently "wins" the shared folder, so testing NeoForge/Forge after running Fabric's
 // datagen silently reverts their cutout render_type and can reintroduce black transparent pixels.
 // Making the client/server runs always regenerate this module's own datagen output first closes
-// that gap without needing to physically separate the output directories (which would require
-// excluding the overlap from the "common"/shadowCommon project dependencies that also bundle
-// common/src/generated/resources into this module's own jar - not attempted here).
-tasks.named("runClient") { dependsOn "runDatagen" }
-tasks.named("runServer") { dependsOn "runDatagen" }
+// that gap.
+tasks.named("runClient") { dependsOn "mergeGeneratedData" }
+tasks.named("runServer") { dependsOn "mergeGeneratedData" }
 
 configurations {
     common
