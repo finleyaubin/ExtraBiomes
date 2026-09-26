@@ -33,7 +33,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.NETHER_REDSTONE_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         stairsBlock(((StairBlock) ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
-        slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
+        slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockModel(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         blockWithItem(ModBlocks.DENSE_CLOUD);
         fluidBlock(ModBlocks.GOO.get());
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
@@ -48,9 +48,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), models().cubeAll(name(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top")));
         stairsBlock(((StairBlock) ModBlocks.BLACK_SANDSTONE_STAIRS.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
         stairsBlock(((StairBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()), texLoc("black_sandstone_top"));
-        slabBlock(((SlabBlock) ModBlocks.BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
-        slabBlock(((SlabBlock) ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
-        slabBlock(((SlabBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()), blockTexture(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.BLACK_SANDSTONE_SLAB.get()), blockModel(ModBlocks.BLACK_SANDSTONE.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get()), blockModel(ModBlocks.CUT_BLACK_SANDSTONE.get()), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
+        slabBlock(((SlabBlock) ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()), blockModel(ModBlocks.SMOOTH_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"));
         wallBlock(((WallBlock) ModBlocks.BLACK_SANDSTONE_WALL.get()), blockTexture(ModBlocks.BLACK_SANDSTONE.get()));
         // mystic wood
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
@@ -65,7 +65,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.STRIPPED_MYSTIC_LOG.get(),models().withExistingParent("extrabiomes:stripped_mystic_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.STRIPPED_MYSTIC_WOOD.get(),models().withExistingParent("extrabiomes:stripped_mystic_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.MYSTIC_STAIRS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.MYSTIC_SLAB.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.MYSTIC_SLAB.get()), blockModel(ModBlocks.MYSTIC_PLANKS.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.MYSTIC_BUTTON.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         pressurePlateBlock(((PressurePlateBlock) ModBlocks.MYSTIC_PRESSURE_PLATE.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         fenceBlock(((FenceBlock) ModBlocks.MYSTIC_FENCE.get()), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
@@ -87,7 +87,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.STRIPPED_SKY_LOG.get(),models().withExistingParent("extrabiomes:stripped_sky_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.STRIPPED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:stripped_sky_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.SKY_STAIRS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.SKY_SLAB.get()), blockTexture(ModBlocks.SKY_PLANKS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.SKY_SLAB.get()), blockModel(ModBlocks.SKY_PLANKS.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.SKY_BUTTON.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
         pressurePlateBlock(((PressurePlateBlock) ModBlocks.SKY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
         fenceBlock(((FenceBlock) ModBlocks.SKY_FENCE.get()), blockTexture(ModBlocks.SKY_PLANKS.get()));
@@ -109,7 +109,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.STRIPPED_PALM_LOG.get(),models().withExistingParent("extrabiomes:stripped_palm_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.STRIPPED_PALM_WOOD.get(),models().withExistingParent("extrabiomes:stripped_palm_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.PALM_STAIRS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.PALM_SLAB.get()), blockTexture(ModBlocks.PALM_PLANKS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.PALM_SLAB.get()), blockModel(ModBlocks.PALM_PLANKS.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.PALM_BUTTON.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
         pressurePlateBlock(((PressurePlateBlock) ModBlocks.PALM_PRESSURE_PLATE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
         fenceBlock(((FenceBlock) ModBlocks.PALM_FENCE.get()), blockTexture(ModBlocks.PALM_PLANKS.get()));
@@ -129,7 +129,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),models().withExistingParent("extrabiomes:stripped_gilded_sky_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.STRIPPED_GILDED_SKY_WOOD.get(),models().withExistingParent("extrabiomes:stripped_gilded_sky_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.GILDED_SKY_STAIRS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.GILDED_SKY_SLAB.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.GILDED_SKY_SLAB.get()), blockModel(ModBlocks.GILDED_SKY_PLANKS.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.GILDED_SKY_BUTTON.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         pressurePlateBlock(((PressurePlateBlock) ModBlocks.GILDED_SKY_PRESSURE_PLATE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         fenceBlock(((FenceBlock) ModBlocks.GILDED_SKY_FENCE.get()), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
@@ -248,6 +248,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     public ResourceLocation blockTexture(Block block) {
         return texLoc(name(block));
+    }
+
+    private ResourceLocation blockModel(Block block) {
+        return modLoc("block/" + name(block));
     }
 
     private ResourceLocation texLoc(String stem) {
