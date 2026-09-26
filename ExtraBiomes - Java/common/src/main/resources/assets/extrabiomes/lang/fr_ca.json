@@ -30,6 +30,7 @@
   "block.extrabiomes.goo": "Gélatine",
   "block.extrabiomes.air_block": "Air",
   "block.extrabiomes.grass_stone": "Pierre Herbeuse",
+  "item.extrabiomes.grass_stone": "Pierre Herbeuse",
   "block.extrabiomes.dense_cloud": "Nuage Dense Dense",
   "block.extrabiomes.dense_cloud_brick": "Nuage Dense Brique de Nuage Dense Dense",
   "block.extrabiomes.dense_cloud_brick_slab": "Nuage Dense Brique de Nuage Dense Dalle Dense",
