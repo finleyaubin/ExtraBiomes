@@ -11,6 +11,7 @@
 - The Netherlands underground now has patches of basalt and blackstone, plus basalt pillars hanging from cave ceilings.
 - Fixed grass generating on cave floors in The Netherlands, and dirt on its ocean floors (now netherrack, matching Bedrock).
 - Netherlands ores now generate all the way down to bedrock instead of stopping around y=0.
+- Fixed grass generating on cave floors under Jellyfish Fields.
 
 ## Items
 <img width="100%" alt="New Spawn Eggs" src="https://github.com/user-attachments/assets/4fdd19cd-5ef6-4c2e-8634-d5ee4591d886" />
