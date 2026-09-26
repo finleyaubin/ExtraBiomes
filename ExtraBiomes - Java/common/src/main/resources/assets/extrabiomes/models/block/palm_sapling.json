@@ -4,8 +4,8 @@
 	"ambientocclusion": false,
 	"render_type": "cutout",
 	"textures": {
-		"particle": "extrabiomes:block/palm_sapling",
-		"leaves": "extrabiomes:block/palm_sapling"
+		"particle": "extrabiomes:block/wood/palm/palm_sapling",
+		"leaves": "extrabiomes:block/wood/palm/palm_sapling"
 	},
 	"elements": [
 		{

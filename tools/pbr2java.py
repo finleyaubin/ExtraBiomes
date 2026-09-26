@@ -8,7 +8,7 @@ Requires Pillow + numpy (pip install pillow numpy). Run with any python3:
     python3 tools/pbr2java.py black_sandstone_top     # convert one texture (test case)
     python3 tools/pbr2java.py --all                   # convert every matched texture
 
-Output: for a matched Java texture assets/extrabiomes/textures/block/<name>.png, writes
+Output: for a matched Java texture assets/extrabiomes/textures/block/**/<name>.png, writes
 <name>_n.png (LabPBR normal+AO+height) and <name>_s.png (LabPBR specular) next to it.
 
 --- Bedrock source format (from *.texture_set.json) ---
@@ -117,6 +117,13 @@ def load_bedrock_set(json_path):
     }
 
 
+def java_dir_for(java_base):
+    for root, _, files in os.walk(JAVA_BLOCKS):
+        if java_base + ".png" in files:
+            return root
+    return JAVA_BLOCKS
+
+
 def java_name_for(bedrock_base):
     if bedrock_base in NAME_ALIASES:
         return NAME_ALIASES[bedrock_base]
@@ -129,7 +136,7 @@ def match_all():
     for jp in find_texture_set_jsons():
         s = load_bedrock_set(jp)
         java_base = java_name_for(s["base"])
-        java_png = os.path.join(JAVA_BLOCKS, java_base + ".png")
+        java_png = os.path.join(java_dir_for(java_base), java_base + ".png")
         if os.path.isfile(java_png):
             matched[java_base] = s
         else:
@@ -206,8 +213,9 @@ def convert_one(java_base, bset, dry_run=False):
     spec = build_specular(java_base, metalness, emissive, roughness, subsurface, bset["has_subsurface"])
     norm = build_normal(bset["height_path"], roughness.shape)
 
-    s_path = os.path.join(JAVA_BLOCKS, java_base + "_s.png")
-    n_path = os.path.join(JAVA_BLOCKS, java_base + "_n.png")
+    out_dir = java_dir_for(java_base)
+    s_path = os.path.join(out_dir, java_base + "_s.png")
+    n_path = os.path.join(out_dir, java_base + "_n.png")
     print(f"  {java_base}: mer={os.path.basename(bset['mer_path'])} "
           f"height={os.path.basename(bset['height_path']) if bset['height_path'] else '(none, flat)'} "
           f"-> {os.path.basename(s_path)}, {os.path.basename(n_path)}")
