@@ -38,6 +38,7 @@ jobs:
       forge: ${{ steps.platforms.outputs.forge }}
       fabric: ${{ steps.platforms.outputs.fabric }}
       neoforge: ${{ steps.platforms.outputs.neoforge }}
+      suites: ${{ steps.suites.outputs.list }}
     steps:
       - uses: actions/checkout@v7
 
@@ -57,6 +58,10 @@ jobs:
               echo "$p=false" >> "$GITHUB_OUTPUT"
             fi
           done
+
+      - name: List test suites
+        id: suites
+        run: echo "list=$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2 | tr ',' '\n' | jq -R . | jq -sc '["unit"] + .')" >> "$GITHUB_OUTPUT"
 
   datagen:
     needs: setup
@@ -83,6 +88,10 @@ jobs:
       - &gradle
         name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
+        with:
+          # The default only saves from the default branch (main), which rarely builds, so each job here
+          # started cold and re-downloaded Loom's Minecraft assets.
+          cache-read-only: false
 
       - &gradlew
         name: Grant execute permission for gradlew
@@ -162,6 +171,11 @@ jobs:
 
   test:
     needs: [setup, datagen]
+    name: test (${{ matrix.suite }})
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: ${{ fromJSON(needs.setup.outputs.suites) }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -212,7 +226,7 @@ jobs:
       # FabricConfig.load()) to a real, non-degenerate climate parameter box per biome; it is not a
       # registration/weight bug, just genuine placement rarity at this specific seed.
       - name: Accept Minecraft EULA for the local test server
-        if: needs.setup.outputs.forge == 'true'
+        if: matrix.suite == 'forge'
         run: |
           mkdir -p forge/run
           echo "eula=true" > forge/run/eula.txt
@@ -225,7 +239,7 @@ jobs:
       # forever instead of failing, eating the whole job's time budget (see the 2026-08-19 CI run
       # that hit the 6-hour ceiling on this exact step for the failure mode this step prevents).
       - name: Download Loom assets
-        if: needs.setup.outputs.forge == 'true'
+        if: matrix.suite == 'forge'
         run: ./gradlew :forge:downloadAssets
         timeout-minutes: 10
 
@@ -267,7 +281,7 @@ jobs:
       # max-tick-time ceiling. The other 6 tests are cheap structural/registry checks - a much
       # shorter per-boot timeout is generous headroom for CI-runner variance in boot time alone.
       - name: Run GameTests
-        if: needs.setup.outputs.forge == 'true'
+        if: matrix.suite == 'forge'
         run: |
           # Discovered from the actual @GameTest methods instead of hand-maintained, so adding or
           # removing a test can't silently drop out of CI coverage the way a hardcoded list could -
@@ -330,7 +344,7 @@ jobs:
         shell: bash
 
       - name: Upload GameTest log
-        if: always() && needs.setup.outputs.forge == 'true'
+        if: always() && matrix.suite == 'forge'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-forge-gametest-log
@@ -339,14 +353,14 @@ jobs:
 
       # Same level-seed/max-tick-time reasoning as the Forge EULA step above, in NeoForge's own run dir.
       - name: Accept Minecraft EULA for the NeoForge test server
-        if: needs.setup.outputs.neoforge == 'true'
+        if: matrix.suite == 'neoforge'
         run: |
           mkdir -p neoforge/run
           echo "eula=true" > neoforge/run/eula.txt
           printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\npause-when-empty-seconds=-1\n' > neoforge/run/server.properties
 
       - name: Download NeoForge Loom assets
-        if: needs.setup.outputs.neoforge == 'true'
+        if: matrix.suite == 'neoforge'
         run: ./gradlew :neoforge:downloadAssets
         timeout-minutes: 10
 
@@ -364,7 +378,7 @@ jobs:
       # sleeping a fixed duration before sending `stop`, since the slow biome-generation test's
       # runtime varies with CI-runner load.
       - name: Run NeoForge GameTests
-        if: needs.setup.outputs.neoforge == 'true'
+        if: matrix.suite == 'neoforge'
         run: |
           mkfifo neoforge-gametest.fifo
           : > neoforge-gametest.log
@@ -472,7 +486,7 @@ jobs:
         shell: bash
 
       - name: Upload NeoForge GameTest log
-        if: always() && needs.setup.outputs.neoforge == 'true'
+        if: always() && matrix.suite == 'neoforge'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-neoforge-gametest-log
@@ -484,8 +498,14 @@ jobs:
       # deterministic biome search, and its BiomeGenerationGameTests (fabric/.../gametest) walks
       # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as Forge's, so it
       # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it mid-sweep.
+      # Its own job now, so it can't lean on NeoForge's downloadAssets having filled Loom's asset cache.
+      - name: Download Fabric Loom assets
+        if: matrix.suite == 'fabric'
+        run: ./gradlew :fabric:downloadAssets
+        timeout-minutes: 10
+
       - name: Pin seed for the Fabric test server
-        if: needs.setup.outputs.fabric == 'true'
+        if: matrix.suite == 'fabric'
         run: |
           mkdir -p fabric/run
           printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > fabric/run/server.properties
@@ -497,12 +517,12 @@ jobs:
       # 30-40s, but the FLOOR-depth ones can each individually approach the 1000s max-tick-time
       # ceiling above.
       - name: Run Fabric GameTests
-        if: needs.setup.outputs.fabric == 'true'
+        if: matrix.suite == 'fabric'
         run: timeout 3000 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
         shell: bash
 
       - name: Upload Fabric GameTest log
-        if: always() && needs.setup.outputs.fabric == 'true'
+        if: always() && matrix.suite == 'fabric'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-fabric-gametest-log
@@ -510,12 +530,13 @@ jobs:
           if-no-files-found: ignore
 
       - name: Run unit tests
+        if: matrix.suite == 'unit'
         run: ./gradlew :common:test
         continue-on-error: true
         timeout-minutes: 10
 
       - name: Upload test report
-        if: always()
+        if: always() && matrix.suite == 'unit'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-common-test-report
