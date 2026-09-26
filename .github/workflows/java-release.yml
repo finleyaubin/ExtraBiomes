@@ -335,7 +335,10 @@ jobs:
         run: |
           pip install --quiet pillow
           python3 ../tools/render_slides.py /tmp/changelog.md \
-            --version "${{ needs.prepare.outputs.VERSION }}" --edition Java --out /tmp/slides
+            --version "${{ needs.prepare.outputs.VERSION }}" --edition Java --out /tmp/slides \
+            --link "modrinth.com/mod/extrabiome/versions" \
+            --link "curseforge.com/minecraft/mc-mods/extrabiomes/files" \
+            --link "github.com/$GITHUB_REPOSITORY/releases/tag/${{ needs.prepare.outputs.RELEASE_TAG }}"
 
       # Meta cURLs image_url from its own servers, so each slide has to be public at publish time.
       # Release assets are the wrong host for it: releases/download/... answers with a 302 to a

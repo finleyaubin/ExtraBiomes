@@ -25,6 +25,8 @@ THEMES = {
 }
 THEME = THEMES["glacier"]
 EDITION = "Java"
+LINKS = []
+LINK_STEP = 40
 
 BAND_H = round((W - 2 * MARGIN) * 9 / 16)  # changelog screenshots are always 16:9
 LOGO = Path(__file__).parent / "title.png"
@@ -121,13 +123,31 @@ def background():
     return image
 
 
+def links_height():
+    return len(LINKS) * LINK_STEP
+
+
+def fitted(draw, text, largest, smallest):
+    return next((font("regular", size) for size in range(largest, smallest - 1, -2)
+                 if draw.textlength(text, font=font("regular", size)) <= W - 2 * MARGIN),
+                font("regular", smallest))
+
+
+def draw_links(draw, top):
+    # Stories posted through the API can't carry link stickers, so the release pages are printed.
+    for offset, link in enumerate(LINKS):
+        draw.text((MARGIN, top + offset * LINK_STEP), link, font=fitted(draw, link, 30, 20), fill=THEME["accent"])
+
+
 def chrome(image, version, footer):
     """The section name is the headline on its own slide, so brand, version and edition sit
     quietly in the footer instead of competing with it from the top of every slide."""
     draw = ImageDraw.Draw(image)
-    draw.text((MARGIN, H - 190), f"ExtraBiomes {version} · {EDITION} Edition",
+    top = H - 190 - links_height()
+    draw.text((MARGIN, top), f"ExtraBiomes {version} · {EDITION} Edition",
               font=font("bold", 32), fill=THEME["accent"])
-    draw.text((MARGIN, H - 144), footer, font=font("regular", 32), fill=THEME["muted"])
+    draw.text((MARGIN, top + 46), footer, font=font("regular", 32), fill=THEME["muted"])
+    draw_links(draw, top + 96)
     return draw
 
 
@@ -155,13 +175,14 @@ def cover_slide(sections, version, footer):
     # left, so a longer version or edition string can't push either off the slide.
     entry_font = font("regular", 46)
     lines = [heading for heading, _ in sections]
-    contents_top = H - 300 - len(lines) * 64
+    contents_top = H - 300 - links_height() - len(lines) * 64
     hero = next((fetch(url) for _, entries in sections for kind, url in entries if kind == "image"), None)
     if hero is not None:
         paste_image(image, hero, y + 110 + (contents_top - y - 170 - BAND_H) // 2)
     for offset, line in enumerate(lines):
         draw.text((MARGIN, contents_top + offset * 64), line, font=entry_font, fill=THEME["muted"])
-    draw.text((MARGIN, H - 190), footer, font=font("regular", 34), fill=THEME["muted"])
+    draw.text((MARGIN, H - 190 - links_height()), footer, font=font("regular", 34), fill=THEME["muted"])
+    draw_links(draw, H - 140 - links_height())
     return image
 
 
@@ -184,7 +205,7 @@ def section_slides(heading, entries, version, footer):
         required = needed
         if kind == "sub" and index + 1 < len(entries):
             required += BAND_H + 48 if entries[index + 1][0] == "image" else 120
-        if image is None or y + required > BODY_BOTTOM:
+        if image is None or y + required > BODY_BOTTOM - links_height():
             image = background()
             draw = chrome(image, version, footer)
             draw.text((MARGIN, BODY_TOP - 190), heading, font=heading_font, fill=THEME["ink"])
@@ -240,6 +261,8 @@ def selftest():
         ["https://e/a.png", "https://e/b.png"]
     draw = ImageDraw.Draw(Image.new("RGB", (1, 1)))
     assert len(wrap(draw, "word " * 60, font("regular", 44), 500)) > 1
+    long_link = "github.com/finleyaubin/ExtraBiomes/releases/tag/Java-v3.10.0-beta-8"
+    assert draw.textlength(long_link, font=fitted(draw, long_link, 30, 20)) <= W - 2 * MARGIN
     print("ok")
 
 
@@ -252,12 +275,15 @@ def main():
     parser.add_argument("--theme", choices=sorted(THEMES), default="glacier")
     parser.add_argument("--edition", choices=["Java", "Bedrock"],
                         help="defaults to the changelog filename's prefix")
+    parser.add_argument("--link", action="append", default=[],
+                        help="release page URL printed at the foot of every slide (repeatable)")
     parser.add_argument("--selftest", action="store_true")
     args = parser.parse_args()
     if args.selftest:
         return selftest()
-    global THEME, EDITION
+    global THEME, EDITION, LINKS
     THEME = THEMES[args.theme]
+    LINKS = args.link
     prefix = args.changelog.name.split("-")[0] if args.changelog else ""
     EDITION = args.edition or (prefix if prefix in ("Java", "Bedrock") else "Java")
     if not args.changelog:
