@@ -149,7 +149,7 @@ jobs:
       # gradle-build.yml).
       - name: Generate Fabric data
         if: needs.prepare.outputs.fabric == 'true'
-        run: ./gradlew :fabric:runDatagen
+        run: ./gradlew :fabric:mergeGeneratedData
         timeout-minutes: 10
 
 

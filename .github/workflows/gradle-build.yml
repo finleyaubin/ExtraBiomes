@@ -145,7 +145,7 @@ jobs:
       # needs this data present too, same as :common:test does.
       - name: Generate Fabric data
         if: needs.setup.outputs.fabric == 'true'
-        run: ./gradlew :fabric:runDatagen
+        run: ./gradlew :fabric:mergeGeneratedData
         timeout-minutes: 10
 
       - name: Verify shared generated data exists
