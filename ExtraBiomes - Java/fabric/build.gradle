@@ -83,6 +83,10 @@ tasks.register("mergeGeneratedData", Sync) {
     preserve {
         include 'data/neoforge/**'
         include 'data/forge/**'
+        // NeoForge's biome modifiers (data/extrabiomes/neoforge/biome_modifier) and its own c:is_* biome tags.
+        include 'data/*/neoforge/**'
+        include 'data/*/forge/**'
+        include 'data/c/**'
     }
 }
 
