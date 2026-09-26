@@ -9,14 +9,25 @@ on:
 permissions:
   contents: write
 
+# Stages: prepare -> build -> publish (GitHub release + one job per loader) -> announce.
 jobs:
-  build-and-publish:
+  prepare:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: "ExtraBiomes - Java"
+    outputs:
+      VERSION: ${{ steps.version.outputs.VERSION }}
+      MC_VERSION: ${{ steps.version.outputs.MC_VERSION }}
+      RELEASE_TAG: ${{ steps.version.outputs.RELEASE_TAG }}
+      IS_PRERELEASE: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
+      forge: ${{ steps.platforms.outputs.forge }}
+      fabric: ${{ steps.platforms.outputs.fabric }}
+      neoforge: ${{ steps.platforms.outputs.neoforge }}
+      EXISTS: ${{ steps.existing.outputs.EXISTS }}
     steps:
       - uses: actions/checkout@v7
+
 
       # Read the version straight from gradle.properties (the same source of truth the
       # build itself uses) rather than parsing it out of the tag name. The release tag has
@@ -39,10 +50,12 @@ jobs:
           # */build.gradle archiveFileName) jars to it instead of creating a duplicate.
           echo "RELEASE_TAG=Java-v${VERSION}" >> $GITHUB_OUTPUT
 
+
       - name: Detect prerelease tag
         id: prerelease
         run: |
           echo "IS_PRERELEASE=${{ contains(github.ref_name, '-beta') || contains(github.ref_name, '-alpha') }}" >> $GITHUB_OUTPUT
+
 
       - name: Load changelog
         id: changelog
@@ -55,21 +68,6 @@ jobs:
             exit 1
           fi
 
-      # Loom's toolchain compiles for 17, but the Gradle daemon itself needs 21 to run
-      # (a loom dependency requires JVM runtime 21+) - same reasoning as gradle-build.yml.
-      - name: Set up JDKs
-        uses: actions/setup-java@v5
-        with:
-          java-version: |
-            17
-            21
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
 
       # Single source of truth for which loaders this branch ships (gradle.properties'
       # enabled_platforms) - which datagen/publish steps below run follows this instead of the
@@ -86,68 +84,6 @@ jobs:
             fi
           done
 
-      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
-      # populated until this runs at least once - see gradle-build.yml's identical step.
-      - name: Download Loom assets
-        if: steps.platforms.outputs.forge == 'true'
-        run: ./gradlew :forge:downloadAssets
-        timeout-minutes: 10
-
-      # ./gradlew build runs :common:test, and BiomeRegistrationParityTest reads generated
-      # biome JSON from src/generated/resources/ - without running runData first, those files
-      # don't exist yet and every case in that test fails with NoSuchFileException. Mirrors
-      # the same steps gradle-build.yml runs before its own build - Forge is preferred when
-      # enabled, with NeoForge/Fabric as fallbacks that write to the same shared
-      # common/src/generated/resources/, since only one loader needs to generate it.
-      - name: Generate data
-        if: steps.platforms.outputs.forge == 'true'
-        run: ./gradlew :forge:runData
-        timeout-minutes: 10
-
-      - name: Download NeoForge Loom assets
-        if: steps.platforms.outputs.neoforge == 'true' && steps.platforms.outputs.forge == 'false'
-        run: ./gradlew :neoforge:downloadAssets
-        timeout-minutes: 10
-
-      - name: Generate NeoForge data
-        if: steps.platforms.outputs.neoforge == 'true' && steps.platforms.outputs.forge == 'false'
-        run: ./gradlew :neoforge:runData
-        timeout-minutes: 10
-
-      # Always run when Fabric is enabled, not just when it's the sole loader - Fabric's own
-      # ModBiomeTagProvider is the only one that writes Fabric's convention tags (c:mushroom,
-      # c:swamp, ...), so skipping this whenever another loader is also enabled silently shipped
-      # released Fabric jars without those tags populated at all (see the matching fix/comment in
-      # gradle-build.yml).
-      - name: Generate Fabric data
-        if: steps.platforms.outputs.fabric == 'true'
-        run: ./gradlew :fabric:runDatagen
-        timeout-minutes: 10
-
-      # mod_version in gradle.properties should already match the tag before tagging a
-      # release - this doesn't derive the jar version from the tag, it just builds whatever
-      # gradle.properties currently says. Which loaders actually get built follows
-      # settings.gradle's `include(...)` list, which should be kept in sync with
-      # enabled_platforms (see gradle.properties).
-      - name: Build mod jars
-        run: ./gradlew build
-        timeout-minutes: 20
-
-      # Composed dynamically rather than a hardcoded three-line list, so a disabled loader's
-      # glob (which would never match a built jar) doesn't need special-casing here.
-      - name: Compose release artifact list
-        id: artifacts
-        # GitHub Actions runs `run:` steps under `bash -e`, but a `cond && echo` whose `cond`
-        # fails is exempted from triggering it (bash only checks the command following the final
-        # `&&`) - a disabled loader's skipped line is safe here, not a step failure.
-        run: |
-          {
-            echo "list<<RELEASE_FILES_EOF"
-            [ "${{ steps.platforms.outputs.forge }}" = "true" ] && echo "ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar"
-            [ "${{ steps.platforms.outputs.fabric }}" = "true" ] && echo "ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar"
-            [ "${{ steps.platforms.outputs.neoforge }}" = "true" ] && echo "ExtraBiomes - Java/neoforge/build/libs/ExtraBiomes-neoforge-v*.jar"
-            echo "RELEASE_FILES_EOF"
-          } >> "$GITHUB_OUTPUT"
 
       # A mod_version gets tagged once per Minecraft version (Java-v3.10.0-beta-5+mc1.20.6,
       # +mc1.21.1, ...) and every one of those runs reuses the same RELEASE_TAG release. Whether
@@ -164,17 +100,182 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+
+      # Loom's toolchain compiles for 17, but the Gradle daemon itself needs 21 to run
+      # (a loom dependency requires JVM runtime 21+) - same reasoning as gradle-build.yml.
+      - name: Set up JDKs
+        uses: actions/setup-java@v5
+        with:
+          java-version: |
+            17
+            21
+          distribution: 'temurin'
+
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+
+      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
+      # populated until this runs at least once - see gradle-build.yml's identical step.
+      - name: Download Loom assets
+        if: needs.prepare.outputs.forge == 'true'
+        run: ./gradlew :forge:downloadAssets
+        timeout-minutes: 10
+
+
+      # ./gradlew build runs :common:test, and BiomeRegistrationParityTest reads generated
+      # biome JSON from src/generated/resources/ - without running runData first, those files
+      # don't exist yet and every case in that test fails with NoSuchFileException. Mirrors
+      # the same steps gradle-build.yml runs before its own build - Forge is preferred when
+      # enabled, with NeoForge/Fabric as fallbacks that write to the same shared
+      # common/src/generated/resources/, since only one loader needs to generate it.
+      - name: Generate data
+        if: needs.prepare.outputs.forge == 'true'
+        run: ./gradlew :forge:runData
+        timeout-minutes: 10
+
+
+      - name: Download NeoForge Loom assets
+        if: needs.prepare.outputs.neoforge == 'true' && needs.prepare.outputs.forge == 'false'
+        run: ./gradlew :neoforge:downloadAssets
+        timeout-minutes: 10
+
+
+      - name: Generate NeoForge data
+        if: needs.prepare.outputs.neoforge == 'true' && needs.prepare.outputs.forge == 'false'
+        run: ./gradlew :neoforge:runData
+        timeout-minutes: 10
+
+
+      # Always run when Fabric is enabled, not just when it's the sole loader - Fabric's own
+      # ModBiomeTagProvider is the only one that writes Fabric's convention tags (c:mushroom,
+      # c:swamp, ...), so skipping this whenever another loader is also enabled silently shipped
+      # released Fabric jars without those tags populated at all (see the matching fix/comment in
+      # gradle-build.yml).
+      - name: Generate Fabric data
+        if: needs.prepare.outputs.fabric == 'true'
+        run: ./gradlew :fabric:runDatagen
+        timeout-minutes: 10
+
+
+      # mod_version in gradle.properties should already match the tag before tagging a
+      # release - this doesn't derive the jar version from the tag, it just builds whatever
+      # gradle.properties currently says. Which loaders actually get built follows
+      # settings.gradle's `include(...)` list, which should be kept in sync with
+      # enabled_platforms (see gradle.properties).
+      - name: Build mod jars
+        run: ./gradlew build
+        timeout-minutes: 20
+
+      - name: Upload release jars
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-release-jars
+          path: |
+            ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
+            ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
+            ExtraBiomes - Java/neoforge/build/libs/ExtraBiomes-neoforge-v*.jar
+          if-no-files-found: error
+
+  github-release:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="../Changelogs/Java-v${{ needs.prepare.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::error::No changelog file found at $FILE - add it before tagging a release"
+            exit 1
+          fi
+
+      - name: Download release jars
+        uses: actions/download-artifact@v8
+        with:
+          name: extrabiomes-release-jars
+          path: "ExtraBiomes - Java"
+
+
+      # Composed dynamically rather than a hardcoded three-line list, so a disabled loader's
+      # glob (which would never match a built jar) doesn't need special-casing here.
+      - name: Compose release artifact list
+        id: artifacts
+        # GitHub Actions runs `run:` steps under `bash -e`, but a `cond && echo` whose `cond`
+        # fails is exempted from triggering it (bash only checks the command following the final
+        # `&&`) - a disabled loader's skipped line is safe here, not a step failure.
+        run: |
+          {
+            echo "list<<RELEASE_FILES_EOF"
+            [ "${{ needs.prepare.outputs.forge }}" = "true" ] && echo "ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar"
+            [ "${{ needs.prepare.outputs.fabric }}" = "true" ] && echo "ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar"
+            [ "${{ needs.prepare.outputs.neoforge }}" = "true" ] && echo "ExtraBiomes - Java/neoforge/build/libs/ExtraBiomes-neoforge-v*.jar"
+            echo "RELEASE_FILES_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.RELEASE_TAG }}
-          name: ${{ steps.version.outputs.RELEASE_TAG }}
+          tag_name: ${{ needs.prepare.outputs.RELEASE_TAG }}
+          name: ${{ needs.prepare.outputs.RELEASE_TAG }}
           files: ${{ steps.artifacts.outputs.list }}
           body_path: /tmp/changelog.md
           draft: false
-          prerelease: ${{ steps.prerelease.outputs.IS_PRERELEASE }}
+          prerelease: ${{ needs.prepare.outputs.IS_PRERELEASE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-forge:
+    needs: [prepare, build]
+    if: needs.prepare.outputs.forge == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="../Changelogs/Java-v${{ needs.prepare.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::error::No changelog file found at $FILE - add it before tagging a release"
+            exit 1
+          fi
+
+      - name: Download release jars
+        uses: actions/download-artifact@v8
+        with:
+          name: extrabiomes-release-jars
+          path: "ExtraBiomes - Java"
+
 
       # One mc-publish step per loader rather than a single glob across both build/libs
       # dirs - each has its own `loaders:` value, and splitting keeps a failure on one loader
@@ -186,7 +287,7 @@ jobs:
       # modrinth.com/settings/pats with the "Create versions" scope on that project). GitHub
       # release publishing is left to the softprops step above, so no github-token is passed here.
       - name: Publish Forge jar
-        if: steps.platforms.outputs.forge == 'true'
+        if: needs.prepare.outputs.forge == 'true'
         uses: Kira-NT/mc-publish@v3
         with:
           modrinth-id: extrabiome
@@ -195,9 +296,9 @@ jobs:
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ExtraBiomes - Java/forge/build/libs/ExtraBiomes-forge-v*.jar
           name: ${{ github.ref_name }}
-          version: ${{ steps.version.outputs.VERSION }}
+          version: ${{ needs.prepare.outputs.VERSION }}
           loaders: forge
-          game-versions: ${{ steps.version.outputs.MC_VERSION }}
+          game-versions: ${{ needs.prepare.outputs.MC_VERSION }}
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
           dependencies: |
@@ -206,8 +307,37 @@ jobs:
             architectury-api(required){modrinth:architectury-api}{curseforge:419699}
             create(optional){modrinth:create}{curseforge:328085}
 
+  publish-fabric:
+    needs: [prepare, build]
+    if: needs.prepare.outputs.fabric == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="../Changelogs/Java-v${{ needs.prepare.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::error::No changelog file found at $FILE - add it before tagging a release"
+            exit 1
+          fi
+
+      - name: Download release jars
+        uses: actions/download-artifact@v8
+        with:
+          name: extrabiomes-release-jars
+          path: "ExtraBiomes - Java"
+
+
       - name: Publish Fabric jar
-        if: steps.platforms.outputs.fabric == 'true'
+        if: needs.prepare.outputs.fabric == 'true'
         uses: Kira-NT/mc-publish@v3
         with:
           modrinth-id: extrabiome
@@ -216,9 +346,9 @@ jobs:
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ExtraBiomes - Java/fabric/build/libs/ExtraBiomes-fabric-v*.jar
           name: ${{ github.ref_name }}
-          version: ${{ steps.version.outputs.VERSION }}
+          version: ${{ needs.prepare.outputs.VERSION }}
           loaders: fabric
-          game-versions: ${{ steps.version.outputs.MC_VERSION }}
+          game-versions: ${{ needs.prepare.outputs.MC_VERSION }}
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
           dependencies: |
@@ -228,8 +358,37 @@ jobs:
             fabric-api(required){modrinth:fabric-api}{curseforge:306612}
             create-fabric(optional){modrinth:create-fabric}{curseforge:624165}
 
+  publish-neoforge:
+    needs: [prepare, build]
+    if: needs.prepare.outputs.neoforge == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="../Changelogs/Java-v${{ needs.prepare.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::error::No changelog file found at $FILE - add it before tagging a release"
+            exit 1
+          fi
+
+      - name: Download release jars
+        uses: actions/download-artifact@v8
+        with:
+          name: extrabiomes-release-jars
+          path: "ExtraBiomes - Java"
+
+
       - name: Publish NeoForge jar
-        if: steps.platforms.outputs.neoforge == 'true'
+        if: needs.prepare.outputs.neoforge == 'true'
         uses: Kira-NT/mc-publish@v3
         with:
           modrinth-id: extrabiome
@@ -238,9 +397,9 @@ jobs:
           curseforge-token: ${{ secrets.CF_API_TOKEN }}
           files: ExtraBiomes - Java/neoforge/build/libs/ExtraBiomes-neoforge-v*.jar
           name: ${{ github.ref_name }}
-          version: ${{ steps.version.outputs.VERSION }}
+          version: ${{ needs.prepare.outputs.VERSION }}
           loaders: neoforge
-          game-versions: ${{ steps.version.outputs.MC_VERSION }}
+          game-versions: ${{ needs.prepare.outputs.MC_VERSION }}
           version-type: ${{ contains(github.ref_name, '-beta') && 'beta' || contains(github.ref_name, '-alpha') && 'alpha' || 'release' }}
           changelog-file: /tmp/changelog.md
           dependencies: |
@@ -249,17 +408,41 @@ jobs:
             architectury-api(required){modrinth:architectury-api}{curseforge:419699}
             create(optional){modrinth:create}{curseforge:328085}
 
+  announce:
+    needs: [prepare, github-release, publish-forge, publish-fabric, publish-neoforge]
+    # A loader this branch doesn't ship skips its publish job; that mustn't block the announcement.
+    if: ${{ !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+
+
+      - name: Load changelog
+        id: changelog
+        run: |
+          FILE="../Changelogs/Java-v${{ needs.prepare.outputs.VERSION }}.md"
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/changelog.md
+          else
+            echo "::error::No changelog file found at $FILE - add it before tagging a release"
+            exit 1
+          fi
+
+
       # Skipped silently when DISCORD_WEBHOOK isn't set, so forks and the initial rollout don't
       # fail the release. The changelog's <img> tags render as literal text in an embed, so they
       # are stripped and the first screenshot becomes the embed's image instead. Discord caps an
       # embed description at 4096 chars; iconv -c drops the partial multi-byte char head -c can
       # leave behind, which would otherwise break jq.
       - name: Announce on Discord
-        if: steps.existing.outputs.EXISTS == 'false'
+        if: needs.prepare.outputs.EXISTS == 'false'
         env:
           WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          TAG: ${{ steps.version.outputs.RELEASE_TAG }}
-          COLOR: ${{ steps.prerelease.outputs.IS_PRERELEASE == 'true' && '16098851' || '3066993' }}
+          TAG: ${{ needs.prepare.outputs.RELEASE_TAG }}
+          COLOR: ${{ needs.prepare.outputs.IS_PRERELEASE == 'true' && '16098851' || '3066993' }}
         run: |
           [ -n "$WEBHOOK" ] || exit 0
           BODY=$(sed 's/<[^>]*>//g' /tmp/changelog.md | head -c 4000 | iconv -f utf-8 -t utf-8 -c)
@@ -270,14 +453,19 @@ jobs:
                       + (if $i == "" then {} else {image:{url:$i}} end)]}' \
             | curl -sSf -X POST -H 'Content-Type: application/json' -d @- "$WEBHOOK"
 
+
       - name: Render story slides
-        if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
+        if: needs.prepare.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
         env:
           IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
         run: |
           pip install --quiet pillow
           python3 ../tools/render_slides.py /tmp/changelog.md \
-            --version "${{ steps.version.outputs.VERSION }}" --edition Java --out /tmp/slides
+            --version "${{ needs.prepare.outputs.VERSION }}" --edition Java --out /tmp/slides \
+            --link "Modrinth=modrinth.com/mod/extrabiome/versions" \
+            --link "CurseForge=curseforge.com/minecraft/mc-mods/extrabiomes/files" \
+            --link "GitHub release=github.com/$GITHUB_REPOSITORY/releases/tag/${{ needs.prepare.outputs.RELEASE_TAG }}"
+
 
       # Meta cURLs image_url from its own servers, so each slide has to be public at publish time.
       # Release assets are the wrong host for it: releases/download/... answers with a 302 to a
@@ -290,30 +478,31 @@ jobs:
       # media branch if that growth starts to matter.
       - name: Commit slides for a stable public URL
         id: slides
-        if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
+        if: needs.prepare.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
         working-directory: .
         env:
           IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
         run: |
-          DIR="media-slides/${{ steps.version.outputs.VERSION }}"
+          DIR="media-slides/${{ needs.prepare.outputs.VERSION }}"
           mkdir -p "$DIR"
           cp /tmp/slides/*.jpg "$DIR/"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$DIR"
-          git commit -qm "Story slides for ${{ steps.version.outputs.RELEASE_TAG }}" || echo "no slide changes"
+          git commit -qm "Story slides for ${{ needs.prepare.outputs.RELEASE_TAG }}" || echo "no slide changes"
           git push -q origin "HEAD:$GITHUB_REF_NAME"
           # Pinned to the SHA, not the branch: raw.githubusercontent caches per ref and a branch
           # URL can still answer 404 for a short while after the push.
           echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           echo "DIR=$DIR" >> $GITHUB_OUTPUT
 
+
       - name: Post Instagram stories
-        if: steps.existing.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
+        if: needs.prepare.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
         env:
           IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
           IG_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
-          TAG: ${{ steps.version.outputs.RELEASE_TAG }}
+          TAG: ${{ needs.prepare.outputs.RELEASE_TAG }}
         run: |
           API="https://graph.instagram.com/v25.0"
           RAW="https://raw.githubusercontent.com/$GITHUB_REPOSITORY/${{ steps.slides.outputs.SHA }}/${{ steps.slides.outputs.DIR }}"
