@@ -127,7 +127,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
         }
 
         // Skip rather than let the world silently drop everything above the build limit (e.g. the 150-tall snow spire on high ground).
-        if (structureBox.maxY() > level.getMaxY()) {
+        if (structureBox.maxY() >= level.getMaxBuildHeight()) {
             return false;
         }
 
