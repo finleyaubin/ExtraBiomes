@@ -59,13 +59,22 @@ tasks.named("runGameTestServer") {
 
 fabricApi {
     configureDataGeneration {
-        // Same target Forge's own "data" run writes to (see forge/build.gradle) - datapack content
-        // (biomes, tags, recipes, loot tables) and resource-pack content (blockstates, models) are
-        // loader-agnostic and shouldn't be generated twice per loader or diverge between them.
-        // common's own build.gradle already wires src/generated/resources into its resources
-        // sourceSet, so nothing needs adding to *this* module's resources for it to take effect.
-        outputDirectory = project(':common').file('src/generated/resources')
+        // Private staging dir: vanilla's HashCache deletes every file under its output it didn't write, so pointing it at the shared folder wiped the other loaders' data (#135).
+        outputDirectory = layout.buildDirectory.dir("datagen").get().asFile
         addToResources = false
+    }
+}
+
+// Merges runDatagen's output into the shared common/src/generated/resources without deleting the Forge/NeoForge-only namespaces.
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runDatagen"
+    from layout.buildDirectory.dir("datagen")
+    into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/forge/**'
+        include 'data/neoforge/**'
+        include 'data/extrabiomes/forge/**'
+        include 'data/extrabiomes/neoforge/**'
     }
 }
 

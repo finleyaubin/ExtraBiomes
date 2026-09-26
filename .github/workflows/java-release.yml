@@ -107,7 +107,13 @@ jobs:
       # Fabric's tags populated at all (see the matching fix/comment in gradle-build.yml).
       - name: Generate Fabric data
         if: steps.platforms.outputs.fabric == 'true'
-        run: ./gradlew :fabric:runDatagen
+        run: ./gradlew :fabric:mergeGeneratedData
+        timeout-minutes: 10
+
+      # Without this the NeoForge jar ships with no data/extrabiomes/neoforge/** (biome modifiers); merges like Fabric's step (#135).
+      - name: Generate NeoForge data
+        if: steps.platforms.outputs.neoforge == 'true'
+        run: ./gradlew :neoforge:mergeGeneratedData
         timeout-minutes: 10
 
       # mod_version in gradle.properties should already match the tag before tagging a

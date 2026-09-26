@@ -43,7 +43,8 @@ loom {
             // up a "dataClient" template that doesn't exist at this version and fails with
             // "Could not find Forge run template with name 'dataClient'".
             data()
-            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            // Private staging dir, merged into the shared folder by mergeGeneratedData below (#135).
+            programArgs '--mod', mod_id, '--all', '--output', file('build/datagen').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
         }
         gameTestServer {
@@ -72,6 +73,17 @@ tasks.register("clearGameTestWorld", Delete) {
 }
 tasks.named("runGameTestServer") {
     dependsOn "clearGameTestWorld"
+}
+
+// Merges runData's output into the shared common/src/generated/resources without deleting the Fabric/Forge-only namespaces.
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runData"
+    from file('build/datagen')
+    into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/c/**'
+        include 'data/extrabiomes/forge/**'
+    }
 }
 
 configurations {

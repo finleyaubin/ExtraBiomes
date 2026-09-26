@@ -51,6 +51,12 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .unlockedBy(getHasName(ModItems.WORM.get()), has(ModItems.WORM.get()))
                 .save(pWriter);
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_COAL_ORE.get()), RecipeCategory.MISC, Items.COAL, 0.1f, 100, "coal", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_COPPER_ORE.get()), RecipeCategory.MISC, Items.COPPER_INGOT, 0.7f, 100, "copper_ingot", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_EMERALD_ORE.get()), RecipeCategory.MISC, Items.EMERALD, 1.0f, 100, "emerald", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_IRON_ORE.get()), RecipeCategory.MISC, Items.IRON_INGOT, 0.7f, 100, "iron_ingot", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_LAPIS_ORE.get()), RecipeCategory.MISC, Items.LAPIS_LAZULI, 0.2f, 100, "lapis_lazuli", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_REDSTONE_ORE.get()), RecipeCategory.MISC, Items.REDSTONE, 0.7f, 100, "redstone", Boolean.TRUE);
         foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs", Boolean.TRUE);
         foodCooking(pWriter, PIRANHA_SMELTABLES, RecipeCategory.FOOD, ModItems.COOKED_PIRANHA.get(), 0.25f, 100, "cooked_piranha", Boolean.TRUE);
         pebbleRecipes(pWriter);
@@ -66,6 +72,7 @@ public abstract class CommonRecipes extends RecipeProvider {
         brick(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_BRICK.get());
         stair(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
+        grassStoneRecipe(pWriter);
         blackSandRecipes(pWriter);
         gildRecipes(pWriter,
                 List.of(
@@ -280,6 +287,17 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .pattern("&&")
                 .define('&', ingredient)
                 .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput);
+    }
+
+    private static void grassStoneRecipe(RecipeOutput recipeOutput) {
+        // Not from Bedrock (no equivalent recipe there) - added per playtest request.
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.GRASS_STONE.get())
+                .pattern("#")
+                .pattern("S")
+                .define('#', Items.GRASS)
+                .define('S', Items.STONE)
+                .unlockedBy(getHasName(Items.STONE), has(Items.STONE))
                 .save(recipeOutput);
     }
 
