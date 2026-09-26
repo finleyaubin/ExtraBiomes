@@ -30,6 +30,7 @@
   "block.extrabiomes.goo": "Goo",
   "block.extrabiomes.air_block": "Air",
   "block.extrabiomes.grass_stone": "Grass Stone",
+  "item.extrabiomes.grass_stone": "Grass Stone",
   "block.extrabiomes.dense_cloud": "Dense Cloud",
   "block.extrabiomes.dense_cloud_brick": "Dense Cloud Brick",
   "block.extrabiomes.dense_cloud_brick_slab": "Dense Cloud Brick Slab",

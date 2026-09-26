@@ -30,6 +30,7 @@
   "block.extrabiomes.goo": "Schleim",
   "block.extrabiomes.air_block": "Luft",
   "block.extrabiomes.grass_stone": "Grasstein",
+  "item.extrabiomes.grass_stone": "Grasstein",
   "block.extrabiomes.dense_cloud": "Dichte Wolke",
   "block.extrabiomes.dense_cloud_brick": "Dichte Wolke Wolkenziegel",
   "block.extrabiomes.dense_cloud_brick_slab": "Dichte Wolke Wolkenziegel Stufe",

@@ -30,6 +30,7 @@
   "block.extrabiomes.goo": "Slim",
   "block.extrabiomes.air_block": "Luft",
   "block.extrabiomes.grass_stone": "Gresstein",
+  "item.extrabiomes.grass_stone": "Gresstein",
   "block.extrabiomes.dense_cloud": "Tett Tett Sky",
   "block.extrabiomes.dense_cloud_brick": "Tett Tett Sky Tett Skymurstein",
   "block.extrabiomes.dense_cloud_brick_slab": "Tett Tett Sky Tett Skymurstein Helle",
