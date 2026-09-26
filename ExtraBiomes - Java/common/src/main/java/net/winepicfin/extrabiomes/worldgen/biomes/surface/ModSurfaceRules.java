@@ -199,14 +199,16 @@ public class ModSurfaceRules {
                                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(4, false, CaveSurface.FLOOR), ICE))),
 
                 // moss_block patch is sequenced before the grass_stone sea floor so it takes priority when its noise band matches.
+                // abovePreliminarySurface() keeps grass, grass stone and moss off cave floors, which ON_FLOOR alone also matches.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JELLYFISH_FIELDS),
+                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.sequence(
                                         SurfaceRules.ifTrue(isSubmerged,
                                                 SurfaceRules.sequence(
                                                         SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.1, 0.3), MOSS_BLOCK),
                                                         GRASS_STONE)),
-                                grassOverStone))),
+                                grassOverStone)))),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.JUNGLE_PILLARS), grassOverStone),
                 // mud patch is sequenced before grassOverStone so it takes priority when its noise band matches.
                 // abovePreliminarySurface() keeps the patch off cave floors, since stoneDepthCheck/ON_FLOOR alone also match those underground.
