@@ -474,8 +474,8 @@ jobs:
       # fetched from this URI", on a different slide each attempt. raw.githubusercontent serves
       # the bytes directly as image/jpeg with no redirect and nothing to expire, so the slides
       # are committed here and posted from there, pinned to this commit.
-      # ponytail: a few MB of JPEGs per release land in branch history. Move them to one orphan
-      # media branch if that growth starts to matter.
+      # An orphan branch, not the triggering ref: on a tag-triggered run GITHUB_REF_NAME is the tag
+      # itself, and tags are immutable, so pushing a slides commit onto it always fails (as manual.yml).
       - name: Commit slides for a stable public URL
         id: slides
         if: needs.prepare.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
@@ -483,14 +483,20 @@ jobs:
         env:
           IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
         run: |
-          DIR="media-slides/${{ needs.prepare.outputs.VERSION }}"
-          mkdir -p "$DIR"
-          cp /tmp/slides/*.jpg "$DIR/"
+          DIR="media-slides/java/${{ needs.prepare.outputs.VERSION }}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch origin media-slides 2>/dev/null; then
+            git checkout -B media-slides origin/media-slides
+          else
+            git checkout --orphan media-slides
+            git reset --hard
+          fi
+          mkdir -p "$DIR"
+          cp /tmp/slides/*.jpg "$DIR/"
           git add "$DIR"
           git commit -qm "Story slides for ${{ needs.prepare.outputs.RELEASE_TAG }}" || echo "no slide changes"
-          git push -q origin "HEAD:$GITHUB_REF_NAME"
+          git push -q origin media-slides
           # Pinned to the SHA, not the branch: raw.githubusercontent caches per ref and a branch
           # URL can still answer 404 for a short while after the push.
           echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
