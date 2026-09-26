@@ -30,6 +30,7 @@
   "block.extrabiomes.goo": "Baba",
   "block.extrabiomes.air_block": "Aire",
   "block.extrabiomes.grass_stone": "Piedra de Hierba",
+  "item.extrabiomes.grass_stone": "Piedra de Hierba",
   "block.extrabiomes.dense_cloud": "Nube Densa Densa",
   "item.extrabiomes.dense_cloud": "Nube Densa Densa",
   "block.extrabiomes.dense_cloud_brick": "Nube Densa Ladrillo de Nube Densa Densa",
