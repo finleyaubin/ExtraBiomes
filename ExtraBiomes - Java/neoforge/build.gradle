@@ -44,7 +44,8 @@ loom {
             // clientData() looks up a "dataClient" template that doesn't exist at this version
             // and fails with "Could not find Forge run template with name 'dataClient'".
             data()
-            programArgs '--mod', mod_id, '--all', '--output', project(':common').file('src/generated/resources').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
+            // Private output dir, merged into the shared folder by mergeGeneratedData below.
+            programArgs '--mod', mod_id, '--all', '--output', file('build/datagen').absolutePath, '--existing', project(':common').file('src/main/resources').absolutePath
             runDir "run-data"
         }
         gameTestServer {
@@ -91,8 +92,24 @@ tasks.named("runGameTestServer") {
 // folder, so testing this module after running Fabric's datagen silently reverts the cutout
 // render_type and can reintroduce black transparent pixels. Making the client/server runs always
 // regenerate this module's own datagen output first closes that gap.
-tasks.named("runClient") { dependsOn "runData" }
-tasks.named("runServer") { dependsOn "runData" }
+tasks.named("runClient") { dependsOn "mergeGeneratedData" }
+tasks.named("runServer") { dependsOn "mergeGeneratedData" }
+
+// Vanilla's DataGenerator/HashCache deletes any file under its output root it doesn't recognize as
+// its own, so NeoForge and Fabric datagen writing straight into the shared folder wiped each
+// other's loader-only content (issue #135). runData writes to a private dir instead and this Sync
+// merges it in, preserving Fabric's (and Forge's) own namespaces.
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runData"
+    from file('build/datagen')
+    into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/c/**'
+        include 'data/forge/**'
+    }
+}
+// finalizedBy keeps ":neoforge:runData" (what CI and people run) updating the shared folder.
+tasks.named("runData") { finalizedBy "mergeGeneratedData" }
 
 configurations {
     common

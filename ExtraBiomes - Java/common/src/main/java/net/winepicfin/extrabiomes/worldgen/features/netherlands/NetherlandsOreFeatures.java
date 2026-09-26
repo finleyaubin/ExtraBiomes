@@ -1,45 +1,36 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.ReplaceSphereConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.features.ore.ModOrePlacement;
 
-/**
- * The nine ore veins from Bedrock's "extrabiomes:the_netherlands/*_ore_feature" ({@code minecraft:ore_feature})
- * plus their "extrabiomes:netherlands_underground_*_ore_feature" feature_rules (placement_pass "underground_pass").
- * <p>
- * Bedrock ore_feature's "count" is the vein SIZE (blocks per vein) -> {@link OreConfiguration}'s size parameter.
- * The matching feature_rules' "iterations" is the number of vein ATTEMPTS per chunk -> {@link ModOrePlacement#commonOrePlacement}'s
- * count parameter (via {@code CountPlacement}). The feature_rules' y "extent" is the absolute height range each vein can roll within.
- * <p>
- * Every one of these Bedrock ore_feature JSONs has {@code replace_rules.may_replace = minecraft:netherrack}. Despite
- * this biome generating in the OVERWORLD, that is honored literally here too: {@link net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules}
- * gives The Netherlands a netherrack underground layer (its "nethrack" pun), so these veins replace
- * {@code minecraft:netherrack}, not {@code minecraft:stone} - a stone-targeted BlockMatchTest here previously matched
- * nothing in this biome's actual terrain and silently placed no ore at all.
- * <p>
- * SIMPLIFICATION 2: Bedrock's {@code places_block} for coal/copper/iron/lapis/redstone are custom addon blocks
- * ("extrabiomes:nether_coal_ore" etc.) that were never ported to the Java block registry (only
- * {@link ModBlocks#NETHER_DIAMOND_ORE} exists in ModBlocks - checked, no others). Per the task's own guidance to
- * check for "vanilla ores re-skinned" as an acceptable target, these use their plain vanilla ore-block equivalents
- * instead (Blocks.COAL_ORE, COPPER_ORE, IRON_ORE, LAPIS_ORE, REDSTONE_ORE, EMERALD_ORE). The diamond vein reuses the
- * existing {@link ModBlocks#NETHER_DIAMOND_ORE} custom reskin exactly as Bedrock specified. Gold and quartz already
- * used vanilla block ids in Bedrock ("minecraft:nether_gold_ore" / "minecraft:quartz_ore", the Bedrock id for
- * Java's {@code minecraft:nether_quartz_ore}) so those are honored literally as Blocks.NETHER_GOLD_ORE / Blocks.NETHER_QUARTZ_ORE.
- */
+import java.util.List;
+
+// Ports Bedrock's the_netherlands/*_ore_feature veins: Bedrock "count" is vein size, its feature_rules "iterations" is veins per chunk.
 public class NetherlandsOreFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> COAL_ORE_KEY = key("netherlands_coal_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> COPPER_ORE_KEY = key("netherlands_copper_ore");
@@ -50,6 +41,9 @@ public class NetherlandsOreFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> LAPIS_ORE_KEY = key("netherlands_lapis_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> QUARTZ_ORE_KEY = key("netherlands_quartz_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> REDSTONE_ORE_KEY = key("netherlands_redstone_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BASALT_BLOBS_KEY = key("netherlands_basalt_blobs");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BLACKSTONE_BLOBS_KEY = key("netherlands_blackstone_blobs");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BASALT_PILLAR_KEY = key("netherlands_basalt_pillar");
 
     public static final ResourceKey<PlacedFeature> COAL_ORE_PLACED_KEY = placedKey("netherlands_coal_ore");
     public static final ResourceKey<PlacedFeature> COPPER_ORE_PLACED_KEY = placedKey("netherlands_copper_ore");
@@ -60,19 +54,31 @@ public class NetherlandsOreFeatures {
     public static final ResourceKey<PlacedFeature> LAPIS_ORE_PLACED_KEY = placedKey("netherlands_lapis_ore");
     public static final ResourceKey<PlacedFeature> QUARTZ_ORE_PLACED_KEY = placedKey("netherlands_quartz_ore");
     public static final ResourceKey<PlacedFeature> REDSTONE_ORE_PLACED_KEY = placedKey("netherlands_redstone_ore");
+    public static final ResourceKey<PlacedFeature> BASALT_BLOBS_PLACED_KEY = placedKey("netherlands_basalt_blobs");
+    public static final ResourceKey<PlacedFeature> BLACKSTONE_BLOBS_PLACED_KEY = placedKey("netherlands_blackstone_blobs");
+    public static final ResourceKey<PlacedFeature> BASALT_PILLAR_PLACED_KEY = placedKey("netherlands_basalt_pillar");
+
+    private static final int WORLD_BOTTOM_Y = -64;
+    // Keeps the basalt/blackstone decoration well under this lowland biome's ~sea-level surface.
+    private static final VerticalAnchor DECORATION_TOP = VerticalAnchor.absolute(40);
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // ModSurfaceRules paints this biome's underground as netherrack, not stone, so these veins must target netherrack to find anything to replace.
         BlockMatchTest replaceNetherrack = new BlockMatchTest(Blocks.NETHERRACK);
-        context.register(COAL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.COAL_ORE.defaultBlockState(), 17)));
-        context.register(COPPER_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.COPPER_ORE.defaultBlockState(), 9)));
+        context.register(COAL_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_COAL_ORE.get().defaultBlockState(), 17)));
+        context.register(COPPER_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_COPPER_ORE.get().defaultBlockState(), 9)));
         context.register(DIAMOND_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_DIAMOND_ORE.get().defaultBlockState(), 8)));
-        context.register(EMERALD_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.EMERALD_ORE.defaultBlockState(), 1)));
+        context.register(EMERALD_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_EMERALD_ORE.get().defaultBlockState(), 1)));
         context.register(GOLD_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.NETHER_GOLD_ORE.defaultBlockState(), 9)));
-        context.register(IRON_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.IRON_ORE.defaultBlockState(), 9)));
-        context.register(LAPIS_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.LAPIS_ORE.defaultBlockState(), 3)));
+        context.register(IRON_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_IRON_ORE.get().defaultBlockState(), 9)));
+        context.register(LAPIS_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_LAPIS_ORE.get().defaultBlockState(), 3)));
         context.register(QUARTZ_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.NETHER_QUARTZ_ORE.defaultBlockState(), 9)));
-        context.register(REDSTONE_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, Blocks.REDSTONE_ORE.defaultBlockState(), 8)));
+        context.register(REDSTONE_ORE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(replaceNetherrack, ModBlocks.NETHER_REDSTONE_ORE.get().defaultBlockState(), 8)));
+        context.register(BASALT_BLOBS_KEY, new ConfiguredFeature<>(Feature.REPLACE_BLOBS,
+                new ReplaceSphereConfiguration(Blocks.NETHERRACK.defaultBlockState(), Blocks.BASALT.defaultBlockState(), UniformInt.of(3, 7))));
+        context.register(BLACKSTONE_BLOBS_KEY, new ConfiguredFeature<>(Feature.REPLACE_BLOBS,
+                new ReplaceSphereConfiguration(Blocks.NETHERRACK.defaultBlockState(), Blocks.BLACKSTONE.defaultBlockState(), UniformInt.of(3, 7))));
+        context.register(BASALT_PILLAR_KEY, new ConfiguredFeature<>(Feature.BASALT_PILLAR, NoneFeatureConfiguration.INSTANCE));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
@@ -86,14 +92,30 @@ public class NetherlandsOreFeatures {
         register(context, configuredFeatures, LAPIS_ORE_KEY, LAPIS_ORE_PLACED_KEY, 1, 0, 16);
         register(context, configuredFeatures, QUARTZ_ORE_KEY, QUARTZ_ORE_PLACED_KEY, 20, 0, 64);
         register(context, configuredFeatures, REDSTONE_ORE_KEY, REDSTONE_ORE_PLACED_KEY, 8, 0, 16);
+
+        HeightRangePlacement underground = HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(8), DECORATION_TOP);
+        context.register(BASALT_BLOBS_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BASALT_BLOBS_KEY),
+                ModOrePlacement.commonOrePlacement(6, underground)));
+        context.register(BLACKSTONE_BLOBS_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BLACKSTONE_BLOBS_KEY),
+                ModOrePlacement.commonOrePlacement(6, underground)));
+        // BasaltPillarFeature only builds from air directly under a solid ceiling, so scan up to one rather than relying on random Y hits.
+        context.register(BASALT_PILLAR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BASALT_PILLAR_KEY), List.of(
+                CountPlacement.of(30),
+                InSquarePlacement.spread(),
+                underground,
+                EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                BiomeFilter.biome())));
     }
 
     private static void register(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
                                   ResourceKey<ConfiguredFeature<?, ?>> configuredKey, ResourceKey<PlacedFeature> placedKey,
-                                  int veinsPerChunk, int yMin, int yMax) {
+                                  int bedrockVeinsPerChunk, int bedrockYMin, int yMax) {
+        // Netherrack reaches bedrock on Java, so Bedrock's range is stretched down to the world bottom with veins scaled to keep its density.
+        int veinsPerChunk = Math.round((float) bedrockVeinsPerChunk * (yMax - WORLD_BOTTOM_Y) / (yMax - bedrockYMin));
         context.register(placedKey, new PlacedFeature(
                 configuredFeatures.getOrThrow(configuredKey),
-                ModOrePlacement.commonOrePlacement(veinsPerChunk, HeightRangePlacement.uniform(VerticalAnchor.absolute(yMin), VerticalAnchor.absolute(yMax)))
+                ModOrePlacement.commonOrePlacement(veinsPerChunk, HeightRangePlacement.uniform(VerticalAnchor.absolute(WORLD_BOTTOM_Y), VerticalAnchor.absolute(yMax)))
         ));
     }
 
