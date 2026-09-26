@@ -87,6 +87,12 @@ public class ModBlockStateProvider implements DataProvider {
 
     private void registerStatesAndModels() {
         blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
+        blockWithItem(ModBlocks.NETHER_COAL_ORE);
+        blockWithItem(ModBlocks.NETHER_COPPER_ORE);
+        blockWithItem(ModBlocks.NETHER_EMERALD_ORE);
+        blockWithItem(ModBlocks.NETHER_IRON_ORE);
+        blockWithItem(ModBlocks.NETHER_LAPIS_ORE);
+        blockWithItem(ModBlocks.NETHER_REDSTONE_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         stairsBlock(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         slabBlock(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));

@@ -40,6 +40,7 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource WHITE_CONCRETE_POWDER = makeStateRule(Blocks.WHITE_CONCRETE_POWDER);
     private static final SurfaceRules.RuleSource WHITE_CONCRETE = makeStateRule(Blocks.WHITE_CONCRETE);
     private static final SurfaceRules.RuleSource NETHERRACK = makeStateRule(Blocks.NETHERRACK);
+    private static final SurfaceRules.RuleSource BEDROCK = makeStateRule(Blocks.BEDROCK);
     // moisture=7 (not defaultBlockState's 0) so the whole field starts fully hydrated rather than
     // waiting on random ticks to notice the buried water pockets one at a time.
     private static final SurfaceRules.RuleSource FARMLAND = SurfaceRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7));
@@ -145,6 +146,10 @@ public class ModSurfaceRules {
 
         SurfaceRules.ConditionSource clearOfBedrock = clearOfBedrock();
         SurfaceRules.RuleSource depthBands = depthBands();
+        // Our rules run before vanilla's bedrock rule, so it's repeated here (same gradient name = same bedrock pattern) or netherrack would replace it.
+        SurfaceRules.RuleSource netherrackDownToBedrock = SurfaceRules.sequence(
+                SurfaceRules.ifTrue(SurfaceRules.verticalGradient("bedrock_floor", VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(5)), BEDROCK),
+                NETHERRACK);
 
         return SurfaceRules.sequence(
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.CHARRED_FOREST),
@@ -226,27 +231,28 @@ public class ModSurfaceRules {
                                                 SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, 0.212, 1.0), PACKED_MUD),
                                                 SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.REGIONAL_BAND, -0.115, 0.212), MUD))))),
 
-                // Netherrack band capped to 30 blocks (unlike Bedrock's full-column replace), so vanilla cave carving resumes above bedrock and no custom carver is needed on Java.
+                // abovePreliminarySurface() keeps grass off cave floors, which ON_FLOOR alone also matches.
+                // No dirt fallback underwater: Bedrock's sea_floor_depth is 0 here, so sea floors are bare netherrack.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS),
                         SurfaceRules.sequence(
-                                grassOverDirt,
-                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(30, false, CaveSurface.FLOOR), NETHERRACK))),
+                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
+                                                SurfaceRules.ifTrue(isAtOrBelowWaterLevel, GRASS_BLOCK))),
+                                netherrackDownToBedrock)),
 
                 // Top layer is FARMLAND, not DIRT, so the whole floor is tillable ground and NetherlandsWheatFeatures'
                 // crop scatter never has to convert terrain itself - it just needs a wheat block on top of every
                 // column, so there are no untouched-dirt gaps between its (inherently probabilistic) patches.
-                // Gated to dry columns only (isAtOrBelowWaterLevel, same check grassOverDirt uses above), falling
-                // back to plain DIRT when submerged - without this, low points of this biome that dip below sea
-                // level got farmland tilled straight onto the sea floor, since ON_FLOOR/abovePreliminarySurface()
-                // alone don't distinguish dry land from underwater.
+                // Gated to dry columns only (isAtOrBelowWaterLevel) - without this, low points of this biome that
+                // dip below sea level got farmland tilled straight onto the sea floor, since
+                // ON_FLOOR/abovePreliminarySurface() alone don't distinguish dry land from underwater. Submerged
+                // floors fall through to netherrack, matching Bedrock's sea_floor_depth of 0.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.THE_NETHERLANDS_MUTATED),
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
-                                                SurfaceRules.sequence(
-                                                        SurfaceRules.ifTrue(isAtOrBelowWaterLevel, FARMLAND),
-                                                        DIRT))),
-                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(30, false, CaveSurface.FLOOR), NETHERRACK))),
+                                                SurfaceRules.ifTrue(isAtOrBelowWaterLevel, FARMLAND))),
+                                netherrackDownToBedrock)),
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.VOLCANIC_MOSS_TUNDRA),
                         sandOverFoundation(BLACK_SAND, BLACK_SANDSTONE)),
