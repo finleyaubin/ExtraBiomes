@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.block;
 
 import net.minecraft.util.ColorRGBA;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -36,6 +37,12 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE_BRICK_SLAB).setId(blockId("dense_cloud_brick_slab")).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE_BRICK_STAIRS).setId(blockId("dense_cloud_brick_stairs")).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore", () -> new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).setId(blockId("nether_diamond_ore")).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_COAL_ORE = registerBlock("nether_coal_ore", () -> new DropExperienceBlock(UniformInt.of(0, 2), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).setId(blockId("nether_coal_ore")).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_COPPER_ORE = registerBlock("nether_copper_ore", () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).setId(blockId("nether_copper_ore")).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_EMERALD_ORE = registerBlock("nether_emerald_ore", () -> new DropExperienceBlock(UniformInt.of(3, 7), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).setId(blockId("nether_emerald_ore")).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_IRON_ORE = registerBlock("nether_iron_ore", () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).setId(blockId("nether_iron_ore")).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_LAPIS_ORE = registerBlock("nether_lapis_ore", () -> new DropExperienceBlock(UniformInt.of(2, 5), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).setId(blockId("nether_lapis_ore")).strength(2f).requiresCorrectToolForDrops()));
+    public static final RegistrySupplier<Block> NETHER_REDSTONE_ORE = registerBlock("nether_redstone_ore", () -> new DropExperienceBlock(UniformInt.of(1, 5), BlockBehaviour.Properties.ofLegacyCopy(Blocks.NETHERRACK).setId(blockId("nether_redstone_ore")).strength(2f).requiresCorrectToolForDrops()));
     public static final RegistrySupplier<LiquidBlock> GOO = BLOCKS.register("goo_block", () -> ExtraBiomesExpectPlatform.createGooLiquidBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.WATER).setId(blockId("goo_block")).sound(SoundType.SLIME_BLOCK).noLootTable()));
     public static final RegistrySupplier<PebbleBlock> PEBBLE = registerBlock("pebble_block", () -> new PebbleBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("pebble_block")).noOcclusion()));
     public static final RegistrySupplier<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("mossy_pebble_block")).noOcclusion()));
@@ -58,6 +65,8 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> BLACK_SANDSTONE_STAIRS = registerBlock("black_sandstone_stairs", () -> new StairBlock(ModBlocks.BLACK_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofLegacyCopy(Blocks.SANDSTONE_STAIRS).setId(blockId("black_sandstone_stairs")).mapColor(MapColor.COLOR_BLACK)));
     public static final RegistrySupplier<Block> SMOOTH_BLACK_SANDSTONE_STAIRS = registerBlock("smooth_black_sandstone_stairs", () -> new StairBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofLegacyCopy(Blocks.SMOOTH_SANDSTONE_STAIRS).setId(blockId("smooth_black_sandstone_stairs")).mapColor(MapColor.COLOR_BLACK)));
     public static final RegistrySupplier<Block> BLACK_SANDSTONE_WALL = registerBlock("black_sandstone_wall", () -> new WallBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SANDSTONE_WALL).setId(blockId("black_sandstone_wall")).mapColor(MapColor.COLOR_BLACK)));
+
+    public static final RegistrySupplier<Block> GRASS_STONE = registerBlock("grass_stone", () -> new Block(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("grass_stone")).mapColor(MapColor.GRASS).strength(3f)));
 
     private static final StandardWoodSet MYSTIC_WOOD_SET = registerStandardWoodSet("mystic", ModWoodTypes.MYSTIC);
     public static final RegistrySupplier<Block> MYSTIC_PLANKS = MYSTIC_WOOD_SET.planks();

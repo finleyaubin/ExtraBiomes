@@ -32,6 +32,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,24 +42,36 @@ import java.util.List;
  *     <li>glacier_ice_feature / glacier_packed_ice_feature / glacier_top_ice_feature -
  *         {@code minecraft:ore_feature} entries that replace stone-family/dirt/sand blocks with
  *         ice, packed ice, and ice respectively, gated on the "glacier" biome tag.</li>
- *     <li>select_snow_drift_feature - a {@code minecraft:weighted_random_feature} (2:1) between
- *         snow_drift_1_feature and snow_drift_2_feature, each a
+ *     <li>select_snow_drift_feature - a {@code minecraft:weighted_random_feature} between sixteen
+ *         snow_drift_N_feature entries (weights 20:10:20:20:10:20:20:20:20:10:10:10:10:10:6:3 for drifts 1-16), each a
  *         {@code minecraft:structure_template_feature}, gated on the broader "frozen" biome tag
- *         (Glacier, ColdMesa/ColdMesaBryce/ColdMesaPlateau, ShatteredTiagaSpikes, TiagaSpikes).</li>
+ *         (Glacier, ColdMesa/ColdMesaBryce/ColdMesaPlateau, ShatteredTiagaSpikes, TiagaSpikes).
+ *         snow_drift_1/2 are the original spiky hash-noise drifts; snow_drift_3-6 (ridge dune,
+ *         rounded mound, s-curve wave bank, low broad drift) were added later, generated from a
+ *         smooth sine-summed height field (see tools/build_snow_drifts.py) for a more natural,
+ *         wind-sculpted look instead of per-voxel jaggedness. snow_drift_7-11 (cornice ridge,
+ *         sastrugi field, barchan crescent, moraine drift, giant swirl) extend that with powder
+ *         snow, wind-scoured ice and glacial debris; snow_drift_12-15 (twisting spire, breaking
+ *         wave, spiral cone, 40-tall giant spire, 150-tall colossal spire) are the tall ones. Java-only for now: generated with
+ *         {@code tools/build_snow_drifts.py --java}.</li>
  * </ul>
  * Bedrock source: "ExtraBiomes - Bedrock/packs/BP/features/glacier/*.json" +
  * "ExtraBiomes - Bedrock/packs/BP/feature_rules/glacier/*.json".
  * <p>
- * The two snow-drift structures reuse the "structurescatter" subsystem's shared
+ * The snow-drift structures reuse the "structurescatter" subsystem's shared
  * SingleStructureFeature/SingleStructureConfiguration infrastructure rather than defining a new
  * Feature class. Since Feature.RANDOM_SELECTOR's RandomFeatureConfiguration needs a
- * Holder&lt;PlacedFeature&gt; per sub-feature (not a registry key), the two sub-features are built
- * as unregistered inline holders via {@link PlacementUtils#inlinePlaced} - exactly the pattern
+ * Holder&lt;PlacedFeature&gt; per sub-feature (not a registry key), each sub-feature is built
+ * as an unregistered inline holder via {@link PlacementUtils#inlinePlaced} - exactly the pattern
  * vanilla itself uses for its own weighted/degenerate features (see e.g. vanilla's
  * TreePlacements) - rather than going through the CONFIGURED_FEATURE/PLACED_FEATURE registries,
  * which would create a registration-order problem (PLACED_FEATURE bootstrap normally runs after
  * CONFIGURED_FEATURE bootstrap, so a same-pass lookup of a not-yet-registered PlacedFeature would
  * fail).
+ * <p>
+ * RandomFeatureConfiguration evaluates its weighted entries sequentially (each a raw
+ * random.nextFloat() &lt; chance test, not a normalized weight), so the target weight ratios are
+ * converted to conditional chances up front: chance_i = w_i / (sum of weights from entry i on).
  */
 public class GlacierFeatures {
 
@@ -83,6 +96,8 @@ public class GlacierFeatures {
             placedKey("select_snow_drift");
 
     private static final int SNOW_DRIFT_GROUND_OFFSET = -2;
+    // Draped drifts follow the ground column by column, so they don't need sinking to hide dips and sit directly on the surface.
+    private static final int DRAPED_SNOW_DRIFT_GROUND_OFFSET = 0;
 
     private static List<OreConfiguration.TargetBlockState> iceTargets(BlockState result) {
         RuleTest[] sources = new RuleTest[] {
@@ -110,24 +125,31 @@ public class GlacierFeatures {
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
 
         // SNOW_DRIFT_GROUND_OFFSET sinks the wide, unevenly-shaped drift templates into the ground so uneven terrain under them doesn't read as floating (same technique as OasisPuddleFeature's -4).
-        Holder<ConfiguredFeature<?, ?>> snowDrift1 = Holder.direct(new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_1"), SNOW_DRIFT_GROUND_OFFSET)
-        ));
-        Holder<ConfiguredFeature<?, ?>> snowDrift2 = Holder.direct(new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_2"), SNOW_DRIFT_GROUND_OFFSET)
-        ));
-        // inlinePlaced avoids a registration-order problem: PLACED_FEATURE bootstrap runs after CONFIGURED_FEATURE, so these sub-features can't go through the registry here.
-        Holder<PlacedFeature> snowDrift1Placed = PlacementUtils.inlinePlaced(snowDrift1);
-        Holder<PlacedFeature> snowDrift2Placed = PlacementUtils.inlinePlaced(snowDrift2);
+        // Keep in sync with SELECT_WEIGHTS in tools/build_snow_drifts.py.
+        int[] snowDriftWeights = {20, 10, 20, 20, 10, 20, 20, 20, 20, 10, 10, 10, 10, 10, 6, 3};
 
-        // Weighted 2:1 selection is encoded as one entry with chance 2/3 plus a default feature that gets the remaining 1/3.
+        List<Holder<PlacedFeature>> snowDriftPlaced = new ArrayList<>();
+        for (int i = 0; i < snowDriftWeights.length; i++) {
+            ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_" + (i + 1));
+            // Drifts 3+ have a flat full-footprint base that floats over any dip, so drape them over the terrain; centering keeps the ~30-wide swirl and giant spire inside the feature write window.
+            boolean drapesOverTerrain = i >= 2;
+            SingleStructureConfiguration config = drapesOverTerrain
+                    ? new SingleStructureConfiguration(structure, DRAPED_SNOW_DRIFT_GROUND_OFFSET, true, true)
+                    : new SingleStructureConfiguration(structure, SNOW_DRIFT_GROUND_OFFSET);
+            Holder<ConfiguredFeature<?, ?>> snowDrift = Holder.direct(new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+            // inlinePlaced avoids a registration-order problem: PLACED_FEATURE bootstrap runs after CONFIGURED_FEATURE, so these sub-features can't go through the registry here.
+            snowDriftPlaced.add(PlacementUtils.inlinePlaced(snowDrift));
+        }
+
+        // RandomFeatureConfiguration tries entries in order with raw chances, so each weight becomes its share of the mass not yet claimed; the last drift is the default.
+        List<WeightedPlacedFeature> snowDriftEntries = new ArrayList<>();
+        int remainingWeight = Arrays.stream(snowDriftWeights).sum();
+        for (int i = 0; i < snowDriftWeights.length - 1; i++) {
+            snowDriftEntries.add(new WeightedPlacedFeature(snowDriftPlaced.get(i), (float) snowDriftWeights[i] / remainingWeight));
+            remainingWeight -= snowDriftWeights[i];
+        }
         context.register(SELECT_SNOW_DRIFT_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
-                new RandomFeatureConfiguration(
-                        List.of(new WeightedPlacedFeature(snowDrift1Placed, 2.0F / 3.0F)),
-                        snowDrift2Placed
-                )));
+                new RandomFeatureConfiguration(snowDriftEntries, snowDriftPlaced.get(snowDriftPlaced.size() - 1))));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
