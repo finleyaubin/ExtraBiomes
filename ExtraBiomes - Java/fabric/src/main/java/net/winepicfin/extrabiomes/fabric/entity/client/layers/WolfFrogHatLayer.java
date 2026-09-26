@@ -9,11 +9,10 @@ import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.winepicfin.extrabiomes.fabric.entity.client.armour.FrogHelmetRenderer;
 import net.winepicfin.extrabiomes.fabric.entity.client.state.WolfRenderStateExtension;
@@ -29,9 +28,10 @@ import org.jetbrains.annotations.NotNull;
 // no longer receives the Wolf entity, its partial tick, or its head yaw/pitch directly. headItem
 // and isInvisibleToPlayer come from the (Living)EntityRenderState, yRot/xRot on the state are the
 // old netHeadYaw/headPitch, and the Wolf entity itself is recovered via WolfRenderStateExtension
-// (populated by WolfRendererMixin) since GeoArmorRenderer#prepForRender still needs a live Entity.
+// (populated by WolfRendererMixin) since the GeckoLib renderer's RenderData still needs a live Entity.
 public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
-    private FrogHelmetRenderer renderer;
+    private FrogHelmetRenderer<?> renderer;
+    private HumanoidRenderState humanoidState;
     private HumanoidModel<?> baseModel;
 
     public WolfFrogHatLayer(RenderLayerParent<WolfRenderState, WolfModel> parent) {
@@ -51,9 +51,14 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         if (headItem.getItem() != ModItems.FROG_HELMET.get() || state.isInvisibleToPlayer) return;
 
         if (this.renderer == null)
-            this.renderer = new FrogHelmetRenderer();
+            this.renderer = new FrogHelmetRenderer<>();
         if (this.baseModel == null)
             this.baseModel = new HumanoidModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER));
+
+        if (this.humanoidState == null)
+            this.humanoidState = new HumanoidRenderState();
+        this.humanoidState.isInvisibleToPlayer = state.isInvisibleToPlayer;
+        this.humanoidState.appearsGlowing = state.appearsGlowing;
 
         float partialTick = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
 
@@ -62,8 +67,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         poseStack.translate(0.05D, -0.6D, -0.02D);
         poseStack.scale(1F, 1F, 1F);
         poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
-        this.renderer.prepForRender(wolf, headItem, EquipmentSlot.HEAD, this.baseModel, buffer, partialTick, state.yRot, state.xRot);
-        this.renderer.renderToBuffer(poseStack, null, packedLight, OverlayTexture.NO_OVERLAY, ARGB.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F));
+        this.renderer.renderOnWolf(this.humanoidState, wolf, headItem, this.baseModel, poseStack, buffer, packedLight, partialTick);
         poseStack.popPose();
     }
 }

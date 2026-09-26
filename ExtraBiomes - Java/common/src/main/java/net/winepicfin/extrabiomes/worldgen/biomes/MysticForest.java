@@ -20,7 +20,7 @@ public class MysticForest {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FROG, 5, 4, 4));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityType.FROG, 4, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -50,7 +50,7 @@ public class MysticForest {
         BiomeDefaultFeatures.addSwampVegetation(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MysticFeatures.MYSTIC_BROWN_MUSHROOM_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MysticFeatures.MYSTIC_RED_MUSHROOM_PLACED_KEY);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.MYSTIC_PLACED_KEY);
         // This biome's "sea_material" is goo, which needs a TOP_LAYER_MODIFICATION feature run after lakes/aquifers exist, rather than a direct fluid swap (see GooConversionFeature).

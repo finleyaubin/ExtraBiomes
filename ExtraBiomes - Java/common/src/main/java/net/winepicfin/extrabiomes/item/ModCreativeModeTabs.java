@@ -41,6 +41,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.NETHER_IRON_ORE.get());
                 pOutput.accept(ModBlocks.NETHER_LAPIS_ORE.get());
                 pOutput.accept(ModBlocks.NETHER_REDSTONE_ORE.get());
+                pOutput.accept(ModBlocks.GRASS_STONE.get());
                 pOutput.accept(ModBlocks.BLACK_SAND.get());
                 pOutput.accept(ModBlocks.BLACK_SANDSTONE.get());
                 pOutput.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());

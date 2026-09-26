@@ -11,15 +11,20 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ARGB;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.item.ItemStack;
+import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.armour.FrogHelmetRenderer;
+import net.winepicfin.extrabiomes.neoforge.item.custom.FrogHelmetItem;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.renderer.GeoEntityRenderState;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 import java.lang.reflect.Field;
 
@@ -38,6 +43,8 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         }
     }
 
+    public static final ContextKey<Wolf> WOLF = new ContextKey<>(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "wolf"));
+
     private FrogHelmetRenderer renderer;
     private HumanoidModel<?> baseModel;
 
@@ -45,25 +52,30 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         super(parent);
     }
 
-    // Vanilla's render states no longer carry the source Entity - GeckoLib's EntityRenderStateMixin
-    // (applied to every EntityRenderState) ducks one back on via GeoEntityRenderState, which
-    // GeoArmorRenderer#prepForRender still needs.
+    // Vanilla's render states no longer carry the source entity - ModEventBusClientEvents stashes the
+    // Wolf under WOLF via RegisterRenderStateModifiersEvent, and GeoArmorRenderer needs a GeoRenderState
+    // humanoid state (GeckoLib's mixin makes every EntityRenderState one) that we fill ourselves.
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int packedLight, @NotNull WolfRenderState renderState,
                         float netHeadYaw, float headPitch) {
-        if (!(renderState instanceof GeoEntityRenderState geoRenderState) || !(geoRenderState.geckolib$getEntity() instanceof Wolf wolf))
+        Wolf wolf = renderState.getRenderData(WOLF);
+        if (wolf == null)
             return;
 
         ItemStack headItem = wolf.getItemBySlot(EquipmentSlot.HEAD);
         if (headItem.getItem() != ModItems.FROG_HELMET.get() || wolf.isInvisible()) return;
 
         if (this.renderer == null)
-            this.renderer = new FrogHelmetRenderer();
-        // GeoArmorRenderer.prepForRender bails out early (leaving its internal entity
-        // reference null, which crashes renderToBuffer) unless it's given a non-null
-        // base HumanoidModel, even though that model is never actually used for a wolf.
+            this.renderer = new FrogHelmetRenderer<>();
         if (this.baseModel == null)
             this.baseModel = new HumanoidModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER));
+
+        GeoRenderState geoState = (GeoRenderState) new HumanoidRenderState();
+        this.renderer.fillRenderState((FrogHelmetItem) headItem.getItem(), new GeoArmorRenderer.RenderData(headItem, EquipmentSlot.HEAD, wolf),
+                geoState, renderState.partialTick);
+        geoState.addGeckolibData(DataTickets.HUMANOID_MODEL, this.baseModel);
+        geoState.addGeckolibData(DataTickets.PACKED_LIGHT, packedLight);
 
         poseStack.pushPose();
         try {
@@ -74,9 +86,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         poseStack.translate(0.05D, -0.6D, -0.02D);
         poseStack.scale(1F, 1F, 1F);
         poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
-        this.renderer.prepForRender(wolf, headItem, EquipmentSlot.HEAD, this.baseModel, buffer, geoRenderState.geckolib$getPartialTick(), netHeadYaw, headPitch);
-        this.renderer.renderToBuffer(poseStack, null, packedLight, OverlayTexture.NO_OVERLAY,
-                ARGB.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F));
+        this.renderer.defaultRender(geoState, poseStack, buffer, null, null);
         poseStack.popPose();
     }
 }

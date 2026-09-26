@@ -3,7 +3,6 @@ package net.winepicfin.extrabiomes.gametest;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -13,8 +12,6 @@ import net.minecraft.world.level.block.state.properties.StructureMode;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import org.slf4j.Logger;
 
@@ -22,16 +19,12 @@ import org.slf4j.Logger;
 // a void, laid out in rows, each with its own SAVE-mode structure block already pointed at the
 // right structure id and size, so fixing a mis-ported trapdoor/stair is "run this test, walk over,
 // fix the block, click Save in the structure block GUI" instead of hand-editing the .nbt bytes.
-@GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
 public class SkyCityStructureEditGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String[] BUILDINGS = {"house_1", "sky_challet", "tower_1", "tower_2"};
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
-    // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = "sky_city_edit_void", timeoutTicks = 60000, batch = "extrabiomes", manualOnly = true)
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();

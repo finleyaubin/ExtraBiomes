@@ -15,7 +15,7 @@ public class FungleJungle {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.MOOSHROOM, 8, 4, 8));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 8, new MobSpawnSettings.SpawnerData(EntityType.MOOSHROOM, 4, 8));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -26,7 +26,7 @@ public class FungleJungle {
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         // Bedrock's 'spawns_without_patrols' tag is handled via BiomeTags.WITHOUT_PATROL_SPAWNS, see ModBiomeTagProvider.
 
         // mushroom_surface_mycelium_floor: ground-conversion feature (mooshroom_island-only), local modification step

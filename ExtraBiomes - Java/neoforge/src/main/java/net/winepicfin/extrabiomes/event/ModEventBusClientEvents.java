@@ -6,10 +6,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
+import net.minecraft.client.renderer.entity.state.WolfRenderState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -66,6 +69,11 @@ public class ModEventBusClientEvents {
         if (wolfRenderer != null) {
             wolfRenderer.addLayer(new WolfFrogHatLayer(wolfRenderer));
         }
+    }
+
+    @SubscribeEvent
+    public static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
+        event.registerEntityModifier(WolfRenderer.class, (Wolf wolf, WolfRenderState state) -> state.setRenderData(WolfFrogHatLayer.WOLF, wolf));
     }
 
     // NeoForge 21.4 removed the datagen-time "render_type" blockstate/model JSON field along with

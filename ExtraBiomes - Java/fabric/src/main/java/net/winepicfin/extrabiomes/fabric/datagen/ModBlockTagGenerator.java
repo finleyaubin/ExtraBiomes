@@ -52,6 +52,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.NETHER_REDSTONE_ORE.get(),
                 ModBlocks.PEBBLE.get(),
                 ModBlocks.MOSSY_PEBBLE.get(),
+                ModBlocks.GRASS_STONE.get(),
                 ModBlocks.BLACK_SANDSTONE.get(),
                 ModBlocks.CHISELED_BLACK_SANDSTONE.get(),
                 ModBlocks.CUT_BLACK_SANDSTONE.get(),

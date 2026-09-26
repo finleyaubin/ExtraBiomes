@@ -15,7 +15,7 @@ public class Moorlands {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.SHEEP, 8, 2, 4));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 8, new MobSpawnSettings.SpawnerData(EntityType.SHEEP, 2, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);

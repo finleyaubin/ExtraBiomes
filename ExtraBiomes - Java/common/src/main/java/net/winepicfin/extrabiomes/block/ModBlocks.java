@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.block;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -66,6 +67,8 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> SMOOTH_BLACK_SANDSTONE_STAIRS = registerBlock("smooth_black_sandstone_stairs", () -> new StairBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofLegacyCopy(Blocks.SMOOTH_SANDSTONE_STAIRS).setId(blockId("smooth_black_sandstone_stairs")).mapColor(MapColor.COLOR_BLACK)));
     public static final RegistrySupplier<Block> BLACK_SANDSTONE_WALL = registerBlock("black_sandstone_wall", () -> new WallBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SANDSTONE_WALL).setId(blockId("black_sandstone_wall")).mapColor(MapColor.COLOR_BLACK)));
 
+    public static final RegistrySupplier<Block> GRASS_STONE = registerBlock("grass_stone", () -> new Block(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("grass_stone")).mapColor(MapColor.GRASS).strength(3f)));
+
     private static final StandardWoodSet MYSTIC_WOOD_SET = registerStandardWoodSet("mystic", ModWoodTypes.MYSTIC);
     public static final RegistrySupplier<Block> MYSTIC_PLANKS = MYSTIC_WOOD_SET.planks();
     public static final RegistrySupplier<Block> MYSTIC_LOG = registerBlock("mystic_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_STEM).setId(blockId("mystic_log")).strength(ModLogsTuning.DESTROY_SECONDS)));
@@ -92,7 +95,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> SKY_LOG = registerBlock("sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_STEM).setId(blockId("sky_log")).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> SKY_WOOD = registerBlock("sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_HYPHAE).setId(blockId("sky_wood")).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> STRIPPED_SKY_LOG = registerBlock("stripped_sky_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_WARPED_STEM).setId(blockId("stripped_sky_log")).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.CHERRY_LEAVES).setId(blockId("sky_leaves")).sound(SoundType.GRASS)) );
+    public static final RegistrySupplier<Block> SKY_LEAVES = registerBlock("sky_leaves", () -> new UntintedParticleLeavesBlock(0.0F, ParticleTypes.CHERRY_LEAVES, BlockBehaviour.Properties.ofLegacyCopy(Blocks.CHERRY_LEAVES).setId(blockId("sky_leaves")).sound(SoundType.GRASS)) );
     public static final RegistrySupplier<Block> STRIPPED_SKY_WOOD = registerBlock("stripped_sky_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_WARPED_HYPHAE).setId(blockId("stripped_sky_wood")).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> SKY_SAPLING = registerBlock("sky_sapling", () -> new SaplingBlock(SkyTreeGrower.GROWER, BlockBehaviour.Properties.ofLegacyCopy(Blocks.OAK_SAPLING).setId(blockId("sky_sapling")).strength(0f)));
     public static final RegistrySupplier<Block> SKY_STAIRS = SKY_WOOD_SET.stairs();
@@ -113,7 +116,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> PALM_LOG = registerBlock("palm_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_STEM).setId(blockId("palm_log")).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> PALM_WOOD = registerBlock("palm_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_HYPHAE).setId(blockId("palm_wood")).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> STRIPPED_PALM_LOG = registerBlock("stripped_palm_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_WARPED_STEM).setId(blockId("stripped_palm_log")).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.CHERRY_LEAVES).setId(blockId("palm_leaves")).sound(SoundType.GRASS)) );
+    public static final RegistrySupplier<Block> PALM_LEAVES = registerBlock("palm_leaves", () -> new TintedParticleLeavesBlock(0.0F, BlockBehaviour.Properties.ofLegacyCopy(Blocks.CHERRY_LEAVES).setId(blockId("palm_leaves")).sound(SoundType.GRASS)) );
     public static final RegistrySupplier<Block> STRIPPED_PALM_WOOD = registerBlock("stripped_palm_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_WARPED_HYPHAE).setId(blockId("stripped_palm_wood")).strength(ModLogsTuning.DESTROY_SECONDS)));
     public static final RegistrySupplier<Block> PALM_SAPLING = registerBlock("palm_sapling", () -> new PalmSaplingBlock(PalmTreeGrower.GROWER, BlockBehaviour.Properties.ofLegacyCopy(Blocks.OAK_SAPLING).setId(blockId("palm_sapling")).strength(0f)));
     public static final RegistrySupplier<Block> PALM_STAIRS = PALM_WOOD_SET.stairs();

@@ -1,8 +1,9 @@
 package net.winepicfin.extrabiomes.fabric.gametest;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.gametest.framework.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
@@ -30,8 +31,8 @@ public class SpawnEggItemGameTests {
     private record SpawnEgg(Item item, Supplier<? extends EntityType<? extends Mob>> expectedType) {
     }
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
-    public static void everySpawnEggResolvesRequiredFeaturesWithoutThrowing(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    public void everySpawnEggResolvesRequiredFeaturesWithoutThrowing(GameTestHelper helper) {
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: starting");
         List<SpawnEgg> spawnEggs = List.of(
                 new SpawnEgg(ModItems.PUCKOO_SPAWN_EGG.get(), ModEntities.PUCKOO),
@@ -48,7 +49,7 @@ public class SpawnEggItemGameTests {
             EntityType<? extends Mob> expectedType = egg.expectedType().get();
             LOGGER.info("[SpawnEggItemGameTests] checking {}", item);
 
-            helper.assertTrue(item instanceof SpawnEggItem, item + " is not a SpawnEggItem");
+            helper.assertTrue(item instanceof SpawnEggItem, Component.literal(item + " is not a SpawnEggItem"));
             SpawnEggItem spawnEgg = (SpawnEggItem) item;
 
             // The old-architecture regression: this used to throw NullPointerException
@@ -66,7 +67,7 @@ public class SpawnEggItemGameTests {
             // actually be caught here.
             EntityType<?> resolvedType = spawnEgg.getType(helper.getLevel().registryAccess(), ItemStack.EMPTY);
             helper.assertTrue(resolvedType == expectedType,
-                    item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType);
+                    Component.literal(item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType));
 
             // Regression coverage for the BY_ID map-collision bug: every one of this mod's spawn
             // eggs used to construct with a null EntityType and collide on that single map slot
@@ -77,7 +78,7 @@ public class SpawnEggItemGameTests {
             // pick-block path too, without needing the old byType()-based check this test used to
             // have.
             helper.assertTrue(SpawnEggItem.byId(expectedType) == item,
-                    "SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item);
+                    Component.literal("SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item));
         }
 
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed");

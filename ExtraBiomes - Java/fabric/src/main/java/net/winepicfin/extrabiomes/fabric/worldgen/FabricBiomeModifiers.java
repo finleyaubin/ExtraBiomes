@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.fabric.worldgen;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biomes;
@@ -43,15 +43,15 @@ public class FabricBiomeModifiers {
         // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
         // orders for the same pair of features and vanilla's FeatureSorter crashes with
         // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        // Tag-based (ConventionalBiomeTags.MUSHROOM, same convention tag FabricBiomeTagProvider
+        // Tag-based (ConventionalBiomeTags.IS_MUSHROOM, same convention tag FabricBiomeTagProvider
         // already folds Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome key - any biome
         // (vanilla, this mod's, or a third-party mod's) carrying the tag gets these. Requires
         // Fabric's own datagen to have actually run (gradle-build.yml/java-release.yml's "Generate
         // Fabric data" step, unconditional now - it used to skip whenever another loader was also
         // enabled, which shipped Fabric builds with this tag empty).
-        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.MUSHROOM),
+        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.IS_MUSHROOM),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.MUSHROOM),
+        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.IS_MUSHROOM),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.DARK_FOREST),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
@@ -93,7 +93,7 @@ public class FabricBiomeModifiers {
         BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.WATER_AMBIENT,
                 ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE,
                 MobSpawnWeightTuning.PIRANHA_JUNGLE_MIN_GROUP, MobSpawnWeightTuning.PIRANHA_JUNGLE_MAX_GROUP);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(ConventionalBiomeTags.SWAMP), MobCategory.WATER_AMBIENT,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(ConventionalBiomeTags.IS_SWAMP), MobCategory.WATER_AMBIENT,
                 ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_SWAMP, 2, 5);
         BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_JUNGLE), MobCategory.CREATURE,
                 ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_JUNGLE, 2, 3);

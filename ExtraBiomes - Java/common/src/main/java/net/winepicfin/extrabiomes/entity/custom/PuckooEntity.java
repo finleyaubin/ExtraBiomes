@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.DoubleSupplier;
 
-public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooBaseVariants> {
+public class PuckooEntity extends AbstractHorse {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(PuckooEntity.class, EntityDataSerializers.INT);
 
     // Out of 9: 4/9 inherit this parent's variant, 4/9 inherit the other parent's, 1/9 random.
@@ -76,7 +76,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
 
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setTypeVariant(tag.getInt("Variant"));
+        this.setTypeVariant(tag.getIntOr("Variant", 0));
     }
 
     @Override
@@ -131,7 +131,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
                 this.modifyTemper(FEED_TEMPER_GAIN);
                 if (this.getTemper() >= this.getMaxTemper()) {
                     this.setTamed(true);
-                    this.setOwnerUUID(player.getUUID());
+                    this.setOwner(player);
                     this.broadcastTamingFeedback(true);
                 } else {
                     this.broadcastTamingFeedback(false);
@@ -180,7 +180,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
 
     // A puckoo is outright fall-immune (Bedrock's deals_damage: false), unlike AbstractHorse's reduced-but-real default; matters most when power-jumped off a cliff while ridden.
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, @NotNull DamageSource source) {
         return false;
     }
 
@@ -251,7 +251,6 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         return this.entityData.get(DATA_ID_TYPE_VARIANT);
     }
 
-    @Override
     public void setVariant(PuckooBaseVariants variant) {
         this.setTypeVariant(variant.getId() & 255 | this.getTypeVariant() & -256);
     }
@@ -265,7 +264,6 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         return PuckooKoiMarkings.byId((this.getTypeVariant() & '\uff00') >> 8);
     }
 
-    @Override
     public @NotNull PuckooBaseVariants getVariant() {
         return PuckooBaseVariants.byId(this.getTypeVariant() & 255);
     }

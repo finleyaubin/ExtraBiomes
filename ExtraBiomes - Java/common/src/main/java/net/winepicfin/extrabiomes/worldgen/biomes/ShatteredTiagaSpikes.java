@@ -17,8 +17,8 @@ public class ShatteredTiagaSpikes {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 4, 2, 3));
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 4, 1, 3));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 4, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 2, 3));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 4, new MobSpawnSettings.SpawnerData(EntityType.FOX, 1, 3));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -32,7 +32,7 @@ public class ShatteredTiagaSpikes {
         BiomeDefaultFeatures.addTaigaTrees(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, TaigaSpikeFeatures.TAIGA_SPIKE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, GlacierFeatures.SELECT_SNOW_DRIFT_PLACED_KEY);
         // Reconstructs the pre-1.18 mesa surface builder's noise-gated pillar bumps - the "spikes" this biome is named for, separate from the taiga_spike structure feature above.

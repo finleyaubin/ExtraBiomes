@@ -50,6 +50,7 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.PEBBLE.get(), block -> createPebbleTable(block, PebbleBlock.SIZE, ModItems.PEBBLE.get()));
         add.accept(ModBlocks.MOSSY_PEBBLE.get(), block -> createPebbleTable(block, MossyPebbleBlock.SIZE, ModItems.MOSSY_PEBBLE.get()));
 
+        dropSelf.accept(ModBlocks.GRASS_STONE.get());
         dropSelf.accept(ModBlocks.BLACK_SAND.get());
         dropSelf.accept(ModBlocks.BLACK_SANDSTONE.get());
         dropSelf.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());

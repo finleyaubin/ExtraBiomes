@@ -7,15 +7,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import org.slf4j.Logger;
 
@@ -29,14 +27,11 @@ import org.slf4j.Logger;
 // equivalent of this test - Fabric's GameTestServer runs a flat, void-biome world with no real
 // chunk generator to generate from, and swapping one in (as the Fabric biome test does for biome
 // sampling) doesn't help here since chunk generation itself is the thing being invoked.
-@GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
 public class StructureGenerationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
     // Matches vanilla's own `/locate structure` search radius (LocateCommand.MAX_STRUCTURE_SEARCH_RADIUS), in chunks.
     private static final int SEARCH_RADIUS_CHUNKS = 100;
 
-    @GameTest(template = "empty", timeoutTicks = 60000, batch = "extrabiomes")
     public static void skyCityAppearsInOverworldGeneration(GameTestHelper helper) {
         LOGGER.info("[StructureGenerationGameTests] skyCityAppearsInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();
@@ -57,7 +52,7 @@ public class StructureGenerationGameTests {
         } else {
             LOGGER.error("[StructureGenerationGameTests] skyCityAppearsInOverworldGeneration: failed");
         }
-        helper.assertTrue(found != null, "sky_city structure not found within " + SEARCH_RADIUS_CHUNKS + " chunks of spawn");
+        helper.assertTrue(found != null, Component.literal("sky_city structure not found within " + SEARCH_RADIUS_CHUNKS + " chunks of spawn"));
         helper.succeed();
     }
 }
