@@ -13,11 +13,6 @@
 - Netherlands ores now generate all the way down to bedrock instead of stopping around y=0.
 - Fixed grass generating on cave floors under Jellyfish Fields.
 
-## Items
-<img width="100%" alt="New Spawn Eggs" src="https://github.com/user-attachments/assets/4fdd19cd-5ef6-4c2e-8634-d5ee4591d886" />
-
-- Created updated spawn egg textures for all too match the new vanilla spawn egg styles in all versions above 1.21.5
-
 ## Blocks
 <img width="100%" alt="2026-09-25_23 18 23" src="https://github.com/user-attachments/assets/06187c41-fe6f-445b-9d72-ba881425b33a" />
 
@@ -35,7 +30,7 @@
 
 ## Misc
 - Fixed NeoForge jars shipping without their `data/neoforge/**` generated tags. (only used in by dense cloud blocks so not a big deal)
-- Reorganized the block and item textures into sub folders (mushrooms, black sand, clouds, nether ores, grass stone, one folder per wood set, spawn eggs, boats, food, tools, doors and signs).
+- Reorganized the block and item textures into sub folders (mushrooms, black sand, clouds, nether ores, grass stone, one folder per wood set, boats, food, tools, doors and signs).
 
 ## Beta status
 Still a beta release - the Java port remains newer and less battle-tested than the Bedrock addon, so please keep reporting anything that looks wrong on the GitHub issue tracker.
