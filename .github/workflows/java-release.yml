@@ -455,12 +455,16 @@ jobs:
           DIR="media-slides/java/${{ needs.prepare.outputs.VERSION }}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Own worktree: checking media-slides out in place would delete the next step's working directory.
+          WT="$RUNNER_TEMP/media-slides"
           if git fetch origin media-slides 2>/dev/null; then
-            git checkout -B media-slides origin/media-slides
+            git worktree add -q -B media-slides "$WT" origin/media-slides
           else
-            git checkout --orphan media-slides
-            git reset --hard
+            git worktree add -q --detach "$WT" HEAD
+            git -C "$WT" checkout -q --orphan media-slides
+            git -C "$WT" reset -q --hard
           fi
+          cd "$WT"
           mkdir -p "$DIR"
           cp /tmp/slides/*.jpg "$DIR/"
           git add "$DIR"
