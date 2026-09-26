@@ -21,40 +21,25 @@ on:
 permissions:
   contents: read
 
+
+# Stages: setup -> datagen -> test -> build. Datagen output travels between jobs as an artifact.
 jobs:
-  build:
+  setup:
     # Skip pull_request runs for same-repo PRs - the branch's own push event already
     # triggered this build, so without this an in-repo PR builds twice. External-fork
     # PRs have no push event here, so they still need the pull_request trigger.
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
-    # A normal run of this job (every step below, every enabled loader) takes about 5 minutes in
-    # practice - the individual step timeouts above are per-step worst-case ceilings for a single
-    # slow/hung step, not an indication this job usually runs anywhere near their sum. 20 minutes
-    # gives a real run generous headroom while still failing fast (with the triggering step's own
-    # log visible) if something actually hangs, instead of burning a much longer ceiling.
-    timeout-minutes: 20
     defaults:
       run:
         working-directory: "ExtraBiomes - Java"
+    timeout-minutes: 5
+    outputs:
+      forge: ${{ steps.platforms.outputs.forge }}
+      fabric: ${{ steps.platforms.outputs.fabric }}
+      neoforge: ${{ steps.platforms.outputs.neoforge }}
     steps:
       - uses: actions/checkout@v7
-
-      # Minecraft 1.21.1 still requires Java 21 (unchanged since the 1.20.4->1.20.6 bump that
-      # first required it - confirmed via the merged Minecraft jar's class file version, still
-      # 65.0 on 1.21.1). Loom's toolchain compiles for 21, and the Gradle daemon itself also
-      # needs 21+ to run (a loom dependency requires JVM runtime 21+), so a single JDK covers both.
-      - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          java-version: 21
-          distribution: 'temurin'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
 
       # Single source of truth for which loaders this branch ships (gradle.properties'
       # enabled_platforms, read by common/build.gradle's `architectury { common(...) }` call too)
@@ -72,6 +57,127 @@ jobs:
               echo "$p=false" >> "$GITHUB_OUTPUT"
             fi
           done
+
+  datagen:
+    needs: setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    timeout-minutes: 20
+    steps:
+      - &checkout
+        uses: actions/checkout@v7
+
+      # Minecraft 1.21.1 still requires Java 21 (unchanged since the 1.20.4->1.20.6 bump that
+      # first required it - confirmed via the merged Minecraft jar's class file version, still
+      # 65.0 on 1.21.1). Loom's toolchain compiles for 21, and the Gradle daemon itself also
+      # needs 21+ to run (a loom dependency requires JVM runtime 21+), so a single JDK covers both.
+      - &jdk
+        name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - &gradle
+        name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - &gradlew
+        name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Architectury Loom's shared asset cache (~/.gradle/caches/fabric-loom/assets) isn't
+      # populated until this runs at least once. Without it, runData's forked JVM throws
+      # "Cannot parse argument '.../fabric-loom/assets' of option assetsDir" and - since Loom's
+      # dev-launch wrapper never calls System.exit() after an early crash like this - just hangs
+      # forever instead of failing, eating the whole job's time budget (see the 2026-08-19 CI run
+      # that hit the 6-hour ceiling on this exact step for the failure mode this step prevents).
+      - name: Download Loom assets
+        if: needs.setup.outputs.forge == 'true'
+        run: ./gradlew :forge:downloadAssets
+        timeout-minutes: 10
+
+      # :forge:runData now uses its own "run-data" directory (see forge/build.gradle's data
+      # run config) instead of the "run" dir shared with runGameTestServer - it was previously
+      # leaving a throwaway world save (forge/run/world/level.dat) behind as a side effect of
+      # bootstrapping structure/registry context, which silently overrode the level-seed pinned
+      # in the EULA step above (Minecraft only reads level-seed when *creating* a world) by the
+      # time runGameTestServer started. That was the actual cause of CI's "17/26 biomes not
+      # found" runs - the pinned seed was never taking effect, not a biome-placement/TerraBlender
+      # issue. Isolating runData's working directory removes the interference at its source.
+      - name: Generate data
+        if: needs.setup.outputs.forge == 'true'
+        run: ./gradlew :forge:runData
+        timeout-minutes: 10
+
+      - name: Download NeoForge Loom assets
+        if: needs.setup.outputs.neoforge == 'true'
+        run: ./gradlew :neoforge:downloadAssets
+        timeout-minutes: 10
+
+      - name: Generate NeoForge data
+        if: needs.setup.outputs.neoforge == 'true'
+        run: ./gradlew :neoforge:runData
+        timeout-minutes: 10
+
+      # Loom's data() run type is Forge-only, so Fabric API's own
+      # fabricApi.configureDataGeneration() extension provides the equivalent "runDatagen" task
+      # instead (see fabric/build.gradle). Forge's and NeoForge's own runData above already
+      # populate most of the same shared common/src/generated/resources/, but NOT everything -
+      # Fabric's own ModBiomeTagProvider is the only one that writes Fabric's convention tags
+      # (c:mushroom, c:swamp, ...; Forge/NeoForge write their own forge:/neoforge: equivalents
+      # instead), so this always runs whenever Fabric is enabled, not just when it's the sole
+      # loader - skipping it (previous version of this step) silently shipped Fabric builds
+      # without those tags populated at all, which broke ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS
+      # (see FabricBiomeModifiers) the moment it depended on one. Placed immediately before
+      # Fabric's own block below (rather than off on its own) since Fabric's GameTestServer boot
+      # needs this data present too, same as :common:test does.
+      # :fabric:runDatagen alone only writes to fabric's own private staging dir now (see
+      # fabric/build.gradle) - :fabric:mergeGeneratedData (which depends on runDatagen, so this
+      # still runs both) is what actually merges that into the shared common/src/generated/
+      # resources every other step here reads, with a preserve so it doesn't wipe NeoForge's own
+      # tags the way a direct-to-shared runDatagen used to (see issue #135).
+      - name: Generate Fabric data
+        if: needs.setup.outputs.fabric == 'true'
+        run: ./gradlew :fabric:mergeGeneratedData
+        timeout-minutes: 10
+
+      - name: Verify shared generated data exists
+        run: |
+          if [ ! -d common/src/generated/resources/data/extrabiomes ] || \
+             [ -z "$(ls -A common/src/generated/resources/data/extrabiomes 2>/dev/null)" ]; then
+            echo "::error::common/src/generated/resources/data/extrabiomes is missing or empty - no enabled loader generated shared data."
+            exit 1
+          fi
+
+      - name: Upload generated data
+        uses: actions/upload-artifact@v7
+        with:
+          name: extrabiomes-generated-resources
+          path: "ExtraBiomes - Java/common/src/generated/resources"
+          if-no-files-found: error
+          retention-days: 1
+
+  test:
+    needs: [setup, datagen]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    # Forge's one-boot-per-test GameTests alone can take ~40 minutes on branches that ship Forge.
+    timeout-minutes: 60
+    steps:
+      - *checkout
+      - *jdk
+      - *gradle
+      - *gradlew
+      - name: Download generated data
+        uses: actions/download-artifact@v8
+        with:
+          name: extrabiomes-generated-resources
+          path: "ExtraBiomes - Java/common/src/generated/resources"
 
       # runGameTestServer boots a real dedicated server, which refuses to start without this.
       # Also pre-seed server.properties with a raised max-tick-time:
@@ -106,7 +212,7 @@ jobs:
       # FabricConfig.load()) to a real, non-degenerate climate parameter box per biome; it is not a
       # registration/weight bug, just genuine placement rarity at this specific seed.
       - name: Accept Minecraft EULA for the local test server
-        if: steps.platforms.outputs.forge == 'true'
+        if: needs.setup.outputs.forge == 'true'
         run: |
           mkdir -p forge/run
           echo "eula=true" > forge/run/eula.txt
@@ -119,21 +225,8 @@ jobs:
       # forever instead of failing, eating the whole job's time budget (see the 2026-08-19 CI run
       # that hit the 6-hour ceiling on this exact step for the failure mode this step prevents).
       - name: Download Loom assets
-        if: steps.platforms.outputs.forge == 'true'
+        if: needs.setup.outputs.forge == 'true'
         run: ./gradlew :forge:downloadAssets
-        timeout-minutes: 10
-
-      # :forge:runData now uses its own "run-data" directory (see forge/build.gradle's data
-      # run config) instead of the "run" dir shared with runGameTestServer - it was previously
-      # leaving a throwaway world save (forge/run/world/level.dat) behind as a side effect of
-      # bootstrapping structure/registry context, which silently overrode the level-seed pinned
-      # in the EULA step above (Minecraft only reads level-seed when *creating* a world) by the
-      # time runGameTestServer started. That was the actual cause of CI's "17/26 biomes not
-      # found" runs - the pinned seed was never taking effect, not a biome-placement/TerraBlender
-      # issue. Isolating runData's working directory removes the interference at its source.
-      - name: Generate data
-        if: steps.platforms.outputs.forge == 'true'
-        run: ./gradlew :forge:runData
         timeout-minutes: 10
 
       # As of the Minecraft 1.20.2 / Forge 48.1.0 bump, `/test runall` (batching every registered
@@ -174,7 +267,7 @@ jobs:
       # max-tick-time ceiling. The other 6 tests are cheap structural/registry checks - a much
       # shorter per-boot timeout is generous headroom for CI-runner variance in boot time alone.
       - name: Run GameTests
-        if: steps.platforms.outputs.forge == 'true'
+        if: needs.setup.outputs.forge == 'true'
         run: |
           # Discovered from the actual @GameTest methods instead of hand-maintained, so adding or
           # removing a test can't silently drop out of CI coverage the way a hardcoded list could -
@@ -237,37 +330,24 @@ jobs:
         shell: bash
 
       - name: Upload GameTest log
-        if: always() && steps.platforms.outputs.forge == 'true'
+        if: always() && needs.setup.outputs.forge == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-forge-gametest-log
           path: "ExtraBiomes - Java/gametest.log"
           if-no-files-found: ignore
 
-      # Same level-seed/max-tick-time reasoning as the Forge EULA step above, own run dir since
-      # :neoforge:runData/:neoforge:runGameTestServer use "neoforge/run"/"neoforge/run-data", not
-      # forge's. Kept immediately adjacent to "Run NeoForge GameTests" below (an earlier revision
-      # of this workflow moved NeoForge's downloadAssets/runData away from its own GameTestServer
-      # boot - up near the top of the job, to generate common's shared data earlier - and the
-      # resulting multi-minute gap reproduced a hang twice in a row: all 7 tests logged "passed",
-      # but the vanilla GameTestServer's own "N GAME TESTS COMPLETE" summary line - which fires in
-      # the same tick as the last test elsewhere - never printed. Restoring this adjacency fixed
-      # it).
+      # Same level-seed/max-tick-time reasoning as the Forge EULA step above, in NeoForge's own run dir.
       - name: Accept Minecraft EULA for the NeoForge test server
-        if: steps.platforms.outputs.neoforge == 'true'
+        if: needs.setup.outputs.neoforge == 'true'
         run: |
           mkdir -p neoforge/run
           echo "eula=true" > neoforge/run/eula.txt
           printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\npause-when-empty-seconds=-1\n' > neoforge/run/server.properties
 
       - name: Download NeoForge Loom assets
-        if: steps.platforms.outputs.neoforge == 'true'
+        if: needs.setup.outputs.neoforge == 'true'
         run: ./gradlew :neoforge:downloadAssets
-        timeout-minutes: 10
-
-      - name: Generate NeoForge data
-        if: steps.platforms.outputs.neoforge == 'true'
-        run: ./gradlew :neoforge:runData
         timeout-minutes: 10
 
       # NeoForge's own -Dneoforge.gameTestServer=true flag would make this boot vanilla's
@@ -284,7 +364,7 @@ jobs:
       # sleeping a fixed duration before sending `stop`, since the slow biome-generation test's
       # runtime varies with CI-runner load.
       - name: Run NeoForge GameTests
-        if: steps.platforms.outputs.neoforge == 'true'
+        if: needs.setup.outputs.neoforge == 'true'
         run: |
           mkfifo neoforge-gametest.fifo
           : > neoforge-gametest.log
@@ -392,50 +472,12 @@ jobs:
         shell: bash
 
       - name: Upload NeoForge GameTest log
-        if: always() && steps.platforms.outputs.neoforge == 'true'
+        if: always() && needs.setup.outputs.neoforge == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-neoforge-gametest-log
           path: "ExtraBiomes - Java/neoforge-gametest.log"
           if-no-files-found: ignore
-
-      # Loom's data() run type is Forge-only, so Fabric API's own
-      # fabricApi.configureDataGeneration() extension provides the equivalent "runDatagen" task
-      # instead (see fabric/build.gradle). Forge's and NeoForge's own runData above already
-      # populate most of the same shared common/src/generated/resources/, but NOT everything -
-      # Fabric's own ModBiomeTagProvider is the only one that writes Fabric's convention tags
-      # (c:mushroom, c:swamp, ...; Forge/NeoForge write their own forge:/neoforge: equivalents
-      # instead), so this always runs whenever Fabric is enabled, not just when it's the sole
-      # loader - skipping it (previous version of this step) silently shipped Fabric builds
-      # without those tags populated at all, which broke ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS
-      # (see FabricBiomeModifiers) the moment it depended on one. Placed immediately before
-      # Fabric's own block below (rather than off on its own) since Fabric's GameTestServer boot
-      # needs this data present too, same as :common:test does.
-      # :fabric:runDatagen alone only writes to fabric's own private staging dir now (see
-      # fabric/build.gradle) - :fabric:mergeGeneratedData (which depends on runDatagen, so this
-      # still runs both) is what actually merges that into the shared common/src/generated/
-      # resources every other step here reads, with a preserve so it doesn't wipe NeoForge's own
-      # tags the way a direct-to-shared runDatagen used to (see issue #135).
-      - name: Generate Fabric data
-        if: steps.platforms.outputs.fabric == 'true'
-        run: ./gradlew :fabric:mergeGeneratedData
-        timeout-minutes: 10
-
-      # Guards the actual bug class that broke this job twice in one day (a prior commit reordered
-      # steps and silently booted Fabric's GameTestServer before any loader had generated
-      # common/src/generated/resources/, crashing on a missing loot table with no hint why). This
-      # dependency is enforced only by which loader's block happens to run first in this file, not
-      # by anything Gradle checks - so a future reorder can reintroduce the same silent breakage.
-      # Fail loudly here instead, right before the first thing in the file that actually needs the
-      # data, rather than relying on comments elsewhere to keep the ordering right forever.
-      - name: Verify shared generated data exists
-        if: steps.platforms.outputs.fabric == 'true'
-        run: |
-          if [ ! -d common/src/generated/resources/data/extrabiomes ] || \
-             [ -z "$(ls -A common/src/generated/resources/data/extrabiomes 2>/dev/null)" ]; then
-            echo "::error::common/src/generated/resources/data/extrabiomes is missing or empty - no enabled loader generated shared data before this step. Check step ordering in this workflow (Forge/NeoForge runData must run before Fabric's GameTestServer boot)."
-            exit 1
-          fi
 
       # Same level-seed and max-tick-time reasoning as the Forge EULA/seed step above - Fabric's
       # run/ dir gets a clean checkout every CI run too, so it needs its own pinned seed for a
@@ -443,7 +485,7 @@ jobs:
       # the same FLOOR-depth-constrained ServerLevel#findClosestBiome3d searches as Forge's, so it
       # needs the same raised ceiling to avoid the vanilla-default 60s watchdog killing it mid-sweep.
       - name: Pin seed for the Fabric test server
-        if: steps.platforms.outputs.fabric == 'true'
+        if: needs.setup.outputs.fabric == 'true'
         run: |
           mkdir -p fabric/run
           printf 'max-tick-time=1000000\nlevel-seed=extrabiomes\n' > fabric/run/server.properties
@@ -455,31 +497,17 @@ jobs:
       # 30-40s, but the FLOOR-depth ones can each individually approach the 1000s max-tick-time
       # ceiling above.
       - name: Run Fabric GameTests
-        if: steps.platforms.outputs.fabric == 'true'
+        if: needs.setup.outputs.fabric == 'true'
         run: timeout 3000 ./gradlew :fabric:runGameTestServer | tee fabric-gametest.log
         shell: bash
 
       - name: Upload Fabric GameTest log
-        if: always() && steps.platforms.outputs.fabric == 'true'
+        if: always() && needs.setup.outputs.fabric == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-fabric-gametest-log
           path: "ExtraBiomes - Java/fabric-gametest.log"
           if-no-files-found: ignore
-
-      # Deliberately runs after every enabled loader's own GameTest section above (rather than
-      # right after Forge's runData, where this step used to sit) so :common:test's
-      # BiomeRegistrationParityTest - which reads generated biome JSON from
-      # common/src/generated/resources/ - always has that data available by the time it runs,
-      # regardless of which loader(s) this branch actually has enabled (see gradle.properties'
-      # enabled_platforms).
-      - name: Verify shared generated data exists (unit tests)
-        run: |
-          if [ ! -d common/src/generated/resources/data/extrabiomes ] || \
-             [ -z "$(ls -A common/src/generated/resources/data/extrabiomes 2>/dev/null)" ]; then
-            echo "::error::common/src/generated/resources/data/extrabiomes is missing or empty - no enabled loader generated shared data before :common:test. Check step ordering in this workflow."
-            exit 1
-          fi
 
       - name: Run unit tests
         run: ./gradlew :common:test
@@ -494,28 +522,34 @@ jobs:
           path: "ExtraBiomes - Java/common/build/reports/tests/test/"
           if-no-files-found: ignore
 
-      # Runs (and uploads) even when an earlier GameTest step failed - a manually-downloadable jar
-      # to test against is useful precisely when the automated biome-placement check disagrees
-      # with local results, so a real failure here shouldn't also block getting a jar out. Which
-      # loaders actually get built here follows settings.gradle's `include(...)` list, which
-      # should be kept in sync with enabled_platforms (see gradle.properties).
-      #
-      # Safe as one shared build again (previously each loader's own datagen step above deleted
-      # the other loaders' generated content on this same shared folder, so only whichever
-      # loader's datagen step happened to run last here actually ended up packaged correctly -
-      # see issue #135). Each loader's own build.gradle now regenerates its data into a private
-      # directory and merges it into this shared folder with an explicit Gradle `preserve` for
-      # the other loaders' namespaces (neoforge/build.gradle and fabric/build.gradle's
-      # mergeGeneratedData tasks, both already run above by the "Generate ... data" steps), so
-      # neither loader's merge step wipes the other's content - `build` here just packages
-      # whatever's on disk, which is now always the union of both.
+  build:
+    needs: [setup, datagen, test]
+    # Still builds and uploads jars when tests failed (a jar to test by hand is most useful then);
+    # the last step then fails this job so the run stays red.
+    if: always() && needs.datagen.result == 'success'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    timeout-minutes: 20
+    steps:
+      - *checkout
+      - *jdk
+      - *gradle
+      - *gradlew
+      - name: Download generated data
+        uses: actions/download-artifact@v8
+        with:
+          name: extrabiomes-generated-resources
+          path: "ExtraBiomes - Java/common/src/generated/resources"
+
       - name: Build with Gradle
         if: always()
         run: ./gradlew build
         timeout-minutes: 15
 
       - name: Upload build artifacts
-        if: always() && steps.platforms.outputs.forge == 'true'
+        if: always() && needs.setup.outputs.forge == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-forge-build
@@ -523,7 +557,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload Fabric build artifacts
-        if: always() && steps.platforms.outputs.fabric == 'true'
+        if: always() && needs.setup.outputs.fabric == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-fabric-build
@@ -531,9 +565,15 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload NeoForge build artifacts
-        if: always() && steps.platforms.outputs.neoforge == 'true'
+        if: always() && needs.setup.outputs.neoforge == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: extrabiomes-neoforge-build
           path: "ExtraBiomes - Java/neoforge/build/libs/*.jar"
           if-no-files-found: ignore
+
+      - name: Fail if the test stage failed
+        if: needs.test.result != 'success'
+        run: |
+          echo "::error::Test stage result: ${{ needs.test.result }}"
+          exit 1
