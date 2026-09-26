@@ -162,7 +162,8 @@ def map_block(name, states, be=None):
     if name == "minecraft:iron_chain":
         return "minecraft:chain", {"axis": _s(states.get("pillar_axis", "y"))}
 
-    if name in ("minecraft:ice", "minecraft:blue_ice", "minecraft:packed_ice"):
+    if name in ("minecraft:ice", "minecraft:blue_ice", "minecraft:packed_ice",
+                "minecraft:powder_snow", "minecraft:gravel", "minecraft:andesite", "minecraft:calcite"):
         return name, {}
 
     if name == "minecraft:stone":

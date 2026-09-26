@@ -3,6 +3,7 @@ package net.winepicfin.extrabiomes.datagen;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.winepicfin.extrabiomes.commondatagen.TexturePaths;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -67,7 +68,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.CUT_BLACK_SANDSTONE_SLAB);
         evenSimplerBlockItem(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB);
         withExistingParent(BuiltInRegistries.BLOCK.getKey(ModBlocks.BLACK_SANDSTONE_WALL.get()).getPath(), mcLoc("block/wall_inventory"))
-                .texture("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone"));
+                .texture("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block("black_sandstone")));
 
         // Mystic Wood
         simpleBlockItem(ModBlocks.MYSTIC_DOOR);
@@ -164,7 +165,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 String armorItemPath = "item/" + itemRegistryObject.getId().getPath();
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
-                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, armorItemPath);
+                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(itemRegistryObject.getId().getPath()));
                 ResourceLocation trimResLoc = ResourceLocation.withDefaultNamespace(trimPath);
                 ResourceLocation trimNameResLoc = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, currentTrimName);
 
@@ -187,7 +188,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .predicate(mcLoc("trim_type"), trimValue).end()
                         .texture("layer0",
                                 ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,
-                                        "item/" + itemRegistryObject.getId().getPath()));
+                                        TexturePaths.item(itemRegistryObject.getId().getPath())));
             });
         }
     }
@@ -199,13 +200,13 @@ public class ModItemModelProvider extends ItemModelProvider {
     private ItemModelBuilder boatItem(RegistrySupplier<Item> item, String texture) {
         return withExistingParent(item.getId().getPath(),
                 ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + texture));
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(texture)));
     }
 
     private ItemModelBuilder simpleItem(RegistrySupplier<Item> item){
         return withExistingParent(item.getId().getPath(),
             ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(item.getId().getPath())));
     }
     public void evenSimplerBlockItem(RegistrySupplier<Block> block) {
         this.withExistingParent(ExtraBiomes.MOD_ID + ":" + BuiltInRegistries.BLOCK.getKey(block.get()).getPath(),
@@ -219,23 +220,23 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     public void fenceItem(RegistrySupplier<Block> block, RegistrySupplier<Block> baseBlock) {
         this.withExistingParent(BuiltInRegistries.BLOCK.getKey(block.get()).getPath(), mcLoc("block/fence_inventory"))
-                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath()));
+                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block(BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath())));
     }
 
     public void buttonItem(RegistrySupplier<Block> block, RegistrySupplier<Block> baseBlock) {
         this.withExistingParent(BuiltInRegistries.BLOCK.getKey(block.get()).getPath(), mcLoc("block/button_inventory"))
-                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath()));
+                .texture("texture",  ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block(BuiltInRegistries.BLOCK.getKey(baseBlock.get()).getPath())));
     }
 
     private ItemModelBuilder simpleBlockItem(RegistrySupplier<Block> item) {
         return withExistingParent(item.getId().getPath(),
                 ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"item/" + item.getId().getPath()));
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(item.getId().getPath())));
     }
 
     private ItemModelBuilder saplingItem(RegistrySupplier<Block> item) {
         return withExistingParent(item.getId().getPath(),
                 ResourceLocation.withDefaultNamespace("item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"block/" + item.getId().getPath()));
+                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block(item.getId().getPath())));
     }
 }
