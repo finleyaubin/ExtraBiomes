@@ -23,9 +23,15 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
-        this.tag(BlockTags.NEEDS_STONE_TOOL);
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(
+                ModBlocks.NETHER_COPPER_ORE.get(),
+                ModBlocks.NETHER_IRON_ORE.get(),
+                ModBlocks.NETHER_LAPIS_ORE.get()
+        );
 
         this.tag(BlockTags.NEEDS_IRON_TOOL).add(
+                ModBlocks.NETHER_EMERALD_ORE.get(),
+                ModBlocks.NETHER_REDSTONE_ORE.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get()
         );
 
@@ -36,8 +42,15 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(),
                 ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get(),
+                ModBlocks.NETHER_COAL_ORE.get(),
+                ModBlocks.NETHER_COPPER_ORE.get(),
+                ModBlocks.NETHER_EMERALD_ORE.get(),
+                ModBlocks.NETHER_IRON_ORE.get(),
+                ModBlocks.NETHER_LAPIS_ORE.get(),
+                ModBlocks.NETHER_REDSTONE_ORE.get(),
                 ModBlocks.PEBBLE.get(),
                 ModBlocks.MOSSY_PEBBLE.get(),
+                ModBlocks.GRASS_STONE.get(),
                 ModBlocks.BLACK_SANDSTONE.get(),
                 ModBlocks.CHISELED_BLACK_SANDSTONE.get(),
                 ModBlocks.CUT_BLACK_SANDSTONE.get(),
@@ -195,7 +208,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 Blocks.WHITE_GLAZED_TERRACOTTA,
                 Blocks.ORANGE_GLAZED_TERRACOTTA,
                 Blocks.RED_GLAZED_TERRACOTTA,
-                Blocks.BLACK_GLAZED_TERRACOTTA
+                Blocks.BLACK_GLAZED_TERRACOTTA,
+                // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
+                Blocks.NETHERRACK
         );
 
 
