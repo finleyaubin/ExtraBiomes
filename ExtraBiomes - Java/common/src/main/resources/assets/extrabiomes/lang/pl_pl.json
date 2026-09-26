@@ -30,6 +30,7 @@
   "block.extrabiomes.goo": "Maz",
   "block.extrabiomes.air_block": "Powietrze",
   "block.extrabiomes.grass_stone": "Trawiasty Kamien",
+  "item.extrabiomes.grass_stone": "Trawiasty Kamien",
   "block.extrabiomes.dense_cloud": "Gesta Gesta Chmura",
   "block.extrabiomes.dense_cloud_brick": "Gesta Gesta Chmura Cegla z Gestej Chmury",
   "block.extrabiomes.dense_cloud_brick_slab": "Gesta Gesta Chmura Cegla z Gestej Chmury Plyta",
