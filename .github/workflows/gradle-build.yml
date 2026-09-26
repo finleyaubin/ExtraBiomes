@@ -22,7 +22,8 @@ permissions:
   contents: read
 
 
-# Stages: setup -> datagen -> test -> build. Datagen output travels between jobs as an artifact.
+# Stages: setup -> datagen -> test (parallel suites) beside package -> build (the required check).
+# Datagen output travels between jobs as an artifact.
 jobs:
   setup:
     # Skip pull_request runs for same-repo PRs - the branch's own push event already
@@ -559,8 +560,8 @@ jobs:
           path: "ExtraBiomes - Java/common/build/reports/tests/test/"
           if-no-files-found: ignore
 
-  build:
-    # Runs beside the test stage rather than after it; the status job below gates the run on both.
+  package:
+    # Runs beside the test stage rather than after it; the build job below gates the run on both.
     needs: [setup, datagen]
     runs-on: ubuntu-latest
     defaults:
@@ -613,12 +614,13 @@ jobs:
           if-no-files-found: ignore
 
 
-  status:
-    needs: [setup, datagen, test, build]
+  build:
+    # Branch protection requires 'build', so this is the job that fails when any stage failed.
+    needs: [setup, datagen, test, package]
     if: always() && needs.setup.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Check every stage passed
         run: |
-          echo "datagen=${{ needs.datagen.result }} test=${{ needs.test.result }} build=${{ needs.build.result }}"
-          [ "${{ needs.datagen.result }}" = success ] && [ "${{ needs.test.result }}" = success ] && [ "${{ needs.build.result }}" = success ]
+          echo "datagen=${{ needs.datagen.result }} test=${{ needs.test.result }} package=${{ needs.package.result }}"
+          [ "${{ needs.datagen.result }}" = success ] && [ "${{ needs.test.result }}" = success ] && [ "${{ needs.package.result }}" = success ]
