@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.winepicfin.extrabiomes.commondatagen.TexturePaths;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -69,15 +70,15 @@ public class ModBlockStateProvider implements DataProvider {
         grassStoneBlock(ModBlocks.GRASS_STONE.get());
         // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
-        cubeBottomTopBlock(ModBlocks.BLACK_SANDSTONE.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("black_sandstone_bottom"), modLoc("black_sandstone_top"));
-        cubeBottomTopBlock(ModBlocks.CHISELED_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), modLoc("black_sandstone_top"), modLoc("black_sandstone_top"));
-        cubeBottomTopBlock(ModBlocks.CUT_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("black_sandstone_top"), modLoc("black_sandstone_top"));
-        cubeAllBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), modLoc("black_sandstone_top"));
-        stairsBlock(ModBlocks.BLACK_SANDSTONE_STAIRS.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("black_sandstone_bottom"), modLoc("black_sandstone_top"));
-        stairsBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(), modLoc("black_sandstone_top"));
-        slabBlock(ModBlocks.BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("black_sandstone_bottom"), modLoc("black_sandstone_top"));
-        slabBlock(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("black_sandstone_top"), modLoc("black_sandstone_top"));
-        slabBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), modLoc("black_sandstone_top"));
+        cubeBottomTopBlock(ModBlocks.BLACK_SANDSTONE.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
+        cubeBottomTopBlock(ModBlocks.CHISELED_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
+        cubeBottomTopBlock(ModBlocks.CUT_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
+        cubeAllBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), texLoc("black_sandstone_top"));
+        stairsBlock(ModBlocks.BLACK_SANDSTONE_STAIRS.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
+        stairsBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(), texLoc("black_sandstone_top"));
+        slabBlock(ModBlocks.BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
+        slabBlock(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
+        slabBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), texLoc("black_sandstone_top"));
         wallBlock(ModBlocks.BLACK_SANDSTONE_WALL.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()));
         // mystic wood
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
@@ -93,8 +94,8 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.MYSTIC_PRESSURE_PLATE.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         fenceBlock(ModBlocks.MYSTIC_FENCE.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         fenceGateBlock(ModBlocks.MYSTIC_FENCE_GATE.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
-        doorBlockState(ModBlocks.MYSTIC_DOOR.get(), modLoc("mystic_door_bottom"), modLoc("mystic_door_top"));
-        trapdoorBlockState(ModBlocks.MYSTIC_TRAPDOOR.get(), modLoc("mystic_trapdoor"));
+        doorBlockState(ModBlocks.MYSTIC_DOOR.get(), texLoc("mystic_door_bottom"), texLoc("mystic_door_top"));
+        trapdoorBlockState(ModBlocks.MYSTIC_TRAPDOOR.get(), texLoc("mystic_trapdoor"));
         signBlockState(ModBlocks.MYSTIC_SIGN.get(), ModBlocks.MYSTIC_WALL_SIGN.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         hangingSignBlockState(ModBlocks.MYSTIC_HANGING_SIGN.get(), ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         // sky wood
@@ -111,8 +112,8 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.SKY_PRESSURE_PLATE.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         fenceBlock(ModBlocks.SKY_FENCE.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         fenceGateBlock(ModBlocks.SKY_FENCE_GATE.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
-        doorBlockState(ModBlocks.SKY_DOOR.get(), modLoc("sky_door_bottom"), modLoc("sky_door_top"));
-        trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), modLoc("sky_trapdoor"));
+        doorBlockState(ModBlocks.SKY_DOOR.get(), texLoc("sky_door_bottom"), texLoc("sky_door_top"));
+        trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), texLoc("sky_trapdoor"));
         signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.SKY_HANGING_SIGN.get(), ModBlocks.SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         // palm wood
@@ -129,8 +130,8 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.PALM_PRESSURE_PLATE.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         fenceBlock(ModBlocks.PALM_FENCE.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         fenceGateBlock(ModBlocks.PALM_FENCE_GATE.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
-        doorBlockState(ModBlocks.PALM_DOOR.get(), modLoc("palm_door_bottom"), modLoc("palm_door_top"));
-        trapdoorBlockState(ModBlocks.PALM_TRAPDOOR.get(), modLoc("palm_trapdoor"));
+        doorBlockState(ModBlocks.PALM_DOOR.get(), texLoc("palm_door_bottom"), texLoc("palm_door_top"));
+        trapdoorBlockState(ModBlocks.PALM_TRAPDOOR.get(), texLoc("palm_trapdoor"));
         signBlockState(ModBlocks.PALM_SIGN.get(), ModBlocks.PALM_WALL_SIGN.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         hangingSignBlockState(ModBlocks.PALM_HANGING_SIGN.get(), ModBlocks.PALM_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         // Gilded Sky wood
@@ -145,8 +146,8 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         fenceBlock(ModBlocks.GILDED_SKY_FENCE.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         fenceGateBlock(ModBlocks.GILDED_SKY_FENCE_GATE.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
-        doorBlockState(ModBlocks.GILDED_SKY_DOOR.get(), modLoc("gilded_sky_door_bottom"), modLoc("gilded_sky_door_top"));
-        trapdoorBlockState(ModBlocks.GILDED_SKY_TRAPDOOR.get(), modLoc("gilded_sky_trapdoor"));
+        doorBlockState(ModBlocks.GILDED_SKY_DOOR.get(), texLoc("gilded_sky_door_bottom"), texLoc("gilded_sky_door_top"));
+        trapdoorBlockState(ModBlocks.GILDED_SKY_TRAPDOOR.get(), texLoc("gilded_sky_trapdoor"));
         signBlockState(ModBlocks.GILDED_SKY_SIGN.get(), ModBlocks.GILDED_SKY_WALL_SIGN.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.GILDED_SKY_HANGING_SIGN.get(), ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         // Small Mushrooms
@@ -174,7 +175,15 @@ public class ModBlockStateProvider implements DataProvider {
     // ---- helpers -----------------------------------------------------------------------------
 
     private ResourceLocation blockTexture(Block block) {
-        return TextureMapping.getBlockTexture(block);
+        return texLoc(BuiltInRegistries.BLOCK.getKey(block).getPath());
+    }
+
+    private ResourceLocation modelOf(ResourceLocation texture) {
+        return modLoc(texture.getPath().substring(texture.getPath().lastIndexOf('/') + 1));
+    }
+
+    private ResourceLocation texLoc(String stem) {
+        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block(stem));
     }
 
     private ResourceLocation modLoc(String path) {
@@ -199,8 +208,8 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void grassStoneBlock(Block block) {
-        TextureMapping common = new TextureMapping().put(TextureSlot.SIDE, modLoc("grass_stone_side")).put(TextureSlot.BOTTOM, modLoc("grass_stone_bottom")).put(TextureSlot.TOP, modLoc("grass_stone_top"));
-        TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, modLoc("grass_stone_side")).put(TextureSlot.BOTTOM, modLoc("grass_stone_bottom")).put(TextureSlot.TOP, modLoc("grass_stone_top_egg"));
+        TextureMapping common = new TextureMapping().put(TextureSlot.SIDE, texLoc("grass_stone_side")).put(TextureSlot.BOTTOM, texLoc("grass_stone_bottom")).put(TextureSlot.TOP, texLoc("grass_stone_top"));
+        TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, texLoc("grass_stone_side")).put(TextureSlot.BOTTOM, texLoc("grass_stone_bottom")).put(TextureSlot.TOP, texLoc("grass_stone_top_egg"));
         ResourceLocation commonModel = ModelTemplates.CUBE_BOTTOM_TOP.create(block, common, models::put);
         ResourceLocation eggModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_egg", egg, models::put);
         blockStates.put(block, MultiVariantGenerator.multiVariant(block,
@@ -248,7 +257,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void saplingBlock(Block block) {
-        ResourceLocation model = ModelTemplates.CROSS.create(block, TextureMapping.cross(block), models::put);
+        ResourceLocation model = ModelTemplates.CROSS.create(block, new TextureMapping().put(TextureSlot.CROSS, blockTexture(block)), models::put);
         simpleBlockState(block, model);
         saplingItemModel(block);
     }
@@ -454,9 +463,11 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // The model JSON these blockstates reference was never actually generated on Fabric, leaving doors/trapdoors as the missing-model placeholder.
-    private void doorBlockState(Block block, ResourceLocation bottomModel, ResourceLocation topModel) {
+    private void doorBlockState(Block block, ResourceLocation bottomTexture, ResourceLocation topTexture) {
+        ResourceLocation bottomModel = modelOf(bottomTexture);
+        ResourceLocation topModel = modelOf(topTexture);
         // Uses the closed/left-hinge DOOR_BOTTOM_LEFT/TOP_LEFT template; Y_ROT alone approximates the other facing/open/hinge combos well enough.
-        TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomModel).put(TextureSlot.TOP, topModel);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
         ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
         ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
 
@@ -489,14 +500,15 @@ public class ModBlockStateProvider implements DataProvider {
     // face rotations needed to keep the slats reading the same way regardless of facing. The plain
     // "template_trapdoor_*" parent is only correct for oak/iron's rotationally-symmetric grid
     // texture - using it here was what made the slats appear to spin between open and closed.
-    private void trapdoorBlockState(Block block, ResourceLocation baseModelName) {
+    private void trapdoorBlockState(Block block, ResourceLocation baseTexture) {
+        ResourceLocation baseModelName = modelOf(baseTexture);
         ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
         ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
         ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
-        putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseModelName);
-        putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseModelName);
-        putTrapdoorModel(open, "minecraft:block/template_orientable_trapdoor_open", baseModelName);
+        putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseTexture);
+        putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseTexture);
+        putTrapdoorModel(open, "minecraft:block/template_orientable_trapdoor_open", baseTexture);
         // Matches vanilla's 3D-look trapdoor item icon (no flat sprite texture is checked in).
         delegateItemModel(block, bottom);
 

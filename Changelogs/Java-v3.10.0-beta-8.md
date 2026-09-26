@@ -9,6 +9,7 @@
 ## Visuals
 - Regenerated the LabPBR normal/specular maps to include heightmaps for black sand and black sandstone, matching the Bedrock addon's PBR set.
 - Updated the palm sapling model.
+- Reorganised the block and item textures into subfolders (mushrooms, black sand, clouds, nether ores, grass stone, one folder per wood set, spawn eggs, boats, food, tools, doors and signs). Resource packs that override ExtraBiomes textures will need the new paths.
 
 ## Compatibility
 - Fixed NeoForge jars shipping without their `data/neoforge/**` generated tags.
