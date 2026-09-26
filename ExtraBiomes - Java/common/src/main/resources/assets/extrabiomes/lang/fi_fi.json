@@ -30,6 +30,7 @@
   "block.extrabiomes.goo": "Lima",
   "block.extrabiomes.air_block": "Ilma",
   "block.extrabiomes.grass_stone": "Ruohokivi",
+  "item.extrabiomes.grass_stone": "Ruohokivi",
   "block.extrabiomes.dense_cloud": "Tihea Tihea Pilvi",
   "item.extrabiomes.dense_cloud": "Tihea Tihea Pilvi",
   "block.extrabiomes.dense_cloud_brick": "Tihea Tihea Pilvi Tihean Pilven Tiili",
