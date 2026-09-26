@@ -249,9 +249,11 @@ jobs:
       # skipping it silently shipped Fabric builds without those tags populated at all. Placed
       # immediately before Fabric's own block below since Fabric's GameTestServer boot needs
       # this data present too, same as :common:test does.
+      # mergeGeneratedData runs runDatagen into a private dir, then merges it into the shared folder
+      # without wiping Forge/NeoForge-only data (#135).
       - name: Generate Fabric data
         if: steps.platforms.outputs.fabric == 'true'
-        run: ./gradlew :fabric:runDatagen
+        run: ./gradlew :fabric:mergeGeneratedData
         timeout-minutes: 10
 
       # Guards the actual bug class that broke this job twice in one day (a prior commit reordered
@@ -311,8 +313,9 @@ jobs:
         run: ./gradlew :neoforge:downloadAssets
         timeout-minutes: 10
 
+      # Same private-dir + merge as Fabric's step above, preserving Fabric's data/c tags and Forge's biome modifiers (#135).
       - name: Generate NeoForge data
-        run: ./gradlew :neoforge:runData
+        run: ./gradlew :neoforge:mergeGeneratedData
         timeout-minutes: 10
 
       # Unlike Forge (see the Forge "Run GameTests" step's own comment for the two framework bugs
