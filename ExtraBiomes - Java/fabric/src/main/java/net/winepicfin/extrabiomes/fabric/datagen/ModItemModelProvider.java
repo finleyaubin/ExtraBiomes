@@ -3,6 +3,7 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.winepicfin.extrabiomes.commondatagen.TexturePaths;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -108,7 +109,7 @@ public class ModItemModelProvider implements DataProvider {
         // Black Sandstone Wall - "wall_inventory" parent needs an explicit item entry (walls, unlike
         // most blocks, use a dedicated inventory-only model rather than reusing a placed-block model).
         withExistingParent(ModBlocks.BLACK_SANDSTONE_WALL.getId().getPath(), "minecraft:block/wall_inventory")
-                .add("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone").toString());
+                .add("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block("black_sandstone")).toString());
 
         // Boat items - see ModItems.BOAT_MODEL_ENTRIES (common) for which wood type uses which texture.
         ModItems.BOAT_MODEL_ENTRIES.forEach(entry -> boatItem(entry.item().get(), entry.texture()));
@@ -128,7 +129,7 @@ public class ModItemModelProvider implements DataProvider {
     private void simpleItem(Item item) {
         ResourceLocation id = ModelLocationUtils.getModelLocation(item);
         // decorateItemModelLocation(path) defaults to the "minecraft" namespace, not this mod's - producing missing textures.
-        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + BuiltInRegistries.ITEM.getKey(item).getPath());
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(BuiltInRegistries.ITEM.getKey(item).getPath()));
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -146,7 +147,7 @@ public class ModItemModelProvider implements DataProvider {
     // match by convention.
     private void boatItem(Item item, String texture) {
         ResourceLocation id = ModelLocationUtils.getModelLocation(item);
-        ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + texture);
+        ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(texture));
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -250,7 +251,7 @@ public class ModItemModelProvider implements DataProvider {
             default -> "";
         };
         String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
-        ResourceLocation itemTexture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + itemPath);
+        ResourceLocation itemTexture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(itemPath));
 
         List<Map.Entry<ResourceKey<TrimMaterial>, Float>> entries = List.copyOf(TRIM_MATERIALS.entrySet());
         ItemModelBuilder base = new ItemModelBuilder("minecraft:item/generated").add("layer0", itemTexture.toString());
