@@ -127,16 +127,31 @@ def links_height():
     return len(LINKS) * LINK_STEP
 
 
-def fitted(draw, text, largest, smallest):
-    return next((font("regular", size) for size in range(largest, smallest - 1, -2)
-                 if draw.textlength(text, font=font("regular", size)) <= W - 2 * MARGIN),
-                font("regular", smallest))
+def link_parts(link):
+    """"Modrinth=modrinth.com/..." -> ("Modrinth  ", "modrinth.com/..."); a bare URL has no name."""
+    name, _, url = link.rpartition("=")
+    return (f"{name}  " if name else ""), url
+
+
+def link_width(draw, link, size):
+    name, url = link_parts(link)
+    return draw.textlength(name, font=font("bold", size)) + draw.textlength(url, font=font("regular", size))
+
+
+def fitted_size(draw, link, largest, smallest):
+    return next((size for size in range(largest, smallest - 1, -2)
+                 if link_width(draw, link, size) <= W - 2 * MARGIN), smallest)
 
 
 def draw_links(draw, top):
     # Stories posted through the API can't carry link stickers, so the release pages are printed.
+    size = min((fitted_size(draw, link, 30, 18) for link in LINKS), default=30)
     for offset, link in enumerate(LINKS):
-        draw.text((MARGIN, top + offset * LINK_STEP), link, font=fitted(draw, link, 30, 20), fill=THEME["accent"])
+        name, url = link_parts(link)
+        y = top + offset * LINK_STEP
+        draw.text((MARGIN, y), name, font=font("bold", size), fill=THEME["ink"])
+        draw.text((MARGIN + draw.textlength(name, font=font("bold", size)), y), url,
+                  font=font("regular", size), fill=THEME["accent"])
 
 
 def chrome(image, version, footer):
@@ -261,8 +276,10 @@ def selftest():
         ["https://e/a.png", "https://e/b.png"]
     draw = ImageDraw.Draw(Image.new("RGB", (1, 1)))
     assert len(wrap(draw, "word " * 60, font("regular", 44), 500)) > 1
-    long_link = "github.com/finleyaubin/ExtraBiomes/releases/tag/Java-v3.10.0-beta-8"
-    assert draw.textlength(long_link, font=fitted(draw, long_link, 30, 20)) <= W - 2 * MARGIN
+    long_link = "GitHub release=github.com/finleyaubin/ExtraBiomes/releases/tag/Java-v3.10.0-beta-8"
+    assert link_parts(long_link)[0] == "GitHub release  "
+    assert link_parts("modrinth.com/x") == ("", "modrinth.com/x")
+    assert link_width(draw, long_link, fitted_size(draw, long_link, 30, 18)) <= W - 2 * MARGIN
     print("ok")
 
 
@@ -276,7 +293,7 @@ def main():
     parser.add_argument("--edition", choices=["Java", "Bedrock"],
                         help="defaults to the changelog filename's prefix")
     parser.add_argument("--link", action="append", default=[],
-                        help="release page URL printed at the foot of every slide (repeatable)")
+                        help="'Name=url' printed at the foot of every slide (repeatable)")
     parser.add_argument("--selftest", action="store_true")
     args = parser.parse_args()
     if args.selftest:
