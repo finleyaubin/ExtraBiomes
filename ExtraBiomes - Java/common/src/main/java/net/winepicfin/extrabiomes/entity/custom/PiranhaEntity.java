@@ -212,10 +212,8 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariant(tag.getInt("Variant"));
-        if (tag.contains("Size")) {
-            this.setSizeScale(tag.getFloat("Size"));
-        }
+        this.setVariant(tag.getIntOr("Variant", 0));
+        tag.getFloat("Size").ifPresent(this::setSizeScale);
     }
 
     @Nullable

@@ -4,19 +4,29 @@
 #
 # Usage:
 #   IG_TOKEN=... IG_USER_ID=... ./tools/post_instagram_retry.sh 3.1.0-beta-3
+#   IG_TOKEN=... IG_USER_ID=... ./tools/post_instagram_retry.sh 3.10.0-beta-8 Java
 #
 # The slides need a stable public URL for Meta's fetcher to pull from - this pushes them
 # to the media-slides branch itself (same as the release workflow) before posting.
 set -euo pipefail
 
-VERSION="${1:?usage: post_instagram_retry.sh <version, e.g. 3.1.0-beta-3>}"
+VERSION="${1:?usage: post_instagram_retry.sh <version, e.g. 3.1.0-beta-3> [Bedrock|Java]}"
+EDITION="${2:-Bedrock}"
 : "${IG_TOKEN:?set IG_TOKEN}"
 : "${IG_USER_ID:?set IG_USER_ID}"
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
-CHANGELOG="Changelogs/Bedrock-${VERSION}.md"
+case "$EDITION" in
+  Bedrock) CHANGELOG="Changelogs/Bedrock-${VERSION}.md"; TAG="Bedrock-V${VERSION}"; LINKS=() ;;
+  # Same links the Java release workflow prints on its slides.
+  Java) CHANGELOG="Changelogs/Java-v${VERSION}.md"; TAG="Java-v${VERSION}"
+        LINKS=(--link "Modrinth=modrinth.com/mod/extrabiome/versions"
+               --link "CurseForge=curseforge.com/minecraft/mc-mods/extrabiomes/files"
+               --link "GitHub release=github.com/finleyaubin/ExtraBiomes/releases/tag/${TAG}") ;;
+  *) echo "edition must be Bedrock or Java" >&2; exit 1 ;;
+esac
 [ -f "$CHANGELOG" ] || { echo "No changelog at $CHANGELOG" >&2; exit 1; }
 
 WORK=$(mktemp -d)
@@ -25,9 +35,9 @@ cp "$CHANGELOG" "$WORK/changelog.md"
 
 pip install --quiet pillow
 python3 tools/render_slides.py "$WORK/changelog.md" \
-  --version "$VERSION" --edition Bedrock --out "$WORK/slides"
+  --version "$VERSION" --edition "$EDITION" --out "$WORK/slides" "${LINKS[@]}"
 
-DIR="media-slides/bedrock/${VERSION}"
+DIR="media-slides/$(echo "$EDITION" | tr '[:upper:]' '[:lower:]')/${VERSION}"
 WT=$(mktemp -d)
 git fetch origin media-slides 2>/dev/null || true
 if git rev-parse --verify origin/media-slides >/dev/null 2>&1; then
@@ -40,7 +50,7 @@ cd "$WT"
 mkdir -p "$DIR"
 cp "$WORK"/slides/*.jpg "$DIR/"
 git add "$DIR"
-git commit -qm "Story slides for Bedrock-V${VERSION} (local retry)" || echo "no slide changes"
+git commit -qm "Story slides for ${TAG} (local retry)" || echo "no slide changes"
 git push -q origin media-slides
 SHA=$(git rev-parse HEAD)
 cd "$REPO_ROOT"

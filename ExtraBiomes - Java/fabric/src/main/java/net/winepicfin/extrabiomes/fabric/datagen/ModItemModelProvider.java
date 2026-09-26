@@ -1,8 +1,8 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.winepicfin.extrabiomes.commondatagen.TexturePaths;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
@@ -108,27 +107,26 @@ public class ModItemModelProvider implements DataProvider {
         // Black Sandstone Wall - "wall_inventory" parent needs an explicit item entry (walls, unlike
         // most blocks, use a dedicated inventory-only model rather than reusing a placed-block model).
         withExistingParent(ModBlocks.BLACK_SANDSTONE_WALL.getId().getPath(), "minecraft:block/wall_inventory")
-                .add("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/black_sandstone").toString());
+                .add("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block("black_sandstone")).toString());
 
         // Boat items - see ModItems.BOAT_MODEL_ENTRIES (common) for which wood type uses which texture.
         ModItems.BOAT_MODEL_ENTRIES.forEach(entry -> boatItem(entry.item().get(), entry.texture()));
 
-        // Spawn Eggs. Colors must match ModItems' registration calls - vanilla no longer tints
-        // these via the Item/ItemColor classes, only via this "tints" array (see spawnEgg()).
-        spawnEgg(ModItems.PUCKOO_SPAWN_EGG.get(), 0xffffff, 0xea7630);
-        spawnEgg(ModItems.WORM_SPAWN_EGG.get(), 0xff81d9, 0xff4343);
-        spawnEgg(ModItems.TREEFROG_SPAWN_EGG.get(), 0x329b17, 0x034722);
-        spawnEgg(ModItems.HOPPLESHROOM_SPAWN_EGG.get(), 0x9b1717, 0xfdd8d8);
-        spawnEgg(ModItems.GIANT_TORTOISE_SPAWN_EGG.get(), 0x364710, 0xa66643);
-        spawnEgg(ModItems.JELLYFISH_SPAWN_EGG.get(), 0x932a9e, 0xdc7ce6);
-        spawnEgg(ModItems.PIRANHA_SPAWN_EGG.get(), 0x444444, 0x251515);
-        spawnEgg(ModItems.HARPY_SPAWN_EGG.get(), 0x2319af, 0xe9c600);
+        // Spawn eggs: per-egg textures, since 1.21.5 removed vanilla's tinted template_spawn_egg model.
+        simpleItem(ModItems.PUCKOO_SPAWN_EGG.get());
+        simpleItem(ModItems.WORM_SPAWN_EGG.get());
+        simpleItem(ModItems.TREEFROG_SPAWN_EGG.get());
+        simpleItem(ModItems.HOPPLESHROOM_SPAWN_EGG.get());
+        simpleItem(ModItems.GIANT_TORTOISE_SPAWN_EGG.get());
+        simpleItem(ModItems.JELLYFISH_SPAWN_EGG.get());
+        simpleItem(ModItems.PIRANHA_SPAWN_EGG.get());
+        simpleItem(ModItems.HARPY_SPAWN_EGG.get());
     }
 
     private void simpleItem(Item item) {
         ResourceLocation id = ModelLocationUtils.getModelLocation(item);
         // decorateItemModelLocation(path) defaults to the "minecraft" namespace, not this mod's - producing missing textures.
-        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + BuiltInRegistries.ITEM.getKey(item).getPath());
+        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(BuiltInRegistries.ITEM.getKey(item).getPath()));
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -146,7 +144,7 @@ public class ModItemModelProvider implements DataProvider {
     // match by convention.
     private void boatItem(Item item, String texture) {
         ResourceLocation id = ModelLocationUtils.getModelLocation(item);
-        ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + texture);
+        ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(texture));
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -156,32 +154,6 @@ public class ModItemModelProvider implements DataProvider {
             return json;
         });
         clientItem(BuiltInRegistries.ITEM.getKey(item), id);
-    }
-
-    // Spawn egg color is no longer an Item-level ItemColor tint in 1.21.4 - it's a "tints" array
-    // baked directly into the items/*.json client item, same as vanilla's own egg items (see
-    // e.g. assets/minecraft/items/creeper_spawn_egg.json). No separate models/item/*.json needed,
-    // vanilla's own template_spawn_egg model is referenced directly.
-    private void spawnEgg(Item item, int backgroundColor, int highlightColor) {
-        items.put(BuiltInRegistries.ITEM.getKey(item), () -> {
-            JsonObject model = new JsonObject();
-            model.addProperty("type", "minecraft:model");
-            model.addProperty("model", "minecraft:item/template_spawn_egg");
-            JsonArray tints = new JsonArray();
-            tints.add(tint(backgroundColor));
-            tints.add(tint(highlightColor));
-            model.add("tints", tints);
-            JsonObject json = new JsonObject();
-            json.add("model", model);
-            return json;
-        });
-    }
-
-    private static JsonObject tint(int rgb) {
-        JsonObject tint = new JsonObject();
-        tint.addProperty("type", "minecraft:constant");
-        tint.addProperty("value", 0xFF000000 | rgb);
-        return tint;
     }
 
     // Minimal withExistingParent-style builder: registers a model whose only content is "parent" plus
@@ -239,9 +211,9 @@ public class ModItemModelProvider implements DataProvider {
     }
 
     private void trimmedArmorItem(Item item) {
-        if (!(item instanceof ArmorItem)) return;
         Equippable equippable = item.getDefaultInstance().get(DataComponents.EQUIPPABLE);
-        EquipmentSlot equipmentSlot = equippable != null ? equippable.slot() : EquipmentSlot.HEAD;
+        if (equippable == null) return;
+        EquipmentSlot equipmentSlot = equippable.slot();
         String armorType = switch (equipmentSlot) {
             case HEAD -> "helmet";
             case CHEST -> "chestplate";
@@ -250,7 +222,7 @@ public class ModItemModelProvider implements DataProvider {
             default -> "";
         };
         String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
-        ResourceLocation itemTexture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + itemPath);
+        ResourceLocation itemTexture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(itemPath));
 
         List<Map.Entry<ResourceKey<TrimMaterial>, Float>> entries = List.copyOf(TRIM_MATERIALS.entrySet());
         ItemModelBuilder base = new ItemModelBuilder("minecraft:item/generated").add("layer0", itemTexture.toString());

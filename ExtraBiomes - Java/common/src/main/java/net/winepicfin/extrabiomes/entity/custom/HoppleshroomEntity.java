@@ -92,7 +92,7 @@ public class HoppleshroomEntity extends Animal {
 
     // Fall damage is reduced by a flat 12 rather than cancelled, so near-continuous hopping never hurts it but a long enough drop still kills it.
     @Override
-    protected int calculateFallDamage(float distance, float multiplier) {
+    protected int calculateFallDamage(double distance, float multiplier) {
         return Math.max(0, super.calculateFallDamage(distance, multiplier) + FALL_DAMAGE_MODIFIER);
     }
 
@@ -187,7 +187,7 @@ public class HoppleshroomEntity extends Animal {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariant(tag.getInt("Variant"));
+        this.setVariant(tag.getIntOr("Variant", 0));
     }
 
     @Nullable

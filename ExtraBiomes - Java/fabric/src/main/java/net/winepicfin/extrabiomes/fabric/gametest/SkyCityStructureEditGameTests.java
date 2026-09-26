@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.fabric.gametest;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.gametest.framework.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -31,8 +31,8 @@ public class SkyCityStructureEditGameTests {
     private static final int MARGIN = 4;
 
     // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000, manualOnly = true)
-    public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":sky_city_edit_void", maxTicks = 60000, manualOnly = true)
+    public void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         StructureTemplateManager templates = level.getStructureManager();
         int buildingsRowDepth = placeRow(helper, level, templates, BUILDINGS, "buildings", 1);

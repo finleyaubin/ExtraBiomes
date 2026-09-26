@@ -20,7 +20,7 @@ public class CharredForest {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.BAT, 5, 4, 4));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityType.BAT, 4, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -35,7 +35,7 @@ public class CharredForest {
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_BIRCH_AND_OAK);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_BIRCH_AND_OAK_LEAF_LITTER);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addForestGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);

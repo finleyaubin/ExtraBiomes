@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -65,7 +65,7 @@ public class WolfFrogHatHandler {
     public static void onWolfTick(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof Wolf wolf) || wolf.level().isClientSide) return;
         if (wolf.getItemBySlot(EquipmentSlot.HEAD).getItem() != ModItems.FROG_HELMET.get()) return;
-        if (wolf.isInWaterOrBubble()) return;
+        if (wolf.isInWater()) return;
 
         wolf.addEffect(FrogHelmetEffects.wolfWaterBreathing());
         wolf.addEffect(FrogHelmetEffects.wolfJumpBoost());

@@ -49,7 +49,7 @@ public class TreefrogEntity extends Animal {
 
     // Subtracts a flat 12 (Bedrock's modifier) rather than cancelling fall damage outright like vanilla Frog does, so hopping is safe but long drops stay lethal.
     @Override
-    protected int calculateFallDamage(float distance, float multiplier) {
+    protected int calculateFallDamage(double distance, float multiplier) {
         return Math.max(0, super.calculateFallDamage(distance, multiplier) + TreefrogTuning.FALL_DAMAGE_MODIFIER);
     }
 

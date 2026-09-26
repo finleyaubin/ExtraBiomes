@@ -11,3 +11,4 @@ CLAUDE.md
 *.kra-autosave
 *.kra.autosave
 *.autosave
+*-autosave.kra

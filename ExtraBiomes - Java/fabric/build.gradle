@@ -59,12 +59,15 @@ tasks.named("runGameTestServer") {
 
 fabricApi {
     configureDataGeneration {
-        // Same target Forge's own "data" run writes to (see forge/build.gradle) - datapack content
-        // (biomes, tags, recipes, loot tables) and resource-pack content (blockstates, models) are
-        // loader-agnostic and shouldn't be generated twice per loader or diverge between them.
-        // common's own build.gradle already wires src/generated/resources into its resources
-        // sourceSet, so nothing needs adding to *this* module's resources for it to take effect.
-        outputDirectory = project(':common').file('src/generated/resources')
+        // Private staging dir, NOT common/src/generated/resources directly - vanilla's own
+        // DataGenerator/HashCache behind "runDatagen" deletes any file under its output root it
+        // doesn't recognize as its own, with no way to scope that to just this mod's own
+        // providers (unlike Gradle's Sync task, which supports "preserve"). Pointed directly at
+        // the shared folder, that wiped NeoForge-only content (e.g.
+        // data/neoforge/tags/block/needs_wood_tool.json) every time this ran after NeoForge's own
+        // datagen - see the mergeGeneratedData task below, which merges this private output into
+        // the shared folder with an explicit preserve instead.
+        outputDirectory = layout.buildDirectory.dir("datagen").get().asFile
         addToResources = false
         // 1.21.4 moved block/item model generation (BlockModelGenerators, PropertyDispatch,
         // ModelProvider, etc.) into the client-only net.minecraft.client.data.models package, so
@@ -75,6 +78,31 @@ fabricApi {
         client = true
     }
 }
+
+// Merges runDatagen's private output into the real shared common/src/generated/resources -
+// mirrors neoforge/build.gradle's own mergeGeneratedData (see its comment for the full
+// reasoning). preserve excludes NeoForge's (and Forge's) own namespaces so this Sync's normal
+// "delete anything not in 'from'" cleanup only ever touches Fabric's own generated content
+// (data/c/**, data/extrabiomes/**, data/minecraft/**, ...), not another loader's.
+tasks.register("mergeGeneratedData", Sync) {
+    dependsOn "runDatagen"
+    from layout.buildDirectory.dir("datagen")
+    into project(':common').file('src/generated/resources')
+    preserve {
+        include 'data/neoforge/**'
+        include 'data/forge/**'
+        // NeoForge's biome modifiers (data/extrabiomes/neoforge/biome_modifier) and its own c:is_* biome tags.
+        include 'data/*/neoforge/**'
+        include 'data/*/forge/**'
+        include 'data/c/**'
+    }
+}
+
+// NOT wiring :common:processResources to dependsOn this task - see neoforge/build.gradle's
+// identical comment on why (a real circular dependency: runDatagen needs :common:jar, which
+// needs :common:classes, which already depends on :common:processResources). The "preserve"
+// block above plus running this merge task in CI right where the old direct-to-shared
+// :fabric:runDatagen used to run (see gradle-build.yml) is what keeps this safe instead.
 
 // NOT wiring runClient/runServer to dependsOn "runDatagen" here, unlike neoforge/build.gradle's
 // equivalent (which is safe - NeoForge's dataClient/dataServer are separate userdev-launched JVMs

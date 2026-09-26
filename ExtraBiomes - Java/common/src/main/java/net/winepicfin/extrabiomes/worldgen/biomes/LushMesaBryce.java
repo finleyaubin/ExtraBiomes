@@ -24,7 +24,7 @@ public class LushMesaBryce {
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         BiomeDefaultFeatures.addJungleMelons(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.LUSH_GRASS_PLACED_KEY);

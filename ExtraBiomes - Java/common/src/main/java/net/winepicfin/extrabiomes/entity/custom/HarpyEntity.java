@@ -89,7 +89,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, @NotNull DamageSource source) {
         return false;
     }
 

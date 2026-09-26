@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.mixin;
 
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.winepicfin.extrabiomes.fabric.entity.client.state.WolfRenderStateExtension;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;

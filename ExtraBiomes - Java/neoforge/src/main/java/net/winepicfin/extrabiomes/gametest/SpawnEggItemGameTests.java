@@ -1,15 +1,13 @@
 package net.winepicfin.extrabiomes.gametest;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -38,15 +36,12 @@ import java.util.function.Supplier;
 // (GameData.unfreezeData()) isn't on common's compile classpath by design (common stays
 // loader-agnostic). A GameTest sidesteps this entirely by reusing the mod's own already-registered
 // live items instead of constructing new ones.
-@GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
 public class SpawnEggItemGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private record SpawnEgg(Item item, Supplier<? extends EntityType<? extends Mob>> expectedType) {
     }
 
-    @GameTest(template = "empty", batch = "extrabiomes")
     public static void everySpawnEggResolvesRequiredFeaturesWithoutThrowing(GameTestHelper helper) {
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: starting");
         List<SpawnEgg> spawnEggs = List.of(
@@ -64,7 +59,7 @@ public class SpawnEggItemGameTests {
             EntityType<? extends Mob> expectedType = egg.expectedType().get();
             LOGGER.info("[SpawnEggItemGameTests] checking {}", item);
 
-            helper.assertTrue(item instanceof SpawnEggItem, item + " is not a SpawnEggItem");
+            helper.assertTrue(item instanceof SpawnEggItem, Component.literal(item + " is not a SpawnEggItem"));
             SpawnEggItem spawnEgg = (SpawnEggItem) item;
 
             // The old-architecture regression: this used to throw NullPointerException
@@ -80,8 +75,7 @@ public class SpawnEggItemGameTests {
             // between two eggs (e.g. two eggs both resolving to the same EntityType) would
             // actually be caught here.
             EntityType<?> resolvedType = spawnEgg.getType(helper.getLevel().registryAccess(), ItemStack.EMPTY);
-            helper.assertTrue(resolvedType == expectedType,
-                    item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType);
+            helper.assertTrue(resolvedType == expectedType, Component.literal(item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType));
 
             // Regression coverage for the BY_ID map-collision bug: every one of this mod's spawn
             // eggs used to construct with a null EntityType and collide on that single map slot
@@ -89,8 +83,7 @@ public class SpawnEggItemGameTests {
             // whichever egg happened to register last. MobPickResultMixin resolves
             // EntityType -> egg item through SpawnEggItem.byId(), so it must actually resolve
             // back to this specific egg.
-            helper.assertTrue(SpawnEggItem.byId(expectedType) == item,
-                    "SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item);
+            helper.assertTrue(SpawnEggItem.byId(expectedType) == item, Component.literal("SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item));
         }
 
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed");

@@ -68,7 +68,7 @@ public final class HarpySpawner {
         if (harpy == null) {
             return;
         }
-        harpy.moveTo(x + 0.5, surfaceY, z + 0.5, random.nextFloat() * 360.0F, 0.0F);
+        harpy.snapTo(x + 0.5, surfaceY, z + 0.5, random.nextFloat() * 360.0F, 0.0F);
         harpy.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
         level.addFreshEntity(harpy);
     }

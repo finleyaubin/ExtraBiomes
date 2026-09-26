@@ -23,6 +23,7 @@ import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.gametest.ModGameTests;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.entity.client.BaitRenderer;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseRenderer;
@@ -74,6 +75,7 @@ public class ExtraBiomesForge
         startDatagenExitWatchdogIfRunningDataGen();
         startGameTestExitWatchdogIfRunningGameTestServer();
 
+        ModGameTests.register(modEventBus);
         ModCreativeModeTabs.register();
         ModFluids.register();
         ModFluidTypes.register(modEventBus);

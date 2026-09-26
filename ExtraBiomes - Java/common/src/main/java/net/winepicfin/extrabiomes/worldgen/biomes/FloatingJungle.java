@@ -14,7 +14,7 @@ public class FloatingJungle {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.PARROT, 5, 1, 2));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityType.PARROT, 1, 2));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
@@ -24,7 +24,7 @@ public class FloatingJungle {
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)

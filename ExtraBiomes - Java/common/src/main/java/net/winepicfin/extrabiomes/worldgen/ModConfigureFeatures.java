@@ -8,7 +8,7 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -56,7 +56,7 @@ public class ModConfigureFeatures {
         // the branch tufts visually distinct from the main crown, matching the reference screenshot.
         register(context, MYSTIC_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LOG.get()),
-                new MysticTrunkPlacer(9, 5, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(4, 8), UniformInt.of(-5, -3), UniformInt.of(-1, 1)),
+                new MysticTrunkPlacer(9, 5, 0, new WeightedListInt(WeightedList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(4, 8), UniformInt.of(-5, -3), UniformInt.of(-1, 1)),
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LEAVES.get()),
                 new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(5), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
                 new TwoLayersFeatureSize(1,0,2)).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
@@ -66,7 +66,7 @@ public class ModConfigureFeatures {
         // nod to its existence as an occasional taller/wider tree among the normal MYSTIC_KEY ones).
         register(context, MYSTIC_LARGE_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LOG.get()),
-                new MysticTrunkPlacer(15, 6, 0, new WeightedListInt(SimpleWeightedRandomList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(6, 10), UniformInt.of(-6, -4), UniformInt.of(-1, 1)),
+                new MysticTrunkPlacer(15, 6, 0, new WeightedListInt(WeightedList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(6, 10), UniformInt.of(-6, -4), UniformInt.of(-1, 1)),
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LEAVES.get()),
                 new CherryFoliagePlacer(ConstantInt.of(4), ConstantInt.of(0), ConstantInt.of(6), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
                 new TwoLayersFeatureSize(1,0,2)).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()

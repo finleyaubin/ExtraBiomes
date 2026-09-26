@@ -4,13 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.gametest.framework.GameTestSequence;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.BiomeClimateTuning;
 import org.slf4j.Logger;
@@ -30,8 +28,6 @@ import java.util.List;
 //
 // Requires no physical structure, so it uses a shared 1x1x1 air template
 // (data/extrabiomes/structures/empty.nbt) rather than one authored per test.
-@GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
 public class BiomeGenerationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final int SEARCH_RADIUS_BLOCKS = 15_000;
@@ -60,7 +56,6 @@ public class BiomeGenerationGameTests {
     // environment-dependent drift that has nothing to do with the pinned world seed. Anchoring on
     // a fixed coordinate instead makes the search fully reproducible given the same seed,
     // regardless of the runner's hardware.
-    @GameTest(template = "empty", timeoutTicks = 60000, batch = "extrabiomes")
     public static void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
         LOGGER.info("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();
@@ -91,9 +86,8 @@ public class BiomeGenerationGameTests {
                     } else {
                         LOGGER.error("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: failed");
                     }
-                    helper.assertTrue(missing.isEmpty(),
-                            missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
-                                    + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing);
+                    helper.assertTrue(missing.isEmpty(), Component.literal(missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
+                                    + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing));
                 })
                 .thenSucceed();
     }
