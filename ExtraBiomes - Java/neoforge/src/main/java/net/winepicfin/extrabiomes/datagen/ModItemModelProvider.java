@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.winepicfin.extrabiomes.commondatagen.TexturePaths;
 import net.minecraft.data.CachedOutput;
@@ -15,7 +14,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
@@ -206,10 +204,12 @@ public class ModItemModelProvider implements DataProvider {
         TRIM_MATERIALS.put(TrimMaterials.AMETHYST, 1.0F);
     }
 
+    // Only ever called with FROG_HELMET - reading the item's own EQUIPPABLE component (via
+    // getDefaultInstance() or components()) throws "Components not bound yet" this early during
+    // datagen bootstrap (before the data component registry finishes binding), so the slot is
+    // hardcoded instead of read back at runtime.
     private void trimmedArmorItem(Item item) {
-        Equippable equippable = item.getDefaultInstance().get(DataComponents.EQUIPPABLE);
-        if (equippable == null) return;
-        EquipmentSlot equipmentSlot = equippable.slot();
+        EquipmentSlot equipmentSlot = EquipmentSlot.HEAD;
         String armorType = switch (equipmentSlot) {
             case HEAD -> "helmet";
             case CHEST -> "chestplate";
