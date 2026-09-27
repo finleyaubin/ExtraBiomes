@@ -84,7 +84,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        poseStack.translate(0.05D, -0.1D, -0.02D);
+        poseStack.translate(0.05D, 0.0D, -0.02D);
         poseStack.scale(1F, 1F, 1F);
         poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
         // cameraState only reaches GeoRenderLayers/pre-post-render hooks, none of which this
