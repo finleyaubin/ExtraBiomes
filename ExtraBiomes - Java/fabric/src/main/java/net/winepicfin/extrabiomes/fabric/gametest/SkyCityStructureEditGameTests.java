@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.StructureBlockEntity;
@@ -48,7 +48,7 @@ public class SkyCityStructureEditGameTests {
         int xCursor = 1;
         int maxDepth = 0;
         for (String name : names) {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/" + subfolder + "/" + name);
+            Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/" + subfolder + "/" + name);
             StructureTemplate template = templates.getOrCreate(id);
             Vec3i size = template.getSize();
 

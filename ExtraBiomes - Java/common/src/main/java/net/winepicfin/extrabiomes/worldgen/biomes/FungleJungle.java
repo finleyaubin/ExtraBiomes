@@ -48,6 +48,7 @@ public class FungleJungle {
                 .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.FUNGLE_JUNGLE.skyColor())
                 .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
+                .setAttribute(EnvironmentAttributes.CAN_PILLAGER_PATROL_SPAWN, false)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.FUNGLE_JUNGLE.waterColor())
                         .foliageColorOverride(BiomeAppearanceTuning.FUNGLE_JUNGLE.foliageColor())
