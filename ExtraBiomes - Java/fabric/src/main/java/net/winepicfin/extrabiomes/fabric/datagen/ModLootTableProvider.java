@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -17,11 +17,11 @@ import java.util.concurrent.CompletableFuture;
 // FabricDataOutput extends PackOutput, a method reference to this create(PackOutput) method satisfies
 // that functional interface without any changes.
 public class ModLootTableProvider {
-    // Takes FabricDataOutput specifically (not the plain PackOutput vanilla's own LootTableProvider
+    // Takes FabricPackOutput specifically (not the plain PackOutput vanilla's own LootTableProvider
     // constructor accepts) purely to disambiguate Pack.addProvider's overload resolution - a
     // PackOutput-accepting factory matches both vanilla's DataProvider.Factory and Fabric's own
     // Pack.Factory equally well, which javac rejects as ambiguous.
-    public static LootTableProvider create(FabricDataOutput out, CompletableFuture<HolderLookup.Provider> registriesFuture){
+    public static LootTableProvider create(FabricPackOutput out, CompletableFuture<HolderLookup.Provider> registriesFuture){
         return new LootTableProvider(out, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(registries -> new ModBlockLootTables(out, registriesFuture), LootContextParamSets.BLOCK),
                 new LootTableProvider.SubProviderEntry(registries -> new ModEntityLootTables(out, registriesFuture), LootContextParamSets.ENTITY)

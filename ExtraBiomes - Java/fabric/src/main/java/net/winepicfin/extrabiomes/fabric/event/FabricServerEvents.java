@@ -39,8 +39,8 @@ public class FabricServerEvents {
             }
         });
 
-        ServerTickEvents.END_WORLD_TICK.register(FabricServerEvents::tickWolves);
-        ServerTickEvents.END_WORLD_TICK.register(HarpySpawner::tick);
+        ServerTickEvents.END_LEVEL_TICK.register(FabricServerEvents::tickWolves);
+        ServerTickEvents.END_LEVEL_TICK.register(HarpySpawner::tick);
 
         // Fabric equivalent of forge/.../event/PhantomHarpyTargetHandler.java.
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {

@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
@@ -16,9 +16,9 @@ import java.util.concurrent.CompletableFuture;
 // (both just wrap vanilla TagsProvider<Block> with a computed "blocks" tag directory). Forge's
 // Tags.Blocks.NEEDS_WOOD_TOOL (a Forge-only common convention tag) has no Fabric Convention Tags
 // equivalent wired up elsewhere in this mod, so it's dropped here rather than guessing at one.
-public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
+public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
 
-    public ModBlockTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    public ModBlockTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider);
     }
 

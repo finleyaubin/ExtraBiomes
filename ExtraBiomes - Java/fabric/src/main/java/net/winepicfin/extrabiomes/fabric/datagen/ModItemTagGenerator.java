@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.ItemTags;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -15,9 +15,9 @@ import java.util.concurrent.CompletableFuture;
 // FabricTagProvider.ItemTagProvider (equivalent of Forge's ItemTagsProvider convenience class). Takes
 // the sibling ModBlockTagGenerator so ItemTagProvider.copy(...) is available if ever needed, matching
 // how Forge's version was constructed with the block tag provider's contentsGetter().
-public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
+public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
 
-    public ModItemTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, ModBlockTagGenerator blockTagProvider) {
+    public ModItemTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, ModBlockTagGenerator blockTagProvider) {
         super(output, completableFuture, blockTagProvider);
     }
 

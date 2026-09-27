@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.BiomeTagsProvider;
@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 // tag-provider convenience only covers Block/Item/Fluid/Enchantment/EntityType/GameEvent - so this
 // extends the vanilla class directly, same as Forge does.
 public class ModBiomeTagProvider extends BiomeTagsProvider {
-    public ModBiomeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    public ModBiomeTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider);
     }
 

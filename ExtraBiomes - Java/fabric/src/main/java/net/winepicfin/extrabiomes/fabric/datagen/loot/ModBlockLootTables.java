@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.datagen.loot;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.minecraft.core.HolderLookup;
 import net.winepicfin.extrabiomes.commondatagen.loot.ModBlockLootTableEntries;
 
@@ -15,10 +15,10 @@ import java.util.concurrent.CompletableFuture;
 // hardcodes that check against the ENTIRE BuiltInRegistries.BLOCK registry - extending it directly
 // on Fabric throws "Missing loottable 'minecraft:blocks/stone' for 'minecraft:stone'" (and for every
 // other vanilla/other-mod block) since nothing here generates tables for blocks that aren't ours.
-// Fabric API's own FabricBlockLootTableProvider is the documented fix: it overrides that same
-// completeness check to scope by FabricDataOutput#getModId() instead of the full registry.
-public class ModBlockLootTables extends FabricBlockLootTableProvider {
-    public ModBlockLootTables(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+// Fabric API's own FabricBlockLootSubProvider is the documented fix: it overrides that same
+// completeness check to scope by FabricPackOutput#getModId() instead of the full registry.
+public class ModBlockLootTables extends FabricBlockLootSubProvider {
+    public ModBlockLootTables(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
