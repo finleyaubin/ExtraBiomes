@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.entity.client;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.state.GiantTortoiseRenderState;
 import net.winepicfin.extrabiomes.entity.custom.GiantTortoiseEntity;
@@ -25,7 +25,7 @@ public class GiantTortoiseRenderer extends MobRenderer<GiantTortoiseEntity, Gian
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(GiantTortoiseRenderState state) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/giant_tortoise.png");
+    public @NotNull Identifier getTextureLocation(GiantTortoiseRenderState state) {
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/giant_tortoise.png");
     }
 }

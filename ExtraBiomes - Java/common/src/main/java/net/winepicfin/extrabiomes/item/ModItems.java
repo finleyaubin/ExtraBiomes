@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.item;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.core.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -98,7 +98,7 @@ public class ModItems {
 
 
     private static ResourceKey<Item> itemId(String name) {
-        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     public static void register() {

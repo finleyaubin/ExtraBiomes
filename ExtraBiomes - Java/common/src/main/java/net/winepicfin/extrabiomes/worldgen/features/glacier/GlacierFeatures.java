@@ -7,7 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -130,7 +130,7 @@ public class GlacierFeatures {
 
         List<Holder<PlacedFeature>> snowDriftPlaced = new ArrayList<>();
         for (int i = 0; i < snowDriftWeights.length; i++) {
-            ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_" + (i + 1));
+            Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_" + (i + 1));
             // Drifts 3+ have a flat full-footprint base that floats over any dip, so drape them over the terrain; centering keeps the ~30-wide swirl and giant spire inside the feature write window.
             boolean drapesOverTerrain = i >= 2;
             SingleStructureConfiguration config = drapesOverTerrain
@@ -194,10 +194,10 @@ public class GlacierFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

@@ -4,6 +4,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.AquaticPlacements;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -50,14 +52,14 @@ public class TropicalIsland {
                 .temperature(BiomeClimateTuning.TROPICAL_ISLAND.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x50D8CE)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.TROPICAL_ISLAND.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.TROPICAL_ISLAND.waterColor())
-                        .waterFogColor(0x50D8CE)
-                        .skyColor(BiomeAppearanceTuning.TROPICAL_ISLAND.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.grassColor()).build())
                 .build();
     }
 }

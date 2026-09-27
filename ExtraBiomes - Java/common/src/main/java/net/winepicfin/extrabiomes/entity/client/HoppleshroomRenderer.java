@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.entity.client;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.state.HoppleshroomRenderState;
@@ -15,11 +15,11 @@ public class HoppleshroomRenderer extends MobRenderer<HoppleshroomEntity, Hopple
             "black", "blue", "brown", "crimson", "cyan", "green",
             "orange", "purple", "red", "warped", "white", "yellow"
     };
-    private static final ResourceLocation[] TEXTURES = new ResourceLocation[COLOURS.length];
+    private static final Identifier[] TEXTURES = new Identifier[COLOURS.length];
 
     static {
         for (int i = 0; i < COLOURS.length; i++) {
-            TEXTURES[i] = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,
+            TEXTURES[i] = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,
                     "textures/entity/hopping_spore/" + COLOURS[i] + ".png");
         }
     }
@@ -42,7 +42,7 @@ public class HoppleshroomRenderer extends MobRenderer<HoppleshroomEntity, Hopple
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(HoppleshroomRenderState state) {
+    public @NotNull Identifier getTextureLocation(HoppleshroomRenderState state) {
         return TEXTURES[state.variant];
     }
 }

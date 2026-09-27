@@ -5,7 +5,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -108,7 +108,7 @@ import java.util.Optional;
 public class BoulderFeatures {
 
     public static final TagKey<Block> BOULDER_REPLACEABLE =
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder_replaceable"));
+            TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder_replaceable"));
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> PEBBLE_REGULAR_KEY = configuredKey("pebble_regular");
     public static final ResourceKey<PlacedFeature> PEBBLE_REGULAR_PLACED_KEY = placedKey("pebble_regular");
@@ -242,13 +242,13 @@ public class BoulderFeatures {
     }
 
     private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset) {
-        ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
+        Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
         SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset);
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }
 
     private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structurePath, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
-        ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
+        Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
         SingleStructureConfiguration config = new SingleStructureConfiguration(structure, rotation, groundOffset, minClearFraction, requireGroundedFloor);
         context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
     }
@@ -326,10 +326,10 @@ public class BoulderFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "boulder/" + name));
     }
 }

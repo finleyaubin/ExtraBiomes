@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.winepicfin.extrabiomes.Config;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import terrablender.api.Regions;
@@ -13,8 +13,8 @@ public class ModTerrablender {
 
     public static void registerBiomes(){
         if (!REGISTERED.compareAndSet(false, true)) return;
-        Regions.register(new ModOverworldRegion(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
-        Regions.register(new ModOverworldRegionSecondary(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_secondary"), Config.secondaryBiomeWeight));
-        Regions.register(new ModOverworldRegionRare(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_rare"), Config.rareBiomeWeight));
+        Regions.register(new ModOverworldRegion(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
+        Regions.register(new ModOverworldRegionSecondary(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_secondary"), Config.secondaryBiomeWeight));
+        Regions.register(new ModOverworldRegionRare(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_rare"), Config.rareBiomeWeight));
     }
 }

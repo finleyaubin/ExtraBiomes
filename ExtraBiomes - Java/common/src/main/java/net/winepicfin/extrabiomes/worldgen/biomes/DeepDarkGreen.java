@@ -5,6 +5,9 @@ import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.BackgroundMusic;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -39,15 +42,15 @@ public class DeepDarkGreen {
                 .temperature(BiomeClimateTuning.DEEP_DARK_GREEN.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x050533)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.DEEP_DARK_GREEN.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DEEP_DARK)))
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DEEP_DARK_GREEN.waterColor())
-                        .waterFogColor(0x050533)
-                        .skyColor(BiomeAppearanceTuning.DEEP_DARK_GREEN.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.DEEP_DARK_GREEN.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_GREEN.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DEEP_DARK)).build())
+                        .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_GREEN.grassColor()).build())
                 .build();
     }
 }

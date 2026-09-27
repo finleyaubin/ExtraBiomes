@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -187,7 +187,7 @@ public class WindmillStructure extends Structure {
         return ModStructureTypes.WINDMILL.get();
     }
 
-    static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(net.winepicfin.extrabiomes.ExtraBiomes.MOD_ID, path);
+    static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(net.winepicfin.extrabiomes.ExtraBiomes.MOD_ID, path);
     }
 }

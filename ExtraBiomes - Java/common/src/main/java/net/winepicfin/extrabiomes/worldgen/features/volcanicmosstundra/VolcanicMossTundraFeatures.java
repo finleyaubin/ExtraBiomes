@@ -5,7 +5,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -76,11 +76,11 @@ public class VolcanicMossTundraFeatures {
     // Sharing one merged tag across all three let the moss-floor patch carve straight through the
     // magma bank and repaint it as moss_block, which is what caused moss to visibly sit "on lava".
     public static final TagKey<Block> VOLCANIC_TUNDRA_REPLACEABLE =
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_replaceable"));
+            TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_replaceable"));
     public static final TagKey<Block> VOLCANIC_TUNDRA_BANK_REPLACEABLE =
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_bank_replaceable"));
+            TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_bank_replaceable"));
     public static final TagKey<Block> VOLCANIC_TUNDRA_MOSS_FLOOR_REPLACEABLE =
-            TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_moss_floor_replaceable"));
+            TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_moss_floor_replaceable"));
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> NO_OP_KEY = configuredKey("no_op");
     public static final ResourceKey<PlacedFeature> NO_OP_PLACED_KEY = placedKey("no_op");
@@ -222,7 +222,7 @@ public class VolcanicMossTundraFeatures {
     }
 
     private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, String name, int groundOffset) {
-        ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name);
+        Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name);
         context.register(configuredKey(name), new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
                 new SingleStructureConfiguration(structure, Optional.<net.minecraft.world.level.block.Rotation>empty(), groundOffset)));
     }
@@ -236,10 +236,10 @@ public class VolcanicMossTundraFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
     }
 }

@@ -55,7 +55,7 @@ public class TreefrogEntity extends Animal {
 
     public void hop(double vx, double vz) {
         this.setDeltaMovement(vx, this.getJumpPower(), vz);
-        this.hasImpulse = true;
+        this.needsSync = true;
     }
 
     @Nullable

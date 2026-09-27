@@ -7,6 +7,8 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class JunglePillars {
 
@@ -35,14 +37,14 @@ public class JunglePillars {
                 .temperature(BiomeClimateTuning.JUNGLE_PILLARS.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x113290)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.JUNGLE_PILLARS.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.JUNGLE_PILLARS.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.JUNGLE_PILLARS.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.JUNGLE_PILLARS.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.JUNGLE_PILLARS.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.JUNGLE_PILLARS.grassColor()).build())
                 .build();
     }
 }

@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.winepicfin.extrabiomes.entity.custom.HarpyEntity;
@@ -30,7 +30,7 @@ public final class HarpySpawner {
     private static final double MIN_DISTANCE_BETWEEN_HARPIES = 64.0;
 
     public static void tick(ServerLevel level) {
-        if (!level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING) || level.getDifficulty() == Difficulty.PEACEFUL) {
+        if (!level.getGameRules().get(GameRules.SPAWN_MOBS) || level.getDifficulty() == Difficulty.PEACEFUL) {
             return;
         }
 

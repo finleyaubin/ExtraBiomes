@@ -8,7 +8,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Pools;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -46,8 +46,8 @@ import java.util.Map;
  * separate StructureSets, each with only its own biomes and its own spacing/separation.
  */
 public class WindmillStructures {
-    private static final ResourceLocation WINDMILL_TEMPLATE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "the_netherlands/windmill");
-    private static final ResourceLocation WINDMILL_CREATE_TEMPLATE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "the_netherlands/windmill_create");
+    private static final Identifier WINDMILL_TEMPLATE = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "the_netherlands/windmill");
+    private static final Identifier WINDMILL_CREATE_TEMPLATE = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "the_netherlands/windmill_create");
 
     public static final ResourceKey<StructureTemplatePool> WINDMILL_POOL_KEY = poolKey("windmill");
     public static final ResourceKey<StructureTemplatePool> WINDMILL_CREATE_POOL_KEY = poolKey("windmill_create");
@@ -116,14 +116,14 @@ public class WindmillStructures {
     }
 
     private static ResourceKey<StructureTemplatePool> poolKey(String name) {
-        return ResourceKey.create(net.minecraft.core.registries.Registries.TEMPLATE_POOL, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(net.minecraft.core.registries.Registries.TEMPLATE_POOL, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<Structure> structureKey(String name) {
-        return ResourceKey.create(net.minecraft.core.registries.Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(net.minecraft.core.registries.Registries.STRUCTURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<StructureSet> setKey(String name) {
-        return ResourceKey.create(net.minecraft.core.registries.Registries.STRUCTURE_SET, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(net.minecraft.core.registries.Registries.STRUCTURE_SET, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }
