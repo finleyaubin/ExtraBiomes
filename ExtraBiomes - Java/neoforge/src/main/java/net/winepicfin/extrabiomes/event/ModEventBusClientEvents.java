@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.event;
 
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
@@ -34,7 +34,7 @@ import net.winepicfin.extrabiomes.entity.client.layers.PuckooBaseModelLayers;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 import net.winepicfin.extrabiomes.neoforge.entity.client.layers.WolfFrogHatLayer;
 
-@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
@@ -96,7 +96,7 @@ public class ModEventBusClientEvents {
                     ModBlocks.MYSTIC_LEAVES.get(), ModBlocks.SKY_LEAVES.get(), ModBlocks.PALM_LEAVES.get(),
                     ModBlocks.MYSTIC_DOOR.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.GILDED_SKY_DOOR.get(),
                     ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get()}) {
-                ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
+                ItemBlockRenderTypes.setRenderLayer(block, ChunkSectionLayer.CUTOUT);
             }
         });
     }

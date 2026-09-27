@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.neoforge;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -211,7 +211,7 @@ public class ExtraBiomesForge
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = ExtraBiomes.MOD_ID, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
@@ -220,8 +220,8 @@ public class ExtraBiomesForge
             Sheets.addWoodType(ModWoodTypes.PALM);
             Sheets.addWoodType(ModWoodTypes.SKY);
             Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), ChunkSectionLayer.TRANSLUCENT);
+            ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), ChunkSectionLayer.TRANSLUCENT);
 
             // Saplings/mushrooms/leaves get their cutout render type from their block model's
             // "render_type" field (set in ModBlockStateProvider's datagen) instead of here -

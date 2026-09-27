@@ -1,15 +1,15 @@
 package net.winepicfin.extrabiomes.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.BoatRenderer;
@@ -61,12 +61,12 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         // which happens no earlier than resource/model reload), so our wood types are already
         // present by then.
 
-        BlockRenderLayerMap.INSTANCE.putFluid(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
-        BlockRenderLayerMap.INSTANCE.putFluid(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
+        BlockRenderLayerMap.putFluid(ModFluids.SOURCE_GOO.get(), ChunkSectionLayer.TRANSLUCENT);
+        BlockRenderLayerMap.putFluid(ModFluids.FLOWING_GOO.get(), ChunkSectionLayer.TRANSLUCENT);
 
-        // Without this, saplings/mushrooms/leaves default to RenderType.solid() and their
+        // Without this, saplings/mushrooms/leaves default to ChunkSectionLayer.SOLID and their
         // texture's transparent pixels render as opaque black instead of being cut out.
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
+        BlockRenderLayerMap.putBlocks(ChunkSectionLayer.CUTOUT,
                 ModBlocks.MYSTIC_SAPLING.get(), ModBlocks.SKY_SAPLING.get(), ModBlocks.PALM_SAPLING.get(),
                 ModBlocks.BLACK_MUSHROOM.get(), ModBlocks.BLUE_MUSHROOM.get(), ModBlocks.CYAN_MUSHROOM.get(),
                 ModBlocks.GREEN_MUSHROOM.get(), ModBlocks.ORANGE_MUSHROOM.get(), ModBlocks.PURPLE_MUSHROOM.get(),

@@ -10,7 +10,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 // net.winepicfin.extrabiomes.worldgen.TerraBlenderFixedBiomeCompat (common) - see that class's
 // javadoc for why this is needed. See fabric/.../FabricTerraBlenderFixedBiomeCompat for the
 // Fabric equivalent hook, which calls the same shared logic.
-@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
 public class TerraBlenderFixedBiomeCompat {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onServerAboutToStart(ServerAboutToStartEvent event) {
