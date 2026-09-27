@@ -24,7 +24,9 @@ import net.winepicfin.extrabiomes.worldgen.tree.MysticTreeGrower;
 import net.winepicfin.extrabiomes.worldgen.tree.PalmTreeGrower;
 import net.winepicfin.extrabiomes.worldgen.tree.SkyTreeGrower;
 
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.BLOCK);
@@ -210,6 +212,20 @@ public class ModBlocks {
         RegistrySupplier<Block> hangingSign = BLOCKS.register(name + "_hanging_sign", () -> new ModHangingSignBlock(BlockBehaviour.Properties.ofLegacyCopy(hangingSignBase), woodType));
         RegistrySupplier<Block> wallHangingSign = BLOCKS.register(name + "_wall_hanging_sign", () -> new ModWallHangingSignBlock(BlockBehaviour.Properties.ofLegacyCopy(wallHangingSignBase), woodType));
         return new StandardWoodSigns(sign, wallSign, hangingSign, wallHangingSign);
+    }
+
+    // Transparent texture pixels render opaque black unless these are registered for cutout on each loader.
+    public static List<Block> cutoutBlocks() {
+        return Stream.of(
+                MYSTIC_SAPLING, SKY_SAPLING, PALM_SAPLING,
+                BLACK_MUSHROOM, BLUE_MUSHROOM, CYAN_MUSHROOM, GREEN_MUSHROOM, ORANGE_MUSHROOM,
+                PURPLE_MUSHROOM, WHITE_MUSHROOM, YELLOW_MUSHROOM, GLOW_MUSHROOM,
+                BLACK_MUSHROOM_BLOCK, BLUE_MUSHROOM_BLOCK, CYAN_MUSHROOM_BLOCK, GREEN_MUSHROOM_BLOCK, ORANGE_MUSHROOM_BLOCK,
+                PURPLE_MUSHROOM_BLOCK, WHITE_MUSHROOM_BLOCK, YELLOW_MUSHROOM_BLOCK, GLOW_MUSHROOM_BLOCK,
+                MYSTIC_LEAVES, SKY_LEAVES, PALM_LEAVES,
+                MYSTIC_DOOR, SKY_DOOR, PALM_DOOR, GILDED_SKY_DOOR,
+                MYSTIC_TRAPDOOR, SKY_TRAPDOOR, PALM_TRAPDOOR, GILDED_SKY_TRAPDOOR
+        ).map(Supplier::get).toList();
     }
 
     public static void register() {
