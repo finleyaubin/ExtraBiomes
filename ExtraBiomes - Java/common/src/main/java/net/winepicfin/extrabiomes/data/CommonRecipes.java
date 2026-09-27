@@ -331,7 +331,7 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .pattern("#$#")
                 .pattern("###")
                 .define('#', Items.SAND)
-                .define('$', Items.BLACK_DYE)
+                .define('$', Items.DYE.black())
                 .unlockedBy(getHasName(Items.SAND), has(Items.SAND))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":black_sand_from_dye");
 

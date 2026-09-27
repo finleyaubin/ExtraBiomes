@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -198,6 +199,8 @@ public class UndergroundJungleFeatures {
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
+        HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
+        HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
 
         context.register(FALLEN_JUNGLE_TREE_KEY, new ConfiguredFeature<>(FALLEN_JUNGLE_TREE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
         context.register(CAVE_VINE_KEY, new ConfiguredFeature<>(CAVE_VINE_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
@@ -208,7 +211,7 @@ public class UndergroundJungleFeatures {
                 new StraightTrunkPlacer(4, 8, 0),
                 BlockStateProvider.simple(Blocks.JUNGLE_LEAVES),
                 new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 0, 1))
+                new TwoLayersFeatureSize(1, 0, 1), TreeConfiguration.defaultPlaceBelowTreeTrunkProvider(biomes))
                 .decorators(List.of(TrunkVineDecorator.INSTANCE, new LeaveVineDecorator(0.25F)))
                 .ignoreVines()
                 .build()));
@@ -221,7 +224,7 @@ public class UndergroundJungleFeatures {
         ))));
 
         context.register(CUSTOM_MOSS_PATCH_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                MOSS_PATCH_REPLACEABLE,
+                blocks.getOrThrow(MOSS_PATCH_REPLACEABLE),
                 BlockStateProvider.simple(Blocks.MOSS_BLOCK),
                 placedFeatures.getOrThrow(MOSS_SELECT_PLACED_KEY),
                 CaveSurface.FLOOR,
@@ -253,7 +256,7 @@ public class UndergroundJungleFeatures {
 
         // horizontal_radius 4, not Bedrock's 8: a radius-8 patch, compounded with its nested moss patch and trees, pushes writes into far chunks and gets rejected.
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                GRASS_FLOOR_REPLACEABLE,
+                blocks.getOrThrow(GRASS_FLOOR_REPLACEABLE),
                 BlockStateProvider.simple(Blocks.GRASS_BLOCK),
                 placedFeatures.getOrThrow(SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY),
                 CaveSurface.FLOOR,
@@ -267,7 +270,7 @@ public class UndergroundJungleFeatures {
 
         // vegetation_chance 0: never actually grows anything - see class docs
         context.register(GRASS_FLOOR_UPPER_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                GRASS_FLOOR_UPPER_REPLACEABLE,
+                blocks.getOrThrow(GRASS_FLOOR_UPPER_REPLACEABLE),
                 BlockStateProvider.simple(Blocks.GRASS_BLOCK),
                 placedFeatures.getOrThrow(SELECT_MOSS_OR_JUNGLE_TREE_UPPER_PLACED_KEY),
                 CaveSurface.FLOOR,

@@ -77,9 +77,10 @@ public class TropicalIslandFeatures {
 
         // vegetationChance 0.0F is intentional: no vegetation is ever placed, this is just a sand-to-grass floor patch.
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
+        HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
         context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH,
                 new VegetationPatchConfiguration(
-                        ISLAND_GRASS_FLOOR_REPLACEABLE,
+                        blocks.getOrThrow(ISLAND_GRASS_FLOOR_REPLACEABLE),
                         BlockStateProvider.simple(Blocks.GRASS_BLOCK.defaultBlockState()),
                         placedFeatures.getOrThrow(UndergroundJungleFeatures.SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY),
                         CaveSurface.FLOOR,

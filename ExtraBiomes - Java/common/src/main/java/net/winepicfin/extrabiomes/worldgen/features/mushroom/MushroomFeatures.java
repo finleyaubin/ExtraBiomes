@@ -254,9 +254,10 @@ public class MushroomFeatures {
         ));
 
         HolderGetter<PlacedFeature> placedFeatures4 = context.lookup(Registries.PLACED_FEATURE);
+        HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
         // Field order is (replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance) - a prior swap of verticalRange/extraEdgeColumnChance here failed datagen ("Value 0 outside of range [1:256]").
         register(context, MYCELIUM_FLOOR_KEY, Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                MYCELIUM_FLOOR_REPLACEABLE,
+                blocks.getOrThrow(MYCELIUM_FLOOR_REPLACEABLE),
                 BlockStateProvider.simple(Blocks.MYCELIUM),
                 placedFeatures4.getOrThrow(SELECT_MUSHROOM_PLACED_KEY),
                 CaveSurface.FLOOR,

@@ -1,8 +1,13 @@
 package net.winepicfin.extrabiomes.datagen;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -14,6 +19,10 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
 
+    // no longer exposed as a BlockTags constant in 26.2, but the vanilla tag data still exists
+    private static final TagKey<Block> LOGS_THAT_BURN =
+            TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
+
     public ModBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, ExtraBiomes.MOD_ID);
     }
@@ -22,180 +31,180 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
         this.tag(BlockTags.NEEDS_STONE_TOOL).add(
-                ModBlocks.NETHER_COPPER_ORE.get(),
-                ModBlocks.NETHER_IRON_ORE.get(),
-                ModBlocks.NETHER_LAPIS_ORE.get()
+                ModBlocks.NETHER_COPPER_ORE.getKey(),
+                ModBlocks.NETHER_IRON_ORE.getKey(),
+                ModBlocks.NETHER_LAPIS_ORE.getKey()
         );
 
         this.tag(BlockTags.NEEDS_IRON_TOOL).add(
-                ModBlocks.NETHER_EMERALD_ORE.get(),
-                ModBlocks.NETHER_REDSTONE_ORE.get(),
-                ModBlocks.NETHER_DIAMOND_ORE.get()
+                ModBlocks.NETHER_EMERALD_ORE.getKey(),
+                ModBlocks.NETHER_REDSTONE_ORE.getKey(),
+                ModBlocks.NETHER_DIAMOND_ORE.getKey()
         );
 
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL);
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
-                ModBlocks.DENSE_CLOUD_BRICK.get(),
-                ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(),
-                ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(),
-                ModBlocks.NETHER_DIAMOND_ORE.get(),
-                ModBlocks.NETHER_COAL_ORE.get(),
-                ModBlocks.NETHER_COPPER_ORE.get(),
-                ModBlocks.NETHER_EMERALD_ORE.get(),
-                ModBlocks.NETHER_IRON_ORE.get(),
-                ModBlocks.NETHER_LAPIS_ORE.get(),
-                ModBlocks.NETHER_REDSTONE_ORE.get(),
-                ModBlocks.PEBBLE.get(),
-                ModBlocks.MOSSY_PEBBLE.get(),
-                ModBlocks.GRASS_STONE.get(),
-                ModBlocks.BLACK_SANDSTONE.get(),
-                ModBlocks.CHISELED_BLACK_SANDSTONE.get(),
-                ModBlocks.CUT_BLACK_SANDSTONE.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE.get(),
-                ModBlocks.BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(),
-                ModBlocks.BLACK_SANDSTONE_WALL.get()
+                ModBlocks.DENSE_CLOUD_BRICK.getKey(),
+                ModBlocks.DENSE_CLOUD_BRICK_SLAB.getKey(),
+                ModBlocks.DENSE_CLOUD_BRICK_STAIRS.getKey(),
+                ModBlocks.NETHER_DIAMOND_ORE.getKey(),
+                ModBlocks.NETHER_COAL_ORE.getKey(),
+                ModBlocks.NETHER_COPPER_ORE.getKey(),
+                ModBlocks.NETHER_EMERALD_ORE.getKey(),
+                ModBlocks.NETHER_IRON_ORE.getKey(),
+                ModBlocks.NETHER_LAPIS_ORE.getKey(),
+                ModBlocks.NETHER_REDSTONE_ORE.getKey(),
+                ResourceKey.create(Registries.BLOCK, ModBlocks.PEBBLE.getId()),
+                ResourceKey.create(Registries.BLOCK, ModBlocks.MOSSY_PEBBLE.getId()),
+                ModBlocks.GRASS_STONE.getKey(),
+                ModBlocks.BLACK_SANDSTONE.getKey(),
+                ModBlocks.CHISELED_BLACK_SANDSTONE.getKey(),
+                ModBlocks.CUT_BLACK_SANDSTONE.getKey(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE.getKey(),
+                ModBlocks.BLACK_SANDSTONE_SLAB.getKey(),
+                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.getKey(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.getKey(),
+                ModBlocks.BLACK_SANDSTONE_STAIRS.getKey(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.getKey(),
+                ModBlocks.BLACK_SANDSTONE_WALL.getKey()
         );
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(
-                ModBlocks.STICK_PILE.get(),
+                ModBlocks.STICK_PILE.getKey(),
                 // mystic wood
-                ModBlocks.MYSTIC_PLANKS.get(),
-                ModBlocks.MYSTIC_STAIRS.get(),
-                ModBlocks.MYSTIC_SLAB.get(),
-                ModBlocks.MYSTIC_BUTTON.get(),
-                ModBlocks.MYSTIC_PRESSURE_PLATE.get(),
-                ModBlocks.MYSTIC_FENCE.get(),
-                ModBlocks.MYSTIC_FENCE_GATE.get(),
-                ModBlocks.MYSTIC_DOOR.get(),
-                ModBlocks.MYSTIC_TRAPDOOR.get(),
-                ModBlocks.MYSTIC_SIGN.get(),
-                ModBlocks.MYSTIC_HANGING_SIGN.get(),
-                ModBlocks.MYSTIC_WALL_SIGN.get(),
-                ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),
+                ModBlocks.MYSTIC_PLANKS.getKey(),
+                ModBlocks.MYSTIC_STAIRS.getKey(),
+                ModBlocks.MYSTIC_SLAB.getKey(),
+                ModBlocks.MYSTIC_BUTTON.getKey(),
+                ModBlocks.MYSTIC_PRESSURE_PLATE.getKey(),
+                ModBlocks.MYSTIC_FENCE.getKey(),
+                ModBlocks.MYSTIC_FENCE_GATE.getKey(),
+                ModBlocks.MYSTIC_DOOR.getKey(),
+                ModBlocks.MYSTIC_TRAPDOOR.getKey(),
+                ModBlocks.MYSTIC_SIGN.getKey(),
+                ModBlocks.MYSTIC_HANGING_SIGN.getKey(),
+                ModBlocks.MYSTIC_WALL_SIGN.getKey(),
+                ModBlocks.MYSTIC_WALL_HANGING_SIGN.getKey(),
                 // sky wood
-                ModBlocks.SKY_PLANKS.get(),
-                ModBlocks.SKY_STAIRS.get(),
-                ModBlocks.SKY_SLAB.get(),
-                ModBlocks.SKY_BUTTON.get(),
-                ModBlocks.SKY_PRESSURE_PLATE.get(),
-                ModBlocks.SKY_FENCE.get(),
-                ModBlocks.SKY_FENCE_GATE.get(),
-                ModBlocks.SKY_DOOR.get(),
-                ModBlocks.SKY_TRAPDOOR.get(),
-                ModBlocks.SKY_SIGN.get(),
-                ModBlocks.SKY_HANGING_SIGN.get(),
-                ModBlocks.SKY_WALL_SIGN.get(),
-                ModBlocks.SKY_WALL_HANGING_SIGN.get(),
+                ModBlocks.SKY_PLANKS.getKey(),
+                ModBlocks.SKY_STAIRS.getKey(),
+                ModBlocks.SKY_SLAB.getKey(),
+                ModBlocks.SKY_BUTTON.getKey(),
+                ModBlocks.SKY_PRESSURE_PLATE.getKey(),
+                ModBlocks.SKY_FENCE.getKey(),
+                ModBlocks.SKY_FENCE_GATE.getKey(),
+                ModBlocks.SKY_DOOR.getKey(),
+                ModBlocks.SKY_TRAPDOOR.getKey(),
+                ModBlocks.SKY_SIGN.getKey(),
+                ModBlocks.SKY_HANGING_SIGN.getKey(),
+                ModBlocks.SKY_WALL_SIGN.getKey(),
+                ModBlocks.SKY_WALL_HANGING_SIGN.getKey(),
                 // palm wood
-                ModBlocks.PALM_PLANKS.get(),
-                ModBlocks.PALM_STAIRS.get(),
-                ModBlocks.PALM_SLAB.get(),
-                ModBlocks.PALM_BUTTON.get(),
-                ModBlocks.PALM_PRESSURE_PLATE.get(),
-                ModBlocks.PALM_FENCE.get(),
-                ModBlocks.PALM_FENCE_GATE.get(),
-                ModBlocks.PALM_DOOR.get(),
-                ModBlocks.PALM_TRAPDOOR.get(),
-                ModBlocks.PALM_SIGN.get(),
-                ModBlocks.PALM_HANGING_SIGN.get(),
-                ModBlocks.PALM_WALL_SIGN.get(),
-                ModBlocks.PALM_WALL_HANGING_SIGN.get(),
+                ModBlocks.PALM_PLANKS.getKey(),
+                ModBlocks.PALM_STAIRS.getKey(),
+                ModBlocks.PALM_SLAB.getKey(),
+                ModBlocks.PALM_BUTTON.getKey(),
+                ModBlocks.PALM_PRESSURE_PLATE.getKey(),
+                ModBlocks.PALM_FENCE.getKey(),
+                ModBlocks.PALM_FENCE_GATE.getKey(),
+                ModBlocks.PALM_DOOR.getKey(),
+                ModBlocks.PALM_TRAPDOOR.getKey(),
+                ModBlocks.PALM_SIGN.getKey(),
+                ModBlocks.PALM_HANGING_SIGN.getKey(),
+                ModBlocks.PALM_WALL_SIGN.getKey(),
+                ModBlocks.PALM_WALL_HANGING_SIGN.getKey(),
                 // Gilded_sky wood
-                ModBlocks.GILDED_SKY_PLANKS.get(),
-                ModBlocks.GILDED_SKY_STAIRS.get(),
-                ModBlocks.GILDED_SKY_SLAB.get(),
-                ModBlocks.GILDED_SKY_BUTTON.get(),
-                ModBlocks.GILDED_SKY_PRESSURE_PLATE.get(),
-                ModBlocks.GILDED_SKY_FENCE.get(),
-                ModBlocks.GILDED_SKY_FENCE_GATE.get(),
-                ModBlocks.GILDED_SKY_DOOR.get(),
-                ModBlocks.GILDED_SKY_TRAPDOOR.get(),
-                ModBlocks.GILDED_SKY_SIGN.get(),
-                ModBlocks.GILDED_SKY_HANGING_SIGN.get(),
-                ModBlocks.GILDED_SKY_WALL_SIGN.get(),
-                ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()
+                ModBlocks.GILDED_SKY_PLANKS.getKey(),
+                ModBlocks.GILDED_SKY_STAIRS.getKey(),
+                ModBlocks.GILDED_SKY_SLAB.getKey(),
+                ModBlocks.GILDED_SKY_BUTTON.getKey(),
+                ModBlocks.GILDED_SKY_PRESSURE_PLATE.getKey(),
+                ModBlocks.GILDED_SKY_FENCE.getKey(),
+                ModBlocks.GILDED_SKY_FENCE_GATE.getKey(),
+                ModBlocks.GILDED_SKY_DOOR.getKey(),
+                ModBlocks.GILDED_SKY_TRAPDOOR.getKey(),
+                ModBlocks.GILDED_SKY_SIGN.getKey(),
+                ModBlocks.GILDED_SKY_HANGING_SIGN.getKey(),
+                ModBlocks.GILDED_SKY_WALL_SIGN.getKey(),
+                ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.getKey()
         );
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(
-                ModBlocks.BLACK_SAND.get()
+                ModBlocks.BLACK_SAND.getKey()
         );
         this.tag(BlockTags.MINEABLE_WITH_HOE);
         this.tag(Tags.Blocks.NEEDS_WOOD_TOOL).add(
-                ModBlocks.DENSE_CLOUD.get()
+                ModBlocks.DENSE_CLOUD.getKey()
         );
 
-        this.tag(BlockTags.FENCES).add(
-                ModBlocks.MYSTIC_FENCE.get(),
-                ModBlocks.SKY_FENCE.get(),
-                ModBlocks.PALM_FENCE.get(),
-                ModBlocks.GILDED_SKY_FENCE.get()
+        this.tag(BlockTags.WOODEN_FENCES).add(
+                ModBlocks.MYSTIC_FENCE.getKey(),
+                ModBlocks.SKY_FENCE.getKey(),
+                ModBlocks.PALM_FENCE.getKey(),
+                ModBlocks.GILDED_SKY_FENCE.getKey()
         );
 
         this.tag(BlockTags.FENCE_GATES).add(
-                ModBlocks.MYSTIC_FENCE_GATE.get(),
-                ModBlocks.SKY_FENCE_GATE.get(),
-                ModBlocks.PALM_FENCE_GATE.get(),
-                ModBlocks.GILDED_SKY_FENCE_GATE.get()
+                ModBlocks.MYSTIC_FENCE_GATE.getKey(),
+                ModBlocks.SKY_FENCE_GATE.getKey(),
+                ModBlocks.PALM_FENCE_GATE.getKey(),
+                ModBlocks.GILDED_SKY_FENCE_GATE.getKey()
         );
 
         this.tag(BlockTags.LOGS).add(
-                ModBlocks.MYSTIC_LOG.get(),
-                ModBlocks.STRIPPED_MYSTIC_LOG.get(),
-                ModBlocks.MYSTIC_WOOD.get(),
-                ModBlocks.STRIPPED_MYSTIC_WOOD.get(),
-                ModBlocks.PALM_LOG.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
-                ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
-                ModBlocks.SKY_LOG.get(),
-                ModBlocks.STRIPPED_SKY_LOG.get(),
-                ModBlocks.SKY_WOOD.get(),
-                ModBlocks.STRIPPED_SKY_WOOD.get(),
-                ModBlocks.GILDED_SKY_LOG.get(),
-                ModBlocks.GILDED_SKY_WOOD.get(),
-                ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
-                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
+                ModBlocks.MYSTIC_LOG.getKey(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.getKey(),
+                ModBlocks.MYSTIC_WOOD.getKey(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.getKey(),
+                ModBlocks.PALM_LOG.getKey(),
+                ModBlocks.STRIPPED_PALM_LOG.getKey(),
+                ModBlocks.PALM_WOOD.getKey(),
+                ModBlocks.STRIPPED_PALM_LOG.getKey(),
+                ModBlocks.SKY_LOG.getKey(),
+                ModBlocks.STRIPPED_SKY_LOG.getKey(),
+                ModBlocks.SKY_WOOD.getKey(),
+                ModBlocks.STRIPPED_SKY_WOOD.getKey(),
+                ModBlocks.GILDED_SKY_LOG.getKey(),
+                ModBlocks.GILDED_SKY_WOOD.getKey(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.getKey(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.getKey()
         );
-        this.tag(BlockTags.LOGS_THAT_BURN).add(
-                ModBlocks.MYSTIC_LOG.get(),
-                ModBlocks.STRIPPED_MYSTIC_LOG.get(),
-                ModBlocks.MYSTIC_WOOD.get(),
-                ModBlocks.STRIPPED_MYSTIC_WOOD.get(),
-                ModBlocks.PALM_LOG.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
-                ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
-                ModBlocks.SKY_LOG.get(),
-                ModBlocks.STRIPPED_SKY_LOG.get(),
-                ModBlocks.SKY_WOOD.get(),
-                ModBlocks.STRIPPED_SKY_WOOD.get(),
-                ModBlocks.GILDED_SKY_LOG.get(),
-                ModBlocks.GILDED_SKY_WOOD.get(),
-                ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
-                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
+        this.tag(LOGS_THAT_BURN).add(
+                ModBlocks.MYSTIC_LOG.getKey(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.getKey(),
+                ModBlocks.MYSTIC_WOOD.getKey(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.getKey(),
+                ModBlocks.PALM_LOG.getKey(),
+                ModBlocks.STRIPPED_PALM_LOG.getKey(),
+                ModBlocks.PALM_WOOD.getKey(),
+                ModBlocks.STRIPPED_PALM_LOG.getKey(),
+                ModBlocks.SKY_LOG.getKey(),
+                ModBlocks.STRIPPED_SKY_LOG.getKey(),
+                ModBlocks.SKY_WOOD.getKey(),
+                ModBlocks.STRIPPED_SKY_WOOD.getKey(),
+                ModBlocks.GILDED_SKY_LOG.getKey(),
+                ModBlocks.GILDED_SKY_WOOD.getKey(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.getKey(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.getKey()
         );
         this.tag(BlockTags.PLANKS).add(
-                ModBlocks.MYSTIC_PLANKS.get(),
-                ModBlocks.SKY_PLANKS.get(),
-                ModBlocks.PALM_PLANKS.get(),
-                ModBlocks.GILDED_SKY_PLANKS.get()
+                ModBlocks.MYSTIC_PLANKS.getKey(),
+                ModBlocks.SKY_PLANKS.getKey(),
+                ModBlocks.PALM_PLANKS.getKey(),
+                ModBlocks.GILDED_SKY_PLANKS.getKey()
         );
 
         this.tag(BlockTags.WALLS).add(
-                ModBlocks.BLACK_SANDSTONE_WALL.get()
+                ModBlocks.BLACK_SANDSTONE_WALL.getKey()
         );
         this.tag(BlockTags.STAIRS).add(
-                ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()
+                ModBlocks.BLACK_SANDSTONE_STAIRS.getKey(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.getKey()
         );
         this.tag(BlockTags.SLABS).add(
-                ModBlocks.BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
+                ModBlocks.BLACK_SANDSTONE_SLAB.getKey(),
+                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.getKey(),
+                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.getKey()
         );
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
@@ -203,12 +212,12 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
         // glazed terracotta isn't in that tag at all. Adding the four colors used there fixes it.
         this.tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(
-                Blocks.WHITE_GLAZED_TERRACOTTA,
-                Blocks.ORANGE_GLAZED_TERRACOTTA,
-                Blocks.RED_GLAZED_TERRACOTTA,
-                Blocks.BLACK_GLAZED_TERRACOTTA,
+                Blocks.GLAZED_TERRACOTTA.white().builtInRegistryHolder().key(),
+                Blocks.GLAZED_TERRACOTTA.orange().builtInRegistryHolder().key(),
+                Blocks.GLAZED_TERRACOTTA.red().builtInRegistryHolder().key(),
+                Blocks.GLAZED_TERRACOTTA.black().builtInRegistryHolder().key(),
                 // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
-                Blocks.NETHERRACK
+                Blocks.NETHERRACK.builtInRegistryHolder().key()
         );
 
 

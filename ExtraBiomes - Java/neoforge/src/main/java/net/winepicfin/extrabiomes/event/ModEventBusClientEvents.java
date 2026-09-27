@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -67,7 +67,7 @@ public class ModEventBusClientEvents {
 
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        WolfRenderer wolfRenderer = event.getRenderer(EntityType.WOLF);
+        WolfRenderer wolfRenderer = event.getRenderer(EntityTypes.WOLF);
         if (wolfRenderer != null) {
             wolfRenderer.addLayer(new WolfFrogHatLayer(wolfRenderer));
         }

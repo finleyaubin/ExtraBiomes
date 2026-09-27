@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.client.BaitModel;
@@ -115,7 +115,7 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
 
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-            if (entityType == EntityType.WOLF && entityRenderer instanceof WolfRenderer wolfRenderer) {
+            if (entityType == EntityTypes.WOLF && entityRenderer instanceof WolfRenderer wolfRenderer) {
                 registrationHelper.register(new WolfFrogHatLayer(wolfRenderer));
             }
         });
