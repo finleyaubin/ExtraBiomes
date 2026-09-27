@@ -49,7 +49,7 @@ public class ModBlocks {
     public static final RegistrySupplier<MossyPebbleBlock> MOSSY_PEBBLE = registerBlock("mossy_pebble_block", () -> new MossyPebbleBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("mossy_pebble_block")).noOcclusion()));
     public static final RegistrySupplier<Block> STICK_PILE = registerBlock("stick_pile", () -> ExtraBiomesExpectPlatform.createStickPileBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.OAK_LOG).setId(blockId("stick_pile")).noOcclusion().strength(StickPileTuning.DESTROY_SECONDS)));
     // Structure-only worldgen block, see FountainSpoutBlock - no BlockItem needed.
-    public static final RegistrySupplier<Block> FOUNTAIN_SPOUT = BLOCKS.register("fountain_spout", () -> new FountainSpoutBlock(BlockBehaviour.Properties.of().setId(blockId("fountain_spout")).noCollission().noOcclusion().noLootTable().strength(-1.0f, 3600000.0f)));
+    public static final RegistrySupplier<Block> FOUNTAIN_SPOUT = BLOCKS.register("fountain_spout", () -> new FountainSpoutBlock(BlockBehaviour.Properties.of().setId(blockId("fountain_spout")).noCollision().noOcclusion().noLootTable().strength(-1.0f, 3600000.0f)));
 
     // Bedrock's black_sand has no gravity (engine limitation); Java copies vanilla SAND's falling behaviour instead.
     // FallingBlock became abstract as of 1.20.4 (subclasses must implement codec()) - ColoredFallingBlock

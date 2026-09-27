@@ -141,7 +141,7 @@ public class JellyfishEntity extends WaterAnimal {
         this.grayAmount = Mth.clamp(this.grayAmount + Mth.clamp((inWater ? 0.0F : 1.0F) - this.grayAmount, -JellyfishTuning.GRAY_STEP_PER_TICK, JellyfishTuning.GRAY_STEP_PER_TICK), 0.0F, 1.0F);
         this.scaleY = Mth.clamp(this.scaleY + Mth.clamp((inWater ? 1.0F : 0.1F) - this.scaleY, -JellyfishTuning.SCALE_Y_STEP_PER_TICK, JellyfishTuning.SCALE_Y_STEP_PER_TICK), 0.1F, 1.0F);
 
-        if (!this.level().isClientSide && this.tickCount % 10 == 0) {
+        if (!this.level().isClientSide() && this.tickCount % 10 == 0) {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.2D));
             for (LivingEntity target : targets) {
                 if (target == this) {
@@ -162,17 +162,17 @@ public class JellyfishEntity extends WaterAnimal {
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             ItemStack jam = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISH_JAM_BOTTLE.get()));
             player.setItemInHand(hand, jam);
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         if (held.is(ModItems.JELLYFISHING_NET_EMPTY.get())) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 player.playSound(SoundEvents.BUCKET_FILL_FISH, 1.0F, 1.0F);
                 ItemStack fullNet = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISHING_NET_FULL.get()));
                 player.setItemInHand(hand, fullNet);
                 this.playSound(SoundEvents.GENERIC_SPLASH, 1.0F, 1.0F);
                 this.discard();
             }
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }

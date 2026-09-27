@@ -1,9 +1,10 @@
 package net.winepicfin.extrabiomes.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.layers.PuckooBaseModelLayers;
@@ -34,11 +35,11 @@ public class PuckooRenderer extends MobRenderer<PuckooEntity, PuckooRenderState,
     }
 
     @Override
-    public void render(PuckooRenderState state, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight){
+    public void submit(PuckooRenderState state, PoseStack pMatrixStack, SubmitNodeCollector pSubmitNodeCollector, CameraRenderState pCameraRenderState) {
         if (state.isBaby) {
             pMatrixStack.scale(0.5f,0.5f,0.5f);
         }
-        super.render(state, pMatrixStack, pBuffer, pPackedLight);
+        super.submit(state, pMatrixStack, pSubmitNodeCollector, pCameraRenderState);
     }
 
     @Override

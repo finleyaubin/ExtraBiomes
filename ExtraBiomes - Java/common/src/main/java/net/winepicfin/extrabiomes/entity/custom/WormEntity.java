@@ -71,7 +71,7 @@ public class WormEntity extends Animal {
     @Override
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player.isSecondaryUseActive() && hand == InteractionHand.MAIN_HAND) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 ItemStack wormItem = new ItemStack(ModItems.WORM.get());
                 if (this.hasCustomName()) {
                     wormItem.set(DataComponents.CUSTOM_NAME, this.getCustomName());
@@ -82,7 +82,7 @@ public class WormEntity extends Animal {
                 this.playSound(SoundEvents.ITEM_PICKUP, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 1.4F + 2.0F) * 2.0F);
                 this.discard();
             }
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }

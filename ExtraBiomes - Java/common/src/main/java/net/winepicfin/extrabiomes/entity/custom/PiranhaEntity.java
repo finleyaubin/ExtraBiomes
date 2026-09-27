@@ -164,7 +164,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
         }
 
         super.aiStep();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.entityData.set(DATA_BITING, this.getTarget() != null || this.chasedBait != null);
         }
     }

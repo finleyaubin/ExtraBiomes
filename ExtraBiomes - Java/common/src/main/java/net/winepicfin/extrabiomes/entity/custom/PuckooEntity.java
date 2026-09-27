@@ -94,7 +94,7 @@ public class PuckooEntity extends AbstractHorse {
     @Override
     protected void tickRidden(Player player, Vec3 travelVector) {
         super.tickRidden(player, travelVector);
-        if (this.isTamed() || this.level().isClientSide) {
+        if (this.isTamed() || this.level().isClientSide()) {
             return;
         }
         if (this.buckCooldown > 0) {
@@ -127,7 +127,7 @@ public class PuckooEntity extends AbstractHorse {
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!this.isTamed() && !this.isBaby() && !this.isVehicle() && stack.is(ModItems.MOSSY_PEBBLE.get())) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 stack.shrink(1);
                 this.modifyTemper(FEED_TEMPER_GAIN);
                 if (this.getTemper() >= this.getMaxTemper()) {
@@ -138,7 +138,7 @@ public class PuckooEntity extends AbstractHorse {
                     this.broadcastTamingFeedback(false);
                 }
             }
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }

@@ -84,7 +84,7 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
         land();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.setPos(this.getX(), result.getLocation().y, this.getZ());
         }
     }
@@ -169,7 +169,7 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
         if (!isLanded() || !player.isShiftKeyDown() || !player.getItemInHand(hand).isEmpty()) {
             return InteractionResult.PASS;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             ItemStack pickedUp = this.getItem().isEmpty() ? new ItemStack(ModItems.BAIT.get()) : this.getItem().copy();
             pickedUp.setCount(1);
             pickedUp.setDamageValue(this.getMaxHealth() - this.getHealth());
@@ -178,7 +178,7 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
             }
             this.discard();
         }
-        return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+        return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
     }
 
     // Lets players and other mobs damage the landed decoy through the normal combat path, on top of PiranhaBaitGoal's direct bite() calls (piranhas aren't LivingEntity attackers, so they can't route through hurt()).
@@ -196,7 +196,7 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
         this.entityData.set(DATA_HEALTH, newHealth);
         this.entityData.set(DATA_HURT_TIME, HURT_DURATION);
         applyKnockback(fromPosition);
-        if (newHealth <= 0 && !this.level().isClientSide) {
+        if (newHealth <= 0 && !this.level().isClientSide()) {
             this.discard();
         }
     }
