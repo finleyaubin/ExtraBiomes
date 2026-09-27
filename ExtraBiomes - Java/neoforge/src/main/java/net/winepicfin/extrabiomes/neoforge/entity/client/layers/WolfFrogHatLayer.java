@@ -23,7 +23,6 @@ import net.winepicfin.extrabiomes.entity.client.armour.FrogHelmetRenderer;
 import net.winepicfin.extrabiomes.neoforge.item.custom.FrogHelmetItem;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.renderer.base.GeoRenderState;
 
@@ -72,10 +71,12 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         if (this.baseModel == null)
             this.baseModel = new HumanoidModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER));
 
-        GeoRenderState geoState = (GeoRenderState) new HumanoidRenderState();
+        HumanoidRenderState humanoidState = new HumanoidRenderState();
+        // GeckoLib reads light from the vanilla lightCoords field, not its PACKED_LIGHT ticket
+        humanoidState.lightCoords = packedLight;
+        GeoRenderState geoState = (GeoRenderState) humanoidState;
         this.renderer.fillRenderState((FrogHelmetItem) headItem.getItem(), new GeoArmorRenderer.RenderData(headItem, EquipmentSlot.HEAD, wolf, this.baseModel),
                 geoState, renderState.partialTick);
-        geoState.addGeckolibData(DataTickets.PACKED_LIGHT, packedLight);
 
         poseStack.pushPose();
         try {

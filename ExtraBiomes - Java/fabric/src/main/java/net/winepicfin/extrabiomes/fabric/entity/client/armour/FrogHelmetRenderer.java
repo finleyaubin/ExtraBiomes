@@ -11,7 +11,6 @@ import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.fabric.item.custom.FrogHelmetItem;
-import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.renderer.base.GeoRenderState;
@@ -28,7 +27,8 @@ public class FrogHelmetRenderer<R extends HumanoidRenderState & GeoRenderState> 
                              PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, float partialTick) {
         R geoState = (R) humanoidState;
         fillRenderState((FrogHelmetItem) stack.getItem(), new RenderData(stack, EquipmentSlot.HEAD, wolf, baseModel), geoState, partialTick);
-        geoState.addGeckolibData(DataTickets.PACKED_LIGHT, packedLight);
+        // GeckoLib reads light from the vanilla lightCoords field, not its PACKED_LIGHT ticket
+        humanoidState.lightCoords = packedLight;
         // cameraState only reaches GeoRenderLayers/pre-post-render hooks, none of which this
         // renderer uses, so an empty one is fine here - RenderLayer#submit isn't handed a real one.
         submitRenderTasks(geoState, poseStack, submitNodeCollector, new CameraRenderState(), null);
