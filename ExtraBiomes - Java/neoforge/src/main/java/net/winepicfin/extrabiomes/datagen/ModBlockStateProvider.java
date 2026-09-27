@@ -20,8 +20,8 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.VariantMutator;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.renderer.block.dispatch.VariantMutator;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
@@ -229,6 +229,11 @@ public class ModBlockStateProvider implements DataProvider {
         return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + path);
     }
 
+    // TextureMapping.put took a bare Identifier pre-26.1; it now wants the sprite wrapped in a Material.
+    private static net.minecraft.client.resources.model.sprite.Material mat(Identifier sprite) {
+        return new net.minecraft.client.resources.model.sprite.Material(sprite);
+    }
+
     private void blockWithItem(RegistrySupplier<Block> blockRegistryObject) {
         cubeAllBlock(blockRegistryObject.get(), blockTexture(blockRegistryObject.get()));
     }
@@ -242,21 +247,21 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void cubeAllBlock(Block block, Identifier texture) {
-        Identifier model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, texture), models::put);
+        Identifier model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, mat(texture)), models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
     }
 
     private void cubeBottomTopBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.BOTTOM, mat(bottom)).put(TextureSlot.TOP, mat(top));
         Identifier model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, tm, models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
     }
 
     private void grassStoneBlock(Block block) {
-        TextureMapping common = new TextureMapping().put(TextureSlot.SIDE, texLoc("grass_stone_side")).put(TextureSlot.BOTTOM, texLoc("grass_stone_bottom")).put(TextureSlot.TOP, texLoc("grass_stone_top"));
-        TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, texLoc("grass_stone_side")).put(TextureSlot.BOTTOM, texLoc("grass_stone_bottom")).put(TextureSlot.TOP, texLoc("grass_stone_top_egg"));
+        TextureMapping common = new TextureMapping().put(TextureSlot.SIDE, mat(texLoc("grass_stone_side"))).put(TextureSlot.BOTTOM, mat(texLoc("grass_stone_bottom"))).put(TextureSlot.TOP, mat(texLoc("grass_stone_top")));
+        TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, mat(texLoc("grass_stone_side"))).put(TextureSlot.BOTTOM, mat(texLoc("grass_stone_bottom"))).put(TextureSlot.TOP, mat(texLoc("grass_stone_top_egg")));
         Identifier commonModel = ModelTemplates.CUBE_BOTTOM_TOP.create(block, common, models::put);
         Identifier eggModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_egg", egg, models::put);
         blockStates.put(block, MultiVariantGenerator.dispatch(block, new MultiVariant(WeightedList.of(
@@ -290,7 +295,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void axisBlock(Block block, Identifier side, Identifier end) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.END, end);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.END, mat(end));
         Identifier model = ModelTemplates.CUBE_COLUMN.create(block, tm, models::put);
         blockStates.put(block, MultiVariantGenerator.dispatch(block, plainVariant(model)).with(
                 PropertyDispatch.modify(RotatedPillarBlock.AXIS)
@@ -301,7 +306,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void saplingBlock(Block block) {
-        Identifier model = ModelTemplates.CROSS.create(block, new TextureMapping().put(TextureSlot.CROSS, blockTexture(block)), models::put);
+        Identifier model = ModelTemplates.CROSS.create(block, new TextureMapping().put(TextureSlot.CROSS, mat(blockTexture(block))), models::put);
         simpleBlockState(block, model);
         saplingItemModel(block);
     }
@@ -352,7 +357,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void stairsBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.BOTTOM, mat(bottom)).put(TextureSlot.TOP, mat(top));
         Identifier straight = ModelTemplates.STAIRS_STRAIGHT.create(block, tm, models::put);
         Identifier inner = ModelTemplates.STAIRS_INNER.create(block, tm, models::put);
         Identifier outer = ModelTemplates.STAIRS_OUTER.create(block, tm, models::put);
@@ -389,7 +394,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void slabBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.BOTTOM, mat(bottom)).put(TextureSlot.TOP, mat(top));
         Identifier bottomModel = ModelTemplates.SLAB_BOTTOM.create(block, tm, models::put);
         Identifier topModel = ModelTemplates.SLAB_TOP.create(block, tm, models::put);
         Identifier doubleModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_double", tm, models::put);
@@ -403,7 +408,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void fenceBlock(Block block, Identifier texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
         Identifier post = ModelTemplates.FENCE_POST.create(block, tm, models::put);
         Identifier side = ModelTemplates.FENCE_SIDE.create(block, tm, models::put);
         Identifier inventory = ModelTemplates.FENCE_INVENTORY.create(block, tm, models::put);
@@ -418,7 +423,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void fenceGateBlock(Block block, Identifier texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
         Identifier closed = ModelTemplates.FENCE_GATE_CLOSED.create(block, tm, models::put);
         Identifier open = ModelTemplates.FENCE_GATE_OPEN.create(block, tm, models::put);
         Identifier wallClosed = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(block, tm, models::put);
@@ -438,7 +443,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void wallBlock(Block block, Identifier texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.WALL, texture);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.WALL, mat(texture));
         Identifier post = ModelTemplates.WALL_POST.create(block, tm, models::put);
         Identifier low = ModelTemplates.WALL_LOW_SIDE.create(block, tm, models::put);
         Identifier tall = ModelTemplates.WALL_TALL_SIDE.create(block, tm, models::put);
@@ -458,7 +463,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void buttonBlock(Block block, Identifier texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
         Identifier unpowered = ModelTemplates.BUTTON.create(block, tm, models::put);
         Identifier powered = ModelTemplates.BUTTON_PRESSED.create(block, tm, models::put);
         Identifier inventory = ModelTemplates.BUTTON_INVENTORY.create(block, tm, models::put);
@@ -485,7 +490,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void pressurePlateBlock(Block block, Identifier texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
         Identifier up = ModelTemplates.PRESSURE_PLATE_UP.create(block, tm, models::put);
         Identifier down = ModelTemplates.PRESSURE_PLATE_DOWN.create(block, tm, models::put);
 
@@ -499,7 +504,7 @@ public class ModBlockStateProvider implements DataProvider {
     private void doorBlockState(Block block, Identifier bottomTexture, Identifier topTexture) {
         Identifier bottomModel = modelOf(bottomTexture);
         Identifier topModel = modelOf(topTexture);
-        TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, mat(bottomTexture)).put(TextureSlot.TOP, mat(topTexture));
         ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
         ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
 
@@ -621,7 +626,7 @@ public class ModBlockStateProvider implements DataProvider {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         blockStates.forEach((block, generator) -> {
             Identifier id = key(block);
-            futures.add(DataProvider.saveStable(cache, BlockModelDefinition.CODEC.encodeStart(JsonOps.INSTANCE, generator.create()).getOrThrow(), blockStatePathProvider.json(id)));
+            futures.add(DataProvider.saveStable(cache, BlockStateModelDispatcher.CODEC.encodeStart(JsonOps.INSTANCE, generator.create()).getOrThrow(), blockStatePathProvider.json(id)));
         });
         models.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), modelPathProvider.json(id))));
         items.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), itemPathProvider.json(id))));

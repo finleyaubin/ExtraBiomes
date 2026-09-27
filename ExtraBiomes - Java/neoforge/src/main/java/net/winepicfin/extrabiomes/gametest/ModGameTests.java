@@ -69,7 +69,7 @@ public final class ModGameTests {
     }
 
     private static void registerInstances(RegisterGameTestsEvent event) {
-        Holder<TestEnvironmentDefinition> environment;
+        Holder<TestEnvironmentDefinition<?>> environment;
         try {
             environment = event.registerEnvironment(
                     Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "default"),
@@ -80,7 +80,7 @@ public final class ModGameTests {
         }
         for (Test test : TESTS) {
             var data = new TestData<>(environment, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, test.template()),
-                    test.maxTicks(), 0, true, Rotation.NONE, test.manualOnly(), 1, 1, false);
+                    test.maxTicks(), 0, true, Rotation.NONE, test.manualOnly(), 1, 1, false, 0);
             event.registerTest(test.id(), new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, test.id()), data));
         }
     }
