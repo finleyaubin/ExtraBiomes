@@ -1,7 +1,6 @@
 package net.winepicfin.extrabiomes.neoforge;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -39,7 +38,6 @@ import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.neoforge.util.ModVanillaCompat;
 import net.winepicfin.extrabiomes.neoforge.worldgen.ModSpawnCaps;
-import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
@@ -195,14 +193,16 @@ public class ExtraBiomesForge
     {
         event.enqueueWork(() ->
         {
-            // Register our surface rules
-            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID, ModSurfaceRules.makeRules());
+            // Register our surface rules. TerraBlender's RuleBuilder is now a
+            // Function<HolderGetter<Biome>, RuleSource> - it calls this lazily during world load
+            // (when a biome lookup actually exists), rather than taking a pre-built RuleSource here.
+            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID, ModSurfaceRules::makeRules);
             // addSurfaceRules above only reaches biomes namespaced "extrabiomes" - this instead
             // injects into the shared default ruleset every other namespace (including vanilla's
             // own badlands/eroded_badlands/wooded_badlands) falls back to, so those get the same
             // depth-banded terracotta too. See ModSurfaceRules.makeVanillaBadlandsAdditions() javadoc.
             SurfaceRuleManager.addToDefaultSurfaceRulesAtStage(SurfaceRuleManager.RuleCategory.OVERWORLD,
-                    SurfaceRuleManager.RuleStage.BEFORE_BEDROCK, 0, ModSurfaceRules.makeVanillaBadlandsAdditions());
+                    SurfaceRuleManager.RuleStage.BEFORE_BEDROCK, 0, ModSurfaceRules::makeVanillaBadlandsAdditions);
             ModVanillaCompat.register();
             ModSpawnCaps.register();
         });
@@ -214,10 +214,8 @@ public class ExtraBiomesForge
     {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            Sheets.addWoodType(ModWoodTypes.MYSTIC);
-            Sheets.addWoodType(ModWoodTypes.PALM);
-            Sheets.addWoodType(ModWoodTypes.SKY);
-            Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
+            // Sheets.addWoodType() is gone in 26.2 - vanilla's Sheets no longer manages sign
+            // sprites/atlases at all, so custom sign wood types need no separate registration here.
             EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
             EntityRenderers.register(ModEntities.WORM.get(), WormRenderer::new);
             EntityRenderers.register(ModEntities.TREEFROG.get(), TreefrogRenderer::new);
