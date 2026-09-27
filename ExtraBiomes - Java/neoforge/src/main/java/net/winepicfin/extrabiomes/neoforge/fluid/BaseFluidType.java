@@ -26,11 +26,7 @@ import org.joml.Vector4f;
 // RegisterClientExtensionsEvent now (see ModEventBusClientEvents#registerClientExtensions), so
 // this class implements IClientFluidTypeExtensions itself and is handed to that event directly.
 //
-// 26.1 removed getStillTexture/getFlowingTexture/getOverlayTexture/getTintColor from
-// IClientFluidTypeExtensions entirely (replaced by a data-driven net.minecraft.client.renderer.
-// block.FluidModel/FluidStateModelSet - see FluidStateModelSet.WATER_MODEL/LAVA_MODEL for the only
-// registrations javap can find; no public hook to add a third entry was found without booting the
-// game). The fields below are kept for later wiring (see report), only the fog behavior compiles now.
+// 26.1 moved fluid textures/tint to FluidModel - see ModEventBusClientEvents#registerFluidModels.
 public class BaseFluidType extends FluidType implements IClientFluidTypeExtensions {
     private final Identifier stillTexture;
     private final Identifier flowingTexture;

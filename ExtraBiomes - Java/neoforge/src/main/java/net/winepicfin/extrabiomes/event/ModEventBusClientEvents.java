@@ -1,5 +1,10 @@
 package net.winepicfin.extrabiomes.event;
 
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
+import net.neoforged.neoforge.client.fluid.FluidTintSources;
+import net.winepicfin.extrabiomes.neoforge.fluid.ModFluids;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
@@ -8,7 +13,6 @@ import net.minecraft.client.renderer.entity.state.WolfRenderState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -74,14 +78,15 @@ public class ModEventBusClientEvents {
         event.registerEntityModifier(WolfRenderer.class, (Wolf wolf, WolfRenderState state) -> state.setRenderData(WolfFrogHatLayer.WOLF, wolf));
     }
 
-    // 26.1 removed ItemBlockRenderTypes entirely (block render layer now comes from the model/
-    // BlockStateModel dispatcher data instead of a runtime registry - see FluidModel/
-    // BlockStateModelDispatcher, referenced from ModBlockStateProvider). No public runtime hook to
-    // set a block's chunk render layer was found without booting the game - see the port report for
-    // the block list this used to cover (saplings/mushrooms/leaves/doors/trapdoors). Until the
-    // model-JSON path is confirmed, these render as RenderType.solid() (opaque cutout artifacts).
     @SubscribeEvent
-    public static void setupClient(FMLClientSetupEvent event) {
+    public static void registerFluidModels(RegisterFluidModelsEvent event) {
+        if (ModFluidTypes.GOO_FLUID_TYPE.get() instanceof BaseFluidType goo) {
+            event.register(new FluidModel.Unbaked(
+                    new Material(goo.getStillTextureId(), true),
+                    new Material(goo.getFlowingTextureId(), true),
+                    new Material(goo.getOverlayTextureId(), true),
+                    FluidTintSources.constant(goo.getTintColour())), ModFluids.SOURCE_GOO, ModFluids.FLOWING_GOO);
+        }
     }
 
     // FluidType lost its own initializeClient(Consumer) hook - client extensions for fluid types

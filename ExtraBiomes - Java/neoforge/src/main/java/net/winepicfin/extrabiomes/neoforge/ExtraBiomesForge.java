@@ -218,9 +218,6 @@ public class ExtraBiomesForge
             Sheets.addWoodType(ModWoodTypes.PALM);
             Sheets.addWoodType(ModWoodTypes.SKY);
             Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
-            // ItemBlockRenderTypes was removed in 26.1 with no public replacement found without
-            // booting the game (see ModEventBusClientEvents#setupClient for the same gap) - goo's
-            // fluid blocks lose their explicit TRANSLUCENT render layer until this is resolved.
             EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
             EntityRenderers.register(ModEntities.WORM.get(), WormRenderer::new);
             EntityRenderers.register(ModEntities.TREEFROG.get(), TreefrogRenderer::new);
