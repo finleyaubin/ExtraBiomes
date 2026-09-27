@@ -13,6 +13,7 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -49,6 +50,8 @@ public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRAND_OASIS_DEAD_BUSH_KEY = registerKey("grand_oasis_dead_bush");
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context){
+        HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
+        BlockStateProvider belowTrunk = TreeConfiguration.defaultPlaceBelowTreeTrunkProvider(biomes);
         // In-game render showed radius 5 giving every attachment (main top + both branch tips) a
         // full-size canopy blob that overlapped its neighbours, fusing into one flat continuous mass
         // instead of a domed crown with separate branch tufts like the Bedrock structure. Shrinking
@@ -59,7 +62,7 @@ public class ModConfigureFeatures {
                 new MysticTrunkPlacer(9, 5, 0, new WeightedListInt(WeightedList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(4, 8), UniformInt.of(-5, -3), UniformInt.of(-1, 1)),
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LEAVES.get()),
                 new CherryFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(5), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
-                new TwoLayersFeatureSize(1,0,2)).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
+                new TwoLayersFeatureSize(1,0,2), belowTrunk).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
         );
         // Rare "elder" variant reviving the scale of Bedrock's unused Large_mystic_tree.mcstructure
         // (never referenced by any Bedrock feature, so not something to shape-match exactly - just a
@@ -69,7 +72,7 @@ public class ModConfigureFeatures {
                 new MysticTrunkPlacer(15, 6, 0, new WeightedListInt(WeightedList.<IntProvider>builder().add(ConstantInt.of(1), 1).add(ConstantInt.of(2), 1).add(ConstantInt.of(3), 1).build()), UniformInt.of(6, 10), UniformInt.of(-6, -4), UniformInt.of(-1, 1)),
                 BlockStateProvider.simple(ModBlocks.MYSTIC_LEAVES.get()),
                 new CherryFoliagePlacer(ConstantInt.of(4), ConstantInt.of(0), ConstantInt.of(6), 0.25F, 0.5F, 0.16666667F, 0.33333334F),
-                new TwoLayersFeatureSize(1,0,2)).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
+                new TwoLayersFeatureSize(1,0,2), belowTrunk).decorators(ImmutableList.of(new CaveVineTreeDecorator(0.25F, 5))).build()
         );
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatureLookup = context.lookup(Registries.CONFIGURED_FEATURE);
         register(context, MYSTIC_SELECT_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
@@ -82,7 +85,7 @@ public class ModConfigureFeatures {
                 new StraightTrunkPlacer(6, 3, 0),
                 BlockStateProvider.simple(ModBlocks.SKY_LEAVES.get()),
                 new SpruceFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(3, 5)),
-                new TwoLayersFeatureSize(4, 10, 6)).build()
+                new TwoLayersFeatureSize(4, 10, 6), belowTrunk).build()
         );
         // Palm trees are no longer a procedural Feature.TREE - see PalmTreeFeatures.SELECT_PALM_KEY, which PalmTreeGrower/ModPlacedFeatures reference instead, since real palm trunks lean/kink and can't be reproduced by a TrunkPlacer/FoliagePlacer pair.
         register(context, CHARRED_KEY,Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -90,7 +93,7 @@ public class ModConfigureFeatures {
                 new FancyTrunkPlacer(5, 2, 0),
                 BlockStateProvider.simple(Blocks.AIR),
                 new BlobFoliagePlacer(ConstantInt.of(0),ConstantInt.of(0),0),
-                new TwoLayersFeatureSize(0, 0, 0)).build()
+                new TwoLayersFeatureSize(0, 0, 0), belowTrunk).build()
         );
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));

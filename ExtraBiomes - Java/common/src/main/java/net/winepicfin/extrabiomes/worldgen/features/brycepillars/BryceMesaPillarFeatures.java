@@ -53,12 +53,12 @@ public class BryceMesaPillarFeatures {
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // streakPalette supplies the occasional colour bands scattered through the plain TERRACOTTA background; see generateBands() in BrycePillarsFeature for the distribution.
         List<BlockState> terracottaStreaks = List.of(
-                Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
-                Blocks.YELLOW_TERRACOTTA.defaultBlockState(),
-                Blocks.RED_TERRACOTTA.defaultBlockState(),
-                Blocks.WHITE_TERRACOTTA.defaultBlockState(),
-                Blocks.LIGHT_GRAY_TERRACOTTA.defaultBlockState(),
-                Blocks.BROWN_TERRACOTTA.defaultBlockState()
+                Blocks.DYED_TERRACOTTA.orange().defaultBlockState(),
+                Blocks.DYED_TERRACOTTA.yellow().defaultBlockState(),
+                Blocks.DYED_TERRACOTTA.red().defaultBlockState(),
+                Blocks.DYED_TERRACOTTA.white().defaultBlockState(),
+                Blocks.DYED_TERRACOTTA.lightGray().defaultBlockState(),
+                Blocks.DYED_TERRACOTTA.brown().defaultBlockState()
         );
 
         // Per-material geometry, not just per-material colour: real Bryce Canyon-style erosion looks different in soft vs. hard rock, so each entry below tunes height/thickness/edge-roughness to its own material rather than all four sharing BrycePillarsConfiguration's one-size-fits-all defaults. maxRadius is now a fin's thickness basis (BrycePillarsFeature halves it) and erosionStrength is edge wobble, not the old cone's radial noise.

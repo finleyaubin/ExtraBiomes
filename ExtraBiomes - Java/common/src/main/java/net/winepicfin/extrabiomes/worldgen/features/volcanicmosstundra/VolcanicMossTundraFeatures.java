@@ -131,18 +131,19 @@ public class VolcanicMossTundraFeatures {
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
+        HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
 
         context.register(NO_OP_KEY, new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE));
         Holder<PlacedFeature> noOp = placedFeatures.getOrThrow(NO_OP_PLACED_KEY);
 
         context.register(LAVA_RIVER_CORE_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                VOLCANIC_TUNDRA_REPLACEABLE, BlockStateProvider.simple(Blocks.LAVA.defaultBlockState()), noOp,
+                blocks.getOrThrow(VOLCANIC_TUNDRA_REPLACEABLE), BlockStateProvider.simple(Blocks.LAVA.defaultBlockState()), noOp,
                 CaveSurface.FLOOR, ConstantInt.of(2), 0.4F, 6, 0.0F, UniformInt.of(2, 3), 0.6F)));
         context.register(LAVA_RIVER_BANK_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                VOLCANIC_TUNDRA_BANK_REPLACEABLE, BlockStateProvider.simple(Blocks.MAGMA_BLOCK.defaultBlockState()), noOp,
+                blocks.getOrThrow(VOLCANIC_TUNDRA_BANK_REPLACEABLE), BlockStateProvider.simple(Blocks.MAGMA_BLOCK.defaultBlockState()), noOp,
                 CaveSurface.FLOOR, ConstantInt.of(2), 0.4F, 6, 0.0F, UniformInt.of(3, 4), 0.6F)));
         context.register(HIGH_ELEVATION_MOSS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                VOLCANIC_TUNDRA_MOSS_FLOOR_REPLACEABLE, BlockStateProvider.simple(Blocks.MOSS_BLOCK.defaultBlockState()), noOp,
+                blocks.getOrThrow(VOLCANIC_TUNDRA_MOSS_FLOOR_REPLACEABLE), BlockStateProvider.simple(Blocks.MOSS_BLOCK.defaultBlockState()), noOp,
                 CaveSurface.FLOOR, ConstantInt.of(1), 0.2F, 4, 0.0F, UniformInt.of(1, 3), 0.6F)));
 
         context.register(BASALT_BANK_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.BASALT_BANK.get(), NoneFeatureConfiguration.INSTANCE));

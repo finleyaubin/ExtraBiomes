@@ -255,7 +255,7 @@ public class BoulderFeatures {
 
     private static void registerGroundPatch(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, net.minecraft.world.level.block.state.BlockState groundState, Holder<PlacedFeature> pebbleSelect, boolean isPebblePatch) {
         VegetationPatchConfiguration config = new VegetationPatchConfiguration(
-                BOULDER_REPLACEABLE,
+                context.lookup(Registries.BLOCK).getOrThrow(BOULDER_REPLACEABLE),
                 BlockStateProvider.simple(groundState),
                 pebbleSelect,
                 CaveSurface.FLOOR,

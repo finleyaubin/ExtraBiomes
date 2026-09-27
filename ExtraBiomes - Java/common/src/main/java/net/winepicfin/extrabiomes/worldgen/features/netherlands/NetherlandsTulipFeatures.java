@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -82,18 +83,20 @@ public class NetherlandsTulipFeatures {
         context.register(WHITE_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WHITE_TULIP))));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
+        HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
+        HolderSet<Block> tulipReplaceable = blocks.getOrThrow(TULIP_REPLACEABLE);
         BlockStateProvider grass = BlockStateProvider.simple(Blocks.GRASS_BLOCK);
         context.register(ORANGE_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                TULIP_REPLACEABLE, grass, placedFeatures.getOrThrow(ORANGE_TULIP_PLACED_KEY), CaveSurface.FLOOR,
+                tulipReplaceable, grass, placedFeatures.getOrThrow(ORANGE_TULIP_PLACED_KEY), CaveSurface.FLOOR,
                 ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
         context.register(PINK_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                TULIP_REPLACEABLE, grass, placedFeatures.getOrThrow(PINK_TULIP_PLACED_KEY), CaveSurface.FLOOR,
+                tulipReplaceable, grass, placedFeatures.getOrThrow(PINK_TULIP_PLACED_KEY), CaveSurface.FLOOR,
                 ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
         context.register(RED_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                TULIP_REPLACEABLE, grass, placedFeatures.getOrThrow(RED_TULIP_PLACED_KEY), CaveSurface.FLOOR,
+                tulipReplaceable, grass, placedFeatures.getOrThrow(RED_TULIP_PLACED_KEY), CaveSurface.FLOOR,
                 ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
         context.register(WHITE_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                TULIP_REPLACEABLE, grass, placedFeatures.getOrThrow(WHITE_TULIP_PLACED_KEY), CaveSurface.FLOOR,
+                tulipReplaceable, grass, placedFeatures.getOrThrow(WHITE_TULIP_PLACED_KEY), CaveSurface.FLOOR,
                 ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
     }
 

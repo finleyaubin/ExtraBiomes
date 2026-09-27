@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.stonepillars;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
 
@@ -39,10 +39,10 @@ import java.util.Set;
  * <p>
  * Runtime-only, like {@link net.winepicfin.extrabiomes.worldgen.features.structurescatter.PreserveBedrockProcessor} -
  * never serialized, only ever constructed once and passed to {@link StructureTemplate#placeInWorld}.
- * See that class's javadoc for why {@link #getType()} returns {@link StructureProcessorType#NOP}
+ * See that class's javadoc for why {@link #codec()} just returns a {@code MapCodec.unit(INSTANCE)}
  * rather than throwing or registering a real type of its own.
  */
-public final class PillarWeatheringProcessor extends StructureProcessor {
+public final class PillarWeatheringProcessor implements StructureProcessor {
     public static final PillarWeatheringProcessor INSTANCE = new PillarWeatheringProcessor();
 
     private static final PerlinSimplexNoise WEATHER_NOISE = new PerlinSimplexNoise(RandomSource.create(5551L), List.of(0));
@@ -81,7 +81,7 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
     @Nullable
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos,
-                                                               StructureTemplate.StructureBlockInfo blockInfo,
+                                                               BlockPos originalPos,
                                                                StructureTemplate.StructureBlockInfo relativeBlockInfo,
                                                                StructurePlaceSettings settings) {
         if (!relativeBlockInfo.state().is(Blocks.STONE)) {
@@ -93,8 +93,8 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
         double y = WEATHER_NOISE.getValue(worldPos.getY() * WEATHER_SCALE_Y, (worldPos.getX() - worldPos.getZ()) * WEATHER_SCALE_Y * 0.5D, false);
         double n = xz * 0.65D + y * 0.35D;
 
-        // blockInfo.pos() is still template-local (pre-rotation), so its Y is unaffected by which random Rotation this placement picked - exactly the "fraction up the structure" this gradient needs.
-        double heightFraction = Math.max(0.0D, Math.min(1.0D, blockInfo.pos().getY() / ASSUMED_MAX_TEMPLATE_HEIGHT));
+        // originalPos is still template-local (pre-rotation), so its Y is unaffected by which random Rotation this placement picked - exactly the "fraction up the structure" this gradient needs.
+        double heightFraction = Math.max(0.0D, Math.min(1.0D, originalPos.getY() / ASSUMED_MAX_TEMPLATE_HEIGHT));
         double gradientShift = (heightFraction - 0.5D) * 2.0D * GRADIENT_WEIGHT;
 
         BlockState variant = pickVariant(n + gradientShift);
@@ -243,7 +243,7 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
     }
 
     @Override
-    protected StructureProcessorType<?> getType() {
-        return StructureProcessorType.NOP;
+    public MapCodec<PillarWeatheringProcessor> codec() {
+        return MapCodec.unit(INSTANCE);
     }
 }
