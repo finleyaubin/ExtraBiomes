@@ -69,12 +69,9 @@ import java.util.List;
  *       mass.</li>
  *   <li>minecraft:grass_double_plant_patch_feature -> {@link DoubleTallGrassFeature} placing both
  *       halves of {@link Blocks#TALL_GRASS}.</li>
- *   <li>minecraft:short_dry_grass_feature and minecraft:random_dry_grass_block_feature -> Bedrock's
- *       dry-grass tuft blocks (with color variants for the "random" one) have no Java 1.20.1
- *       equivalent block at all (dry grass blocks were only added to Java in a later version), so
- *       both are approximated with {@link Blocks#DEAD_BUSH} scatters, same air-only guard as above.
- *       This loses the color-variant aspect of the "random" variant entirely - noted here as an
- *       accepted simplification.</li>
+ *   <li>minecraft:short_dry_grass_feature and minecraft:random_dry_grass_block_feature -> scatters of
+ *       {@link Blocks#SHORT_DRY_GRASS} and {@link Blocks#TALL_DRY_GRASS}, same air-only guard as above.
+ *       Bedrock's color variants for the "random" one have no Java equivalent.</li>
  *   <li>minecraft:fixup_waterlily_position_feature -> {@link WaterLilyFixupFeature}: searches
  *       downward from the placement column for a water surface and places a lily pad.</li>
  * </ul>
@@ -125,12 +122,12 @@ public class MoorlandFeatures {
 
         context.register(MOORLAND_SHORT_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)),
+                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_DRY_GRASS)),
                                 BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
 
         context.register(MOORLAND_TALL_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
                 new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.DEAD_BUSH)),
+                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.TALL_DRY_GRASS)),
                                 BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
 
         context.register(MOORLAND_WATERLILY_KEY, new ConfiguredFeature<>(WATERLILY_FIXUP_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
