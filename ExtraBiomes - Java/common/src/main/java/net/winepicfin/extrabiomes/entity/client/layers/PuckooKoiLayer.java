@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ARGB;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 import net.winepicfin.extrabiomes.entity.client.state.PuckooRenderState;
@@ -34,7 +33,7 @@ public class PuckooKoiLayer extends RenderLayer<PuckooRenderState, PuckooModel<P
         ResourceLocation resourcelocation = LOCATION_BY_MARKINGS.get(state.markings);
         if (resourcelocation != null && !state.isInvisible) {
             int overlay = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
-            submitNodeCollector.order(1).submitModel(this.getParentModel(), state, poseStack, RenderType.entityTranslucent(resourcelocation), packedLight, overlay, ARGB.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F), null);
+            submitNodeCollector.order(1).submitModel(this.getParentModel(), state, poseStack, RenderType.entityTranslucent(resourcelocation), packedLight, overlay, state.outlineColor, null);
         }
     }
 }

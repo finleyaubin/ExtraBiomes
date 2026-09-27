@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.state.BaitProjectileRenderState;
@@ -60,7 +59,7 @@ public class BaitRenderer extends EntityRenderer<BaitProjectileEntity, BaitProje
         // Not a LivingEntity, so the usual automatic red hurt tint doesn't apply - drive it off BaitProjectileEntity's own hurtTime instead.
         int overlay = OverlayTexture.pack(OverlayTexture.NO_WHITE_U, state.hurtTime > 0);
         int packedLight = state.lightCoords;
-        submitNodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(getTextureLocation(state)), packedLight, overlay, ARGB.colorFromFloat(1.0F, 1.0F, 1.0F, 1.0F), null);
+        submitNodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(getTextureLocation(state)), packedLight, overlay, state.outlineColor, null);
         poseStack.popPose();
         super.submit(state, poseStack, submitNodeCollector, cameraRenderState);
     }
