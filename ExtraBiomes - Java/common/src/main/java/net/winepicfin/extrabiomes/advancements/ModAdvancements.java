@@ -67,7 +67,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .display(ModItems.WORM.get(),
                         Component.translatable("advancements.extrabiomes.root.title"),
                         Component.translatable("advancements.extrabiomes.root.description"),
-                        ResourceLocation.withDefaultNamespace("textures/gui/advancements/backgrounds/stone.png"),
+                        ResourceLocation.withDefaultNamespace("gui/advancements/backgrounds/stone"),
                         AdvancementType.TASK, false, false, false)
                 .addCriterion("tick", PlayerTrigger.TriggerInstance.tick());
         AdvancementHolder root = rootBuilder.build(rootId);
