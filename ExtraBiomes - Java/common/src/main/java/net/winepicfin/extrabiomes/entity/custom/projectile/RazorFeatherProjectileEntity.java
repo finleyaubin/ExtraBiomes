@@ -70,7 +70,7 @@ public class RazorFeatherProjectileEntity extends ThrowableItemProjectile {
     @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte) 3);
             if (this.getOwner() instanceof Player) {
                 ItemEntity drop = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItem().copy());

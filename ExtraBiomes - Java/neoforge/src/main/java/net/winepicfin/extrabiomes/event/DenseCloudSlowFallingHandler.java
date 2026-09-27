@@ -35,7 +35,7 @@ public class DenseCloudSlowFallingHandler {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         Level level = player.level();
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
 
         double fallSpeed = -player.getDeltaMovement().y;
         if (fallSpeed <= MIN_FALL_SPEED) return;

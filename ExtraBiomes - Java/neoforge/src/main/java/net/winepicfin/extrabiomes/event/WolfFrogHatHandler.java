@@ -45,7 +45,7 @@ public class WolfFrogHatHandler {
 
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
-        if (wolf.level().isClientSide) return;
+        if (wolf.level().isClientSide()) return;
 
         if (equipping) {
             wolf.setItemSlot(EquipmentSlot.HEAD, heldItem.copy());
@@ -63,7 +63,7 @@ public class WolfFrogHatHandler {
 
     @SubscribeEvent
     public static void onWolfTick(EntityTickEvent.Post event) {
-        if (!(event.getEntity() instanceof Wolf wolf) || wolf.level().isClientSide) return;
+        if (!(event.getEntity() instanceof Wolf wolf) || wolf.level().isClientSide()) return;
         if (wolf.getItemBySlot(EquipmentSlot.HEAD).getItem() != ModItems.FROG_HELMET.get()) return;
         if (wolf.isInWater()) return;
 

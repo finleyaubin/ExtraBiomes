@@ -24,7 +24,7 @@ public class BaitItem extends Item {
         ItemStack itemStack = player.getItemInHand(hand);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS,
                 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             BaitProjectileEntity bait = new BaitProjectileEntity(level, player);
             bait.setItem(itemStack);
             // A bait picked back up via BaitProjectileEntity.interact() carries its remaining health over

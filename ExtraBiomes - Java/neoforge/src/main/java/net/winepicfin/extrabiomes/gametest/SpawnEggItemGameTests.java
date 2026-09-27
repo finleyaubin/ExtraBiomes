@@ -68,14 +68,11 @@ public class SpawnEggItemGameTests {
             // CreativeModeTabs$Rebuilder.buildContents does for every registered item.
             item.requiredFeatures();
 
-            // ItemStack.EMPTY (not a literal null) is the tag-less fallback vanilla's own
-            // crafting/inventory code actually passes (e.g. rendering the item in a creative tab,
-            // which needs an EntityType to pick the egg's overlay color). Asserted against the
-            // specific EntityType each egg is expected to carry, not just non-null, so a mix-up
-            // between two eggs (e.g. two eggs both resolving to the same EntityType) would
-            // actually be caught here.
-            EntityType<?> resolvedType = spawnEgg.getType(helper.getLevel().registryAccess(), ItemStack.EMPTY);
-            helper.assertTrue(resolvedType == expectedType, Component.literal(item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType));
+            // Vanilla eggs carry their EntityType as a default ENTITY_DATA component since 1.21.9,
+            // so a fresh stack (not ItemStack.EMPTY) is what resolves it; asserting the specific
+            // type still catches two eggs resolving to the same EntityType.
+            EntityType<?> resolvedType = spawnEgg.getType(new ItemStack(item));
+            helper.assertTrue(resolvedType == expectedType, Component.literal(item + "#getType(new ItemStack) returned " + resolvedType + ", expected " + expectedType));
 
             // Regression coverage for the BY_ID map-collision bug: every one of this mod's spawn
             // eggs used to construct with a null EntityType and collide on that single map slot

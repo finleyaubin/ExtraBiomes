@@ -2,11 +2,12 @@ package net.winepicfin.extrabiomes.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.ThrownItemRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.winepicfin.extrabiomes.entity.custom.projectile.RazorFeatherProjectileEntity;
@@ -34,15 +35,15 @@ public class RazorFeatherRenderer<T extends RazorFeatherProjectileEntity> extend
     }
 
     @Override
-    public void render(ThrownItemRenderState state, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void submit(ThrownItemRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
-        poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+        poseStack.mulPose(cameraRenderState.orientation);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(state.ageInTicks * SPIN_DEGREES_PER_TICK));
         if (!state.item.isEmpty()) {
-            state.item.render(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
+            state.item.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
         poseStack.popPose();
-        super.render(state, poseStack, buffer, packedLight);
+        super.submit(state, poseStack, submitNodeCollector, cameraRenderState);
     }
 }

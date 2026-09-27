@@ -146,9 +146,10 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
     // ModHangingSignBlockEntity are plain subclasses adding no new rendered state, so a renderer
     // built for the vanilla supertype works unchanged on ours.
     @SuppressWarnings("unchecked")
-    private static <E extends net.minecraft.world.level.block.entity.BlockEntity, S extends net.minecraft.world.level.block.entity.BlockEntity> void registerBlockEntityRenderer(
+    private static <E extends net.minecraft.world.level.block.entity.BlockEntity, S extends net.minecraft.world.level.block.entity.BlockEntity,
+            RS extends net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState> void registerBlockEntityRenderer(
             net.minecraft.world.level.block.entity.BlockEntityType<E> type,
-            net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<S> provider) {
-        BlockEntityRendererRegistry.register(type, (net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<E>) provider);
+            net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<S, RS> provider) {
+        BlockEntityRendererRegistry.register(type, (net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<E, RS>) provider);
     }
 }

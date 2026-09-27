@@ -29,7 +29,7 @@ public class JellyfishingNetItem extends Item {
         Level level = context.getLevel();
         Player player = context.getPlayer();
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
-        if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
             JellyfishEntity jellyfish = ModEntities.JELLYFISH.get().create(serverLevel, EntitySpawnReason.BUCKET);
             if (jellyfish != null) {
                 jellyfish.snapTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
