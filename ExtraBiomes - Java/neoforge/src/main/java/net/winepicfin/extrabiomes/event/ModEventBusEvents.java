@@ -19,7 +19,7 @@ import net.winepicfin.extrabiomes.entity.custom.PuckooEntity;
 import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
 import net.winepicfin.extrabiomes.entity.custom.WormEntity;
 
-@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
 public class ModEventBusEvents {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {

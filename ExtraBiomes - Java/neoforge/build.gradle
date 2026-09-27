@@ -31,6 +31,8 @@ loom {
             configName = "NeoForge Client"
             client()
             source sourceSets.main
+            // Architectury's @OnlyIn triggers a dev-only NeoForge 21.8 warning screen on every boot.
+            vmArgs "-Dneoforge.warnings.onlyin.hide=true"
         }
         server {
             configName = "NeoForge Server"

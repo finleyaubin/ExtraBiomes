@@ -2,12 +2,13 @@ package net.winepicfin.extrabiomes.neoforge.fluid;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogParameters;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.FogEnvironment;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -65,8 +66,11 @@ public class BaseFluidType extends FluidType implements IClientFluidTypeExtensio
         return new Vector4f(fogColour.x, fogColour.y, fogColour.z, fluidFogColor.w());
     }
 
+    // FogParameters (start/end/shape/color record) is gone as of the 1.21.6 fog rework - FogData is a
+    // mutable holder the vanilla environment already populated, so this just tightens its distances.
     @Override
-    public @NotNull FogParameters modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, FogParameters fogParameters) {
-        return new FogParameters(0.6f, 3f, fogParameters.shape(), fogParameters.red(), fogParameters.green(), fogParameters.blue(), fogParameters.alpha());
+    public void modifyFogRender(Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, FogData fogData) {
+        fogData.environmentalStart = 0.6f;
+        fogData.environmentalEnd = 3f;
     }
 }

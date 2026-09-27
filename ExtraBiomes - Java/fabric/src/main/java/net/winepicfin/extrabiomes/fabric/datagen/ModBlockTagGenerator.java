@@ -25,21 +25,21 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
-        this.tag(BlockTags.NEEDS_STONE_TOOL).add(keys(
+        this.valueLookupBuilder(BlockTags.NEEDS_STONE_TOOL).add(keys(
                 ModBlocks.NETHER_COPPER_ORE.get(),
                 ModBlocks.NETHER_IRON_ORE.get(),
                 ModBlocks.NETHER_LAPIS_ORE.get()
         ));
 
-        this.tag(BlockTags.NEEDS_IRON_TOOL).add(keys(
+        this.valueLookupBuilder(BlockTags.NEEDS_IRON_TOOL).add(keys(
                 ModBlocks.NETHER_EMERALD_ORE.get(),
                 ModBlocks.NETHER_REDSTONE_ORE.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get()
         ));
 
-        this.tag(BlockTags.NEEDS_DIAMOND_TOOL);
+        this.valueLookupBuilder(BlockTags.NEEDS_DIAMOND_TOOL);
 
-        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(keys(
+        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(keys(
                 ModBlocks.DENSE_CLOUD_BRICK.get(),
                 ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(),
                 ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(),
@@ -65,7 +65,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.BLACK_SANDSTONE_WALL.get()
         ));
 
-        this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(
+        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(keys(
                 ModBlocks.STICK_PILE.get(),
                 // mystic wood
                 ModBlocks.MYSTIC_PLANKS.get(),
@@ -124,26 +124,26 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.GILDED_SKY_WALL_SIGN.get(),
                 ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()
         ));
-        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(keys(
+        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_SHOVEL).add(keys(
                 ModBlocks.BLACK_SAND.get()
         ));
-        this.tag(BlockTags.MINEABLE_WITH_HOE);
+        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_HOE);
 
-        this.tag(BlockTags.FENCES).add(keys(
+        this.valueLookupBuilder(BlockTags.FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get(),
                 ModBlocks.SKY_FENCE.get(),
                 ModBlocks.PALM_FENCE.get(),
                 ModBlocks.GILDED_SKY_FENCE.get()
         ));
 
-        this.tag(BlockTags.FENCE_GATES).add(keys(
+        this.valueLookupBuilder(BlockTags.FENCE_GATES).add(keys(
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.SKY_FENCE_GATE.get(),
                 ModBlocks.PALM_FENCE_GATE.get(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get()
         ));
 
-        this.tag(BlockTags.LOGS).add(keys(
+        this.valueLookupBuilder(BlockTags.LOGS).add(keys(
                 ModBlocks.MYSTIC_LOG.get(),
                 ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
@@ -161,7 +161,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         ));
-        this.tag(BlockTags.LOGS_THAT_BURN).add(keys(
+        this.valueLookupBuilder(BlockTags.LOGS_THAT_BURN).add(keys(
                 ModBlocks.MYSTIC_LOG.get(),
                 ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
@@ -179,21 +179,21 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         ));
-        this.tag(BlockTags.PLANKS).add(keys(
+        this.valueLookupBuilder(BlockTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.SKY_PLANKS.get(),
                 ModBlocks.PALM_PLANKS.get(),
                 ModBlocks.GILDED_SKY_PLANKS.get()
         ));
 
-        this.tag(BlockTags.WALLS).add(keys(
+        this.valueLookupBuilder(BlockTags.WALLS).add(keys(
                 ModBlocks.BLACK_SANDSTONE_WALL.get()
         ));
-        this.tag(BlockTags.STAIRS).add(keys(
+        this.valueLookupBuilder(BlockTags.STAIRS).add(keys(
                 ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()
         ));
-        this.tag(BlockTags.SLABS).add(keys(
+        this.valueLookupBuilder(BlockTags.SLABS).add(keys(
                 ModBlocks.BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
@@ -203,7 +203,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
         // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
         // glazed terracotta isn't in that tag at all. Adding the four colors used there fixes it.
-        this.tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(keys(
+        this.valueLookupBuilder(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(keys(
                 Blocks.WHITE_GLAZED_TERRACOTTA,
                 Blocks.ORANGE_GLAZED_TERRACOTTA,
                 Blocks.RED_GLAZED_TERRACOTTA,
@@ -215,12 +215,8 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
     }
 
-    @SafeVarargs
-    private static net.minecraft.resources.ResourceKey<Block>[] keys(Block... blocks) {
-        net.minecraft.resources.ResourceKey<Block>[] result = new net.minecraft.resources.ResourceKey[blocks.length];
-        for (int i = 0; i < blocks.length; i++) {
-            result[i] = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getResourceKey(blocks[i]).orElseThrow();
-        }
-        return result;
+    // valueLookupBuilder()'s TagAppender takes Block directly (Fabric API 1.21.6+), so this is now an identity passthrough.
+    private static Block[] keys(Block... blocks) {
+        return blocks;
     }
 }

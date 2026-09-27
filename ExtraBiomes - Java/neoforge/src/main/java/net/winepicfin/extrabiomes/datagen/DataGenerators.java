@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 // subtype only fires when that half of datagen is actually running), and getExistingFileHelper()
 // is gone along with the ExistingFileHelper class itself (see ModBlockStateProvider's header
 // comment) - confirmed via javap on neoforge-21.4.157-universal.jar's GatherDataEvent.class.
-@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
 public class DataGenerators {
     @SubscribeEvent
     public static void gatherServerData(GatherDataEvent.Server event){
@@ -46,9 +46,9 @@ public class DataGenerators {
         event.addProvider(new ModRecipeProvider(packOutput, lookupProvider));
         event.addProvider(ModLootTableProvider.create(packOutput, lookupProvider));
 
-        ModBlockTagGenerator blockTagGenerator = event.addProvider(new ModBlockTagGenerator(packOutput, lookupProvider));
+        event.addProvider(new ModBlockTagGenerator(packOutput, lookupProvider));
         event.addProvider(new ModBiomeTagProvider(packOutput, biomeTagLookupProvider));
-        event.addProvider(new ModItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter()));
+        event.addProvider(new ModItemTagGenerator(packOutput, lookupProvider));
 
         event.addProvider(new ModWorldGenProvider(packOutput, lookupProvider));
 
