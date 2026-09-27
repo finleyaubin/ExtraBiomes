@@ -10,7 +10,7 @@ license="MIT License"
     modId="${mod_id}"
     version="${version}"
     displayName="${mod_name}"
-    logoFile="extrabiomes_logo.png"
+    iconFile="extrabiomes_logo.png"
     authors="${mod_authors}"
     description='''${mod_description}'''
 [[dependencies.extrabiomes]]
