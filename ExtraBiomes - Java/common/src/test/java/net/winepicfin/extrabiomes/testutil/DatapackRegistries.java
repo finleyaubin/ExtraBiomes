@@ -326,6 +326,14 @@ public final class DatapackRegistries {
         }
     }
 
+    private static <T> void bindRegistryTags(MultiPackResourceManager resources, Registry<T> registry) {
+        setFrozen(registry, false);
+        net.minecraft.core.WritableRegistry<T> writable = (net.minecraft.core.WritableRegistry<T>) registry;
+        writable.bindTags(net.minecraft.tags.TagLoader.loadTagsForRegistry(
+                resources, registry.key(), net.minecraft.tags.TagLoader.ElementLookup.fromWritableRegistry(writable)));
+        registry.freeze();
+    }
+
     private static HolderLookup.Provider load() {
         List<PackResources> packs = new ArrayList<>();
         // Vanilla's own built-in datapack (data/minecraft/**, read straight off the merged
@@ -347,19 +355,17 @@ public final class DatapackRegistries {
             // #minecraft:ancient_city_replaceable) instead of tolerating an unbound one - block/item
             // tags aren't part of registriesToLoad()'s dynamic-registry set, so bind them explicitly
             // first from the same vanilla+mod packs.
-            setFrozen(BuiltInRegistries.BLOCK, false);
-            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.BLOCK);
-            BuiltInRegistries.BLOCK.freeze();
-            setFrozen(BuiltInRegistries.ITEM, false);
-            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.ITEM);
-            BuiltInRegistries.ITEM.freeze();
-            setFrozen(BuiltInRegistries.ENTITY_TYPE, false);
-            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.ENTITY_TYPE);
-            BuiltInRegistries.ENTITY_TYPE.freeze();
+            // As of 26.1, TagLoader.loadTagsForRegistry(ResourceManager, WritableRegistry) merely computes
+            // and discards the tag map instead of binding it - bindTags(...) must be called explicitly now.
+            bindRegistryTags(resources, BuiltInRegistries.BLOCK);
+            bindRegistryTags(resources, BuiltInRegistries.ITEM);
+            bindRegistryTags(resources, BuiltInRegistries.ENTITY_TYPE);
             RegistryAccess base = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
             List<net.minecraft.core.HolderLookup.RegistryLookup<?>> baseLookups =
                     base.registries().<net.minecraft.core.HolderLookup.RegistryLookup<?>>map(entry -> entry.value()).toList();
-            RegistryAccess.Frozen loaded = RegistryDataLoader.load(resources, baseLookups, registriesToLoad());
+            // RegistryDataLoader.load() became async (returns a CompletableFuture) as of 26.1; run it
+            // synchronously on the calling thread since tests just need the result immediately.
+            RegistryAccess.Frozen loaded = RegistryDataLoader.load(resources, baseLookups, registriesToLoad(), Runnable::run).join();
             // RegistryDataLoader.load()'s result only carries the registries it just loaded
             // (registriesToLoad()) - callers (DatapackSchemaTest) need item/block/enchantment/...
             // lookups too (e.g. loot table/advancement/recipe predicates), so merge base back in.

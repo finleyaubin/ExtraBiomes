@@ -8,8 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
@@ -23,19 +24,19 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class MysticTrunkPlacer extends TrunkPlacer {
-    private static final Codec<UniformInt> BRANCH_START_CODEC = UniformInt.CODEC.validate((pUniformInt) -> {
-        return pUniformInt.getMaxValue() - pUniformInt.getMinValue() < 1 ? DataResult.error(() -> {
+    private static final Codec<UniformInt> BRANCH_START_CODEC = UniformInt.MAP_CODEC.codec().validate((pUniformInt) -> {
+        return pUniformInt.maxInclusive() - pUniformInt.minInclusive() < 1 ? DataResult.error(() -> {
             return "Need at least 2 blocks variation for the branch starts to fit both branches";
         }) : DataResult.success(pUniformInt);
-    }).codec();
+    });
 public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec((pInstance) -> {
-    return trunkPlacerParts(pInstance).and(pInstance.group(IntProvider.codec(1, 3).fieldOf("branch_count").forGetter((pTrunkPlacer) -> {
+    return trunkPlacerParts(pInstance).and(pInstance.group(IntProviders.codec(1, 3).fieldOf("branch_count").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchCount;
-    }), IntProvider.codec(2, 16).fieldOf("branch_horizontal_length").forGetter((pTrunkPlacer) -> {
+    }), IntProviders.codec(2, 16).fieldOf("branch_horizontal_length").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchHorizontalLength;
-    }), IntProvider.validateCodec(-16, 0, BRANCH_START_CODEC).fieldOf("branch_start_offset_from_top").forGetter((pTrunkPlacer) -> {
+    }), IntProviders.validateCodec(-16, 0, BRANCH_START_CODEC).fieldOf("branch_start_offset_from_top").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchStartOffsetFromTop;
-    }), IntProvider.codec(-16, 16).fieldOf("branch_end_offset_from_top").forGetter((pTrunkPlacer) -> {
+    }), IntProviders.codec(-16, 16).fieldOf("branch_end_offset_from_top").forGetter((pTrunkPlacer) -> {
         return pTrunkPlacer.branchEndOffsetFromTop;
     }))).apply(pInstance, MysticTrunkPlacer::new);
 });
@@ -44,7 +45,7 @@ public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCo
         this.branchCount = pBranchCount;
         this.branchHorizontalLength = pBranchLength;
         this.branchStartOffsetFromTop = pBranchOffsetFromTop;
-        this.secondBranchStartOffsetFromTop = UniformInt.of(pBranchOffsetFromTop.getMinValue(), pBranchOffsetFromTop.getMaxValue() - 1);
+        this.secondBranchStartOffsetFromTop = UniformInt.of(pBranchOffsetFromTop.minInclusive(), pBranchOffsetFromTop.maxInclusive() - 1);
         this.branchEndOffsetFromTop = branchEndOffsetFromTop;
     }
     private final IntProvider branchCount;
@@ -58,17 +59,17 @@ public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCo
     }
 
     @Override
-    public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig) {
+    public List<FoliagePlacer.FoliageAttachment> placeTrunk(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig) {
         BlockPos blockpos = pPos.below();
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos, pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.north(), pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.east(), pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.south(), pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.west(), pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.north().east(), pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.north().west(), pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.south().east(), pConfig);
-        setDirtAt(pLevel, pBlockSetter, pRandom, blockpos.south().west(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos, pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.north(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.east(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.south(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.west(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.north().east(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.north().west(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.south().east(), pConfig);
+        placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.south().west(), pConfig);
 
         int i = Math.max(0, pFreeTreeHeight - 1 + this.branchStartOffsetFromTop.sample(pRandom));
         int j = Math.max(0, pFreeTreeHeight - 1 + this.secondBranchStartOffsetFromTop.sample(pRandom));
@@ -159,7 +160,7 @@ public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCo
      * the trunk to meet the branches' natural heights, so this only bites in the rare case that would
      * have pushed the trunk past the tree's overall height cap.
      */
-    private List<FoliagePlacer.FoliageAttachment> generateBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, BlockPos pPos, TreeConfiguration pConfig, Direction pDirectionA, Direction pDirectionB, int pOffset, boolean pOffsetExtra, int pEndHeight, int pTrunkHeight, BlockPos.MutableBlockPos pPosMutable) {
+    private List<FoliagePlacer.FoliageAttachment> generateBranch(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, BlockPos pPos, TreeConfiguration pConfig, Direction pDirectionA, Direction pDirectionB, int pOffset, boolean pOffsetExtra, int pEndHeight, int pTrunkHeight, BlockPos.MutableBlockPos pPosMutable) {
         List<FoliagePlacer.FoliageAttachment> attachments = new ArrayList<>();
         pPosMutable.set(pPos).move(Direction.UP, pOffset);
         int i = Math.min(pEndHeight, pTrunkHeight - 1);
@@ -229,7 +230,7 @@ public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCo
      * A shorter, un-forking offshoot from a point partway along a main branch: a couple of logs
      * heading off perpendicular to the parent branch, capped with their own foliage attachment.
      */
-    private List<FoliagePlacer.FoliageAttachment> generateSubBranch(LevelSimulatedReader pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, TreeConfiguration pConfig, BlockPos pStart, Direction pParentDirection) {
+    private List<FoliagePlacer.FoliageAttachment> generateSubBranch(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, TreeConfiguration pConfig, BlockPos pStart, Direction pParentDirection) {
         Direction direction = pRandom.nextBoolean() ? pParentDirection.getClockWise() : pParentDirection.getCounterClockWise();
         Function<BlockState, BlockState> propertySetter = axisSetter(direction);
         int length = 1 + pRandom.nextInt(3);

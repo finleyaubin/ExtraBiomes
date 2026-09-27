@@ -5,8 +5,8 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -117,14 +117,14 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     protected void oreBlasting(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean createSmelting) {
-        modOreCooking(recipeOutput, RecipeSerializer.BLASTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_blasting");
+        modOreCooking(recipeOutput, true, ingredients, category, result, experience, cookingTime, group, "_from_blasting");
         if (createSmelting) {
-            modOreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime * 2, group, "_from_smelting");
+            modOreCooking(recipeOutput, false, ingredients, category, result, experience, cookingTime * 2, group, "_from_smelting");
         }
     }
 
     protected void foodCooking(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean campfireAndSmoker) {
-        modOreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_cooking");
+        modOreCooking(recipeOutput, false, ingredients, category, result, experience, cookingTime, group, "_from_cooking");
         if (campfireAndSmoker) {
             campfireCooking(recipeOutput, "campfire_cooking", 600, ingredients, result, experience);
             smokingCooking(recipeOutput, "smoking", 100, ingredients, result, experience);
@@ -138,11 +138,13 @@ public abstract class CommonRecipes extends RecipeProvider {
     // a Factory through every call site, dispatch to the two loader-agnostic convenience methods
     // (.blasting()/.smelting()) that already bind the right serializer+factory pair, matching this
     // method's only two real callers below.
-    protected void modOreCooking(RecipeOutput recipeOutput, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
+    protected void modOreCooking(RecipeOutput recipeOutput, boolean blasting, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
         for (ItemLike itemlike : ingredients) {
-            SimpleCookingRecipeBuilder builder = recipeSerializer == RecipeSerializer.BLASTING_RECIPE
-                    ? SimpleCookingRecipeBuilder.blasting(Ingredient.of(itemlike), category, result, experience, cookingTime)
-                    : SimpleCookingRecipeBuilder.smelting(Ingredient.of(itemlike), category, result, experience, cookingTime);
+            // CookingBookCategory only affects which recipe-book tab this shows under (not gameplay);
+            // MISC matches this method's mixed ore/misc callers with no single better fit.
+            SimpleCookingRecipeBuilder builder = blasting
+                    ? SimpleCookingRecipeBuilder.blasting(Ingredient.of(itemlike), category, CookingBookCategory.MISC, result, experience, cookingTime)
+                    : SimpleCookingRecipeBuilder.smelting(Ingredient.of(itemlike), category, CookingBookCategory.MISC, result, experience, cookingTime);
             builder.group(group).unlockedBy(getHasName(itemlike), has(itemlike))
                     .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(result) + recipeSuffix + "_" + getItemName(itemlike));
         }
@@ -333,10 +335,10 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .unlockedBy(getHasName(Items.SAND), has(Items.SAND))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":black_sand_from_dye");
 
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SAND.get()), RecipeCategory.MISC, Items.GLASS, 0.1F, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SAND.get()), RecipeCategory.MISC, CookingBookCategory.MISC, Items.GLASS, 0.1F, 200)
                 .unlockedBy(getHasName(ModBlocks.BLACK_SAND.get()), has(ModBlocks.BLACK_SAND.get()))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":glass_from_black_sand");
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SANDSTONE.get()), RecipeCategory.BUILDING_BLOCKS, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), 0.1F, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SANDSTONE.get()), RecipeCategory.BUILDING_BLOCKS, CookingBookCategory.BLOCKS, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), 0.1F, 200)
                 .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE.get()), has(ModBlocks.BLACK_SANDSTONE.get()))
                 .save(recipeOutput);
 

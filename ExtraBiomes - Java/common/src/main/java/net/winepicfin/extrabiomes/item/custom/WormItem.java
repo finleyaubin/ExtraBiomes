@@ -47,7 +47,7 @@ public class WormItem extends Item {
             worm.setCustomName(heldStack.get(DataComponents.CUSTOM_NAME));
         }
 
-        float yaw = Mth.wrapDegrees(level.random.nextFloat() * 360.0F);
+        float yaw = Mth.wrapDegrees(level.getRandom().nextFloat() * 360.0F);
         worm.snapTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, yaw, 0.0F);
         worm.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(spawnPos), EntitySpawnReason.BUCKET, null);
         serverLevel.addFreshEntity(worm);

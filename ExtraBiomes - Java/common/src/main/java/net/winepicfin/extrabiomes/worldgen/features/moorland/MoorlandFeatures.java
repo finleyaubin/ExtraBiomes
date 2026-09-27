@@ -4,7 +4,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -13,7 +12,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -24,11 +22,13 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.ore.ModOrePlacement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -110,25 +110,19 @@ public class MoorlandFeatures {
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(MOORLAND_PODZOL_KEY, new ConfiguredFeature<>(PODZOL_CONVERSION_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
-        // 30/8/4 mirror each Bedrock scatter_feature's own inner gaussian jitter around the outer placement position.
-        context.register(MOORLAND_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-                new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS)),
-                                BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
+        // 30/8/4 mirror each Bedrock scatter_feature's own inner gaussian jitter around the outer placement
+        // position; that inner jitter is now folded into the placed feature's own modifiers (bootstrapPlaced
+        // below) since 26.1 removed the random_patch feature/RandomPatchConfiguration.
+        context.register(MOORLAND_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS))));
 
-        context.register(MOORLAND_DOUBLE_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-                new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(DOUBLE_TALL_GRASS_FEATURE.get(), NoneFeatureConfiguration.INSTANCE))));
+        context.register(MOORLAND_DOUBLE_TALL_GRASS_KEY, new ConfiguredFeature<>(DOUBLE_TALL_GRASS_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
-        context.register(MOORLAND_SHORT_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-                new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_DRY_GRASS)),
-                                BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
+        context.register(MOORLAND_SHORT_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_DRY_GRASS))));
 
-        context.register(MOORLAND_TALL_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-                new RandomPatchConfiguration(30, 8, 4,
-                        PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.TALL_DRY_GRASS)),
-                                BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE)))));
+        context.register(MOORLAND_TALL_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.TALL_DRY_GRASS))));
 
         context.register(MOORLAND_WATERLILY_KEY, new ConfiguredFeature<>(WATERLILY_FIXUP_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
     }
@@ -141,15 +135,21 @@ public class MoorlandFeatures {
                 List.of(CountPlacement.of(UniformInt.of(15, 160)), InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome()));
 
-        // The y = heightmap +/- 4 spread is already folded into each configured feature's own RandomPatchConfiguration y_spread above.
+        // The y = heightmap +/- 4 spread is now the random_offset modifier appended below (30/8/4 tries/xz/y,
+        // same as the removed RandomPatchConfiguration's own numbers).
+        PlacementModifier airOnly = BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE);
         register(context, MOORLAND_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_GRASS_KEY),
-                ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+                withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
+                        8, 4, airOnly));
         register(context, MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_DOUBLE_TALL_GRASS_KEY),
-                ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+                withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
+                        8, 4));
         register(context, MOORLAND_SHORT_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_SHORT_DRY_GRASS_KEY),
-                ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+                withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
+                        8, 4, airOnly));
         register(context, MOORLAND_TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_DRY_GRASS_KEY),
-                ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+                withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
+                        8, 4, airOnly));
 
         register(context, MOORLAND_WATERLILY_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_WATERLILY_KEY),
                 ModOrePlacement.commonOrePlacement(4, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
@@ -166,5 +166,14 @@ public class MoorlandFeatures {
     private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key,
                                   Holder<ConfiguredFeature<?, ?>> configuration, List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
+    }
+
+    /** Appends the removed random_patch feature's tries/xz_spread/y_spread (as count + random_offset) plus any filter. */
+    private static List<PlacementModifier> withPatchModifiers(List<PlacementModifier> base, int xzSpread, int ySpread, PlacementModifier... extra) {
+        List<PlacementModifier> result = new ArrayList<>(base);
+        result.add(CountPlacement.of(30));
+        result.add(RandomOffsetPlacement.ofTriangle(xzSpread, ySpread));
+        result.addAll(List.of(extra));
+        return result;
     }
 }

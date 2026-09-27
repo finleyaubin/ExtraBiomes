@@ -1,6 +1,5 @@
 package net.winepicfin.extrabiomes.worldgen.features.moss;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -11,15 +10,16 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
 import java.util.List;
@@ -96,10 +96,6 @@ public class MossFeatures {
     public static final ResourceKey<PlacedFeature> MOSS_CARPET_SCATTER_PLACED_KEY = placedKey("moss_carpet_scatter");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_KEY = configuredKey("tall_grass");
-    /** Inner air-guarded placement of a single {@link Blocks#SHORT_GRASS} block - not a top-level decoration by itself. */
-    public static final ResourceKey<PlacedFeature> TALL_GRASS_INNER_PLACED_KEY = placedKey("tall_grass_inner");
-
-    public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_PATCH_KEY = configuredKey("tall_grass_patch");
 
     /**
      * extrabiomes:moss/tall_grass_scatter - the moorland-style tall-grass scatter (30 tries,
@@ -119,17 +115,11 @@ public class MossFeatures {
             ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath("minecraft", "jungle_bush"));
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
-
         context.register(MOSS_CARPET_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState()))));
 
         context.register(TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS.defaultBlockState()))));
-
-        Holder<PlacedFeature> tallGrassInner = placedFeatures.getOrThrow(TALL_GRASS_INNER_PLACED_KEY);
-        context.register(TALL_GRASS_PATCH_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-                new RandomPatchConfiguration(30, 8, 3, tallGrassInner)));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
@@ -146,17 +136,17 @@ public class MossFeatures {
                 )
         ));
 
-        context.register(TALL_GRASS_INNER_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(TALL_GRASS_KEY),
-                List.<PlacementModifier>of(BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)))
-        ));
-
+        // random_patch's tries/xz_spread/y_spread (30/8/3) are now the count + random_offset modifiers below,
+        // since 26.1 removed the random_patch feature/RandomPatchConfiguration.
         context.register(TALL_GRASS_SCATTER_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(TALL_GRASS_PATCH_KEY),
+                configuredFeatures.getOrThrow(TALL_GRASS_KEY),
                 List.of(
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                        BiomeFilter.biome()
+                        BiomeFilter.biome(),
+                        CountPlacement.of(30),
+                        RandomOffsetPlacement.ofTriangle(8, 3),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR))
                 )
         ));
     }

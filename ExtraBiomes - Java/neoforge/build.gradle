@@ -168,15 +168,15 @@ dependencies {
     // obfuscated Minecraft is through the regular dev.architectury.loom plugin instead" - an
     // explicit, unambiguous Loom error).
     neoForge "net.neoforged:neoforge:${neoforge_version}"
-    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+    api "dev.architectury:architectury-neoforge:${architectury_api_version}"
 
     // Resolved through Modrinth's Maven proxy - see common/build.gradle and root build.gradle for why.
-    modImplementation "maven.modrinth:terrablender:${terrablender_neoforge_modrinth_id}"
+    implementation "maven.modrinth:terrablender:${terrablender_neoforge_modrinth_id}"
 
     // GeckoLib 4.5.4 inlined mclib's math functions into its own package (software.bernie.geckolib.loading.math)
     // instead of jar-in-jarring the separate mclib artifact, so no merge is needed anymore - see
     // root build.gradle's mergeJarInJarDependency for the merge this replaces on older GeckoLib builds.
-    modImplementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+    implementation "maven.modrinth:geckolib:${geckolib_neoforge_modrinth_id}"
 
     // No 1.21.4 Create or Registrate build available as of 2026-09-08 (Create's own maven and wiki
     // top out at 1.21.1; Registrate has no MC1.21.x build at all) - re-enable when one ships. See
@@ -185,7 +185,7 @@ dependencies {
     // modCompileOnly("com.simibubi.create:create-1.21.1:6.0.10-280:slim") { transitive = false }
     // compileOnly("com.tterrag.registrate:Registrate:MC1.21-1.3.0+67") { transitive = false }
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 }
 
@@ -213,19 +213,20 @@ processResources {
     }
 }
 
+jar {
+    archiveClassifier = "raw"
+}
+
+// 26.1 ships unobfuscated, so there's no remapJar - the shadow jar is the release artifact.
 shadowJar {
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
-}
-
-remapJar {
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
     archiveClassifier = null
     archiveFileName = "${archives_base_name}-neoforge-v${mod_version}-${minecraft_version}.jar"
 }
+
+assemble.dependsOn shadowJar
 
 sourcesJar {
     def commonSources = project(":common").sourcesJar

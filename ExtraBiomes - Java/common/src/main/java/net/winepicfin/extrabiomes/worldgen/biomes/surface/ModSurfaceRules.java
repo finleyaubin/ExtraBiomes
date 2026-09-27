@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.biomes.surface;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -43,7 +43,7 @@ public class ModSurfaceRules {
     private static final SurfaceRules.RuleSource BEDROCK = makeStateRule(Blocks.BEDROCK);
     // moisture=7 (not defaultBlockState's 0) so the whole field starts fully hydrated rather than
     // waiting on random ticks to notice the buried water pockets one at a time.
-    private static final SurfaceRules.RuleSource FARMLAND = SurfaceRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7));
+    private static final SurfaceRules.RuleSource FARMLAND = SurfaceRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7));
     private static final SurfaceRules.RuleSource MUD = makeStateRule(Blocks.MUD);
     private static final SurfaceRules.RuleSource PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
     private static final SurfaceRules.RuleSource MYCELIUM = makeStateRule(Blocks.MYCELIUM);

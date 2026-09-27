@@ -1,7 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.charred;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -15,7 +14,6 @@ import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
@@ -119,10 +117,7 @@ public class CharredForestFeatures {
     public static final ResourceKey<PlacedFeature> SMOKING_GROUND_PLACED_KEY = placedKey("smoking_ground");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> FIRE_KEY = configuredKey("fire");
-    /** Inner air/survivability-guarded single fire placement - not a top-level decoration by itself. */
-    public static final ResourceKey<PlacedFeature> FIRE_INNER_PLACED_KEY = placedKey("fire_inner");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SCATTER_FIRE_KEY = configuredKey("scatter_fire");
     /** Register via {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SCATTER_FIRE_PLACED_KEY)}. */
     public static final ResourceKey<PlacedFeature> SCATTER_FIRE_PLACED_KEY = placedKey("scatter_fire");
 
@@ -131,8 +126,6 @@ public class CharredForestFeatures {
     private static final int FIRE_PATCH_TRIES = 25;
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
-
         List<OreConfiguration.TargetBlockState> dirtFamily = List.of(
                 OreConfiguration.target(new BlockMatchTest(Blocks.DIRT), Blocks.BASALT.defaultBlockState()),
                 OreConfiguration.target(new BlockMatchTest(Blocks.DIRT_PATH), Blocks.BASALT.defaultBlockState()),
@@ -152,10 +145,6 @@ public class CharredForestFeatures {
 
         context.register(FIRE_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FIRE.defaultBlockState()))));
-
-        Holder<PlacedFeature> fireInner = placedFeatures.getOrThrow(FIRE_INNER_PLACED_KEY);
-        context.register(SCATTER_FIRE_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-                new RandomPatchConfiguration(FIRE_PATCH_TRIES, 8, 4, fireInner)));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
@@ -179,16 +168,17 @@ public class CharredForestFeatures {
                 BiomeFilter.biome()
         )));
 
-        context.register(FIRE_INNER_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(FIRE_KEY), List.<PlacementModifier>of(
-                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)),
-                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.FIRE.defaultBlockState(), BlockPos.ZERO))
-        )));
-
-        context.register(SCATTER_FIRE_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SCATTER_FIRE_KEY), List.of(
+        // random_patch's tries/xz_spread/y_spread (FIRE_PATCH_TRIES/8/4) are now the count + random_offset
+        // modifiers below, since 26.1 removed the random_patch feature/RandomPatchConfiguration.
+        context.register(SCATTER_FIRE_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(FIRE_KEY), List.of(
                 CountPlacement.of(FIRE_OUTER_COUNT),
                 InSquarePlacement.spread(),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                BiomeFilter.biome()
+                BiomeFilter.biome(),
+                CountPlacement.of(FIRE_PATCH_TRIES),
+                RandomOffsetPlacement.ofTriangle(8, 4),
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)),
+                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.FIRE.defaultBlockState(), BlockPos.ZERO))
         )));
     }
 

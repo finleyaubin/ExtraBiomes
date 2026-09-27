@@ -14,7 +14,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -98,21 +98,17 @@ public class MysticFeatures {
                 .add(Blocks.ORANGE_TULIP.defaultBlockState(), 1)
                 .add(Blocks.WHITE_TULIP.defaultBlockState(), 1)
                 .add(Blocks.PINK_TULIP.defaultBlockState(), 1));
-        context.register(MYSTIC_FLOWERS_KEY, new ConfiguredFeature<>(Feature.FLOWER, new RandomPatchConfiguration(
-                64, 6, 2, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(flowers)))));
+        context.register(MYSTIC_FLOWERS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(flowers)));
 
         // Same shape as vanilla's PATCH_GRASS (grassPatch(SHORT_GRASS, 32) -> tries 32, xz/y spread 7/3).
-        context.register(MYSTIC_GRASS_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(
-                32, 7, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS))))));
+        context.register(MYSTIC_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS))));
         // Same shape as vanilla's PATCH_BROWN_MUSHROOM/PATCH_RED_MUSHROOM (simplePatchConfiguration's
         // default tries 96, xz/y spread 7/3).
-        context.register(MYSTIC_BROWN_MUSHROOM_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(
-                96, 7, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM))))));
-        context.register(MYSTIC_RED_MUSHROOM_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(
-                96, 7, 3, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM))))));
+        context.register(MYSTIC_BROWN_MUSHROOM_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM))));
+        context.register(MYSTIC_RED_MUSHROOM_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
+                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM))));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
@@ -125,23 +121,28 @@ public class MysticFeatures {
 
         // count(2): same sparse, occasional-accent density as this mod's other hand-tuned patch
         // features (e.g. GRAND_OASIS_DEAD_BUSH_PLACED_KEY) - each attempt already scatters up to 64
-        // flowers via the RandomPatchConfiguration above.
+        // flowers via the patch-shaped placement modifiers appended below (random_patch's replacement
+        // since 26.1: count/random_offset/isEmpty in place of the removed RandomPatchConfiguration).
         context.register(MYSTIC_FLOWERS_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(MYSTIC_FLOWERS_KEY), List.of(
                 CountPlacement.of(2), InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome())));
+                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome(),
+                CountPlacement.of(64), RandomOffsetPlacement.ofTriangle(6, 2), PlacementUtils.isEmpty())));
 
         // Same shape as vanilla's PATCH_GRASS_FOREST placement (worldSurfaceSquaredWithCount(2)).
         context.register(MYSTIC_GRASS_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(MYSTIC_GRASS_KEY), List.of(
                 CountPlacement.of(2), InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome())));
+                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome(),
+                CountPlacement.of(32), RandomOffsetPlacement.ofTriangle(7, 3), PlacementUtils.isEmpty())));
         // Same shape as vanilla's BROWN_MUSHROOM_NORMAL/RED_MUSHROOM_NORMAL placements
         // (getMushroomPlacement(rarity, null): rarity filter, spread, MOTION_BLOCKING heightmap).
         context.register(MYSTIC_BROWN_MUSHROOM_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(MYSTIC_BROWN_MUSHROOM_KEY), List.of(
                 RarityFilter.onAverageOnceEvery(256), InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING), BiomeFilter.biome())));
+                HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING), BiomeFilter.biome(),
+                CountPlacement.of(96), RandomOffsetPlacement.ofTriangle(7, 3), PlacementUtils.isEmpty())));
         context.register(MYSTIC_RED_MUSHROOM_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(MYSTIC_RED_MUSHROOM_KEY), List.of(
                 RarityFilter.onAverageOnceEvery(512), InSquarePlacement.spread(),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING), BiomeFilter.biome())));
+                HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING), BiomeFilter.biome(),
+                CountPlacement.of(96), RandomOffsetPlacement.ofTriangle(7, 3), PlacementUtils.isEmpty())));
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

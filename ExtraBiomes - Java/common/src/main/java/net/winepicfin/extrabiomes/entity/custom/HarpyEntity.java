@@ -34,7 +34,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
     public HarpyEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         this.moveControl = new FlyingMoveControl(this, 20, true);
-        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.FIRE_IN_NEIGHBOR, -1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

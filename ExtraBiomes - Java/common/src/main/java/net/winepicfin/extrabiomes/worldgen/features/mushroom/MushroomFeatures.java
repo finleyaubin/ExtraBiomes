@@ -180,10 +180,12 @@ public class MushroomFeatures {
         registerStructure(context, HUGE_WHITE_MUSHROOM_KEY, "huge_white_mushroom", Optional.empty());
         registerStructure(context, HUGE_YELLOW_MUSHROOM_KEY, "huge_yellow_mushroom", Optional.empty());
 
+        // canPlaceOn is a new required field since 26.1 (HugeMushroomFeatureConfiguration gained it); alwaysTrue()
+        // preserves the old behavior where huge mushrooms generated regardless of the block underneath.
         register(context, VANILLA_HUGE_RED_MUSHROOM_KEY, Feature.HUGE_RED_MUSHROOM,
-                new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 2));
+                new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 2, BlockPredicate.alwaysTrue()));
         register(context, VANILLA_HUGE_BROWN_MUSHROOM_KEY, Feature.HUGE_BROWN_MUSHROOM,
-                new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 3));
+                new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 3, BlockPredicate.alwaysTrue()));
 
         // Weights are sequential-trial chances (w_i / weight remaining from i onward, since RandomFeatureConfiguration tries entries in order and the last is the guaranteed default), rebalanced to ~3:1 favoring custom colors over Bedrock's literal weights after playtesting showed the literal weights (any one vanilla color individually outnumbers any one custom color 5:1) read as almost no modded mushrooms.
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);

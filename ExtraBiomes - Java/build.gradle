@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "${architectury_plugin_version}"
-    id "dev.architectury.loom" version "${architectury_loom_version}" apply false
+    id "dev.architectury.loom-no-remap" version "${architectury_loom_version}" apply false
 }
 
 architectury {
@@ -55,7 +55,7 @@ ext.mergeJarInJarDependency = { Project project, String hostDependencyNotation, 
 }
 
 subprojects {
-    apply plugin: "dev.architectury.loom"
+    apply plugin: "dev.architectury.loom-no-remap"
 
     loom {
         silentMojangMappingsLicense()
@@ -63,7 +63,6 @@ subprojects {
 
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        mappings loom.officialMojangMappings()
     }
 
     repositories {
@@ -126,7 +125,7 @@ subprojects {
 }
 
 allprojects {
-    apply plugin: "java"
+    apply plugin: "java-library"
     apply plugin: "architectury-plugin"
     apply plugin: "idea"
     apply plugin: "maven-publish"
@@ -145,15 +144,15 @@ allprojects {
     java {
         withSourcesJar()
 
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
 
         // Pin the toolchain instead of relying on whatever JDK happens to be the
-        // caller's default (Minecraft 1.20.5+ requires 21, confirmed by the merged jar's
+        // caller's default (Minecraft 26.1 requires 25; 1.20.5-1.21.11 required 21, confirmed by the merged jar's
         // class file version being 65.0 - up from 17's 61.0) - keeps the build reproducible
         // across machines regardless of the system default JDK.
         toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion = JavaLanguageVersion.of(25)
         }
     }
 
@@ -189,7 +188,7 @@ allprojects {
     // whole ordering question by never touching IDE-only tasks in the first place.
     tasks.withType(JavaExec).matching { it.name in ['runClient', 'runServer', 'runData', 'runDatagen', 'runGameTestServer'] }.configureEach {
         javaLauncher = javaToolchains.launcherFor {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion = JavaLanguageVersion.of(25)
         }
     }
 

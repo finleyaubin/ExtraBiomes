@@ -3,7 +3,6 @@ package net.winepicfin.extrabiomes.item.custom;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
@@ -42,8 +41,10 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
         return null;
     }
 
-    @Override
-    public EntityType<?> getType(ItemStack stack) {
+    // Vanilla's SpawnEggItem.getType(ItemStack) became static in 26.1, so it can no longer be overridden
+    // polymorphically - callers that need this egg's lazily-resolved type (byType() below, and any
+    // mixin consulting it) use this instead.
+    public EntityType<?> resolveType(ItemStack stack) {
         if (stack == null) {
             return typeSupplier.get();
         }
@@ -52,10 +53,5 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
             return entityData.type();
         }
         return typeSupplier.get();
-    }
-
-    @Override
-    public FeatureFlagSet requiredFeatures() {
-        return typeSupplier.get().requiredFeatures();
     }
 }

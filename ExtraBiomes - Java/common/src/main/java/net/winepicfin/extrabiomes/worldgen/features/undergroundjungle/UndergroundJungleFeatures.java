@@ -36,6 +36,7 @@ import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -86,7 +87,7 @@ import java.util.List;
  *       reused from {@link MossFeatures}: that class deliberately left the outer
  *       {@code custom_moss_patch_feature.json} vegetation-patch wrapper out of scope and instead
  *       registered its three {@code custom_moss_select_feature.json} aggregate members
- *       ({@link MossFeatures#TALL_GRASS_PATCH_KEY}, {@link MossFeatures#MOSS_CARPET_KEY}, vanilla
+ *       ({@link MossFeatures#TALL_GRASS_KEY}, {@link MossFeatures#MOSS_CARPET_KEY}, vanilla
  *       {@link TreeFeatures#JUNGLE_BUSH}) as independent top-level {@code PlacedFeature}s carrying
  *       their own chunk-wide scatter/heightmap-surface placement modifiers - exactly wrong for
  *       nesting inside another patch's single-slot {@code vegetation_feature} (which needs a
@@ -289,7 +290,14 @@ public class UndergroundJungleFeatures {
         registerNoModifiers(context, JUNGLE_TREE_WITH_COCOA_PLACED_KEY, configuredFeatures.getOrThrow(JUNGLE_TREE_NO_COCOA_KEY));
         registerNoModifiers(context, BAMBOO_PLACED_KEY, configuredFeatures.getOrThrow(VegetationFeatures.BAMBOO_NO_PODZOL));
 
-        registerNoModifiers(context, MOSS_SELECT_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MossFeatures.TALL_GRASS_PATCH_KEY));
+        // random_patch's tries/xz_spread/y_spread (30/8/3) folded in directly since 26.1 removed it.
+        context.register(MOSS_SELECT_TALL_GRASS_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(MossFeatures.TALL_GRASS_KEY),
+                List.of(
+                        CountPlacement.of(30), RandomOffsetPlacement.ofTriangle(8, 3),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR))
+                )
+        ));
         context.register(MOSS_SELECT_CARPET_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(MossFeatures.MOSS_CARPET_KEY),
                 List.<PlacementModifier>of(BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)))

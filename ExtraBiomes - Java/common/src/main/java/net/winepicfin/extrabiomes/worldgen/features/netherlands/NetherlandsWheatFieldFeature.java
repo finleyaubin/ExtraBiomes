@@ -39,7 +39,7 @@ public class NetherlandsWheatFieldFeature extends Feature<NoneFeatureConfigurati
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel level = context.level();
         RandomSource random = context.random();
-        ChunkPos chunkPos = new ChunkPos(context.origin());
+        ChunkPos chunkPos = new ChunkPos(context.origin().getX() >> 4, context.origin().getZ() >> 4);
         boolean placedAny = false;
 
         for (int x = 0; x < 16; x++) {
