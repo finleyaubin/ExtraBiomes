@@ -4,19 +4,19 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.critereon.ConsumeItemTrigger;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.LocationPredicate;
-import net.minecraft.advancements.critereon.PlayerTrigger;
-import net.minecraft.advancements.critereon.TameAnimalTrigger;
+import net.minecraft.advancements.criterion.ConsumeItemTrigger;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.advancements.criterion.PlayerTrigger;
+import net.minecraft.advancements.criterion.TameAnimalTrigger;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.biome.Biome;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -62,18 +62,18 @@ public class ModAdvancements implements AdvancementSubProvider {
         HolderGetter<Biome> biomes = registries.lookupOrThrow(Registries.BIOME);
         HolderGetter<net.minecraft.world.entity.EntityType<?>> entityTypes = registries.lookupOrThrow(Registries.ENTITY_TYPE);
         HolderGetter<net.minecraft.world.item.Item> items = registries.lookupOrThrow(Registries.ITEM);
-        ResourceLocation rootId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "root");
+        Identifier rootId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "root");
         Advancement.Builder rootBuilder = Advancement.Builder.advancement()
                 .display(ModItems.WORM.get(),
                         Component.translatable("advancements.extrabiomes.root.title"),
                         Component.translatable("advancements.extrabiomes.root.description"),
-                        ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/wood/palm/palm_log"),
+                        Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/wood/palm/palm_log"),
                         AdvancementType.TASK, false, false, false)
                 .addCriterion("tick", PlayerTrigger.TriggerInstance.tick());
         AdvancementHolder root = rootBuilder.build(rootId);
         saver.accept(root);
 
-        ResourceLocation tamePuckooId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tame_puckoo");
+        Identifier tamePuckooId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tame_puckoo");
         saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.PUCKOO_SPAWN_EGG.get(),
@@ -84,7 +84,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                         EntityPredicate.Builder.entity().of(entityTypes, ModEntities.PUCKOO.get())))
                 .build(tamePuckooId));
 
-        ResourceLocation catchWormId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "catch_worm");
+        Identifier catchWormId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "catch_worm");
         saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.WORM.get(),
@@ -94,7 +94,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("has_worm", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.WORM.get()))
                 .build(catchWormId));
 
-        ResourceLocation gooCollectorId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "goo_collector");
+        Identifier gooCollectorId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "goo_collector");
         saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.BUCKET_OF_GOO.get(),
@@ -104,7 +104,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("has_goo", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.BUCKET_OF_GOO.get()))
                 .build(gooCollectorId));
 
-        ResourceLocation mysticWoodworkerId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mystic_woodworker");
+        Identifier mysticWoodworkerId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mystic_woodworker");
         saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModBlocks.MYSTIC_PLANKS.get(),
@@ -114,7 +114,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("has_mystic_planks", InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.MYSTIC_PLANKS.get()))
                 .build(mysticWoodworkerId));
 
-        ResourceLocation amphibiousArmorId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "amphibious_armor");
+        Identifier amphibiousArmorId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "amphibious_armor");
         saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.FROG_HELMET.get(),
@@ -124,7 +124,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("has_frog_helmet", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.FROG_HELMET.get()))
                 .build(amphibiousArmorId));
 
-        ResourceLocation piranhaDinnerId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "piranha_dinner");
+        Identifier piranhaDinnerId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "piranha_dinner");
         saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.COOKED_PIRANHA.get(),
@@ -134,7 +134,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("ate_cooked_piranha", ConsumeItemTrigger.TriggerInstance.usedItem(items, ModItems.COOKED_PIRANHA.get()))
                 .build(piranhaDinnerId));
 
-        ResourceLocation visitNetherlandsId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "visit_netherlands");
+        Identifier visitNetherlandsId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "visit_netherlands");
         AdvancementHolder visitNetherlands = Advancement.Builder.advancement()
                 .parent(root)
                 .display(Items.WHEAT,
@@ -148,7 +148,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .build(visitNetherlandsId);
         saver.accept(visitNetherlands);
 
-        ResourceLocation baitAndSwitchId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "bait_and_switch");
+        Identifier baitAndSwitchId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "bait_and_switch");
         saver.accept(Advancement.Builder.advancement()
                 .parent(root)
                 .display(ModItems.BAIT.get(),
@@ -158,7 +158,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("lured_piranha_with_bait", ModCriteriaTriggers.LURED_PIRANHA_WITH_BAIT.get().createCriterion(BaitLureTrigger.TriggerInstance.luredPiranhaWithBait()))
                 .build(baitAndSwitchId));
 
-        ResourceLocation dutchTreasureId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "dutch_treasure");
+        Identifier dutchTreasureId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "dutch_treasure");
         saver.accept(Advancement.Builder.advancement()
                 .parent(visitNetherlands)
                 .display(ModBlocks.NETHER_DIAMOND_ORE.get(),
@@ -168,7 +168,7 @@ public class ModAdvancements implements AdvancementSubProvider {
                 .addCriterion("has_nether_diamond_ore", InventoryChangeTrigger.TriggerInstance.hasItems(ModBlocks.NETHER_DIAMOND_ORE.get()))
                 .build(dutchTreasureId));
 
-        ResourceLocation biomeExplorerId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "biome_explorer");
+        Identifier biomeExplorerId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "biome_explorer");
         Advancement.Builder biomeExplorer = Advancement.Builder.advancement()
                 .parent(root)
                 .display(Items.FILLED_MAP,
@@ -176,13 +176,13 @@ public class ModAdvancements implements AdvancementSubProvider {
                         Component.translatable("advancements.extrabiomes.biome_explorer.description"),
                         null, AdvancementType.CHALLENGE, true, true, false);
         for (ResourceKey<Biome> biome : ALL_BIOMES) {
-            biomeExplorer.addCriterion(biome.location().getPath(), PlayerTrigger.TriggerInstance.located(
+            biomeExplorer.addCriterion(biome.identifier().getPath(), PlayerTrigger.TriggerInstance.located(
                     LocationPredicate.Builder.inBiome(biomes.getOrThrow(biome))));
         }
         saver.accept(biomeExplorer.build(biomeExplorerId));
     }
 
     private static String advancementId(String name) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name).toString();
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name).toString();
     }
 }

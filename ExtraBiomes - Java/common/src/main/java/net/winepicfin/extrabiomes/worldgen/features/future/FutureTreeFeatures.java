@@ -4,7 +4,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
@@ -70,15 +70,15 @@ import java.util.List;
  */
 public class FutureTreeFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> FUTURE_TREE_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_2"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_2"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> FUTURE_TREE_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_3"));
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_3"));
 
     /** These are the keys the biome-wiring pass should addFeature(...) with. */
     public static final ResourceKey<PlacedFeature> FUTURE_TREE_2_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_2"));
+            ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_2"));
     public static final ResourceKey<PlacedFeature> FUTURE_TREE_3_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_3"));
+            ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future_tree_3"));
 
     // Placed flush on the heightmap these small leaf clusters read as floating above the ground; sinking them in slightly keeps their base embedded.
     private static final int GROUND_OFFSET = -1;
@@ -86,11 +86,11 @@ public class FutureTreeFeatures {
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(FUTURE_TREE_2_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/2_tall_white_tree"), GROUND_OFFSET)
+                new SingleStructureConfiguration(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/2_tall_white_tree"), GROUND_OFFSET)
         ));
         context.register(FUTURE_TREE_3_KEY, new ConfiguredFeature<>(
                 ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/3_tall_white_tree"), GROUND_OFFSET)
+                new SingleStructureConfiguration(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "future/3_tall_white_tree"), GROUND_OFFSET)
         ));
     }
 

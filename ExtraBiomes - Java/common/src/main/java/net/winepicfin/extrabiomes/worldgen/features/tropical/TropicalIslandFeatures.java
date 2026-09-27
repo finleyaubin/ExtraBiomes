@@ -5,7 +5,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
@@ -61,7 +61,7 @@ public class TropicalIslandFeatures {
     public static final ResourceKey<PlacedFeature> MELON_PLACED_KEY = placedKey("tropical_melon");
 
     public static final TagKey<Block> ISLAND_GRASS_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
-            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "island_grass_floor_replaceable"));
+            Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "island_grass_floor_replaceable"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRASS_FLOOR_KEY = configuredKey("island_grass_floor");
 
     /**
@@ -116,10 +116,10 @@ public class TropicalIslandFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
     }
 }

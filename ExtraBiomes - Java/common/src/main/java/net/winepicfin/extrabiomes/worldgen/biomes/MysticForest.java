@@ -6,6 +6,10 @@ import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.attribute.AmbientParticle;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.BackgroundMusic;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -62,16 +66,19 @@ public class MysticForest {
                 .temperature(BiomeClimateTuning.MYSTIC_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x3A5F78)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 12.0F)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.MYSTIC_FOREST.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x4A3C2D)
+                .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 32.0F)
+                .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 1200.0F)
+                .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, AmbientParticle.of(ParticleTypes.PORTAL, 0.100193334F))
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_CHERRY_GROVE)))
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.MYSTIC_FOREST.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.MYSTIC_FOREST.skyColor())
-                        .fogColor(0x4F126384)
                         .foliageColorOverride(BiomeAppearanceTuning.MYSTIC_FOREST.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.MYSTIC_FOREST.grassColor())
-                        .ambientParticle(new AmbientParticleSettings(ParticleTypes.PORTAL, 0.100193334F))
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_CHERRY_GROVE)).build())
+                        .grassColorOverride(BiomeAppearanceTuning.MYSTIC_FOREST.grassColor()).build())
                 .build();
     }
 }

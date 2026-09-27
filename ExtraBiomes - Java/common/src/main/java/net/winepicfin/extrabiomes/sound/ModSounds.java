@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.sound;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.core.registries.Registries;
@@ -19,7 +19,7 @@ public class ModSounds {
 
     private static RegistrySupplier<SoundEvent> registerSound(String name) {
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name)));
+                Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name)));
     }
 
     public static void register() {

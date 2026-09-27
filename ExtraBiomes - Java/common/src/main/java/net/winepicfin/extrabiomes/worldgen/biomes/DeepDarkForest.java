@@ -7,6 +7,8 @@ import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class DeepDarkForest {
 
@@ -48,14 +50,18 @@ public class DeepDarkForest {
                 .temperature(BiomeClimateTuning.DEEP_DARK_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x000000)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 12.0F)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.DEEP_DARK_FOREST.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x000000)
+                .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 4.0F)
+                .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 32.0F)
+                .setAttribute(EnvironmentAttributes.SKY_FOG_END_DISTANCE, 32.0F)
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DEEP_DARK_FOREST.waterColor())
-                        .waterFogColor(0x050533)
-                        .skyColor(BiomeAppearanceTuning.DEEP_DARK_FOREST.skyColor())
-                        .fogColor(0x0d0d17)
                         .foliageColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.grassColor()).build())
                 .build();
     }
 }

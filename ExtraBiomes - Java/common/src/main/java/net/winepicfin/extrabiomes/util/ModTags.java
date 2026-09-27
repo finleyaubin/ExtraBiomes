@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.util;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
@@ -11,7 +11,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 public class ModTags {
     public static class Blocks{
         public static TagKey<Block> tag(String name){
-            return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+            return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
     public static class Items{
@@ -20,7 +20,7 @@ public class ModTags {
         public static final TagKey<Item> REPAIRS_FROG_ARMOR = tag("repairs_frog_armor");
 
         public static TagKey<Item> tag(String name){
-            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
     public static class Biomes{
@@ -53,7 +53,7 @@ public class ModTags {
         public static final TagKey<Biome> SPAWNS_HOPPLESHROOM = tag("spawns_hoppleshroom");
         public static final TagKey<Biome> SPAWNS_JELLYFISH = tag("spawns_jellyfish");
         public static TagKey<Biome> tag(String name){
-           return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+           return TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
 

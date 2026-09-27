@@ -6,6 +6,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class DesertBryce {
 
@@ -29,11 +30,11 @@ public class DesertBryce {
                 .temperature(BiomeClimateTuning.DESERT_BRYCE.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x113290)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.DESERT_BRYCE.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DESERT_BRYCE.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.DESERT_BRYCE.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.grassColor()).build())
                 .build();

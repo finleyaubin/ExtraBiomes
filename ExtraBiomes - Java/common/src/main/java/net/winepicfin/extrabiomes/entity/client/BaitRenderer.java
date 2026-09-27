@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.state.BaitProjectileRenderState;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 // Ported from Bedrock's controller.render.bait: swaps between 10 damage-stage textures as piranhas chip the bait away.
 public class BaitRenderer extends EntityRenderer<BaitProjectileEntity, BaitProjectileRenderState> {
-    private static final ResourceLocation[] TEXTURES = {
+    private static final Identifier[] TEXTURES = {
             texture("bait10"), texture("bait20"), texture("bait30"), texture("bait40"), texture("bait50"),
             texture("bait60"), texture("bait70"), texture("bait80"), texture("bait90"), texture("bait90"),
     };
@@ -29,8 +29,8 @@ public class BaitRenderer extends EntityRenderer<BaitProjectileEntity, BaitProje
         this.shadowRadius = 0.15F;
     }
 
-    private static ResourceLocation texture(String name) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/" + name + ".png");
+    private static Identifier texture(String name) {
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/" + name + ".png");
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BaitRenderer extends EntityRenderer<BaitProjectileEntity, BaitProje
         super.submit(state, poseStack, submitNodeCollector, cameraRenderState);
     }
 
-    public @NotNull ResourceLocation getTextureLocation(BaitProjectileRenderState state) {
+    public @NotNull Identifier getTextureLocation(BaitProjectileRenderState state) {
         int index = Mth.clamp(state.health * TEXTURES.length / state.maxHealth, 0, TEXTURES.length - 1);
         return TEXTURES[index];
     }

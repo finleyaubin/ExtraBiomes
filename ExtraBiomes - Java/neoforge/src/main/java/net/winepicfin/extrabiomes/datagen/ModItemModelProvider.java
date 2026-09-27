@@ -12,7 +12,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.Equippable;
@@ -45,8 +45,8 @@ public class ModItemModelProvider implements DataProvider {
     // via clientItem(), or it silently renders as a missing/no-model item with zero warning at
     // datagen time - only a runtime "No model loaded for default item ID" warning gives it away.
     private final PackOutput.PathProvider itemPathProvider;
-    private final Map<ResourceLocation, Supplier<JsonElement>> models = new HashMap<>();
-    private final Map<ResourceLocation, Supplier<JsonElement>> items = new HashMap<>();
+    private final Map<Identifier, Supplier<JsonElement>> models = new HashMap<>();
+    private final Map<Identifier, Supplier<JsonElement>> items = new HashMap<>();
 
     public ModItemModelProvider(PackOutput output) {
         this.modelPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "models");
@@ -58,7 +58,7 @@ public class ModItemModelProvider implements DataProvider {
     // models/item/<modelId>.json - the simple "minecraft:model" case that covers every item here
     // except the trimmed armor's per-trim selection (see trimmedArmorItem, which builds its own
     // "minecraft:select" items/ entry directly instead of calling this).
-    private void clientItem(ResourceLocation itemId, ResourceLocation modelId) {
+    private void clientItem(Identifier itemId, Identifier modelId) {
         items.put(itemId, () -> {
             JsonObject model = new JsonObject();
             model.addProperty("type", "minecraft:model");
@@ -107,7 +107,7 @@ public class ModItemModelProvider implements DataProvider {
         // Black Sandstone Wall - "wall_inventory" parent needs an explicit item entry (walls, unlike
         // most blocks, use a dedicated inventory-only model rather than reusing a placed-block model).
         withExistingParent(ModBlocks.BLACK_SANDSTONE_WALL.getId().getPath(), "minecraft:block/wall_inventory")
-                .add("wall", ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block("black_sandstone")).toString());
+                .add("wall", Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block("black_sandstone")).toString());
 
         // Boat items - see ModItems.BOAT_MODEL_ENTRIES (common) for which wood type uses which texture.
         ModItems.BOAT_MODEL_ENTRIES.forEach(entry -> boatItem(entry.item().get(), entry.texture()));
@@ -124,8 +124,8 @@ public class ModItemModelProvider implements DataProvider {
     }
 
     private void simpleItem(Item item) {
-        ResourceLocation id = ModelLocationUtils.getModelLocation(item);
-        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(BuiltInRegistries.ITEM.getKey(item).getPath()));
+        Identifier id = ModelLocationUtils.getModelLocation(item);
+        Identifier texture = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(BuiltInRegistries.ITEM.getKey(item).getPath()));
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -141,8 +141,8 @@ public class ModItemModelProvider implements DataProvider {
     // own registry path - boat items are named "<wood>_boat" (matching this mod's other wood items),
     // but the pre-staged art (ported from the Bedrock module) is named "boat_<wood>".
     private void boatItem(Item item, String texture) {
-        ResourceLocation id = ModelLocationUtils.getModelLocation(item);
-        ResourceLocation textureLocation = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(texture));
+        Identifier id = ModelLocationUtils.getModelLocation(item);
+        Identifier textureLocation = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(texture));
         models.put(id, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -155,10 +155,10 @@ public class ModItemModelProvider implements DataProvider {
     }
 
     private ItemModelBuilder withExistingParent(String path, String parent) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + path);
+        Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + path);
         ItemModelBuilder builder = new ItemModelBuilder(parent);
         models.put(id, builder::build);
-        clientItem(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, path), id);
+        clientItem(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, path), id);
         return builder;
     }
 
@@ -218,10 +218,10 @@ public class ModItemModelProvider implements DataProvider {
             default -> "";
         };
         String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
-        ResourceLocation itemTexture = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(itemPath));
+        Identifier itemTexture = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.item(itemPath));
 
         List<Map.Entry<ResourceKey<TrimMaterial>, Float>> entries = List.copyOf(TRIM_MATERIALS.entrySet());
-        ResourceLocation baseId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + itemPath);
+        Identifier baseId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + itemPath);
 
         models.put(baseId, () -> {
             JsonObject json = new JsonObject();
@@ -240,14 +240,14 @@ public class ModItemModelProvider implements DataProvider {
         items.put(BuiltInRegistries.ITEM.getKey(item), () -> {
             JsonArray cases = new JsonArray();
             for (Map.Entry<ResourceKey<TrimMaterial>, Float> entry : entries) {
-                String trimName = entry.getKey().location().getPath();
+                String trimName = entry.getKey().identifier().getPath();
                 String modelName = itemPath + "_" + trimName + "_trim";
                 JsonObject caseModel = new JsonObject();
                 caseModel.addProperty("type", "minecraft:model");
                 caseModel.addProperty("model", ExtraBiomes.MOD_ID + ":item/" + modelName);
                 JsonObject caseEntry = new JsonObject();
                 caseEntry.add("model", caseModel);
-                caseEntry.addProperty("when", entry.getKey().location().toString());
+                caseEntry.addProperty("when", entry.getKey().identifier().toString());
                 cases.add(caseEntry);
             }
             JsonObject fallback = new JsonObject();
@@ -264,10 +264,10 @@ public class ModItemModelProvider implements DataProvider {
         });
 
         for (Map.Entry<ResourceKey<TrimMaterial>, Float> entry : entries) {
-            String trimName = entry.getKey().location().getPath();
+            String trimName = entry.getKey().identifier().getPath();
             String modelName = itemPath + "_" + trimName + "_trim";
-            ResourceLocation trimModelId = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + modelName);
-            ResourceLocation trimTexture = ResourceLocation.fromNamespaceAndPath("minecraft", "trims/items/" + armorType + "_trim_" + trimName);
+            Identifier trimModelId = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "item/" + modelName);
+            Identifier trimTexture = Identifier.fromNamespaceAndPath("minecraft", "trims/items/" + armorType + "_trim_" + trimName);
             models.put(trimModelId, () -> {
                 JsonObject json = new JsonObject();
                 json.addProperty("parent", "minecraft:item/generated");

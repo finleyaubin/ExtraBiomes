@@ -25,7 +25,7 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -63,8 +63,8 @@ public class ModBlockStateProvider implements DataProvider {
     // silently renders as a missing/no-model item.
     private final PackOutput.PathProvider itemPathProvider;
     private final Map<Block, BlockModelDefinitionGenerator> blockStates = new HashMap<>();
-    private final Map<ResourceLocation, Supplier<JsonElement>> models = new HashMap<>();
-    private final Map<ResourceLocation, Supplier<JsonElement>> items = new HashMap<>();
+    private final Map<Identifier, Supplier<JsonElement>> models = new HashMap<>();
+    private final Map<Identifier, Supplier<JsonElement>> items = new HashMap<>();
 
     public ModBlockStateProvider(net.fabricmc.fabric.api.datagen.v1.FabricDataOutput output) {
         this.blockStatePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "blockstates");
@@ -73,8 +73,8 @@ public class ModBlockStateProvider implements DataProvider {
         registerStatesAndModels();
     }
 
-    private void clientItem(Block block, ResourceLocation modelId) {
-        ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
+    private void clientItem(Block block, Identifier modelId) {
+        Identifier itemId = BuiltInRegistries.BLOCK.getKey(block);
         items.put(itemId, () -> {
             JsonObject model = new JsonObject();
             model.addProperty("type", "minecraft:model");
@@ -208,35 +208,35 @@ public class ModBlockStateProvider implements DataProvider {
 
     // ---- helpers -----------------------------------------------------------------------------
 
-    private ResourceLocation blockTexture(Block block) {
+    private Identifier blockTexture(Block block) {
         return texLoc(BuiltInRegistries.BLOCK.getKey(block).getPath());
     }
 
-    private ResourceLocation modelOf(ResourceLocation texture) {
+    private Identifier modelOf(Identifier texture) {
         return modLoc(texture.getPath().substring(texture.getPath().lastIndexOf('/') + 1));
     }
 
-    private ResourceLocation texLoc(String stem) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block(stem));
+    private Identifier texLoc(String stem) {
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block(stem));
     }
 
-    private ResourceLocation modLoc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + path);
+    private Identifier modLoc(String path) {
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + path);
     }
 
     private void blockWithItem(RegistrySupplier<Block> blockRegistryObject) {
         cubeAllBlock(blockRegistryObject.get(), blockTexture(blockRegistryObject.get()));
     }
 
-    private void cubeAllBlock(Block block, ResourceLocation texture) {
-        ResourceLocation model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, texture), models::put);
+    private void cubeAllBlock(Block block, Identifier texture) {
+        Identifier model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, texture), models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
     }
 
-    private void cubeBottomTopBlock(Block block, ResourceLocation side, ResourceLocation bottom, ResourceLocation top) {
+    private void cubeBottomTopBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
-        ResourceLocation model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, tm, models::put);
+        Identifier model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, tm, models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
     }
@@ -244,23 +244,23 @@ public class ModBlockStateProvider implements DataProvider {
     private void grassStoneBlock(Block block) {
         TextureMapping common = new TextureMapping().put(TextureSlot.SIDE, texLoc("grass_stone_side")).put(TextureSlot.BOTTOM, texLoc("grass_stone_bottom")).put(TextureSlot.TOP, texLoc("grass_stone_top"));
         TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, texLoc("grass_stone_side")).put(TextureSlot.BOTTOM, texLoc("grass_stone_bottom")).put(TextureSlot.TOP, texLoc("grass_stone_top_egg"));
-        ResourceLocation commonModel = ModelTemplates.CUBE_BOTTOM_TOP.create(block, common, models::put);
-        ResourceLocation eggModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_egg", egg, models::put);
+        Identifier commonModel = ModelTemplates.CUBE_BOTTOM_TOP.create(block, common, models::put);
+        Identifier eggModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_egg", egg, models::put);
         blockStates.put(block, MultiVariantGenerator.dispatch(block, new MultiVariant(WeightedList.of(
                 new Weighted<>(new Variant(commonModel), 1200),
                 new Weighted<>(new Variant(eggModel), 1)))));
         delegateItemModel(block, commonModel);
     }
 
-    private void simpleBlockState(Block block, ResourceLocation model) {
+    private void simpleBlockState(Block block, Identifier model) {
         blockStates.put(block, MultiVariantGenerator.dispatch(block, plain(model)));
     }
 
     // Auto-derives an item model that just reuses the block model (matching Forge's
     // simpleBlockWithItem behaviour, which never needed a separate ModItemModelProvider entry for
     // these blocks either).
-    private void delegateItemModel(Block block, ResourceLocation blockModel) {
-        ResourceLocation itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
+    private void delegateItemModel(Block block, Identifier blockModel) {
+        Identifier itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
         models.put(itemModelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", blockModel.toString());
@@ -271,18 +271,18 @@ public class ModBlockStateProvider implements DataProvider {
 
     // Passing the same texture for both sides put bark on the cut ends too; use the dedicated "_top" texture.
     private void logBlock(Block block) {
-        ResourceLocation side = blockTexture(block);
-        ResourceLocation end = ResourceLocation.fromNamespaceAndPath(side.getNamespace(), side.getPath() + "_top");
+        Identifier side = blockTexture(block);
+        Identifier end = Identifier.fromNamespaceAndPath(side.getNamespace(), side.getPath() + "_top");
         axisBlock(block, side, end);
     }
 
-    private void axisBlock(Block block, ResourceLocation texture) {
+    private void axisBlock(Block block, Identifier texture) {
         axisBlock(block, texture, texture);
     }
 
-    private void axisBlock(Block block, ResourceLocation side, ResourceLocation end) {
+    private void axisBlock(Block block, Identifier side, Identifier end) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.END, end);
-        ResourceLocation model = ModelTemplates.CUBE_COLUMN.create(block, tm, models::put);
+        Identifier model = ModelTemplates.CUBE_COLUMN.create(block, tm, models::put);
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(RotatedPillarBlock.AXIS)
                         .select(Direction.Axis.Y, plain(model))
@@ -292,7 +292,7 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void saplingBlock(Block block) {
-        ResourceLocation model = ModelTemplates.CROSS.create(block, new TextureMapping().put(TextureSlot.CROSS, blockTexture(block)), models::put);
+        Identifier model = ModelTemplates.CROSS.create(block, new TextureMapping().put(TextureSlot.CROSS, blockTexture(block)), models::put);
         simpleBlockState(block, model);
         saplingItemModel(block);
     }
@@ -300,7 +300,7 @@ public class ModBlockStateProvider implements DataProvider {
     // Palm sapling has its own custom multi-blade geometry on Bedrock (RP/models/blocks/
     // palm_sapling.geo.json), not vanilla's flat crossed-quad shape - references the static
     // converted model at models/block/palm_sapling.json instead of generating a CROSS template.
-    private void customSaplingBlock(Block block, ResourceLocation model) {
+    private void customSaplingBlock(Block block, Identifier model) {
         simpleBlockState(block, model);
         saplingItemModel(block);
     }
@@ -308,8 +308,8 @@ public class ModBlockStateProvider implements DataProvider {
     // Saplings get a flat inventory icon (item/generated + the block's own texture as layer0), not
     // a delegate to the 3D block model - matches vanilla's own sapling items.
     private void saplingItemModel(Block block) {
-        ResourceLocation itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
-        ResourceLocation texture = blockTexture(block);
+        Identifier itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
+        Identifier texture = blockTexture(block);
         models.put(itemModelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -331,7 +331,7 @@ public class ModBlockStateProvider implements DataProvider {
         };
     }
 
-    private static MultiVariant plain(ResourceLocation model) {
+    private static MultiVariant plain(Identifier model) {
         return BlockModelGenerators.plainVariant(model);
     }
 
@@ -344,20 +344,20 @@ public class ModBlockStateProvider implements DataProvider {
         };
     }
 
-    private void stairsBlock(Block block, ResourceLocation texture) {
+    private void stairsBlock(Block block, Identifier texture) {
         stairsBlock(block, texture, texture, texture);
     }
 
-    private void stairsBlock(Block block, ResourceLocation side, ResourceLocation bottom, ResourceLocation top) {
+    private void stairsBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
-        ResourceLocation straight = ModelTemplates.STAIRS_STRAIGHT.create(block, tm, models::put);
-        ResourceLocation inner = ModelTemplates.STAIRS_INNER.create(block, tm, models::put);
-        ResourceLocation outer = ModelTemplates.STAIRS_OUTER.create(block, tm, models::put);
+        Identifier straight = ModelTemplates.STAIRS_STRAIGHT.create(block, tm, models::put);
+        Identifier inner = ModelTemplates.STAIRS_INNER.create(block, tm, models::put);
+        Identifier outer = ModelTemplates.STAIRS_OUTER.create(block, tm, models::put);
 
         PropertyDispatch.C3<MultiVariant, Direction, Half, StairsShape> dispatch = PropertyDispatch.initial(StairBlock.FACING, StairBlock.HALF, StairBlock.SHAPE);
         for (Direction facing : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
             for (StairsShape shape : StairsShape.values()) {
-                ResourceLocation model = switch (shape) {
+                Identifier model = switch (shape) {
                     case STRAIGHT -> straight;
                     case INNER_LEFT, INNER_RIGHT -> inner;
                     case OUTER_LEFT, OUTER_RIGHT -> outer;
@@ -384,15 +384,15 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, straight);
     }
 
-    private void slabBlock(Block block, ResourceLocation texture) {
+    private void slabBlock(Block block, Identifier texture) {
         slabBlock(block, texture, texture, texture);
     }
 
-    private void slabBlock(Block block, ResourceLocation side, ResourceLocation bottom, ResourceLocation top) {
+    private void slabBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
-        ResourceLocation bottomModel = ModelTemplates.SLAB_BOTTOM.create(block, tm, models::put);
-        ResourceLocation topModel = ModelTemplates.SLAB_TOP.create(block, tm, models::put);
-        ResourceLocation doubleModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_double", tm, models::put);
+        Identifier bottomModel = ModelTemplates.SLAB_BOTTOM.create(block, tm, models::put);
+        Identifier topModel = ModelTemplates.SLAB_TOP.create(block, tm, models::put);
+        Identifier doubleModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_double", tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(SlabBlock.TYPE)
@@ -402,11 +402,11 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, bottomModel);
     }
 
-    private void fenceBlock(Block block, ResourceLocation texture) {
+    private void fenceBlock(Block block, Identifier texture) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation post = ModelTemplates.FENCE_POST.create(block, tm, models::put);
-        ResourceLocation side = ModelTemplates.FENCE_SIDE.create(block, tm, models::put);
-        ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.create(block, tm, models::put);
+        Identifier post = ModelTemplates.FENCE_POST.create(block, tm, models::put);
+        Identifier side = ModelTemplates.FENCE_SIDE.create(block, tm, models::put);
+        Identifier inventory = ModelTemplates.FENCE_INVENTORY.create(block, tm, models::put);
 
         blockStates.put(block, MultiPartGenerator.multiPart(block)
                 .with(plain(post))
@@ -417,17 +417,17 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, inventory);
     }
 
-    private void fenceGateBlock(Block block, ResourceLocation texture) {
+    private void fenceGateBlock(Block block, Identifier texture) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation closed = ModelTemplates.FENCE_GATE_CLOSED.create(block, tm, models::put);
-        ResourceLocation open = ModelTemplates.FENCE_GATE_OPEN.create(block, tm, models::put);
-        ResourceLocation wallClosed = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(block, tm, models::put);
-        ResourceLocation wallOpen = ModelTemplates.FENCE_GATE_WALL_OPEN.create(block, tm, models::put);
+        Identifier closed = ModelTemplates.FENCE_GATE_CLOSED.create(block, tm, models::put);
+        Identifier open = ModelTemplates.FENCE_GATE_OPEN.create(block, tm, models::put);
+        Identifier wallClosed = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(block, tm, models::put);
+        Identifier wallOpen = ModelTemplates.FENCE_GATE_WALL_OPEN.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(FenceGateBlock.FACING, FenceGateBlock.IN_WALL, FenceGateBlock.OPEN)
                         .generate((facing, inWall, isOpen) -> {
-                            ResourceLocation model = inWall ? (isOpen ? wallOpen : wallClosed) : (isOpen ? open : closed);
+                            Identifier model = inWall ? (isOpen ? wallOpen : wallClosed) : (isOpen ? open : closed);
                             // Fence gates are offset -90 (not +180) from the stairs table's rot()
                             // convention (verified against vanilla's oak_fence_gate.json).
                             int y = (rot(facing) + 270) % 360;
@@ -436,12 +436,12 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, closed);
     }
 
-    private void wallBlock(Block block, ResourceLocation texture) {
+    private void wallBlock(Block block, Identifier texture) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.WALL, texture);
-        ResourceLocation post = ModelTemplates.WALL_POST.create(block, tm, models::put);
-        ResourceLocation low = ModelTemplates.WALL_LOW_SIDE.create(block, tm, models::put);
-        ResourceLocation tall = ModelTemplates.WALL_TALL_SIDE.create(block, tm, models::put);
-        ResourceLocation inventory = ModelTemplates.WALL_INVENTORY.create(block, tm, models::put);
+        Identifier post = ModelTemplates.WALL_POST.create(block, tm, models::put);
+        Identifier low = ModelTemplates.WALL_LOW_SIDE.create(block, tm, models::put);
+        Identifier tall = ModelTemplates.WALL_TALL_SIDE.create(block, tm, models::put);
+        Identifier inventory = ModelTemplates.WALL_INVENTORY.create(block, tm, models::put);
 
         blockStates.put(block, MultiPartGenerator.multiPart(block)
                 .with(new ConditionBuilder().term(WallBlock.UP, true), plain(post))
@@ -456,16 +456,16 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, inventory);
     }
 
-    private void buttonBlock(Block block, ResourceLocation texture) {
+    private void buttonBlock(Block block, Identifier texture) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation unpowered = ModelTemplates.BUTTON.create(block, tm, models::put);
-        ResourceLocation powered = ModelTemplates.BUTTON_PRESSED.create(block, tm, models::put);
-        ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.create(block, tm, models::put);
+        Identifier unpowered = ModelTemplates.BUTTON.create(block, tm, models::put);
+        Identifier powered = ModelTemplates.BUTTON_PRESSED.create(block, tm, models::put);
+        Identifier inventory = ModelTemplates.BUTTON_INVENTORY.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(ButtonBlock.FACE, ButtonBlock.FACING, ButtonBlock.POWERED)
                         .generate((face, facing, powered1) -> {
-                            ResourceLocation model = powered1 ? powered : unpowered;
+                            Identifier model = powered1 ? powered : unpowered;
                             MultiVariant v = plain(model);
                             // rot(facing) is offset by -90 from the button's own facing convention
                             // (verified against vanilla's oak_button.json); ceiling additionally
@@ -485,10 +485,10 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, inventory);
     }
 
-    private void pressurePlateBlock(Block block, ResourceLocation texture) {
+    private void pressurePlateBlock(Block block, Identifier texture) {
         TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation up = ModelTemplates.PRESSURE_PLATE_UP.create(block, tm, models::put);
-        ResourceLocation down = ModelTemplates.PRESSURE_PLATE_DOWN.create(block, tm, models::put);
+        Identifier up = ModelTemplates.PRESSURE_PLATE_UP.create(block, tm, models::put);
+        Identifier down = ModelTemplates.PRESSURE_PLATE_DOWN.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(PressurePlateBlock.POWERED)
@@ -498,9 +498,9 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // The model JSON these blockstates reference was never actually generated on Fabric, leaving doors/trapdoors as the missing-model placeholder.
-    private void doorBlockState(Block block, ResourceLocation bottomTexture, ResourceLocation topTexture) {
-        ResourceLocation bottomModel = modelOf(bottomTexture);
-        ResourceLocation topModel = modelOf(topTexture);
+    private void doorBlockState(Block block, Identifier bottomTexture, Identifier topTexture) {
+        Identifier bottomModel = modelOf(bottomTexture);
+        Identifier topModel = modelOf(topTexture);
         // Uses the closed/left-hinge DOOR_BOTTOM_LEFT/TOP_LEFT template; Y_ROT alone approximates the other facing/open/hinge combos well enough.
         TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
         ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
@@ -509,7 +509,7 @@ public class ModBlockStateProvider implements DataProvider {
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
+                            Identifier model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
                             int y = rot(facing);
                             if (open) {
                                 // +90 matches vanilla's own left-hinge-open rotation exactly; a
@@ -532,11 +532,11 @@ public class ModBlockStateProvider implements DataProvider {
     // face rotations needed to keep the slats reading the same way regardless of facing. The plain
     // "template_trapdoor_*" parent is only correct for oak/iron's rotationally-symmetric grid
     // texture - using it here was what made the slats appear to spin between open and closed.
-    private void trapdoorBlockState(Block block, ResourceLocation baseTexture) {
-        ResourceLocation baseModelName = modelOf(baseTexture);
-        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
-        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
-        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+    private void trapdoorBlockState(Block block, Identifier baseTexture) {
+        Identifier baseModelName = modelOf(baseTexture);
+        Identifier bottom = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        Identifier top = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        Identifier open = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
         putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseTexture);
         putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseTexture);
@@ -550,7 +550,7 @@ public class ModBlockStateProvider implements DataProvider {
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> {
-                            ResourceLocation model = isOpen ? open : (half == Half.TOP ? top : bottom);
+                            Identifier model = isOpen ? open : (half == Half.TOP ? top : bottom);
                             // rot(facing) is offset by -90 from the trapdoor's own convention
                             // (verified against vanilla's birch_trapdoor.json - e.g. facing=east is
                             // y:90, not y:0), same offset as the plain-template open state used.
@@ -564,7 +564,7 @@ public class ModBlockStateProvider implements DataProvider {
                         })));
     }
 
-    private void putTrapdoorModel(ResourceLocation modelId, String parent, ResourceLocation texture) {
+    private void putTrapdoorModel(Identifier modelId, String parent, Identifier texture) {
         models.put(modelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", parent);
@@ -578,8 +578,8 @@ public class ModBlockStateProvider implements DataProvider {
     // Standing/wall signs render their text via a block entity renderer - the blockstate model is
     // just an invisible placeholder, same as vanilla's own sign blocks. It still needs a "particle"
     // texture key though, or break particles fall back to the missing-texture sprite.
-    private void signBlockState(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
-        ResourceLocation modelId = ModelLocationUtils.getModelLocation(signBlock);
+    private void signBlockState(Block signBlock, Block wallSignBlock, Identifier texture) {
+        Identifier modelId = ModelLocationUtils.getModelLocation(signBlock);
         models.put(modelId, () -> {
             JsonObject json = new JsonObject();
             JsonObject textures = new JsonObject();
@@ -592,8 +592,8 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // No "minecraft:block/hanging_sign" parent exists; the chain/plank mesh is block-entity-rendered like regular signs.
-    private void hangingSignBlockState(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
-        ResourceLocation modelId = ModelLocationUtils.getModelLocation(signBlock);
+    private void hangingSignBlockState(Block signBlock, Block wallSignBlock, Identifier texture) {
+        Identifier modelId = ModelLocationUtils.getModelLocation(signBlock);
         models.put(modelId, () -> {
             JsonObject json = new JsonObject();
             JsonObject textures = new JsonObject();
@@ -638,14 +638,14 @@ public class ModBlockStateProvider implements DataProvider {
     // helper, which pointed at the same existing "minecraft:block/water" model rather than generating
     // one).
     private void fluidBlock(Block block) {
-        simpleBlockState(block, ResourceLocation.fromNamespaceAndPath("minecraft", "block/water"));
+        simpleBlockState(block, Identifier.fromNamespaceAndPath("minecraft", "block/water"));
     }
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         blockStates.forEach((block, generator) -> {
-            ResourceLocation id = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
+            Identifier id = Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
             futures.add(DataProvider.saveStable(cache, BlockModelDefinition.CODEC, generator.create(), blockStatePathProvider.json(id)));
         });
         models.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), modelPathProvider.json(id))));

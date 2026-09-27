@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,7 +39,7 @@ public class BlockGridGameTests {
 
         List<Block> modBlocks = new ArrayList<>();
         for (Block block : blockRegistry) {
-            ResourceLocation id = blockRegistry.getKey(block);
+            Identifier id = blockRegistry.getKey(block);
             if (id != null && ExtraBiomes.MOD_ID.equals(id.getNamespace())) {
                 modBlocks.add(block);
             }

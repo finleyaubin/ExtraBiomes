@@ -7,6 +7,8 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class LushMesaBryce {
 
@@ -37,14 +39,15 @@ public class LushMesaBryce {
                 .temperature(BiomeClimateTuning.LUSH_MESA_BRYCE.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x1B9ED8)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 60.0F)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.LUSH_MESA_BRYCE.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xf8e6b4)
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.LUSH_MESA_BRYCE.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.LUSH_MESA_BRYCE.skyColor())
-                        .fogColor(0xf8e6b4)
                         .foliageColorOverride(BiomeAppearanceTuning.LUSH_MESA_BRYCE.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.LUSH_MESA_BRYCE.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.LUSH_MESA_BRYCE.grassColor()).build())
                 .build();
     }
 }

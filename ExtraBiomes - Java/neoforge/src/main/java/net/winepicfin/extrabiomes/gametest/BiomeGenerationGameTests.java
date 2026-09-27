@@ -93,8 +93,8 @@ public class BiomeGenerationGameTests {
     }
 
     private static boolean matchesPath(Holder<Biome> holder, String expectedPath) {
-        return holder.unwrapKey().map(key -> key.location().getNamespace().equals(ExtraBiomes.MOD_ID)
-                        && key.location().getPath().equals(expectedPath))
+        return holder.unwrapKey().map(key -> key.identifier().getNamespace().equals(ExtraBiomes.MOD_ID)
+                        && key.identifier().getPath().equals(expectedPath))
                 .orElse(false);
     }
 }

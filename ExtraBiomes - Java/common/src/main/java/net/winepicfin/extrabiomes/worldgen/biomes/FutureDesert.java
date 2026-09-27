@@ -6,6 +6,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.future.FutureTreeFeatures;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class FutureDesert {
 
@@ -30,11 +31,11 @@ public class FutureDesert {
                 .temperature(BiomeClimateTuning.FUTURE_DESERT.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x113290)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.FUTURE_DESERT.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.FUTURE_DESERT.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.FUTURE_DESERT.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.grassColor()).build())
                 .build();

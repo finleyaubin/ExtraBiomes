@@ -26,7 +26,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.fish.WaterAnimal;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -159,7 +159,7 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
                     (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F, 0.4F,
                     (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F));
             this.setOnGround(false);
-            this.hasImpulse = true;
+            this.needsSync = true;
             this.playSound(SoundEvents.COD_FLOP, this.getSoundVolume(), this.getVoicePitch());
         }
 

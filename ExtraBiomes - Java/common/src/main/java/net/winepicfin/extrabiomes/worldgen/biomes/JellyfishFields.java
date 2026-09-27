@@ -6,6 +6,8 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.jellycoral.JellyCoralFeatures;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class JellyfishFields {
 
@@ -33,14 +35,16 @@ public class JellyfishFields {
                 .temperature(BiomeClimateTuning.JELLYFISH_FIELDS.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x02C7D5)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_START_DISTANCE, 30.0F)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 90.0F)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.JELLYFISH_FIELDS.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x8fe0e8)
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.JELLYFISH_FIELDS.waterColor())
-                        .waterFogColor(0x50D8CE)
-                        .skyColor(BiomeAppearanceTuning.JELLYFISH_FIELDS.skyColor())
-                        .fogColor(0x8fe0e8)
                         .foliageColorOverride(BiomeAppearanceTuning.JELLYFISH_FIELDS.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.JELLYFISH_FIELDS.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.JELLYFISH_FIELDS.grassColor()).build())
                 .build();
     }
 }

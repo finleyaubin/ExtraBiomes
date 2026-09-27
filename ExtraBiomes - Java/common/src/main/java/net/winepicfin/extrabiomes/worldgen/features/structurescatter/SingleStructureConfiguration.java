@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -20,7 +20,7 @@ import java.util.Optional;
  * (oasis puddles, jellycoral clusters, windmills, stone pillars, glacier snow-drifts, taiga spikes, ...).
  *
  * @param structure    the location of the converted structure template, e.g.
- *                     {@code ResourceLocation.fromNamespaceAndPath("extrabiomes", "structurescatter/oasis_puddle")},
+ *                     {@code Identifier.fromNamespaceAndPath("extrabiomes", "structurescatter/oasis_puddle")},
  *                     which resolves to {@code data/extrabiomes/structures/structurescatter/oasis_puddle.nbt}.
  * @param rotation     a fixed rotation to always place with, or {@code Optional.empty()} to pick a
  *                     uniformly random rotation per placement. This maps directly onto Bedrock's
@@ -102,65 +102,65 @@ import java.util.Optional;
  *                     instead of leaving a flat base floating. {@code false} (the default for every
  *                     existing convenience constructor) keeps the template rigid.
  */
-public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction, boolean embedInStone, boolean weatheredVariation, boolean followTerrain) implements FeatureConfiguration {
+public record SingleStructureConfiguration(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction, boolean embedInStone, boolean weatheredVariation, boolean followTerrain) implements FeatureConfiguration {
 
-    public SingleStructureConfiguration(ResourceLocation structure) {
+    public SingleStructureConfiguration(Identifier structure) {
         this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
     }
 
-    public SingleStructureConfiguration(ResourceLocation structure, Rotation fixedRotation) {
+    public SingleStructureConfiguration(Identifier structure, Rotation fixedRotation) {
         this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
     }
 
-    public SingleStructureConfiguration(ResourceLocation structure, int groundOffset) {
+    public SingleStructureConfiguration(Identifier structure, int groundOffset) {
         this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
     }
 
     // Jellycoral-style use: random rotation + a required submerged (water/waterlogged) fraction,
     // for templates that no longer bundle their own explicit water fill.
-    public SingleStructureConfiguration(ResourceLocation structure, int groundOffset, float minSubmergedFraction) {
+    public SingleStructureConfiguration(Identifier structure, int groundOffset, float minSubmergedFraction) {
         this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), minSubmergedFraction, false, false, false);
     }
 
-    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset) {
+    public SingleStructureConfiguration(Identifier structure, Optional<Rotation> rotation, int groundOffset) {
         this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
     }
 
-    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
+    public SingleStructureConfiguration(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
         this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
     }
 
     // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction.
-    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
+    public SingleStructureConfiguration(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
         this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of(), 0.0F, false, false, false);
     }
 
     // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required solid floor.
-    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
+    public SingleStructureConfiguration(Identifier structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
         this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of(), 0.0F, false, false, false);
     }
 
     // Oasis-puddle-style use: required solid floor restricted to a specific set of blocks.
-    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks) {
+    public SingleStructureConfiguration(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks) {
         this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, false, false, false);
     }
 
     // Stone-pillar-style use: required solid floor restricted to a specific set of blocks, sunk into real stone rather than anchored to the dirt/grass surface, with noise-based weathering/vegetation.
-    public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, boolean embedInStone, boolean weatheredVariation) {
+    public SingleStructureConfiguration(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, boolean embedInStone, boolean weatheredVariation) {
         this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, embedInStone, weatheredVariation, false);
     }
 
     // Snow-drift-style use: low, wide template draped over the terrain column by column.
-    public SingleStructureConfiguration(ResourceLocation structure, int groundOffset, boolean centered, boolean followTerrain) {
+    public SingleStructureConfiguration(Identifier structure, int groundOffset, boolean centered, boolean followTerrain) {
         this(structure, Optional.empty(), groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, followTerrain);
     }
 
-    public SingleStructureConfiguration(ResourceLocation structure, BlockPos anchor) {
+    public SingleStructureConfiguration(Identifier structure, BlockPos anchor) {
         this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of(), 0.0F, false, false, false);
     }
 
     public static final Codec<SingleStructureConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("structure").forGetter(SingleStructureConfiguration::structure),
+            Identifier.CODEC.fieldOf("structure").forGetter(SingleStructureConfiguration::structure),
             Codec.STRING.xmap(Rotation::valueOf, Rotation::name).optionalFieldOf("rotation").forGetter(SingleStructureConfiguration::rotation),
             Codec.INT.optionalFieldOf("ground_offset", 0).forGetter(SingleStructureConfiguration::groundOffset),
             Codec.BOOL.optionalFieldOf("centered", false).forGetter(SingleStructureConfiguration::centered),

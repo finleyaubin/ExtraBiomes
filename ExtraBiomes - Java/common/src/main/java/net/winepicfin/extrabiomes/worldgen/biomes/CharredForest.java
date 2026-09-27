@@ -7,6 +7,10 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.attribute.AmbientParticle;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.BackgroundMusic;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -49,16 +53,20 @@ public class CharredForest {
                 .temperature(BiomeClimateTuning.CHARRED_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x423E42)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 15.0F)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.CHARRED_FOREST.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x685F70)
+                .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 10.0F)
+                .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 96.0F)
+                .setAttribute(EnvironmentAttributes.SKY_FOG_END_DISTANCE, 96.0F)
+                .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, AmbientParticle.of(ParticleTypes.ASH, 0.018093334F))
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DESERT)))
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.CHARRED_FOREST.waterColor())
-                        .waterFogColor(0x3f76e4)
-                        .skyColor(BiomeAppearanceTuning.CHARRED_FOREST.skyColor())
-                        .fogColor(0x6b5327)
                         .foliageColorOverride(BiomeAppearanceTuning.CHARRED_FOREST.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.CHARRED_FOREST.grassColor())
-                        .ambientParticle(new AmbientParticleSettings(ParticleTypes.ASH, 0.018093334F))
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DESERT)).build())
+                        .grassColorOverride(BiomeAppearanceTuning.CHARRED_FOREST.grassColor()).build())
                 .build();
     }
 }

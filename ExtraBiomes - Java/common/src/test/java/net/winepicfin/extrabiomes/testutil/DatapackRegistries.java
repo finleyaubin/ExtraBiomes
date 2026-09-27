@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackLocationInfo;
@@ -144,7 +144,7 @@ public final class DatapackRegistries {
             // register() helper (which re-freezes after each call, and `new Block(...)` needs
             // frozen=false at construction time, before register() ever runs).
             Block block = placeholderBlock(id);
-            Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), block);
+            Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), block);
         }
         BuiltInRegistries.BLOCK.freeze();
 
@@ -153,8 +153,8 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.ITEM, false);
         for (String id : modIds) {
             net.minecraft.world.item.Item item = new net.minecraft.world.item.Item(new net.minecraft.world.item.Item.Properties()
-                    .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id))));
-            Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), item);
+                    .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id))));
+            Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), item);
         }
         BuiltInRegistries.ITEM.freeze();
 
@@ -166,7 +166,7 @@ public final class DatapackRegistries {
         for (String id : modIds) {
             net.minecraft.world.entity.EntityType<?> entityType =
                     net.minecraft.world.entity.EntityType.Builder.createNothing(net.minecraft.world.entity.MobCategory.MISC)
-                            .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
+                            .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
             register(BuiltInRegistries.ENTITY_TYPE, Registries.ENTITY_TYPE, id, entityType);
         }
         BuiltInRegistries.ENTITY_TYPE.freeze();
@@ -243,7 +243,7 @@ public final class DatapackRegistries {
     // their Holder.Reference value still null, surfacing later as "Trying to access unbound value".
     private static <T> void register(Registry<T> registry, ResourceKey<? extends Registry<T>> registryKey, String path, T value) {
         ((net.minecraft.core.WritableRegistry<T>) registry).register(
-                ResourceKey.create(registryKey, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, path)), value, RegistrationInfo.BUILT_IN);
+                ResourceKey.create(registryKey, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, path)), value, RegistrationInfo.BUILT_IN);
     }
 
     // A plain Block has no BlockState properties at all, which is fine for most loot
@@ -254,7 +254,7 @@ public final class DatapackRegistries {
     // (see ModBlocks.registerStandardWoodSet/registerBlock call sites), not a per-id hardcoded list.
     private static Block placeholderBlock(String id) {
         BlockBehaviour.Properties properties = BlockBehaviour.Properties.of()
-                .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
+                .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
         if (id.equals("pebble_block")) {
             return new PebbleBlock(properties);
         }

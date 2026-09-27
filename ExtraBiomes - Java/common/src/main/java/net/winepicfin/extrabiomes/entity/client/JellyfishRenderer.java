@@ -1,10 +1,11 @@
 package net.winepicfin.extrabiomes.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -14,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class JellyfishRenderer extends MobRenderer<JellyfishEntity, JellyfishRenderState, JellyfishModel<JellyfishRenderState>> {
-    private static final ResourceLocation[] TEXTURES = {
-            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish.png"),
-            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish1.png"),
+    private static final Identifier[] TEXTURES = {
+            Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish.png"),
+            Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/jellyfish1.png"),
     };
 
     public JellyfishRenderer(EntityRendererProvider.Context context) {
@@ -42,7 +43,7 @@ public class JellyfishRenderer extends MobRenderer<JellyfishEntity, JellyfishRen
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(JellyfishRenderState state) {
+    public @NotNull Identifier getTextureLocation(JellyfishRenderState state) {
         return TEXTURES[state.variant];
     }
 
@@ -60,6 +61,6 @@ public class JellyfishRenderer extends MobRenderer<JellyfishEntity, JellyfishRen
     @Override
     @Nullable
     protected RenderType getRenderType(JellyfishRenderState state, boolean bodyVisible, boolean translucent, boolean glowing) {
-        return RenderType.entityTranslucent(getTextureLocation(state));
+        return RenderTypes.entityTranslucent(getTextureLocation(state));
     }
 }

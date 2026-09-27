@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.item;
 
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -34,7 +34,7 @@ public class ModItemMaterials {
                 0f,
                 0f,
                 ModTags.Items.REPAIRS_FROG_ARMOR,
-                ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "frog"))
+                ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "frog"))
         );
     }
 

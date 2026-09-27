@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.entity.ai;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -13,7 +13,7 @@ import java.util.EnumSet;
 
 // Ported from Bedrock's ram_attack: runs the full charge/hit/retreat/re-charge cycle itself instead of handing off to a separate melee goal.
 public class GiantTortoiseChargeGoal extends Goal {
-    private static final ResourceLocation CHARGE_SPEED_MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "giant_tortoise_charge_speed");
+    private static final Identifier CHARGE_SPEED_MODIFIER_ID = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "giant_tortoise_charge_speed");
     private static final double MIN_RAM_DISTANCE = 4.0D;
     private static final double RAM_DISTANCE = 7.0D;
     private static final double RAM_SPEED_MULTIPLIER = 1.0D; // +100% => 2x base, matches ram_speed:2 vs run_speed:1
