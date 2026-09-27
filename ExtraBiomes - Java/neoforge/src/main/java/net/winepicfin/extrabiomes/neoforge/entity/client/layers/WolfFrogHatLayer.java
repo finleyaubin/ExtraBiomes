@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.WolfModel;
+import net.minecraft.client.model.animal.wolf.WolfModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
@@ -43,7 +43,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         }
     }
 
-    public static final ContextKey<Wolf> WOLF = new ContextKey<>(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "wolf"));
+    public static final ContextKey<Wolf> WOLF = new ContextKey<>(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "wolf"));
 
     private FrogHelmetRenderer renderer;
     private HumanoidModel<?> baseModel;
@@ -89,7 +89,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
         // cameraState only reaches GeoRenderLayers/pre-post-render hooks, none of which this
         // renderer uses, so an empty one is fine here - RenderLayer#submit isn't handed a real one.
-        this.renderer.submitRenderTasks(geoState, poseStack, submitNodeCollector, new CameraRenderState(), null);
+        this.renderer.performRenderPass(geoState, poseStack, submitNodeCollector, new CameraRenderState());
         poseStack.popPose();
     }
 }

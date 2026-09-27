@@ -10,7 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -37,7 +37,7 @@ public class StructureGenerationGameTests {
         ServerLevel level = helper.getLevel();
         ChunkGenerator generator = level.getChunkSource().getGenerator();
         Registry<Structure> structures = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        Holder<Structure> skyCity = structures.getOrThrow(ResourceKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city")));
+        Holder<Structure> skyCity = structures.getOrThrow(ResourceKey.create(Registries.STRUCTURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city")));
         BlockPos origin = new BlockPos(0, 80, 0);
 
         Pair<BlockPos, Holder<Structure>> found = generator.findNearestMapStructure(level, HolderSet.direct(skyCity), origin, SEARCH_RADIUS_CHUNKS, false);

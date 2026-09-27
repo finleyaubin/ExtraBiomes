@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.neoforge.fluid;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -19,9 +19,9 @@ import org.joml.Vector3f;
 // instead subscribes a RegisterEvent listener on the given event bus and genuinely defers
 // until that event fires, which is what a registry created this late actually requires.
 public class ModFluidTypes {
-    public static final ResourceLocation WATER_STILL_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_still");
-    public static final ResourceLocation WATER_FLOWING_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_flow");
-    public static final ResourceLocation GOO_OVERLAY_RL = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo");
+    public static final Identifier WATER_STILL_RL = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_still");
+    public static final Identifier WATER_FLOWING_RL = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_flow");
+    public static final Identifier GOO_OVERLAY_RL = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo");
 
     public static final DeferredRegister<FluidType> FLUID_TYPES =
             DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, ExtraBiomes.MOD_ID);

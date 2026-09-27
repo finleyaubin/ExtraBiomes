@@ -112,7 +112,7 @@ public class BiomeModifierApplicationGameTests {
                 }
             }
         }
-        helper.assertTrue(present, Component.literal("Expected " + expected.location() + " in " + step + " but it was missing"));
+        helper.assertTrue(present, Component.literal("Expected " + expected.identifier() + " in " + step + " but it was missing"));
     }
 
     private static void assertHasSpawn(GameTestHelper helper, Biome biome, MobCategory category, EntityType<?> expected) {

@@ -4,7 +4,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.fog.FogData;
 import net.minecraft.client.renderer.fog.environment.FogEnvironment;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
@@ -26,13 +26,13 @@ import org.joml.Vector4f;
 // RegisterClientExtensionsEvent now (see ModEventBusClientEvents#registerClientExtensions), so
 // this class implements IClientFluidTypeExtensions itself and is handed to that event directly.
 public class BaseFluidType extends FluidType implements IClientFluidTypeExtensions {
-    private final ResourceLocation stillTexture;
-    private final ResourceLocation flowingTexture;
-    private final ResourceLocation overlayTexture;
+    private final Identifier stillTexture;
+    private final Identifier flowingTexture;
+    private final Identifier overlayTexture;
     private final int tintColour;
     private final Vector3f fogColour;
 
-    public BaseFluidType(final ResourceLocation stillTexture, final ResourceLocation flowingTexture, final ResourceLocation overlayTexture, final int tintColor, final Vector3f fogColor, final Properties properties) {
+    public BaseFluidType(final Identifier stillTexture, final Identifier flowingTexture, final Identifier overlayTexture, final int tintColor, final Vector3f fogColor, final Properties properties) {
         super(properties);
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
@@ -42,17 +42,17 @@ public class BaseFluidType extends FluidType implements IClientFluidTypeExtensio
     }
 
     @Override
-    public ResourceLocation getStillTexture() {
+    public Identifier getStillTexture() {
         return stillTexture;
     }
 
     @Override
-    public ResourceLocation getFlowingTexture() {
+    public Identifier getFlowingTexture() {
         return flowingTexture;
     }
 
     @Override
-    public ResourceLocation getOverlayTexture() {
+    public Identifier getOverlayTexture() {
         return overlayTexture;
     }
 

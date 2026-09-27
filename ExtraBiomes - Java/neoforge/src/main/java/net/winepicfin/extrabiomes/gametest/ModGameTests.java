@@ -7,7 +7,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Rotation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -29,8 +29,8 @@ public final class ModGameTests {
             this(owner, method, body, "empty", DEFAULT_MAX_TICKS, false);
         }
 
-        ResourceLocation id() {
-            return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, (owner.getSimpleName() + "." + method).toLowerCase());
+        Identifier id() {
+            return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, (owner.getSimpleName() + "." + method).toLowerCase());
         }
     }
 
@@ -72,14 +72,14 @@ public final class ModGameTests {
         Holder<TestEnvironmentDefinition> environment;
         try {
             environment = event.registerEnvironment(
-                    ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "default"),
+                    Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "default"),
                     new TestEnvironmentDefinition.AllOf(List.of()));
         } catch (IllegalStateException registryFrozen) {
             // A dedicated server re-fires this event from handleServerStarting after RegistryDataLoader already fired it and froze the registries
             return;
         }
         for (Test test : TESTS) {
-            var data = new TestData<>(environment, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, test.template()),
+            var data = new TestData<>(environment, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, test.template()),
                     test.maxTicks(), 0, true, Rotation.NONE, test.manualOnly(), 1, 1, false);
             event.registerTest(test.id(), new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, test.id()), data));
         }
