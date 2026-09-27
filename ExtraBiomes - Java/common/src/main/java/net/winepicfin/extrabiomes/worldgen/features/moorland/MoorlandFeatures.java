@@ -107,6 +107,9 @@ public class MoorlandFeatures {
     public static final ResourceKey<PlacedFeature> MOORLAND_TALL_DRY_GRASS_PLACED_KEY = createKey("moorland_tall_dry_grass_placed");
     public static final ResourceKey<PlacedFeature> MOORLAND_WATERLILY_PLACED_KEY = createKey("moorland_waterlily_placed");
 
+    // Bedrock's grass_double_plant_patch_feature places a whole patch per scatter try; Java places one plant, so it needs more tries.
+    private static final int DOUBLE_TALL_GRASS_TRIES = 96;
+
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(MOORLAND_PODZOL_KEY, new ConfiguredFeature<>(PODZOL_CONVERSION_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
@@ -140,16 +143,16 @@ public class MoorlandFeatures {
         PlacementModifier airOnly = BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE);
         register(context, MOORLAND_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_GRASS_KEY),
                 withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
-                        8, 4, airOnly));
+                        30, 8, 4, airOnly));
         register(context, MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_DOUBLE_TALL_GRASS_KEY),
                 withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
-                        8, 4));
+                        DOUBLE_TALL_GRASS_TRIES, 8, 4));
         register(context, MOORLAND_SHORT_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_SHORT_DRY_GRASS_KEY),
                 withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
-                        8, 4, airOnly));
+                        30, 8, 4, airOnly));
         register(context, MOORLAND_TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_DRY_GRASS_KEY),
                 withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
-                        8, 4, airOnly));
+                        30, 8, 4, airOnly));
 
         register(context, MOORLAND_WATERLILY_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_WATERLILY_KEY),
                 ModOrePlacement.commonOrePlacement(4, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
@@ -169,9 +172,9 @@ public class MoorlandFeatures {
     }
 
     /** Appends the removed random_patch feature's tries/xz_spread/y_spread (as count + random_offset) plus any filter. */
-    private static List<PlacementModifier> withPatchModifiers(List<PlacementModifier> base, int xzSpread, int ySpread, PlacementModifier... extra) {
+    private static List<PlacementModifier> withPatchModifiers(List<PlacementModifier> base, int tries, int xzSpread, int ySpread, PlacementModifier... extra) {
         List<PlacementModifier> result = new ArrayList<>(base);
-        result.add(CountPlacement.of(30));
+        result.add(CountPlacement.of(tries));
         result.add(RandomOffsetPlacement.ofTriangle(xzSpread, ySpread));
         result.addAll(List.of(extra));
         return result;
