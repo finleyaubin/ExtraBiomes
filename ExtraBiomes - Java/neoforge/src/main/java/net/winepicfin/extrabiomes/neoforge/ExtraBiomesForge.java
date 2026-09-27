@@ -224,10 +224,8 @@ public class ExtraBiomesForge
             ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
 
-            // Saplings/mushrooms/leaves get their cutout render type from their block model's
-            // "render_type" field (set in ModBlockStateProvider's datagen) instead of here -
-            // the runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) overloads are
-            // deprecated for removal in favor of setting render_type on the model itself.
+            // Models' render_type isn't enough: the shared generated folder ships Fabric's models (no render_type) when Fabric datagen runs last.
+            ModBlocks.cutoutBlocks().forEach(block -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout()));
             EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
             EntityRenderers.register(ModEntities.WORM.get(), WormRenderer::new);
             EntityRenderers.register(ModEntities.TREEFROG.get(), TreefrogRenderer::new);
