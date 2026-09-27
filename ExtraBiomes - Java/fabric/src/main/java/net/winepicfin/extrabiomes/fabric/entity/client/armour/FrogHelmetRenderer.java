@@ -2,8 +2,9 @@ package net.winepicfin.extrabiomes.fabric.entity.client.armour;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
@@ -24,11 +25,12 @@ public class FrogHelmetRenderer<R extends HumanoidRenderState & GeoRenderState> 
     // Wolves have no HumanoidRenderState of their own, so the layer lends one to drive the GeoArmorRenderer.
     @SuppressWarnings("unchecked")
     public void renderOnWolf(HumanoidRenderState humanoidState, Wolf wolf, ItemStack stack, HumanoidModel<?> baseModel,
-                             PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, float partialTick) {
+                             PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, float partialTick) {
         R geoState = (R) humanoidState;
-        fillRenderState((FrogHelmetItem) stack.getItem(), new RenderData(stack, EquipmentSlot.HEAD, wolf), geoState, partialTick);
-        geoState.addGeckolibData(DataTickets.HUMANOID_MODEL, baseModel);
+        fillRenderState((FrogHelmetItem) stack.getItem(), new RenderData(stack, EquipmentSlot.HEAD, wolf, baseModel), geoState, partialTick);
         geoState.addGeckolibData(DataTickets.PACKED_LIGHT, packedLight);
-        defaultRender(geoState, poseStack, bufferSource, null, null);
+        // cameraState only reaches GeoRenderLayers/pre-post-render hooks, none of which this
+        // renderer uses, so an empty one is fine here - RenderLayer#submit isn't handed a real one.
+        submitRenderTasks(geoState, poseStack, submitNodeCollector, new CameraRenderState(), null);
     }
 }

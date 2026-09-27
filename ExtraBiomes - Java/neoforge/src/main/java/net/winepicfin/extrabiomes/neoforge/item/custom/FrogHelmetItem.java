@@ -1,9 +1,6 @@
 package net.winepicfin.extrabiomes.neoforge.item.custom;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -86,7 +83,7 @@ public final class FrogHelmetItem extends Item implements GeoItem {
             private GeoArmorRenderer<?, ?> renderer;
 
             @Override
-            public <S extends HumanoidRenderState> @Nullable GeoArmorRenderer<?, ?> getGeoArmorRenderer(@Nullable S renderState, ItemStack itemStack, EquipmentSlot equipmentSlot, EquipmentClientInfo.LayerType type, @Nullable HumanoidModel<S> original) {
+            public @Nullable GeoArmorRenderer<?, ?> getGeoArmorRenderer(ItemStack itemStack, EquipmentSlot equipmentSlot) {
                 if (this.renderer == null)
                     this.renderer = new FrogHelmetRenderer<>();
 

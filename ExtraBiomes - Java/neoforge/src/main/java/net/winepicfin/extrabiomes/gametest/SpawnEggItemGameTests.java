@@ -74,7 +74,7 @@ public class SpawnEggItemGameTests {
             // specific EntityType each egg is expected to carry, not just non-null, so a mix-up
             // between two eggs (e.g. two eggs both resolving to the same EntityType) would
             // actually be caught here.
-            EntityType<?> resolvedType = spawnEgg.getType(helper.getLevel().registryAccess(), ItemStack.EMPTY);
+            EntityType<?> resolvedType = spawnEgg.getType(ItemStack.EMPTY);
             helper.assertTrue(resolvedType == expectedType, Component.literal(item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType));
 
             // Regression coverage for the BY_ID map-collision bug: every one of this mod's spawn

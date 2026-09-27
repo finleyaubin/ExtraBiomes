@@ -1,7 +1,5 @@
 package net.winepicfin.extrabiomes.fabric.item.custom;
 
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -11,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.winepicfin.extrabiomes.fabric.entity.client.armour.FrogHelmetRenderer;
 import net.winepicfin.extrabiomes.item.FrogHelmetEffects;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -20,7 +17,6 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -61,7 +57,7 @@ public final class FrogHelmetItem extends Item implements GeoItem {
             private GeoArmorRenderer<?, ?> renderer;
 
             @Override
-            public <S extends HumanoidRenderState> GeoArmorRenderer<?, ?> getGeoArmorRenderer(@Nullable S renderState, ItemStack itemStack, EquipmentSlot equipmentSlot, EquipmentClientInfo.LayerType type, @Nullable HumanoidModel<S> original) {
+            public GeoArmorRenderer<?, ?> getGeoArmorRenderer(ItemStack itemStack, EquipmentSlot equipmentSlot) {
                 if (this.renderer == null)
                     this.renderer = new FrogHelmetRenderer<>();
 

@@ -12,6 +12,7 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
+import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -65,20 +66,19 @@ public class SpawnEggItemGameTests {
             // specific EntityType each egg is expected to carry, not just non-null, so a mix-up
             // between two eggs (e.g. two eggs both resolving to the same EntityType) would
             // actually be caught here.
-            EntityType<?> resolvedType = spawnEgg.getType(helper.getLevel().registryAccess(), ItemStack.EMPTY);
+            EntityType<?> resolvedType = spawnEgg.getType(ItemStack.EMPTY);
             helper.assertTrue(resolvedType == expectedType,
                     Component.literal(item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType));
 
             // Regression coverage for the BY_ID map-collision bug: every one of this mod's spawn
-            // eggs used to construct with a null EntityType and collide on that single map slot
-            // in vanilla's SpawnEggItem.BY_ID, so looking up any of their entity types returned
-            // whichever egg happened to register last. MobPickResultMixin already switched to
-            // vanilla's SpawnEggItem.byId() for the pick-block path in the same fix that removed
-            // ExtraBiomesSpawnEggItem.byType(), so testing byId() directly here covers that
-            // pick-block path too, without needing the old byType()-based check this test used to
-            // have.
-            helper.assertTrue(SpawnEggItem.byId(expectedType) == item,
-                    Component.literal("SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item));
+            // eggs used to construct with a null EntityType and collide on that single map slot in
+            // vanilla's SpawnEggItem.BY_ID, so looking up any of their entity types returned
+            // whichever egg happened to register last. Vanilla's SpawnEggItem constructor no longer
+            // accepts an EntityType at all (1.21.10), so BY_ID is never populated for these eggs -
+            // MobPickResultMixin instead consults ExtraBiomesSpawnEggItem.byType() for the
+            // pick-block path, so that's what's asserted here too.
+            helper.assertTrue(ExtraBiomesSpawnEggItem.byType(expectedType) == item,
+                    Component.literal("ExtraBiomesSpawnEggItem.byType(" + expectedType + ") did not resolve back to " + item));
         }
 
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed");

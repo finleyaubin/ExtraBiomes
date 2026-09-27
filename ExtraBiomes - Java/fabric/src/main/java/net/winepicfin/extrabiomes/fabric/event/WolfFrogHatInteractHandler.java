@@ -28,7 +28,7 @@ public class WolfFrogHatInteractHandler {
             boolean shearing = heldItem.getItem() == Items.SHEARS && headItem.getItem() == ModItems.FROG_HELMET.get();
             if (!equipping && !shearing) return InteractionResult.PASS;
 
-            if (level.isClientSide) return InteractionResult.SUCCESS;
+            if (level.isClientSide()) return InteractionResult.SUCCESS;
 
             if (equipping) {
                 wolf.setItemSlot(EquipmentSlot.HEAD, heldItem.copy());

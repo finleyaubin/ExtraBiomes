@@ -15,7 +15,7 @@ import net.winepicfin.extrabiomes.entity.PhantomHarpyTargeting;
 public class PhantomHarpyTargetHandler {
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide) return;
+        if (event.getLevel().isClientSide()) return;
         Goal goal = PhantomHarpyTargeting.createHarpyTargetGoal(event.getEntity());
         if (goal != null) {
             ((Mob) event.getEntity()).targetSelector.addGoal(PhantomHarpyTargeting.GOAL_PRIORITY, goal);

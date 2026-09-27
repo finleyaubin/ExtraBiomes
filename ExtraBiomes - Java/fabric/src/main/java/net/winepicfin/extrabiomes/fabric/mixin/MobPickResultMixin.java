@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.fabric.mixin;
 
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
+import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,7 +16,7 @@ public abstract class MobPickResultMixin {
             return;
         }
         Mob self = (Mob) (Object) this;
-        SpawnEggItem egg = SpawnEggItem.byId(self.getType());
+        ExtraBiomesSpawnEggItem egg = ExtraBiomesSpawnEggItem.byType(self.getType());
         if (egg != null) {
             cir.setReturnValue(new ItemStack(egg));
         }

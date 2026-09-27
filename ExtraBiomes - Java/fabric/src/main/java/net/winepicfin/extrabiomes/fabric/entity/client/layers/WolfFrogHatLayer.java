@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.WolfModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
@@ -39,7 +39,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int packedLight, @NotNull WolfRenderState state,
+    public void submit(@NotNull PoseStack poseStack, @NotNull SubmitNodeCollector submitNodeCollector, int packedLight, @NotNull WolfRenderState state,
                         float limbSwing, float limbSwingAmount) {
         Wolf wolf = ((WolfRenderStateExtension) state).extrabiomes$getWolf();
         if (wolf == null) return;
@@ -58,7 +58,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         if (this.humanoidState == null)
             this.humanoidState = new HumanoidRenderState();
         this.humanoidState.isInvisibleToPlayer = state.isInvisibleToPlayer;
-        this.humanoidState.appearsGlowing = state.appearsGlowing;
+        this.humanoidState.outlineColor = state.outlineColor;
 
         float partialTick = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false);
 
@@ -67,7 +67,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         poseStack.translate(0.05D, -0.6D, -0.02D);
         poseStack.scale(1F, 1F, 1F);
         poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
-        this.renderer.renderOnWolf(this.humanoidState, wolf, headItem, this.baseModel, poseStack, buffer, packedLight, partialTick);
+        this.renderer.renderOnWolf(this.humanoidState, wolf, headItem, this.baseModel, poseStack, submitNodeCollector, packedLight, partialTick);
         poseStack.popPose();
     }
 }

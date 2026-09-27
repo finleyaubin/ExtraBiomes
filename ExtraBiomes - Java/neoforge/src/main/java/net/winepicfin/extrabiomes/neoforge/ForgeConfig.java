@@ -43,7 +43,7 @@ public class ForgeConfig
 
     public static void load()
     {
-        boolean isGametest = GameTestHooks.isGametestServer();
+        boolean isGametest = GameTestHooks.isGametestEnabled();
         Config.biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : BIOMEWEIGHT.get();
         Config.secondaryBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : SECONDARYBIOMEWEIGHT.get();
         Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : RAREBIOMEWEIGHT.get();
