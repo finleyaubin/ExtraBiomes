@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.item.custom;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
@@ -26,7 +27,8 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
     public ExtraBiomesSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
         // backgroundColor/highlightColor no longer go through the Item itself in 1.21.4 - egg colors
         // are now item-model tints (see the generated spawn egg item model JSON), so they're unused here.
-        super(properties);
+        // Delayed so typeSupplier resolves after registration; vanilla's static getType/byId read this component.
+        super(properties.delayedComponent(DataComponents.ENTITY_DATA, registries -> TypedEntityData.of(typeSupplier.get(), new CompoundTag())));
         this.typeSupplier = typeSupplier;
         ALL.add(this);
     }
