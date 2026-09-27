@@ -80,7 +80,9 @@ public class SpawnEggItemGameTests {
             // whichever egg happened to register last. MobPickResultMixin resolves
             // EntityType -> egg item through SpawnEggItem.byId(), so it must actually resolve
             // back to this specific egg.
-            helper.assertTrue(SpawnEggItem.byId(expectedType) == item, Component.literal("SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item));
+            // byId now returns Optional<Holder<Item>> instead of a bare Item.
+            helper.assertTrue(SpawnEggItem.byId(expectedType).map(net.minecraft.core.Holder::value).orElse(null) == item,
+                    Component.literal("SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item));
         }
 
         LOGGER.info("[SpawnEggItemGameTests] everySpawnEggResolvesRequiredFeaturesWithoutThrowing: passed");

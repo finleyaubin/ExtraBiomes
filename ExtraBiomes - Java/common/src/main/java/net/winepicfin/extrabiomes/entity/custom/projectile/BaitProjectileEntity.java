@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.Vec3;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
@@ -165,7 +166,7 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
 
     // Shift-click with an empty hand to reclaim a landed bait instead of leaving it to expire - its remaining health carries over as the returned item's damage bar (BaitItem is durability-based specifically so this has something to show).
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 hitPos) {
         if (!isLanded() || !player.isShiftKeyDown() || !player.getItemInHand(hand).isEmpty()) {
             return InteractionResult.PASS;
         }

@@ -51,7 +51,7 @@ public class RazorFeatherProjectileEntity extends ThrowableItemProjectile {
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getItem()),
+                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getItem().getItem()),
                         this.getX(), this.getY(), this.getZ(),
                         ((double) this.random.nextFloat() - 0.5D) * 0.08D,
                         ((double) this.random.nextFloat() - 0.5D) * 0.08D,

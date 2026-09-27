@@ -256,7 +256,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
      * getting clipped at the edge.
      */
     private static boolean fitsWithinSafeWriteArea(BoundingBox structureBox, BlockPos decoratingColumn) {
-        ChunkPos chunk = new ChunkPos(decoratingColumn);
+        ChunkPos chunk = new ChunkPos(decoratingColumn.getX() >> 4, decoratingColumn.getZ() >> 4);
         int minX = chunk.getMinBlockX() - (WRITE_RADIUS_CHUNKS * 16);
         int maxX = chunk.getMaxBlockX() + (WRITE_RADIUS_CHUNKS * 16);
         int minZ = chunk.getMinBlockZ() - (WRITE_RADIUS_CHUNKS * 16);

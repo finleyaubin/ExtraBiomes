@@ -9,10 +9,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -48,7 +46,7 @@ public class ModItemModelProvider implements DataProvider {
     private final Map<Identifier, Supplier<JsonElement>> models = new HashMap<>();
     private final Map<Identifier, Supplier<JsonElement>> items = new HashMap<>();
 
-    public ModItemModelProvider(net.fabricmc.fabric.api.datagen.v1.FabricDataOutput output) {
+    public ModItemModelProvider(net.fabricmc.fabric.api.datagen.v1.FabricPackOutput output) {
         this.modelPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "models");
         this.itemPathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "items");
         registerModels();
@@ -210,10 +208,12 @@ public class ModItemModelProvider implements DataProvider {
         TRIM_MATERIALS.put(TrimMaterials.AMETHYST, 1.0F);
     }
 
+    // Only ever called with FROG_HELMET - reading the item's own EQUIPPABLE component (via
+    // getDefaultInstance() or components()) throws "Components not bound yet" this early during
+    // datagen bootstrap (before the data component registry finishes binding), so the slot is
+    // hardcoded instead of read back at runtime.
     private void trimmedArmorItem(Item item) {
-        Equippable equippable = item.getDefaultInstance().get(DataComponents.EQUIPPABLE);
-        if (equippable == null) return;
-        EquipmentSlot equipmentSlot = equippable.slot();
+        EquipmentSlot equipmentSlot = EquipmentSlot.HEAD;
         String armorType = switch (equipmentSlot) {
             case HEAD -> "helmet";
             case CHEST -> "chestplate";

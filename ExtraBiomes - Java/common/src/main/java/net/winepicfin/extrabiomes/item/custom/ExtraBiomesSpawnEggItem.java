@@ -1,9 +1,9 @@
 package net.winepicfin.extrabiomes.item.custom;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
@@ -27,7 +27,8 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
     public ExtraBiomesSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
         // backgroundColor/highlightColor no longer go through the Item itself in 1.21.4 - egg colors
         // are now item-model tints (see the generated spawn egg item model JSON), so they're unused here.
-        super(properties);
+        // Delayed so typeSupplier resolves after registration; vanilla's static getType/byId read this component.
+        super(properties.delayedComponent(DataComponents.ENTITY_DATA, registries -> TypedEntityData.of(typeSupplier.get(), new CompoundTag())));
         this.typeSupplier = typeSupplier;
         ALL.add(this);
     }
@@ -42,8 +43,10 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
         return null;
     }
 
-    @Override
-    public EntityType<?> getType(ItemStack stack) {
+    // Vanilla's SpawnEggItem.getType(ItemStack) became static in 26.1, so it can no longer be overridden
+    // polymorphically - callers that need this egg's lazily-resolved type (byType() below, and any
+    // mixin consulting it) use this instead.
+    public EntityType<?> resolveType(ItemStack stack) {
         if (stack == null) {
             return typeSupplier.get();
         }
@@ -52,10 +55,5 @@ public class ExtraBiomesSpawnEggItem extends SpawnEggItem {
             return entityData.type();
         }
         return typeSupplier.get();
-    }
-
-    @Override
-    public FeatureFlagSet requiredFeatures() {
-        return typeSupplier.get().requiredFeatures();
     }
 }

@@ -25,6 +25,8 @@ import org.joml.Vector4f;
 // extensions for blocks/items/fluid types all register centrally through
 // RegisterClientExtensionsEvent now (see ModEventBusClientEvents#registerClientExtensions), so
 // this class implements IClientFluidTypeExtensions itself and is handed to that event directly.
+//
+// 26.1 moved fluid textures/tint to FluidModel - see ModEventBusClientEvents#registerFluidModels.
 public class BaseFluidType extends FluidType implements IClientFluidTypeExtensions {
     private final Identifier stillTexture;
     private final Identifier flowingTexture;
@@ -41,29 +43,27 @@ public class BaseFluidType extends FluidType implements IClientFluidTypeExtensio
         this.fogColour = fogColor;
     }
 
-    @Override
-    public Identifier getStillTexture() {
+    public Identifier getStillTextureId() {
         return stillTexture;
     }
 
-    @Override
-    public Identifier getFlowingTexture() {
+    public Identifier getFlowingTextureId() {
         return flowingTexture;
     }
 
-    @Override
-    public Identifier getOverlayTexture() {
+    public Identifier getOverlayTextureId() {
         return overlayTexture;
     }
 
-    @Override
-    public int getTintColor() {
+    public int getTintColour() {
         return tintColour;
     }
 
+    // modifyFogColor became void (mutates fluidFogColor in place) as of the 26.1 fog rework -
+    // it used to return a new Vector4f.
     @Override
-    public @NotNull Vector4f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
-        return new Vector4f(fogColour.x, fogColour.y, fogColour.z, fluidFogColor.w());
+    public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
+        fluidFogColor.set(fogColour.x, fogColour.y, fogColour.z, fluidFogColor.w());
     }
 
     // FogParameters (start/end/shape/color record) is gone as of the 1.21.6 fog rework - FogData is a

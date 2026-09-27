@@ -1,5 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.gametest;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.SpawnEggItem;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -8,7 +10,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -50,8 +51,7 @@ public class SpawnEggItemGameTests {
             EntityType<? extends Mob> expectedType = egg.expectedType().get();
             LOGGER.info("[SpawnEggItemGameTests] checking {}", item);
 
-            helper.assertTrue(item instanceof SpawnEggItem, Component.literal(item + " is not a SpawnEggItem"));
-            SpawnEggItem spawnEgg = (SpawnEggItem) item;
+            helper.assertTrue(item instanceof ExtraBiomesSpawnEggItem, Component.literal(item + " is not an ExtraBiomesSpawnEggItem"));
 
             // The old-architecture regression: this used to throw NullPointerException
             // (null.requiredFeatures()) for every one of these, because the old
@@ -60,15 +60,12 @@ public class SpawnEggItemGameTests {
             // CreativeModeTabs$Rebuilder.buildContents does for every registered item.
             item.requiredFeatures();
 
-            // ItemStack.EMPTY (not a literal null) is the tag-less fallback vanilla's own
-            // crafting/inventory code actually passes (e.g. rendering the item in a creative tab,
-            // which needs an EntityType to pick the egg's overlay color). Asserted against the
-            // specific EntityType each egg is expected to carry, not just non-null, so a mix-up
-            // between two eggs (e.g. two eggs both resolving to the same EntityType) would
-            // actually be caught here.
-            EntityType<?> resolvedType = spawnEgg.getType(ItemStack.EMPTY);
+            // Placing an egg goes through vanilla's static getType, which only reads ENTITY_DATA.
+            EntityType<?> resolvedType = SpawnEggItem.getType(new ItemStack(item));
             helper.assertTrue(resolvedType == expectedType,
-                    Component.literal(item + "#getType(ItemStack.EMPTY) returned " + resolvedType + ", expected " + expectedType));
+                    Component.literal(item + ": SpawnEggItem.getType(new ItemStack) returned " + resolvedType + ", expected " + expectedType));
+            helper.assertTrue(SpawnEggItem.byId(expectedType).map(Holder::value).orElse(null) == item,
+                    Component.literal("SpawnEggItem.byId(" + expectedType + ") did not resolve back to " + item));
 
             // Regression coverage for the BY_ID map-collision bug: every one of this mod's spawn
             // eggs used to construct with a null EntityType and collide on that single map slot in

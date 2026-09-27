@@ -1,8 +1,6 @@
 package net.winepicfin.extrabiomes.neoforge;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -220,13 +218,6 @@ public class ExtraBiomesForge
             Sheets.addWoodType(ModWoodTypes.PALM);
             Sheets.addWoodType(ModWoodTypes.SKY);
             Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), ChunkSectionLayer.TRANSLUCENT);
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), ChunkSectionLayer.TRANSLUCENT);
-
-            // Saplings/mushrooms/leaves get their cutout render type from their block model's
-            // "render_type" field (set in ModBlockStateProvider's datagen) instead of here -
-            // the runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) overloads are
-            // deprecated for removal in favor of setting render_type on the model itself.
             EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
             EntityRenderers.register(ModEntities.WORM.get(), WormRenderer::new);
             EntityRenderers.register(ModEntities.TREEFROG.get(), TreefrogRenderer::new);
