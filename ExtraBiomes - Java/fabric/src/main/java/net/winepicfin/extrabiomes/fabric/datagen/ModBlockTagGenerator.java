@@ -3,7 +3,11 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.block.ModBlocks;
@@ -25,21 +29,21 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
 
-        this.valueLookupBuilder(BlockTags.NEEDS_STONE_TOOL).add(keys(
+        this.tag(BlockTags.NEEDS_STONE_TOOL).add(keys(
                 ModBlocks.NETHER_COPPER_ORE.get(),
                 ModBlocks.NETHER_IRON_ORE.get(),
                 ModBlocks.NETHER_LAPIS_ORE.get()
         ));
 
-        this.valueLookupBuilder(BlockTags.NEEDS_IRON_TOOL).add(keys(
+        this.tag(BlockTags.NEEDS_IRON_TOOL).add(keys(
                 ModBlocks.NETHER_EMERALD_ORE.get(),
                 ModBlocks.NETHER_REDSTONE_ORE.get(),
                 ModBlocks.NETHER_DIAMOND_ORE.get()
         ));
 
-        this.valueLookupBuilder(BlockTags.NEEDS_DIAMOND_TOOL);
+        this.tag(BlockTags.NEEDS_DIAMOND_TOOL);
 
-        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(keys(
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(keys(
                 ModBlocks.DENSE_CLOUD_BRICK.get(),
                 ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(),
                 ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(),
@@ -65,7 +69,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.BLACK_SANDSTONE_WALL.get()
         ));
 
-        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(keys(
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(
                 ModBlocks.STICK_PILE.get(),
                 // mystic wood
                 ModBlocks.MYSTIC_PLANKS.get(),
@@ -124,26 +128,26 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.GILDED_SKY_WALL_SIGN.get(),
                 ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get()
         ));
-        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_SHOVEL).add(keys(
+        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(keys(
                 ModBlocks.BLACK_SAND.get()
         ));
-        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_HOE);
+        this.tag(BlockTags.MINEABLE_WITH_HOE);
 
-        this.valueLookupBuilder(BlockTags.FENCES).add(keys(
+        this.tag(BlockTags.FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get(),
                 ModBlocks.SKY_FENCE.get(),
                 ModBlocks.PALM_FENCE.get(),
                 ModBlocks.GILDED_SKY_FENCE.get()
         ));
 
-        this.valueLookupBuilder(BlockTags.FENCE_GATES).add(keys(
+        this.tag(BlockTags.FENCE_GATES).add(keys(
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.SKY_FENCE_GATE.get(),
                 ModBlocks.PALM_FENCE_GATE.get(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get()
         ));
 
-        this.valueLookupBuilder(BlockTags.LOGS).add(keys(
+        this.tag(BlockTags.LOGS).add(keys(
                 ModBlocks.MYSTIC_LOG.get(),
                 ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
@@ -161,7 +165,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         ));
-        this.valueLookupBuilder(BlockTags.LOGS_THAT_BURN).add(keys(
+        this.tag(LOGS_THAT_BURN).add(keys(
                 ModBlocks.MYSTIC_LOG.get(),
                 ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
@@ -179,21 +183,21 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         ));
-        this.valueLookupBuilder(BlockTags.PLANKS).add(keys(
+        this.tag(BlockTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.SKY_PLANKS.get(),
                 ModBlocks.PALM_PLANKS.get(),
                 ModBlocks.GILDED_SKY_PLANKS.get()
         ));
 
-        this.valueLookupBuilder(BlockTags.WALLS).add(keys(
+        this.tag(BlockTags.WALLS).add(keys(
                 ModBlocks.BLACK_SANDSTONE_WALL.get()
         ));
-        this.valueLookupBuilder(BlockTags.STAIRS).add(keys(
+        this.tag(BlockTags.STAIRS).add(keys(
                 ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()
         ));
-        this.valueLookupBuilder(BlockTags.SLABS).add(keys(
+        this.tag(BlockTags.SLABS).add(keys(
                 ModBlocks.BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
@@ -203,11 +207,11 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
         // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
         // glazed terracotta isn't in that tag at all. Adding the four colors used there fixes it.
-        this.valueLookupBuilder(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(keys(
-                Blocks.WHITE_GLAZED_TERRACOTTA,
-                Blocks.ORANGE_GLAZED_TERRACOTTA,
-                Blocks.RED_GLAZED_TERRACOTTA,
-                Blocks.BLACK_GLAZED_TERRACOTTA,
+        this.tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(keys(
+                Blocks.GLAZED_TERRACOTTA.white(),
+                Blocks.GLAZED_TERRACOTTA.orange(),
+                Blocks.GLAZED_TERRACOTTA.red(),
+                Blocks.GLAZED_TERRACOTTA.black(),
                 // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
                 Blocks.NETHERRACK
         ));
@@ -215,8 +219,17 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
 
     }
 
-    // valueLookupBuilder()'s TagAppender takes Block directly (Fabric API 1.21.6+), so this is now an identity passthrough.
-    private static Block[] keys(Block... blocks) {
-        return blocks;
+    // Vanilla's BlockTags no longer exposes LOGS_THAT_BURN as a constant (26.2), but the tag itself
+    // (data/minecraft/tags/block/logs_that_burn.json) still exists, so it's recreated here by id.
+    private static final TagKey<Block> LOGS_THAT_BURN = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
+
+    // TagAppender.add() takes ResourceKey<Block>, not Block, so this maps each block to its registry key.
+    @SafeVarargs
+    private static ResourceKey<Block>[] keys(Block... blocks) {
+        ResourceKey<Block>[] result = new ResourceKey[blocks.length];
+        for (int i = 0; i < blocks.length; i++) {
+            result[i] = blocks[i].builtInRegistryHolder().key();
+        }
+        return result;
     }
 }

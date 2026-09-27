@@ -3,6 +3,7 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
@@ -23,23 +24,23 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-        //this.valueLookupBuilder(ItemTags.TRIMMABLE_ARMOR).add(ModItems.FROG_HELMET.get()); does now work with the gecolib model
+        //this.tag(ItemTags.TRIMMABLE_ARMOR).add(ModItems.FROG_HELMET.get()); does now work with the gecolib model
 
-        this.valueLookupBuilder(ItemTags.FENCES).add(keys(
+        this.tag(ItemTags.WOODEN_FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
                 ModBlocks.SKY_FENCE.get().asItem(),
                 ModBlocks.PALM_FENCE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem()
         ));
 
-        this.valueLookupBuilder(ItemTags.FENCE_GATES).add(keys(
+        this.tag(ItemTags.FENCE_GATES).add(keys(
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
         ));
 
-        this.valueLookupBuilder(ItemTags.LOGS).add(keys(
+        this.tag(ItemTags.LOGS).add(keys(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
                 ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
@@ -50,7 +51,7 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem()
         ));
-        this.valueLookupBuilder(ItemTags.LOGS_THAT_BURN).add(keys(
+        this.tag(ItemTags.LOGS_THAT_BURN).add(keys(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
                 ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
@@ -61,19 +62,24 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem()
         ));
-        this.valueLookupBuilder(ItemTags.PLANKS).add(keys(
+        this.tag(ItemTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
                 ModBlocks.SKY_PLANKS.get().asItem(),
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         ));
 
-        this.valueLookupBuilder(ItemTags.BOATS).add(keys(ModItems.BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
-        this.valueLookupBuilder(ItemTags.CHEST_BOATS).add(keys(ModItems.CHEST_BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
+        this.tag(ItemTags.BOATS).add(keys(ModItems.BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
+        this.tag(ItemTags.CHEST_BOATS).add(keys(ModItems.CHEST_BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
     }
 
-    // valueLookupBuilder()'s TagAppender takes Item directly (Fabric API 1.21.6+), so this is now an identity passthrough.
-    private static net.minecraft.world.item.Item[] keys(net.minecraft.world.item.Item... items) {
-        return items;
+    // TagAppender.add() takes ResourceKey<Item>, not Item, so this maps each item to its registry key.
+    @SafeVarargs
+    private static ResourceKey<net.minecraft.world.item.Item>[] keys(net.minecraft.world.item.Item... items) {
+        ResourceKey<net.minecraft.world.item.Item>[] result = new ResourceKey[items.length];
+        for (int i = 0; i < items.length; i++) {
+            result[i] = items[i].builtInRegistryHolder().key();
+        }
+        return result;
     }
 }
