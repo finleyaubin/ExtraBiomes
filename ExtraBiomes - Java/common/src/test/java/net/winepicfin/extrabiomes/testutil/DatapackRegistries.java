@@ -361,6 +361,8 @@ public final class DatapackRegistries {
             bindRegistryTags(resources, BuiltInRegistries.BLOCK);
             bindRegistryTags(resources, BuiltInRegistries.ITEM);
             bindRegistryTags(resources, BuiltInRegistries.ENTITY_TYPE);
+            // Vanilla's data-driven villager trades reference potions via #minecraft:tradeable.
+            bindRegistryTags(resources, BuiltInRegistries.POTION);
             RegistryAccess base = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
             List<net.minecraft.core.HolderLookup.RegistryLookup<?>> baseLookups =
                     base.registries().<net.minecraft.core.HolderLookup.RegistryLookup<?>>map(entry -> entry.value()).toList();
@@ -376,49 +378,20 @@ public final class DatapackRegistries {
         }
     }
 
-    // The worldgen registries this mod actually authors data for. Deliberately narrower than
-    // RegistryDataLoader.WORLDGEN_REGISTRIES as a whole - the full vanilla list also loads
-    // registries like enchantment/trim_pattern/wolf_variant whose own vanilla JSON leans on
-    // item/entity_type tags for HolderSet fields, which need a full ReloadableServerResources-
-    // style tag pass this test doesn't set up. None of that is relevant to validating this mod's
-    // own worldgen JSON, so only load the registries this mod (and its cross-references) touch.
-    //
+    // Full WORLD_REGISTRIES: vanilla's recipes/advancements/loot tables cross-reference nearly all of it.
     // Computed lazily (not a static field) - touching RegistryDataLoader's own class before
     // Bootstrap.bootStrap() has run trips the same "Not bootstrapped" failure this method's
     // caller is careful to avoid.
     private static List<RegistryDataLoader.RegistryData<?>> registriesToLoad() {
-        Set<ResourceKey<?>> keys = Set.of(
-                Registries.FEATURE,
-                Registries.PLACED_FEATURE,
-                Registries.STRUCTURE,
-                Registries.STRUCTURE_SET,
-                Registries.TEMPLATE_POOL,
-                Registries.PROCESSOR_LIST,
-                Registries.BIOME,
-                Registries.NOISE,
-                // As of 26.x, BlockStateProvider entries used by worldgen features (including
-                // vanilla's own tree features) are registered as their own data-driven registry
-                // rather than always inlined, so it must be loaded alongside FEATURE/NOISE/etc.
-                Registries.BLOCK_STATE_PROVIDER,
-                // As of 26.x, vanilla's own SurfaceRules were replaced by the MaterialRule/
-                // MaterialCondition system (see ModSurfaceRules), which NOISE_SETTINGS now
-                // references as its own data-driven registries.
-                Registries.MATERIAL_RULE,
-                Registries.MATERIAL_CONDITION,
-                Registries.DENSITY_FUNCTION,
-                Registries.NOISE_SETTINGS,
-                Registries.CARVER,
-                // Not authored by this mod, but every vanilla nether biome this test also loads
-                // as base content (basalt_deltas, crimson_forest, ...) references its ambient
-                // sound presets through this registry.
-                Registries.MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST,
-                // Not authored by this mod, but this mod's own loot tables/recipes/advancements
-                // reference vanilla enchantments (looting, fortune, silk_touch, ...) by id, and
-                // vanilla's own enchantment JSON in turn references damage types (thorns, ...).
-                Registries.ENCHANTMENT,
-                Registries.DAMAGE_TYPE);
-        return RegistryDataLoader.WORLD_REGISTRIES.stream()
-                .filter(data -> keys.contains(data.key()))
+        // Advancements reference recipes and loot tables reference predicates by id.
+        Set<ResourceKey<?>> reloadableKeys = Set.of(
+                Registries.RECIPE,
+                Registries.ADVANCEMENT,
+                Registries.LOOT_TABLE,
+                Registries.PREDICATE);
+        return java.util.stream.Stream.concat(
+                        RegistryDataLoader.WORLD_REGISTRIES.stream(),
+                        RegistryDataLoader.RELOADABLE_REGISTRIES.stream().filter(data -> reloadableKeys.contains(data.key())))
                 .toList();
     }
 

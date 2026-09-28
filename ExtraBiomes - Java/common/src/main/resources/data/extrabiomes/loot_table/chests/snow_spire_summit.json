@@ -17,22 +17,23 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:diamond_boots",
-          "functions": [
+          "weight": 2,
+          "modifier": [
             {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 30
+              "levels": 30,
+              "type": "minecraft:enchant_with_levels"
             },
             {
-              "function": "minecraft:enchant_randomly",
-              "options": "minecraft:frost_walker"
+              "options": "minecraft:frost_walker",
+              "type": "minecraft:enchant_randomly"
             }
-          ],
-          "weight": 2
+          ]
         }
       ]
     },
     {
       "rolls": {
+        "type": "minecraft:uniform",
         "min": 4,
         "max": 7
       },
@@ -40,87 +41,80 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:diamond",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 2,
-                "max": 5
-              }
-            }
-          ],
-          "weight": 3
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 5
+            },
+            "type": "minecraft:set_count"
+          }
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:emerald",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 3,
-                "max": 8
-              }
-            }
-          ],
-          "weight": 3
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 3,
+              "max": 8
+            },
+            "type": "minecraft:set_count"
+          }
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:gold_ingot",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 3,
-                "max": 7
-              }
-            }
-          ],
-          "weight": 2
+          "weight": 2,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 3,
+              "max": 7
+            },
+            "type": "minecraft:set_count"
+          }
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:blue_ice",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 8,
-                "max": 16
-              }
-            }
-          ],
-          "weight": 2
+          "weight": 2,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 8,
+              "max": 16
+            },
+            "type": "minecraft:set_count"
+          }
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:book",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly",
-              "options": [
-                "minecraft:frost_walker",
-                "minecraft:feather_falling",
-                "minecraft:protection"
-              ]
-            }
-          ],
-          "weight": 2
+          "weight": 2,
+          "modifier": {
+            "options": [
+              "minecraft:frost_walker",
+              "minecraft:feather_falling",
+              "minecraft:protection"
+            ],
+            "type": "minecraft:enchant_randomly"
+          }
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:golden_apple",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "min": 1,
-                "max": 2
-              }
-            }
-          ],
-          "weight": 1
+          "weight": 1,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 2
+            },
+            "type": "minecraft:set_count"
+          }
         }
       ]
     }
