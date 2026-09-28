@@ -60,7 +60,7 @@ public class BiomeGenerationGameTests {
         LevelUtils.initializeBiomes(registryAccess, overworld.type(), LevelStem.OVERWORLD, generator, seed);
 
         BiomeSource biomeSource = generator.getBiomeSource();
-        RandomState randomState = RandomState.create(generator.generatorSettings().value(), registryAccess.lookupOrThrow(Registries.NOISE), seed);
+        RandomState randomState = RandomState.create(registryAccess.lookupOrThrow(Registries.NOISE), seed, generator.generatorSettings().value());
         // Fixed coordinate, not level.getSharedSpawnPos() - see the Forge test's javadoc for why:
         // Vanilla's spawn-suitability search can converge on a different valid candidate depending
         // on chunk-completion ordering on machines with different core counts, which drifted the
@@ -70,7 +70,7 @@ public class BiomeGenerationGameTests {
 
         List<String> missing = new ArrayList<>();
         for (String expectedPath : BiomeClimateTuning.BY_BEDROCK_KEY.keySet()) {
-            Pair<BlockPos, Holder<Biome>> found = biomeSource.findClosestBiome3d(origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS, holder -> matchesPath(holder, expectedPath), randomState.sampler(), level);
+            Pair<BlockPos, Holder<Biome>> found = biomeSource.findClosestBiome3d(origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS, holder -> matchesPath(holder, expectedPath), randomState, level);
             if (found == null) {
                 missing.add(expectedPath);
                 LOGGER.error("[BiomeGenerationGameTests] {}: NOT FOUND within {} blocks", expectedPath, SEARCH_RADIUS_BLOCKS);

@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -206,20 +205,5 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.CUT_BLACK_SANDSTONE_SLAB.getKey(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.getKey()
         );
-
-        // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
-        // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
-        // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
-        // glazed terracotta isn't in that tag at all. Adding the four colors used there fixes it.
-        this.tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(
-                Blocks.GLAZED_TERRACOTTA.white().builtInRegistryHolder().key(),
-                Blocks.GLAZED_TERRACOTTA.orange().builtInRegistryHolder().key(),
-                Blocks.GLAZED_TERRACOTTA.red().builtInRegistryHolder().key(),
-                Blocks.GLAZED_TERRACOTTA.black().builtInRegistryHolder().key(),
-                // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
-                Blocks.NETHERRACK.builtInRegistryHolder().key()
-        );
-
-
     }
 }

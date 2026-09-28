@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.neoforge;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -50,7 +51,7 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.Undergroun
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
-import terrablender.api.SurfaceRuleManager;
+import terrablender.api.MaterialRuleManager;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file. This is the Forge
 // bootstrap entry point; ExtraBiomes (common) holds only the loader-agnostic MOD_ID constant.
@@ -194,15 +195,17 @@ public class ExtraBiomesForge
         event.enqueueWork(() ->
         {
             // Register our surface rules. TerraBlender's RuleBuilder is now a
-            // Function<HolderGetter<Biome>, RuleSource> - it calls this lazily during world load
-            // (when a biome lookup actually exists), rather than taking a pre-built RuleSource here.
-            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID, ModSurfaceRules::makeRules);
-            // addSurfaceRules above only reaches biomes namespaced "extrabiomes" - this instead
+            // Function<RegistryAccess, MaterialRule> - it calls this lazily during world load (when
+            // a biome lookup actually exists), rather than taking a pre-built MaterialRule here.
+            MaterialRuleManager.addRules(MaterialRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID,
+                    registries -> ModSurfaceRules.makeRules(registries.lookupOrThrow(Registries.BIOME)));
+            // addRules above only reaches biomes namespaced "extrabiomes" - this instead
             // injects into the shared default ruleset every other namespace (including vanilla's
             // own badlands/eroded_badlands/wooded_badlands) falls back to, so those get the same
             // depth-banded terracotta too. See ModSurfaceRules.makeVanillaBadlandsAdditions() javadoc.
-            SurfaceRuleManager.addToDefaultSurfaceRulesAtStage(SurfaceRuleManager.RuleCategory.OVERWORLD,
-                    SurfaceRuleManager.RuleStage.BEFORE_BEDROCK, 0, ModSurfaceRules::makeVanillaBadlandsAdditions);
+            MaterialRuleManager.addToDefaultRulesAtStage(MaterialRuleManager.RuleCategory.OVERWORLD,
+                    MaterialRuleManager.RuleStage.BEFORE_BEDROCK, 0,
+                    registries -> ModSurfaceRules.makeVanillaBadlandsAdditions(registries.lookupOrThrow(Registries.BIOME)));
             ModVanillaCompat.register();
             ModSpawnCaps.register();
         });

@@ -27,7 +27,7 @@ public class SkyCityStructureEditGameTests {
 
     public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        StructureTemplateManager templates = level.getStructureManager();
+        StructureTemplateManager templates = level.getStructureTemplateManager();
         int buildingsRowDepth = placeRow(helper, level, templates, BUILDINGS, "buildings", 1);
         placeRow(helper, level, templates, PATHS, "paths", 1 + buildingsRowDepth + MARGIN);
         helper.succeed();

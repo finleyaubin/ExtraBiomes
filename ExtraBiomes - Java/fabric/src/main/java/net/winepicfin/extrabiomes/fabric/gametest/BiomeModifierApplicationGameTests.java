@@ -8,10 +8,12 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -113,7 +115,9 @@ public class BiomeModifierApplicationGameTests {
     }
 
     private static void assertHasSpawn(GameTestHelper helper, Biome biome, MobCategory category, EntityType<?> expected) {
-        boolean present = biome.getMobSettings().getMobs(category).unwrap().stream()
+        MobSpawnSettings mobSpawnSettings = biome.getAttributes().applyModifier(
+                EnvironmentAttributes.NATURAL_MOB_SPAWNS, EnvironmentAttributes.NATURAL_MOB_SPAWNS.defaultValue());
+        boolean present = mobSpawnSettings.getMobsInCategory(category).unwrap().stream()
                 .anyMatch(spawnerData -> spawnerData.value().type() == expected);
         helper.assertTrue(present, Component.literal("Expected " + category + " spawn of " + expected + " but it was missing"));
     }

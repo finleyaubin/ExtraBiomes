@@ -8,6 +8,7 @@ import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -79,7 +80,7 @@ public final class ModGameTests {
             return;
         }
         for (Test test : TESTS) {
-            var data = new TestData<>(environment, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, test.template()),
+            var data = new TestData<>(environment, Level.OVERWORLD, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, test.template()),
                     test.maxTicks(), 0, true, Rotation.NONE, test.manualOnly(), 1, 1, false, 0);
             event.registerTest(test.id(), new FunctionGameTestInstance(ResourceKey.create(Registries.TEST_FUNCTION, test.id()), data));
         }

@@ -25,6 +25,7 @@ public class ModBlockLootTables extends FabricBlockLootSubProvider {
     @Override
     public void generate() {
         ModBlockLootTableEntries.populate(
+                this.blocks,
                 this::dropSelf,
                 this::add,
                 this::createSlabItemTable,
