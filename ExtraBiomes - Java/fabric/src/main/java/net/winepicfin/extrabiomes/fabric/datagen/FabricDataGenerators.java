@@ -4,8 +4,8 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.advancements.AdvancementProvider;
-import net.winepicfin.extrabiomes.advancements.ModAdvancements;
+import net.winepicfin.extrabiomes.fabric.datagen.loot.ModBlockLootTables;
+import net.winepicfin.extrabiomes.fabric.datagen.loot.ModEntityLootTables;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModNoiseParameters;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
@@ -48,7 +48,8 @@ public class FabricDataGenerators implements DataGeneratorEntrypoint {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
         pack.addProvider(ModRecipeProvider::new);
-        pack.addProvider(ModLootTableProvider::create);
+        pack.addProvider(ModBlockLootTables::new);
+        pack.addProvider(ModEntityLootTables::new);
 
         ModBlockTagGenerator blockTagGenerator = pack.addProvider(ModBlockTagGenerator::new);
         pack.addProvider(ModBiomeTagProvider::new);
@@ -59,7 +60,7 @@ public class FabricDataGenerators implements DataGeneratorEntrypoint {
         pack.addProvider(ModBlockStateProvider::new);
         pack.addProvider(ModItemModelProvider::new);
 
-        pack.addProvider((output, registriesFuture) -> new AdvancementProvider(output, registriesFuture, java.util.List.of(new ModAdvancements())));
+        pack.addProvider(ModAdvancementsProvider::new);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class FabricDataGenerators implements DataGeneratorEntrypoint {
         // comment on forge/datagen/ModWorldGenProvider.BUILDER for why every bootstrap method for a
         // given registry is chained into a single lambda below instead of calling .add() per feature.
         registryBuilder
-                .add(Registries.CONFIGURED_FEATURE, context -> {
+                .add(Registries.FEATURE, context -> {
                     ModConfigureFeatures.bootstrap(context);
                     OasisPuddleFeature.bootstrapConfigured(context);
                     OasisFossilFeatures.bootstrapConfigured(context);

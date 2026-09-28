@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.item.custom;
 
+import net.minecraft.util.Prediction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +30,7 @@ public class JellyfishJamBottleItem extends Item {
             if (entity instanceof Player player && !player.getAbilities().instabuild) {
                 ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
                 if (!player.getInventory().add(bottle)) {
-                    player.drop(bottle, false);
+                    player.drop(bottle, false, Prediction.SERVER_ONLY);
                 }
             }
             return stack;

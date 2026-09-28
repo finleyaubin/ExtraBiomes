@@ -13,7 +13,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
@@ -59,7 +59,7 @@ public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCo
     }
 
     @Override
-    public List<FoliagePlacer.FoliageAttachment> placeTrunk(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeConfiguration pConfig) {
+    public List<FoliagePlacer.FoliageAttachment> placeTrunk(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, int pFreeTreeHeight, BlockPos pPos, TreeFeature pConfig) {
         BlockPos blockpos = pPos.below();
         placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos, pConfig);
         placeBelowTrunkBlock(pLevel, pBlockSetter, pRandom, blockpos.north(), pConfig);
@@ -160,7 +160,7 @@ public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCo
      * the trunk to meet the branches' natural heights, so this only bites in the rare case that would
      * have pushed the trunk past the tree's overall height cap.
      */
-    private List<FoliagePlacer.FoliageAttachment> generateBranch(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, BlockPos pPos, TreeConfiguration pConfig, Direction pDirectionA, Direction pDirectionB, int pOffset, boolean pOffsetExtra, int pEndHeight, int pTrunkHeight, BlockPos.MutableBlockPos pPosMutable) {
+    private List<FoliagePlacer.FoliageAttachment> generateBranch(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, BlockPos pPos, TreeFeature pConfig, Direction pDirectionA, Direction pDirectionB, int pOffset, boolean pOffsetExtra, int pEndHeight, int pTrunkHeight, BlockPos.MutableBlockPos pPosMutable) {
         List<FoliagePlacer.FoliageAttachment> attachments = new ArrayList<>();
         pPosMutable.set(pPos).move(Direction.UP, pOffset);
         int i = Math.min(pEndHeight, pTrunkHeight - 1);
@@ -230,7 +230,7 @@ public static final MapCodec<MysticTrunkPlacer> CODEC = RecordCodecBuilder.mapCo
      * A shorter, un-forking offshoot from a point partway along a main branch: a couple of logs
      * heading off perpendicular to the parent branch, capped with their own foliage attachment.
      */
-    private List<FoliagePlacer.FoliageAttachment> generateSubBranch(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, TreeConfiguration pConfig, BlockPos pStart, Direction pParentDirection) {
+    private List<FoliagePlacer.FoliageAttachment> generateSubBranch(WorldGenLevel pLevel, BiConsumer<BlockPos, BlockState> pBlockSetter, RandomSource pRandom, TreeFeature pConfig, BlockPos pStart, Direction pParentDirection) {
         Direction direction = pRandom.nextBoolean() ? pParentDirection.getClockWise() : pParentDirection.getCounterClockWise();
         Function<BlockState, BlockState> propertySetter = axisSetter(direction);
         int length = 1 + pRandom.nextInt(3);

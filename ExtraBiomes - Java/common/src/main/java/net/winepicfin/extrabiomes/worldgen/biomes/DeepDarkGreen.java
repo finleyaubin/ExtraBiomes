@@ -1,6 +1,8 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.sounds.Musics;
@@ -20,10 +22,10 @@ public class DeepDarkGreen {
         // A cave variant of vanilla's Deep Dark (placed underground via ModOverworldRegion), so it follows deepDark()'s setup but with jungle-flavoured vegetation/colors instead of plain grass and black.
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityTypes.FROG, 2, 4));
+        spawnBuilder.addSpawn(EntityTypes.FROG, MobCategory.CREATURE, 5, UniformInt.of(2, 4));
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder);
@@ -42,9 +44,9 @@ public class DeepDarkGreen {
                 .temperature(BiomeClimateTuning.DEEP_DARK_GREEN.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x050533)
-                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.DEEP_DARK_GREEN.skyColor())
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x050533))
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.DEEP_DARK_GREEN.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xC0D8FF))
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DEEP_DARK)))
                 .specialEffects((new BiomeSpecialEffects.Builder())

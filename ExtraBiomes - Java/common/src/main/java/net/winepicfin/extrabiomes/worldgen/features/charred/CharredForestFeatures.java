@@ -11,10 +11,10 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
+import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
@@ -73,7 +73,7 @@ import java.util.List;
  *       places a directional/lit block" primitive closer than this.</li>
  *   <li>{@code burnt_land_feature.json}'s distribution (iterations 4, x/z uniform 0-16, y uniform
  *       heightmap±4) maps to {@code CountPlacement.of(4)} + {@code InSquarePlacement.spread()} +
- *       {@code HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG)} + {@code RandomOffsetPlacement.vertical(UniformInt.of(-4, 4))}.
+ *       {@code HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG)} + {@code OffsetPlacement.vertical(UniformInt.of(-4, 4))}.
  *       {@code smoking_ground_feature.json}'s distribution (iterations 50, y = heightmap-3 fixed) maps
  *       the same way but with a constant vertical offset of -3 instead of a uniform range.</li>
  *   <li>{@code scatter_fire_feature.json}'s {@code minecraft:scatter_feature} (iterations 90, gaussian
@@ -104,19 +104,19 @@ import java.util.List;
  */
 public class CharredForestFeatures {
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> BURNT_BASALT_KEY = configuredKey("burnt_basalt");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> BURNT_MAGMA_KEY = configuredKey("burnt_magma");
+    public static final ResourceKey<Feature> BURNT_BASALT_KEY = configuredKey("burnt_basalt");
+    public static final ResourceKey<Feature> BURNT_MAGMA_KEY = configuredKey("burnt_magma");
 
     /** Register via {@code biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, BURNT_BASALT_PLACED_KEY)}. */
     public static final ResourceKey<PlacedFeature> BURNT_BASALT_PLACED_KEY = placedKey("burnt_basalt");
     /** Register alongside {@link #BURNT_BASALT_PLACED_KEY} at the same LOCAL_MODIFICATIONS step (see class docs - aggregate simplification). */
     public static final ResourceKey<PlacedFeature> BURNT_MAGMA_PLACED_KEY = placedKey("burnt_magma");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMOKING_GROUND_KEY = configuredKey("smoking_ground");
+    public static final ResourceKey<Feature> SMOKING_GROUND_KEY = configuredKey("smoking_ground");
     /** Register via {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SMOKING_GROUND_PLACED_KEY)}. */
     public static final ResourceKey<PlacedFeature> SMOKING_GROUND_PLACED_KEY = placedKey("smoking_ground");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> FIRE_KEY = configuredKey("fire");
+    public static final ResourceKey<Feature> FIRE_KEY = configuredKey("fire");
 
     /** Register via {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, SCATTER_FIRE_PLACED_KEY)}. */
     public static final ResourceKey<PlacedFeature> SCATTER_FIRE_PLACED_KEY = placedKey("scatter_fire");
@@ -125,36 +125,34 @@ public class CharredForestFeatures {
     private static final int FIRE_OUTER_COUNT = 4;
     private static final int FIRE_PATCH_TRIES = 25;
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        List<OreConfiguration.TargetBlockState> dirtFamily = List.of(
-                OreConfiguration.target(new BlockMatchTest(Blocks.DIRT), Blocks.BASALT.defaultBlockState()),
-                OreConfiguration.target(new BlockMatchTest(Blocks.DIRT_PATH), Blocks.BASALT.defaultBlockState()),
-                OreConfiguration.target(new BlockMatchTest(Blocks.COARSE_DIRT), Blocks.BASALT.defaultBlockState())
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        List<BlockReplacement> dirtFamily = List.of(
+                BlockReplacement.replace(new BlockMatchTest(Blocks.DIRT), Blocks.BASALT.defaultBlockState()),
+                BlockReplacement.replace(new BlockMatchTest(Blocks.DIRT_PATH), Blocks.BASALT.defaultBlockState()),
+                BlockReplacement.replace(new BlockMatchTest(Blocks.COARSE_DIRT), Blocks.BASALT.defaultBlockState())
         );
-        context.register(BURNT_BASALT_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(dirtFamily, 3, 0f)));
+        context.register(BURNT_BASALT_KEY, new OreFeature(dirtFamily, 3, 0f));
 
-        context.register(BURNT_MAGMA_KEY, new ConfiguredFeature<>(Feature.ORE,
-                new OreConfiguration(new BlockMatchTest(Blocks.BASALT), Blocks.MAGMA_BLOCK.defaultBlockState(), 22, 0f)));
+        context.register(BURNT_MAGMA_KEY, new OreFeature(List.of(BlockReplacement.replace(new BlockMatchTest(Blocks.BASALT), Blocks.MAGMA_BLOCK.defaultBlockState())), 22, 0f));
 
-        List<OreConfiguration.TargetBlockState> dirtFamilyToCampfire = List.of(
-                OreConfiguration.target(new BlockMatchTest(Blocks.DIRT), Blocks.CAMPFIRE.defaultBlockState()),
-                OreConfiguration.target(new BlockMatchTest(Blocks.DIRT_PATH), Blocks.CAMPFIRE.defaultBlockState()),
-                OreConfiguration.target(new BlockMatchTest(Blocks.COARSE_DIRT), Blocks.CAMPFIRE.defaultBlockState())
+        List<BlockReplacement> dirtFamilyToCampfire = List.of(
+                BlockReplacement.replace(new BlockMatchTest(Blocks.DIRT), Blocks.CAMPFIRE.defaultBlockState()),
+                BlockReplacement.replace(new BlockMatchTest(Blocks.DIRT_PATH), Blocks.CAMPFIRE.defaultBlockState()),
+                BlockReplacement.replace(new BlockMatchTest(Blocks.COARSE_DIRT), Blocks.CAMPFIRE.defaultBlockState())
         );
-        context.register(SMOKING_GROUND_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(dirtFamilyToCampfire, 3, 0f)));
+        context.register(SMOKING_GROUND_KEY, new OreFeature(dirtFamilyToCampfire, 3, 0f));
 
-        context.register(FIRE_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.FIRE.defaultBlockState()))));
+        context.register(FIRE_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.FIRE.defaultBlockState())));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         List<PlacementModifier> burntLandPlacement = List.of(
                 CountPlacement.of(4),
                 InSquarePlacement.spread(),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                RandomOffsetPlacement.vertical(UniformInt.of(-4, 4)),
+                OffsetPlacement.vertical(UniformInt.of(-4, 4)),
                 BiomeFilter.biome()
         );
         context.register(BURNT_BASALT_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BURNT_BASALT_KEY), burntLandPlacement));
@@ -164,7 +162,7 @@ public class CharredForestFeatures {
                 CountPlacement.of(50),
                 InSquarePlacement.spread(),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                RandomOffsetPlacement.vertical(ConstantInt.of(-3)),
+                OffsetPlacement.vertical(ConstantInt.of(-3)),
                 BiomeFilter.biome()
         )));
 
@@ -176,14 +174,14 @@ public class CharredForestFeatures {
                 HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                 BiomeFilter.biome(),
                 CountPlacement.of(FIRE_PATCH_TRIES),
-                RandomOffsetPlacement.ofTriangle(8, 4),
+                OffsetPlacement.ofTriangle(8, 4),
                 BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)),
-                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.FIRE.defaultBlockState(), BlockPos.ZERO))
+                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.FIRE))
         )));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "charred/" + name));
+    private static ResourceKey<Feature> configuredKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "charred/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {

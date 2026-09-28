@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.entity.custom.projectile;
 
+import net.minecraft.util.Prediction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -175,7 +176,7 @@ public class BaitProjectileEntity extends ThrowableItemProjectile {
             pickedUp.setCount(1);
             pickedUp.setDamageValue(this.getMaxHealth() - this.getHealth());
             if (!player.getInventory().add(pickedUp)) {
-                player.drop(pickedUp, false);
+                player.drop(pickedUp, false, Prediction.SERVER_ONLY);
             }
             this.discard();
         }

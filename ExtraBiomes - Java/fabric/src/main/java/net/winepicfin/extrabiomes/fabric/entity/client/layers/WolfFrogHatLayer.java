@@ -66,7 +66,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         ((WolfModelAccessor) this.getParentModel()).extrabiomes$getHead().translateAndRotate(poseStack);
         poseStack.translate(0.05D, 0.15D, -0.02D);
         poseStack.scale(1F, 1F, 1F);
-        poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
+        poseStack.rotate(Axis.XP.rotationDegrees(0.0F));
         this.renderer.renderOnWolf(this.humanoidState, wolf, headItem, this.baseModel, poseStack, submitNodeCollector, packedLight, partialTick);
         poseStack.popPose();
     }

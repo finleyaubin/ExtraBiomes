@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
@@ -19,7 +20,7 @@ public class JellyfishFields {
         BiomeDefaultFeatures.warmOceanSpawns(spawnBuilder, 10, 4);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
 
@@ -35,11 +36,11 @@ public class JellyfishFields {
                 .temperature(BiomeClimateTuning.JELLYFISH_FIELDS.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x02C7D5)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x02C7D5))
                 .setAttribute(EnvironmentAttributes.WATER_FOG_START_DISTANCE, 30.0F)
                 .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 90.0F)
-                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.JELLYFISH_FIELDS.skyColor())
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x8fe0e8)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.JELLYFISH_FIELDS.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x8fe0e8))
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.JELLYFISH_FIELDS.waterColor())

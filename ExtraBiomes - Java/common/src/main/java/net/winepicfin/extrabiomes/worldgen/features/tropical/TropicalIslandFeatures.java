@@ -12,10 +12,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
+import net.minecraft.world.level.levelgen.feature.VegetationPatchFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
@@ -51,7 +50,7 @@ import java.util.List;
  */
 public class TropicalIslandFeatures {
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MELON_KEY = configuredKey("tropical_melon");
+    public static final ResourceKey<Feature> MELON_KEY = configuredKey("tropical_melon");
 
     /**
      * extrabiomes:tropical/tropical_melon - places a single {@link Blocks#MELON} where the block
@@ -62,7 +61,7 @@ public class TropicalIslandFeatures {
 
     public static final TagKey<Block> ISLAND_GRASS_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
             Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "island_grass_floor_replaceable"));
-    public static final ResourceKey<ConfiguredFeature<?, ?>> GRASS_FLOOR_KEY = configuredKey("island_grass_floor");
+    public static final ResourceKey<Feature> GRASS_FLOOR_KEY = configuredKey("island_grass_floor");
 
     /**
      * extrabiomes:tropical/island_grass_floor - converts sand to grass block on the surface (with the
@@ -71,17 +70,15 @@ public class TropicalIslandFeatures {
      */
     public static final ResourceKey<PlacedFeature> GRASS_FLOOR_PLACED_KEY = placedKey("island_grass_floor");
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(MELON_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MELON.defaultBlockState()))));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(MELON_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.MELON.defaultBlockState())));
 
         // vegetationChance 0.0F is intentional: no vegetation is ever placed, this is just a sand-to-grass floor patch.
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
-        context.register(GRASS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH,
-                new VegetationPatchConfiguration(
+        context.register(GRASS_FLOOR_KEY, new VegetationPatchFeature(
                         blocks.getOrThrow(ISLAND_GRASS_FLOOR_REPLACEABLE),
-                        BlockStateProvider.simple(Blocks.GRASS_BLOCK.defaultBlockState()),
+                        BlockStateProvider.holderOf(Blocks.GRASS_BLOCK.defaultBlockState()),
                         placedFeatures.getOrThrow(UndergroundJungleFeatures.SELECT_MOSS_OR_JUNGLE_TREE_PLACED_KEY),
                         CaveSurface.FLOOR,
                         ConstantInt.of(1),
@@ -90,16 +87,16 @@ public class TropicalIslandFeatures {
                         0.0F,
                         ConstantInt.of(8),
                         0.3F
-                )));
+                ));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         context.register(MELON_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(MELON_KEY),
                 List.of(
-                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK)),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, -1, 0), java.util.List.of(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK))),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome()
@@ -116,8 +113,8 @@ public class TropicalIslandFeatures {
         ));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
+    private static ResourceKey<Feature> configuredKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "tropical/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {

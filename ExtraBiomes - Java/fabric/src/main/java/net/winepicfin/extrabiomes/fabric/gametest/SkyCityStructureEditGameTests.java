@@ -34,7 +34,7 @@ public class SkyCityStructureEditGameTests {
     @GameTest(structure = ExtraBiomes.MOD_ID + ":sky_city_edit_void", maxTicks = 60000, manualOnly = true)
     public void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        StructureTemplateManager templates = level.getStructureManager();
+        StructureTemplateManager templates = level.getStructureTemplateManager();
         int buildingsRowDepth = placeRow(helper, level, templates, BUILDINGS, "buildings", 1);
         placeRow(helper, level, templates, PATHS, "paths", 1 + buildingsRowDepth + MARGIN);
         helper.succeed();

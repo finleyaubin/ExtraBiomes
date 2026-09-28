@@ -1,6 +1,8 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.attribute.AmbientSounds;
@@ -17,12 +19,12 @@ public class Moorlands {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, 8, new MobSpawnSettings.SpawnerData(EntityTypes.SHEEP, 2, 4));
+        spawnBuilder.addSpawn(EntityTypes.SHEEP, MobCategory.CREATURE, 8, UniformInt.of(2, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
 
@@ -55,9 +57,9 @@ public class Moorlands {
                 .temperature(BiomeClimateTuning.MOORLANDS.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x113290)
-                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.MOORLANDS.skyColor())
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x113290))
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.MOORLANDS.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xC0D8FF))
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.MOORLANDS.waterColor())

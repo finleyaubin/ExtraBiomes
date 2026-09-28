@@ -1,13 +1,13 @@
 package net.winepicfin.extrabiomes.worldgen.features.mystic;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 
 /**
@@ -23,19 +23,21 @@ import net.winepicfin.extrabiomes.block.ModBlocks;
  * down from the surface heightmap at all, and even a deep surface lake only converts its top
  * SEARCH_DEPTH blocks.
  */
-public class GooConversionFeature extends Feature<NoneFeatureConfiguration> {
+public class GooConversionFeature implements Feature {
 
     // Deep enough for a typical surface pond/lake, shallow enough to avoid deep ocean trenches or cave-adjacent water.
     private static final int SEARCH_DEPTH = 16;
 
-    public GooConversionFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<GooConversionFeature> CODEC = MapCodec.unit(GooConversionFeature::new);
+
+    @Override
+    public MapCodec<GooConversionFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BlockPos.MutableBlockPos pos = context.origin().mutable();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        BlockPos.MutableBlockPos pos = origin.mutable();
         BlockState gooState = ModBlocks.GOO.get().defaultBlockState();
 
         boolean placedAny = false;

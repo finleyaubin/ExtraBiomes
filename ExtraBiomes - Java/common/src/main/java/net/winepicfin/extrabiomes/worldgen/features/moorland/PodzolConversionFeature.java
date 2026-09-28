@@ -1,13 +1,13 @@
 package net.winepicfin.extrabiomes.worldgen.features.moorland;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
  * Java port of Bedrock's "extrabiomes:moorland/moorlands_podzol_feature", an aggregate that
@@ -22,16 +22,18 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  * the first free (air) position above the ground - so the actual surface block to convert is
  * one below the origin.
  */
-public class PodzolConversionFeature extends Feature<NoneFeatureConfiguration> {
+public class PodzolConversionFeature implements Feature {
 
-    public PodzolConversionFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<PodzolConversionFeature> CODEC = MapCodec.unit(PodzolConversionFeature::new);
+
+    @Override
+    public MapCodec<PodzolConversionFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BlockPos ground = context.origin().below();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        BlockPos ground = origin.below();
         BlockState state = level.getBlockState(ground);
 
         if (state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.DIRT) || state.is(Blocks.COARSE_DIRT)) {

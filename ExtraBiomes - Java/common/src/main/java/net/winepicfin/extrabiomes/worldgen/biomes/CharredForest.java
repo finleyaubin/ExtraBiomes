@@ -2,6 +2,8 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
@@ -24,12 +26,12 @@ public class CharredForest {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityTypes.BAT, 4, 4));
+        spawnBuilder.addSpawn(EntityTypes.BAT, MobCategory.CREATURE, 5, UniformInt.of(4, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, CharredForestFeatures.BURNT_BASALT_PLACED_KEY);
@@ -53,10 +55,10 @@ public class CharredForest {
                 .temperature(BiomeClimateTuning.CHARRED_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x423E42)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x423E42))
                 .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 15.0F)
-                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.CHARRED_FOREST.skyColor())
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x685F70)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.CHARRED_FOREST.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x685F70))
                 .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 10.0F)
                 .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 96.0F)
                 .setAttribute(EnvironmentAttributes.SKY_FOG_END_DISTANCE, 96.0F)

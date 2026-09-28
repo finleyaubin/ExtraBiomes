@@ -1,14 +1,14 @@
 package net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Fluids;
 
 /**
@@ -20,21 +20,22 @@ import net.minecraft.world.level.material.Fluids;
  * chunk origin) and explicitly schedules a fluid tick on every lava block it finds near the surface,
  * kicking off normal fluid physics from there - the same as if a player had just placed it by hand.
  */
-public class LavaFlowKickstartFeature extends Feature<NoneFeatureConfiguration> {
+public class LavaFlowKickstartFeature implements Feature {
     // Generous on purpose: WORLD_SURFACE_WG's reported top can shift a little once later
     // LOCAL_MODIFICATIONS features (rock formations, volcanoes) dig into the same columns, and
     // missing a pocket here means that whole pocket never gets a scheduled tick at all - better to
     // over-scan than silently skip lava that's a few blocks deeper than expected.
     private static final int SEARCH_DEPTH = 12;
 
-    public LavaFlowKickstartFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<LavaFlowKickstartFeature> CODEC = MapCodec.unit(LavaFlowKickstartFeature::new);
+
+    @Override
+    public MapCodec<LavaFlowKickstartFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BlockPos origin = context.origin();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
         boolean scheduledAny = false;
 
         for (int dx = 0; dx < 16; dx++) {

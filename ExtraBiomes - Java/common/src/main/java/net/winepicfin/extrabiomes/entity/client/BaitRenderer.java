@@ -51,15 +51,15 @@ public class BaitRenderer extends EntityRenderer<BaitProjectileEntity, BaitProje
     @Override
     public void submit(BaitProjectileRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.interpolatedYRot - 90.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(state.interpolatedXRot));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.interpolatedYRot - 90.0F));
+        poseStack.rotate(Axis.ZP.rotationDegrees(state.interpolatedXRot));
         // The model's root part uses the humanoid PartPose.offset(0, 24, 0) convention, which LivingEntityRenderer normally un-flips; this renderer has no such base class, so the flip has to happen here.
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.translate(0.0D, -1.25D, 0.0D);
         // Not a LivingEntity, so the usual automatic red hurt tint doesn't apply - drive it off BaitProjectileEntity's own hurtTime instead.
         int overlay = OverlayTexture.pack(OverlayTexture.NO_WHITE_U, state.hurtTime > 0);
         int packedLight = state.lightCoords;
-        submitNodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(getTextureLocation(state)), packedLight, overlay, state.outlineColor, null);
+        submitNodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(getTextureLocation(state)), packedLight, overlay, state.outlineColor);
         poseStack.popPose();
         super.submit(state, poseStack, submitNodeCollector, cameraRenderState);
     }

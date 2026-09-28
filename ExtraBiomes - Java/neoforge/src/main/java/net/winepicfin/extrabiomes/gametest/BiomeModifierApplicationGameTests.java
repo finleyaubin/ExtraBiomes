@@ -12,6 +12,8 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.attribute.EnvironmentAttributeMap;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -115,8 +117,15 @@ public class BiomeModifierApplicationGameTests {
         helper.assertTrue(present, Component.literal("Expected " + expected.identifier() + " in " + step + " but it was missing"));
     }
 
+    // Biome no longer exposes mob spawns directly as of 26.3 - they're the NATURAL_MOB_SPAWNS
+    // EnvironmentAttribute, with BiomeModifier-added spawns applied as a modifier layered on top
+    // of the attribute's default value (see AttributeModifier#apply/EnvironmentAttributeMap.Entry).
     private static void assertHasSpawn(GameTestHelper helper, Biome biome, MobCategory category, EntityType<?> expected) {
-        boolean present = biome.getMobSettings().getMobs(category).unwrap().stream()
+        EnvironmentAttributeMap.Entry<MobSpawnSettings, ?> entry = biome.getAttributes().get(EnvironmentAttributes.NATURAL_MOB_SPAWNS);
+        MobSpawnSettings settings = entry != null
+                ? entry.applyModifier(EnvironmentAttributes.NATURAL_MOB_SPAWNS.defaultValue())
+                : EnvironmentAttributes.NATURAL_MOB_SPAWNS.defaultValue();
+        boolean present = settings.getMobsInCategory(category).unwrap().stream()
                 .anyMatch(spawnerData -> spawnerData.value().type() == expected);
         helper.assertTrue(present, Component.literal("Expected " + category + " spawn of " + expected + " but it was missing"));
     }

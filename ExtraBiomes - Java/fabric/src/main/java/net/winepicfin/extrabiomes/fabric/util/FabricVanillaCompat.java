@@ -1,13 +1,13 @@
 package net.winepicfin.extrabiomes.fabric.util;
 
+import net.fabricmc.fabric.api.item.v1.BlockTransformerHelper;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.world.level.block.Block;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 
 // Fabric equivalent of forge/.../util/ModVanillaCompat.java + the axe-stripping half of
 // forge/.../block/custom/ModLogs.java's getToolModifiedState override. Neither needs a custom
-// Block subclass on Fabric: FlammableBlockRegistry/StrippableBlockRegistry cover exactly what
+// Block subclass on Fabric: FlammableBlockRegistry/BlockTransformerHelper cover exactly what
 // those Forge-only per-block method overrides did (and the overrides were already redundant with
 // this same flammability data on Forge - see forge/.../ModVanillaCompat's STICK_PILE entry, which
 // registers the same (50, 50) values StickPileBlock's overrides also hardcoded). Fabric's
@@ -78,12 +78,12 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.GILDED_SKY_TRAPDOOR.get(), 5, 20);
 
         // Axe stripping - matches forge/.../block/custom/ModLogs.java's getToolModifiedState
-        StrippableBlockRegistry.register(ModBlocks.MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get());
-        StrippableBlockRegistry.register(ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPPED_MYSTIC_WOOD.get());
-        StrippableBlockRegistry.register(ModBlocks.SKY_LOG.get(), ModBlocks.STRIPPED_SKY_LOG.get());
-        StrippableBlockRegistry.register(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_WOOD.get());
-        StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_LOG.get(), ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
-        StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_WOOD.get(), ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPPED_MYSTIC_WOOD.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.SKY_LOG.get(), ModBlocks.STRIPPED_SKY_LOG.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_WOOD.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.GILDED_SKY_LOG.get(), ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.GILDED_SKY_WOOD.get(), ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
     }
 
     private static void registerFlammable(Block block, int burn, int spread) {

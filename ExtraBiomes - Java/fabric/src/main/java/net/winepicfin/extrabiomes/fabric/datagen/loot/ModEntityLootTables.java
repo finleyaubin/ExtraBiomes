@@ -1,36 +1,28 @@
 package net.winepicfin.extrabiomes.fabric.datagen.loot;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricEntityLootSubProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.winepicfin.extrabiomes.commondatagen.loot.ModEntityLootTableEntries;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 
 // Fabric wiring for the shared entity loot table entries in
 // net.winepicfin.extrabiomes.commondatagen.loot.ModEntityLootTableEntries (common) - see that class's
-// javadoc for why the entries live there instead of here directly. Unlike Forge, plain vanilla's
-// EntityLootSubProvider.generate(BiConsumer) hardcodes a completeness check against the ENTIRE
-// BuiltInRegistries.ENTITY_TYPE registry (throws "Missing loottable 'minecraft:entities/allay' for
-// 'minecraft:allay'" - and every other vanilla/other-mod entity - since nothing here generates
-// tables for entities that aren't ours), the same problem ModBlockLootTables hit. Fabric API has no
-// entity-specific scoped provider (unlike FabricBlockLootSubProvider for blocks), so this instead
-// extends the generic SimpleFabricLootTableSubProvider and implements the raw BiConsumer callback
-// directly, sidestepping EntityLootSubProvider (and its completeness check) entirely.
-public class ModEntityLootTables extends SimpleFabricLootTableSubProvider {
+// javadoc for why the entries live there instead of here directly. FabricEntityLootSubProvider scopes
+// EntityLootSubProvider's completeness check to this mod's own entities (same fix
+// FabricBlockLootSubProvider applies for blocks), so unlike before this can extend it directly instead
+// of sidestepping EntityLootSubProvider with a raw BiConsumer callback.
+public class ModEntityLootTables extends FabricEntityLootSubProvider {
     private final CompletableFuture<HolderLookup.Provider> registriesFuture;
 
     public ModEntityLootTables(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, registriesFuture, LootContextParamSets.ENTITY);
+        super(output, registriesFuture);
         this.registriesFuture = registriesFuture;
     }
 
     @Override
-    public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
-        ModEntityLootTableEntries.populate(registriesFuture.join(), (entityType, builder) -> consumer.accept(entityType.getDefaultLootTable().orElseThrow(), builder));
+    public void generate() {
+        ModEntityLootTableEntries.populate(registriesFuture.join(), this::add);
     }
 }

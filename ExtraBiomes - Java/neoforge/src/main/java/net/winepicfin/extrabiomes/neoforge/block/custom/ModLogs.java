@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.neoforge.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.AxeItem;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -34,7 +34,7 @@ public class ModLogs extends RotatedPillarBlock {
 
     @Override
     public @Nullable BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility toolAction, boolean simulate) {
-        if (context.getItemInHand().getItem() instanceof AxeItem) {
+        if (context.getItemInHand().is(ItemTags.AXES)) {
             if (state.is(ModBlocks.MYSTIC_LOG.get())) {
                 return ModBlocks.STRIPPED_MYSTIC_LOG.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
             }

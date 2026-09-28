@@ -1,31 +1,32 @@
 package net.winepicfin.extrabiomes.worldgen.features.moorland;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
  * Java port of the Bedrock "minecraft:grass_double_plant_patch_feature" placed by
  * "moorlands_scatter_double_tall_grass_feature". Vanilla's own Feature.SIMPLE_BLOCK only ever
  * sets a single block, so double-tall plants (tall grass) need both halves set explicitly.
  */
-public class DoubleTallGrassFeature extends Feature<NoneFeatureConfiguration> {
+public class DoubleTallGrassFeature implements Feature {
 
-    public DoubleTallGrassFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<DoubleTallGrassFeature> CODEC = MapCodec.unit(DoubleTallGrassFeature::new);
+
+    @Override
+    public MapCodec<DoubleTallGrassFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BlockPos lower = context.origin();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos lower) {
         BlockPos upper = lower.above();
         BlockPos ground = lower.below();
 

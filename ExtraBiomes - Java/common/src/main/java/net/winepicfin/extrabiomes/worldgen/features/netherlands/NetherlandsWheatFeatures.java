@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
+import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.HolderGetter;
@@ -8,9 +9,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
@@ -43,25 +42,25 @@ import java.util.List;
  */
 public class NetherlandsWheatFeatures {
     // Registered in Registries.FEATURE (not just DeferredRegister) so the codec gets a stable registry name for ConfiguredFeature serialization/datagen.
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
+    public static final DeferredRegister<MapCodec<? extends Feature>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE_TYPE);
 
-    public static final RegistrySupplier<NetherlandsWheatFieldFeature> WHEAT_FIELD_FEATURE =
-            FEATURES.register("netherlands_wheat_field", () -> new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<MapCodec<NetherlandsWheatFieldFeature>> WHEAT_FIELD_FEATURE =
+            FEATURES.register("netherlands_wheat_field", () -> NetherlandsWheatFieldFeature.CODEC);
 
     /** Must be called once from the mod's main class, e.g. {@code NetherlandsWheatFeatures.register();}. */
     public static void register() {
         FEATURES.register();
     }
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_FLOOR_KEY = key("netherlands_wheat_floor");
+    public static final ResourceKey<Feature> WHEAT_FLOOR_KEY = key("netherlands_wheat_floor");
     public static final ResourceKey<PlacedFeature> WHEAT_FLOOR_PLACED_KEY = placedKey("netherlands_wheat_floor");
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(WHEAT_FLOOR_KEY, new ConfiguredFeature<>(WHEAT_FIELD_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(WHEAT_FLOOR_KEY, new NetherlandsWheatFieldFeature());
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         // No CountPlacement/InSquarePlacement: the feature iterates every column of its chunk itself, so
         // this only needs to run exactly once per chunk. Deliberately no BiomeFilter either - without
@@ -76,8 +75,8 @@ public class NetherlandsWheatFeatures {
         context.register(WHEAT_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_FLOOR_KEY), once));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+    private static ResourceKey<Feature> key(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {

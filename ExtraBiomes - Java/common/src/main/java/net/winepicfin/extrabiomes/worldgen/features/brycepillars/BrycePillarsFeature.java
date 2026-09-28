@@ -1,19 +1,22 @@
 package net.winepicfin.extrabiomes.worldgen.features.brycepillars;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
+import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,28 +31,28 @@ import java.util.concurrent.ConcurrentHashMap;
  * noise profile (steep, uneven peaks and valleys, tapering to nothing at both ends) rather than
  * tapering to a single point. That's what produces a "wall with broken teeth" silhouette instead of
  * a spike. Formations are placed sparsely: a column only becomes an origin if it clears
- * {@link BrycePillarsConfiguration#threshold()} on a coarse mask field AND is the maximum among
+ * {@link BrycePillarsFeature#threshold()} on a coarse mask field AND is the maximum among
  * neighbours {@link #ORIGIN_SPACING_RADIUS} blocks away (not just adjacent columns), which is what
  * keeps formations from crowding - the previous per-column approach cleared entire chunks nearly
  * solid because every column got its own chance to spawn something. The mask field's sample
  * coordinates are still pushed around by a coarse warp pair (see {@link #maskAt}) so origins cluster
  * into loose groups rather than a perfectly even lattice. The materials (and height/thickness/
- * rarity/edge-roughness tuning) come from the per-biome {@link BrycePillarsConfiguration}, and the
+ * rarity/edge-roughness tuning) come from the per-biome {@link BrycePillarsFeature}, and the
  * 192-layer terracotta-style Y banding ({@link #getBandedMaterial}) is unchanged from before.
  */
-public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
+public record BrycePillarsFeature(BlockState backgroundMaterial, List<BlockState> streakPalette, int minHeight, int maxHeight, float threshold, int maxRadius, float erosionStrength, Optional<BlockState> capMaterial) implements Feature {
     // Decides WHERE a fin's origin column is. Coarser-feeling than its NOISE_SCALE alone suggests, because ORIGIN_SPACING_RADIUS enforces real separation between accepted origins on top of the raw threshold.
-    private static final PerlinSimplexNoise FIN_ORIGIN_NOISE = new PerlinSimplexNoise(RandomSource.create(2345L), List.of(0));
-    private static final PerlinSimplexNoise PILLAR_ROOF_NOISE = new PerlinSimplexNoise(RandomSource.create(4321L), List.of(0));
+    private static final SimplexNoise FIN_ORIGIN_NOISE = new SimplexNoise(RandomSource.create(2345L));
+    private static final SimplexNoise PILLAR_ROOF_NOISE = new SimplexNoise(RandomSource.create(4321L));
     // Reused for the fin's edge roughness (see placeFin) - same "weathered, not a razor-straight wall" role erosion played on the old cone's radius.
-    private static final PerlinSimplexNoise EROSION_NOISE = new PerlinSimplexNoise(RandomSource.create(9876L), List.of(0));
-    private static final PerlinSimplexNoise BAND_OFFSET_NOISE = new PerlinSimplexNoise(RandomSource.create(1357L), List.of(0));
-    private static final PerlinSimplexNoise WARP_NOISE_X = new PerlinSimplexNoise(RandomSource.create(2468L), List.of(0));
-    private static final PerlinSimplexNoise WARP_NOISE_Z = new PerlinSimplexNoise(RandomSource.create(8642L), List.of(0));
+    private static final SimplexNoise EROSION_NOISE = new SimplexNoise(RandomSource.create(9876L));
+    private static final SimplexNoise BAND_OFFSET_NOISE = new SimplexNoise(RandomSource.create(1357L));
+    private static final SimplexNoise WARP_NOISE_X = new SimplexNoise(RandomSource.create(2468L));
+    private static final SimplexNoise WARP_NOISE_Z = new SimplexNoise(RandomSource.create(8642L));
     // Sampled at several coordinate offsets (see place()) to pick one fin's orientation, length, and the per-fin seed RIDGE_NOISE uses - stable because each is keyed only on the fin's own origin (x, z).
-    private static final PerlinSimplexNoise FIN_NOISE = new PerlinSimplexNoise(RandomSource.create(1122L), List.of(0));
+    private static final SimplexNoise FIN_NOISE = new SimplexNoise(RandomSource.create(1122L));
     // Drives the jagged "broken teeth" crest profile along one fin's length - see computeFinColumnHeight.
-    private static final PerlinSimplexNoise RIDGE_NOISE = new PerlinSimplexNoise(RandomSource.create(7913L), List.of(0));
+    private static final SimplexNoise RIDGE_NOISE = new SimplexNoise(RandomSource.create(7913L));
     private static final double NOISE_SCALE = 0.25D;
     private static final double EROSION_SCALE = 0.35D;
     private static final double EROSION_SMOOTH_SCALE = 0.12D;
@@ -77,15 +80,34 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
     private static final int BAND_LAYER_COUNT = 192;
     private static final Map<BandCacheKey, List<BlockState>> BAND_CACHE = new ConcurrentHashMap<>();
 
-    public BrycePillarsFeature(Codec<BrycePillarsConfiguration> codec) {
-        super(codec);
+    // threshold raised 0.55 -> 0.85 since abs(simplex) cleared 0.55 (and even 0.75) on far too many columns for sparse, isolated Bryce Canyon-style hoodoos; maxHeight raised 15 -> 48 so the tallest pillars tower above the old vanilla mesa cap.
+    public BrycePillarsFeature(BlockState backgroundMaterial, List<BlockState> streakPalette) {
+        this(backgroundMaterial, streakPalette, Optional.empty());
+    }
+
+    public BrycePillarsFeature(BlockState backgroundMaterial, List<BlockState> streakPalette, Optional<BlockState> capMaterial) {
+        this(backgroundMaterial, streakPalette, 5, 48, 0.97F, 4, 1.5F, capMaterial);
+    }
+
+    public static final MapCodec<BrycePillarsFeature> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            BlockState.CODEC.fieldOf("background_material").forGetter(BrycePillarsFeature::backgroundMaterial),
+            BlockState.CODEC.listOf().optionalFieldOf("streak_palette", List.of()).forGetter(BrycePillarsFeature::streakPalette),
+            Codec.intRange(0, 96).optionalFieldOf("min_height", 5).forGetter(BrycePillarsFeature::minHeight),
+            Codec.intRange(0, 96).optionalFieldOf("max_height", 48).forGetter(BrycePillarsFeature::maxHeight),
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("threshold", 0.97F).forGetter(BrycePillarsFeature::threshold),
+            Codec.intRange(0, 16).optionalFieldOf("max_radius", 4).forGetter(BrycePillarsFeature::maxRadius),
+            Codec.floatRange(0.0F, 8.0F).optionalFieldOf("erosion_strength", 1.5F).forGetter(BrycePillarsFeature::erosionStrength),
+            BlockState.CODEC.optionalFieldOf("cap_material").forGetter(BrycePillarsFeature::capMaterial)
+    ).apply(instance, BrycePillarsFeature::new));
+
+    @Override
+    public MapCodec<BrycePillarsFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<BrycePillarsConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BrycePillarsConfiguration config = context.config();
-        BlockPos origin = context.origin();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        BrycePillarsFeature config = this;
         // Materials are chosen deterministically by absolute Y (getBandedMaterial), so this feature needs no placement RandomSource.
         List<BlockState> bands = getOrBuildBands(level.getSeed(), config);
         // Normalize to the chunk's corner regardless of what x/z the placement modifiers picked - this feature scans the whole 16x16 column grid itself rather than placing at one point.
@@ -113,16 +135,16 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
                 double strength = (mask - config.threshold()) / (1.0D - config.threshold());
                 // warpAt(warpCache, x, z)[0] is exactly the WARP_NOISE_X sample regionalHeight needs (pre * WARP_STRENGTH) - dividing it back out reuses the cached warp instead of resampling the same noise field a second time.
                 double regionalHeight = warpAt(warpCache, x, z)[0] / WARP_STRENGTH;
-                double roof = PILLAR_ROOF_NOISE.getValue(x * NOISE_SCALE, z * NOISE_SCALE, false);
+                double roof = PILLAR_ROOF_NOISE.get(x * NOISE_SCALE, z * NOISE_SCALE);
                 int crestHeight = computeCrestHeight(config, strength, roof, regionalHeight);
                 if (crestHeight <= 0) continue;
 
                 // Angle, length, and the ridge-profile seed are each their own FIN_NOISE sample at a well-separated coordinate offset (same trick BULGE_NOISE used previously) - independent-feeling per fin, but still a stable, deterministic function of the fin's own origin.
-                double angle = FIN_NOISE.getValue((x + 9000) * FIN_COORD_SCALE, (z + 9000) * FIN_COORD_SCALE, false) * Math.PI;
-                double lengthT = (FIN_NOISE.getValue((x + 1000) * FIN_COORD_SCALE, (z + 1000) * FIN_COORD_SCALE, false) + 1.0D) / 2.0D;
+                double angle = FIN_NOISE.get((x + 9000) * FIN_COORD_SCALE, (z + 9000) * FIN_COORD_SCALE) * Math.PI;
+                double lengthT = (FIN_NOISE.get((x + 1000) * FIN_COORD_SCALE, (z + 1000) * FIN_COORD_SCALE) + 1.0D) / 2.0D;
                 int length = (int) Math.round(FIN_LENGTH_MIN + lengthT * (FIN_LENGTH_MAX - FIN_LENGTH_MIN));
                 int halfThickness = Math.max(1, config.maxRadius() / 2);
-                double ridgeSeed = FIN_NOISE.getValue((x + 5000) * FIN_COORD_SCALE, (z + 5000) * FIN_COORD_SCALE, false) * 1000.0D;
+                double ridgeSeed = FIN_NOISE.get((x + 5000) * FIN_COORD_SCALE, (z + 5000) * FIN_COORD_SCALE) * 1000.0D;
 
                 placedAny |= placeFin(level, x, z, angle, length, halfThickness, crestHeight, ridgeSeed, bands, config);
             }
@@ -136,7 +158,7 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
      * ({@code regionalHeight}, the caller's already-cached warp sample) so fins in the same
      * warp-driven region trend toward a shared height band rather than each rolling independently.
      */
-    private static int computeCrestHeight(BrycePillarsConfiguration config, double strength, double roof, double regionalHeight) {
+    private static int computeCrestHeight(BrycePillarsFeature config, double strength, double roof, double regionalHeight) {
         int span = config.maxHeight() - config.minHeight();
         int height = config.minHeight() + (int) Math.round(strength * span)
                 + (int) Math.round(roof * span * ROOF_INFLUENCE)
@@ -154,7 +176,7 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
      * placed at least one block.
      */
     private static boolean placeFin(WorldGenLevel level, int originX, int originZ, double angle, int length, int halfThickness,
-                                     int crestHeight, double ridgeSeed, List<BlockState> bands, BrycePillarsConfiguration config) {
+                                     int crestHeight, double ridgeSeed, List<BlockState> bands, BrycePillarsFeature config) {
         double dirAlongX = Math.cos(angle);
         double dirAlongZ = Math.sin(angle);
         double dirAcrossX = -dirAlongZ;
@@ -216,12 +238,12 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
         double t = length > 0 ? Math.min(1.0D, Math.max(0.0D, along / length)) : 0.5D;
         double envelope = Math.sin(t * Math.PI);
         double envelopeHeight = MIN_TAPER_HEIGHT + envelope * Math.max(0, crestHeight - MIN_TAPER_HEIGHT);
-        double ridged = 1.0D - Math.abs(RIDGE_NOISE.getValue(along * RIDGE_SCALE, ridgeSeed, false));
+        double ridged = 1.0D - Math.abs(RIDGE_NOISE.get(along * RIDGE_SCALE, ridgeSeed));
         double jaggedFactor = RIDGE_BASELINE + (1.0D - RIDGE_BASELINE) * ridged;
         return Math.max(0, (int) Math.round(envelopeHeight * jaggedFactor));
     }
 
-    private static boolean isRegionalMaximum(PerlinSimplexNoise field, Map<Long, double[]> warpCache, int x, int z, double mask, int radius) {
+    private static boolean isRegionalMaximum(SimplexNoise field, Map<Long, double[]> warpCache, int x, int z, double mask, int radius) {
         return mask >= maskAt(field, warpCache, x + radius, z)
                 && mask >= maskAt(field, warpCache, x - radius, z)
                 && mask >= maskAt(field, warpCache, x, z + radius)
@@ -237,9 +259,9 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
      * and compressed region by region, producing loose groups of fins in some areas and long open
      * gaps in others rather than one somewhere-nearby every few dozen blocks everywhere.
      */
-    private static double maskAt(PerlinSimplexNoise field, Map<Long, double[]> warpCache, int x, int z) {
+    private static double maskAt(SimplexNoise field, Map<Long, double[]> warpCache, int x, int z) {
         double[] warp = warpAt(warpCache, x, z);
-        return Math.abs(field.getValue((x + warp[0]) * NOISE_SCALE, (z + warp[1]) * NOISE_SCALE, false));
+        return Math.abs(field.get((x + warp[0]) * NOISE_SCALE, (z + warp[1]) * NOISE_SCALE));
     }
 
     /**
@@ -250,8 +272,8 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
      */
     private static double[] warpAt(Map<Long, double[]> warpCache, int x, int z) {
         return warpCache.computeIfAbsent(packKey(x, z), key -> {
-            double warpX = WARP_NOISE_X.getValue(x * WARP_COORD_SCALE, z * WARP_COORD_SCALE, false) * WARP_STRENGTH;
-            double warpZ = WARP_NOISE_Z.getValue(x * WARP_COORD_SCALE, z * WARP_COORD_SCALE, false) * WARP_STRENGTH;
+            double warpX = WARP_NOISE_X.get(x * WARP_COORD_SCALE, z * WARP_COORD_SCALE) * WARP_STRENGTH;
+            double warpZ = WARP_NOISE_Z.get(x * WARP_COORD_SCALE, z * WARP_COORD_SCALE) * WARP_STRENGTH;
             return new double[]{warpX, warpZ};
         });
     }
@@ -269,8 +291,8 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
      * going perfectly straight.
      */
     private static double erosionAt(int x, int z) {
-        double fine = EROSION_NOISE.getValue(x * EROSION_SCALE, z * EROSION_SCALE, false);
-        double smooth = EROSION_NOISE.getValue(x * EROSION_SMOOTH_SCALE, z * EROSION_SMOOTH_SCALE, false);
+        double fine = EROSION_NOISE.get(x * EROSION_SCALE, z * EROSION_SCALE);
+        double smooth = EROSION_NOISE.get(x * EROSION_SMOOTH_SCALE, z * EROSION_SMOOTH_SCALE);
         return fine * EROSION_FINE_WEIGHT + smooth * EROSION_SMOOTH_WEIGHT;
     }
 
@@ -295,12 +317,12 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
         if (isBaseRow && bands.contains(anchorState)) {
             return anchorState;
         }
-        double noiseValue = BAND_OFFSET_NOISE.getValue(x * BAND_OFFSET_COORD_SCALE, z * BAND_OFFSET_COORD_SCALE, false) * BAND_OFFSET_MAX;
+        double noiseValue = BAND_OFFSET_NOISE.get(x * BAND_OFFSET_COORD_SCALE, z * BAND_OFFSET_COORD_SCALE) * BAND_OFFSET_MAX;
         int index = Math.floorMod((int) Math.round(y + noiseValue), bands.size());
         return bands.get(index);
     }
 
-    private static List<BlockState> getOrBuildBands(long seed, BrycePillarsConfiguration config) {
+    private static List<BlockState> getOrBuildBands(long seed, BrycePillarsFeature config) {
         return BAND_CACHE.computeIfAbsent(new BandCacheKey(seed, config),
                 key -> generateBands(RandomSource.create(key.seed() ^ key.config().hashCode()), key.config()));
     }
@@ -315,7 +337,7 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
      * jungle_pillars' flat stone) collapses this to one repeated colour, which still runs through
      * the exact same indexing logic as the terracotta biomes.
      */
-    private static List<BlockState> generateBands(RandomSource random, BrycePillarsConfiguration config) {
+    private static List<BlockState> generateBands(RandomSource random, BrycePillarsFeature config) {
         BlockState[] layers = new BlockState[BAND_LAYER_COUNT];
         Arrays.fill(layers, config.backgroundMaterial());
         List<BlockState> streakPalette = config.streakPalette();
@@ -333,6 +355,6 @@ public class BrycePillarsFeature extends Feature<BrycePillarsConfiguration> {
         return List.of(layers);
     }
 
-    private record BandCacheKey(long seed, BrycePillarsConfiguration config) {
+    private record BandCacheKey(long seed, BrycePillarsFeature config) {
     }
 }

@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.datagen.loot;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -12,13 +12,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
-    public ModBlockLootTables(HolderLookup.Provider registries) {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
+    public ModBlockLootTables(LootTableSubProvider.Context context) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), context);
     }
 
     @Override
     protected void generate() {
         ModBlockLootTableEntries.populate(
+                this.blocks,
                 this::dropSelf,
                 this::add,
                 this::createSlabItemTable,

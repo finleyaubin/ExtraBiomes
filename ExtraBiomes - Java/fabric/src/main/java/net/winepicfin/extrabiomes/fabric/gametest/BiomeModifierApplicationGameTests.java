@@ -8,10 +8,12 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -83,13 +85,14 @@ public class BiomeModifierApplicationGameTests {
     }
 
     @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
-    public void plainsGetsHarpySpawn(GameTestHelper helper) {
-        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: starting");
-        Biome plains = biome(helper, Biomes.PLAINS);
+    public void overworldGetsHarpySpawn(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] overworldGetsHarpySpawn: starting");
+        // Since 26.3 the gametest overworld is flat desert, the only biome foundInOverworld() matches here.
+        Biome desert = biome(helper, Biomes.DESERT);
 
-        assertHasSpawn(helper, plains, MobCategory.MONSTER, ModEntities.HARPY.get());
+        assertHasSpawn(helper, desert, MobCategory.MONSTER, ModEntities.HARPY.get());
 
-        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: passed");
+        LOGGER.info("[BiomeModifierApplicationGameTests] overworldGetsHarpySpawn: passed");
         helper.succeed();
     }
 
@@ -113,7 +116,9 @@ public class BiomeModifierApplicationGameTests {
     }
 
     private static void assertHasSpawn(GameTestHelper helper, Biome biome, MobCategory category, EntityType<?> expected) {
-        boolean present = biome.getMobSettings().getMobs(category).unwrap().stream()
+        MobSpawnSettings mobSpawnSettings = biome.getAttributes().applyModifier(
+                EnvironmentAttributes.NATURAL_MOB_SPAWNS, EnvironmentAttributes.NATURAL_MOB_SPAWNS.defaultValue());
+        boolean present = mobSpawnSettings.getMobsInCategory(category).unwrap().stream()
                 .anyMatch(spawnerData -> spawnerData.value().type() == expected);
         helper.assertTrue(present, Component.literal("Expected " + category + " spawn of " + expected + " but it was missing"));
     }

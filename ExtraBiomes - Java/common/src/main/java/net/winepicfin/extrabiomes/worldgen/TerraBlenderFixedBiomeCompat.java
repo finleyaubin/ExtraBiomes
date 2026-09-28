@@ -12,7 +12,7 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import terrablender.DimensionTypeTags;
-import terrablender.api.SurfaceRuleManager;
+import terrablender.api.MaterialRuleManager;
 import terrablender.worldgen.IExtendedNoiseGeneratorSettings;
 
 import java.util.Map;
@@ -51,13 +51,13 @@ public class TerraBlenderFixedBiomeCompat {
 
             Holder<DimensionType> dimensionType = stem.type();
             // TerraBlender renamed IExtendedNoiseGeneratorSettings#setRegionType(RegionType) to
-            // #setRuleCategory(SurfaceRuleManager.RuleCategory) between 3.2.0.14 and 3.3.0.12 - same
+            // #setRuleCategory(MaterialRuleManager.RuleCategory) between 3.2.0.14 and 3.3.0.12 - same
             // OVERWORLD/NETHER split, just a different enum type.
-            SurfaceRuleManager.RuleCategory ruleCategory;
+            MaterialRuleManager.RuleCategory ruleCategory;
             if (dimensionType.is(DimensionTypeTags.NETHER_REGIONS)) {
-                ruleCategory = SurfaceRuleManager.RuleCategory.NETHER;
+                ruleCategory = MaterialRuleManager.RuleCategory.NETHER;
             } else if (dimensionType.is(DimensionTypeTags.OVERWORLD_REGIONS)) {
-                ruleCategory = SurfaceRuleManager.RuleCategory.OVERWORLD;
+                ruleCategory = MaterialRuleManager.RuleCategory.OVERWORLD;
             } else {
                 continue;
             }

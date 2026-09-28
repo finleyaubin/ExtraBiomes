@@ -30,6 +30,13 @@ public final class LootTableParity {
             "looting_enchant", "enchanted_count_increase",
             "random_chance_with_looting", "random_chance_with_enchanted_bonus");
 
+    // 26.3 renamed Java's loot keys; Bedrock kept the old names.
+    private static final Map<String, String> BEDROCK_TO_JAVA_KEY = Map.of(
+            "functions", "modifier",
+            "conditions", "condition",
+            "function", "type",
+            "condition", "type");
+
     public static void assertMatches(JsonObject bedrockRoot, JsonObject javaRoot) {
         compare(bedrockRoot.get("pools"), javaRoot.get("pools"), "pools");
     }
@@ -53,10 +60,12 @@ public final class LootTableParity {
             JsonObject j = java.getAsJsonObject();
             for (String key : b.keySet()) {
                 JsonElement bVal = b.get(key);
-                JsonElement jVal = j.has(key) ? j.get(key) : null;
+                String javaKey = BEDROCK_TO_JAVA_KEY.getOrDefault(key, key);
+                JsonElement jVal = j.has(javaKey) ? j.get(javaKey) : null;
                 if (jVal == null && "weight".equals(key) && bVal.getAsDouble() == 1.0) {
                     continue; // Java's datagen omits the default weight of 1
                 }
+                jVal = expandToSingletonArray(javaKey, bVal, jVal);
                 compare(normalizeCount(key, bVal), normalizeCount(key, jVal), path + "." + key);
             }
         } else {
@@ -92,6 +101,19 @@ public final class LootTableParity {
         enchantedChance.addProperty("per_level_above_first", multiplier);
         reshaped.add("enchanted_chance", enchantedChance);
         return reshaped;
+    }
+
+    // Java writes a lone modifier/condition as a bare object where Bedrock keeps a one-element array.
+    private static JsonElement expandToSingletonArray(String javaKey, JsonElement bedrockVal, JsonElement javaVal) {
+        if (javaVal == null || !javaVal.isJsonObject() || !bedrockVal.isJsonArray()) {
+            return javaVal;
+        }
+        if (!"modifier".equals(javaKey) && !"condition".equals(javaKey)) {
+            return javaVal;
+        }
+        JsonArray wrapped = new JsonArray();
+        wrapped.add(javaVal);
+        return wrapped;
     }
 
     // Both sides may express a fixed count as either {"min": n, "max": n} or a bare number n.

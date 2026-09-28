@@ -1,14 +1,14 @@
 package net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
  * Port of Bedrock's extrabiomes:volcanic_moss_tundra/basalt_bank aggregate_feature: a fixed
@@ -29,7 +29,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  * real lava/magma block already present nearby before placing anything, so basalt pillars only ever
  * appear hugging a river/bank that actually generated.
  */
-public class BasaltBankFeature extends Feature<NoneFeatureConfiguration> {
+public class BasaltBankFeature implements Feature {
     private static final int RIVER_PROXIMITY_RADIUS = 10;
 
     // {dx, dz, height} - see basalt_bank/c{col}_r{row}.json (dx=col, dz=row); height is basalt_pillar_1..5's 3/4/5/6/7.
@@ -42,14 +42,15 @@ public class BasaltBankFeature extends Feature<NoneFeatureConfiguration> {
             {7, 0, 3}, {7, 2, 3}, {7, 4, 3},
     };
 
-    public BasaltBankFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<BasaltBankFeature> CODEC = MapCodec.unit(BasaltBankFeature::new);
+
+    @Override
+    public MapCodec<BasaltBankFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BlockPos origin = context.origin();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
         if (!isNearLavaOrMagma(level, origin.getX(), origin.getZ(), RIVER_PROXIMITY_RADIUS)) {
             return false;
         }

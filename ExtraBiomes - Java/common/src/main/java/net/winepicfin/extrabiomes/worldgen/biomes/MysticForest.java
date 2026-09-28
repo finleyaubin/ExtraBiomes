@@ -2,6 +2,8 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.sounds.Musics;
@@ -24,12 +26,12 @@ public class MysticForest {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, 5, new MobSpawnSettings.SpawnerData(EntityTypes.FROG, 4, 4));
+        spawnBuilder.addSpawn(EntityTypes.FROG, MobCategory.CREATURE, 5, UniformInt.of(4, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         // swampVegetation < defaultMushrooms is the order ShatteredSwamp already establishes for that
         // pair - FeatureSorter shares one global per-step order across all biomes, so this has to
@@ -66,10 +68,10 @@ public class MysticForest {
                 .temperature(BiomeClimateTuning.MYSTIC_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x3A5F78)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x3A5F78))
                 .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 12.0F)
-                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.MYSTIC_FOREST.skyColor())
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x4A3C2D)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.MYSTIC_FOREST.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x4A3C2D))
                 .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 32.0F)
                 .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 1200.0F)
                 .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, AmbientParticle.of(ParticleTypes.PORTAL, 0.100193334F))

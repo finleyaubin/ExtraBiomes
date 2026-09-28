@@ -202,21 +202,6 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
         ));
-
-        // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
-        // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
-        // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
-        // glazed terracotta isn't in that tag at all. Adding the four colors used there fixes it.
-        this.tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).add(keys(
-                Blocks.GLAZED_TERRACOTTA.white(),
-                Blocks.GLAZED_TERRACOTTA.orange(),
-                Blocks.GLAZED_TERRACOTTA.red(),
-                Blocks.GLAZED_TERRACOTTA.black(),
-                // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
-                Blocks.NETHERRACK
-        ));
-
-
     }
 
     // Vanilla's BlockTags no longer exposes LOGS_THAT_BURN as a constant (26.2), but the tag itself

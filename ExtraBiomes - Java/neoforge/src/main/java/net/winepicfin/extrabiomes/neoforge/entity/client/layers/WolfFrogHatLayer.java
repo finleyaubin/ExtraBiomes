@@ -86,7 +86,7 @@ public class WolfFrogHatLayer extends RenderLayer<WolfRenderState, WolfModel> {
         }
         poseStack.translate(0.05D, 0.15D, -0.02D);
         poseStack.scale(1F, 1F, 1F);
-        poseStack.mulPose(Axis.XP.rotationDegrees(0.0F));
+        poseStack.rotate(Axis.XP.rotationDegrees(0.0F));
         // cameraState only reaches GeoRenderLayers/pre-post-render hooks, none of which this
         // renderer uses, so an empty one is fine here - RenderLayer#submit isn't handed a real one.
         this.renderer.performRenderPass(geoState, poseStack, submitNodeCollector, new CameraRenderState());
