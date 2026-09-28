@@ -1,0 +1,423 @@
+{
+  "generated": "2026-09-28",
+  "rows": [
+    {
+      "mc": "1.20.6",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "18.4.0.5",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.6 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.6 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.3.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.3",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.8",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.2.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "WWOO": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.5",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.5.13",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.world.level.biome.Biome@1385ac44}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.world.level.biome.Biome@b14f46}, Reference{Res"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.4.0.61",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "WWOO": {
+          "status": "missing-deps",
+          "version": "2.5.3",
+          "reason": "no build for dependencies P7dR8mSH"
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "21.5.98"
+    },
+    {
+      "mc": "1.21.10",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.5.13",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.class_1959@5fd16def}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.class_1959@6b86dcc2}, Reference{ResourceKey[minecraft:world"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.10.0.3",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "missing-deps",
+          "version": "4.2.2-Fabric",
+          "reason": "no build for dependencies ziOp6EO8"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.10 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.6.0",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.10",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.5.13",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.world.level.biome.Biome@752ea66f}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.world.level.biome.Biome@7e7a743f}, Reference{R"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.10.0.3",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "missing-deps",
+          "version": "4.2.2-NeoForge",
+          "reason": "no build for dependencies ziOp6EO8"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.6.0",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "21.10.64"
+    },
+    {
+      "mc": "26.1.2",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.6.2",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.world.level.biome.Biome@2bf2572c}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.world.level.biome.Biome@7d4e14b3}, Reference{R"
+        },
+        "Biomes O' Plenty": {
+          "status": "partner-broken",
+          "version": "26.1.2.0.22",
+          "reason": "[21:04:04] [main/ERROR]: Incompatible mods found!"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.1.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.7.0+beta2-fabric-26.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.0",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.1.2",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.6.2",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.world.level.biome.Biome@23112cf7}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.world.level.biome.Biome@6e11d03d}, Reference{R"
+        },
+        "Biomes O' Plenty": {
+          "status": "partner-broken",
+          "version": "26.1.2.0.22",
+          "reason": "[21:03:55] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.1.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.7.0+beta2-neoforge-26.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.0",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "26.1.2.112"
+    },
+    {
+      "mc": "26.2",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.6.4",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.world.level.biome.Biome@602c9957}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.world.level.biome.Biome@6d410a12}, Reference{R"
+        },
+        "Biomes O' Plenty": {
+          "status": "partner-broken",
+          "version": "26.1.2.0.40",
+          "reason": "[21:04:33] [main/ERROR]: Incompatible mods found!"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.2 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.2",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.6.4",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.world.level.biome.Biome@26613abe}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.world.level.biome.Biome@a121c63}, Reference{Re"
+        },
+        "Biomes O' Plenty": {
+          "status": "partner-broken",
+          "version": "26.1.2.0.40",
+          "reason": "[21:04:16] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "26.2.0.88"
+    },
+    {
+      "mc": "26.3",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.6.5+26.3",
+          "reason": "Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:sakura_valley]=net.minecraft.world.level.biome.Biome@7c777f59}, Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=net.minecraft.world.level.biome.Biome@2a95b9de}, Reference{R"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.3.0.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "3.0.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.3",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "crash",
+          "version": "",
+          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+        },
+        "Terralith": {
+          "status": "crash",
+          "version": "2.6.5+26.3",
+          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+        },
+        "Biomes O' Plenty": {
+          "status": "partner-broken",
+          "version": "26.3.0.0.7",
+          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "WWOO": {
+          "status": "crash",
+          "version": "3.0.1",
+          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "26.3.0.31-beta"
+    }
+  ]
+}
