@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -33,8 +34,15 @@ HEADERS = {"User-Agent": "finleyaubin/ExtraBiomes compat-grid"}
 def fetch(url):
     # Modrinth asks for a descriptive User-Agent; the Forge/NeoForge Mavens reject anything but a curl-like one.
     headers = HEADERS if urllib.parse.urlsplit(url).hostname == "api.modrinth.com" else {"User-Agent": "curl/8.5.0"}
-    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=120) as r:
-        return r.read()
+    # The Mavens intermittently 404 when many matrix jobs hit them at once.
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=120) as r:
+                return r.read()
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 3:
+                raise
+            time.sleep(15 * (attempt + 1))
 
 
 def fetch_json(url):
@@ -142,7 +150,7 @@ def boot(launch, server_dir, mod_files, log_path):
         code = wait_for_boot_then_stop(server, Path(log_path))
     text = Path(log_path).read_text(errors="replace")
     if "Feature order cycle found" in text:
-        return "cycle", first_line(text, r"Feature order cycle found.*")
+        return "cycle", "biomes: " + ", ".join(cycle_biomes(text))
     if code is None:
         return "timeout", f"no clean shutdown within {BOOT_TIMEOUT}s"
     if code == 0 and "Done (" in text:
@@ -169,6 +177,11 @@ def wait_for_boot_then_stop(server, log_path):
         server.wait()
         return None
     return server.returncode
+
+
+def cycle_biomes(text):
+    line = re.search(r"Feature order cycle found.*", text).group(0)
+    return sorted(set(re.findall(r"worldgen/biome / ([\w.-]+:[\w/.-]+)", line)))
 
 
 def first_line(text, pattern):
@@ -263,6 +276,8 @@ def cmd_selftest(_):
     assert [java_major(v) for v in ("1.20.1", "1.20.4", "1.20.6", "1.21", "1.21.11", "26.1.2")] == [17, 17, 21, 21, 21, 25]
     assert [neoforge_prefix(v) for v in ("1.20.2", "1.21", "1.21.10", "26.1.2", "26.2")] == ["20.2.", "21.0.", "21.10.", "26.1.2.", "26.2.0."]
     assert sorted(["1.21.10", "1.20.1", "26.2", "1.21.4"], key=version_key) == ["1.20.1", "1.21.4", "1.21.10", "26.2"]
+    cycle = "Caused by: java.lang.IllegalStateException: Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=B@1}, Reference{ResourceKey[minecraft:worldgen/biome / extrabiomes:lush_mesa_bryce]=B@2}]"
+    assert cycle_biomes(cycle) == ["extrabiomes:lush_mesa_bryce", "terralith:warm_river"]
     print("selftest ok")
 
 
