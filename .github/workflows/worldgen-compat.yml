@@ -1,0 +1,64 @@
+name: Worldgen Compat
+
+# Boots a Fabric dedicated server alongside other worldgen mods to catch "Feature order cycle found" crashes.
+on:
+  workflow_dispatch:
+    inputs:
+      mods:
+        description: "Optional: test only these comma-separated Modrinth slug:versionId pairs"
+        required: false
+        default: ""
+
+jobs:
+  compat:
+    name: compat (${{ matrix.mods }})
+    strategy:
+      fail-fast: false
+      matrix:
+        mods: ${{ inputs.mods && fromJSON(format('["{0}"]', inputs.mods)) || fromJSON('["terralith:WeYhEb5d", "regions-unexplored:rhE8MT9Z,forge-config-api-port:HvR3IdRE", "wwoo:cNiETBJi"]') }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDKs
+        uses: actions/setup-java@v5
+        with:
+          java-version: |
+            17
+            21
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Prepare Gradle
+        run: chmod +x gradlew
+
+      # Without the asset cache, runData hangs forever instead of failing (see gradle-build.yml).
+      - name: Download Loom assets
+        run: |
+          ./gradlew :forge:downloadAssets
+          ./gradlew :fabric:downloadAssets
+        timeout-minutes: 15
+
+      - name: Generate data
+        run: |
+          ./gradlew :forge:runData
+          ./gradlew :fabric:mergeGeneratedData
+        timeout-minutes: 15
+
+      - name: Check for feature order cycles
+        run: scripts/worldgen_compat_check.sh "${{ matrix.mods }}"
+        timeout-minutes: 15
+
+      - name: Upload server log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: worldgen-compat-log-${{ strategy.job-index }}
+          path: "ExtraBiomes - Java/worldgen-compat.log"
+          if-no-files-found: ignore

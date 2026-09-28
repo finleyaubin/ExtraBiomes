@@ -48,6 +48,10 @@ tasks.register("clearGameTestWorld", Delete) {
 tasks.named("runGameTestServer") {
     dependsOn "clearGameTestWorld"
 }
+// Lets the worldgen-compat workflow pipe "stop" into the dedicated server console.
+tasks.named("runServer") {
+    standardInput = System.in
+}
 
 fabricApi {
     configureDataGeneration {
@@ -120,6 +124,9 @@ dependencies {
     // plain compileOnly) because this jar is itself a real Fabric mod (has its own fabric.mod.json) still
     // in intermediary names - Loom needs to remap it the same as any other mod dependency.
     modCompileOnly files("libs/Registrate-fabric-1.3.79-MC1.20.1.jar")
+
+    // Other worldgen mods for the worldgen-compat workflow, e.g. -PcompatMods=terralith:WeYhEb5d,wwoo:cNiETBJi
+    findProperty("compatMods")?.split(",")?.each { modLocalRuntime "maven.modrinth:${it.trim()}" }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }

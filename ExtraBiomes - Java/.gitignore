@@ -43,3 +43,4 @@ forge*changelog.txt
 /.claude/skills/bump-mc-version/progress.json
 /.claude/skills/bump-mc-version/.venv/
 /.claude/skills/bump-mc-version/__pycache__/
+/worldgen-compat.log
