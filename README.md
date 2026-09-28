@@ -14,6 +14,7 @@ Generated 2026-09-28 by the Compat Grid workflow. Each cell boots a real server 
 | 1.20.4 | fabric | 3.10.0-beta-8 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
 | 1.20.4 | neoforge | 3.10.0-beta-8 | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ |
 | 1.20.6 | fabric | 3.10.0-beta-8 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 1.20.6 | neoforge | 3.10.0-beta-8 | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ |
 | 1.21.1 | fabric | 3.10.0-beta-8 | ✅ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ |
 | 1.21.1 | neoforge | 3.10.0-beta-8 | ✅ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ |
 | 1.21.3 | fabric | 3.10.0-beta-8 | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ |

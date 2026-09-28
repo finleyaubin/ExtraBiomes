@@ -306,6 +306,44 @@
       "loader_version": "0.19.5"
     },
     {
+      "mc": "1.20.6",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "18.4.0.5",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "WWOO": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        }
+      },
+      "extrabiomes": "3.10.0-beta-8",
+      "loader_version": "20.6.141"
+    },
+    {
       "mc": "1.21.1",
       "loader": "fabric",
       "results": {
@@ -531,7 +569,7 @@
         }
       },
       "extrabiomes": "3.10.0-beta-8",
-      "loader_version": "21.4.157"
+      "loader_version": "21.4.158"
     },
     {
       "mc": "1.21.5",
@@ -854,7 +892,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.22",
-          "reason": "[21:23:07] [main/ERROR]: Incompatible mods found!"
+          "reason": "[21:33:29] [main/ERROR]: Incompatible mods found!"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -892,7 +930,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.22",
-          "reason": "[21:19:38] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
+          "reason": "[21:33:30] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -930,7 +968,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.40",
-          "reason": "[21:20:01] [main/ERROR]: Incompatible mods found!"
+          "reason": "[21:31:14] [main/ERROR]: Incompatible mods found!"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -968,7 +1006,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.40",
-          "reason": "[21:22:24] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
+          "reason": "[21:34:36] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -1063,7 +1101,7 @@
         }
       },
       "extrabiomes": "3.10.0-beta-8",
-      "loader_version": "26.3.0.31-beta"
+      "loader_version": "26.3.0.33-beta"
     }
   ]
 }
