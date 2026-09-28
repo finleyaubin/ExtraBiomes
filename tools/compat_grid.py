@@ -27,6 +27,8 @@ PARTNERS = {
     "WWOO": "wwoo",
 }
 ALONE = "ExtraBiomes alone"
+# TerraBlender's 26.3 build uses DataPackRegistryEvent$NewRegistry, which later 26.3 betas removed.
+NEOFORGE_PINS = {"26.3": "26.3.0.19-beta"}
 BOOT_TIMEOUT = 900
 HEADERS = {"User-Agent": "finleyaubin/ExtraBiomes compat-grid"}
 
@@ -110,6 +112,8 @@ def maven_versions(artifact_url, prefix):
 
 
 def neoforge_version(mc):
+    if mc in NEOFORGE_PINS:
+        return NEOFORGE_PINS[mc]
     # NeoForge's maven-metadata.xml can briefly list only the newest build after a publish; the directory listing can't.
     listing = fetch_json("https://maven.neoforged.net/api/maven/details/releases/net/neoforged/neoforge")
     matching = sorted_versions([f["name"] for f in listing["files"] if f.get("type") == "DIRECTORY"], neoforge_prefix(mc))
@@ -206,11 +210,12 @@ def cmd_run(args):
         d.mkdir(parents=True, exist_ok=True)
     result = {"mc": args.mc, "loader": args.loader, "results": {}}
     extrabiomes = modrinth_version(EXTRABIOMES, args.mc, args.loader)
-    result["extrabiomes"] = extrabiomes["version_number"]
+    result["extrabiomes"] = f"local {Path(args.jar).name}" if args.jar else extrabiomes["version_number"]
     launch, result["loader_version"] = install_server(args.mc, args.loader, server_dir)
     base_versions, base_missing = resolve_with_deps(EXTRABIOMES, args.mc, args.loader)
 
-    for name, project in {ALONE: None, **PARTNERS}.items():
+    partners = {n: p for n, p in PARTNERS.items() if not args.only or n in args.only.split(",")}
+    for name, project in {ALONE: None, **partners}.items():
         entry = {"status": "n/a", "version": "", "reason": ""}
         result["results"][name] = entry
         versions, missing = list(base_versions), list(base_missing)
@@ -228,6 +233,9 @@ def cmd_run(args):
             continue
         files = []
         for v in versions:
+            if args.jar and v["project_id"] == extrabiomes["project_id"]:
+                files.append(Path(args.jar).resolve())
+                continue
             primary = next((f for f in v["files"] if f["primary"]), v["files"][0])
             files.append(download(primary["url"], cache / primary["filename"]))
         slug = project or "alone"
@@ -296,6 +304,8 @@ def main():
     run.add_argument("--loader", required=True)
     run.add_argument("--out", required=True)
     run.add_argument("--work", default="compat-work")
+    run.add_argument("--jar", help="test this local ExtraBiomes jar instead of the published one")
+    run.add_argument("--only", help="comma-separated partner names to test, e.g. Terralith")
     grid = sub.add_parser("grid")
     grid.add_argument("results")
     grid.add_argument("--out", required=True)
