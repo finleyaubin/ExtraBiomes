@@ -42,7 +42,6 @@ public class NetherlandsOreFeatures {
     public static final ResourceKey<Feature> REDSTONE_ORE_KEY = key("netherlands_redstone_ore");
     public static final ResourceKey<Feature> BASALT_BLOBS_KEY = key("netherlands_basalt_blobs");
     public static final ResourceKey<Feature> BLACKSTONE_BLOBS_KEY = key("netherlands_blackstone_blobs");
-    public static final ResourceKey<Feature> BASALT_PILLAR_KEY = key("netherlands_basalt_pillar");
 
     public static final ResourceKey<PlacedFeature> COAL_ORE_PLACED_KEY = placedKey("netherlands_coal_ore");
     public static final ResourceKey<PlacedFeature> COPPER_ORE_PLACED_KEY = placedKey("netherlands_copper_ore");
@@ -75,7 +74,6 @@ public class NetherlandsOreFeatures {
         context.register(REDSTONE_ORE_KEY, new OreFeature(replaceNetherrack, ModBlocks.NETHER_REDSTONE_ORE.get().defaultBlockState(), 8));
         context.register(BASALT_BLOBS_KEY, new ReplaceBlobsFeature(Blocks.NETHERRACK.defaultBlockState(), Blocks.BASALT.defaultBlockState(), UniformInt.of(3, 7)));
         context.register(BLACKSTONE_BLOBS_KEY, new ReplaceBlobsFeature(Blocks.NETHERRACK.defaultBlockState(), Blocks.BLACKSTONE.defaultBlockState(), UniformInt.of(3, 7)));
-        context.register(BASALT_PILLAR_KEY, context.lookup(Registries.FEATURE).getOrThrow(NetherFeatures.BASALT_PILLAR).value());
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
@@ -96,7 +94,7 @@ public class NetherlandsOreFeatures {
         context.register(BLACKSTONE_BLOBS_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BLACKSTONE_BLOBS_KEY),
                 ModOrePlacement.commonOrePlacement(6, underground)));
         // BasaltPillarFeature only builds from air directly under a solid ceiling, so scan up to one rather than relying on random Y hits.
-        context.register(BASALT_PILLAR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BASALT_PILLAR_KEY), List.of(
+        context.register(BASALT_PILLAR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(NetherFeatures.BASALT_PILLAR), List.of(
                 CountPlacement.of(30),
                 InSquarePlacement.spread(),
                 underground,
