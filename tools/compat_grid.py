@@ -32,7 +32,7 @@ HEADERS = {"User-Agent": "finleyaubin/ExtraBiomes compat-grid"}
 
 def fetch(url):
     # Modrinth asks for a descriptive User-Agent; the Forge/NeoForge Mavens reject anything but a curl-like one.
-    headers = HEADERS if "modrinth.com" in url else {"User-Agent": "curl/8.5.0"}
+    headers = HEADERS if urllib.parse.urlsplit(url).hostname == "api.modrinth.com" else {"User-Agent": "curl/8.5.0"}
     with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=120) as r:
         return r.read()
 
