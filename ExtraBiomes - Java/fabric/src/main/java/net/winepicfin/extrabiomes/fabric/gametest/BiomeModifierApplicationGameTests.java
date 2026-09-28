@@ -85,13 +85,14 @@ public class BiomeModifierApplicationGameTests {
     }
 
     @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
-    public void plainsGetsHarpySpawn(GameTestHelper helper) {
-        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: starting");
-        Biome plains = biome(helper, Biomes.PLAINS);
+    public void overworldGetsHarpySpawn(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] overworldGetsHarpySpawn: starting");
+        // Since 26.3 the gametest overworld is flat desert, the only biome foundInOverworld() matches here.
+        Biome desert = biome(helper, Biomes.DESERT);
 
-        assertHasSpawn(helper, plains, MobCategory.MONSTER, ModEntities.HARPY.get());
+        assertHasSpawn(helper, desert, MobCategory.MONSTER, ModEntities.HARPY.get());
 
-        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: passed");
+        LOGGER.info("[BiomeModifierApplicationGameTests] overworldGetsHarpySpawn: passed");
         helper.succeed();
     }
 
