@@ -31,8 +31,8 @@ HEADERS = {"User-Agent": "finleyaubin/ExtraBiomes compat-grid"}
 
 
 def fetch(url):
-    # Modrinth asks for a descriptive User-Agent, but NeoForge's Maven 404s on this one.
-    headers = HEADERS if "modrinth.com" in url else {}
+    # Modrinth asks for a descriptive User-Agent; the Forge/NeoForge Mavens reject anything but a curl-like one.
+    headers = HEADERS if "modrinth.com" in url else {"User-Agent": "curl/8.5.0"}
     with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=120) as r:
         return r.read()
 
@@ -93,9 +93,13 @@ def neoforge_prefix(mc):
     return ".".join((parts + ["0"])[:3]) + "."
 
 
+def maven_versions(artifact_url, prefix):
+    versions = re.findall(r"<version>([^<]+)</version>", fetch(f"{artifact_url}/maven-metadata.xml").decode())
+    return sorted((v for v in versions if v.startswith(prefix)), key=lambda v: [int(n) for n in re.findall(r"\d+", v)])
+
+
 def neoforge_version(mc):
-    versions = re.findall(r"<version>([^<]+)</version>", fetch("https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml").decode())
-    matching = [v for v in versions if v.startswith(neoforge_prefix(mc))]
+    matching = maven_versions("https://maven.neoforged.net/releases/net/neoforged/neoforge", neoforge_prefix(mc))
     stable = [v for v in matching if "beta" not in v]
     return (stable or matching)[-1]
 
@@ -110,9 +114,8 @@ def install_server(mc, loader, server_dir):
         download(f"https://meta.fabricmc.net/v2/versions/loader/{mc}/{loader_version}/{installer}/server/jar", server_dir / "fabric-server.jar")
         return [java, "-jar", "fabric-server.jar"], loader_version
     if loader == "forge":
-        promos = fetch_json("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json")["promos"]
-        version = promos.get(f"{mc}-recommended") or promos[f"{mc}-latest"]
-        full = f"{mc}-{version}"
+        full = maven_versions("https://maven.minecraftforge.net/net/minecraftforge/forge", f"{mc}-")[-1]
+        version = full.removeprefix(f"{mc}-")
         installer_url = f"https://maven.minecraftforge.net/net/minecraftforge/forge/{full}/forge-{full}-installer.jar"
         args_file = f"libraries/net/minecraftforge/forge/{full}/unix_args.txt"
     else:
