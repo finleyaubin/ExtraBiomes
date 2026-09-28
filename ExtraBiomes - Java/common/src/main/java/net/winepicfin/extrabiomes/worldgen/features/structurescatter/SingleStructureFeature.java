@@ -1,8 +1,12 @@
 package net.winepicfin.extrabiomes.worldgen.features.structurescatter;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -13,9 +17,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor;
@@ -37,7 +41,83 @@ import java.util.Optional;
  * own converted .nbt and its own {@link SingleStructureConfiguration}. See
  * {@link OasisPuddleFeature} for a complete worked example.
  */
-public class SingleStructureFeature extends Feature<SingleStructureConfiguration> {
+public record SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction, boolean embedInStone, boolean weatheredVariation, boolean followTerrain) implements Feature {
+
+    public SingleStructureFeature(Identifier structure) {
+        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+    }
+
+    public SingleStructureFeature(Identifier structure, Rotation fixedRotation) {
+        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+    }
+
+    public SingleStructureFeature(Identifier structure, int groundOffset) {
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+    }
+
+    // Jellycoral-style use: random rotation + a required submerged (water/waterlogged) fraction,
+    // for templates that no longer bundle their own explicit water fill.
+    public SingleStructureFeature(Identifier structure, int groundOffset, float minSubmergedFraction) {
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), minSubmergedFraction, false, false, false);
+    }
+
+    public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset) {
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+    }
+
+    public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
+        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+    }
+
+    // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction.
+    public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
+        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of(), 0.0F, false, false, false);
+    }
+
+    // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required solid floor.
+    public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
+        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of(), 0.0F, false, false, false);
+    }
+
+    // Oasis-puddle-style use: required solid floor restricted to a specific set of blocks.
+    public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks) {
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, false, false, false);
+    }
+
+    // Stone-pillar-style use: required solid floor restricted to a specific set of blocks, sunk into real stone rather than anchored to the dirt/grass surface, with noise-based weathering/vegetation.
+    public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, boolean embedInStone, boolean weatheredVariation) {
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, embedInStone, weatheredVariation, false);
+    }
+
+    // Snow-drift-style use: low, wide template draped over the terrain column by column.
+    public SingleStructureFeature(Identifier structure, int groundOffset, boolean centered, boolean followTerrain) {
+        this(structure, Optional.empty(), groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, followTerrain);
+    }
+
+    public SingleStructureFeature(Identifier structure, BlockPos anchor) {
+        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of(), 0.0F, false, false, false);
+    }
+
+    public static final MapCodec<SingleStructureFeature> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Identifier.CODEC.fieldOf("structure").forGetter(SingleStructureFeature::structure),
+            Codec.STRING.xmap(Rotation::valueOf, Rotation::name).optionalFieldOf("rotation").forGetter(SingleStructureFeature::rotation),
+            Codec.INT.optionalFieldOf("ground_offset", 0).forGetter(SingleStructureFeature::groundOffset),
+            Codec.BOOL.optionalFieldOf("centered", false).forGetter(SingleStructureFeature::centered),
+            BlockPos.CODEC.optionalFieldOf("anchor").forGetter(SingleStructureFeature::anchor),
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_clear_fraction", 0.0F).forGetter(SingleStructureFeature::minClearFraction),
+            Codec.BOOL.optionalFieldOf("require_grounded_floor", false).forGetter(SingleStructureFeature::requireGroundedFloor),
+            Codec.list(BuiltInRegistries.BLOCK.byNameCodec()).optionalFieldOf("required_floor_blocks", List.of()).forGetter(SingleStructureFeature::requiredFloorBlocks),
+            Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_submerged_fraction", 0.0F).forGetter(SingleStructureFeature::minSubmergedFraction),
+            Codec.BOOL.optionalFieldOf("embed_in_stone", false).forGetter(SingleStructureFeature::embedInStone),
+            Codec.BOOL.optionalFieldOf("weathered_variation", false).forGetter(SingleStructureFeature::weatheredVariation),
+            Codec.BOOL.optionalFieldOf("follow_terrain", false).forGetter(SingleStructureFeature::followTerrain)
+    ).apply(instance, SingleStructureFeature::new));
+
+    @Override
+    public MapCodec<SingleStructureFeature> codec() {
+        return CODEC;
+    }
+
     /**
      * Vanilla's FEATURES chunk status only lets a Feature safely write into the chunk currently
      * decorating plus one chunk of buffer on every side (a 3x3-chunk / 48-block-wide window). Any
@@ -51,19 +131,13 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
     // One block above the max thickness of Java's randomized 1-5-block bedrock floor (y=-64); matches MesaFeatures/ModSurfaceRules' own margin.
     private static final int BEDROCK_MARGIN_Y = -59;
 
-    public SingleStructureFeature(Codec<SingleStructureConfiguration> codec) {
-        super(codec);
-    }
-
     @Override
-    public boolean place(FeaturePlaceContext<SingleStructureConfiguration> context) {
-        SingleStructureConfiguration config = context.config();
-        WorldGenLevel level = context.level();
-        RandomSource random = context.random();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos placementOrigin) {
+        SingleStructureFeature config = this;
 
         ServerLevel serverLevel = level.getLevel();
 
-        StructureTemplateManager structureManager = serverLevel.getStructureManager();
+        StructureTemplateManager structureManager = serverLevel.getStructureTemplateManager();
         Optional<StructureTemplate> templateOpt = structureManager.get(config.structure());
         if (templateOpt.isEmpty()) {
             return false;
@@ -89,7 +163,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             settings.addProcessor(new GravityProcessor(Heightmap.Types.OCEAN_FLOOR_WG, config.groundOffset()));
         }
 
-        BlockPos anchor = context.origin().offset(0, config.groundOffset(), 0);
+        BlockPos anchor = placementOrigin.offset(0, config.groundOffset(), 0);
         BlockPos origin = anchor;
         if (config.anchor().isPresent()) {
             // Same rotation-pivot trick as the centered case below, but for an arbitrary local point (e.g. a leaning tree's trunk base) instead of the footprint center.
@@ -117,7 +191,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
             }
         }
 
-        if (!fitsWithinSafeWriteArea(structureBox, context.origin())) {
+        if (!fitsWithinSafeWriteArea(structureBox, placementOrigin)) {
             return false;
         }
 
@@ -144,7 +218,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
         }
 
         // Checked at the un-offset heightmap origin so a negative groundOffset doesn't probe underground.
-        if (config.requireGroundedFloor() && !hasSolidFloor(level, structureBox, context.origin().getY() - 1, config.requiredFloorBlocks())) {
+        if (config.requireGroundedFloor() && !hasSolidFloor(level, structureBox, placementOrigin.getY() - 1, config.requiredFloorBlocks())) {
             return false;
         }
 

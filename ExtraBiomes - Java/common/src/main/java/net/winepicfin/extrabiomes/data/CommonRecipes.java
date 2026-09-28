@@ -1,12 +1,15 @@
 package net.winepicfin.extrabiomes.data;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -37,19 +40,19 @@ import java.util.List;
  */
 public abstract class CommonRecipes extends RecipeProvider {
 
-    protected CommonRecipes(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
+    protected CommonRecipes(BootstrapContext<Recipe<?>> output, BootstrapContext<Advancement> advancementOutput) {
+        super(output, advancementOutput);
     }
 
     public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
     public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
     public static final List<ItemLike> PIRANHA_SMELTABLES = List.of(ModItems.PIRANHA.get());
 
-    public static void build(HolderLookup.Provider registries, RecipeOutput pWriter) {
-        new CommonRecipes(registries, pWriter) {
+    public static void build(BootstrapContext<Recipe<?>> output, BootstrapContext<Advancement> advancementOutput) {
+        new CommonRecipes(output, advancementOutput) {
             @Override
             protected void buildRecipes() {
-                this.buildAll(pWriter);
+                this.buildAll(this.output);
             }
         }.buildRecipes();
     }

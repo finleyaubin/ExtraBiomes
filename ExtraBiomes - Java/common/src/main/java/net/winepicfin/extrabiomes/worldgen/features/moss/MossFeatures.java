@@ -8,9 +8,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
@@ -19,7 +18,7 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
+import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
 import java.util.List;
@@ -86,7 +85,7 @@ import java.util.List;
  */
 public class MossFeatures {
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOSS_CARPET_KEY = configuredKey("moss_carpet");
+    public static final ResourceKey<Feature> MOSS_CARPET_KEY = configuredKey("moss_carpet");
 
     /**
      * extrabiomes:moss/moss_carpet_scatter - places a single {@link Blocks#MOSS_CARPET} on top of
@@ -95,7 +94,7 @@ public class MossFeatures {
      */
     public static final ResourceKey<PlacedFeature> MOSS_CARPET_SCATTER_PLACED_KEY = placedKey("moss_carpet_scatter");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_KEY = configuredKey("tall_grass");
+    public static final ResourceKey<Feature> TALL_GRASS_KEY = configuredKey("tall_grass");
 
     /**
      * extrabiomes:moss/tall_grass_scatter - the moorland-style tall-grass scatter (30 tries,
@@ -114,16 +113,14 @@ public class MossFeatures {
     public static final ResourceKey<PlacedFeature> JUNGLE_BUSH_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath("minecraft", "jungle_bush"));
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(MOSS_CARPET_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState()))));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(MOSS_CARPET_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.MOSS_CARPET.defaultBlockState())));
 
-        context.register(TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS.defaultBlockState()))));
+        context.register(TALL_GRASS_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.SHORT_GRASS.defaultBlockState())));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         // Bedrock's source feature scatters 10 attempts with 0 spread, which always lands on the same block; collapsed to a single placement.
         context.register(MOSS_CARPET_SCATTER_PLACED_KEY, new PlacedFeature(
@@ -145,14 +142,14 @@ public class MossFeatures {
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome(),
                         CountPlacement.of(30),
-                        RandomOffsetPlacement.ofTriangle(8, 3),
+                        OffsetPlacement.ofTriangle(8, 3),
                         BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR))
                 )
         ));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "moss/" + name));
+    private static ResourceKey<Feature> configuredKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "moss/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {

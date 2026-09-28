@@ -33,7 +33,7 @@ public class PuckooKoiLayer extends RenderLayer<PuckooRenderState, PuckooModel<P
         Identifier resourcelocation = LOCATION_BY_MARKINGS.get(state.markings);
         if (resourcelocation != null && !state.isInvisible) {
             int overlay = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
-            submitNodeCollector.order(1).submitModel(this.getParentModel(), state, poseStack, RenderTypes.entityTranslucent(resourcelocation), packedLight, overlay, state.outlineColor, null);
+            submitNodeCollector.order(1).submitModel(this.getParentModel(), state, poseStack, RenderTypes.entityTranslucent(resourcelocation), packedLight, overlay, state.outlineColor);
         }
     }
 }

@@ -22,7 +22,7 @@ public class PuckooSaddleLayer extends RenderLayer<PuckooRenderState, PuckooMode
     public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, PuckooRenderState state, float limbSwing, float limbSwingAmount) {
         if (state.isSaddled && !state.isInvisible) {
             int overlay = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
-            submitNodeCollector.order(1).submitModel(this.getParentModel(), state, poseStack, RenderTypes.entityTranslucent(TEXTURE), packedLight, overlay, state.outlineColor, null);
+            submitNodeCollector.order(1).submitModel(this.getParentModel(), state, poseStack, RenderTypes.entityTranslucent(TEXTURE), packedLight, overlay, state.outlineColor);
         }
     }
 }

@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
@@ -28,6 +27,7 @@ import net.winepicfin.extrabiomes.worldgen.features.ore.ModOrePlacement;
 import net.winepicfin.extrabiomes.worldgen.features.palm.PalmTreeFeatures;
 
 import java.util.List;
+import net.minecraft.world.level.levelgen.feature.Feature;
 
 public class ModPlacedFeatures{
     public static final ResourceKey<PlacedFeature> MYSTIC_PLACED_KEY = createKey("mystic_placed");
@@ -39,7 +39,7 @@ public class ModPlacedFeatures{
     public static final ResourceKey<PlacedFeature> GRAND_OASIS_DEAD_BUSH_PLACED_KEY = createKey("grand_oasis_dead_bush_placed");
     // PlacementUtils.countExtra(count, extraChance, extraCount): only the middle argument is a float - passing a float as count silently picks the wrong overload, so keep the literals typed as written below.
     public static void bootstrap(BootstrapContext<PlacedFeature>context){
-        HolderGetter<ConfiguredFeature<?, ?>>configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature>configuredFeatures = context.lookup(Registries.FEATURE);
         // Bedrock's mystic_tree_feature.json allows the structure to intersect minecraft:water and
         // extrabiomes:goo (unburied is the only ground constraint) so trees can grow straight out of
         // the swamp's goo pools - vanilla's treePlacement() hardcodes max_water_depth 0, which would
@@ -66,14 +66,14 @@ public class ModPlacedFeatures{
     private static List<PlacementModifier> treePlacementWithWaterDepth(PlacementModifier countModifier, Block sapling, int maxWaterDepth) {
         return List.of(countModifier, InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(maxWaterDepth),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), BiomeFilter.biome(),
-                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(sapling.defaultBlockState(), BlockPos.ZERO)));
+                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(sapling)));
     }
 
     private static ResourceKey<PlacedFeature> createKey(String name) {
         return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
-    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,List<PlacementModifier> modifiers) {
+    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<Feature> configuration,List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
     }
 }

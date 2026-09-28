@@ -7,9 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 /**
  * Java equivalent of Bedrock's {@code (query.heightmap(...) >= 75) ? query.heightmap(...) : 300}
@@ -20,7 +19,7 @@ import java.util.stream.Stream;
  * {@code minY + rampBlocks} - moss starts sparse right at the cutoff and thickens with elevation,
  * rather than carpeting the whole "high ground" region uniformly the instant it crosses 75.
  */
-public class MinYFilter extends PlacementModifier {
+public class MinYFilter implements PlacementModifier {
     public static final MapCodec<MinYFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.INT.fieldOf("min_y").forGetter(MinYFilter::minY),
             Codec.INT.fieldOf("ramp_blocks").forGetter(MinYFilter::rampBlocks)
@@ -47,20 +46,23 @@ public class MinYFilter extends PlacementModifier {
     }
 
     @Override
-    public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
+    public void modify(PlacementContext context, RandomSource random, BlockPos pos, Consumer<BlockPos> consumer) {
         int y = pos.getY();
         if (y < minY) {
-            return Stream.of();
+            return;
         }
         if (rampBlocks <= 0) {
-            return Stream.of(pos);
+            consumer.accept(pos);
+            return;
         }
         float chance = Math.min(1.0F, (y - minY) / (float) rampBlocks);
-        return random.nextFloat() < chance ? Stream.of(pos) : Stream.of();
+        if (random.nextFloat() < chance) {
+            consumer.accept(pos);
+        }
     }
 
     @Override
-    public PlacementModifierType<?> type() {
-        return ModVolcanicPlacementModifiers.MIN_Y_FILTER.get();
+    public MapCodec<? extends PlacementModifier> codec() {
+        return CODEC;
     }
 }

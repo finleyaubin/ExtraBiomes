@@ -13,11 +13,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
+import net.minecraft.world.level.levelgen.feature.RandomSelectorFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
@@ -29,8 +29,7 @@ import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +58,7 @@ import java.util.List;
  * "ExtraBiomes - Bedrock/packs/BP/feature_rules/glacier/*.json".
  * <p>
  * The snow-drift structures reuse the "structurescatter" subsystem's shared
- * SingleStructureFeature/SingleStructureConfiguration infrastructure rather than defining a new
+ * SingleStructureFeature/SingleStructureFeature infrastructure rather than defining a new
  * Feature class. Since Feature.RANDOM_SELECTOR's RandomFeatureConfiguration needs a
  * Holder&lt;PlacedFeature&gt; per sub-feature (not a registry key), each sub-feature is built
  * as an unregistered inline holder via {@link PlacementUtils#inlinePlaced} - exactly the pattern
@@ -75,11 +74,11 @@ import java.util.List;
  */
 public class GlacierFeatures {
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_ICE_KEY =
+    public static final ResourceKey<Feature> GLACIER_ICE_KEY =
             configuredKey("glacier_ice");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_PACKED_ICE_KEY =
+    public static final ResourceKey<Feature> GLACIER_PACKED_ICE_KEY =
             configuredKey("glacier_packed_ice");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_TOP_ICE_KEY =
+    public static final ResourceKey<Feature> GLACIER_TOP_ICE_KEY =
             configuredKey("glacier_top_ice");
 
     public static final ResourceKey<PlacedFeature> GLACIER_ICE_PLACED_KEY =
@@ -89,7 +88,7 @@ public class GlacierFeatures {
     public static final ResourceKey<PlacedFeature> GLACIER_TOP_ICE_PLACED_KEY =
             placedKey("glacier_top_ice");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_SNOW_DRIFT_KEY =
+    public static final ResourceKey<Feature> SELECT_SNOW_DRIFT_KEY =
             configuredKey("select_snow_drift");
     /** This is the key the biome-wiring pass should addFeature(...) with. */
     public static final ResourceKey<PlacedFeature> SELECT_SNOW_DRIFT_PLACED_KEY =
@@ -99,7 +98,7 @@ public class GlacierFeatures {
     // Draped drifts follow the ground column by column, so they don't need sinking to hide dips and sit directly on the surface.
     private static final int DRAPED_SNOW_DRIFT_GROUND_OFFSET = 0;
 
-    private static List<OreConfiguration.TargetBlockState> iceTargets(BlockState result) {
+    private static List<BlockReplacement> iceTargets(BlockState result) {
         RuleTest[] sources = new RuleTest[] {
                 new BlockMatchTest(Blocks.STONE),
                 new BlockMatchTest(Blocks.GRANITE),
@@ -112,17 +111,14 @@ public class GlacierFeatures {
                 new BlockMatchTest(Blocks.SANDSTONE),
                 new BlockMatchTest(Blocks.DEEPSLATE),
         };
-        return Arrays.stream(sources).map(test -> OreConfiguration.target(test, result)).toList();
+        return Arrays.stream(sources).map(test -> BlockReplacement.replace(test, result)).toList();
     }
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
         // OreConfiguration's vein-size codec caps at 64, so the packed/top ice veins (90/110 in Bedrock) are clamped.
-        context.register(GLACIER_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
-                new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 30, 0.0F)));
-        context.register(GLACIER_PACKED_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
-                new OreConfiguration(iceTargets(Blocks.PACKED_ICE.defaultBlockState()), 64, 0.0F)));
-        context.register(GLACIER_TOP_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
-                new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
+        context.register(GLACIER_ICE_KEY, new OreFeature(iceTargets(Blocks.ICE.defaultBlockState()), 30, 0.0F));
+        context.register(GLACIER_PACKED_ICE_KEY, new OreFeature(iceTargets(Blocks.PACKED_ICE.defaultBlockState()), 64, 0.0F));
+        context.register(GLACIER_TOP_ICE_KEY, new OreFeature(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F));
 
         // SNOW_DRIFT_GROUND_OFFSET sinks the wide, unevenly-shaped drift templates into the ground so uneven terrain under them doesn't read as floating (same technique as OasisPuddleFeature's -4).
         // Keep in sync with SELECT_WEIGHTS in tools/build_snow_drifts.py.
@@ -133,10 +129,10 @@ public class GlacierFeatures {
             Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "glacier/snow_drift_" + (i + 1));
             // Drifts 3+ have a flat full-footprint base that floats over any dip, so drape them over the terrain; centering keeps the ~30-wide swirl and giant spire inside the feature write window.
             boolean drapesOverTerrain = i >= 2;
-            SingleStructureConfiguration config = drapesOverTerrain
-                    ? new SingleStructureConfiguration(structure, DRAPED_SNOW_DRIFT_GROUND_OFFSET, true, true)
-                    : new SingleStructureConfiguration(structure, SNOW_DRIFT_GROUND_OFFSET);
-            Holder<ConfiguredFeature<?, ?>> snowDrift = Holder.direct(new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+            SingleStructureFeature config = drapesOverTerrain
+                    ? new SingleStructureFeature(structure, DRAPED_SNOW_DRIFT_GROUND_OFFSET, true, true)
+                    : new SingleStructureFeature(structure, SNOW_DRIFT_GROUND_OFFSET);
+            Holder<Feature> snowDrift = Holder.direct(config);
             // inlinePlaced avoids a registration-order problem: PLACED_FEATURE bootstrap runs after CONFIGURED_FEATURE, so these sub-features can't go through the registry here.
             snowDriftPlaced.add(PlacementUtils.inlinePlaced(snowDrift));
         }
@@ -148,12 +144,11 @@ public class GlacierFeatures {
             snowDriftEntries.add(new WeightedPlacedFeature(snowDriftPlaced.get(i), (float) snowDriftWeights[i] / remainingWeight));
             remainingWeight -= snowDriftWeights[i];
         }
-        context.register(SELECT_SNOW_DRIFT_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
-                new RandomFeatureConfiguration(snowDriftEntries, snowDriftPlaced.get(snowDriftPlaced.size() - 1))));
+        context.register(SELECT_SNOW_DRIFT_KEY, new RandomSelectorFeature(snowDriftEntries, snowDriftPlaced.get(snowDriftPlaced.size() - 1)));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         // glacier_ice/glacier_packed_ice span the full underground range (-64..100) so they're wired at UNDERGROUND_ORES in the biome; glacier_top_ice only spans 64..100 so it's wired at LOCAL_MODIFICATIONS instead.
         context.register(GLACIER_ICE_PLACED_KEY, new PlacedFeature(
@@ -188,13 +183,13 @@ public class GlacierFeatures {
                         RarityFilter.onAverageOnceEvery(8),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
-                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), Blocks.AIR, Blocks.SNOW)),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), java.util.List.of(Blocks.AIR, Blocks.SNOW))),
                         BiomeFilter.biome()
                 )));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+    private static ResourceKey<Feature> configuredKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {

@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
@@ -17,10 +16,10 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 
 import java.util.List;
+import net.minecraft.world.level.levelgen.feature.Feature;
 
 /**
  * Ports Bedrock's "extrabiomes:jellycoral/jellycoral_{1,2,3,4}" ({@code minecraft:structure_template_feature})
@@ -40,7 +39,7 @@ import java.util.List;
  * Mapping notes:
  * <ul>
  *   <li>No {@code facing_direction} is specified in Bedrock, so rotation is left random -
- *       {@link SingleStructureConfiguration}'s {@code (structure, groundOffset)} constructor is used,
+ *       {@link SingleStructureFeature}'s {@code (structure, groundOffset)} constructor is used,
  *       which implies {@code Optional.empty()} rotation (uniformly random per placement).</li>
  *   <li>{@code iterations: 20} + {@code scatter_chance: 100.0} (always run, up to 20 scatter attempts
  *       per chunk) -> {@link CountPlacement#of(int)}, deliberately tuned down to 4 (see
@@ -68,19 +67,19 @@ import java.util.List;
  *       had their water palette entries replaced with {@code minecraft:structure_void} (leave-as-is), so
  *       placement now relies on the surrounding ocean plus the structure's own waterlogged coral
  *       fans/pickles (which hold their water via the {@code waterlogged} state, not an adjacent block) -
- *       see {@link SingleStructureConfiguration#minSubmergedFraction()}, set to 0.9F below, which rejects
+ *       see {@link SingleStructureFeature#minSubmergedFraction()}, set to 0.9F below, which rejects
  *       placement unless the structure's rotated bounding box is at least 90% water/waterlogged.</li>
  * </ul>
  */
 public class JellyCoralFeatures {
-    public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_1_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_1"));
-    public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_2"));
-    public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_3"));
-    public static final ResourceKey<ConfiguredFeature<?, ?>> JELLYCORAL_4_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_4"));
+    public static final ResourceKey<Feature> JELLYCORAL_1_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_1"));
+    public static final ResourceKey<Feature> JELLYCORAL_2_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_2"));
+    public static final ResourceKey<Feature> JELLYCORAL_3_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_3"));
+    public static final ResourceKey<Feature> JELLYCORAL_4_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_4"));
 
     public static final ResourceKey<PlacedFeature> JELLYCORAL_1_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_1"));
@@ -91,7 +90,7 @@ public class JellyCoralFeatures {
     public static final ResourceKey<PlacedFeature> JELLYCORAL_4_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral_4"));
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
         registerConfigured(context, JELLYCORAL_1_KEY, "jellycoral_1");
         registerConfigured(context, JELLYCORAL_2_KEY, "jellycoral_2");
         registerConfigured(context, JELLYCORAL_3_KEY, "jellycoral_3");
@@ -102,23 +101,20 @@ public class JellyCoralFeatures {
     // already be almost entirely underwater so the coral/kelp/pickle pieces don't land high and dry.
     private static final float MIN_SUBMERGED_FRACTION = 0.9F;
 
-    private static void registerConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName) {
-        context.register(key, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION)
-        ));
+    private static void registerConfigured(BootstrapContext<Feature> context, ResourceKey<Feature> key, String structureName) {
+        context.register(key, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellycoral/" + structureName), 0, MIN_SUBMERGED_FRACTION));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
         registerPlaced(context, configuredFeatures, JELLYCORAL_1_PLACED_KEY, JELLYCORAL_1_KEY);
         registerPlaced(context, configuredFeatures, JELLYCORAL_2_PLACED_KEY, JELLYCORAL_2_KEY);
         registerPlaced(context, configuredFeatures, JELLYCORAL_3_PLACED_KEY, JELLYCORAL_3_KEY);
         registerPlaced(context, configuredFeatures, JELLYCORAL_4_PLACED_KEY, JELLYCORAL_4_KEY);
     }
 
-    private static void registerPlaced(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
-                                        ResourceKey<PlacedFeature> placedKey, ResourceKey<ConfiguredFeature<?, ?>> configuredKey) {
+    private static void registerPlaced(BootstrapContext<PlacedFeature> context, HolderGetter<Feature> configuredFeatures,
+                                        ResourceKey<PlacedFeature> placedKey, ResourceKey<Feature> configuredKey) {
         context.register(placedKey, new PlacedFeature(
                 configuredFeatures.getOrThrow(configuredKey),
                 List.of(
@@ -128,7 +124,7 @@ public class JellyCoralFeatures {
                         CountPlacement.of(4),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
-                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), Blocks.WATER, Blocks.SEAGRASS, Blocks.KELP)),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new BlockPos(0, 0, 0), java.util.List.of(Blocks.WATER, Blocks.SEAGRASS, Blocks.KELP))),
                         BiomeFilter.biome()
                 )
         ));

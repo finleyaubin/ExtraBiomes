@@ -1,15 +1,14 @@
 package net.winepicfin.extrabiomes.worldgen.features.undergroundjungle;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
  * Approximation of Bedrock's built-in {@code minecraft:optional_fallen_jungle_tree_feature}
@@ -21,22 +20,21 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  * mirroring the "optional" naming's implication that the feature gracefully no-ops/truncates rather
  * than failing outright.
  */
-public class FallenJungleTreeFeature extends Feature<NoneFeatureConfiguration> {
+public class FallenJungleTreeFeature implements Feature {
 
     private static final Direction[] HORIZONTAL_DIRECTIONS = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
     private static final int MIN_LENGTH = 3;
     private static final int MAX_LENGTH = 6;
 
-    public FallenJungleTreeFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<FallenJungleTreeFeature> CODEC = MapCodec.unit(FallenJungleTreeFeature::new);
+
+    @Override
+    public MapCodec<FallenJungleTreeFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        RandomSource random = context.random();
-        BlockPos origin = context.origin();
-
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
         Direction direction = HORIZONTAL_DIRECTIONS[random.nextInt(HORIZONTAL_DIRECTIONS.length)];
         Direction.Axis axis = direction.getAxis();
         int length = MIN_LENGTH + random.nextInt(MAX_LENGTH - MIN_LENGTH + 1);

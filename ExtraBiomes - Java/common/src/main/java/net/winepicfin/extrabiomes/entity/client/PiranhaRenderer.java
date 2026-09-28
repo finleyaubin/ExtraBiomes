@@ -52,10 +52,10 @@ public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaRenderSta
     @Override
     protected void setupRotations(PiranhaRenderState state, PoseStack poseStack, float bodyRot, float scale) {
         super.setupRotations(state, poseStack, bodyRot, scale);
-        poseStack.mulPose(Axis.YP.rotationDegrees(4.3F * Mth.sin(0.6F * state.ageInTicks)));
+        poseStack.rotate(Axis.YP.rotationDegrees(4.3F * Mth.sin(0.6F * state.ageInTicks)));
         if (!state.isInWater) {
             poseStack.translate(0.1F, 0.1F, -0.1F);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
+            poseStack.rotate(Axis.ZP.rotationDegrees(90.0F));
         }
     }
 }

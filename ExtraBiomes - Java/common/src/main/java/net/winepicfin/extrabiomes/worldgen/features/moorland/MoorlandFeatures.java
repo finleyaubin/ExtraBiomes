@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.moorland;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -9,10 +10,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
@@ -22,7 +21,7 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
+import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -78,27 +77,27 @@ import java.util.List;
  */
 public class MoorlandFeatures {
 
-    // Registered in Registries.FEATURE (not just DeferredRegister) so codecs get stable registry names for ConfiguredFeature serialization/datagen.
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
+    // Registered in Registries.FEATURE_TYPE (not just DeferredRegister) so codecs get stable registry names for Feature serialization/datagen.
+    public static final DeferredRegister<MapCodec<? extends Feature>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE_TYPE);
 
-    public static final RegistrySupplier<PodzolConversionFeature> PODZOL_CONVERSION_FEATURE =
-            FEATURES.register("moorland_podzol_conversion", () -> new PodzolConversionFeature(NoneFeatureConfiguration.CODEC));
-    public static final RegistrySupplier<DoubleTallGrassFeature> DOUBLE_TALL_GRASS_FEATURE =
-            FEATURES.register("moorland_double_tall_grass", () -> new DoubleTallGrassFeature(NoneFeatureConfiguration.CODEC));
-    public static final RegistrySupplier<WaterLilyFixupFeature> WATERLILY_FIXUP_FEATURE =
-            FEATURES.register("moorland_waterlily_fixup", () -> new WaterLilyFixupFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<MapCodec<PodzolConversionFeature>> PODZOL_CONVERSION_FEATURE =
+            FEATURES.register("moorland_podzol_conversion", () -> PodzolConversionFeature.CODEC);
+    public static final RegistrySupplier<MapCodec<DoubleTallGrassFeature>> DOUBLE_TALL_GRASS_FEATURE =
+            FEATURES.register("moorland_double_tall_grass", () -> DoubleTallGrassFeature.CODEC);
+    public static final RegistrySupplier<MapCodec<WaterLilyFixupFeature>> WATERLILY_FIXUP_FEATURE =
+            FEATURES.register("moorland_waterlily_fixup", () -> WaterLilyFixupFeature.CODEC);
 
     /** Must be called once from the mod's main class, e.g. {@code MoorlandFeatures.register(modEventBus);}. */
     public static void register() {
         FEATURES.register();
     }
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_PODZOL_KEY = registerKey("moorland_podzol");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_TALL_GRASS_KEY = registerKey("moorland_tall_grass");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_DOUBLE_TALL_GRASS_KEY = registerKey("moorland_double_tall_grass");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_SHORT_DRY_GRASS_KEY = registerKey("moorland_short_dry_grass");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_TALL_DRY_GRASS_KEY = registerKey("moorland_tall_dry_grass");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_WATERLILY_KEY = registerKey("moorland_waterlily");
+    public static final ResourceKey<Feature> MOORLAND_PODZOL_KEY = registerKey("moorland_podzol");
+    public static final ResourceKey<Feature> MOORLAND_TALL_GRASS_KEY = registerKey("moorland_tall_grass");
+    public static final ResourceKey<Feature> MOORLAND_DOUBLE_TALL_GRASS_KEY = registerKey("moorland_double_tall_grass");
+    public static final ResourceKey<Feature> MOORLAND_SHORT_DRY_GRASS_KEY = registerKey("moorland_short_dry_grass");
+    public static final ResourceKey<Feature> MOORLAND_TALL_DRY_GRASS_KEY = registerKey("moorland_tall_dry_grass");
+    public static final ResourceKey<Feature> MOORLAND_WATERLILY_KEY = registerKey("moorland_waterlily");
 
     public static final ResourceKey<PlacedFeature> MOORLAND_PODZOL_PLACED_KEY = createKey("moorland_podzol_placed");
     public static final ResourceKey<PlacedFeature> MOORLAND_TALL_GRASS_PLACED_KEY = createKey("moorland_tall_grass_placed");
@@ -110,28 +109,25 @@ public class MoorlandFeatures {
     // Bedrock's grass_double_plant_patch_feature places a whole patch per scatter try; Java places one plant, so it needs more tries.
     private static final int DOUBLE_TALL_GRASS_TRIES = 96;
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(MOORLAND_PODZOL_KEY, new ConfiguredFeature<>(PODZOL_CONVERSION_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(MOORLAND_PODZOL_KEY, new PodzolConversionFeature());
 
         // 30/8/4 mirror each Bedrock scatter_feature's own inner gaussian jitter around the outer placement
         // position; that inner jitter is now folded into the placed feature's own modifiers (bootstrapPlaced
         // below) since 26.1 removed the random_patch feature/RandomPatchConfiguration.
-        context.register(MOORLAND_TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS))));
+        context.register(MOORLAND_TALL_GRASS_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.SHORT_GRASS)));
 
-        context.register(MOORLAND_DOUBLE_TALL_GRASS_KEY, new ConfiguredFeature<>(DOUBLE_TALL_GRASS_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(MOORLAND_DOUBLE_TALL_GRASS_KEY, new DoubleTallGrassFeature());
 
-        context.register(MOORLAND_SHORT_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_DRY_GRASS))));
+        context.register(MOORLAND_SHORT_DRY_GRASS_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.SHORT_DRY_GRASS)));
 
-        context.register(MOORLAND_TALL_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.TALL_DRY_GRASS))));
+        context.register(MOORLAND_TALL_DRY_GRASS_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.TALL_DRY_GRASS)));
 
-        context.register(MOORLAND_WATERLILY_KEY, new ConfiguredFeature<>(WATERLILY_FIXUP_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(MOORLAND_WATERLILY_KEY, new WaterLilyFixupFeature());
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         // Java has no analogue of Bedrock's per-chunk noise-derived placement count, so it's approximated with a uniform random count over the same [15,160] range.
         register(context, MOORLAND_PODZOL_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_PODZOL_KEY),
@@ -158,8 +154,8 @@ public class MoorlandFeatures {
                 ModOrePlacement.commonOrePlacement(4, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+    private static ResourceKey<Feature> registerKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> createKey(String name) {
@@ -167,7 +163,7 @@ public class MoorlandFeatures {
     }
 
     private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key,
-                                  Holder<ConfiguredFeature<?, ?>> configuration, List<PlacementModifier> modifiers) {
+                                  Holder<Feature> configuration, List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
     }
 
@@ -175,7 +171,7 @@ public class MoorlandFeatures {
     private static List<PlacementModifier> withPatchModifiers(List<PlacementModifier> base, int tries, int xzSpread, int ySpread, PlacementModifier... extra) {
         List<PlacementModifier> result = new ArrayList<>(base);
         result.add(CountPlacement.of(tries));
-        result.add(RandomOffsetPlacement.ofTriangle(xzSpread, ySpread));
+        result.add(OffsetPlacement.ofTriangle(xzSpread, ySpread));
         result.addAll(List.of(extra));
         return result;
     }

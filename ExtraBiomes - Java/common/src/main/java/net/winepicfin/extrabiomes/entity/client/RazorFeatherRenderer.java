@@ -37,9 +37,9 @@ public class RazorFeatherRenderer<T extends RazorFeatherProjectileEntity> extend
     @Override
     public void submit(ThrownItemRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
-        poseStack.mulPose(cameraRenderState.orientation);
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(state.ageInTicks * SPIN_DEGREES_PER_TICK));
+        poseStack.rotate(cameraRenderState.orientation);
+        poseStack.rotate(Axis.YP.rotationDegrees(180.0F));
+        poseStack.rotate(Axis.ZP.rotationDegrees(state.ageInTicks * SPIN_DEGREES_PER_TICK));
         if (!state.item.isEmpty()) {
             state.item.submit(poseStack, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }

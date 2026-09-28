@@ -12,12 +12,11 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.NoOpFeature;
+import net.minecraft.world.level.levelgen.feature.RandomSelectorFeature;
+import net.minecraft.world.level.levelgen.feature.VegetationPatchFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
@@ -33,8 +32,7 @@ import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.features.moss.MossFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,27 +80,27 @@ public class VolcanicMossTundraFeatures {
     public static final TagKey<Block> VOLCANIC_TUNDRA_MOSS_FLOOR_REPLACEABLE =
             TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra_moss_floor_replaceable"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> NO_OP_KEY = configuredKey("no_op");
+    public static final ResourceKey<Feature> NO_OP_KEY = configuredKey("no_op");
     public static final ResourceKey<PlacedFeature> NO_OP_PLACED_KEY = placedKey("no_op");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> LAVA_RIVER_CORE_KEY = configuredKey("lava_river_core");
+    public static final ResourceKey<Feature> LAVA_RIVER_CORE_KEY = configuredKey("lava_river_core");
     public static final ResourceKey<PlacedFeature> LAVA_RIVER_CORE_PLACED_KEY = placedKey("lava_river_core");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> LAVA_RIVER_BANK_KEY = configuredKey("lava_river_bank");
+    public static final ResourceKey<Feature> LAVA_RIVER_BANK_KEY = configuredKey("lava_river_bank");
     public static final ResourceKey<PlacedFeature> LAVA_RIVER_BANK_PLACED_KEY = placedKey("lava_river_bank");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HIGH_ELEVATION_MOSS_FLOOR_KEY = configuredKey("high_elevation_moss_floor");
+    public static final ResourceKey<Feature> HIGH_ELEVATION_MOSS_FLOOR_KEY = configuredKey("high_elevation_moss_floor");
     public static final ResourceKey<PlacedFeature> HIGH_ELEVATION_MOSS_FLOOR_PLACED_KEY = placedKey("high_elevation_moss_floor");
 
     public static final ResourceKey<PlacedFeature> ELEVATION_MOSS_PLACED_KEY = placedKey("elevation_moss");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> BASALT_BANK_KEY = configuredKey("basalt_bank");
+    public static final ResourceKey<Feature> BASALT_BANK_KEY = configuredKey("basalt_bank");
     public static final ResourceKey<PlacedFeature> BASALT_BANK_PLACED_KEY = placedKey("basalt_bank");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> LAVA_FLOW_KICKSTART_KEY = configuredKey("lava_flow_kickstart");
+    public static final ResourceKey<Feature> LAVA_FLOW_KICKSTART_KEY = configuredKey("lava_flow_kickstart");
     public static final ResourceKey<PlacedFeature> LAVA_FLOW_KICKSTART_PLACED_KEY = placedKey("lava_flow_kickstart");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_ROCK_FORMATION_KEY = configuredKey("select_rock_formation");
+    public static final ResourceKey<Feature> SELECT_ROCK_FORMATION_KEY = configuredKey("select_rock_formation");
     public static final ResourceKey<PlacedFeature> SELECT_ROCK_FORMATION_PLACED_KEY = placedKey("select_rock_formation");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_VOLCANO_KEY = configuredKey("select_volcano");
+    public static final ResourceKey<Feature> SELECT_VOLCANO_KEY = configuredKey("select_volcano");
     public static final ResourceKey<PlacedFeature> SELECT_VOLCANO_PLACED_KEY = placedKey("select_volcano");
 
     private static final int ROCK_FORMATION_GROUND_OFFSET = -3;
@@ -122,33 +120,33 @@ public class VolcanicMossTundraFeatures {
     private static final PlacementModifier CARPET_MAY_PLACE = BlockPredicateFilter.forPredicate(
             BlockPredicate.matchesBlocks(Blocks.AIR));
     private static final PlacementModifier CARPET_MAY_ATTACH_TO = BlockPredicateFilter.forPredicate(
-            BlockPredicate.matchesBlocks(new Vec3i(0, -1, 0), ModBlocks.BLACK_SAND.get(), Blocks.MOSS_BLOCK));
+            BlockPredicate.matchesBlocks(new Vec3i(0, -1, 0), java.util.List.of(ModBlocks.BLACK_SAND.get(), Blocks.MOSS_BLOCK)));
 
     private static final String[] PILLARS = {"pillar_1", "pillar_2", "pillar_3", "pillar_4", "pillar_5", "pillar_6"};
     private static final String[] BOULDERS = {"boulder_1", "boulder_2", "boulder_3", "boulder_4", "boulder_5", "boulder_6", "boulder_7", "boulder_8"};
     private static final String[] ELEPHANT_ROCKS = {"elephant_rock_1", "elephant_rock_2", "elephant_rock_3", "elephant_rock_4"};
     private static final String[] VOLCANOES = {"volcano_1", "volcano_2"};
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
 
-        context.register(NO_OP_KEY, new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE));
+        context.register(NO_OP_KEY, new NoOpFeature());
         Holder<PlacedFeature> noOp = placedFeatures.getOrThrow(NO_OP_PLACED_KEY);
 
-        context.register(LAVA_RIVER_CORE_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                blocks.getOrThrow(VOLCANIC_TUNDRA_REPLACEABLE), BlockStateProvider.simple(Blocks.LAVA.defaultBlockState()), noOp,
-                CaveSurface.FLOOR, ConstantInt.of(2), 0.4F, 6, 0.0F, UniformInt.of(2, 3), 0.6F)));
-        context.register(LAVA_RIVER_BANK_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                blocks.getOrThrow(VOLCANIC_TUNDRA_BANK_REPLACEABLE), BlockStateProvider.simple(Blocks.MAGMA_BLOCK.defaultBlockState()), noOp,
-                CaveSurface.FLOOR, ConstantInt.of(2), 0.4F, 6, 0.0F, UniformInt.of(3, 4), 0.6F)));
-        context.register(HIGH_ELEVATION_MOSS_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                blocks.getOrThrow(VOLCANIC_TUNDRA_MOSS_FLOOR_REPLACEABLE), BlockStateProvider.simple(Blocks.MOSS_BLOCK.defaultBlockState()), noOp,
-                CaveSurface.FLOOR, ConstantInt.of(1), 0.2F, 4, 0.0F, UniformInt.of(1, 3), 0.6F)));
+        context.register(LAVA_RIVER_CORE_KEY, new VegetationPatchFeature(
+                blocks.getOrThrow(VOLCANIC_TUNDRA_REPLACEABLE), BlockStateProvider.holderOf(Blocks.LAVA.defaultBlockState()), noOp,
+                CaveSurface.FLOOR, ConstantInt.of(2), 0.4F, 6, 0.0F, UniformInt.of(2, 3), 0.6F));
+        context.register(LAVA_RIVER_BANK_KEY, new VegetationPatchFeature(
+                blocks.getOrThrow(VOLCANIC_TUNDRA_BANK_REPLACEABLE), BlockStateProvider.holderOf(Blocks.MAGMA_BLOCK.defaultBlockState()), noOp,
+                CaveSurface.FLOOR, ConstantInt.of(2), 0.4F, 6, 0.0F, UniformInt.of(3, 4), 0.6F));
+        context.register(HIGH_ELEVATION_MOSS_FLOOR_KEY, new VegetationPatchFeature(
+                blocks.getOrThrow(VOLCANIC_TUNDRA_MOSS_FLOOR_REPLACEABLE), BlockStateProvider.holderOf(Blocks.MOSS_BLOCK.defaultBlockState()), noOp,
+                CaveSurface.FLOOR, ConstantInt.of(1), 0.2F, 4, 0.0F, UniformInt.of(1, 3), 0.6F));
 
-        context.register(BASALT_BANK_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.BASALT_BANK.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(BASALT_BANK_KEY, new BasaltBankFeature());
 
-        context.register(LAVA_FLOW_KICKSTART_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.LAVA_FLOW_KICKSTART.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(LAVA_FLOW_KICKSTART_KEY, new LavaFlowKickstartFeature());
 
         // ROCK_FORMATION_GROUND_OFFSET/VOLCANO_GROUND_OFFSET sink each structure below the ground heightmap so it reads as embedded rather than resting on top.
         for (String pillar : PILLARS) registerSingleStructure(context, pillar, ROCK_FORMATION_GROUND_OFFSET);
@@ -171,16 +169,16 @@ public class VolcanicMossTundraFeatures {
             rockEntries.add(new WeightedPlacedFeature(structurePlaced(placedFeatures, ELEPHANT_ROCKS[i]), 2.0F / remaining));
             remaining -= 2.0F;
         }
-        context.register(SELECT_ROCK_FORMATION_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
-                rockEntries, structurePlaced(placedFeatures, ELEPHANT_ROCKS[ELEPHANT_ROCKS.length - 1]))));
+        context.register(SELECT_ROCK_FORMATION_KEY, new RandomSelectorFeature(
+                rockEntries, structurePlaced(placedFeatures, ELEPHANT_ROCKS[ELEPHANT_ROCKS.length - 1])));
 
-        context.register(SELECT_VOLCANO_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
+        context.register(SELECT_VOLCANO_KEY, new RandomSelectorFeature(
                 List.of(new WeightedPlacedFeature(structurePlaced(placedFeatures, VOLCANOES[0]), 0.5F)),
-                structurePlaced(placedFeatures, VOLCANOES[1]))));
+                structurePlaced(placedFeatures, VOLCANOES[1])));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         context.register(NO_OP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(NO_OP_KEY), List.of()));
 
@@ -212,7 +210,7 @@ public class VolcanicMossTundraFeatures {
         for (String elephantRock : ELEPHANT_ROCKS) registerNoModifiers(context, configuredFeatures, elephantRock);
         for (String volcano : VOLCANOES) registerNoModifiers(context, configuredFeatures, volcano);
 
-        // OCEAN_FLOOR_WG (not WORLD_SURFACE_WG) ignores fluids, so these don't land on top of water; the ground offset is applied separately via SingleStructureConfiguration.
+        // OCEAN_FLOOR_WG (not WORLD_SURFACE_WG) ignores fluids, so these don't land on top of water; the ground offset is applied separately via SingleStructureFeature.
         context.register(SELECT_ROCK_FORMATION_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SELECT_ROCK_FORMATION_KEY),
                 List.of(RarityFilter.onAverageOnceEvery(7), InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG), BiomeFilter.biome())));
@@ -222,13 +220,12 @@ public class VolcanicMossTundraFeatures {
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG), BiomeFilter.biome())));
     }
 
-    private static void registerSingleStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, String name, int groundOffset) {
+    private static void registerSingleStructure(BootstrapContext<Feature> context, String name, int groundOffset) {
         Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name);
-        context.register(configuredKey(name), new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(structure, Optional.<net.minecraft.world.level.block.Rotation>empty(), groundOffset)));
+        context.register(configuredKey(name), new SingleStructureFeature(structure, Optional.<net.minecraft.world.level.block.Rotation>empty(), groundOffset));
     }
 
-    private static void registerNoModifiers(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, String name) {
+    private static void registerNoModifiers(BootstrapContext<PlacedFeature> context, HolderGetter<Feature> configuredFeatures, String name) {
         context.register(placedKey(name), new PlacedFeature(configuredFeatures.getOrThrow(configuredKey(name)), List.<PlacementModifier>of()));
     }
 
@@ -236,8 +233,8 @@ public class VolcanicMossTundraFeatures {
         return placedFeatures.getOrThrow(placedKey(name));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
+    private static ResourceKey<Feature> configuredKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "volcanic_moss_tundra/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {

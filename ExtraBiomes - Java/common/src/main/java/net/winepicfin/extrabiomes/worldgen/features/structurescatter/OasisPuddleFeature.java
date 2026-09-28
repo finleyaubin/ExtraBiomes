@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
@@ -18,6 +17,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.world.level.levelgen.feature.Feature;
 
 /**
  * Worked example / reference implementation of {@link SingleStructureFeature}, converted from
@@ -33,7 +33,7 @@ import java.util.Optional;
  *   distribution: iterations 1, scatter_chance 1, x/z uniform [0,16], y = heightmap(worldx,worldz) - 4
  *   conditions: biome_filter has_biome_tag "oasis"
  * </pre>
- * Mapping notes (see the class-level docs on {@link SingleStructureConfiguration} for the general rules):
+ * Mapping notes (see the class-level docs on {@link SingleStructureFeature} for the general rules):
  * <ul>
  *   <li>{@code structure_name} -> the converted .nbt at
  *       data/extrabiomes/structures/structurescatter/oasis_puddle.nbt, referenced here as
@@ -50,10 +50,10 @@ import java.util.Optional;
  *       Bedrock - hence the added rarity.</li>
  *   <li>{@code x/z uniform [0,16]} (once per chunk, spread across it) -> {@link InSquarePlacement#spread()}.</li>
  *   <li>{@code y = heightmap - 4} -> {@link HeightmapPlacement} on WORLD_SURFACE_WG (offset 0) combined with
- *       {@code groundOffset = -4} in the {@link SingleStructureConfiguration}, which is applied inside
+ *       {@code groundOffset = -4} in the {@link SingleStructureFeature}, which is applied inside
  *       {@link SingleStructureFeature#place} right before the structure is stamped down.</li>
  *   <li>{@code constraints.grounded} + {@code block_intersection.block_allowlist} (the puddle must sit on
- *       sand/red sand) -> {@link SingleStructureConfiguration}'s {@code requireGroundedFloor} +
+ *       sand/red sand) -> {@link SingleStructureFeature}'s {@code requireGroundedFloor} +
  *       {@code requiredFloorBlocks} (SAND, RED_SAND), checked against the structure's real post-rotation
  *       footprint (a prior PlacementModifier-based version checked pre-rotation offsets and over-rejected
  *       almost every site).</li>
@@ -64,21 +64,18 @@ import java.util.Optional;
  * </ul>
  */
 public class OasisPuddleFeature {
-    public static final ResourceKey<ConfiguredFeature<?, ?>> OASIS_PUDDLE_SCATTER_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
+    public static final ResourceKey<Feature> OASIS_PUDDLE_SCATTER_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
     public static final ResourceKey<PlacedFeature> OASIS_PUDDLE_SCATTER_PLACED_KEY =
             ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "oasis_puddle_scatter"));
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(OASIS_PUDDLE_SCATTER_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "structurescatter/oasis_puddle"),
-                        Optional.empty(), -4, true, List.of(Blocks.SAND, Blocks.RED_SAND))
-        ));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(OASIS_PUDDLE_SCATTER_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "structurescatter/oasis_puddle"),
+                        Optional.empty(), -4, true, List.of(Blocks.SAND, Blocks.RED_SAND)));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
         context.register(OASIS_PUDDLE_SCATTER_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(OASIS_PUDDLE_SCATTER_KEY),
                 List.of(

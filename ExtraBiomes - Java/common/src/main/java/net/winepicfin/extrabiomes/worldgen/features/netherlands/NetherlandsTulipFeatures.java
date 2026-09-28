@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
@@ -10,10 +11,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
+import net.minecraft.world.level.levelgen.feature.VegetationPatchFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -39,7 +39,7 @@ import java.util.List;
  * <p>
  * {@code replaceable_blocks: [minecraft:farmland, minecraft:grass]} -> the shared
  * {@code extrabiomes:netherlands_tulip_replaceable} block tag (data/extrabiomes/tags/blocks/netherlands_tulip_replaceable.json).
- * {@code ground_block: minecraft:grass} -> BlockStateProvider.simple(Blocks.GRASS_BLOCK) (Bedrock's legacy "grass" id).
+ * {@code ground_block: minecraft:grass} -> BlockStateProvider.holderOf(Blocks.GRASS_BLOCK) (Bedrock's legacy "grass" id).
  * {@code surface: floor} -> CaveSurface.FLOOR. {@code depth: 1-1} -> ConstantInt.of(1). {@code vertical_range: 2} -> 2.
  * {@code vegetation_chance: 1} -> 1.0F. {@code horizontal_radius: 1-1} -> ConstantInt.of(1).
  * {@code extra_edge_column_chance: 0} -> 0.0F (last VegetationPatchConfiguration parameter). No Bedrock field maps to
@@ -56,52 +56,52 @@ import java.util.List;
 public class NetherlandsTulipFeatures {
     public static final TagKey<Block> TULIP_REPLACEABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "netherlands_tulip_replaceable"));
 
-    private static final ResourceKey<ConfiguredFeature<?, ?>> ORANGE_TULIP_KEY = key("netherlands_orange_tulip");
-    private static final ResourceKey<ConfiguredFeature<?, ?>> PINK_TULIP_KEY = key("netherlands_pink_tulip");
-    private static final ResourceKey<ConfiguredFeature<?, ?>> RED_TULIP_KEY = key("netherlands_red_tulip");
-    private static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_TULIP_KEY = key("netherlands_white_tulip");
+    private static final ResourceKey<Feature> ORANGE_TULIP_KEY = key("netherlands_orange_tulip");
+    private static final ResourceKey<Feature> PINK_TULIP_KEY = key("netherlands_pink_tulip");
+    private static final ResourceKey<Feature> RED_TULIP_KEY = key("netherlands_red_tulip");
+    private static final ResourceKey<Feature> WHITE_TULIP_KEY = key("netherlands_white_tulip");
 
     private static final ResourceKey<PlacedFeature> ORANGE_TULIP_PLACED_KEY = placedKey("netherlands_orange_tulip");
     private static final ResourceKey<PlacedFeature> PINK_TULIP_PLACED_KEY = placedKey("netherlands_pink_tulip");
     private static final ResourceKey<PlacedFeature> RED_TULIP_PLACED_KEY = placedKey("netherlands_red_tulip");
     private static final ResourceKey<PlacedFeature> WHITE_TULIP_PLACED_KEY = placedKey("netherlands_white_tulip");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> ORANGE_TULIP_FLOOR_KEY = key("netherlands_orange_tulip_floor");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> PINK_TULIP_FLOOR_KEY = key("netherlands_pink_tulip_floor");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> RED_TULIP_FLOOR_KEY = key("netherlands_red_tulip_floor");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> WHITE_TULIP_FLOOR_KEY = key("netherlands_white_tulip_floor");
+    public static final ResourceKey<Feature> ORANGE_TULIP_FLOOR_KEY = key("netherlands_orange_tulip_floor");
+    public static final ResourceKey<Feature> PINK_TULIP_FLOOR_KEY = key("netherlands_pink_tulip_floor");
+    public static final ResourceKey<Feature> RED_TULIP_FLOOR_KEY = key("netherlands_red_tulip_floor");
+    public static final ResourceKey<Feature> WHITE_TULIP_FLOOR_KEY = key("netherlands_white_tulip_floor");
 
     public static final ResourceKey<PlacedFeature> ORANGE_TULIP_FLOOR_PLACED_KEY = placedKey("netherlands_orange_tulip_floor");
     public static final ResourceKey<PlacedFeature> PINK_TULIP_FLOOR_PLACED_KEY = placedKey("netherlands_pink_tulip_floor");
     public static final ResourceKey<PlacedFeature> RED_TULIP_FLOOR_PLACED_KEY = placedKey("netherlands_red_tulip_floor");
     public static final ResourceKey<PlacedFeature> WHITE_TULIP_FLOOR_PLACED_KEY = placedKey("netherlands_white_tulip_floor");
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(ORANGE_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.ORANGE_TULIP))));
-        context.register(PINK_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.PINK_TULIP))));
-        context.register(RED_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_TULIP))));
-        context.register(WHITE_TULIP_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WHITE_TULIP))));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(ORANGE_TULIP_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.ORANGE_TULIP)));
+        context.register(PINK_TULIP_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.PINK_TULIP)));
+        context.register(RED_TULIP_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.RED_TULIP)));
+        context.register(WHITE_TULIP_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.WHITE_TULIP)));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
         HolderSet<Block> tulipReplaceable = blocks.getOrThrow(TULIP_REPLACEABLE);
-        BlockStateProvider grass = BlockStateProvider.simple(Blocks.GRASS_BLOCK);
-        context.register(ORANGE_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
+        Holder<BlockStateProvider> grass = BlockStateProvider.holderOf(Blocks.GRASS_BLOCK);
+        context.register(ORANGE_TULIP_FLOOR_KEY, new VegetationPatchFeature(
                 tulipReplaceable, grass, placedFeatures.getOrThrow(ORANGE_TULIP_PLACED_KEY), CaveSurface.FLOOR,
-                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
-        context.register(PINK_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
+                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F));
+        context.register(PINK_TULIP_FLOOR_KEY, new VegetationPatchFeature(
                 tulipReplaceable, grass, placedFeatures.getOrThrow(PINK_TULIP_PLACED_KEY), CaveSurface.FLOOR,
-                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
-        context.register(RED_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
+                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F));
+        context.register(RED_TULIP_FLOOR_KEY, new VegetationPatchFeature(
                 tulipReplaceable, grass, placedFeatures.getOrThrow(RED_TULIP_PLACED_KEY), CaveSurface.FLOOR,
-                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
-        context.register(WHITE_TULIP_FLOOR_KEY, new ConfiguredFeature<>(Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
+                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F));
+        context.register(WHITE_TULIP_FLOOR_KEY, new VegetationPatchFeature(
                 tulipReplaceable, grass, placedFeatures.getOrThrow(WHITE_TULIP_PLACED_KEY), CaveSurface.FLOOR,
-                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F)));
+                ConstantInt.of(1), 0.0F, 2, 1.0F, ConstantInt.of(1), 0.0F));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
         // The outer vegetation patch feature registered below controls placement of these inner blocks.
         context.register(ORANGE_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(ORANGE_TULIP_KEY), List.of()));
         context.register(PINK_TULIP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(PINK_TULIP_KEY), List.of()));
@@ -116,8 +116,8 @@ public class NetherlandsTulipFeatures {
         context.register(WHITE_TULIP_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHITE_TULIP_FLOOR_KEY), scatter));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+    private static ResourceKey<Feature> key(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {

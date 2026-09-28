@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
+import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
@@ -34,7 +34,7 @@ import java.util.Set;
  * sapling/bamboo/azalea/fern where a ledge is wide enough) on exposed tops. Both the reskin and
  * the vegetation use the same coherent-noise style already established by
  * {@link net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsFeature} (a static
- * seeded {@link PerlinSimplexNoise} field, sampled per-column) so variation clusters into patches
+ * seeded {@link SimplexNoise} field, sampled per-column) so variation clusters into patches
  * instead of a speckled per-block roll.
  * <p>
  * Runtime-only, like {@link net.winepicfin.extrabiomes.worldgen.features.structurescatter.PreserveBedrockProcessor} -
@@ -45,9 +45,9 @@ import java.util.Set;
 public final class PillarWeatheringProcessor implements StructureProcessor {
     public static final PillarWeatheringProcessor INSTANCE = new PillarWeatheringProcessor();
 
-    private static final PerlinSimplexNoise WEATHER_NOISE = new PerlinSimplexNoise(RandomSource.create(5551L), List.of(0));
-    private static final PerlinSimplexNoise VEGETATION_NOISE = new PerlinSimplexNoise(RandomSource.create(9113L), List.of(0));
-    private static final PerlinSimplexNoise SOIL_NOISE = new PerlinSimplexNoise(RandomSource.create(7331L), List.of(0));
+    private static final SimplexNoise WEATHER_NOISE = new SimplexNoise(RandomSource.create(5551L));
+    private static final SimplexNoise VEGETATION_NOISE = new SimplexNoise(RandomSource.create(9113L));
+    private static final SimplexNoise SOIL_NOISE = new SimplexNoise(RandomSource.create(7331L));
     private static final double WEATHER_SCALE_XZ = 0.07D;
     private static final double WEATHER_SCALE_Y = 0.10D;
     // No template here is anywhere near this tall (tallest pillar variant is 106) - used only to
@@ -88,9 +88,9 @@ public final class PillarWeatheringProcessor implements StructureProcessor {
             return relativeBlockInfo;
         }
         BlockPos worldPos = relativeBlockInfo.pos();
-        // A blend of an XZ sample and a Y-leaning sample - a single 2D field alone would only ever produce perfectly vertical bands, since PerlinSimplexNoise has no native 3D overload.
-        double xz = WEATHER_NOISE.getValue(worldPos.getX() * WEATHER_SCALE_XZ, worldPos.getZ() * WEATHER_SCALE_XZ, false);
-        double y = WEATHER_NOISE.getValue(worldPos.getY() * WEATHER_SCALE_Y, (worldPos.getX() - worldPos.getZ()) * WEATHER_SCALE_Y * 0.5D, false);
+        // A blend of an XZ sample and a Y-leaning sample - a single 2D field alone would only ever produce perfectly vertical bands, since SimplexNoise has no native 3D overload.
+        double xz = WEATHER_NOISE.get(worldPos.getX() * WEATHER_SCALE_XZ, worldPos.getZ() * WEATHER_SCALE_XZ);
+        double y = WEATHER_NOISE.get(worldPos.getY() * WEATHER_SCALE_Y, (worldPos.getX() - worldPos.getZ()) * WEATHER_SCALE_Y * 0.5D);
         double n = xz * 0.65D + y * 0.35D;
 
         // originalPos is still template-local (pre-rotation), so its Y is unaffected by which random Rotation this placement picked - exactly the "fraction up the structure" this gradient needs.
@@ -165,7 +165,7 @@ public final class PillarWeatheringProcessor implements StructureProcessor {
             double density = vegetationDensity(above);
             if (random.nextFloat() >= TOP_GROWTH_CHANCE * (float) density) continue;
 
-            boolean mossy = SOIL_NOISE.getValue(p.getX() * VEGETATION_SCALE, p.getZ() * VEGETATION_SCALE, false) < 0.0D;
+            boolean mossy = SOIL_NOISE.get(p.getX() * VEGETATION_SCALE, p.getZ() * VEGETATION_SCALE) < 0.0D;
             level.setBlock(p, (mossy ? Blocks.MOSS_BLOCK : Blocks.GRASS_BLOCK).defaultBlockState(), Block.UPDATE_CLIENTS);
 
             float topRoll = random.nextFloat();
@@ -227,7 +227,7 @@ public final class PillarWeatheringProcessor implements StructureProcessor {
 
     /** 0..1 clustering weight - only positions in a noise field's upper range grow anything, so vegetation reads as patches rather than an even coat. */
     private static double vegetationDensity(BlockPos pos) {
-        double n = VEGETATION_NOISE.getValue(pos.getX() * VEGETATION_SCALE, pos.getZ() * VEGETATION_SCALE, false);
+        double n = VEGETATION_NOISE.get(pos.getX() * VEGETATION_SCALE, pos.getZ() * VEGETATION_SCALE);
         return Math.max(0.0D, (n + 1.0D) / 2.0D);
     }
 

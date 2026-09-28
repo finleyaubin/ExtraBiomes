@@ -1,9 +1,9 @@
 package net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -17,14 +17,14 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
  * registering SingleStructureFeature's Feature type. Must be called once from the mod's main class.
  */
 public class ModVolcanicPlacementModifiers {
-    public static final DeferredRegister<PlacementModifierType<?>> MODIFIERS = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.PLACEMENT_MODIFIER_TYPE);
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
+    public static final DeferredRegister<MapCodec<? extends PlacementModifier>> MODIFIERS = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.PLACEMENT_MODIFIER_TYPE);
+    public static final DeferredRegister<MapCodec<? extends Feature>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE_TYPE);
 
-    public static final RegistrySupplier<PlacementModifierType<RiverNoiseFilter>> RIVER_NOISE_FILTER = MODIFIERS.register("river_noise_filter", () -> () -> RiverNoiseFilter.CODEC);
-    public static final RegistrySupplier<PlacementModifierType<MinYFilter>> MIN_Y_FILTER = MODIFIERS.register("min_y_filter", () -> () -> MinYFilter.CODEC);
+    public static final RegistrySupplier<MapCodec<RiverNoiseFilter>> RIVER_NOISE_FILTER = MODIFIERS.register("river_noise_filter", () -> RiverNoiseFilter.CODEC);
+    public static final RegistrySupplier<MapCodec<MinYFilter>> MIN_Y_FILTER = MODIFIERS.register("min_y_filter", () -> MinYFilter.CODEC);
 
-    public static final RegistrySupplier<BasaltBankFeature> BASALT_BANK = FEATURES.register("basalt_bank", () -> new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
-    public static final RegistrySupplier<LavaFlowKickstartFeature> LAVA_FLOW_KICKSTART = FEATURES.register("lava_flow_kickstart", () -> new LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<MapCodec<BasaltBankFeature>> BASALT_BANK = FEATURES.register("basalt_bank", () -> BasaltBankFeature.CODEC);
+    public static final RegistrySupplier<MapCodec<LavaFlowKickstartFeature>> LAVA_FLOW_KICKSTART = FEATURES.register("lava_flow_kickstart", () -> LavaFlowKickstartFeature.CODEC);
 
     public static void register() {
         MODIFIERS.register();

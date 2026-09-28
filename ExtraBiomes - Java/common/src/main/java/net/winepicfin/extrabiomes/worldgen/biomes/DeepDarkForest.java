@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
@@ -19,7 +20,7 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
         // Bedrock's deep_dark_forest carries both "taiga"+"mega" (old-growth taiga trees) and "roofed" (dark oak) tags at once, so both are added rather than picking just one.
@@ -50,10 +51,10 @@ public class DeepDarkForest {
                 .temperature(BiomeClimateTuning.DEEP_DARK_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x000000)
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x000000))
                 .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 12.0F)
-                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.DEEP_DARK_FOREST.skyColor())
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0x000000)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.DEEP_DARK_FOREST.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x000000))
                 .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 4.0F)
                 .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 32.0F)
                 .setAttribute(EnvironmentAttributes.SKY_FOG_END_DISTANCE, 32.0F)

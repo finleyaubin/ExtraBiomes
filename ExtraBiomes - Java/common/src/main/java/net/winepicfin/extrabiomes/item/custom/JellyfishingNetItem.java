@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.item.custom;
 
+import net.minecraft.util.Prediction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -43,7 +44,7 @@ public class JellyfishingNetItem extends Item {
                         context.getItemInHand().shrink(1);
                         ItemStack emptyNet = new ItemStack(ModItems.JELLYFISHING_NET_EMPTY.get());
                         if (!player.getInventory().add(emptyNet)) {
-                            player.drop(emptyNet, false);
+                            player.drop(emptyNet, false, Prediction.SERVER_ONLY);
                         }
                     }
                 }

@@ -18,38 +18,36 @@ import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.advancements.BaitLureTrigger;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
-import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.DoubleTallGrassFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.PodzolConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.WaterLilyFixupFeature;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.GooConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFieldFeature;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.CaveVineFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.FallenJungleTreeFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeature;
-import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeatureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.BasaltBankFeature;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.MinYFilter;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.RiverNoiseFilter;
@@ -171,24 +169,24 @@ public final class DatapackRegistries {
         }
         BuiltInRegistries.ENTITY_TYPE.freeze();
 
-        setFrozen(BuiltInRegistries.FEATURE, false);
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "single_structure", new SingleStructureFeature(SingleStructureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "bryce_pillars", new BrycePillarsFeature(BrycePillarsConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_podzol_conversion", new PodzolConversionFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_double_tall_grass", new DoubleTallGrassFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_waterlily_fixup", new WaterLilyFixupFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "mystic_goo_conversion", new GooConversionFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "netherlands_wheat_field", new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_cave_vine", new CaveVineFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_fallen_jungle_tree", new FallenJungleTreeFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_multi", new MultiFeature(MultiFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "basalt_bank", new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "lava_flow_kickstart", new net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
-        BuiltInRegistries.FEATURE.freeze();
+        setFrozen(BuiltInRegistries.FEATURE_TYPE, false);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "single_structure", SingleStructureFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "bryce_pillars", BrycePillarsFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_podzol_conversion", PodzolConversionFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_double_tall_grass", DoubleTallGrassFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_waterlily_fixup", WaterLilyFixupFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "mystic_goo_conversion", GooConversionFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "netherlands_wheat_field", NetherlandsWheatFieldFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_cave_vine", CaveVineFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_fallen_jungle_tree", FallenJungleTreeFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_multi", MultiFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "basalt_bank", BasaltBankFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "lava_flow_kickstart", net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature.CODEC);
+        BuiltInRegistries.FEATURE_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
-        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "river_noise_filter", (PlacementModifierType<RiverNoiseFilter>) () -> RiverNoiseFilter.CODEC);
-        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "min_y_filter", (PlacementModifierType<MinYFilter>) () -> MinYFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "river_noise_filter", RiverNoiseFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "min_y_filter", MinYFilter.CODEC);
         BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.STRUCTURE_TYPE, false);
@@ -343,7 +341,10 @@ public final class DatapackRegistries {
         // can't locate this jar reliably from a plain Gradle test JVM (no dev-launch classpath
         // marker), so open it directly instead via the jar backing a known vanilla class.
         packs.add(new FilePackResources.FileResourcesSupplier(vanillaJarPath())
-                .openPrimary(new PackLocationInfo("vanilla", Component.literal("vanilla"), PackSource.BUILT_IN, Optional.empty())));
+                .openResources(
+                        new PackLocationInfo("vanilla", Component.literal("vanilla"), PackSource.BUILT_IN, Optional.empty()),
+                        new Pack.Metadata(Component.literal("vanilla"), PackCompatibility.COMPATIBLE, FeatureFlags.VANILLA_SET, List.of()))
+                .findFirst().orElseThrow());
         for (Path root : DATA_ROOTS) {
             packs.add(new PathPackResources(
                     new PackLocationInfo(root.toString(), Component.literal(root.toString()), PackSource.BUILT_IN, Optional.empty()),
@@ -387,7 +388,7 @@ public final class DatapackRegistries {
     // caller is careful to avoid.
     private static List<RegistryDataLoader.RegistryData<?>> registriesToLoad() {
         Set<ResourceKey<?>> keys = Set.of(
-                Registries.CONFIGURED_FEATURE,
+                Registries.FEATURE,
                 Registries.PLACED_FEATURE,
                 Registries.STRUCTURE,
                 Registries.STRUCTURE_SET,
@@ -395,9 +396,18 @@ public final class DatapackRegistries {
                 Registries.PROCESSOR_LIST,
                 Registries.BIOME,
                 Registries.NOISE,
+                // As of 26.x, BlockStateProvider entries used by worldgen features (including
+                // vanilla's own tree features) are registered as their own data-driven registry
+                // rather than always inlined, so it must be loaded alongside FEATURE/NOISE/etc.
+                Registries.BLOCK_STATE_PROVIDER,
+                // As of 26.x, vanilla's own SurfaceRules were replaced by the MaterialRule/
+                // MaterialCondition system (see ModSurfaceRules), which NOISE_SETTINGS now
+                // references as its own data-driven registries.
+                Registries.MATERIAL_RULE,
+                Registries.MATERIAL_CONDITION,
                 Registries.DENSITY_FUNCTION,
                 Registries.NOISE_SETTINGS,
-                Registries.CONFIGURED_CARVER,
+                Registries.CARVER,
                 // Not authored by this mod, but every vanilla nether biome this test also loads
                 // as base content (basalt_deltas, crimson_forest, ...) references its ambient
                 // sound presets through this registry.
@@ -407,7 +417,7 @@ public final class DatapackRegistries {
                 // vanilla's own enchantment JSON in turn references damage types (thorns, ...).
                 Registries.ENCHANTMENT,
                 Registries.DAMAGE_TYPE);
-        return RegistryDataLoader.WORLDGEN_REGISTRIES.stream()
+        return RegistryDataLoader.WORLD_REGISTRIES.stream()
                 .filter(data -> keys.contains(data.key()))
                 .toList();
     }
