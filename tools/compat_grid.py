@@ -101,13 +101,18 @@ def neoforge_prefix(mc):
     return ".".join((parts + ["0"])[:3]) + "."
 
 
-def maven_versions(artifact_url, prefix):
-    versions = re.findall(r"<version>([^<]+)</version>", fetch(f"{artifact_url}/maven-metadata.xml").decode())
+def sorted_versions(versions, prefix):
     return sorted((v for v in versions if v.startswith(prefix)), key=lambda v: [int(n) for n in re.findall(r"\d+", v)])
 
 
+def maven_versions(artifact_url, prefix):
+    return sorted_versions(re.findall(r"<version>([^<]+)</version>", fetch(f"{artifact_url}/maven-metadata.xml").decode()), prefix)
+
+
 def neoforge_version(mc):
-    matching = maven_versions("https://maven.neoforged.net/releases/net/neoforged/neoforge", neoforge_prefix(mc))
+    # NeoForge's maven-metadata.xml can briefly list only the newest build after a publish; the directory listing can't.
+    listing = fetch_json("https://maven.neoforged.net/api/maven/details/releases/net/neoforged/neoforge")
+    matching = sorted_versions([f["name"] for f in listing["files"] if f.get("type") == "DIRECTORY"], neoforge_prefix(mc))
     stable = [v for v in matching if "beta" not in v]
     return (stable or matching)[-1]
 
