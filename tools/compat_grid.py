@@ -12,6 +12,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -30,7 +31,9 @@ HEADERS = {"User-Agent": "finleyaubin/ExtraBiomes compat-grid"}
 
 
 def fetch(url):
-    with urllib.request.urlopen(urllib.request.Request(url, headers=HEADERS), timeout=120) as r:
+    # Modrinth asks for a descriptive User-Agent, but NeoForge's Maven 404s on this one.
+    headers = HEADERS if "modrinth.com" in url else {}
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=120) as r:
         return r.read()
 
 
@@ -132,11 +135,8 @@ def boot(launch, server_dir, mod_files, log_path):
     (server_dir / "eula.txt").write_text("eula=true\n")
     (server_dir / "server.properties").write_text("level-seed=extrabiomes\nserver-port=0\nonline-mode=false\n")
     with open(log_path, "w") as log:
-        try:
-            # "stop" is only handled once the world and its spawn chunks have generated.
-            code = subprocess.run([*launch, "nogui"], cwd=server_dir, input=b"stop\n", stdout=log, stderr=subprocess.STDOUT, timeout=BOOT_TIMEOUT).returncode
-        except subprocess.TimeoutExpired:
-            code = None
+        server = subprocess.Popen([*launch, "nogui"], cwd=server_dir, stdin=subprocess.PIPE, stdout=log, stderr=subprocess.STDOUT)
+        code = wait_for_boot_then_stop(server, Path(log_path))
     text = Path(log_path).read_text(errors="replace")
     if "Feature order cycle found" in text:
         return "cycle", first_line(text, r"Feature order cycle found.*")
@@ -145,6 +145,27 @@ def boot(launch, server_dir, mod_files, log_path):
     if code == 0 and "Done (" in text:
         return "pass", ""
     return "crash", first_line(text, r"(Caused by: .*|.*Incompatible mods? found.*|.*requires .*|.*Exception: .*)")
+
+
+def wait_for_boot_then_stop(server, log_path):
+    """Returns the exit code, or None if the server had to be killed."""
+    deadline = time.monotonic() + BOOT_TIMEOUT
+    stopping = False
+    while time.monotonic() < deadline and server.poll() is None:
+        text = log_path.read_text(errors="replace")
+        if "Feature order cycle found" in text:
+            break
+        # Commands queued before "Done" can fail on newer versions, leaving the server idling forever.
+        if "Done (" in text and not stopping:
+            server.stdin.write(b"stop\n")
+            server.stdin.flush()
+            stopping = True
+        time.sleep(2)
+    if server.poll() is None:
+        server.kill()
+        server.wait()
+        return None
+    return server.returncode
 
 
 def first_line(text, pattern):

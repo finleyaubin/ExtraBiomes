@@ -3,6 +3,8 @@ name: Compat Grid
 # Tests each published ExtraBiomes build against other worldgen mods and commits the grid to the compat-grid branch.
 on:
   workflow_dispatch:
+  push:
+    branches: [ci/compat-grid]
 
 permissions:
   contents: read
