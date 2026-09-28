@@ -892,7 +892,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.22",
-          "reason": "[21:33:29] [main/ERROR]: Incompatible mods found!"
+          "reason": "[23:29:10] [main/ERROR]: Incompatible mods found!"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -930,7 +930,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.22",
-          "reason": "[21:33:30] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
+          "reason": "[23:30:46] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -968,7 +968,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.40",
-          "reason": "[21:31:14] [main/ERROR]: Incompatible mods found!"
+          "reason": "[23:30:51] [main/ERROR]: Incompatible mods found!"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -1006,7 +1006,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.40",
-          "reason": "[21:34:36] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
+          "reason": "[23:29:28] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -1070,19 +1070,19 @@
       "loader": "neoforge",
       "results": {
         "ExtraBiomes alone": {
-          "status": "crash",
+          "status": "pass",
           "version": "",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+          "reason": ""
         },
         "Terralith": {
-          "status": "crash",
+          "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+          "reason": "[23:27:58] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "26.3.0.0.7",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+          "reason": ""
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -1095,13 +1095,13 @@
           "reason": "no neoforge 26.3 build"
         },
         "WWOO": {
-          "status": "crash",
+          "status": "pass",
           "version": "3.0.1",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry"
+          "reason": ""
         }
       },
       "extrabiomes": "3.10.0-beta-8",
-      "loader_version": "26.3.0.33-beta"
+      "loader_version": "26.3.0.19-beta"
     }
   ]
 }

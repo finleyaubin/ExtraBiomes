@@ -34,7 +34,7 @@ Generated 2026-09-28 by the Compat Grid workflow. Each cell boots a real server 
 | 26.2 | fabric | 3.10.0-beta-8 | ✅ | ❌ feature cycle | ⚠️ fails without ExtraBiomes too | ➖ | ➖ | ✅ |
 | 26.2 | neoforge | 3.10.0-beta-8 | ✅ | ❌ feature cycle | ⚠️ fails without ExtraBiomes too | ➖ | ➖ | ✅ |
 | 26.3 | fabric | 3.10.0-beta-8 | ✅ | ❌ feature cycle | ✅ | ➖ | ➖ | ✅ |
-| 26.3 | neoforge | 3.10.0-beta-8 | 💥 crash | 💥 crash | ⚠️ fails without ExtraBiomes too | ➖ | ➖ | 💥 crash |
+| 26.3 | neoforge | 3.10.0-beta-8 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ |
 
 ## Failures
 
@@ -61,6 +61,3 @@ Generated 2026-09-28 by the Compat Grid workflow. Each cell boots a real server 
 - **26.2 fabric + Terralith** (cycle): `biomes: extrabiomes:lush_mesa_bryce, terralith:sakura_valley, terralith:warm_river`
 - **26.2 neoforge + Terralith** (cycle): `biomes: extrabiomes:lush_mesa_bryce, terralith:sakura_valley, terralith:warm_river`
 - **26.3 fabric + Terralith** (cycle): `biomes: extrabiomes:lush_mesa_bryce, terralith:sakura_valley, terralith:warm_river`
-- **26.3 neoforge + ExtraBiomes alone** (crash): `Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry`
-- **26.3 neoforge + Terralith** (crash): `Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry`
-- **26.3 neoforge + WWOO** (crash): `Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.DataPackRegistryEvent$NewRegistry`
