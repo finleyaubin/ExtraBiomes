@@ -8,7 +8,7 @@ Dev mode tests what CI built from each branch instead of what is published:
   compat_grid.py plan-dev --repo OWNER/REPO [--branches 1.21.1,Java-Dev]  -> JSON list of {branch, mc, loader, run_id, label}
   compat_grid.py fetch-jar --repo OWNER/REPO --run-id N --loader fabric --out DIR -> prints the path of the CI-built jar
   compat_grid.py run ... --jar PATH --label BRANCH@SHA --branch BRANCH
-  compat_grid.py grid results/ --out grid/ --dev
+  compat_grid.py grid results/ --out grid/ --dev [--previous OLD/grid.json]   -> keeps rows OLD has that results/ doesn't retest
 """
 import argparse
 import datetime
@@ -341,6 +341,7 @@ def cmd_run(args):
         base_versions, base_missing = resolve_with_deps(EXTRABIOMES, args.mc, args.loader)
     if args.branch:
         result["branch"] = args.branch
+    result["tested"] = datetime.date.today().isoformat()
     launch, result["loader_version"] = install_server(args.mc, args.loader, server_dir)
 
     partners = {n: p for n, p in PARTNERS.items() if not args.only or n in args.only.split(",")}
@@ -384,10 +385,26 @@ def version_key(mc):
     return [int(p) for p in mc.split(".")]
 
 
+def row_key(row):
+    return (row.get("branch", ""), row["mc"], row["loader"])
+
+
+def merge_rows(previous, new):
+    """A partial run replaces only the rows it retested; the rest stay, dated to the run that produced them."""
+    merged = {row_key(r): {**r, "tested": r.get("tested", previous.get("generated", "?"))} for r in previous.get("rows", [])}
+    merged.update({row_key(r): r for r in new})
+    return list(merged.values())
+
+
 def cmd_grid(args):
-    rows = sorted((json.loads(p.read_text()) for p in Path(args.results).glob("*.json")), key=lambda r: (version_key(r["mc"]), r.get("branch", ""), r["loader"]))
-    columns = [ALONE, *PARTNERS]
     today = datetime.date.today().isoformat()
+    rows = [json.loads(p.read_text()) for p in Path(args.results).glob("*.json")]
+    for r in rows:
+        r.setdefault("tested", today)
+    if args.previous and Path(args.previous).exists():
+        rows = merge_rows(json.loads(Path(args.previous).read_text()), rows)
+    rows.sort(key=lambda r: (version_key(r["mc"]), r.get("branch", ""), r["loader"]))
+    columns = [ALONE, *PARTNERS]
     subject = ("the jar CI built from the tip of each branch (unreleased code)", "Compat Grid (dev) workflow") if args.dev else ("the published ExtraBiomes build", "Compat Grid workflow")
     lines = [
         "# ExtraBiomes worldgen compatibility" + (" (dev branches)" if args.dev else ""),
@@ -395,20 +412,21 @@ def cmd_grid(args):
         f"Want another mod added to this grid? [Request it in an issue]({ISSUES_URL}). "
         f"If your mod list hits a feature order cycle that isn't listed here, [Feature Recycler]({FEATURE_RECYCLER_URL}) can fix it.",
         "",
-        f"Generated {today} by the {subject[1]}. Each cell boots a real server with {subject[0]} and one other mod, generates a world, and stops it.",
+        f"Generated {today} by the {subject[1]}. Each cell boots a real server with {subject[0]} and one other mod, generates a world, and stops it."
+        + (" A run of only some branches updates just those rows, so the Tested column shows when each row was last run." if args.dev else ""),
         "",
         "✅ works · ❌ feature order cycle · 💥 crash on startup · ⏱ didn't finish · ⚠️ the other mod fails even without ExtraBiomes · ➖ that mod (or a dependency) has no build for this version",
         "",
-        "| Minecraft | Loader | ExtraBiomes | " + " | ".join(columns) + " |",
-        "|" + "---|" * (len(columns) + 3),
+        "| Minecraft | Loader | ExtraBiomes | " + ("Tested | " if args.dev else "") + " | ".join(columns) + " |",
+        "|" + "---|" * (len(columns) + 3 + args.dev),
     ]
     for r in rows:
         cells = [ICONS[r["results"][c]["status"]] if c in r["results"] else "?" for c in columns]
-        lines.append(f"| {r['mc']} | {r['loader']} | {r['extrabiomes']} | " + " | ".join(cells) + " |")
+        lines.append(f"| {r['mc']} | {r['loader']} | {r['extrabiomes']} | " + (f"{r['tested']} | " if args.dev else "") + " | ".join(cells) + " |")
     failures = [(r, c, e) for r in rows for c, e in r["results"].items() if e["status"] in ("cycle", "crash", "timeout")]
     if failures:
         lines += ["", "## Failures", ""]
-        lines += [f"- **{r['mc']} {r['loader']}{' (' + r['branch'] + ')' if 'branch' in r else ''} + {c}** ({e['status']}): `{e['reason']}`" for r, c, e in failures]
+        lines += [f"- **{r['mc']} {r['loader']}{' (' + r['branch'] + ')' if 'branch' in r else ''} + {c}** ({e['status']}{', tested ' + r['tested'] if args.dev else ''}): `{e['reason']}`" for r, c, e in failures]
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / "README.md").write_text("\n".join(lines) + "\n")
@@ -439,6 +457,14 @@ def cmd_selftest(_):
     assert dependencies_of(bop) == ([], ["s3dmwKy5"])
     assert dependencies_of({**bop, "dependencies": [{"project_id": "s3dmwKy5", "dependency_type": "required"}, {"project_id": "x", "dependency_type": "optional"}]}) == (["s3dmwKy5"], [])
     assert dependencies_of({"project_id": "other", "dependencies": [{"project_id": "a", "dependency_type": "required"}]}) == (["a"], [])
+    def row(mc, loader, branch, status, tested=None):
+        return {"mc": mc, "loader": loader, "branch": branch, "results": {"Terralith": {"status": status}}, **({"tested": tested} if tested else {})}
+    old = {"generated": "2026-09-01", "rows": [row("1.21.1", "fabric", "1.21.1", "cycle", "2026-09-05"), row("1.21.1", "neoforge", "1.21.1", "pass"), row("26.2", "fabric", "26.2", "pass", "2026-09-05")]}
+    merged = {row_key(r): r for r in merge_rows(old, [row("1.21.1", "fabric", "1.21.1", "pass", "2026-09-10")])}
+    assert len(merged) == 3
+    assert merged[("1.21.1", "1.21.1", "fabric")]["results"]["Terralith"]["status"] == "pass" and merged[("1.21.1", "1.21.1", "fabric")]["tested"] == "2026-09-10"
+    assert merged[("1.21.1", "1.21.1", "neoforge")]["tested"] == "2026-09-01" and merged[("26.2", "26.2", "fabric")]["tested"] == "2026-09-05"
+    assert len(merge_rows({}, [row("1.21.1", "fabric", "1.21.1", "pass", "2026-09-10")])) == 1
     print("selftest ok")
 
 
@@ -468,6 +494,7 @@ def main():
     grid.add_argument("results")
     grid.add_argument("--out", required=True)
     grid.add_argument("--dev", action="store_true", help="describe the results as unreleased branch builds")
+    grid.add_argument("--previous", help="a previous grid.json: rows it has that these results don't retest are kept")
     args = parser.parse_args()
     {"plan": cmd_plan, "plan-dev": cmd_plan_dev, "fetch-jar": cmd_fetch_jar, "run": cmd_run, "grid": cmd_grid, "selftest": cmd_selftest}[args.cmd](args)
 

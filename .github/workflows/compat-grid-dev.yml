@@ -86,8 +86,17 @@ jobs:
           path: results
           merge-multiple: true
 
+      # A run of only some branches (the `branches` input) keeps the rows it didn't retest from the published grid;
+      # a full run replaces everything, so branches that no longer exist drop out.
       - name: Build grid
-        run: python3 tools/compat_grid.py grid results --dev --out "$RUNNER_TEMP/grid" >> "$GITHUB_STEP_SUMMARY"
+        env:
+          BRANCHES: ${{ inputs.branches }}
+        run: |
+          PREVIOUS=()
+          if [ -n "$BRANCHES" ] && git fetch -q origin compat-grid-dev 2>/dev/null && git show origin/compat-grid-dev:grid.json > "$RUNNER_TEMP/previous-grid.json" 2>/dev/null; then
+            PREVIOUS=(--previous "$RUNNER_TEMP/previous-grid.json")
+          fi
+          python3 tools/compat_grid.py grid results --dev "${PREVIOUS[@]}" --out "$RUNNER_TEMP/grid" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit grid to the compat-grid-dev branch
         run: |
