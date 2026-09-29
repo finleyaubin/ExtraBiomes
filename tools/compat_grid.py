@@ -3,6 +3,12 @@
   compat_grid.py plan                                   -> JSON list of {mc, loader} with a published ExtraBiomes
   compat_grid.py run --mc 1.20.1 --loader fabric --out results/1.20.1-fabric.json [--work DIR]
   compat_grid.py grid results/ --out grid/              -> grid/README.md + grid/grid.json
+
+Dev mode tests what CI built from each branch instead of what is published:
+  compat_grid.py plan-dev --repo OWNER/REPO [--branches 1.21.1,Java-Dev]  -> JSON list of {branch, mc, loader, run_id, label}
+  compat_grid.py fetch-jar --repo OWNER/REPO --run-id N --loader fabric --out DIR -> prints the path of the CI-built jar
+  compat_grid.py run ... --jar PATH --label BRANCH@SHA --branch BRANCH
+  compat_grid.py grid results/ --out grid/ --dev
 """
 import argparse
 import datetime
@@ -19,6 +25,9 @@ import urllib.request
 from pathlib import Path
 
 EXTRABIOMES = "extrabiome"
+GRADLE_PROPERTIES = "ExtraBiomes - Java/gradle.properties"
+BUILD_WORKFLOW = "gradle-build.yml"
+DEV_BRANCH_PATTERN = re.compile(r"\d+\.\d+(\.\d+)?|Java-Dev")
 PARTNERS = {
     "Terralith": "terralith",
     "Biomes O' Plenty": "biomes-o-plenty",
@@ -198,6 +207,78 @@ def first_line(text, pattern):
     return match.group(0).strip()[:300] if match else "see log"
 
 
+def resolve_dev_deps(mc, loader):
+    """Dependencies for an ExtraBiomes build that may not be published: the newest published build's required dependencies, resolved for this version."""
+    query = urllib.parse.urlencode({"loaders": json.dumps([loader])})
+    newest = fetch_json(f"https://api.modrinth.com/v2/project/{EXTRABIOMES}/version?{query}")[0]
+    resolved, missing = {}, []
+    for dep in newest["dependencies"]:
+        if dep["dependency_type"] != "required":
+            continue
+        versions, dep_missing = resolve_with_deps(dep["project_id"], mc, loader)
+        resolved.update({v["project_id"]: v for v in versions})
+        missing += dep_missing
+    return list(resolved.values()), missing
+
+
+def gh_api(path, raw=False):
+    cmd = ["gh", "api", path] + (["-H", "Accept: application/vnd.github.raw"] if raw else [])
+    out = subprocess.run(cmd, check=True, capture_output=True, text=True).stdout
+    return out if raw else json.loads(out)
+
+
+def parse_properties(text):
+    return dict(line.split("=", 1) for line in text.splitlines() if "=" in line and not line.startswith("#"))
+
+
+def newest_green(runs):
+    # The API's own status filter and ordering have returned a stale run, so sort and filter here.
+    green = [r for r in runs if r["conclusion"] == "success"]
+    return max(green, key=lambda r: r["created_at"], default=None)
+
+
+def dev_label(branch, built, tip):
+    return f"{branch}@{built[:7]}" + ("" if built == tip else f" (tip {tip[:7]} not built)")
+
+
+def cmd_plan_dev(args):
+    """One entry per (branch, enabled loader), pointing at the newest green Build Mod run whose artifacts are still downloadable."""
+    wanted = args.branches.split(",") if args.branches else None
+    combos = []
+    for entry in gh_api(f"repos/{args.repo}/branches?per_page=100"):
+        branch, tip = entry["name"], entry["commit"]["sha"]
+        if wanted is not None and branch not in wanted or wanted is None and not DEV_BRANCH_PATTERN.fullmatch(branch):
+            continue
+        props = parse_properties(gh_api(f"repos/{args.repo}/contents/{urllib.parse.quote(GRADLE_PROPERTIES)}?ref={urllib.parse.quote(branch)}", raw=True))
+        run = newest_green(gh_api(f"repos/{args.repo}/actions/workflows/{BUILD_WORKFLOW}/runs?branch={urllib.parse.quote(branch)}&event=push&per_page=30")["workflow_runs"])
+        if run is None:
+            print(f"skipping {branch}: no green {BUILD_WORKFLOW} run", file=sys.stderr)
+            continue
+        if run["head_sha"] != tip:
+            print(f"warning: {branch} tip {tip[:7]} has no green build; using {run['head_sha'][:7]}", file=sys.stderr)
+        live = {a["name"] for a in gh_api(f"repos/{args.repo}/actions/runs/{run['id']}/artifacts?per_page=100")["artifacts"] if not a["expired"]}
+        for loader in props["enabled_platforms"].split(","):
+            if f"extrabiomes-{loader}-build" not in live:
+                print(f"skipping {branch} {loader}: build artifact expired or missing", file=sys.stderr)
+                continue
+            combos.append({"branch": branch, "mc": props["minecraft_version"], "loader": loader, "run_id": run["id"], "label": dev_label(branch, run["head_sha"], tip)})
+    print(json.dumps(combos))
+
+
+def pick_jar(jars):
+    """The remapped jar from a loader's build/libs: not the -raw, -sources or -dev intermediates."""
+    candidates = [j for j in jars if not re.search(r"-(raw|sources|dev|dev-shadow)\.jar$", str(j))]
+    if len(candidates) != 1:
+        raise SystemExit(f"expected one release jar, found {[str(j) for j in candidates]} among {[str(j) for j in jars]}")
+    return candidates[0]
+
+
+def cmd_fetch_jar(args):
+    out = Path(args.out)
+    subprocess.run(["gh", "run", "download", str(args.run_id), "--repo", args.repo, "-n", f"extrabiomes-{args.loader}-build", "-D", str(out)], check=True, stdout=sys.stderr)
+    print(pick_jar(sorted(out.glob("*.jar"))))
+
+
 def cmd_plan(_):
     combos = {(gv, loader) for v in fetch_json(f"https://api.modrinth.com/v2/project/{EXTRABIOMES}/version") for gv in v["game_versions"] for loader in v["loaders"]}
     print(json.dumps([{"mc": mc, "loader": loader} for mc, loader in sorted(combos)]))
@@ -209,10 +290,15 @@ def cmd_run(args):
     for d in (cache, logs):
         d.mkdir(parents=True, exist_ok=True)
     result = {"mc": args.mc, "loader": args.loader, "results": {}}
-    extrabiomes = modrinth_version(EXTRABIOMES, args.mc, args.loader)
-    result["extrabiomes"] = f"local {Path(args.jar).name}" if args.jar else extrabiomes["version_number"]
+    if args.jar:
+        result["extrabiomes"] = args.label or f"local {Path(args.jar).name}"
+        base_versions, base_missing = resolve_dev_deps(args.mc, args.loader)
+    else:
+        result["extrabiomes"] = modrinth_version(EXTRABIOMES, args.mc, args.loader)["version_number"]
+        base_versions, base_missing = resolve_with_deps(EXTRABIOMES, args.mc, args.loader)
+    if args.branch:
+        result["branch"] = args.branch
     launch, result["loader_version"] = install_server(args.mc, args.loader, server_dir)
-    base_versions, base_missing = resolve_with_deps(EXTRABIOMES, args.mc, args.loader)
 
     partners = {n: p for n, p in PARTNERS.items() if not args.only or n in args.only.split(",")}
     for name, project in {ALONE: None, **partners}.items():
@@ -233,13 +319,11 @@ def cmd_run(args):
             continue
         files = []
         for v in versions:
-            if args.jar and v["project_id"] == extrabiomes["project_id"]:
-                files.append(Path(args.jar).resolve())
-                continue
             primary = next((f for f in v["files"] if f["primary"]), v["files"][0])
             files.append(download(primary["url"], cache / primary["filename"]))
         slug = project or "alone"
-        entry["status"], entry["reason"] = boot(launch, server_dir, files, logs / f"{args.mc}-{args.loader}-{slug}.log")
+        jar = [Path(args.jar).resolve()] if args.jar else []
+        entry["status"], entry["reason"] = boot(launch, server_dir, jar + files, logs / f"{args.mc}-{args.loader}-{slug}.log")
         if project and entry["status"] != "pass":
             partner_files = [f for v, f in zip(versions, files) if v["project_id"] in {p["project_id"] for p in partner_versions}]
             alone_status, _ = boot(launch, server_dir, partner_files, logs / f"{args.mc}-{args.loader}-{slug}-without-extrabiomes.log")
@@ -258,13 +342,14 @@ def version_key(mc):
 
 
 def cmd_grid(args):
-    rows = sorted((json.loads(p.read_text()) for p in Path(args.results).glob("*.json")), key=lambda r: (version_key(r["mc"]), r["loader"]))
+    rows = sorted((json.loads(p.read_text()) for p in Path(args.results).glob("*.json")), key=lambda r: (version_key(r["mc"]), r.get("branch", ""), r["loader"]))
     columns = [ALONE, *PARTNERS]
     today = datetime.date.today().isoformat()
+    subject = ("the jar CI built from the tip of each branch (unreleased code)", "Compat Grid (dev) workflow") if args.dev else ("the published ExtraBiomes build", "Compat Grid workflow")
     lines = [
-        "# ExtraBiomes worldgen compatibility",
+        "# ExtraBiomes worldgen compatibility" + (" (dev branches)" if args.dev else ""),
         "",
-        f"Generated {today} by the Compat Grid workflow. Each cell boots a real server with the published ExtraBiomes build and one other mod, generates a world, and stops it.",
+        f"Generated {today} by the {subject[1]}. Each cell boots a real server with {subject[0]} and one other mod, generates a world, and stops it.",
         "",
         "✅ works · ❌ feature order cycle · 💥 crash on startup · ⏱ didn't finish · ⚠️ the other mod fails even without ExtraBiomes · ➖ that mod (or a dependency) has no build for this version",
         "",
@@ -277,7 +362,7 @@ def cmd_grid(args):
     failures = [(r, c, e) for r in rows for c, e in r["results"].items() if e["status"] in ("cycle", "crash", "timeout")]
     if failures:
         lines += ["", "## Failures", ""]
-        lines += [f"- **{r['mc']} {r['loader']} + {c}** ({e['status']}): `{e['reason']}`" for r, c, e in failures]
+        lines += [f"- **{r['mc']} {r['loader']}{' (' + r['branch'] + ')' if 'branch' in r else ''} + {c}** ({e['status']}): `{e['reason']}`" for r, c, e in failures]
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / "README.md").write_text("\n".join(lines) + "\n")
@@ -291,6 +376,13 @@ def cmd_selftest(_):
     assert sorted(["1.21.10", "1.20.1", "26.2", "1.21.4"], key=version_key) == ["1.20.1", "1.21.4", "1.21.10", "26.2"]
     cycle = "Caused by: java.lang.IllegalStateException: Feature order cycle found, involved sources: [Reference{ResourceKey[minecraft:worldgen/biome / terralith:warm_river]=B@1}, Reference{ResourceKey[minecraft:worldgen/biome / extrabiomes:lush_mesa_bryce]=B@2}]"
     assert cycle_biomes(cycle) == ["extrabiomes:lush_mesa_bryce", "terralith:warm_river"]
+    assert parse_properties("# c\nminecraft_version=26.3\nenabled_platforms=fabric,neoforge\n") == {"minecraft_version": "26.3", "enabled_platforms": "fabric,neoforge"}
+    assert [bool(DEV_BRANCH_PATTERN.fullmatch(b)) for b in ("1.20.1", "26.2", "1.21.11", "Java-Dev", "main", "Bedrock-Dev", "license-gpl3/1.20.1", "26.3-fix")] == [True, True, True, True, False, False, False, False]
+    assert pick_jar([Path("a/ExtraBiomes-3.10-raw.jar"), Path("a/ExtraBiomes-3.10-sources.jar"), Path("a/ExtraBiomes-fabric-v3.10-26.3.jar")]).name == "ExtraBiomes-fabric-v3.10-26.3.jar"
+    runs = [{"id": 1, "conclusion": "success", "created_at": "2026-09-10T09:51:18Z"}, {"id": 3, "conclusion": "failure", "created_at": "2026-09-29T06:40:33Z"}, {"id": 2, "conclusion": "success", "created_at": "2026-09-27T15:07:16Z"}]
+    assert newest_green(runs)["id"] == 2 and newest_green([runs[1]]) is None
+    assert dev_label("1.21.1", "04a6d61" + "0" * 33, "04a6d61" + "0" * 33) == "1.21.1@04a6d61"
+    assert dev_label("1.21.1", "04a6d61" + "0" * 33, "9999999" + "0" * 33) == "1.21.1@04a6d61 (tip 9999999 not built)"
     print("selftest ok")
 
 
@@ -298,6 +390,14 @@ def main():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="cmd", required=True)
     sub.add_parser("plan")
+    plan_dev = sub.add_parser("plan-dev")
+    plan_dev.add_argument("--repo", required=True)
+    plan_dev.add_argument("--branches", help="comma-separated branches; default is every Minecraft-version branch plus Java-Dev")
+    fetch_jar = sub.add_parser("fetch-jar")
+    fetch_jar.add_argument("--repo", required=True)
+    fetch_jar.add_argument("--run-id", required=True)
+    fetch_jar.add_argument("--loader", required=True)
+    fetch_jar.add_argument("--out", required=True)
     sub.add_parser("selftest")
     run = sub.add_parser("run")
     run.add_argument("--mc", required=True)
@@ -305,12 +405,15 @@ def main():
     run.add_argument("--out", required=True)
     run.add_argument("--work", default="compat-work")
     run.add_argument("--jar", help="test this local ExtraBiomes jar instead of the published one")
+    run.add_argument("--label", help="what to show in the ExtraBiomes column for --jar, e.g. Java-Dev@01261ab")
+    run.add_argument("--branch", help="branch the --jar was built from, recorded in the result and shown next to failures")
     run.add_argument("--only", help="comma-separated partner names to test, e.g. Terralith")
     grid = sub.add_parser("grid")
     grid.add_argument("results")
     grid.add_argument("--out", required=True)
+    grid.add_argument("--dev", action="store_true", help="describe the results as unreleased branch builds")
     args = parser.parse_args()
-    {"plan": cmd_plan, "run": cmd_run, "grid": cmd_grid, "selftest": cmd_selftest}[args.cmd](args)
+    {"plan": cmd_plan, "plan-dev": cmd_plan_dev, "fetch-jar": cmd_fetch_jar, "run": cmd_run, "grid": cmd_grid, "selftest": cmd_selftest}[args.cmd](args)
 
 
 if __name__ == "__main__":
