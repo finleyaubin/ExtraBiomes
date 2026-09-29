@@ -1,5 +1,7 @@
 # ExtraBiomes worldgen compatibility (dev branches)
 
+Want another mod added to this grid? [Request it in an issue](https://github.com/finleyaubin/ExtraBiomes/issues). If your mod list hits a feature order cycle that isn't listed here, [Feature Recycler](https://www.curseforge.com/minecraft/mc-mods/feature-recycler) can fix it.
+
 Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real server with the jar CI built from the tip of each branch (unreleased code) and one other mod, generates a world, and stops it.
 
 ✅ works · ❌ feature order cycle · 💥 crash on startup · ⏱ didn't finish · ⚠️ the other mod fails even without ExtraBiomes · ➖ that mod (or a dependency) has no build for this version
@@ -29,15 +31,11 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 | 1.21.10 | neoforge | 1.21.10@2a0712f | ✅ | ✅ | ✅ | ➖ deps missing | ➖ | ✅ |
 | 1.21.11 | fabric | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ |
 | 1.21.11 | neoforge | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ |
-| 26.1.2 | fabric | 26.1.2@171ccd3 | ✅ | ✅ | ⚠️ fails without ExtraBiomes too | ➖ | ✅ | ✅ |
-| 26.1.2 | neoforge | 26.1.2@171ccd3 | ✅ | ✅ | ⚠️ fails without ExtraBiomes too | ➖ | ✅ | ✅ |
+| 26.1.2 | fabric | 26.1.2@171ccd3 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
+| 26.1.2 | neoforge | 26.1.2@171ccd3 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
 | 26.2 | fabric | 26.2@01e4941 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 26.2 | neoforge | 26.2@01e4941 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
-| 26.3 | fabric | 26.3@243cb81 | ✅ | ❌ feature cycle | ✅ | ➖ | ➖ | ✅ |
-| 26.3 | neoforge | 26.3@243cb81 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ |
+| 26.3 | fabric | 26.3@004fad3 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 26.3 | neoforge | 26.3@004fad3 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ |
 | 26.3 | fabric | Java-Dev@01261ab | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 26.3 | neoforge | Java-Dev@01261ab | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ |
-
-## Failures
-
-- **26.3 fabric (26.3) + Terralith** (cycle): `biomes: extrabiomes:lush_mesa_bryce, terralith:sakura_valley, terralith:warm_river`

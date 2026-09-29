@@ -913,9 +913,9 @@
           "reason": ""
         },
         "Biomes O' Plenty": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "26.1.2.0.22",
-          "reason": "[11:32:20] [main/ERROR]: Incompatible mods found!"
+          "reason": ""
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -952,9 +952,9 @@
           "reason": ""
         },
         "Biomes O' Plenty": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "26.1.2.0.22",
-          "reason": "[11:35:10] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
+          "reason": ""
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -1064,9 +1064,9 @@
           "reason": ""
         },
         "Terralith": {
-          "status": "cycle",
+          "status": "pass",
           "version": "2.6.5+26.3",
-          "reason": "biomes: extrabiomes:lush_mesa_bryce, terralith:sakura_valley, terralith:warm_river"
+          "reason": ""
         },
         "Biomes O' Plenty": {
           "status": "pass",
@@ -1089,7 +1089,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.3@243cb81",
+      "extrabiomes": "26.3@004fad3",
       "branch": "26.3",
       "loader_version": "0.19.5"
     },
@@ -1105,7 +1105,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[11:35:08] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
+          "reason": "[11:56:47] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",
@@ -1128,7 +1128,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.3@243cb81",
+      "extrabiomes": "26.3@004fad3",
       "branch": "26.3",
       "loader_version": "26.3.0.19-beta"
     },
@@ -1183,7 +1183,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[11:34:29] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
+          "reason": "[11:57:59] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",
