@@ -46,8 +46,12 @@ PARTNERS = {
 ISSUES_URL = "https://github.com/finleyaubin/ExtraBiomes/issues"
 FEATURE_RECYCLER_URL = "https://www.curseforge.com/minecraft/mc-mods/feature-recycler"
 ALONE = "ExtraBiomes alone"
-# Dependencies a mod needs at runtime but doesn't declare on Modrinth for some builds: its 26.1.2 build lists none and fails without GlitchCore.
-UNDECLARED_DEPENDENCIES = {"HXF82T3G": ["s3dmwKy5"]}  # Biomes O' Plenty -> GlitchCore
+# Dependencies a mod needs at runtime but doesn't declare on Modrinth for some builds: Biomes O' Plenty's 26.1.2 build lists
+# none and fails without GlitchCore, and Tectonic never lists Lithostitched (1.20.1 and 1.21.8+ fail without it).
+UNDECLARED_DEPENDENCIES = {
+    "HXF82T3G": ["s3dmwKy5"],  # Biomes O' Plenty -> GlitchCore
+    "lWDHr9jE": ["XaDC71GB"],  # Tectonic -> Lithostitched
+}
 # TerraBlender's 26.3 build uses DataPackRegistryEvent$NewRegistry, which later 26.3 betas removed.
 NEOFORGE_PINS = {"26.3": "26.3.0.19-beta"}
 BOOT_TIMEOUT = 900
