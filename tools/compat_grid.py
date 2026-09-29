@@ -34,6 +34,14 @@ PARTNERS = {
     "Oh The Biomes We've Gone": "oh-the-biomes-weve-gone",
     "Regions Unexplored": "regions-unexplored",
     "WWOO": "wwoo",
+    "Wilder Wild": "wilder-wild",
+    "Geophilic": "geophilic",
+    "Ecologics": "ecologics",
+    "Terrestria": "terrestria",
+    "Traverse": "traverse",
+    "Nature's Spirit": "natures-spirit",
+    "Dynamic Trees": "dynamictrees",
+    "Tectonic": "tectonic",
 }
 ISSUES_URL = "https://github.com/finleyaubin/ExtraBiomes/issues"
 FEATURE_RECYCLER_URL = "https://www.curseforge.com/minecraft/mc-mods/feature-recycler"
