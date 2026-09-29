@@ -6,7 +6,6 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.minecraft.world.attribute.AmbientSounds;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 
@@ -36,8 +35,8 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         // Bedrock's 'has_structure_trail_ruins' tag is handled via structure_set/biome tags (see ModBiomeTagProvider), not here.
 
-        // shattered_swamp/swamp_huge_mushroom_feature.json applies to swamp OR roofed-forest tagged biomes
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
+        // swamp_huge_mushroom is delivered by the ADD_DARK_FOREST_HUGE_MUSHROOMS modifier via ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS,
+        // not baked in here: see that tag's javadoc for why a baked-in copy makes a feature order cycle with mods that append vegetal features.
 
         // Same sculk vein + deep dark sculk patch vanilla's underground deep_dark biome uses (BiomeDefaultFeatures.addSculk).
         // Sculk vein is a multiface growth that clings to any solid surface it can spread onto, including the trunks of this
