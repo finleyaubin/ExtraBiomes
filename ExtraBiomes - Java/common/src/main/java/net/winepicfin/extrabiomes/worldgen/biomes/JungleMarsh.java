@@ -8,8 +8,6 @@ import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 
 public class JungleMarsh {
 
@@ -30,8 +28,8 @@ public class JungleMarsh {
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)
-        // shattered_swamp: swamp huge mushroom selection
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
+        // swamp_huge_mushroom is delivered by the ADD_DARK_FOREST_HUGE_MUSHROOMS modifier via ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS,
+        // not baked in here: see that tag's javadoc for why a baked-in copy makes a feature order cycle with mods that append vegetal features.
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
