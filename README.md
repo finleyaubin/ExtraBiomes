@@ -6,8 +6,8 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 
 | Minecraft | Loader | ExtraBiomes | ExtraBiomes alone | Terralith | Biomes O' Plenty | Oh The Biomes We've Gone | Regions Unexplored | WWOO |
 |---|---|---|---|---|---|---|---|---|
-| 1.20.1 | fabric | 1.20.1@036beec (tip 943985c not built) | ✅ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ |
-| 1.20.1 | forge | 1.20.1@036beec (tip 943985c not built) | ✅ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ |
+| 1.20.1 | fabric | 1.20.1@943985c | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 1.20.1 | forge | 1.20.1@943985c | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 1.20.2 | fabric | 1.20.2@138a0b0 | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ |
 | 1.20.2 | forge | 1.20.2@138a0b0 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ |
 | 1.20.2 | neoforge | 1.20.2@138a0b0 | ✅ | ✅ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
@@ -29,12 +29,15 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 | 1.21.10 | neoforge | 1.21.10@2a0712f | ✅ | ✅ | ✅ | ➖ deps missing | ➖ | ✅ |
 | 1.21.11 | fabric | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ |
 | 1.21.11 | neoforge | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ |
-| 26.2 | fabric | 26.2@01e4941 | ✅ | ✅ | ⚠️ fails without ExtraBiomes too | ➖ | ➖ | ✅ |
-| 26.2 | neoforge | 26.2@01e4941 | ✅ | ✅ | ⚠️ fails without ExtraBiomes too | ➖ | ➖ | ✅ |
+| 26.1.2 | fabric | 26.1.2@171ccd3 | ✅ | ✅ | ⚠️ fails without ExtraBiomes too | ➖ | ✅ | ✅ |
+| 26.1.2 | neoforge | 26.1.2@171ccd3 | ✅ | ✅ | ⚠️ fails without ExtraBiomes too | ➖ | ✅ | ✅ |
+| 26.2 | fabric | 26.2@01e4941 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 26.2 | neoforge | 26.2@01e4941 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 26.3 | fabric | 26.3@243cb81 | ✅ | ❌ feature cycle | ✅ | ➖ | ➖ | ✅ |
+| 26.3 | neoforge | 26.3@243cb81 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ |
 | 26.3 | fabric | Java-Dev@01261ab | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 26.3 | neoforge | Java-Dev@01261ab | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ |
 
 ## Failures
 
-- **1.20.1 fabric (1.20.1) + Oh The Biomes We've Gone** (cycle): `biomes: biomeswevegone:coconino_meadow, extrabiomes:jungle_marsh, extrabiomes:lush_mesa_bryce, extrabiomes:moorlands, minecraft:sunflower_plains`
-- **1.20.1 forge (1.20.1) + Oh The Biomes We've Gone** (cycle): `biomes: biomeswevegone:coconino_meadow, extrabiomes:jungle_marsh, extrabiomes:lush_mesa_bryce, extrabiomes:moorlands, minecraft:sunflower_plains`
+- **26.3 fabric (26.3) + Terralith** (cycle): `biomes: extrabiomes:lush_mesa_bryce, terralith:sakura_valley, terralith:warm_river`

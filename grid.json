@@ -21,9 +21,9 @@
           "reason": ""
         },
         "Oh The Biomes We've Gone": {
-          "status": "cycle",
+          "status": "pass",
           "version": "1.8.0-Fabric",
-          "reason": "biomes: biomeswevegone:coconino_meadow, extrabiomes:jungle_marsh, extrabiomes:lush_mesa_bryce, extrabiomes:moorlands, minecraft:sunflower_plains"
+          "reason": ""
         },
         "Regions Unexplored": {
           "status": "pass",
@@ -36,7 +36,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "1.20.1@036beec (tip 943985c not built)",
+      "extrabiomes": "1.20.1@943985c",
       "branch": "1.20.1",
       "loader_version": "0.19.5"
     },
@@ -60,9 +60,9 @@
           "reason": ""
         },
         "Oh The Biomes We've Gone": {
-          "status": "cycle",
+          "status": "pass",
           "version": "1.8.0-Forge",
-          "reason": "biomes: biomeswevegone:coconino_meadow, extrabiomes:jungle_marsh, extrabiomes:lush_mesa_bryce, extrabiomes:moorlands, minecraft:sunflower_plains"
+          "reason": ""
         },
         "Regions Unexplored": {
           "status": "pass",
@@ -75,7 +75,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "1.20.1@036beec (tip 943985c not built)",
+      "extrabiomes": "1.20.1@943985c",
       "branch": "1.20.1",
       "loader_version": "47.4.23"
     },
@@ -899,6 +899,84 @@
       "loader_version": "21.11.45"
     },
     {
+      "mc": "26.1.2",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.2",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "partner-broken",
+          "version": "26.1.2.0.22",
+          "reason": "[11:32:20] [main/ERROR]: Incompatible mods found!"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.1.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.7.0+beta2-fabric-26.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.0",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.1.2@171ccd3",
+      "branch": "26.1.2",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.1.2",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.2",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "partner-broken",
+          "version": "26.1.2.0.22",
+          "reason": "[11:35:10] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.1.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.7.0+beta2-neoforge-26.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.0",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.1.2@171ccd3",
+      "branch": "26.1.2",
+      "loader_version": "26.1.2.112"
+    },
+    {
       "mc": "26.2",
       "loader": "fabric",
       "results": {
@@ -913,9 +991,9 @@
           "reason": ""
         },
         "Biomes O' Plenty": {
-          "status": "partner-broken",
-          "version": "26.1.2.0.40",
-          "reason": "[11:15:18] [main/ERROR]: Incompatible mods found!"
+          "status": "pass",
+          "version": "26.2.0.0.28",
+          "reason": ""
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -952,9 +1030,9 @@
           "reason": ""
         },
         "Biomes O' Plenty": {
-          "status": "partner-broken",
-          "version": "26.1.2.0.40",
-          "reason": "[11:15:29] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
+          "status": "pass",
+          "version": "26.2.0.0.28",
+          "reason": ""
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -975,6 +1053,84 @@
       "extrabiomes": "26.2@01e4941",
       "branch": "26.2",
       "loader_version": "26.2.0.88"
+    },
+    {
+      "mc": "26.3",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "cycle",
+          "version": "2.6.5+26.3",
+          "reason": "biomes: extrabiomes:lush_mesa_bryce, terralith:sakura_valley, terralith:warm_river"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.3.0.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "3.0.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.3@243cb81",
+      "branch": "26.3",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.3",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "partner-broken",
+          "version": "2.6.5+26.3",
+          "reason": "[11:35:08] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.3.0.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "3.0.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.3@243cb81",
+      "branch": "26.3",
+      "loader_version": "26.3.0.19-beta"
     },
     {
       "mc": "26.3",
@@ -1027,7 +1183,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[11:15:11] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[11:34:29] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",
