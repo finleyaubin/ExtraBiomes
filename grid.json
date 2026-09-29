@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-28",
+  "generated": "2026-09-29",
   "rows": [
     {
       "mc": "1.20.1",
@@ -892,7 +892,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.22",
-          "reason": "[23:29:10] [main/ERROR]: Incompatible mods found!"
+          "reason": "[06:57:01] [main/ERROR]: Incompatible mods found!"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -930,7 +930,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.22",
-          "reason": "[23:30:46] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
+          "reason": "[06:57:31] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.1.2.0.0 or above"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -968,7 +968,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.40",
-          "reason": "[23:30:51] [main/ERROR]: Incompatible mods found!"
+          "reason": "[06:59:31] [main/ERROR]: Incompatible mods found!"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -1006,7 +1006,7 @@
         "Biomes O' Plenty": {
           "status": "partner-broken",
           "version": "26.1.2.0.40",
-          "reason": "[23:29:28] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
+          "reason": "[07:00:37] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod biomesoplenty requires glitchcore 26.2.0.0.0 or above"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -1077,7 +1077,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[23:27:58] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[06:58:59] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",

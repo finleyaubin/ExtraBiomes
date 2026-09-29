@@ -1,6 +1,6 @@
 # ExtraBiomes worldgen compatibility
 
-Generated 2026-09-28 by the Compat Grid workflow. Each cell boots a real server with the published ExtraBiomes build and one other mod, generates a world, and stops it.
+Generated 2026-09-29 by the Compat Grid workflow. Each cell boots a real server with the published ExtraBiomes build and one other mod, generates a world, and stops it.
 
 ✅ works · ❌ feature order cycle · 💥 crash on startup · ⏱ didn't finish · ⚠️ the other mod fails even without ExtraBiomes · ➖ that mod (or a dependency) has no build for this version
 
