@@ -21,9 +21,14 @@ public class LushMesa {
 
         BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
+        // Matches vanilla's own jungle() convention (trees, then warm flowers, then jungle grass).
+        // addDefaultFlowers's flower_default used to sit here instead: Terralith and Oh The Biomes
+        // We've Gone each order flower_default relative to patch_grass_jungle in opposite directions
+        // through their own biomes, so no placement of flower_default next to patch_grass_jungle is
+        // safe - flower_warm avoids the shared node entirely and matches vanilla's real jungle order.
+        BiomeDefaultFeatures.addWarmFlowers(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
