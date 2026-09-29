@@ -83,6 +83,9 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         // same convention tags, the same courtesy other mods extend to us.
         this.tag(ConventionalBiomeTags.IS_SWAMP).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP);
         this.tag(ConventionalBiomeTags.IS_MUSHROOM).add(Biomes.MUSHROOM_FIELDS);
+        this.tag(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES).addTag(ConventionalBiomeTags.IS_MUSHROOM).add(ModBiomes.FUNGLE_JUNGLE);
+        this.tag(ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS).add(Biomes.DARK_FOREST, ModBiomes.JUNGLE_MARSH,
+                ModBiomes.DEEP_DARK_FOREST, ModBiomes.MYSTIC_FOREST, ModBiomes.SHATTERED_SWAMP);
 
         this.tag(ModTags.Biomes.IS_WETLAND).addTag(ConventionalBiomeTags.IS_SWAMP).add(ModBiomes.MOORLANDS);
         this.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM).addTag(ConventionalBiomeTags.IS_MUSHROOM).add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
