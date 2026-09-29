@@ -34,26 +34,20 @@ public class FabricBiomeModifiers {
         BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_JUNGLE),
                 GenerationStep.Decoration.UNDERGROUND_DECORATION, UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY);
 
-        // Registered before the boulder/stick_pile block below - see the long comment there for
-        // why the ORDER of these two blocks (not just their content) matters: JungleMarsh.java
-        // bakes extrabiomes:swamp_huge_mushroom directly into its own VEGETAL_DECORATION list at
-        // biome-registration time (i.e. always before any BiomeModifications run at all), so on
-        // vanilla Dark Forest - which gets both swamp_huge_mushroom and select_stick_pile purely
-        // via modifiers, in whatever order these calls run - the mushroom modifier must also run
-        // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
-        // orders for the same pair of features and vanilla's FeatureSorter crashes with
-        // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        // Tag-based (ConventionalBiomeTags.IS_MUSHROOM, same convention tag FabricBiomeTagProvider
-        // already folds Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome key - any biome
-        // (vanilla, this mod's, or a third-party mod's) carrying the tag gets these. Requires
-        // Fabric's own datagen to have actually run (gradle-build.yml/java-release.yml's "Generate
-        // Fabric data" step, unconditional now - it used to skip whenever another loader was also
-        // enabled, which shipped Fabric builds with this tag empty).
-        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.IS_MUSHROOM),
+        // Every biome that gets swamp_huge_mushroom or the mushroom-island features gets it HERE, through
+        // ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS / GETS_MUSHROOM_ISLAND_FEATURES - none of this mod's own biomes
+        // bake these into their definitions. A baked-in copy sits before every feature a third-party mod appends
+        // (Dynamic Trees, Wilder Wild) while a modifier-delivered copy sits after them, so the same pair of features
+        // ends up in opposite orders in two biomes and vanilla's FeatureSorter crashes with "Feature order cycle
+        // found". Delivered by one modifier everywhere, every biome gets the same relative order. Registered before
+        // the boulder/stick_pile block below so swamp_huge_mushroom still precedes select_stick_pile in every biome.
+        // Requires Fabric's own datagen to have actually run (gradle-build.yml/java-release.yml's "Generate Fabric
+        // data" step, unconditional now) so the tags are populated.
+        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.tag(ConventionalBiomeTags.IS_MUSHROOM),
+        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
-        BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.DARK_FOREST),
+        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS),
                 GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
         // Underground badlands terracotta banding (including the near-lava glazed band) is handled

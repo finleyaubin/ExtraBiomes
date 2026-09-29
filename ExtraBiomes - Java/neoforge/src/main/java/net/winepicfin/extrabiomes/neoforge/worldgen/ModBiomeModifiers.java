@@ -79,21 +79,15 @@ public class ModBiomeModifiers {
                 HolderSet.direct(placedFeatures.getOrThrow(UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
-        // Registered before the boulder/stick_pile block below - see the long comment there for
-        // why the ORDER of these two blocks (not just their content) matters: JungleMarsh.java
-        // bakes extrabiomes:swamp_huge_mushroom directly into its own VEGETAL_DECORATION list at
-        // biome-registration time (i.e. always before any BiomeModifier runs at all), so on
-        // vanilla Dark Forest - which gets both swamp_huge_mushroom and select_stick_pile purely
-        // via modifiers - the mushroom modifier must also be registered (and therefore applied)
-        // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
-        // orders for the same pair of features and vanilla's FeatureSorter crashes with
-        // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        // Tag-based (Tags.Biomes.IS_MUSHROOM, same convention tag ModBiomeTagProvider already folds
-        // Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome list, matching
-        // ADD_BOULDER/ADD_UNDERGROUND_JUNGLE_VEGETATION below - any biome (vanilla, this
-        // mod's, or a third-party mod's) carrying the tag gets these, not just vanilla's own biome.
+        // Every biome that gets swamp_huge_mushroom or the mushroom-island features gets it HERE, through
+        // ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS / GETS_MUSHROOM_ISLAND_FEATURES - none of this mod's own biomes
+        // bake these into their definitions. A baked-in copy sits before every feature a third-party mod appends
+        // (Dynamic Trees, Wilder Wild) while a modifier-delivered copy sits after them, so the same pair of features
+        // ends up in opposite orders in two biomes and vanilla's FeatureSorter crashes with "Feature order cycle
+        // found". Delivered by one modifier everywhere, every biome gets the same relative order. Registered before
+        // the boulder/stick_pile block below so swamp_huge_mushroom still precedes select_stick_pile in every biome.
         context.register(ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
+                biomes.getOrThrow(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
         // Small mod-added mushroom variants (via the mycelium-floor-patch mechanism -
@@ -102,11 +96,11 @@ public class ModBiomeModifiers {
         // ever got the huge mushroom modifier above - they had no path to this mod's own small
         // mushroom colours at all. Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
         context.register(ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
+                biomes.getOrThrow(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY)),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS));
         context.register(ADD_DARK_FOREST_HUGE_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST)),
+                biomes.getOrThrow(ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
