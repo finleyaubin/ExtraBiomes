@@ -71,9 +71,9 @@
           "reason": "no fabric 1.20.1 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.17",
-          "reason": "[12:17:00] [main/ERROR]: Incompatible mods found!"
+          "reason": ""
         }
       },
       "extrabiomes": "1.20.1@943985c",
@@ -150,9 +150,9 @@
           "reason": "biomes: extrabiomes:fungle_jungle, minecraft:mushroom_fields"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.17",
-          "reason": "net.minecraftforge.fml.ModLoadingException: Mod \u00a7etectonic\u00a7r requires \u00a76lithostitched\u00a7r \u00a7o1.4.11 or above\u00a7r"
+          "reason": ""
         }
       },
       "extrabiomes": "1.20.1@943985c",
@@ -1414,9 +1414,9 @@
           "reason": "no fabric 1.21.8 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.13",
-          "reason": "[12:11:15] [main/ERROR]: Incompatible mods found!"
+          "reason": ""
         }
       },
       "extrabiomes": "1.21.8@b9d17dc",
@@ -1493,9 +1493,9 @@
           "reason": "no neoforge 1.21.8 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.13",
-          "reason": "[12:11:06] [main/FATAL] [ne.ne.fm.ModLoader/CORE]: Error during pre-loading phase: Mod tectonic requires lithostitched 1.4.11 or above"
+          "reason": ""
         }
       },
       "extrabiomes": "1.21.8@b9d17dc",
@@ -1572,9 +1572,9 @@
           "reason": "no fabric 1.21.10 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.17",
-          "reason": "[12:12:57] [main/ERROR]: Incompatible mods found!"
+          "reason": ""
         }
       },
       "extrabiomes": "1.21.10@2a0712f",
@@ -1651,9 +1651,9 @@
           "reason": "no neoforge 1.21.10 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.17",
-          "reason": "[12:07:03] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod tectonic requires lithostitched 1.4.11 or above"
+          "reason": ""
         }
       },
       "extrabiomes": "1.21.10@2a0712f",
@@ -1730,9 +1730,9 @@
           "reason": "no fabric 1.21.11 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.19",
-          "reason": "[12:16:19] [main/ERROR]: Incompatible mods found!"
+          "reason": ""
         }
       },
       "extrabiomes": "1.21.11@bfd9183",
@@ -1809,9 +1809,9 @@
           "reason": "no neoforge 1.21.11 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.19",
-          "reason": "[12:08:21] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod tectonic requires lithostitched 1.4.11 or above"
+          "reason": ""
         }
       },
       "extrabiomes": "1.21.11@bfd9183",
@@ -2225,7 +2225,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[12:05:36] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
+          "reason": "[12:41:14] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",
@@ -2285,7 +2285,7 @@
         "Tectonic": {
           "status": "partner-broken",
           "version": "3.0.31-neoforge-26.3",
-          "reason": "[12:08:20] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[12:43:24] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         }
       },
       "extrabiomes": "26.3@004fad3",
@@ -2383,7 +2383,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[12:11:24] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
+          "reason": "[12:41:11] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",
@@ -2443,7 +2443,7 @@
         "Tectonic": {
           "status": "partner-broken",
           "version": "3.0.31-neoforge-26.3",
-          "reason": "[12:14:04] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[12:43:49] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         }
       },
       "extrabiomes": "Java-Dev@01261ab",

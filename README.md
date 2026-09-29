@@ -8,8 +8,8 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 
 | Minecraft | Loader | ExtraBiomes | ExtraBiomes alone | Terralith | Biomes O' Plenty | Oh The Biomes We've Gone | Regions Unexplored | WWOO | Wilder Wild | Geophilic | Ecologics | Terrestria | Traverse | Nature's Spirit | Dynamic Trees | Tectonic |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1.20.1 | fabric | 1.20.1@943985c | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ⚠️ fails without ExtraBiomes too |
-| 1.20.1 | forge | 1.20.1@943985c | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ | ❌ feature cycle | ⚠️ fails without ExtraBiomes too |
+| 1.20.1 | fabric | 1.20.1@943985c | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ |
+| 1.20.1 | forge | 1.20.1@943985c | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ | ❌ feature cycle | ✅ |
 | 1.20.2 | fabric | 1.20.2@138a0b0 | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ❌ feature cycle | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 1.20.2 | forge | 1.20.2@138a0b0 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
 | 1.20.2 | neoforge | 1.20.2@138a0b0 | ✅ | ✅ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
@@ -25,12 +25,12 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 | 1.21.4 | neoforge | 1.21.4@68cfc2c | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
 | 1.21.5 | fabric | 1.21.5@ccbd167 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ❌ feature cycle | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 1.21.5 | neoforge | 1.21.5@ccbd167 | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ deps missing | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
-| 1.21.8 | fabric | 1.21.8@b9d17dc | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ❌ feature cycle | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
-| 1.21.8 | neoforge | 1.21.8@b9d17dc | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ deps missing | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
-| 1.21.10 | fabric | 1.21.10@2a0712f | ✅ | ✅ | ✅ | ➖ deps missing | ➖ | ✅ | ❌ feature cycle | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
-| 1.21.10 | neoforge | 1.21.10@2a0712f | ✅ | ✅ | ✅ | ➖ deps missing | ➖ | ✅ | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
-| 1.21.11 | fabric | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ❌ feature cycle | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
-| 1.21.11 | neoforge | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
+| 1.21.8 | fabric | 1.21.8@b9d17dc | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ❌ feature cycle | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 1.21.8 | neoforge | 1.21.8@b9d17dc | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ deps missing | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
+| 1.21.10 | fabric | 1.21.10@2a0712f | ✅ | ✅ | ✅ | ➖ deps missing | ➖ | ✅ | ❌ feature cycle | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 1.21.10 | neoforge | 1.21.10@2a0712f | ✅ | ✅ | ✅ | ➖ deps missing | ➖ | ✅ | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
+| 1.21.11 | fabric | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ❌ feature cycle | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 1.21.11 | neoforge | 1.21.11@bfd9183 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
 | 26.1.2 | fabric | 26.1.2@171ccd3 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 26.1.2 | neoforge | 26.1.2@171ccd3 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ➖ | ❌ feature cycle | ✅ |
 | 26.2 | fabric | 26.2@01e4941 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
