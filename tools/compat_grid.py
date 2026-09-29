@@ -69,7 +69,13 @@ def download(url, dest):
 
 def modrinth_version(project, mc, loader):
     query = urllib.parse.urlencode({"loaders": json.dumps([loader]), "game_versions": json.dumps([mc])})
-    versions = fetch_json(f"https://api.modrinth.com/v2/project/{project}/version?{query}")
+    return pick_version(fetch_json(f"https://api.modrinth.com/v2/project/{project}/version?{query}"), mc)
+
+
+def pick_version(versions, mc):
+    # Biomes O' Plenty tags a release numbered 26.1.2 as 26.2 (with no dependencies listed), ahead of its real 26.2 betas.
+    numbered = [v for v in versions if v["version_number"].startswith(f"{mc}.")]
+    versions = numbered or versions
     releases = [v for v in versions if v["version_type"] == "release"]
     return (releases or versions or [None])[0]
 
@@ -237,6 +243,20 @@ def newest_green(runs):
     return max(green, key=lambda r: r["created_at"], default=None)
 
 
+def read_runs(url, reads=4):
+    """Workflow-run queries sometimes come back incomplete (a branch listing dropped its newest runs, a head_sha lookup found none), so merge several reads."""
+    seen = {}
+    for _ in range(reads):
+        seen.update({r["id"]: r for r in gh_api(url)["workflow_runs"]})
+    return list(seen.values())
+
+
+def build_run(repo, branch, tip):
+    """The green Build Mod run for the branch tip, else the newest green one on the branch."""
+    runs_url = f"repos/{repo}/actions/workflows/{BUILD_WORKFLOW}/runs?event=push"
+    return newest_green(read_runs(f"{runs_url}&head_sha={tip}")) or newest_green(read_runs(f"{runs_url}&branch={urllib.parse.quote(branch)}&per_page=30"))
+
+
 def dev_label(branch, built, tip):
     return f"{branch}@{built[:7]}" + ("" if built == tip else f" (tip {tip[:7]} not built)")
 
@@ -250,7 +270,7 @@ def cmd_plan_dev(args):
         if wanted is not None and branch not in wanted or wanted is None and not DEV_BRANCH_PATTERN.fullmatch(branch):
             continue
         props = parse_properties(gh_api(f"repos/{args.repo}/contents/{urllib.parse.quote(GRADLE_PROPERTIES)}?ref={urllib.parse.quote(branch)}", raw=True))
-        run = newest_green(gh_api(f"repos/{args.repo}/actions/workflows/{BUILD_WORKFLOW}/runs?branch={urllib.parse.quote(branch)}&event=push&per_page=30")["workflow_runs"])
+        run = build_run(args.repo, branch, tip)
         if run is None:
             print(f"skipping {branch}: no green {BUILD_WORKFLOW} run", file=sys.stderr)
             continue
@@ -383,6 +403,12 @@ def cmd_selftest(_):
     assert newest_green(runs)["id"] == 2 and newest_green([runs[1]]) is None
     assert dev_label("1.21.1", "04a6d61" + "0" * 33, "04a6d61" + "0" * 33) == "1.21.1@04a6d61"
     assert dev_label("1.21.1", "04a6d61" + "0" * 33, "9999999" + "0" * 33) == "1.21.1@04a6d61 (tip 9999999 not built)"
+    build = lambda number, kind: {"version_number": number, "version_type": kind}
+    cross_tagged = [build("26.1.2.0.40", "release"), build("26.2.0.0.28", "beta"), build("26.2.0.0.27", "beta")]
+    assert pick_version(cross_tagged, "26.2")["version_number"] == "26.2.0.0.28"
+    assert pick_version([build("21.11.0.32", "beta"), build("21.11.0.31", "release")], "1.21.11")["version_number"] == "21.11.0.31"
+    assert pick_version([build("2.5.13", "release"), build("2.5.14", "beta")], "1.21.5")["version_number"] == "2.5.13"
+    assert pick_version([], "26.2") is None
     print("selftest ok")
 
 
