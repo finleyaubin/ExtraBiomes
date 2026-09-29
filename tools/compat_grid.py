@@ -35,7 +35,11 @@ PARTNERS = {
     "Regions Unexplored": "regions-unexplored",
     "WWOO": "wwoo",
 }
+ISSUES_URL = "https://github.com/finleyaubin/ExtraBiomes/issues"
+FEATURE_RECYCLER_URL = "https://www.curseforge.com/minecraft/mc-mods/feature-recycler"
 ALONE = "ExtraBiomes alone"
+# Dependencies a mod needs at runtime but doesn't declare on Modrinth for some builds: its 26.1.2 build lists none and fails without GlitchCore.
+UNDECLARED_DEPENDENCIES = {"HXF82T3G": ["s3dmwKy5"]}  # Biomes O' Plenty -> GlitchCore
 # TerraBlender's 26.3 build uses DataPackRegistryEvent$NewRegistry, which later 26.3 betas removed.
 NEOFORGE_PINS = {"26.3": "26.3.0.19-beta"}
 BOOT_TIMEOUT = 900
@@ -80,21 +84,28 @@ def pick_version(versions, mc):
     return (releases or versions or [None])[0]
 
 
+def dependencies_of(version):
+    """(declared required project ids, known-but-undeclared project ids) for a version."""
+    declared = [d["project_id"] for d in version["dependencies"] if d["dependency_type"] == "required"]
+    return declared, [d for d in UNDECLARED_DEPENDENCIES.get(version["project_id"], []) if d not in declared]
+
+
 def resolve_with_deps(project, mc, loader):
-    """Returns (versions to install, missing dependency project ids)."""
-    resolved, missing, queue = {}, [], [(project, None)]
+    """Returns (versions to install, missing dependency project ids). Undeclared dependencies are best effort: one with no build for this version is skipped, not reported missing."""
+    resolved, missing, queue = {}, [], [(project, None, True)]
     while queue:
-        project_id, version_id = queue.pop()
+        project_id, version_id, required = queue.pop()
         version = fetch_json(f"https://api.modrinth.com/v2/version/{version_id}") if version_id else modrinth_version(project_id, mc, loader)
         if version is None:
-            missing.append(project_id)
+            if required:
+                missing.append(project_id)
             continue
         if version["project_id"] in resolved:
             continue
         resolved[version["project_id"]] = version
-        for dep in version["dependencies"]:
-            if dep["dependency_type"] == "required" and dep["project_id"] not in resolved:
-                queue.append((dep["project_id"], None))
+        declared, undeclared = dependencies_of(version)
+        queue += [(dep, None, True) for dep in declared if dep not in resolved]
+        queue += [(dep, None, False) for dep in undeclared if dep not in resolved]
     return list(resolved.values()), missing
 
 
@@ -369,6 +380,9 @@ def cmd_grid(args):
     lines = [
         "# ExtraBiomes worldgen compatibility" + (" (dev branches)" if args.dev else ""),
         "",
+        f"Want another mod added to this grid? [Request it in an issue]({ISSUES_URL}). "
+        f"If your mod list hits a feature order cycle that isn't listed here, [Feature Recycler]({FEATURE_RECYCLER_URL}) can fix it.",
+        "",
         f"Generated {today} by the {subject[1]}. Each cell boots a real server with {subject[0]} and one other mod, generates a world, and stops it.",
         "",
         "✅ works · ❌ feature order cycle · 💥 crash on startup · ⏱ didn't finish · ⚠️ the other mod fails even without ExtraBiomes · ➖ that mod (or a dependency) has no build for this version",
@@ -409,6 +423,10 @@ def cmd_selftest(_):
     assert pick_version([build("21.11.0.32", "beta"), build("21.11.0.31", "release")], "1.21.11")["version_number"] == "21.11.0.31"
     assert pick_version([build("2.5.13", "release"), build("2.5.14", "beta")], "1.21.5")["version_number"] == "2.5.13"
     assert pick_version([], "26.2") is None
+    bop = {"project_id": "HXF82T3G", "dependencies": []}
+    assert dependencies_of(bop) == ([], ["s3dmwKy5"])
+    assert dependencies_of({**bop, "dependencies": [{"project_id": "s3dmwKy5", "dependency_type": "required"}, {"project_id": "x", "dependency_type": "optional"}]}) == (["s3dmwKy5"], [])
+    assert dependencies_of({"project_id": "other", "dependencies": [{"project_id": "a", "dependency_type": "required"}]}) == (["a"], [])
     print("selftest ok")
 
 
