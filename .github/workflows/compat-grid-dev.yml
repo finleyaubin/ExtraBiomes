@@ -1,0 +1,108 @@
+name: Compat Grid (dev)
+
+# Tests the jar CI built from the tip of each Minecraft-version branch (plus Java-Dev) against other worldgen mods,
+# before anything is published, and commits the grid to the compat-grid-dev branch.
+# Reuses the jars from each branch's newest green Build Mod run rather than rebuilding them.
+on:
+  workflow_dispatch:
+    inputs:
+      branches:
+        description: Comma-separated branches to test (default is every Minecraft-version branch plus Java-Dev)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: compat-grid-dev
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      combos: ${{ steps.plan.outputs.combos }}
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 tools/compat_grid.py selftest
+      - id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCHES: ${{ inputs.branches }}
+        run: echo "combos=$(python3 tools/compat_grid.py plan-dev --repo "$GITHUB_REPOSITORY" ${BRANCHES:+--branches "$BRANCHES"})" >> "$GITHUB_OUTPUT"
+
+  test:
+    needs: plan
+    name: ${{ matrix.branch }} ${{ matrix.loader }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.combos) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+            25
+
+      - name: Download the branch's CI-built jar
+        id: jar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: echo "path=$(python3 tools/compat_grid.py fetch-jar --repo "$GITHUB_REPOSITORY" --run-id "${{ matrix.run_id }}" --loader "${{ matrix.loader }}" --out "jar")" >> "$GITHUB_OUTPUT"
+
+      - name: Boot servers
+        env:
+          LABEL: ${{ matrix.label }}
+          BRANCH: ${{ matrix.branch }}
+        run: python3 tools/compat_grid.py run --mc "${{ matrix.mc }}" --loader "${{ matrix.loader }}" --jar "${{ steps.jar.outputs.path }}" --label "$LABEL" --branch "$BRANCH" --out "results/${{ matrix.branch }}-${{ matrix.loader }}.json"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: compat-dev-${{ matrix.branch }}-${{ matrix.loader }}
+          path: results/
+
+  publish:
+    needs: test
+    if: always() && needs.test.result != 'cancelled' && needs.test.result != 'skipped'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: compat-dev-*
+          path: results
+          merge-multiple: true
+
+      - name: Build grid
+        run: python3 tools/compat_grid.py grid results --dev --out "$RUNNER_TEMP/grid" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit grid to the compat-grid-dev branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          WT="$RUNNER_TEMP/compat-grid-dev"
+          if git fetch origin compat-grid-dev 2>/dev/null; then
+            git worktree add -q -B compat-grid-dev "$WT" origin/compat-grid-dev
+          else
+            git worktree add -q --detach "$WT" HEAD
+            git -C "$WT" checkout -q --orphan compat-grid-dev
+            git -C "$WT" rm -rqf .
+          fi
+          cp "$RUNNER_TEMP/grid/README.md" "$RUNNER_TEMP/grid/grid.json" "$WT/"
+          cd "$WT"
+          git add README.md grid.json
+          git commit -qm "Compat grid (dev) $(date -u +%F)" || echo "grid unchanged"
+          git push -q origin compat-grid-dev
