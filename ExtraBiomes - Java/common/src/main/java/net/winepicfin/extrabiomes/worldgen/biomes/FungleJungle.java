@@ -6,8 +6,6 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 
 public class FungleJungle {
 
@@ -29,12 +27,11 @@ public class FungleJungle {
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         // Bedrock's 'spawns_without_patrols' tag is handled via BiomeTags.WITHOUT_PATROL_SPAWNS, see ModBiomeTagProvider.
 
-        // mushroom_surface_mycelium_floor: ground-conversion feature (mooshroom_island-only), local modification step
-        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY);
+        // mushroom_surface_mycelium_floor and mushroom_island_surface_huge_mushroom are delivered by the ADD_MUSHROOM_FIELDS_*
+        // modifiers via ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES, not baked in here: see that tag's javadoc for why a
+        // baked-in copy makes a feature order cycle with mods that append vegetal features.
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         // boulder: weighted stick-pile selection, vegetal decoration step
-        // mushroom_island_surface_huge_mushroom: mushroom-island-specific huge mushroom distribution
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
