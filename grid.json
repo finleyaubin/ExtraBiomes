@@ -2,6 +2,726 @@
   "generated": "2026-09-29",
   "rows": [
     {
+      "mc": "1.20.1",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "19.0.0.96",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "1.8.0-Fabric",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "A-0.5.6+1.20.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.0.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "cycle",
+          "version": "3.0.7-mc1.20.1",
+          "reason": "biomes: extrabiomes:jungle_marsh, minecraft:bamboo_jungle, minecraft:dark_forest"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.2.7-Fabric",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "6.0.13",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "7.0.12",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "pass",
+          "version": "2.2.5-1.20.1",
+          "reason": ""
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.1 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.17",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.1@943985c (tip 7526d00 not built)",
+      "branch": "1.20.1",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.20.1",
+      "loader": "forge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "18.0.0.592",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "1.8.0-Forge",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "F-0.5.6+1.20.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.0.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.1 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.2.7-Forge",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.1 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.1 build"
+        },
+        "Nature's Spirit": {
+          "status": "pass",
+          "version": "2.2.5-1.20.1",
+          "reason": ""
+        },
+        "Dynamic Trees": {
+          "status": "cycle",
+          "version": "1.20.1-1.4.11",
+          "reason": "biomes: extrabiomes:fungle_jungle, minecraft:mushroom_fields"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.17",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.1@943985c (tip 7526d00 not built)",
+      "branch": "1.20.1",
+      "tested": "2026-09-29",
+      "loader_version": "47.4.23"
+    },
+    {
+      "mc": "1.20.2",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.2 build"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.5.5+1.20.2",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.0.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "3.0.7-mc1.20.2",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.2 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "6.1.3",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "7.1.3",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.2 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.2 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.3.5b",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.2@48b268f",
+      "branch": "1.20.2",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.20.2",
+      "loader": "forge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "18.2.0.53",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.5.5+1.20.2",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.0.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.2 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.2 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.2 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.2 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.2 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no forge 1.20.2 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.3.5a",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.2@48b268f",
+      "branch": "1.20.2",
+      "tested": "2026-09-29",
+      "loader_version": "48.1.0"
+    },
+    {
+      "mc": "1.20.2",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "WWOO": {
+          "status": "partner-broken",
+          "version": "2.0.0",
+          "reason": "net.neoforged.fml.ModLoadingException: Mod File WWOO-FABRIC+FORGE+QUILT-2.0.0.jar needs language provider javafml:47 or above to load"
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.2 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.3.4",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.2@48b268f",
+      "branch": "1.20.2",
+      "tested": "2026-09-29",
+      "loader_version": "20.2.93"
+    },
+    {
+      "mc": "1.20.4",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "19.0.0.89",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.4 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "A-0.5.6+1.20.4",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.3.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "3.0.7-mc1.20.4",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.4 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "6.2.0",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "7.2.1",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "pass",
+          "version": "1.4.3-1.20.4",
+          "reason": ""
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.4 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.3.5b",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.4@a6f118f",
+      "branch": "1.20.4",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.20.4",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "19.0.0.89",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "WWOO": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.4 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.3.4",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.4@a6f118f",
+      "branch": "1.20.4",
+      "tested": "2026-09-29",
+      "loader_version": "20.4.251"
+    },
+    {
+      "mc": "1.20.6",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "18.4.0.5",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.6 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.6 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.3.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "3.0.7-mc1.20.6",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.6 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "6.3.0",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "7.3.1",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "pass",
+          "version": "1.5.3-1.20.6",
+          "reason": ""
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.20.6 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.3.5",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.6@7d8d290",
+      "branch": "1.20.6",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.20.6",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "18.4.0.5",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "WWOO": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.20.6 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.3.5",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.20.6@7d8d290",
+      "branch": "1.20.6",
+      "tested": "2026-09-29",
+      "loader_version": "20.6.141"
+    },
+    {
       "mc": "1.21.1",
       "loader": "fabric",
       "results": {
@@ -78,6 +798,7 @@
       },
       "extrabiomes": "1.21.1@159f8a0",
       "branch": "1.21.1",
+      "tested": "2026-09-29",
       "loader_version": "0.19.5"
     },
     {
@@ -157,7 +878,1608 @@
       },
       "extrabiomes": "1.21.1@159f8a0",
       "branch": "1.21.1",
+      "tested": "2026-09-29",
       "loader_version": "21.1.252"
+    },
+    {
+      "mc": "1.21.3",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.8",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.2.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "WWOO": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.2.1-mc1.21.2",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "7.1.2",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "8.1.2",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.3 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.4.2",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.3@adfaf1d",
+      "branch": "1.21.3",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.3",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.8",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.2.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "WWOO": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.3 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.4.2",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.3@adfaf1d",
+      "branch": "1.21.3",
+      "tested": "2026-09-29",
+      "loader_version": "21.3.97"
+    },
+    {
+      "mc": "1.21.4",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.8",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.4.0.22",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "3.2.5-Fabric",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.4 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.4.3",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.2.1-mc1.21.4",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.4 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "7.2.4",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "8.2.2",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.4 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.4 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.4.3",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.4@b03dcc3",
+      "branch": "1.21.4",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.4",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.8",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.4.0.22",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "3.2.5-NeoForge",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.4 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.4.3",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.4 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.4 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.4 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.4 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.4 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.4 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "2.4.3",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.4@b03dcc3",
+      "branch": "1.21.4",
+      "tested": "2026-09-29",
+      "loader_version": "21.4.158"
+    },
+    {
+      "mc": "1.21.5",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.13",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.4.0.61",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.5 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.5 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.5.3",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.2.1-mc1.21.5",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.5 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "7.3.3",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "8.3.2",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.5 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.5 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.1-fabric-1.21.5",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.5@944fd82",
+      "branch": "1.21.5",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.5",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.13",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.4.0.61",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "WWOO": {
+          "status": "missing-deps",
+          "version": "2.5.3",
+          "reason": "no build for dependencies P7dR8mSH"
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.5 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.1-neoforge-1.21.5",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.5@944fd82",
+      "branch": "1.21.5",
+      "tested": "2026-09-29",
+      "loader_version": "21.5.98"
+    },
+    {
+      "mc": "1.21.8",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.13",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.8.0.14",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "4.1.1-Fabric",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.8 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.5.3",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.2.1-mc1.21.8",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.8 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "7.4.4",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "8.4.1",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.8 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.8 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.13",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.8@59e49ca",
+      "branch": "1.21.8",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.8",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.13",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.8.0.14",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "4.1.1-NeoForge",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.8 build"
+        },
+        "WWOO": {
+          "status": "missing-deps",
+          "version": "2.5.3",
+          "reason": "no build for dependencies P7dR8mSH"
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.8 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.8 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.8 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.8 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.8 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.8 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.13",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.8@59e49ca",
+      "branch": "1.21.8",
+      "tested": "2026-09-29",
+      "loader_version": "21.8.54"
+    },
+    {
+      "mc": "1.21.10",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.13",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.10.0.3",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "missing-deps",
+          "version": "4.2.2-Fabric",
+          "reason": "no build for dependencies ziOp6EO8"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.10 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.6.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.2.1-mc1.21.10",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.10 build"
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "7.5.1",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "8.5.0",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.10 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.10 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.17",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.10@f598994",
+      "branch": "1.21.10",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.10",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.5.13",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.10.0.3",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "missing-deps",
+          "version": "4.2.2-NeoForge",
+          "reason": "no build for dependencies ziOp6EO8"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.6.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.10 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.17",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.10@f598994",
+      "branch": "1.21.10",
+      "tested": "2026-09-29",
+      "loader_version": "21.10.64"
+    },
+    {
+      "mc": "1.21.11",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.1",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.11.0.31",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "4.4.0-Fabric",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.11 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.6.4",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.2.4-mc1.21.11",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.4.6-Fabric",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "7.6.0",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "8.6.0",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.11 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 1.21.11 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.19",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.11@22faf94",
+      "branch": "1.21.11",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "1.21.11",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.1",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "21.11.0.31",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "pass",
+          "version": "4.4.0-NeoForge",
+          "reason": ""
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.11 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.6.4",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.11 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.4.6-NeoForge",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.11 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.11 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.11 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 1.21.11 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.19",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "1.21.11@22faf94",
+      "branch": "1.21.11",
+      "tested": "2026-09-29",
+      "loader_version": "21.11.45"
+    },
+    {
+      "mc": "26.1.2",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.2",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.1.2.0.22",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.1.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.7.0+beta2-fabric-26.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "cycle",
+          "version": "4.2.9-mc26.1",
+          "reason": "biomes: extrabiomes:jungle_marsh, minecraft:bamboo_jungle, minecraft:dark_forest"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.5.3-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "8.0.1",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "9.0.3",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.1.2 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.1.2 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.28-fabric-26.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.1.2@171ccd3 (tip 2245d2d not built)",
+      "branch": "26.1.2",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.1.2",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.2",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.1.2.0.22",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.1.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "pass",
+          "version": "0.7.0+beta2-neoforge-26.1",
+          "reason": ""
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.0",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.1.2 build"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.5.3-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.1.2 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.1.2 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.1.2 build"
+        },
+        "Dynamic Trees": {
+          "status": "cycle",
+          "version": "1.8.0-BETA04",
+          "reason": "biomes: extrabiomes:fungle_jungle, minecraft:mushroom_fields"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.28-neoforge-26.1",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.1.2@171ccd3 (tip 2245d2d not built)",
+      "branch": "26.1.2",
+      "tested": "2026-09-29",
+      "loader_version": "26.1.2.112"
+    },
+    {
+      "mc": "26.2",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.2.0.0.28",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.2 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.3-mc26.2-fabric",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.6.0-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "pass",
+          "version": "8.1.0-beta.2",
+          "reason": ""
+        },
+        "Traverse": {
+          "status": "pass",
+          "version": "9.1.0-beta.1",
+          "reason": ""
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.2 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.2 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.28-fabric-26.2",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.2@01e4941 (tip 137a82d not built)",
+      "branch": "26.2",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.2",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.4",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.2.0.0.28",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "2.7.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.3-mc26.2-neoforge",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.6.0-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.2 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.28-neoforge-26.2",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.2@01e4941 (tip 137a82d not built)",
+      "branch": "26.2",
+      "tested": "2026-09-29",
+      "loader_version": "26.2.0.88"
+    },
+    {
+      "mc": "26.3",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.5+26.3",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.3.0.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "3.0.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.3.1-mc26.3-fabric",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.7.0_2-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.31-fabric-26.3",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "26.3@004fad3 (tip f68e8d7 not built)",
+      "branch": "26.3",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.3",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "partner-broken",
+          "version": "2.6.5+26.3",
+          "reason": "[16:06:26] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.3.0.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "3.0.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "partner-broken",
+          "version": "4.3.1-mc26.3-neoforge",
+          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.7.0_2-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Tectonic": {
+          "status": "partner-broken",
+          "version": "3.0.31-neoforge-26.3",
+          "reason": "[16:09:05] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+        }
+      },
+      "extrabiomes": "26.3@004fad3 (tip f68e8d7 not built)",
+      "branch": "26.3",
+      "tested": "2026-09-29",
+      "loader_version": "26.3.0.19-beta"
+    },
+    {
+      "mc": "26.3",
+      "loader": "fabric",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "pass",
+          "version": "2.6.5+26.3",
+          "reason": ""
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.3.0.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "3.0.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "pass",
+          "version": "4.3.1-mc26.3-fabric",
+          "reason": ""
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.7.0_2-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no fabric 26.3 build"
+        },
+        "Tectonic": {
+          "status": "pass",
+          "version": "3.0.31-fabric-26.3",
+          "reason": ""
+        }
+      },
+      "extrabiomes": "Java-Dev@01261ab (tip a1ced97 not built)",
+      "branch": "Java-Dev",
+      "tested": "2026-09-29",
+      "loader_version": "0.19.5"
+    },
+    {
+      "mc": "26.3",
+      "loader": "neoforge",
+      "results": {
+        "ExtraBiomes alone": {
+          "status": "pass",
+          "version": "",
+          "reason": ""
+        },
+        "Terralith": {
+          "status": "partner-broken",
+          "version": "2.6.5+26.3",
+          "reason": "[16:10:02] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+        },
+        "Biomes O' Plenty": {
+          "status": "pass",
+          "version": "26.3.0.0.7",
+          "reason": ""
+        },
+        "Oh The Biomes We've Gone": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Regions Unexplored": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "WWOO": {
+          "status": "pass",
+          "version": "3.0.1",
+          "reason": ""
+        },
+        "Wilder Wild": {
+          "status": "partner-broken",
+          "version": "4.3.1-mc26.3-neoforge",
+          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+        },
+        "Geophilic": {
+          "status": "pass",
+          "version": "3.7",
+          "reason": ""
+        },
+        "Ecologics": {
+          "status": "pass",
+          "version": "2.7.0_2-NeoFab",
+          "reason": ""
+        },
+        "Terrestria": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Traverse": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Nature's Spirit": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Dynamic Trees": {
+          "status": "n/a",
+          "version": "",
+          "reason": "no neoforge 26.3 build"
+        },
+        "Tectonic": {
+          "status": "partner-broken",
+          "version": "3.0.31-neoforge-26.3",
+          "reason": "[16:12:44] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+        }
+      },
+      "extrabiomes": "Java-Dev@01261ab (tip a1ced97 not built)",
+      "branch": "Java-Dev",
+      "tested": "2026-09-29",
+      "loader_version": "26.3.0.19-beta"
     }
   ]
 }
