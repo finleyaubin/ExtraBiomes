@@ -86,6 +86,26 @@ class BiomeRegistrationParityTest {
         assertNeverCombines(entry.getKey(), "minecraft:flower_default", "minecraft:patch_grass_plain");
     }
 
+    // Regression for the Dynamic Trees / Wilder Wild "Feature order cycle found" crashes: these features are added to
+    // vanilla biomes (Dark Forest, Mushroom Fields) by a biome modifier, so a copy baked into one of this mod's own
+    // biomes sits before every feature a third-party mod appends while the modifier-delivered copy sits after them -
+    // opposite orders for the same pair. See ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS.
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("biomes")
+    void neverBakesModifierDeliveredFeatures(Map.Entry<String, BiomeClimateTuning.Climate> entry) {
+        JsonObject generated = JavaDatapackJson.load(
+                "src/generated/resources/data/extrabiomes/worldgen/biome/" + entry.getKey() + ".json");
+        for (JsonElement stepElement : generated.getAsJsonArray("features")) {
+            for (JsonElement featureElement : stepElement.getAsJsonArray()) {
+                String key = featureElement.getAsString();
+                assertFalse(key.equals("extrabiomes:swamp_huge_mushroom")
+                                || key.equals("extrabiomes:mushroom_island_huge_mushroom")
+                                || key.equals("extrabiomes:mushroom_surface_mycelium_floor"),
+                        entry.getKey() + " bakes in " + key + ", which a biome modifier already delivers via a tag");
+            }
+        }
+    }
+
     private static void assertNeverCombines(String biomeKey, String featureA, String featureB) {
         JsonObject generated = JavaDatapackJson.load(
                 "src/generated/resources/data/extrabiomes/worldgen/biome/" + biomeKey + ".json");
