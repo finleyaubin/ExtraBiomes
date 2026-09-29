@@ -8,8 +8,8 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 
 | Minecraft | Loader | ExtraBiomes | Tested | ExtraBiomes alone | Terralith | Biomes O' Plenty | Oh The Biomes We've Gone | Regions Unexplored | WWOO | Wilder Wild | Geophilic | Ecologics | Terrestria | Traverse | Nature's Spirit | Dynamic Trees | Tectonic |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1.20.1 | fabric | 1.20.1@943985c (tip 7526d00 not built) | 2026-09-29 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ |
-| 1.20.1 | forge | 1.20.1@943985c (tip 7526d00 not built) | 2026-09-29 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ | ❌ feature cycle | ✅ |
+| 1.20.1 | fabric | 1.20.1@7526d00 | 2026-09-29 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ |
+| 1.20.1 | forge | 1.20.1@7526d00 | 2026-09-29 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ |
 | 1.20.2 | fabric | 1.20.2@48b268f | 2026-09-29 | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 1.20.2 | forge | 1.20.2@48b268f | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
 | 1.20.2 | neoforge | 1.20.2@48b268f | 2026-09-29 | ✅ | ✅ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
@@ -31,18 +31,11 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 | 1.21.10 | neoforge | 1.21.10@f598994 | 2026-09-29 | ✅ | ✅ | ✅ | ➖ deps missing | ➖ | ✅ | ➖ | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
 | 1.21.11 | fabric | 1.21.11@22faf94 | 2026-09-29 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 1.21.11 | neoforge | 1.21.11@22faf94 | 2026-09-29 | ✅ | ✅ | ✅ | ✅ | ➖ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
-| 26.1.2 | fabric | 26.1.2@171ccd3 (tip 2245d2d not built) | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ❌ feature cycle | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
-| 26.1.2 | neoforge | 26.1.2@171ccd3 (tip 2245d2d not built) | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ➖ | ❌ feature cycle | ✅ |
-| 26.2 | fabric | 26.2@01e4941 (tip 137a82d not built) | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
-| 26.2 | neoforge | 26.2@01e4941 (tip 137a82d not built) | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
-| 26.3 | fabric | 26.3@004fad3 (tip f68e8d7 not built) | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
-| 26.3 | neoforge | 26.3@004fad3 (tip f68e8d7 not built) | 2026-09-29 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
-| 26.3 | fabric | Java-Dev@01261ab (tip a1ced97 not built) | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
-| 26.3 | neoforge | Java-Dev@01261ab (tip a1ced97 not built) | 2026-09-29 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
-
-## Failures
-
-- **1.20.1 fabric (1.20.1) + Wilder Wild** (cycle, tested 2026-09-29): `biomes: extrabiomes:jungle_marsh, minecraft:bamboo_jungle, minecraft:dark_forest`
-- **1.20.1 forge (1.20.1) + Dynamic Trees** (cycle, tested 2026-09-29): `biomes: extrabiomes:fungle_jungle, minecraft:mushroom_fields`
-- **26.1.2 fabric (26.1.2) + Wilder Wild** (cycle, tested 2026-09-29): `biomes: extrabiomes:jungle_marsh, minecraft:bamboo_jungle, minecraft:dark_forest`
-- **26.1.2 neoforge (26.1.2) + Dynamic Trees** (cycle, tested 2026-09-29): `biomes: extrabiomes:fungle_jungle, minecraft:mushroom_fields`
+| 26.1.2 | fabric | 26.1.2@2245d2d | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 26.1.2 | neoforge | 26.1.2@2245d2d | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ➖ | ✅ | ✅ |
+| 26.2 | fabric | 26.2@137a82d | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
+| 26.2 | neoforge | 26.2@137a82d | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
+| 26.3 | fabric | 26.3@f68e8d7 | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
+| 26.3 | neoforge | 26.3@f68e8d7 | 2026-09-29 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
+| 26.3 | fabric | Java-Dev@a1ced97 | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
+| 26.3 | neoforge | Java-Dev@a1ced97 | 2026-09-29 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |

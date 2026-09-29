@@ -36,9 +36,9 @@
           "reason": ""
         },
         "Wilder Wild": {
-          "status": "cycle",
+          "status": "pass",
           "version": "3.0.7-mc1.20.1",
-          "reason": "biomes: extrabiomes:jungle_marsh, minecraft:bamboo_jungle, minecraft:dark_forest"
+          "reason": ""
         },
         "Geophilic": {
           "status": "pass",
@@ -76,7 +76,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "1.20.1@943985c (tip 7526d00 not built)",
+      "extrabiomes": "1.20.1@7526d00",
       "branch": "1.20.1",
       "tested": "2026-09-29",
       "loader_version": "0.19.5"
@@ -146,9 +146,9 @@
           "reason": ""
         },
         "Dynamic Trees": {
-          "status": "cycle",
+          "status": "pass",
           "version": "1.20.1-1.4.11",
-          "reason": "biomes: extrabiomes:fungle_jungle, minecraft:mushroom_fields"
+          "reason": ""
         },
         "Tectonic": {
           "status": "pass",
@@ -156,7 +156,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "1.20.1@943985c (tip 7526d00 not built)",
+      "extrabiomes": "1.20.1@7526d00",
       "branch": "1.20.1",
       "tested": "2026-09-29",
       "loader_version": "47.4.23"
@@ -1876,9 +1876,9 @@
           "reason": ""
         },
         "Wilder Wild": {
-          "status": "cycle",
+          "status": "pass",
           "version": "4.2.9-mc26.1",
-          "reason": "biomes: extrabiomes:jungle_marsh, minecraft:bamboo_jungle, minecraft:dark_forest"
+          "reason": ""
         },
         "Geophilic": {
           "status": "pass",
@@ -1916,7 +1916,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.1.2@171ccd3 (tip 2245d2d not built)",
+      "extrabiomes": "26.1.2@2245d2d",
       "branch": "26.1.2",
       "tested": "2026-09-29",
       "loader_version": "0.19.5"
@@ -1986,9 +1986,9 @@
           "reason": "no neoforge 26.1.2 build"
         },
         "Dynamic Trees": {
-          "status": "cycle",
+          "status": "pass",
           "version": "1.8.0-BETA04",
-          "reason": "biomes: extrabiomes:fungle_jungle, minecraft:mushroom_fields"
+          "reason": ""
         },
         "Tectonic": {
           "status": "pass",
@@ -1996,7 +1996,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.1.2@171ccd3 (tip 2245d2d not built)",
+      "extrabiomes": "26.1.2@2245d2d",
       "branch": "26.1.2",
       "tested": "2026-09-29",
       "loader_version": "26.1.2.112"
@@ -2076,7 +2076,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.2@01e4941 (tip 137a82d not built)",
+      "extrabiomes": "26.2@137a82d",
       "branch": "26.2",
       "tested": "2026-09-29",
       "loader_version": "0.19.5"
@@ -2156,7 +2156,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.2@01e4941 (tip 137a82d not built)",
+      "extrabiomes": "26.2@137a82d",
       "branch": "26.2",
       "tested": "2026-09-29",
       "loader_version": "26.2.0.88"
@@ -2236,7 +2236,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.3@004fad3 (tip f68e8d7 not built)",
+      "extrabiomes": "26.3@f68e8d7",
       "branch": "26.3",
       "tested": "2026-09-29",
       "loader_version": "0.19.5"
@@ -2253,7 +2253,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[16:06:26] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
+          "reason": "[16:22:04] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",
@@ -2313,10 +2313,10 @@
         "Tectonic": {
           "status": "partner-broken",
           "version": "3.0.31-neoforge-26.3",
-          "reason": "[16:09:05] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[16:24:37] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
         }
       },
-      "extrabiomes": "26.3@004fad3 (tip f68e8d7 not built)",
+      "extrabiomes": "26.3@f68e8d7",
       "branch": "26.3",
       "tested": "2026-09-29",
       "loader_version": "26.3.0.19-beta"
@@ -2396,7 +2396,7 @@
           "reason": ""
         }
       },
-      "extrabiomes": "Java-Dev@01261ab (tip a1ced97 not built)",
+      "extrabiomes": "Java-Dev@a1ced97",
       "branch": "Java-Dev",
       "tested": "2026-09-29",
       "loader_version": "0.19.5"
@@ -2413,7 +2413,7 @@
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[16:10:02] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[16:22:06] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
           "status": "pass",
@@ -2473,10 +2473,10 @@
         "Tectonic": {
           "status": "partner-broken",
           "version": "3.0.31-neoforge-26.3",
-          "reason": "[16:12:44] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[16:24:43] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         }
       },
-      "extrabiomes": "Java-Dev@01261ab (tip a1ced97 not built)",
+      "extrabiomes": "Java-Dev@a1ced97",
       "branch": "Java-Dev",
       "tested": "2026-09-29",
       "loader_version": "26.3.0.19-beta"
