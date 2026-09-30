@@ -22,6 +22,7 @@ import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheat
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructures;
 import net.winepicfin.extrabiomes.worldgen.features.jellycoral.JellyCoralFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
+import net.winepicfin.extrabiomes.worldgen.features.floatingjungle.FloatingJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.taigaspike.TaigaSpikeFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.charred.CharredForestFeatures;
@@ -59,6 +60,7 @@ public class ModWorldGenProvider {
                 JellyCoralFeatures.bootstrapConfigured(context);
                 StonePillarsFeature.bootstrapConfigured(context);
                 TaigaSpikeFeatures.bootstrapConfigured(context);
+                FloatingJungleFeatures.bootstrapConfigured(context);
                 UndergroundJungleFeatures.bootstrapConfigured(context);
                 CharredForestFeatures.bootstrapConfigured(context);
                 FutureTreeFeatures.bootstrapConfigured(context);
@@ -84,6 +86,7 @@ public class ModWorldGenProvider {
                 JellyCoralFeatures.bootstrapPlaced(context);
                 StonePillarsFeature.bootstrapPlaced(context);
                 TaigaSpikeFeatures.bootstrapPlaced(context);
+                FloatingJungleFeatures.bootstrapPlaced(context);
                 UndergroundJungleFeatures.bootstrapPlaced(context);
                 CharredForestFeatures.bootstrapPlaced(context);
                 FutureTreeFeatures.bootstrapPlaced(context);
