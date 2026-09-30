@@ -1,0 +1,16 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:structure_template_feature": {
+    "description": {
+      "identifier": "extrabiomes:floating_jungle/islet_large_1_feature"
+    },
+    "structure_name": "extrabiomes:floating_jungle/islet_large_1",
+    "constraints": {
+      "block_intersection": {
+        "block_allowlist": [
+          "minecraft:air"
+        ]
+      }
+    }
+  }
+}
