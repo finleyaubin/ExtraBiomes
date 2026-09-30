@@ -20,6 +20,17 @@ Glacier gets a full overhaul, above and below the ice. None of this is in the Be
 - Glacial ponds, gravel moraine and andesite boulders dot the surface.
 - Glacier water is now a pristine, clearer pale blue. The biome is slightly warmer, so surface water no longer freezes. It rains instead of snowing, and ice and snow blocks do not melt.
 
+## Floating Jungle
+Floating Jungle finally floats. None of this is in the Bedrock addon yet.
+
+- Sky islands now hang 28 to 60 blocks above the mountain peaks: grass and moss tops over stone cones, with jungle trees, vines and roots trailing from their undersides and flat-bottomed wisps of cloud drifting below. Some have a waterfall spilling off the rim.
+- Archipelagos join a large island to smaller ones with giant log canopy bridges, and the rarest has an overgrown ruin around a chest of loot.
+- A rare island carries a real vanilla jungle temple, with its loot chests, arrow traps and redstone puzzle intact.
+- Colossal jungle trees rise from the peaks, about ten times the height of a normal jungle tree at 100 to 130 blocks. Each has a trunk around 20 blocks thick, buttress roots, sweeping branches, a layered crown, moss, azalea leaves and hanging vines. They are very rare, and do not generate where the peak leaves no room below the build limit.
+
+## Blocks
+- Dense Cloud and Dense Cloud Brick (and the brick slab and stairs) are now slightly translucent.
+
 ## Minecraft versions
 - Added support for Minecraft 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2 and 26.3.
 
