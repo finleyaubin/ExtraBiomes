@@ -1,4 +1,13 @@
 {
+    "individual_named_sounds": {
+        "events": {
+            "ambient.glacier.ice_cracking": {
+                "sound": "ambient.glacier.ice_cracking",
+                "volume": 1.0,
+                "pitch": 1.0
+            }
+        }
+    },
     "entity_sounds": {
         "entities": {
             "extrabiomes:treefrog": {

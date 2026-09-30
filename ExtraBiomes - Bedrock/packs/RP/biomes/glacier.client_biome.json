@@ -5,6 +5,9 @@
             "identifier": "extrabiomes:glacier"
         },
         "components": {
+            "minecraft:ambient_sounds": {
+                "addition": "ambient.glacier.ice_cracking"
+            },
             "minecraft:water_appearance": {
                 "surface_color": "#9EE6FF",
                 "surface_opacity": 0.45
