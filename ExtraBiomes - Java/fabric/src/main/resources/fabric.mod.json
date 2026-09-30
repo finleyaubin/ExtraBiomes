@@ -21,6 +21,7 @@
     "fabric-gametest": [
       "net.winepicfin.extrabiomes.fabric.gametest.BiomeGenerationGameTests",
       "net.winepicfin.extrabiomes.fabric.gametest.BiomeModifierApplicationGameTests",
+      "net.winepicfin.extrabiomes.fabric.gametest.FloatingJungleGameTests",
       "net.winepicfin.extrabiomes.fabric.gametest.SpawnEggItemGameTests"
     ],
     "fabric-datagen": [
