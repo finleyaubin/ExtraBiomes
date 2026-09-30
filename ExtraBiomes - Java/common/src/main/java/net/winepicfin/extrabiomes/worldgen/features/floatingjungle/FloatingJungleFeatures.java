@@ -35,9 +35,9 @@ public class FloatingJungleFeatures {
     // Keep in sync with TEMPLATES in tools/build_floating_islands.py.
     private static final String[] ISLAND_TEMPLATES = {
             "islet_small_1", "islet_small_2", "islet_small_3", "islet_large_1", "islet_large_2",
-            "archipelago_1", "archipelago_2", "archipelago_ruin"
+            "archipelago_1", "archipelago_2", "archipelago_ruin", "islet_temple"
     };
-    private static final int[] ISLAND_WEIGHTS = {17, 17, 16, 12, 13, 10, 10, 5};
+    private static final int[] ISLAND_WEIGHTS = {17, 17, 16, 12, 13, 10, 10, 5, 4};
 
     // Skips the island if its volume is already taken (terrain, Sky City, another island).
     private static final float MIN_CLEAR_FRACTION = 0.95F;

@@ -30,7 +30,7 @@ import java.util.Set;
 public class FloatingJungleGameTests {
     private static final String[] ISLAND_TEMPLATES = {
             "islet_small_1", "islet_small_2", "islet_small_3", "islet_large_1", "islet_large_2",
-            "archipelago_1", "archipelago_2", "archipelago_ruin"
+            "archipelago_1", "archipelago_2", "archipelago_ruin", "islet_temple"
     };
     // SingleStructureFeature only writes inside a 48-block window; wider templates would be skipped every time.
     private static final int MAX_SPAN = 44;
@@ -62,6 +62,12 @@ public class FloatingJungleGameTests {
         Set<Block> ruin = placeAndCollect(level, "archipelago_ruin", origin.offset(0, 0, 64));
         for (Block expected : List.of(Blocks.CHEST, Blocks.MOSSY_STONE_BRICKS, Blocks.JUNGLE_LOG)) {
             helper.assertTrue(ruin.contains(expected), "archipelago_ruin is missing " + expected);
+        }
+
+        Set<Block> temple = placeAndCollect(level, "islet_temple", origin.offset(0, 0, 128));
+        for (Block expected : List.of(Blocks.GRASS_BLOCK, Blocks.MOSSY_COBBLESTONE, Blocks.CHEST, Blocks.DISPENSER,
+                Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK, Blocks.STICKY_PISTON, Blocks.REDSTONE_WIRE, Blocks.LEVER)) {
+            helper.assertTrue(temple.contains(expected), Component.literal("islet_temple is missing " + expected));
         }
         helper.succeed();
     }
