@@ -1,0 +1,20 @@
+{
+  "format_version": "1.17.0",
+  "minecraft:ore_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/magma_fissure_feature"
+    },
+    "count": 6,
+    "replace_rules": [
+      {
+        "places_block": "minecraft:magma",
+        "may_replace": [
+          "minecraft:packed_ice",
+          "minecraft:blue_ice",
+          "minecraft:stone",
+          "minecraft:deepslate"
+        ]
+      }
+    ]
+  }
+}
