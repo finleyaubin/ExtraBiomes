@@ -13,6 +13,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -34,6 +35,7 @@ public class FloatingJungleGameTests {
     };
     // SingleStructureFeature only writes inside a 48-block window; wider templates would be skipped every time.
     private static final int MAX_SPAN = 44;
+    private static final String[] GIANT_TREES = {"giant_tree_1", "giant_tree_2", "giant_tree_3"};
 
     @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
     public static void everyIslandTemplateLoadsWithinTheWriteWindow(GameTestHelper helper) {
@@ -67,7 +69,7 @@ public class FloatingJungleGameTests {
         Set<Block> temple = placeAndCollect(level, "islet_temple", origin.offset(0, 0, 128));
         for (Block expected : List.of(Blocks.GRASS_BLOCK, Blocks.MOSSY_COBBLESTONE, Blocks.CHEST, Blocks.DISPENSER,
                 Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK, Blocks.STICKY_PISTON, Blocks.REDSTONE_WIRE, Blocks.LEVER)) {
-            helper.assertTrue(temple.contains(expected), Component.literal("islet_temple is missing " + expected));
+            helper.assertTrue(temple.contains(expected), "islet_temple is missing " + expected);
         }
         helper.succeed();
     }
@@ -96,6 +98,40 @@ public class FloatingJungleGameTests {
             present |= holder.unwrapKey().map(k -> k.equals(FloatingJungleFeatures.SELECT_ISLAND_PLACED_KEY)).orElse(false);
         }
         helper.assertTrue(present, "Floating Jungle is missing its island feature in SURFACE_STRUCTURES");
+        helper.succeed();
+    }
+
+    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
+    public static void giantTreesStandTallWithTheirDetails(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos abs = helper.absolutePos(BlockPos.ZERO);
+        int ground = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, abs.getX(), abs.getZ());
+        BlockPos origin = new BlockPos((abs.getX() >> 4 << 4) + 8, ground, (abs.getZ() >> 4 << 4) + 8);
+
+        int offset = 192;
+        for (String name : GIANT_TREES) {
+            ResourceLocation id = new ResourceLocation(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
+            BlockPos at = origin.offset(0, 0, offset);
+            offset += 64;
+            SingleStructureConfiguration config = new SingleStructureConfiguration(id, Optional.empty(), -5, true, 0.8F);
+            boolean placed = new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config)
+                    .place(level, level.getChunkSource().getGenerator(), level.getRandom(), at);
+            helper.assertTrue(placed, name + " refused to place at " + at);
+
+            Set<Block> found = new HashSet<>();
+            int tallestLog = ground;
+            for (BlockPos pos : BlockPos.betweenClosed(at.offset(-24, -6, -24), at.offset(24, 140, 24))) {
+                Block block = level.getBlockState(pos).getBlock();
+                found.add(block);
+                if ((block == Blocks.JUNGLE_LOG || block == Blocks.JUNGLE_WOOD) && pos.getY() > tallestLog) {
+                    tallestLog = pos.getY();
+                }
+            }
+            for (Block expected : List.of(Blocks.JUNGLE_WOOD, Blocks.JUNGLE_LOG, Blocks.JUNGLE_LEAVES, Blocks.VINE)) {
+                helper.assertTrue(found.contains(expected), name + " is missing " + expected);
+            }
+            helper.assertTrue(tallestLog - ground >= 80, name + " is only " + (tallestLog - ground) + " blocks tall");
+        }
         helper.succeed();
     }
 }

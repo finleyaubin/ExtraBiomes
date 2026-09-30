@@ -31,6 +31,17 @@ import java.util.Optional;
 public class FloatingJungleFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_ISLAND_KEY = configuredKey("select_floating_island");
     public static final ResourceKey<PlacedFeature> SELECT_ISLAND_PLACED_KEY = placedKey("select_floating_island");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_GIANT_TREE_KEY = configuredKey("select_giant_jungle_tree");
+    public static final ResourceKey<PlacedFeature> SELECT_GIANT_TREE_PLACED_KEY = placedKey("select_giant_jungle_tree");
+
+    // Keep in sync with GIANT_TREES in tools/build_floating_islands.py.
+    private static final String[] GIANT_TREE_TEMPLATES = {"giant_tree_1", "giant_tree_2", "giant_tree_3"};
+    private static final int[] GIANT_TREE_WEIGHTS = {1, 1, 1};
+
+    // The roots are buried this deep in the peak (GIANT_ROOT_DEPTH in the generator), so the trunk stands on the real ground.
+    private static final int GIANT_TREE_GROUND_OFFSET = -5;
+    // Looser than the islands' fraction: a 40-wide footprint on a mountain top always clips some slope.
+    private static final float GIANT_TREE_MIN_CLEAR_FRACTION = 0.8F;
 
     // Keep in sync with TEMPLATES in tools/build_floating_islands.py.
     private static final String[] ISLAND_TEMPLATES = {
@@ -43,26 +54,31 @@ public class FloatingJungleFeatures {
     private static final float MIN_CLEAR_FRACTION = 0.95F;
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        List<Holder<PlacedFeature>> islands = new ArrayList<>();
-        for (String template : ISLAND_TEMPLATES) {
+        context.register(SELECT_ISLAND_KEY, weightedSelector(ISLAND_TEMPLATES, ISLAND_WEIGHTS, 0, MIN_CLEAR_FRACTION));
+        context.register(SELECT_GIANT_TREE_KEY, weightedSelector(GIANT_TREE_TEMPLATES, GIANT_TREE_WEIGHTS,
+                GIANT_TREE_GROUND_OFFSET, GIANT_TREE_MIN_CLEAR_FRACTION));
+    }
+
+    private static ConfiguredFeature<?, ?> weightedSelector(String[] templates, int[] weights, int groundOffset, float minClearFraction) {
+        List<Holder<PlacedFeature>> placed = new ArrayList<>();
+        for (String template : templates) {
             ResourceLocation structure = new ResourceLocation(ExtraBiomes.MOD_ID, "floating_jungle/" + template);
-            SingleStructureConfiguration config = new SingleStructureConfiguration(structure, Optional.empty(), 0, true, MIN_CLEAR_FRACTION);
-            Holder<ConfiguredFeature<?, ?>> island = Holder.direct(new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
-            islands.add(PlacementUtils.inlinePlaced(island));
+            SingleStructureConfiguration config = new SingleStructureConfiguration(structure, Optional.empty(), groundOffset, true, minClearFraction);
+            Holder<ConfiguredFeature<?, ?>> structureFeature = Holder.direct(new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+            placed.add(PlacementUtils.inlinePlaced(structureFeature));
         }
 
-        // RandomFeatureConfiguration tries entries in order with raw chances, so each weight becomes its share of the mass not yet claimed; the last island is the default.
+        // RandomFeatureConfiguration tries entries in order with raw chances, so each weight becomes its share of the mass not yet claimed; the last entry is the default.
         List<WeightedPlacedFeature> entries = new ArrayList<>();
         int remainingWeight = 0;
-        for (int weight : ISLAND_WEIGHTS) {
+        for (int weight : weights) {
             remainingWeight += weight;
         }
-        for (int i = 0; i < ISLAND_WEIGHTS.length - 1; i++) {
-            entries.add(new WeightedPlacedFeature(islands.get(i), (float) ISLAND_WEIGHTS[i] / remainingWeight));
-            remainingWeight -= ISLAND_WEIGHTS[i];
+        for (int i = 0; i < weights.length - 1; i++) {
+            entries.add(new WeightedPlacedFeature(placed.get(i), (float) weights[i] / remainingWeight));
+            remainingWeight -= weights[i];
         }
-        context.register(SELECT_ISLAND_KEY, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
-                new RandomFeatureConfiguration(entries, islands.get(islands.size() - 1))));
+        return new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(entries, placed.get(placed.size() - 1)));
     }
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
@@ -78,6 +94,16 @@ public class FloatingJungleFeatures {
                         RandomOffsetPlacement.vertical(ConstantInt.of(16)),
                         RandomOffsetPlacement.vertical(ConstantInt.of(16)),
                         RandomOffsetPlacement.vertical(UniformInt.of(-4, 12)),
+                        BiomeFilter.biome()
+                )));
+
+        // Rare on purpose: each one is ~40 wide and 100+ tall, and the window check drops about a third of tries on top of this.
+        context.register(SELECT_GIANT_TREE_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(SELECT_GIANT_TREE_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(24),
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome()
                 )));
     }
