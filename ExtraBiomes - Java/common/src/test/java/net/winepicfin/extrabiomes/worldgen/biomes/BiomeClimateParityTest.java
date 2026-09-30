@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 // Parity checks against every ExtraBiomes - Bedrock/packs/BP/biomes/<key>.biome.json
 // "minecraft:climate" component, read live rather than copy-pasted. Iterates
@@ -22,6 +23,8 @@ class BiomeClimateParityTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("biomes")
     void temperatureMatchesBedrock(Map.Entry<String, BiomeClimateTuning.Climate> entry) {
+        // Remove once the unfrozen-water temperature is backported to Bedrock dev.
+        assumeFalse(entry.getKey().equals("glacier"), "Java-only warmer glacier (water must not freeze) pending Bedrock backport");
         BedrockEntityJson bedrock = BedrockEntityJson.load("BP/biomes/" + entry.getKey() + ".biome.json");
         assertEquals(bedrock.getFloat("minecraft:biome", "components", "minecraft:climate", "temperature"),
                 entry.getValue().temperature());

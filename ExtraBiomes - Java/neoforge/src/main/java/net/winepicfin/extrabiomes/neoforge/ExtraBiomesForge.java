@@ -48,6 +48,7 @@ import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheat
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.ModStructureTypes;
+import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
@@ -89,6 +90,7 @@ public class ExtraBiomesForge
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
         ModVolcanicPlacementModifiers.register();
+        GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
         NetherlandsWheatFeatures.register();
