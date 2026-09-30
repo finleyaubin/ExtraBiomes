@@ -138,8 +138,18 @@ def map_block(name, states, be=None):
     if name in ("minecraft:black_concrete", "minecraft:white_concrete",
                 "minecraft:cyan_carpet", "minecraft:crafting_table",
                 "minecraft:blackstone", "minecraft:cracked_polished_blackstone_bricks",
-                "minecraft:moss_block"):
+                "minecraft:moss_block", "minecraft:dirt", "minecraft:grass_block", "minecraft:moss_carpet"):
         return name, {}
+    if name == "minecraft:hanging_roots":
+        return name, {"waterlogged": "false"}
+    if name in ("minecraft:jungle_leaves", "minecraft:oak_leaves"):
+        return name, {"persistent": _b(states.get("persistent_bit", 0)), "distance": "7", "waterlogged": "false"}
+    if name == "minecraft:vine":
+        bits = int(states.get("vine_direction_bits", 0))
+        return name, {
+            "up": "false",
+            "south": _b(bool(bits & 1)), "west": _b(bool(bits & 2)), "north": _b(bool(bits & 4)), "east": _b(bool(bits & 8)),
+        }
     if name == "minecraft:magma":
         return "minecraft:magma_block", {}
     if name == "minecraft:lava":
