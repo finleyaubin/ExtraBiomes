@@ -197,9 +197,22 @@ def add_clouds(g, seed, cx, cz, radius, thick, top_y, count):
     for i in range(count):
         ang = rand01(seed, 1500 + i) * math.tau
         dist = radius * (0.5 + 0.6 * rand01(seed, 1510 + i))
-        y = top_y - int(thick * (0.35 + 0.6 * rand01(seed, 1520 + i)))
-        g.ball(cx + round(dist * math.cos(ang)), y, cz + round(dist * math.sin(ang)),
-               2 + 2 * rand01(seed, 1530 + i), "cloud", 1540 + i, keep=0.95, flat=1.8)
+        add_cloud_puff(g, seed + i, cx + round(dist * math.cos(ang)), cz + round(dist * math.sin(ang)),
+                       top_y - int(thick * (0.35 + 0.6 * rand01(seed, 1520 + i))))
+
+
+def add_cloud_puff(g, seed, px, pz, base_y):
+    """Flat-bottomed cloud: every column starts at base_y and its height follows a low ripple, so the top is wavy."""
+    rx, rz = 3 + 3 * rand01(seed, 1530), 3 + 3 * rand01(seed, 1531)
+    ph1, ph2 = rand01(seed, 1532) * math.tau, rand01(seed, 1533) * math.tau
+    for x in range(px - math.ceil(rx), px + math.ceil(rx) + 1):
+        for z in range(pz - math.ceil(rz), pz + math.ceil(rz) + 1):
+            d2 = ((x - px) / rx) ** 2 + ((z - pz) / rz) ** 2
+            if d2 >= 1:
+                continue
+            ripple = 0.5 + 0.3 * math.sin(0.9 * (x - px) + ph1) + 0.2 * math.sin(1.3 * (z - pz) + ph2)
+            for y in range(base_y, base_y + 1 + int(3.6 * (1 - d2) ** 0.7 * ripple)):
+                g.put(x, y, z, "cloud")
 
 
 def add_roots(g, seed):
