@@ -1,0 +1,31 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:structure_template_feature": {
+    "description": {
+      "identifier": "extrabiomes:floating_jungle/giant_tree_1_feature"
+    },
+    "structure_name": "extrabiomes:floating_jungle/giant_tree_1",
+    "constraints": {
+      "block_intersection": {
+        "block_allowlist": [
+          "minecraft:air",
+          "minecraft:grass_block",
+          "minecraft:dirt",
+          "minecraft:stone",
+          "minecraft:gravel",
+          "minecraft:andesite",
+          "minecraft:diorite",
+          "minecraft:granite",
+          "minecraft:tuff",
+          "minecraft:snow_layer",
+          "minecraft:jungle_leaves",
+          "minecraft:oak_leaves",
+          "minecraft:vine",
+          "minecraft:short_grass",
+          "minecraft:tallgrass",
+          "minecraft:moss_block"
+        ]
+      }
+    }
+  }
+}
