@@ -30,7 +30,7 @@ public final class BiomeAppearanceTuning {
     public static final Appearance JUNGLE_MARSH = register("jungle_marsh", 0x2a6830, 0x386020, 0x487030, 0x77A8FF);
     public static final Appearance JUNGLE_PILLARS = register("jungle_pillars", 0x3f76e4, 0x30bb0b, 0x59c93c, 0x77A8FF);
     public static final Appearance MYSTIC_FOREST = register("mystic_forest", 0xFF63FF, 0x9040c8, 0x8050e0, 0x77A8FF);
-    public static final Appearance GLACIER = register("glacier", 0x2838c8, 0x60a0b0, 0x80b0c0, 0x7FA1FF);
+    public static final Appearance GLACIER = register("glacier", 0x9EE6FF, 0x60a0b0, 0x80b0c0, 0x7FA1FF);
     public static final Appearance JELLYFISH_FIELDS = register("jellyfish_fields", 0x02B0E5, 0x38b078, 0x58c898, 0x7BA4FF);
     public static final Appearance LUSH_MESA = register("lush_mesa", 0x1B9ED8, 0x58b028, 0x78c040, 0x6EB1FF);
     public static final Appearance LUSH_MESA_BRYCE = register("lush_mesa_bryce", 0x1B9ED8, 0x50a830, 0x70bc40, 0x6EB1FF);
