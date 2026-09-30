@@ -19,5 +19,12 @@
       "extrabiomes:mob/puckoo/cry1",
       "extrabiomes:mob/puckoo/cry2"
     ]
+  },
+  "ambient.glacier.ice_cracking": {
+    "category": "ambient",
+    "sounds": [
+      "extrabiomes:ambient/glacier/ice_cracking_1",
+      "extrabiomes:ambient/glacier/ice_cracking_2"
+    ]
   }
 }
