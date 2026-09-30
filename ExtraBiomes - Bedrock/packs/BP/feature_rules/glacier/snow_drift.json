@@ -9,15 +9,50 @@
             "placement_pass": "underground_pass",
             "minecraft:biome_filter": [
                 {
-                    "test": "has_biome_tag",
-                    "operator": "==",
-                    "value": "frozen"
+                    "any_of": [
+                        {
+                            "test": "has_biome_tag",
+                            "operator": "==",
+                            "value": "glacier"
+                        },
+                        {
+                            "all_of": [
+                                {
+                                    "test": "has_biome_tag",
+                                    "operator": "==",
+                                    "value": "frozen"
+                                },
+                                {
+                                    "test": "has_biome_tag",
+                                    "operator": "==",
+                                    "value": "mesa"
+                                }
+                            ]
+                        },
+                        {
+                            "all_of": [
+                                {
+                                    "test": "has_biome_tag",
+                                    "operator": "==",
+                                    "value": "frozen"
+                                },
+                                {
+                                    "test": "has_biome_tag",
+                                    "operator": "==",
+                                    "value": "taiga"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
         "distribution": {
             "iterations": 1,
-            "scatter_chance": 30,
+            "scatter_chance": {
+                "numerator": 1,
+                "denominator": 8
+            },
             "x": {
                 "distribution": "uniform",
                 "extent": [0, 16]
