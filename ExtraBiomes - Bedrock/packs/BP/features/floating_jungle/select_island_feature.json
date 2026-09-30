@@ -36,6 +36,10 @@
       [
         "extrabiomes:floating_jungle/archipelago_ruin_feature",
         5
+      ],
+      [
+        "extrabiomes:floating_jungle/islet_temple_feature",
+        4
       ]
     ]
   }

@@ -42,7 +42,15 @@ TEMPLATES = [
                                satellites=[(10, 21, 6, 8, 2), (75, 20, 5, 7, -3)], chain=True)),
     ("archipelago_ruin", 5, dict(kind="archipelago", seed=41, radius=13, thick=14, ruin=True,
                                  satellites=[(15, 21, 5, 7, 2), (95, 20, 5, 7, -2)])),
+    ("islet_temple", 4, dict(kind="islet", seed=51, radius=15, thick=16, puffs=5, temple=True)),
 ]
+
+# Vanilla JungleTemplePiece captured from 26.3 worldgen (seed 1234) as a normal structure template.
+TEMPLE_NBT = os.path.join(HERE, "jungle_temple_vanilla.nbt")
+TEMPLE_SIZE = (12, 16, 15)
+# Capture layer 6 is the first layer above the ground; everything below it is the temple's buried chambers.
+TEMPLE_GROUND_LAYER = 6
+TEMPLE_ORIGIN = (-6, 1 - TEMPLE_GROUND_LAYER, -7)
 
 BLOCKS = {
     "grass": ("minecraft:grass_block", {}),
@@ -63,6 +71,7 @@ BLOCKS = {
     "water": ("minecraft:water", {"liquid_depth": T_int(0)}),
     "cloud": ("extrabiomes:dense_cloud", {}),
     "chest": ("minecraft:chest", {"minecraft:cardinal_direction": T_str("south")}),
+    "temple_anchor": ("minecraft:stone", {"stone_type": T_str("stone")}),
 }
 SOLID = {"grass", "dirt", "moss", "stone", "andesite", "mossy_cobble", "brick", "brick_mossy", "brick_cracked",
          "log_y", "log_x", "log_z"}
@@ -70,7 +79,13 @@ SOLID = {"grass", "dirt", "moss", "stone", "andesite", "mossy_cobble", "brick", 
 VINE_FACES = [((0, 1), 1), ((-1, 0), 2), ((0, -1), 4), ((1, 0), 8)]
 
 
+RAW = []
+RAW_BE = {}
+
+
 def block_def(key):
+    if isinstance(key, tuple) and key[0] == "raw":
+        return RAW[key[1]][:2]
     if isinstance(key, tuple):
         return "minecraft:vine", {"vine_direction_bits": T_int(key[1])}
     return BLOCKS[key]
@@ -288,10 +303,26 @@ def add_ruin(g, seed, cx, cz, floor_y):
     return footprint
 
 
-def build(seed, radius, thick, kind, waterfall=False, puffs=3, satellites=(), ruin=False, chain=False):
+def add_temple_pad(g):
+    """Flatten and solidify the ground under the temple's footprint; the anchor cell marks where the temple's corner goes."""
+    ox, oy, oz = TEMPLE_ORIGIN
+    sx, _, sz = TEMPLE_SIZE
+    footprint = set()
+    for x in range(ox, ox + sx):
+        for z in range(oz, oz + sz):
+            footprint.add((x, z))
+            for y in range(1, 16):
+                g.cells.pop((x, y, z), None)
+            for y in range(oy, 1):
+                g.put(x, y, z, "stone")
+    g.cells[TEMPLE_ORIGIN] = "temple_anchor"
+    return {(x + dx, z + dz) for x, z in footprint for dx in (-1, 0, 1) for dz in (-1, 0, 1)}
+
+
+def build(seed, radius, thick, kind, waterfall=False, puffs=3, satellites=(), ruin=False, chain=False, temple=False):
     g = Grid(seed)
     add_island(g, seed, 0, 0, radius, thick, 0)
-    avoid = add_ruin(g, seed, 0, 0, 0) if ruin else set()
+    avoid = add_ruin(g, seed, 0, 0, 0) if ruin else add_temple_pad(g) if temple else set()
     add_trees(g, seed, 0, 0, radius, 0, avoid)
     if waterfall:
         add_waterfall(g, seed, 0, 0, radius)
@@ -329,7 +360,8 @@ def make_structure(sx, sy, sz, cells):
     palette = []
     for k in keys:
         name, states = block_def(k)
-        palette.append(T_comp({"name": T_str(name), "states": T_comp(dict(states)), "version": T_int(VERSION)}))
+        version = RAW[k[1]][2] if isinstance(k, tuple) and k[0] == "raw" else VERSION
+        palette.append(T_comp({"name": T_str(name), "states": T_comp(dict(states)), "version": T_int(version)}))
     total = sx * sy * sz
     layer0 = [Tag(TAG_INT, -1) for _ in range(total)]
     layer1 = [Tag(TAG_INT, -1) for _ in range(total)]
@@ -342,6 +374,8 @@ def make_structure(sx, sy, sz, cells):
                 "id": T_str("Chest"),
                 "LootTable": T_str(LOOT_TABLE),
             })})
+        elif (x, y, z) in RAW_BE:
+            block_entities[str(flat)] = RAW_BE[(x, y, z)]
     return T_comp({
         "format_version": T_int(1),
         "size": T_list([T_int(sx), T_int(sy), T_int(sz)], TAG_INT),
@@ -371,9 +405,91 @@ def write_java_structure(name, sx, sy, sz, cells):
         src = os.path.join(tmp, f"{name}.mcstructure")
         save(src, make_structure(sx, sy, sz, cells), "")
         warnings = []
-        mc2java.convert_one(src, os.path.join(JAVA_STRUCT_DIR, f"{name}.nbt"), warnings, Counter())
+        out = os.path.join(JAVA_STRUCT_DIR, f"{name}.nbt")
+        mc2java.convert_one(src, out, warnings, Counter())
         for w in warnings:
             print(f"  warning: {w}")
+    return out
+
+
+def find_temple_anchor(cells):
+    return next(pos for pos, key in cells.items() if key == "temple_anchor")
+
+
+def assert_temple_fits(anchor, size):
+    ax, ay, az = anchor
+    sx, sy, sz = size
+    assert ax >= 0 and ay >= 0 and az >= 0 and ax + TEMPLE_SIZE[0] <= sx and ay + TEMPLE_SIZE[1] <= sy and az + TEMPLE_SIZE[2] <= sz, \
+        f"temple at {anchor} does not fit inside {size}"
+
+
+def merge_temple_java(path, anchor):
+    """Stamp the vanilla temple's blocks straight into the island's Java .nbt, so they stay exactly as vanilla builds them."""
+    import nbt_edit
+    from nbt_edit import Tag, TAG_COMPOUND, TAG_INT, TAG_LIST
+    get = nbt_edit.compound_get
+
+    def entry_key(entry):
+        props = get(entry, "Properties")
+        return get(entry, "Name").value, tuple(sorted((k, v.value) for k, v in props.value)) if props else ()
+
+    def pos_of(block):
+        return tuple(t.value for t in get(block, "pos").value[1])
+
+    name, island = nbt_edit.load(path)
+    _, temple = nbt_edit.load(TEMPLE_NBT)
+    palette = get(island, "palette").value[1]
+    index = {entry_key(e): i for i, e in enumerate(palette)}
+
+    blocks_tag = get(island, "blocks")
+    temple_blocks = get(temple, "blocks").value[1]
+    claimed = {(anchor[0] + pos_of(b)[0], anchor[1] + pos_of(b)[1], anchor[2] + pos_of(b)[2]) for b in temple_blocks}
+    kept = [b for b in blocks_tag.value[1] if pos_of(b) not in claimed]
+
+    temple_palette = get(temple, "palette").value[1]
+    for b in temple_blocks:
+        entry = temple_palette[get(b, "state").value]
+        key = entry_key(entry)
+        if key not in index:
+            index[key] = len(palette)
+            palette.append(entry)
+        x, y, z = pos_of(b)
+        fields = [("state", Tag(TAG_INT, index[key])),
+                  ("pos", Tag(TAG_LIST, (TAG_INT, [Tag(TAG_INT, anchor[0] + x), Tag(TAG_INT, anchor[1] + y), Tag(TAG_INT, anchor[2] + z)])))]
+        be = get(b, "nbt")
+        if be is not None:
+            fields.append(("nbt", be))
+        kept.append(Tag(TAG_COMPOUND, fields))
+
+    blocks_tag.value = (blocks_tag.value[0], kept)
+    nbt_edit.save(path, name, island)
+
+
+def inject_temple_bedrock(cells, anchor):
+    """Convert the vanilla temple with java2mc and drop its blocks into the island's cells as raw Bedrock blocks."""
+    import java2mc
+    RAW.clear()
+    RAW_BE.clear()
+    structure = java2mc.convert(TEMPLE_NBT).value["structure"].value
+    layer0 = [t.value for t in structure["block_indices"].value[0].value]
+    default = structure["palette"].value["default"].value
+    palette = default["block_palette"].value
+    entities = default["block_position_data"].value
+    _, sy, sz = TEMPLE_SIZE
+    raw_index = {}
+    for flat, idx in enumerate(layer0):
+        if idx < 0:
+            continue
+        x, rest = divmod(flat, sy * sz)
+        y, z = divmod(rest, sz)
+        if idx not in raw_index:
+            entry = palette[idx].value
+            raw_index[idx] = len(RAW)
+            RAW.append((entry["name"].value, entry["states"].value, entry["version"].value))
+        pos = (anchor[0] + x, anchor[1] + y, anchor[2] + z)
+        cells[pos] = ("raw", raw_index[idx])
+        if str(flat) in entities:
+            RAW_BE[pos] = entities[str(flat)]
 
 
 def write_json(path, data):
@@ -428,7 +544,17 @@ if __name__ == "__main__":
     for name, _, kwargs in TEMPLATES:
         sx, sy, sz, cells = build(**kwargs)
         assert sx <= MAX_SPAN and sz <= MAX_SPAN, f"{name} is {sx}x{sz}, over the {MAX_SPAN}-block write window"
-        (write_java_structure if java_only else write_bedrock_structure)(name, sx, sy, sz, cells)
+        anchor = find_temple_anchor(cells) if kwargs.get("temple") else None
+        if anchor:
+            assert_temple_fits(anchor, (sx, sy, sz))
+        if java_only:
+            path = write_java_structure(name, sx, sy, sz, cells)
+            if anchor:
+                merge_temple_java(path, anchor)
+        else:
+            if anchor:
+                inject_temple_bedrock(cells, anchor)
+            write_bedrock_structure(name, sx, sy, sz, cells)
         print(f"{name}: {sx}x{sy}x{sz}, {len(cells)} blocks")
     if not java_only:
         write_bedrock_features()

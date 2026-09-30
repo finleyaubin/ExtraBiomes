@@ -18,6 +18,9 @@ BLOCK_VERSION = 18168865
 AXIS_BLOCK_FACE = {"y": "up", "x": "east", "z": "north"}
 STAIR_FACING_WEIRDO = {"east": 0, "west": 1, "south": 2, "north": 3}
 FACING_DIRECTION = {"down": 0, "up": 1, "north": 2, "south": 3, "west": 4, "east": 5}
+HORIZONTAL_DIRECTION = {"south": 0, "west": 1, "north": 2, "east": 3}
+STAIR_NAMES = {"minecraft:cobblestone_stairs": "minecraft:stone_stairs"}
+CONTAINER_BLOCK_ENTITIES = {"minecraft:chest": "Chest", "minecraft:dispenser": "Dispenser"}
 WALL_CONNECTION = {"none": "none", "low": "short", "tall": "tall"}
 # Inverse of block_map._ROT_TOP - the jigsaw `rotation` a vertical front encodes.
 ROT_TOP = {"north": 0, "east": 1, "south": 2, "west": 3}
@@ -51,10 +54,54 @@ def map_block(name, props):
                       "extrabiomes:persist": T_byte(_bool(props.get("persistent", "false"))),
                       "extrabiomes:placed": T_byte(1)}
 
+    if name in ("minecraft:cobblestone", "minecraft:mossy_cobblestone"):
+        return name, {}
+
+    if name == "minecraft:chiseled_stone_bricks":
+        return "minecraft:stonebrick", {"stone_brick_type": T_str("chiseled")}
+
+    # The vanilla jungle temple's parts (floating_jungle/islet_temple). Redstone, tripwire, hook, lever and
+    # repeater directions are a best-effort mapping that has not been loaded in Bedrock yet.
+    if name == "minecraft:chest":
+        return name, {"minecraft:cardinal_direction": T_str(props.get("facing", "north"))}
+
+    if name == "minecraft:dispenser":
+        return name, {"facing_direction": T_int(FACING_DIRECTION[props["facing"]]),
+                      "triggered_bit": T_byte(_bool(props.get("triggered", "false")))}
+
+    if name == "minecraft:sticky_piston":
+        return name, {"facing_direction": T_int(FACING_DIRECTION[props["facing"]])}
+
+    if name == "minecraft:tripwire":
+        return "minecraft:trip_wire", {"attached_bit": T_byte(_bool(props.get("attached", "false"))),
+                                       "disarmed_bit": T_byte(_bool(props.get("disarmed", "false"))),
+                                       "powered_bit": T_byte(_bool(props.get("powered", "false"))),
+                                       "suspended_bit": T_byte(0)}
+
+    if name == "minecraft:tripwire_hook":
+        return name, {"attached_bit": T_byte(_bool(props.get("attached", "false"))),
+                      "powered_bit": T_byte(_bool(props.get("powered", "false"))),
+                      "direction": T_int(HORIZONTAL_DIRECTION[props["facing"]])}
+
+    if name == "minecraft:redstone_wire":
+        return name, {"redstone_signal": T_int(int(props.get("power", "0")))}
+
+    if name == "minecraft:lever":
+        return name, {"lever_direction": T_str(props["facing"]),
+                      "open_bit": T_byte(_bool(props.get("powered", "false")))}
+
+    if name == "minecraft:repeater":
+        return "minecraft:unpowered_repeater", {"direction": T_int(HORIZONTAL_DIRECTION[props["facing"]]),
+                                                "repeater_delay": T_int(int(props.get("delay", "1")) - 1)}
+
+    if name == "minecraft:vine":
+        bits = sum(bit for side, bit in (("south", 1), ("west", 2), ("north", 4), ("east", 8)) if props.get(side) == "true")
+        return name, {"vine_direction_bits": T_int(bits)}
+
     if name.endswith("_stairs"):
         # Bedrock has no `shape` state - it derives corner geometry from neighbours,
         # so Java's outer_left/outer_right are dropped here rather than mapped.
-        return name, {"weirdo_direction": T_int(STAIR_FACING_WEIRDO[props["facing"]]),
+        return STAIR_NAMES.get(name, name), {"weirdo_direction": T_int(STAIR_FACING_WEIRDO[props["facing"]]),
                       "upside_down_bit": T_byte(1 if props.get("half") == "top" else 0)}
 
     if name.endswith("_wall"):
@@ -91,6 +138,13 @@ def _jigsaw_entity(nbt, x, y, z):
         "target_pool": T_str(nbt.get("pool", "minecraft:empty")),
         "x": T_int(x), "y": T_int(y), "z": T_int(z),
     })})
+
+
+def _container_entity(nbt):
+    entity = {"id": T_str(CONTAINER_BLOCK_ENTITIES[nbt["id"]]), "isMovable": T_byte(1)}
+    if "LootTable" in nbt:
+        entity["LootTable"] = T_str("loot_tables/" + nbt["LootTable"].split(":", 1)[1] + ".json")
+    return T_comp({"block_entity_data": T_comp(entity)})
 
 
 def _py(tag):
@@ -130,6 +184,8 @@ def convert(src):
         layer0[flat] = palette_id(java_name, props)
         if java_name == "minecraft:jigsaw":
             position_data[str(flat)] = _jigsaw_entity(blk["nbt"], x, y, z)
+        elif java_name in CONTAINER_BLOCK_ENTITIES and "nbt" in blk:
+            position_data[str(flat)] = _container_entity(blk["nbt"])
 
     return T_comp({
         "format_version": T_int(1),
