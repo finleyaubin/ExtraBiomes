@@ -1,0 +1,21 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:growing_plant_feature": {
+        "description": {
+            "identifier": "extrabiomes:the_netherlands/hanging_basalt_pillar_feature"
+        },
+        "height_distribution": [
+            [
+                {
+                    "range_min": 2,
+                    "range_max": 10
+                },
+                1
+            ]
+        ],
+        "growth_direction": "DOWN",
+        "body_blocks": [["minecraft:basalt", 1]],
+        "head_blocks": [["minecraft:basalt", 1]],
+        "allow_water": false
+    }
+}
