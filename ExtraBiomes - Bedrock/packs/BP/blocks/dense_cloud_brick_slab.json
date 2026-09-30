@@ -28,7 +28,7 @@
             "minecraft:material_instances": {
                 "*": {
                     "texture": "extrabiomes_dense_cloud_brick",
-                    "render_method": "opaque"
+                    "render_method": "blend"
                 }
             },
             "minecraft:liquid_detection": {
