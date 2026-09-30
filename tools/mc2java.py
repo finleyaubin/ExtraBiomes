@@ -158,6 +158,7 @@ LOOT_TABLE_MAP = {
     "loot_tables/chests/rare_skycity.json": "extrabiomes:chests/rare_skycity",
     "loot_tables/chests/epic_skycity.json": "extrabiomes:chests/epic_skycity",
     "loot_tables/chests/snow_spire_summit.json": "extrabiomes:chests/snow_spire_summit",
+    "loot_tables/chests/floating_jungle_ruin.json": "extrabiomes:chests/floating_jungle_ruin",
 }
 
 
