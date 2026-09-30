@@ -45,6 +45,16 @@ TEMPLATES = [
     ("islet_temple", 4, dict(kind="islet", seed=51, radius=15, thick=16, puffs=5, temple=True)),
 ]
 
+# Giant jungle trees stand on the peak itself (~10x a vanilla jungle tree's height), buried GIANT_ROOT_DEPTH into the ground.
+GIANT_ROOT_DEPTH = 5
+GIANT_GIRTH = 1.35
+GIANT_MAX_SPAN = 44
+GIANT_TREES = [
+    ("giant_tree_1", 1, dict(seed=61, trunk_height=90)),
+    ("giant_tree_2", 1, dict(seed=62, trunk_height=104)),
+    ("giant_tree_3", 1, dict(seed=63, trunk_height=118)),
+]
+
 # Vanilla JungleTemplePiece captured from 26.3 worldgen (seed 1234) as a normal structure template.
 TEMPLE_NBT = os.path.join(HERE, "jungle_temple_vanilla.nbt")
 TEMPLE_SIZE = (12, 16, 15)
@@ -72,6 +82,8 @@ BLOCKS = {
     "cloud": ("extrabiomes:dense_cloud", {}),
     "chest": ("minecraft:chest", {"minecraft:cardinal_direction": T_str("south")}),
     "temple_anchor": ("minecraft:stone", {"stone_type": T_str("stone")}),
+    "wood": ("minecraft:wood", {"wood_type": T_str("jungle"), "stripped_bit": T_byte(0), "pillar_axis": T_str("y")}),
+    "azalea": ("minecraft:azalea_leaves", {"persistent_bit": T_byte(1), "update_bit": T_byte(0)}),
 }
 SOLID = {"grass", "dirt", "moss", "stone", "andesite", "mossy_cobble", "brick", "brick_mossy", "brick_cracked",
          "log_y", "log_x", "log_z"}
@@ -301,6 +313,135 @@ def add_ruin(g, seed, cx, cz, floor_y):
                 g.put(x, floor_y + 1, z, "moss_carpet")
     g.put(cx, floor_y + 1, cz, "chest", overwrite=True)
     return footprint
+
+
+def trunk_center(seed, y, height):
+    """Gentle S-curve so the trunk isn't a ruler-straight pole; zero at the base."""
+    ph = rand01(seed, 700) * math.tau
+    def at(t):
+        return 1.6 * math.sin(t * 2.4 + ph), 1.6 * math.cos(t * 1.9 + ph * 1.3)
+    bx, bz = at(0)
+    x, z = at(y / height)
+    return x - bx, z - bz
+
+
+def trunk_radius(y, height):
+    t = y / height
+    return GIANT_GIRTH * (1.7 + 3.3 * (1 - t) ** 1.5 + 2.2 * math.exp(-max(y - GIANT_ROOT_DEPTH, 0) / 5))
+
+
+def add_giant_trunk(g, seed, top):
+    for y in range(0, top + 1):
+        cx, cz = trunk_center(seed, y, top)
+        r = trunk_radius(y, top)
+        span = math.ceil(r) + 2
+        for x in range(round(cx) - span, round(cx) + span + 1):
+            for z in range(round(cz) - span, round(cz) + span + 1):
+                d = math.hypot(x - cx, z - cz)
+                noise = (rand01(seed, x * 31 + y * 7 + z * 17) - 0.5) * 0.8
+                if d > r + noise:
+                    continue
+                roll = rand01(seed, x * 53 + y * 11 + z * 29)
+                if d <= r + noise - 1.8:
+                    key = "log_y"
+                elif roll < 0.04:
+                    key = "moss"
+                else:
+                    key = "wood" if roll < 0.82 else "log_y"
+                g.put(x, y, z, key, overwrite=True)
+
+
+def horizontal_log(dx, dz):
+    return "log_x" if abs(dx) >= abs(dz) else "log_z"
+
+
+def add_giant_roots(g, seed, top):
+    base = trunk_radius(GIANT_ROOT_DEPTH, top)
+    count = 9
+    for i in range(count):
+        ang = (i + 0.6 * rand01(seed, 800 + i)) * math.tau / count
+        dx, dz = math.cos(ang), math.sin(ang)
+        length = 10 + 3 * rand01(seed, 810 + i)
+        rise = 11 + 5 * rand01(seed, 820 + i)
+        for step in range(int(length * 3)):
+            t = step / (length * 3)
+            dist = base - 1 + t * length
+            y = GIANT_ROOT_DEPTH + rise * (1 - t) ** 1.8 - 2 * t
+            radius = 3.4 * (1 - t) + 1.2
+            key = "wood" if rand01(seed + i, step) < 0.6 else horizontal_log(dx, dz)
+            g.ball(round(dist * dx), round(y), round(dist * dz), radius, key, 830 + i, keep=1.0)
+
+
+def add_giant_branches(g, seed, top):
+    levels = 11
+    for k in range(levels):
+        frac = k / (levels - 1)
+        y_b = GIANT_ROOT_DEPTH + round((top - GIANT_ROOT_DEPTH) * (0.26 + 0.6 * frac))
+        for j in range(2):
+            ang = k * 2.4 + j * math.pi + (rand01(seed, 900 + k * 2 + j) - 0.5) * 0.9
+            dx, dz = math.cos(ang), math.sin(ang)
+            length = 5.5 - 2.5 * frac + rand01(seed, 910 + k * 2 + j)
+            leaf_r = 6.6 - 1.6 * frac
+            cx, cz = trunk_center(seed, y_b, top)
+            r = trunk_radius(y_b, top)
+            key = horizontal_log(dx, dz)
+            tip = None
+            for step in range(int(length * 3) + 1):
+                t = step / (length * 3)
+                x, z = cx + (r - 0.5 + t * length) * dx, cz + (r - 0.5 + t * length) * dz
+                y = y_b + 0.3 * length * math.sin(t * math.pi / 2)
+                g.ball(round(x), round(y), round(z), 2.2 * (1 - t) + 0.7, key, 920 + k, keep=1.0)
+                tip = (round(x), round(y), round(z))
+                if step in (int(length * 1.5), int(length * 2.2)):
+                    g.ball(round(x), round(y) + 1, round(z), 3.2, "leaves", 930 + k * 7 + step, keep=0.88, flat=0.7)
+            g.ball(tip[0], tip[1] + 1, tip[2], leaf_r, "leaves", 940 + k * 2 + j, keep=0.93, flat=0.6)
+
+
+def add_giant_crown(g, seed, top):
+    cx, cz = trunk_center(seed, top, top)
+    cx, cz = round(cx), round(cz)
+    g.ball(cx, top - 3, cz, 11.0, "leaves", 950, keep=0.94, flat=0.55)
+    g.ball(cx, top + 2, cz, 5.5, "leaves", 951, keep=0.95, flat=0.8)
+    for i in range(6):
+        ang = i * math.tau / 6 + rand01(seed, 960 + i)
+        g.ball(cx + round(8.5 * math.cos(ang)), top - 6 - (i % 2) * 3, cz + round(8.5 * math.sin(ang)),
+               6.5, "leaves", 960 + i, keep=0.93, flat=0.6)
+
+
+def add_giant_accents(g, seed):
+    for pos, key in sorted(g.cells.items()):
+        if key == "leaves" and rand01(seed, pos[0] * 71 + pos[1] * 13 + pos[2] * 37) < 0.05:
+            g.cells[pos] = "azalea"
+
+
+def add_giant_vines(g, seed):
+    supports = {"leaves", "azalea", "log_x", "log_y", "log_z", "wood", "moss"}
+    for (x, y, z), key in sorted(g.cells.items()):
+        if key not in supports or y <= GIANT_ROOT_DEPTH + 3:
+            continue
+        chance = 0.07 if key in ("leaves", "azalea") else 0.025
+        for (dx, dz), _ in VINE_FACES:
+            nx, nz = x + dx, z + dz
+            if (nx, y, nz) in g.cells or rand01(seed, x * 13 + y * 29 + z * 53 + dx * 7 + dz * 11) >= chance:
+                continue
+            mask = sum(bit for (fx, fz), bit in VINE_FACES if g.cells.get((nx + fx, y, nz + fz)) in supports)
+            length = 3 + int(rand01(seed, x * 3 + y * 5 + z * 7 + dx) * 10)
+            for i in range(length):
+                if (nx, y - i, nz) in g.cells:
+                    break
+                g.put(nx, y - i, nz, ("vine", mask))
+
+
+def build_giant_tree(seed, trunk_height):
+    g = Grid(seed)
+    top = GIANT_ROOT_DEPTH + trunk_height
+    add_giant_trunk(g, seed, top)
+    add_giant_roots(g, seed, top)
+    add_giant_branches(g, seed, top)
+    add_giant_crown(g, seed, top)
+    add_giant_accents(g, seed)
+    add_giant_vines(g, seed)
+    return finalize(g.cells)
 
 
 def add_temple_pad(g):
@@ -538,6 +679,49 @@ def write_bedrock_features():
         },
     })
 
+    # The roots bury themselves in the peak, so the allowlist has to cover what a mountain top is made of.
+    terrain = ["minecraft:air", "minecraft:grass_block", "minecraft:dirt", "minecraft:stone", "minecraft:gravel",
+               "minecraft:andesite", "minecraft:diorite", "minecraft:granite", "minecraft:tuff", "minecraft:snow_layer",
+               "minecraft:jungle_leaves", "minecraft:oak_leaves", "minecraft:vine", "minecraft:short_grass",
+               "minecraft:tallgrass", "minecraft:moss_block"]
+    for name, _, _ in GIANT_TREES:
+        write_json(os.path.join(FEATURE_DIR, f"{name}_feature.json"), {
+            "format_version": "1.14.0",
+            "minecraft:structure_template_feature": {
+                "description": {"identifier": f"{NAMESPACE}:floating_jungle/{name}_feature"},
+                "structure_name": f"{NAMESPACE}:floating_jungle/{name}",
+                "constraints": {"block_intersection": {"block_allowlist": terrain}},
+            },
+        })
+    write_json(os.path.join(FEATURE_DIR, "select_giant_tree_feature.json"), {
+        "format_version": "1.14.0",
+        "minecraft:weighted_random_feature": {
+            "description": {"identifier": f"{NAMESPACE}:floating_jungle/select_giant_tree_feature"},
+            "features": [[f"{NAMESPACE}:floating_jungle/{name}_feature", weight] for name, weight, _ in GIANT_TREES],
+        },
+    })
+    above_top = "query.above_top_solid(variable.worldx, variable.worldz)"
+    write_json(os.path.join(RULE_DIR, "giant_tree.json"), {
+        "format_version": "1.14.0",
+        "minecraft:feature_rules": {
+            "description": {
+                "identifier": f"{NAMESPACE}:floating_jungle_giant_tree",
+                "places_feature": f"{NAMESPACE}:floating_jungle/select_giant_tree_feature",
+            },
+            "conditions": {
+                "placement_pass": "surface_pass",
+                "minecraft:biome_filter": [{"test": "has_biome_tag", "operator": "==", "value": "floating_jungle"}],
+            },
+            "distribution": {
+                "iterations": 1,
+                "scatter_chance": 3,
+                "x": {"distribution": "uniform", "extent": [0, 16]},
+                "y": {"distribution": "uniform", "extent": [f"{above_top} - {GIANT_ROOT_DEPTH}", f"{above_top} - {GIANT_ROOT_DEPTH}"]},
+                "z": {"distribution": "uniform", "extent": [0, 16]},
+            },
+        },
+    })
+
 
 if __name__ == "__main__":
     java_only = "--java" in sys.argv[1:]
@@ -555,6 +739,11 @@ if __name__ == "__main__":
             if anchor:
                 inject_temple_bedrock(cells, anchor)
             write_bedrock_structure(name, sx, sy, sz, cells)
+        print(f"{name}: {sx}x{sy}x{sz}, {len(cells)} blocks")
+    for name, _, kwargs in GIANT_TREES:
+        sx, sy, sz, cells = build_giant_tree(**kwargs)
+        assert sx <= GIANT_MAX_SPAN and sz <= GIANT_MAX_SPAN, f"{name} is {sx}x{sz}, over the {GIANT_MAX_SPAN}-block budget"
+        (write_java_structure if java_only else write_bedrock_structure)(name, sx, sy, sz, cells)
         print(f"{name}: {sx}x{sy}x{sz}, {len(cells)} blocks")
     if not java_only:
         write_bedrock_features()
