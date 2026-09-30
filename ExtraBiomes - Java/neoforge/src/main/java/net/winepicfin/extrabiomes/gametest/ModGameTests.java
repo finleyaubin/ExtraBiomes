@@ -37,6 +37,8 @@ public final class ModGameTests {
     private static final List<Test> TESTS = List.of(
             new Test(BiomeGenerationGameTests.class, "allModBiomesAppearInOverworldGeneration",
                     BiomeGenerationGameTests::allModBiomesAppearInOverworldGeneration, "empty", LONG_MAX_TICKS, false),
+            new Test(GlacierGenerationGameTests.class, "glacierGeothermalFeaturesGenerate",
+                    GlacierGenerationGameTests::glacierGeothermalFeaturesGenerate, "empty", LONG_MAX_TICKS, false),
             new Test(StructureGenerationGameTests.class, "skyCityAppearsInOverworldGeneration",
                     StructureGenerationGameTests::skyCityAppearsInOverworldGeneration, "empty", LONG_MAX_TICKS, false),
             new Test(SkyCityStructureEditGameTests.class, "layoutSkyCityBuildingsForEditing",
