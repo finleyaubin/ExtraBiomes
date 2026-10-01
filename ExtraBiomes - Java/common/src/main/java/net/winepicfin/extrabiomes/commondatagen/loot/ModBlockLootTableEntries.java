@@ -40,6 +40,8 @@ public class ModBlockLootTableEntries {
             Function<Block, LootTable.Builder> createLapisOreDrops,
             Function<Block, LootTable.Builder> createRedstoneOreDrops) {
         dropSelf.accept(ModBlocks.DENSE_CLOUD.get());
+        dropSelf.accept(ModBlocks.DENSE_CLOUD_STAIRS.get());
+        add.accept(ModBlocks.DENSE_CLOUD_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.DENSE_CLOUD_SLAB.get()));
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         add.accept(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()));

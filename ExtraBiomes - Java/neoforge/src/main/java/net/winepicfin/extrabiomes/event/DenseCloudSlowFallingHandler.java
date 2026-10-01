@@ -55,6 +55,8 @@ public class DenseCloudSlowFallingHandler {
 
     private static boolean isDenseCloudBlock(BlockState state) {
         return state.is(ModBlocks.DENSE_CLOUD.get())
+                || state.is(ModBlocks.DENSE_CLOUD_SLAB.get())
+                || state.is(ModBlocks.DENSE_CLOUD_STAIRS.get())
                 || state.is(ModBlocks.DENSE_CLOUD_BRICK.get())
                 || state.is(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get())
                 || state.is(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
