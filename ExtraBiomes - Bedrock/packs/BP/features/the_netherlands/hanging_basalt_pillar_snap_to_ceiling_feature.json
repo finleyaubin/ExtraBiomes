@@ -1,0 +1,11 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:snap_to_surface_feature": {
+        "description": {
+            "identifier": "extrabiomes:the_netherlands/hanging_basalt_pillar_snap_to_ceiling_feature"
+        },
+        "feature_to_snap": "extrabiomes:the_netherlands/hanging_basalt_pillar_feature",
+        "vertical_search_range": 12,
+        "surface": "ceiling"
+    }
+}
