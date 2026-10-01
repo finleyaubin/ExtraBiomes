@@ -437,8 +437,8 @@ def cloud_palette(version):
         "minecraft:cave_vines", {"growing_plant_age": T_int(1)}, version))
     entries.append(palette_block(
         "extrabiomes:sky_leaves",
-        {"extrabiomes:decay": T_int(0), "extrabiomes:persist": T_int(1),
-         "extrabiomes:placed": T_byte(1)}, version))
+        {"extrabiomes:decay": T_int(1), "extrabiomes:persist": T_int(0),
+         "extrabiomes:placed": T_byte(0)}, version))
     entries.append(palette_block(
         "extrabiomes:sky_log", {"minecraft:block_face": T_str("up")}, version))
     return entries
@@ -451,7 +451,7 @@ WATER_PIDX = 7
 # cave vine under the column breaks on its first random tick, and that block
 # update kicks the water into flowing down to the ground.
 VINE_PIDX = 8
-LEAF_PIDX = 9   # persistent sky leaves, so trees on cloudlets never decay
+LEAF_PIDX = 9   # natural sky leaves (placed=0, decay=1 like the stock sky tree): logs keep them alive, cutting the trunk lets them decay
 LOG_PIDX = 10
 
 # The small sky tree (same silhouette as structures/extrabiomes/sky_tree), one
