@@ -2,13 +2,13 @@
     "format_version": "1.26.10",
     "minecraft:template_pool": {
         "description": {
-            "identifier": "extrabiomes:sky_city_cloud_filler"
+            "identifier": "extrabiomes:sky_city_cloud_satellite"
         },
         "elements": [
             {
                 "element": {
                     "element_type": "minecraft:single_pool_element",
-                    "location": "extrabiomes/sky_city/clouds/filler_0",
+                    "location": "extrabiomes/sky_city/clouds/satellite_0",
                     "projection": "rigid"
                 },
                 "weight": 3
@@ -16,7 +16,7 @@
             {
                 "element": {
                     "element_type": "minecraft:single_pool_element",
-                    "location": "extrabiomes/sky_city/clouds/filler_1",
+                    "location": "extrabiomes/sky_city/clouds/satellite_1",
                     "projection": "rigid"
                 },
                 "weight": 3
@@ -24,7 +24,23 @@
             {
                 "element": {
                     "element_type": "minecraft:single_pool_element",
-                    "location": "extrabiomes/sky_city/clouds/filler_2",
+                    "location": "extrabiomes/sky_city/clouds/satellite_2",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/satellite_3",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/satellite_4",
                     "projection": "rigid"
                 },
                 "weight": 3
@@ -32,34 +48,10 @@
             {
                 "element": {
                     "element_type": "minecraft:single_pool_element",
-                    "location": "extrabiomes/sky_city/clouds/filler_3",
+                    "location": "extrabiomes/sky_city/clouds/satellite_5",
                     "projection": "rigid"
                 },
                 "weight": 2
-            },
-            {
-                "element": {
-                    "element_type": "minecraft:single_pool_element",
-                    "location": "extrabiomes/sky_city/clouds/filler_4",
-                    "projection": "rigid"
-                },
-                "weight": 2
-            },
-            {
-                "element": {
-                    "element_type": "minecraft:single_pool_element",
-                    "location": "extrabiomes/sky_city/clouds/filler_5",
-                    "projection": "rigid"
-                },
-                "weight": 2
-            },
-            {
-                "element": {
-                    "element_type": "minecraft:single_pool_element",
-                    "location": "extrabiomes/sky_city/clouds/filler_6",
-                    "projection": "rigid"
-                },
-                "weight": 1
             }
         ]
     }
