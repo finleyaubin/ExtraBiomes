@@ -209,6 +209,51 @@ def keep_connected(s, start):
     return seen
 
 
+def h32(x, z, seed):
+    """Deterministic 32-bit hash for per-cell choices."""
+    n = (x * 374761393 + z * 668265263 + seed * 2246822519) & 0xFFFFFFFF
+    n = ((n ^ (n >> 13)) * 1274126177) & 0xFFFFFFFF
+    return (n ^ (n >> 16)) & 0xFFFFFFFF
+
+
+def soften(cells, dims, seed, protect_top=True, keep_cols=(), fraction=0.75):
+    """Round off stair-stepped silhouettes with half blocks. A cloud cell on an
+    exposed edge becomes a slab, or a stair on a straight edge:
+      * top surface with air on a side: bottom slab / bottom stair (back inward)
+      * underside with air on a side: top slab / upside-down stair (back inward)
+    Interior cells, flat faces, the top layer (if protected), anything next to a
+    jigsaw, water, vine or tree block, and the `keep_cols` columns stay full.
+    Returns how many cells were softened."""
+    w, h, d = dims
+    occ = np.zeros(dims, dtype=bool)
+    for (x, y, z) in cells:
+        occ[x, y, z] = True
+
+    def solid(x, y, z):
+        return 0 <= x < w and 0 <= y < h and 0 <= z < d and occ[x, y, z]
+
+    changes = {}
+    for (x, y, z), v in cells.items():
+        if v != 0 or (x, z) in keep_cols or (protect_top and y == h - 1):
+            continue
+        if any(cells.get((x + dx, y + dy, z + dz), 0) != 0
+               for dx in (-1, 0, 1) for dy in (-1, 0, 1) for dz in (-1, 0, 1)):
+            continue   # beside a jigsaw / water / vine / tree block: stay a full block
+        up, down = solid(x, y + 1, z), solid(x, y - 1, z)
+        if up == down:
+            continue
+        air = [n for n, (dx, dz) in DIR_XZ.items() if not solid(x + dx, y, z + dz)]
+        if not air or h32(x, y * 31 + z, seed) % 100 >= fraction * 100:
+            continue
+        half = "bottom" if down else "top"     # exposed top surface -> bottom half block
+        if len(air) == 1:
+            changes[(x, y, z)] = STAIR_PIDX[(half, OPPOSITE[air[0]])]
+        else:
+            changes[(x, y, z)] = SLAB_PIDX[half]
+    cells.update(changes)
+    return len(changes)
+
+
 def crop(s):
     """Trim to the solid bounding box. Returns (grid, (ox, oy, oz))."""
     xs = np.where(s.any(axis=(1, 2)))[0]
@@ -470,6 +515,17 @@ def cloud_palette(version):
     entries.append(palette_block(
         "extrabiomes:gilded_sky_log", {"minecraft:block_face": T_str("up")}, version))
     entries.append(palette_block("extrabiomes:sky_sapling_block", {}, version))
+    for half in ("bottom", "top"):
+        entries.append(palette_block(
+            "extrabiomes:dense_cloud_slab",
+            {"extrabiomes:is_double": T_byte(0), "minecraft:vertical_half": T_str(half)}, version))
+    for half in ("bottom", "top"):
+        for card in ("north", "south", "west", "east"):
+            entries.append(palette_block(
+                "extrabiomes:dense_cloud_stairs",
+                {"extrabiomes:direction": T_int(0), "extrabiomes:is_upside_down": T_byte(0),
+                 "minecraft:cardinal_direction": T_str(card),
+                 "minecraft:vertical_half": T_str(half)}, version))
     return entries
 
 
@@ -484,6 +540,13 @@ LEAF_PIDX = 9   # natural sky leaves (placed=0, decay=1 like the stock sky tree)
 LOG_PIDX = 10
 GILDED_PIDX = 11  # gilded trunk variant
 SAPLING_PIDX = 12
+SLAB_PIDX = {"bottom": 13, "top": 14}
+# stairs: a stair's cardinal_direction is the side its tall back is on, for both halves
+STAIR_PIDX = {(half, card): 15 + 4 * hi + ci
+              for hi, half in enumerate(("bottom", "top"))
+              for ci, card in enumerate(("north", "south", "west", "east"))}
+DIR_XZ = {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}
+OPPOSITE = {"north": "south", "south": "north", "west": "east", "east": "west"}
 
 # The small sky tree (same silhouette as structures/extrabiomes/sky_tree), one
 # string per y layer from the trunk base up; rows are z, columns x, trunk at (2, 2).
@@ -673,6 +736,8 @@ def build_pad(short, variant, seed, mask, anchor, sx, sz, water_cols=()):
         bpd[str(flat_index(x, top, z, H, sz))] = jigsaw_entity(
             FILLER_SOCKET_NAME, FILLER_NAME, FILLER_POOL,
             CLOUD_BLOCK, x, top, z)
+    shaft = {(wx + dx, wz + dz) for wx, wz in water_cols for dx in (-1, 0, 1) for dz in (-1, 0, 1)}
+    soften(cells, (sx, H, sz), seed, keep_cols=shaft, fraction=0.9)
     root = make_structure(sx, H, sz, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
     save(os.path.join(CLOUD_DIR, f"{short}_{variant}.mcstructure"), root, "")
 
@@ -745,6 +810,7 @@ def build_filler(variant, seed, w, d, h, trees=0, prefix="filler"):
         bpd[str(flat_index(x, joint, z, h, d))] = jigsaw_entity(
             FILLER_NAME, "minecraft:empty", "minecraft:empty",
             CLOUD_BLOCK, x, joint, z)
+    soften(cells, (w, h, d), seed, fraction=0.8)
     H = h
     if trees:
         planted, extra = plant_trees(cells, solid[:, top, :].copy(), None, h, rnd, trees)
@@ -915,6 +981,7 @@ def build_puff(variant, seed, kind, w, h, d, satellites=2):
         f"puff_{variant}", F > 0.18, (px, pz), rnd, sockets=True, fringe_amount=0.2)
     add_sat_sockets(solid, cells, bpd, dims, conn, rnd, satellites)
     w, h, d = dims
+    soften(cells, dims, seed, fraction=0.55)
     root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
     save(os.path.join(CLOUD_DIR, f"puff_{variant}.mcstructure"), root, "")
     return dims
@@ -1045,6 +1112,7 @@ def build_satellite(variant, seed, kind, w, h, d, trees=0, prefix="satellite",
     add_face_connectors(cells, bpd, dims, SAT_NAME, conn)
     if bank_socket:
         add_bank_socket(solid, cells, bpd, dims, rnd)
+    soften(cells, dims, seed, protect_top=bool(trees), fraction=0.6)
     if wisps:
         cells, bpd, h = add_hanging_wisps(cells, bpd, solid, h, d, rnd, wisps)
         dims = (w, h, d)
@@ -1131,6 +1199,7 @@ def build_bank(variant, seed, w, h, d, trees=0):
     cells = grid_cells(solid)
     bpd = {}
     add_face_connectors(cells, bpd, (w, h, d), BANK_NAME)
+    soften(cells, (w, h, d), seed, protect_top=bool(trees), fraction=0.6)
     if trees:
         planted, extra = plant_trees(cells, solid[:, h - 1, :].copy(), None, h, rnd, trees)
         if planted == 0:
@@ -1301,6 +1370,8 @@ def build_island(variant, seed, w, h, as_puff=False):
             cells[(cx + 1, min(shaft_ys), cx)] = VINE_PIDX  # water updater
     for _ in range(1 if as_puff else 2):
         add_spring(cells, solid, cx, top, rnd)
+    shaft_cols = {(cx + dx, cx + dz) for dx in range(0, 3) for dz in range(-1, 2)}
+    soften(cells, (w, h, w), seed, keep_cols=shaft_cols, fraction=0.4)
     cells[(cx, top, cx)] = 1  # up jigsaw: city hub spawner, or puff connector
     if as_puff:
         entity = jigsaw_entity(PUFF_NAME, "minecraft:empty", "minecraft:empty",
