@@ -27,8 +27,8 @@
             },
             "render_controllers": ["controller.render.jellyfish"],
             "spawn_egg": {
-                "base_color": "#932A9E",
-                "overlay_color": "#DC7CE6"
+                "texture": "extrabiomes:jellyfish_spawn_egg",
+                "texture_index": 0
             }
         }
     }
