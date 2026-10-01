@@ -48,7 +48,8 @@
           "minecraft:snow_layer",
           "minecraft:powder_snow"
         ]
-      }
+      },
+      "grounded": {}
     },
     "ground_level": 45
   }
