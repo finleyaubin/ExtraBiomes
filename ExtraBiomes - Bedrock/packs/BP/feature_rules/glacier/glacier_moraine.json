@@ -1,0 +1,44 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "extrabiomes:glacier_moraine",
+      "places_feature": "extrabiomes:glacier/moraine_feature"
+    },
+    "conditions": {
+      "placement_pass": "after_surface_pass",
+      "minecraft:biome_filter": [
+        {
+          "test": "has_biome_tag",
+          "operator": "==",
+          "value": "glacier"
+        }
+      ]
+    },
+    "distribution": {
+      "iterations": 8,
+      "scatter_chance": 100,
+      "x": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      },
+      "y": {
+        "distribution": "uniform",
+        "extent": [
+          "query.heightmap(variable.worldx, variable.worldz) - 2",
+          "query.heightmap(variable.worldx, variable.worldz) - 1"
+        ]
+      },
+      "z": {
+        "distribution": "uniform",
+        "extent": [
+          0,
+          16
+        ]
+      }
+    }
+  }
+}

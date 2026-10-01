@@ -1,0 +1,11 @@
+{
+  "format_version": "1.20.30",
+  "minecraft:snap_to_surface_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/basalt_pillar_snap_feature"
+    },
+    "feature_to_snap": "extrabiomes:glacier/select_basalt_pillar_feature",
+    "vertical_search_range": 12,
+    "surface": "ceiling"
+  }
+}

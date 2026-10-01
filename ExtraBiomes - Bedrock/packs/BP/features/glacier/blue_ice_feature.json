@@ -1,0 +1,28 @@
+{
+  "format_version": "1.17.0",
+  "minecraft:ore_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/blue_ice_feature"
+    },
+    "count": 64,
+    "replace_rules": [
+      {
+        "places_block": "minecraft:blue_ice",
+        "may_replace": [
+          "minecraft:stone",
+          "minecraft:andesite",
+          "minecraft:diorite",
+          "minecraft:granite",
+          "minecraft:dirt",
+          "minecraft:grass_block",
+          "minecraft:sand",
+          "minecraft:gravel",
+          "minecraft:sandstone",
+          "minecraft:deepslate",
+          "minecraft:packed_ice",
+          "minecraft:ice"
+        ]
+      }
+    ]
+  }
+}

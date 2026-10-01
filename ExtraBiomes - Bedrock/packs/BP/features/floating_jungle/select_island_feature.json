@@ -1,0 +1,46 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:floating_jungle/select_island_feature"
+    },
+    "features": [
+      [
+        "extrabiomes:floating_jungle/islet_small_1_feature",
+        17
+      ],
+      [
+        "extrabiomes:floating_jungle/islet_small_2_feature",
+        17
+      ],
+      [
+        "extrabiomes:floating_jungle/islet_small_3_feature",
+        16
+      ],
+      [
+        "extrabiomes:floating_jungle/islet_large_1_feature",
+        12
+      ],
+      [
+        "extrabiomes:floating_jungle/islet_large_2_feature",
+        13
+      ],
+      [
+        "extrabiomes:floating_jungle/archipelago_1_feature",
+        10
+      ],
+      [
+        "extrabiomes:floating_jungle/archipelago_2_feature",
+        10
+      ],
+      [
+        "extrabiomes:floating_jungle/archipelago_ruin_feature",
+        5
+      ],
+      [
+        "extrabiomes:floating_jungle/islet_temple_feature",
+        4
+      ]
+    ]
+  }
+}
