@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Husty Husty Mrak
 tile.extrabiomes:dense_cloud_brick.name=Husty Husty Mrak Cihla z Hosteho Mraku
 tile.extrabiomes:dense_cloud_brick_slab.name=Husty Husty Mrak Cihla z Hosteho Mraku Deska
 tile.extrabiomes:dense_cloud_brick_stairs.name=Husty Husty Mrak Cihla z Hosteho Mraku Schody
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Černý Písek
 tile.extrabiomes:black_sandstone.name=Černý Pískovec

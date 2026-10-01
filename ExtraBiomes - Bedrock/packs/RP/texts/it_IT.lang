@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Nube Densa Densa
 tile.extrabiomes:dense_cloud_brick.name=Nube Densa Mattone di Nube Densa Densa
 tile.extrabiomes:dense_cloud_brick_slab.name=Nube Densa Mattone di Nube Densa Lastra Densa
 tile.extrabiomes:dense_cloud_brick_stairs.name=Nube Densa Mattone di Nube Densa Scala Densa
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Sabbia Nera
 tile.extrabiomes:black_sandstone.name=Arenaria Nera
