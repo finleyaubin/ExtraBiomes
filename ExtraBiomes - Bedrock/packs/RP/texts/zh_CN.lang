@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=浓云
 tile.extrabiomes:dense_cloud_brick.name=浓云砖
 tile.extrabiomes:dense_cloud_brick_slab.name=浓云砖台阶
 tile.extrabiomes:dense_cloud_brick_stairs.name=浓云砖楼梯
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=黑砂
 tile.extrabiomes:black_sandstone.name=黑砂岩

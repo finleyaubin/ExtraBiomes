@@ -1,0 +1,42 @@
+{
+    "format_version": "1.26.10",
+    "minecraft:template_pool": {
+        "description": {
+            "identifier": "extrabiomes:sky_city_cloud_bank"
+        },
+        "elements": [
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/bank_0",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/bank_1",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/bank_2",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/bank_3",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            }
+        ]
+    }
+}

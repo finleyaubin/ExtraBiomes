@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Щільна Щільна Хмара
 tile.extrabiomes:dense_cloud_brick.name=Щільна Щільна Хмара Цегла зі Щільної Хмари
 tile.extrabiomes:dense_cloud_brick_slab.name=Щільна Щільна Хмара Цегла зі Щільної Хмари Плита
 tile.extrabiomes:dense_cloud_brick_stairs.name=Щільна Щільна Хмара Цегла зі Щільної Хмари Сходи
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=чорний пісок
 tile.extrabiomes:black_sandstone.name=чорний пісковик
