@@ -2,22 +2,22 @@
   "format_version": "1.14.0",
   "minecraft:feature_rules": {
     "description": {
-      "identifier": "extrabiomes:floating_jungle_island",
-      "places_feature": "extrabiomes:floating_jungle/select_island_feature"
+      "identifier": "extrabiomes:glacier_erosion_shaft",
+      "places_feature": "extrabiomes:glacier/select_erosion_shaft_feature"
     },
     "conditions": {
-      "placement_pass": "surface_pass",
+      "placement_pass": "after_surface_pass",
       "minecraft:biome_filter": [
         {
           "test": "has_biome_tag",
           "operator": "==",
-          "value": "floating_jungle"
+          "value": "glacier"
         }
       ]
     },
     "distribution": {
       "iterations": 1,
-      "scatter_chance": 12,
+      "scatter_chance": 8,
       "x": {
         "distribution": "uniform",
         "extent": [
@@ -25,13 +25,7 @@
           16
         ]
       },
-      "y": {
-        "distribution": "uniform",
-        "extent": [
-          "query.heightmap(variable.worldx, variable.worldz) + 30",
-          "query.heightmap(variable.worldx, variable.worldz) + 70"
-        ]
-      },
+      "y": "query.heightmap(variable.worldx, variable.worldz)",
       "z": {
         "distribution": "uniform",
         "extent": [

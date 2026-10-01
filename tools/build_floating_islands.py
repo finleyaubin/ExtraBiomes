@@ -27,6 +27,7 @@ JAVA_STRUCT_DIR = os.path.join(HERE, "..", "ExtraBiomes - Java", "common", "src"
 NAMESPACE = "extrabiomes"
 LOOT_TABLE = "loot_tables/chests/floating_jungle_ruin.json"
 MAX_SPAN = 44
+CHUNK_CENTER_ORIGIN = 8 - MAX_SPAN // 2
 RIM_NOISE = 0.18
 
 # (name, weight, builder kwargs); "kind" picks the builder
@@ -532,9 +533,17 @@ def make_structure(sx, sy, sz, cells):
     })
 
 
-def write_bedrock_structure(name, sx, sy, sz, cells):
+def write_bedrock_structure(name, sx, sy, sz, cells, pad=True):
     os.makedirs(STRUCT_DIR, exist_ok=True)
+    if pad:
+        dx, dz = (MAX_SPAN - sx) // 2, (MAX_SPAN - sz) // 2
+        cells = {(x + dx, y, z + dz): key for (x, y, z), key in cells.items()}
+        sx = sz = MAX_SPAN
+        shifted_be = {(x + dx, y, z + dz): be for (x, y, z), be in RAW_BE.items()}
+        RAW_BE.clear()
+        RAW_BE.update(shifted_be)
     save(os.path.join(STRUCT_DIR, f"{name}.mcstructure"), make_structure(sx, sy, sz, cells), "")
+    RAW_BE.clear()
 
 
 def write_java_structure(name, sx, sy, sz, cells):
@@ -658,7 +667,7 @@ def write_bedrock_features():
         },
     })
     surface = "query.heightmap(variable.worldx, variable.worldz)"
-    write_json(os.path.join(RULE_DIR, "island.json"), {
+    write_json(os.path.join(RULE_DIR, "floating_jungle_island.json"), {
         "format_version": "1.14.0",
         "minecraft:feature_rules": {
             "description": {
@@ -671,19 +680,25 @@ def write_bedrock_features():
             },
             "distribution": {
                 "iterations": 1,
-                "scatter_chance": 12,
-                "x": {"distribution": "uniform", "extent": [0, 16]},
+                "scatter_chance": 50,
+                "x": CHUNK_CENTER_ORIGIN,
                 "y": {"distribution": "uniform", "extent": [f"{surface} + 30", f"{surface} + 70"]},
-                "z": {"distribution": "uniform", "extent": [0, 16]},
+                "z": CHUNK_CENTER_ORIGIN,
             },
         },
     })
 
-    # The roots bury themselves in the peak, so the allowlist has to cover what a mountain top is made of.
-    terrain = ["minecraft:air", "minecraft:grass_block", "minecraft:dirt", "minecraft:stone", "minecraft:gravel",
-               "minecraft:andesite", "minecraft:diorite", "minecraft:granite", "minecraft:tuff", "minecraft:snow_layer",
-               "minecraft:jungle_leaves", "minecraft:oak_leaves", "minecraft:vine", "minecraft:short_grass",
-               "minecraft:tallgrass", "minecraft:moss_block"]
+    # The footprint spans jungle canopy and mountain rock, so the allowlist covers both.
+    terrain = [
+        "minecraft:air", "minecraft:grass_block", "minecraft:dirt", "minecraft:coarse_dirt", "minecraft:podzol",
+        "minecraft:dirt_with_roots", "minecraft:mud", "minecraft:sand", "minecraft:gravel", "minecraft:stone",
+        "minecraft:andesite", "minecraft:diorite", "minecraft:granite", "minecraft:tuff", "minecraft:calcite",
+        "minecraft:deepslate", "minecraft:snow", "minecraft:snow_layer", "minecraft:moss_block", "minecraft:water",
+        "minecraft:log", "minecraft:jungle_log", "minecraft:oak_log", "minecraft:jungle_leaves", "minecraft:oak_leaves",
+        "minecraft:vine", "minecraft:short_grass", "minecraft:tallgrass", "minecraft:fern", "minecraft:large_fern",
+        "minecraft:double_plant", "minecraft:bamboo", "minecraft:bamboo_sapling", "minecraft:cocoa",
+        "minecraft:melon_block", "minecraft:brown_mushroom", "minecraft:red_mushroom", "minecraft:mossy_cobblestone",
+    ]
     for name, _, _ in GIANT_TREES:
         write_json(os.path.join(FEATURE_DIR, f"{name}_feature.json"), {
             "format_version": "1.14.0",
@@ -701,7 +716,7 @@ def write_bedrock_features():
         },
     })
     above_top = "query.above_top_solid(variable.worldx, variable.worldz)"
-    write_json(os.path.join(RULE_DIR, "giant_tree.json"), {
+    write_json(os.path.join(RULE_DIR, "floating_jungle_giant_tree.json"), {
         "format_version": "1.14.0",
         "minecraft:feature_rules": {
             "description": {
@@ -709,15 +724,15 @@ def write_bedrock_features():
                 "places_feature": f"{NAMESPACE}:floating_jungle/select_giant_tree_feature",
             },
             "conditions": {
-                "placement_pass": "surface_pass",
+                "placement_pass": "before_surface_pass",
                 "minecraft:biome_filter": [{"test": "has_biome_tag", "operator": "==", "value": "floating_jungle"}],
             },
             "distribution": {
                 "iterations": 1,
                 "scatter_chance": 3,
-                "x": {"distribution": "uniform", "extent": [0, 16]},
+                "x": CHUNK_CENTER_ORIGIN,
                 "y": {"distribution": "uniform", "extent": [f"{above_top} - {GIANT_ROOT_DEPTH}", f"{above_top} - {GIANT_ROOT_DEPTH}"]},
-                "z": {"distribution": "uniform", "extent": [0, 16]},
+                "z": CHUNK_CENTER_ORIGIN,
             },
         },
     })

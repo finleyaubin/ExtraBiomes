@@ -1,0 +1,32 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:feature_rules": {
+    "description": {
+      "identifier": "extrabiomes:floating_jungle_island",
+      "places_feature": "extrabiomes:floating_jungle/select_island_feature"
+    },
+    "conditions": {
+      "placement_pass": "surface_pass",
+      "minecraft:biome_filter": [
+        {
+          "test": "has_biome_tag",
+          "operator": "==",
+          "value": "floating_jungle"
+        }
+      ]
+    },
+    "distribution": {
+      "iterations": 1,
+      "scatter_chance": 50,
+      "x": -14,
+      "y": {
+        "distribution": "uniform",
+        "extent": [
+          "query.heightmap(variable.worldx, variable.worldz) + 30",
+          "query.heightmap(variable.worldx, variable.worldz) + 70"
+        ]
+      },
+      "z": -14
+    }
+  }
+}

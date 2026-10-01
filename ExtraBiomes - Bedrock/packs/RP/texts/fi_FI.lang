@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Tihea Tihea Pilvi
 tile.extrabiomes:dense_cloud_brick.name=Tihea Tihea Pilvi Tihean Pilven Tiili
 tile.extrabiomes:dense_cloud_brick_slab.name=Tihea Tihea Pilvi Tihean Pilven Tiili Laatta
 tile.extrabiomes:dense_cloud_brick_stairs.name=Tihea Tihea Pilvi Tihean Pilven Tiili Portaat
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Musta Hiekka
 tile.extrabiomes:black_sandstone.name=Musta Hiekkakivi

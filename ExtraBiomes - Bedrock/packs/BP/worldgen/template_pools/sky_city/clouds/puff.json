@@ -8,6 +8,22 @@
             {
                 "element": {
                     "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/puff_0",
+                    "projection": "rigid"
+                },
+                "weight": 3
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/puff_1",
+                    "projection": "rigid"
+                },
+                "weight": 3
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
                     "location": "extrabiomes/sky_city/clouds/puff_2",
                     "projection": "rigid"
                 },
@@ -19,7 +35,7 @@
                     "location": "extrabiomes/sky_city/clouds/puff_3",
                     "projection": "rigid"
                 },
-                "weight": 4
+                "weight": 2
             },
             {
                 "element": {
@@ -27,7 +43,31 @@
                     "location": "extrabiomes/sky_city/clouds/puff_4",
                     "projection": "rigid"
                 },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/puff_5",
+                    "projection": "rigid"
+                },
                 "weight": 3
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/puff_6",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/puff_7",
+                    "projection": "rigid"
+                },
+                "weight": 1
             },
             {
                 "element": {

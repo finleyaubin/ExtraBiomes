@@ -1,0 +1,12 @@
+{
+  "format_version": "1.13.0",
+  "minecraft:aggregate_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/lavafall_feature"
+    },
+    "features": [
+      "extrabiomes:glacier/lavafall_cap_snap_feature",
+      "extrabiomes:glacier/lavafall_pad_snap_feature"
+    ]
+  }
+}

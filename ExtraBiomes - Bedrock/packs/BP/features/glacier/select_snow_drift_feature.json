@@ -5,8 +5,70 @@
             "identifier": "extrabiomes:glacier/select_snow_drift_feature"
         },
         "features": [
-            ["extrabiomes:glacier/snow_drift_1_feature", 2],
-            ["extrabiomes:glacier/snow_drift_2_feature", 1]
+            [
+                "extrabiomes:glacier/snow_drift_1_feature",
+                20
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_2_feature",
+                10
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_3_feature",
+                20
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_4_feature",
+                20
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_5_feature",
+                10
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_6_feature",
+                20
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_7_feature",
+                20
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_8_feature",
+                20
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_9_feature",
+                20
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_10_feature",
+                10
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_11_feature",
+                10
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_12_feature",
+                10
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_13_feature",
+                10
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_14_feature",
+                10
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_15_feature",
+                6
+            ],
+            [
+                "extrabiomes:glacier/snow_drift_16_feature",
+                3
+            ]
         ]
     }
 }

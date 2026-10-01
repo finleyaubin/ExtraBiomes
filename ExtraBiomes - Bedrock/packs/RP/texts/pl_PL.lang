@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Gesta Gesta Chmura
 tile.extrabiomes:dense_cloud_brick.name=Gesta Gesta Chmura Cegla z Gestej Chmury
 tile.extrabiomes:dense_cloud_brick_slab.name=Gesta Gesta Chmura Cegla z Gestej Chmury Plyta
 tile.extrabiomes:dense_cloud_brick_stairs.name=Gesta Gesta Chmura Cegla z Gestej Chmury Schody
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Czarny Piasek
 tile.extrabiomes:black_sandstone.name=Czarny Piaskowiec
