@@ -58,6 +58,7 @@ PUFF_POOL = "extrabiomes:sky_city_cloud_puff"
 SAT_SOCKET_NAME = "extrabiomes:sky_city_satellite_socket"  # down/side jigsaw in a puff
 SAT_NAME = "extrabiomes:sky_city_satellite"                # up + side jigsaws in the satellite
 SAT_POOL = "extrabiomes:sky_city_cloud_satellite"
+SAT_SIDE_POOL = "extrabiomes:sky_city_cloud_satellite_side"  # side sockets: treed + plain cloudlets
 FILLER_SOCKET_NAME = "extrabiomes:sky_city_filler_socket"  # side jigsaw in the pad
 FILLER_NAME = "extrabiomes:sky_city_filler"                # side jigsaws in the filler
 FILLER_POOL = "extrabiomes:sky_city_cloud_filler"
@@ -434,6 +435,12 @@ def cloud_palette(version):
         "minecraft:water", {"liquid_depth": T_int(0)}, version))
     entries.append(palette_block(
         "minecraft:cave_vines", {"growing_plant_age": T_int(1)}, version))
+    entries.append(palette_block(
+        "extrabiomes:sky_leaves",
+        {"extrabiomes:decay": T_int(0), "extrabiomes:persist": T_int(1),
+         "extrabiomes:placed": T_byte(1)}, version))
+    entries.append(palette_block(
+        "extrabiomes:sky_log", {"minecraft:block_face": T_str("up")}, version))
     return entries
 
 
@@ -444,6 +451,24 @@ WATER_PIDX = 7
 # cave vine under the column breaks on its first random tick, and that block
 # update kicks the water into flowing down to the ground.
 VINE_PIDX = 8
+LEAF_PIDX = 9   # persistent sky leaves, so trees on cloudlets never decay
+LOG_PIDX = 10
+
+# The small sky tree (same silhouette as structures/extrabiomes/sky_tree), one
+# string per y layer from the trunk base up; rows are z, columns x, trunk at (2, 2).
+SKY_TREE = [
+    [".....", ".....", "..#..", ".....", "....."],
+    [".....", ".....", "..#..", ".....", "....."],
+    [".LLL.", "LLLLL", "LL#LL", "LLLLL", ".LLL."],
+    [".LLL.", "LLLLL", "LL#LL", "LLLLL", ".LLL."],
+    ["..L..", ".LLL.", "LL#LL", ".LLL.", "..L.."],
+    ["..L..", ".LLL.", "LL#LL", ".LLL.", "..L.."],
+    [".....", "..L..", ".L#L.", "..L..", "....."],
+    [".....", "..L..", ".L#L.", "..L..", "....."],
+    [".....", ".....", "..L..", ".....", "....."],
+    [".....", ".....", "..L..", ".....", "....."],
+]
+TREE_HEIGHT = len(SKY_TREE)
 
 
 def side_sockets(mask, sx, sz, ax, az, spacing=6):
@@ -788,8 +813,11 @@ def add_sat_sockets(solid, cells, bpd, dims, conn, rnd, count):
             continue
         taken.add((x, y, z))
         cells[(x, y, z)] = 2 if kind == "down" else FACING_PIDX[fd]
+        # a satellite hung below a puff has the puff over its head, so only the
+        # side-attached ones (open sky above) draw from the pool with trees
         bpd[str(flat_index(x, y, z, h, d))] = jigsaw_entity(
-            SAT_SOCKET_NAME, SAT_NAME, SAT_POOL, CLOUD_BLOCK, x, y, z, joint="rollable")
+            SAT_SOCKET_NAME, SAT_NAME, SAT_POOL if kind == "down" else SAT_SIDE_POOL,
+            CLOUD_BLOCK, x, y, z, joint="rollable")
 
 
 def build_puff(variant, seed, kind, w, h, d, satellites=2):
@@ -836,10 +864,11 @@ def sat_lobes(rnd, kind, w, h, d):
     return lobes
 
 
-def build_satellite(variant, seed, kind, w, h, d):
+def build_satellite(variant, seed, kind, w, h, d, trees=0, prefix="satellite"):
     """A small cloudlet. One up connector plus outward side connectors at two
     heights on every face, so it can hang below a socket or hook onto one from
-    the side at a varied height."""
+    the side at a varied height. trees > 0 plants that many sky trees on the top
+    surface (only used where the top is open sky, see SAT_SIDE_POOL)."""
     rnd = random.Random(seed)
     X, Y, Z = grid_xyz(w, h, d)
     lobes = sat_lobes(rnd, kind, w, h, d)
@@ -847,8 +876,19 @@ def build_satellite(variant, seed, kind, w, h, d):
     solid = F > 0.15
     cxz = (int(round((w - 1) / 2.0)), int(round((d - 1) / 2.0)))
     solid, cells, bpd, dims, conn = finish_cloud(
-        f"satellite_{variant}", solid, cxz, rnd, sockets=False)
+        f"{prefix}_{variant}", solid, cxz, rnd, sockets=False)
     w, h, d = dims
+    if trees:
+        # level the crown into a plateau so trunks have flat footing: any column
+        # whose surface is within 2 of the top is raised to the top layer
+        for x in range(w):
+            for z in range(d):
+                ys = np.nonzero(solid[x, :, z])[0]
+                if len(ys) and ys.max() >= h - 3:
+                    for y in range(int(ys.max()) + 1, h):
+                        solid[x, y, z] = True
+                        cells.setdefault((x, y, z), 0)
+    top_solid = solid[:, h - 1, :].copy()
     # side connectors, outward-facing, on the middle of each bounding-box face
     mx, mz = (w - 1) // 2, (d - 1) // 2
     layers = sorted({max(0, h - 2), min(1, h - 1)}) if h >= 3 else [0]
@@ -869,9 +909,55 @@ def build_satellite(variant, seed, kind, w, h, d):
                 cx_, cz_ = cx_ + sx_, cz_ + sz_
             bpd[str(flat_index(x, jl, z, h, d))] = jigsaw_entity(
                 SAT_NAME, "minecraft:empty", "minecraft:empty", CLOUD_BLOCK, x, jl, z)
+    planted = plant_trees(cells, top_solid, conn, h, rnd, trees) if trees else 0
+    if trees and planted == 0:
+        raise ValueError(f"{prefix}_{variant}: no flat spot for a tree")
+    if planted:
+        # re-key jigsaw entities for the taller bounding box
+        new_h = h + TREE_HEIGHT
+        rekeyed = {}
+        for key, ent in bpd.items():
+            f = int(key)
+            x, y, z = f // (h * d), (f // d) % h, f % d
+            rekeyed[str(flat_index(x, y, z, new_h, d))] = ent
+        bpd, h = rekeyed, new_h
+        dims = (w, h, d)
     root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
-    save(os.path.join(CLOUD_DIR, f"satellite_{variant}.mcstructure"), root, "")
+    save(os.path.join(CLOUD_DIR, f"{prefix}_{variant}.mcstructure"), root, "")
     return dims
+
+
+def plant_trees(cells, top_solid, conn, top_layer_h, rnd, count):
+    """Plant up to `count` sky trees on the satellite's top surface. A trunk
+    needs a mostly flat 3x3 patch of cloud and room for the 5-wide canopy, and
+    keeps clear of the up connector and of other trunks. Returns trees planted."""
+    w, d = top_solid.shape
+    top = top_layer_h - 1
+    cands = []
+    for x in range(2, w - 2):
+        for z in range(2, d - 2):
+            patch = top_solid[x - 1:x + 2, z - 1:z + 2]
+            if top_solid[x, z] and patch.sum() >= 8 and cells.get((x, top, z)) == 0 \
+                    and math.hypot(x - conn[0], z - conn[2]) >= 3:
+                edge = min(x, w - 1 - x, z, d - 1 - z)
+                cands.append((edge + rnd.uniform(0, 1.2), x, z))
+    cands.sort(reverse=True)
+    trunks = []
+    for _, x, z in cands:
+        if all(math.hypot(x - tx, z - tz) >= 6 for tx, tz in trunks):
+            trunks.append((x, z))
+            if len(trunks) == count:
+                break
+    for tx, tz in trunks:
+        for ly, layer in enumerate(SKY_TREE):
+            for lz, row in enumerate(layer):
+                for lx, ch in enumerate(row):
+                    if ch == ".":
+                        continue
+                    pos = (tx - 2 + lx, top + 1 + ly, tz - 2 + lz)
+                    if ch == "#" or pos not in cells:
+                        cells[pos] = LOG_PIDX if ch == "#" else LEAF_PIDX
+    return len(trunks)
 
 
 # ---------------------------------------------------------------------------
@@ -996,6 +1082,10 @@ FILLERS = [
     (15, 9, 6, 3), (13, 13, 6, 3), (11, 7, 5, 3), (9, 9, 5, 2),
     (7, 5, 4, 2), (12, 8, 5, 2), (5, 5, 4, 1),
 ]
+# (kind, w, h, d, weight, trees) - wide, flat-topped cloudlets that carry sky trees
+TREE_SATELLITES = [
+    ("cumulus", 15, 8, 13, 3, 2), ("cumulus", 13, 7, 11, 3, 1), ("streak", 19, 5, 11, 2, 2),
+]
 ISLANDS = [(40, 14), (38, 13), (42, 14)]
 
 
@@ -1003,7 +1093,7 @@ def main():
     os.makedirs(CLOUD_DIR, exist_ok=True)
     os.makedirs(ISLAND_DIR, exist_ok=True)
     os.makedirs(POOL_DIR, exist_ok=True)
-    clear_generated(CLOUD_DIR, ("puff_", "satellite_", "filler_"))
+    clear_generated(CLOUD_DIR, ("puff_", "satellite_", "filler_"))  # "satellite_" also covers satellite_tree_
 
     # grab a palette 'version' value from an existing piece so new blocks match
     global VERSION_FROM_PIECE
@@ -1045,6 +1135,19 @@ def main():
                [(f"extrabiomes/sky_city/clouds/satellite_{v}", s[4])
                 for v, s in enumerate(SATELLITES)])
     print(f"satellites: {sat_dims}")
+
+    tree_dims = []
+    for v, (kind, w, h, d, _, n) in enumerate(TREE_SATELLITES):
+        tree_dims.append(build_satellite(v, seed=3500 + v * 43, kind=kind, w=w, h=h, d=d,
+                                         trees=n, prefix="satellite_tree"))
+    # side sockets: treed cloudlets first choice, plain ones as the fallback where
+    # the taller treed shape doesn't fit
+    write_pool("satellite_side.json", SAT_SIDE_POOL,
+               [(f"extrabiomes/sky_city/clouds/satellite_tree_{v}", t[4])
+                for v, t in enumerate(TREE_SATELLITES)]
+               + [(f"extrabiomes/sky_city/clouds/satellite_{v}", 1)
+                  for v in range(len(SATELLITES))])
+    print(f"tree satellites: {tree_dims}")
 
     for v, (w, d, h, _) in enumerate(FILLERS):
         build_filler(v, seed=5000 + v * 61, w=w, d=d, h=h)
