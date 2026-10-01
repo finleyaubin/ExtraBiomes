@@ -9,7 +9,8 @@ hung under a small cross-shaped city. Needs only Pillow and numpy. The images
 are for eyeballing silhouettes while tuning build_clouds.py; they are not
 committed.
 
-Colours: cloud = white-blue, water = blue, jigsaw = magenta, cave vine = green.
+Colours: cloud = white-blue, water = blue, jigsaw = magenta, cave vine and
+sky leaves = green, sky log = brown.
 """
 import math
 import os
@@ -26,12 +27,14 @@ SC = os.path.join(HERE, "..", "ExtraBiomes - Bedrock", "packs", "BP",
 CLOUD_DIR = os.path.join(SC, "clouds")
 ISLAND_DIR = os.path.join(SC, "islands")
 
-EMPTY, CLOUD, WATER, JIGSAW, VINE = 0, 1, 2, 3, 4
+EMPTY, CLOUD, WATER, JIGSAW, VINE, LEAF, LOG = 0, 1, 2, 3, 4, 5, 6
 COLORS = {
     CLOUD: ((244, 247, 252), (208, 218, 234), (172, 188, 210)),
     WATER: ((90, 150, 235), (70, 125, 215), (55, 100, 190)),
     JIGSAW: ((235, 60, 200), (200, 40, 170), (160, 30, 140)),
     VINE: ((70, 190, 80), (55, 160, 65), (45, 130, 55)),
+    LEAF: ((96, 190, 92), (70, 150, 70), (52, 120, 56)),
+    LOG: ((150, 108, 68), (118, 82, 50), (92, 64, 40)),
 }
 BG = (36, 44, 66)
 
@@ -47,7 +50,8 @@ def load_grid(path):
     for p in pal:
         n = p["name"]
         kinds.append(JIGSAW if n == "minecraft:jigsaw" else WATER if n == "minecraft:water"
-                     else VINE if n == "minecraft:cave_vines" else CLOUD)
+                     else VINE if n == "minecraft:cave_vines" else LEAF if n == "extrabiomes:sky_leaves"
+                     else LOG if n == "extrabiomes:sky_log" else CLOUD)
     grid = np.zeros((sx, sy, sz), dtype=np.int8)
     for pi, k in enumerate(kinds):
         grid[idx == pi] = k
@@ -150,7 +154,7 @@ class Canvas:
             if (0 <= X < self.g.shape[0] and 0 <= Y < self.g.shape[1]
                     and 0 <= Z < self.g.shape[2] and self.g[X, Y, Z] == EMPTY):
                 v = grid[x, y, z]
-                self.g[X, Y, Z] = CLOUD if as_cloud and v != WATER else v
+                self.g[X, Y, Z] = CLOUD if as_cloud and v in (WATER, VINE, JIGSAW) else v
 
 
 def mock_city(out_path, seed=3):
@@ -161,7 +165,8 @@ def mock_city(out_path, seed=3):
     rnd = random.Random(seed)
     pads = {n: g for n, g in group("cross_") + group("straight_") + group("t_") + group("curve_")}
     puffs = [g for _, g in group("puff_")]
-    sats = [g for _, g in group("satellite_")]
+    sats = [g for n, g in group("satellite_") if not n.startswith("satellite_tree")]
+    tree_sats = [g for _, g in group("satellite_tree_")]
     fills = [g for _, g in group("filler_")]
     # (pad name, offset x, z) - a plus of pieces laid edge to edge
     layout = [("cross_0", 40, 40), ("straight_0", 49, 42), ("straight_1", 28, 42),
@@ -207,6 +212,26 @@ def mock_city(out_path, seed=3):
                     for (sx_, sy_, sz_) in jigsaws(p):
                         if sy_ == p.shape[1] - 1 and (sx_, sz_) == (ux, uz):
                             continue
+                        pw, ph, pd = p.shape
+                        face = ("w" if sx_ == 0 else "e" if sx_ == pw - 1
+                                else "n" if sz_ == 0 else "s" if sz_ == pd - 1 else None)
+                        if sy_ > 0 and face:
+                            # side socket: hook a treed (or plain) cloudlet on from the side
+                            s = rnd.choice(tree_sats + sats[:2])
+                            sw, sh, sd = s.shape
+                            want = {"w": lambda c: c[0] == sw - 1, "e": lambda c: c[0] == 0,
+                                    "n": lambda c: c[2] == sd - 1, "s": lambda c: c[2] == 0}[face]
+                            cj = sorted((c for c in jigsaws(s) if want(c) and c[1] > 0),
+                                        key=lambda c: -c[1])
+                            if cj:
+                                cx, cy, cz = cj[0]
+                                dx, dz = {"w": (-1, 0), "e": (1, 0), "n": (0, -1), "s": (0, 1)}[face]
+                                sox = ox + sx_ + dx - cx
+                                soy = oy2 + sy_ - cy
+                                soz = oz + sz_ + dz - cz
+                                if free(s, sox, soy, soz):
+                                    commit(s, sox, soy, soz)
+                            continue
                         s = rnd.choice(sats)
                         sup = [c for c in jigsaws(s) if c[1] == s.shape[1] - 1]
                         if sy_ == 0 and sup:
@@ -248,10 +273,13 @@ def main(argv):
         pads += group(short + "_")[:2]
     sheet(pads, os.path.join(out, "pads.png"), cols=2)
     sheet(group("puff_"), os.path.join(out, "puffs.png"), cols=2)
-    sheet(group("satellite_"), os.path.join(out, "satellites.png"), cols=3, u=9)
+    plain = [g for g in group("satellite_") if not g[0].startswith("satellite_tree")]
+    treed = group("satellite_tree_")
+    sheet(plain, os.path.join(out, "satellites.png"), cols=3, u=9)
+    sheet(treed, os.path.join(out, "satellites_trees.png"), cols=1, u=9)
     sheet(group("filler_"), os.path.join(out, "fillers.png"), cols=2, u=8)
     sheet(group("island_", ISLAND_DIR)[:3], os.path.join(out, "islands.png"), cols=1, u=7)
-    mock_city(os.path.join(out, "mock_city.png"))
+    mock_city(os.path.join(out, "mock_city.png"), seed=3)
     print("wrote previews to", out)
     return 0
 
