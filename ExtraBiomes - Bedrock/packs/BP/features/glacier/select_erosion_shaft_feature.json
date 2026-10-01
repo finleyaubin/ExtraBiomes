@@ -1,0 +1,22 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/select_erosion_shaft_feature"
+    },
+    "features": [
+      [
+        "extrabiomes:glacier/shaft_1_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/shaft_2_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/shaft_3_feature",
+        1
+      ]
+    ]
+  }
+}
