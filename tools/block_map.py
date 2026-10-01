@@ -332,16 +332,16 @@ def map_block(name, states, be=None):
                 "extrabiomes:gilded_sky_planks", "extrabiomes:sky_planks"):
         return name, {}
 
-    if name in ("extrabiomes:dense_cloud_brick_slab", "extrabiomes:gilded_sky_slab",
-                "extrabiomes:sky_slab"):
+    if name in ("extrabiomes:dense_cloud_brick_slab", "extrabiomes:dense_cloud_slab",
+                "extrabiomes:gilded_sky_slab", "extrabiomes:sky_slab"):
         if states.get("extrabiomes:is_double") in (1, True):
             stype = "double"
         else:
             stype = _s(states.get("minecraft:vertical_half", "bottom"))
         return name, {"type": stype, "waterlogged": "false"}
 
-    if name in ("extrabiomes:dense_cloud_brick_stairs", "extrabiomes:gilded_sky_stairs",
-                "extrabiomes:sky_stairs"):
+    if name in ("extrabiomes:dense_cloud_brick_stairs", "extrabiomes:dense_cloud_stairs",
+                "extrabiomes:gilded_sky_stairs", "extrabiomes:sky_stairs"):
         direction = int(states.get("extrabiomes:direction", 0))
         half = _s(states.get("minecraft:vertical_half", "bottom"))
         if direction in STAIR_CORNER:

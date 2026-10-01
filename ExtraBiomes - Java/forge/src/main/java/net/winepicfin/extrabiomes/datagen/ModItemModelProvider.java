@@ -55,6 +55,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.JELLYFISHING_NET_FULL);
         simpleItem(ModItems.BUCKET_OF_GOO);
         trimmedArmorItem(ModItems.FROG_HELMET);
+        evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_STAIRS);
+        evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_SLAB);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_SLAB);
 
