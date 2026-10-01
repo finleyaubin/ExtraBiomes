@@ -28,6 +28,9 @@ CLOUD_DIR = os.path.join(SC, "clouds")
 ISLAND_DIR = os.path.join(SC, "islands")
 
 EMPTY, CLOUD, WATER, JIGSAW, VINE, LEAF, LOG, GILDED, SAPLING = 0, 1, 2, 3, 4, 5, 6, 7, 8
+SLAB_B, SLAB_T = 9, 10          # half blocks
+STAIR0 = 20                     # 20 + 4 * (half == top) + index in DIRS: a stair, tall back toward DIRS[i]
+DIRS = ["north", "south", "west", "east"]
 COLORS = {
     CLOUD: ((244, 247, 252), (208, 218, 234), (172, 188, 210)),
     WATER: ((90, 150, 235), (70, 125, 215), (55, 100, 190)),
@@ -39,6 +42,35 @@ COLORS = {
     SAPLING: ((140, 230, 120), (110, 200, 95), (85, 165, 75)),
 }
 BG = (36, 44, 66)
+for _k in [SLAB_B, SLAB_T] + list(range(STAIR0, STAIR0 + 8)):
+    COLORS[_k] = COLORS[CLOUD]
+
+
+def boxes(kind):
+    """Sub-boxes (x0, x1, y0, y1, z0, z1), in cell fractions, a block kind occupies."""
+    if kind == SLAB_B:
+        return [(0, 1, 0, .5, 0, 1)]
+    if kind == SLAB_T:
+        return [(0, 1, .5, 1, 0, 1)]
+    if kind >= STAIR0:
+        top, di = divmod(kind - STAIR0, 4)
+        base = (0, 1, .5, 1, 0, 1) if top else (0, 1, 0, .5, 0, 1)
+        y0, y1 = (0, .5) if top else (.5, 1)
+        back = {"north": (0, 1, y0, y1, 0, .5), "south": (0, 1, y0, y1, .5, 1),
+                "west": (0, .5, y0, y1, 0, 1), "east": (.5, 1, y0, y1, 0, 1)}[DIRS[di]]
+        return [base, back]
+    return [(0, 1, 0, 1, 0, 1)]
+
+
+def mirror_y(kind):
+    if kind == SLAB_B:
+        return SLAB_T
+    if kind == SLAB_T:
+        return SLAB_B
+    if kind >= STAIR0:
+        top, di = divmod(kind - STAIR0, 4)
+        return STAIR0 + 4 * (1 - top) + di
+    return kind
 
 
 def load_grid(path):
@@ -55,6 +87,13 @@ def load_grid(path):
                      else VINE if n == "minecraft:cave_vines" else LEAF if n == "extrabiomes:sky_leaves"
                      else LOG if n == "extrabiomes:sky_log" else GILDED if n == "extrabiomes:gilded_sky_log"
                      else SAPLING if n == "extrabiomes:sky_sapling_block" else CLOUD)
+    for pi, p in enumerate(pal):
+        st = p["states"]
+        if p["name"] == "extrabiomes:dense_cloud_slab":
+            kinds[pi] = SLAB_T if st.get("minecraft:vertical_half") == "top" else SLAB_B
+        elif p["name"] == "extrabiomes:dense_cloud_stairs":
+            kinds[pi] = (STAIR0 + (4 if st.get("minecraft:vertical_half") == "top" else 0)
+                         + DIRS.index(st.get("minecraft:cardinal_direction", "north")))
     grid = np.zeros((sx, sy, sz), dtype=np.int8)
     for pi, k in enumerate(kinds):
         grid[idx == pi] = k
@@ -62,13 +101,14 @@ def load_grid(path):
 
 
 def render_iso(grid, u=6, flip=False):
-    """Painter's-algorithm voxel render. flip=True mirrors y first, which shows
-    the underside as seen from below."""
+    """Painter's-algorithm voxel render with half blocks. flip=True mirrors y
+    first, which shows the underside as seen from below."""
     if flip:
-        grid = grid[:, ::-1, :]
+        grid = np.vectorize(mirror_y)(grid[:, ::-1, :]).astype(np.int8)
     sx, sy, sz = grid.shape
     solid = grid != EMPTY
-    pad = np.pad(solid, 1)
+    full = solid & ((grid < SLAB_B) | ((grid > SLAB_T) & (grid < STAIR0)))   # cubes that hide neighbours' faces
+    pad = np.pad(full, 1)
 
     def proj(x, y, z):
         return ((x - z) * u * 0.866, (x + z) * u * 0.5 - y * u)
@@ -86,20 +126,20 @@ def render_iso(grid, u=6, flip=False):
     order = np.argsort(xs + ys + zs, kind="stable")
     for k in order:
         x, y, z = int(xs[k]), int(ys[k]), int(zs[k])
-        top, left, right = COLORS[int(grid[x, y, z])]
-        faces = []
-        if not pad[x + 1, y + 2, z + 1]:   # +y exposed
-            faces.append((top, [(x, y + 1, z), (x + 1, y + 1, z),
-                                (x + 1, y + 1, z + 1), (x, y + 1, z + 1)]))
-        if not pad[x + 2, y + 1, z + 1]:   # +x exposed
-            faces.append((right, [(x + 1, y, z), (x + 1, y, z + 1),
-                                  (x + 1, y + 1, z + 1), (x + 1, y + 1, z)]))
-        if not pad[x + 1, y + 1, z + 2]:   # +z exposed
-            faces.append((left, [(x, y, z + 1), (x + 1, y, z + 1),
-                                 (x + 1, y + 1, z + 1), (x, y + 1, z + 1)]))
-        for color, quad in faces:
-            pts = [(proj(*p)[0] - minx, proj(*p)[1] - miny) for p in quad]
-            dr.polygon(pts, fill=color)
+        kind = int(grid[x, y, z])
+        top, left, right = COLORS[kind]
+        for (x0, x1, y0, y1, z0, z1) in sorted(boxes(kind), key=lambda b_: b_[2]):
+            X0, X1, Y0, Y1, Z0, Z1 = x + x0, x + x1, y + y0, y + y1, z + z0, z + z1
+            faces = []
+            if not (y1 == 1 and pad[x + 1, y + 2, z + 1]):
+                faces.append((top, [(X0, Y1, Z0), (X1, Y1, Z0), (X1, Y1, Z1), (X0, Y1, Z1)]))
+            if not (x1 == 1 and pad[x + 2, y + 1, z + 1]):
+                faces.append((right, [(X1, Y0, Z0), (X1, Y0, Z1), (X1, Y1, Z1), (X1, Y1, Z0)]))
+            if not (z1 == 1 and pad[x + 1, y + 1, z + 2]):
+                faces.append((left, [(X0, Y0, Z1), (X1, Y0, Z1), (X1, Y1, Z1), (X0, Y1, Z1)]))
+            for color, quad in faces:
+                pts = [(proj(*p_)[0] - minx, proj(*p_)[1] - miny) for p_ in quad]
+                dr.polygon(pts, fill=color)
     box = ImageChops.difference(img, Image.new("RGB", img.size, BG)).getbbox()
     return img.crop((max(0, box[0] - 4), max(0, box[1] - 4), box[2] + 4, box[3] + 4)) if box else img
 
