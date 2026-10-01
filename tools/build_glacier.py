@@ -315,7 +315,7 @@ def aggregate_feature(name, members):
 
 
 def feature_rule(name, places, pass_name, iterations, y, scatter_chance=100):
-    write_json(os.path.join(RULE_DIR, f"{name}.json"), {
+    write_json(os.path.join(RULE_DIR, f"glacier_{name}.json"), {
         "format_version": "1.14.0",
         "minecraft:feature_rules": {
             "description": {"identifier": f"{NAMESPACE}:glacier_{name}", "places_feature": places},
