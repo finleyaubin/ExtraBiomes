@@ -340,5 +340,6 @@
   "advancements.extrabiomes.biome_explorer.title": "Biome Explorer",
   "advancements.extrabiomes.biome_explorer.description": "Discover every biome ExtraBiomes adds",
   "advancements.extrabiomes.bait_and_switch.title": "Bait and Switch",
-  "advancements.extrabiomes.bait_and_switch.description": "Use bait to lure a Piranha away from you"
+  "advancements.extrabiomes.bait_and_switch.description": "Use bait to lure a Piranha away from you",
+  "tag.item.extrabiomes.repairs_frog_armor": "Repairs Frog Armor"
 }
