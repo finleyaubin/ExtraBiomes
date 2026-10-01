@@ -549,6 +549,8 @@ def write_structure(name, sx, sy, sz, cells):
     root = make_structure(sx, sy, sz, cells)
     save(os.path.join(STRUCT_DIR, f"{name}.mcstructure"), root, "")
 
+GLACIER_BLOCKS = ['minecraft:air', 'minecraft:snow_layer', 'minecraft:snow', 'minecraft:powder_snow', 'minecraft:ice', 'minecraft:packed_ice', 'minecraft:blue_ice', 'minecraft:stone', 'minecraft:dirt', 'minecraft:gravel', 'minecraft:water']
+
 
 def write_structure_feature(name):
     ident = f"{NAMESPACE}:glacier/{name}_feature"
@@ -558,9 +560,8 @@ def write_structure_feature(name):
             "description": {"identifier": ident},
             "structure_name": f"{NAMESPACE}:{name}",
             "constraints": {
-                "unburied": {},
                 "block_intersection": {
-                    "block_allowlist": ["minecraft:air", "minecraft:snow_layer"]
+                    "block_allowlist": GLACIER_BLOCKS
                 },
                 "grounded": {},
             },

@@ -6,11 +6,19 @@
         },
         "structure_name": "extrabiomes:snow_drift_6",
         "constraints": {
-            "unburied": {},
             "block_intersection": {
                 "block_allowlist": [
                     "minecraft:air",
-                    "minecraft:snow_layer"
+                    "minecraft:snow_layer",
+                    "minecraft:snow",
+                    "minecraft:powder_snow",
+                    "minecraft:ice",
+                    "minecraft:packed_ice",
+                    "minecraft:blue_ice",
+                    "minecraft:stone",
+                    "minecraft:dirt",
+                    "minecraft:gravel",
+                    "minecraft:water"
                 ]
             },
             "grounded": {}
