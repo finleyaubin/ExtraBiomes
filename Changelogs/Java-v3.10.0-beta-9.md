@@ -34,7 +34,7 @@ The clouds under the Sky City are redone so they look like clouds instead of a c
 - The island the city sits on has a lumpy, irregular outline and an underbelly of hanging cloud pouches instead of a smooth stepped cone.
 - Clouds under each street and building now hang as rounded lobes, and the gaps between paths are filled with organic oval slabs in several sizes instead of identical squares.
 - Larger clouds (billowing cumulus, long streaks, hanging pouches and towers) sit off to one side of the city instead of stacking up directly underneath it, with smaller cloudlets trailing off below and beside them so the clouds thin out gradually.
-- Some of the smaller cloudlets that hook onto the side of the bigger clouds are flat-topped and carry one or two sky trees.
+- Sky trees now grow on some of the flat cloud in the gaps between paths and on the smaller flat-topped cloudlets that hook onto the sides of the bigger clouds, wherever there is room. Their leaves decay if you cut the trunk down.
 - The fountain's water still pours through the island and falls to the ground, so you can swim up into the city.
 
 ## Blocks
