@@ -340,7 +340,6 @@ def between(low, high):
 
 
 HEIGHT = "query.heightmap(variable.worldx, variable.worldz)"
-ABOVE_SEA = f"{HEIGHT} > 63 ? {HEIGHT} : 300"
 STONE_FAMILY = ["minecraft:stone", "minecraft:andesite", "minecraft:diorite", "minecraft:granite",
                 "minecraft:dirt", "minecraft:grass_block", "minecraft:sand", "minecraft:gravel",
                 "minecraft:sandstone", "minecraft:deepslate"]
@@ -395,25 +394,25 @@ def build_surface():
     crevasses = [structure_feature(crevasse(seed, half_length, depth), grounded=True)
                  for seed, half_length, depth in ((1, 6, 14), (2, 8, 18), (3, 10, 22), (4, 12, 28), (5, 13, 33))]
     feature_rule("crevasse", select_feature("select_crevasse_feature", [(f, 1) for f in crevasses]),
-                 "after_surface_pass", 1, ABOVE_SEA, 17)
+                 "after_surface_pass", 1, HEIGHT, 17)
 
     streams = [structure_feature(stream(seed, length, vent), grounded=True)
                for seed, length, vent in ((1, 12, True), (2, 14, False), (3, 16, True), (4, 13, False))]
     feature_rule("meltwater_stream", select_feature("select_meltwater_stream_feature", [(f, 1) for f in streams]),
-                 "after_surface_pass", 1, ABOVE_SEA, 40)
+                 "after_surface_pass", 1, HEIGHT, 40)
 
     shafts = [structure_feature(shaft(seed, radius, depth, chamber, dogleg), grounded=True)
               for seed, radius, depth, chamber, dogleg in ((1, 2.5, 32, 8, 3), (2, 3.5, 38, 9.5, 0), (3, 5.5, 44, 9.5, -4))]
     feature_rule("erosion_shaft", select_feature("select_erosion_shaft_feature", [(f, 1) for f in shafts]),
-                 "after_surface_pass", 1, ABOVE_SEA, 8)
+                 "after_surface_pass", 1, HEIGHT, 8)
 
     ponds = [structure_feature(pond(seed, radius), grounded=True) for seed, radius in ((1, 3), (2, 4.5), (3, 6))]
     feature_rule("pond", select_feature("select_pond_feature", [(f, 1) for f in ponds]),
-                 "after_surface_pass", 1, ABOVE_SEA, 8)
+                 "after_surface_pass", 1, HEIGHT, 8)
 
     boulders = [structure_feature(boulder(seed, radius), grounded=True) for seed, radius in ((1, 1.8), (2, 2.4), (3, 3.2))]
     feature_rule("erratic", select_feature("select_erratic_feature", [(f, 1) for f in boulders]),
-                 "after_surface_pass", 1, ABOVE_SEA, 30)
+                 "after_surface_pass", 1, HEIGHT, 30)
 
 
 if __name__ == "__main__":
