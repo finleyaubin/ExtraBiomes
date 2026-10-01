@@ -610,8 +610,10 @@ def build_pad(short, variant, seed, mask, anchor, sx, sz, water_cols=()):
 # fillers: organic slabs that close the gaps between paths
 # ---------------------------------------------------------------------------
 
-def build_filler(variant, seed, w, d, h):
-    """Gap-filler slab: lobed oval outline, rounded bushy bottom.
+def build_filler(variant, seed, w, d, h, trees=0, prefix="filler"):
+    """Gap-filler slab: lobed oval outline, rounded bushy bottom. trees > 0 plants
+    that many sky trees on its flat top (drawn from the same pool as the plain
+    fillers, so where there's no headroom a plain slab is placed instead).
     The connector jigsaws sit one layer BELOW the top: they align with the pad
     side sockets (one under the piece floor), so the filler's flat top rises
     level with the road surface and paths/buildings read as cutting through a
@@ -672,8 +674,13 @@ def build_filler(variant, seed, w, d, h):
         bpd[str(flat_index(x, joint, z, h, d))] = jigsaw_entity(
             FILLER_NAME, "minecraft:empty", "minecraft:empty",
             CLOUD_BLOCK, x, joint, z)
-    root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
-    save(os.path.join(CLOUD_DIR, f"filler_{variant}.mcstructure"), root, "")
+    H = h
+    if trees:
+        if plant_trees(cells, solid[:, top, :].copy(), None, h, rnd, trees) == 0:
+            raise ValueError(f"{prefix}_{variant}: no flat spot for a tree")
+        bpd, H = rekey_bpd(bpd, h, d, h + TREE_HEIGHT), h + TREE_HEIGHT
+    root = make_structure(w, H, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
+    save(os.path.join(CLOUD_DIR, f"{prefix}_{variant}.mcstructure"), root, "")
 
 
 # ---------------------------------------------------------------------------
@@ -913,38 +920,43 @@ def build_satellite(variant, seed, kind, w, h, d, trees=0, prefix="satellite"):
     if trees and planted == 0:
         raise ValueError(f"{prefix}_{variant}: no flat spot for a tree")
     if planted:
-        # re-key jigsaw entities for the taller bounding box
-        new_h = h + TREE_HEIGHT
-        rekeyed = {}
-        for key, ent in bpd.items():
-            f = int(key)
-            x, y, z = f // (h * d), (f // d) % h, f % d
-            rekeyed[str(flat_index(x, y, z, new_h, d))] = ent
-        bpd, h = rekeyed, new_h
+        bpd, h = rekey_bpd(bpd, h, d, h + TREE_HEIGHT), h + TREE_HEIGHT
         dims = (w, h, d)
     root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
     save(os.path.join(CLOUD_DIR, f"{prefix}_{variant}.mcstructure"), root, "")
     return dims
 
 
+def rekey_bpd(bpd, h, d, new_h):
+    """Jigsaw entities are keyed by flat index, which depends on the template
+    height; re-key them after a tree makes the bounding box taller."""
+    out = {}
+    for key, ent in bpd.items():
+        f = int(key)
+        x, y, z = f // (h * d), (f // d) % h, f % d
+        out[str(flat_index(x, y, z, new_h, d))] = ent
+    return out
+
+
 def plant_trees(cells, top_solid, conn, top_layer_h, rnd, count):
-    """Plant up to `count` sky trees on the satellite's top surface. A trunk
-    needs a mostly flat 3x3 patch of cloud and room for the 5-wide canopy, and
-    keeps clear of the up connector and of other trunks. Returns trees planted."""
+    """Plant up to `count` sky trees on a cloud's flat top surface, as many as fit.
+    A trunk needs a mostly flat 3x3 patch of cloud and room for the 5-wide
+    canopy inside the template, and keeps clear of the up connector (if any) and
+    of other trunks. Returns trees planted."""
     w, d = top_solid.shape
     top = top_layer_h - 1
     cands = []
     for x in range(2, w - 2):
         for z in range(2, d - 2):
             patch = top_solid[x - 1:x + 2, z - 1:z + 2]
-            if top_solid[x, z] and patch.sum() >= 8 and cells.get((x, top, z)) == 0 \
-                    and math.hypot(x - conn[0], z - conn[2]) >= 3:
+            if top_solid[x, z] and patch.sum() >= 7 and cells.get((x, top, z)) == 0 \
+                    and (conn is None or math.hypot(x - conn[0], z - conn[2]) >= 3):
                 edge = min(x, w - 1 - x, z, d - 1 - z)
                 cands.append((edge + rnd.uniform(0, 1.2), x, z))
     cands.sort(reverse=True)
     trunks = []
     for _, x, z in cands:
-        if all(math.hypot(x - tx, z - tz) >= 6 for tx, tz in trunks):
+        if all(math.hypot(x - tx, z - tz) >= 5 for tx, tz in trunks):
             trunks.append((x, z))
             if len(trunks) == count:
                 break
@@ -1084,7 +1096,11 @@ FILLERS = [
 ]
 # (kind, w, h, d, weight, trees) - wide, flat-topped cloudlets that carry sky trees
 TREE_SATELLITES = [
-    ("cumulus", 15, 8, 13, 3, 2), ("cumulus", 13, 7, 11, 3, 1), ("streak", 19, 5, 11, 2, 2),
+    ("cumulus", 15, 8, 13, 3, 4), ("cumulus", 13, 7, 11, 3, 3), ("streak", 19, 5, 11, 2, 4),
+]
+# (w, d, h, weight, max trees) - filler slabs big enough for a canopy, treed
+TREE_FILLERS = [
+    (15, 9, 6, 2, 2), (13, 13, 6, 2, 4), (12, 8, 5, 2, 2), (11, 7, 5, 2, 2), (9, 9, 5, 1, 1),
 ]
 ISLANDS = [(40, 14), (38, 13), (42, 14)]
 
@@ -1151,9 +1167,13 @@ def main():
 
     for v, (w, d, h, _) in enumerate(FILLERS):
         build_filler(v, seed=5000 + v * 61, w=w, d=d, h=h)
+    for v, (w, d, h, _, n) in enumerate(TREE_FILLERS):
+        build_filler(v, seed=6000 + v * 59, w=w, d=d, h=h, trees=n, prefix="filler_tree")
     write_pool("filler.json", FILLER_POOL,
                [(f"extrabiomes/sky_city/clouds/filler_{v}", f[3])
-                for v, f in enumerate(FILLERS)])
+                for v, f in enumerate(FILLERS)]
+               + [(f"extrabiomes/sky_city/clouds/filler_tree_{v}", f[3])
+                  for v, f in enumerate(TREE_FILLERS)])
     print(f"fillers: {FILLERS}")
 
     for v, (w, h) in enumerate(ISLANDS):

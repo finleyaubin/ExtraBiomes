@@ -245,7 +245,8 @@ def mock_city(out_path, seed=3):
                 fx = 0 if jx == 0 else (g.shape[0] - 1 if jx == g.shape[0] - 1 else None)
                 if fx is None:
                     continue
-                cand = [c for c in jigsaws(f) if c[1] == f.shape[1] - 2
+                jl = max(c[1] for c in jigsaws(f))
+                cand = [c for c in jigsaws(f) if c[1] == jl
                         and ((jx == 0 and c[0] == f.shape[0] - 1) or (jx != 0 and c[0] == 0))]
                 if not cand:
                     continue
@@ -277,7 +278,9 @@ def main(argv):
     treed = group("satellite_tree_")
     sheet(plain, os.path.join(out, "satellites.png"), cols=3, u=9)
     sheet(treed, os.path.join(out, "satellites_trees.png"), cols=1, u=9)
-    sheet(group("filler_"), os.path.join(out, "fillers.png"), cols=2, u=8)
+    fillers = group("filler_")
+    sheet([g for g in fillers if "tree" not in g[0]], os.path.join(out, "fillers.png"), cols=2, u=8)
+    sheet([g for g in fillers if "tree" in g[0]], os.path.join(out, "fillers_trees.png"), cols=1, u=8)
     sheet(group("island_", ISLAND_DIR)[:3], os.path.join(out, "islands.png"), cols=1, u=7)
     mock_city(os.path.join(out, "mock_city.png"), seed=3)
     print("wrote previews to", out)
