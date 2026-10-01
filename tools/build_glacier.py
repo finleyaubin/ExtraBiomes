@@ -60,7 +60,7 @@ def emit(name, cells, ground, allowlist):
     sy = max(max(ys) - y0 + 1, ground - y0 + 1)
     shifted = {(x - x0, y - y0, z - z0): v for (x, y, z), v in cells.items()}
     assert sx <= MAX_SPAN and sz <= MAX_SPAN, f"{name} is {sx}x{sz}"
-    bfi.write_bedrock_structure(name, sx, sy, sz, shifted)
+    bfi.write_bedrock_structure(name, sx, sy, sz, shifted, pad=False)
     print(f"{name}: {sx}x{sy}x{sz}, {len(cells)} blocks, ground_level {ground - y0}")
     return {"name": name, "ground_level": ground - y0, "allowlist": allowlist}
 

@@ -533,14 +533,15 @@ def make_structure(sx, sy, sz, cells):
     })
 
 
-def write_bedrock_structure(name, sx, sy, sz, cells):
+def write_bedrock_structure(name, sx, sy, sz, cells, pad=True):
     os.makedirs(STRUCT_DIR, exist_ok=True)
-    dx, dz = (MAX_SPAN - sx) // 2, (MAX_SPAN - sz) // 2
-    cells = {(x + dx, y, z + dz): key for (x, y, z), key in cells.items()}
-    sx = sz = MAX_SPAN
-    shifted_be = {(x + dx, y, z + dz): be for (x, y, z), be in RAW_BE.items()}
-    RAW_BE.clear()
-    RAW_BE.update(shifted_be)
+    if pad:
+        dx, dz = (MAX_SPAN - sx) // 2, (MAX_SPAN - sz) // 2
+        cells = {(x + dx, y, z + dz): key for (x, y, z), key in cells.items()}
+        sx = sz = MAX_SPAN
+        shifted_be = {(x + dx, y, z + dz): be for (x, y, z), be in RAW_BE.items()}
+        RAW_BE.clear()
+        RAW_BE.update(shifted_be)
     save(os.path.join(STRUCT_DIR, f"{name}.mcstructure"), make_structure(sx, sy, sz, cells), "")
     RAW_BE.clear()
 
