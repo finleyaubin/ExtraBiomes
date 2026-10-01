@@ -28,6 +28,14 @@ Floating Jungle finally floats. None of this is in the Bedrock addon yet.
 - A rare island carries a real vanilla jungle temple, with its loot chests, arrow traps and redstone puzzle intact.
 - Colossal jungle trees rise from the peaks, about ten times the height of a normal jungle tree at 100 to 130 blocks. Each has a trunk around 20 blocks thick, buttress roots, sweeping branches, a layered crown, moss, azalea leaves and hanging vines. They are very rare, and do not generate where the peak leaves no room below the build limit.
 
+## Sky City
+The clouds under the Sky City are redone so they look like clouds instead of a computer-built grid. The city on top is unchanged. None of this is in the Bedrock addon yet.
+
+- The island the city sits on has a lumpy, irregular outline and an underbelly of hanging cloud pouches instead of a smooth stepped cone.
+- Clouds under each street and building now hang as rounded lobes, and the gaps between paths are filled with organic oval slabs in several sizes instead of identical squares.
+- Larger clouds (billowing cumulus, long streaks, hanging pouches and towers) sit off to one side of the city instead of stacking up directly underneath it, with smaller cloudlets trailing off below and beside them so the clouds thin out gradually.
+- The fountain's water still pours through the island and falls to the ground, so you can swim up into the city.
+
 ## Blocks
 - Dense Cloud and Dense Cloud Brick (and the brick slab and stairs) are now slightly translucent.
 
