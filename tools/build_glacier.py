@@ -30,7 +30,7 @@ bfi.BLOCKS.update({
     "ice": ("minecraft:ice", {}),
     "snow": ("minecraft:snow", {}),
     "lava": ("minecraft:lava", {"liquid_depth": T_int(0)}),
-    "soul_sand": ("minecraft:soul_sand", {}),
+    "potent_sulfur": ("minecraft:potent_sulfur", {}),
 })
 
 ORES = [f"minecraft:{prefix}{ore}_ore" for prefix in ("", "deepslate_") for ore in
@@ -199,7 +199,8 @@ def stream(seed, length, vent):
         cells[(x, ground, z)] = "air"
         cells[(x, ground + 1, z)] = "air"
     if vent:
-        cells[(end[0], ground - 3, end[1])] = "soul_sand"
+        cells[(end[0], ground - 3, end[1])] = "potent_sulfur"
+        cells[(end[0], ground - 4, end[1])] = "magma"
     return emit(f"stream_{seed}", cells, ground, SURFACE)
 
 
