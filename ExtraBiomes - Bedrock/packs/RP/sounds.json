@@ -1,6 +1,6 @@
 {
     "individual_named_sounds": {
-        "events": {
+        "sounds": {
             "ambient.glacier.ice_cracking": {
                 "sound": "ambient.glacier.ice_cracking",
                 "volume": 1.0,
