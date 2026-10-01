@@ -2,9 +2,9 @@
     "format_version": "1.14.0",
     "minecraft:structure_template_feature": {
         "description": {
-            "identifier": "extrabiomes:glacier/snow_drift_2_feature"
+            "identifier": "extrabiomes:glacier/snow_drift_11_feature"
         },
-        "structure_name": "extrabiomes:snow_drift_2",
+        "structure_name": "extrabiomes:snow_drift_11",
         "constraints": {
             "block_intersection": {
                 "block_allowlist": [

@@ -17,14 +17,8 @@
     },
     "distribution": {
       "iterations": 1,
-      "scatter_chance": 12,
-      "x": {
-        "distribution": "uniform",
-        "extent": [
-          0,
-          16
-        ]
-      },
+      "scatter_chance": 50,
+      "x": -14,
       "y": {
         "distribution": "uniform",
         "extent": [
@@ -32,13 +26,7 @@
           "query.heightmap(variable.worldx, variable.worldz) + 70"
         ]
       },
-      "z": {
-        "distribution": "uniform",
-        "extent": [
-          0,
-          16
-        ]
-      }
+      "z": -14
     }
   }
 }
