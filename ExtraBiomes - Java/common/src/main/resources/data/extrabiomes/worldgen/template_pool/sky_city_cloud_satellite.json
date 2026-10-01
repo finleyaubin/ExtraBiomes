@@ -55,6 +55,33 @@
         "processors": "minecraft:empty",
         "projection": "rigid"
       }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "extrabiomes:sky_city/clouds/satellite_virga_0",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "extrabiomes:sky_city/clouds/satellite_virga_1",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "extrabiomes:sky_city/clouds/satellite_virga_2",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
     }
   ]
 }
