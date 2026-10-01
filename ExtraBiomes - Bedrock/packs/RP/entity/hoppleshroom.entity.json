@@ -40,8 +40,8 @@
             },
             "render_controllers": ["controller.render.hoppleshroom"],
             "spawn_egg": {
-                "base_color": "#9b1717",
-                "overlay_color": "#fdd8d8"
+                "texture": "extrabiomes:hoppleshroom_spawn_egg",
+                "texture_index": 0
             }
         }
     }
