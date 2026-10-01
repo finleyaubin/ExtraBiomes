@@ -10,7 +10,7 @@ are for eyeballing silhouettes while tuning build_clouds.py; they are not
 committed.
 
 Colours: cloud = white-blue, water = blue, jigsaw = magenta, cave vine and
-sky leaves = green, sky log = brown.
+sky leaves = green, sky log = brown, gilded log = gold, sapling = light green.
 """
 import math
 import os
@@ -27,7 +27,7 @@ SC = os.path.join(HERE, "..", "ExtraBiomes - Bedrock", "packs", "BP",
 CLOUD_DIR = os.path.join(SC, "clouds")
 ISLAND_DIR = os.path.join(SC, "islands")
 
-EMPTY, CLOUD, WATER, JIGSAW, VINE, LEAF, LOG = 0, 1, 2, 3, 4, 5, 6
+EMPTY, CLOUD, WATER, JIGSAW, VINE, LEAF, LOG, GILDED, SAPLING = 0, 1, 2, 3, 4, 5, 6, 7, 8
 COLORS = {
     CLOUD: ((244, 247, 252), (208, 218, 234), (172, 188, 210)),
     WATER: ((90, 150, 235), (70, 125, 215), (55, 100, 190)),
@@ -35,6 +35,8 @@ COLORS = {
     VINE: ((70, 190, 80), (55, 160, 65), (45, 130, 55)),
     LEAF: ((96, 190, 92), (70, 150, 70), (52, 120, 56)),
     LOG: ((150, 108, 68), (118, 82, 50), (92, 64, 40)),
+    GILDED: ((236, 200, 90), (205, 168, 64), (170, 136, 48)),
+    SAPLING: ((140, 230, 120), (110, 200, 95), (85, 165, 75)),
 }
 BG = (36, 44, 66)
 
@@ -51,7 +53,8 @@ def load_grid(path):
         n = p["name"]
         kinds.append(JIGSAW if n == "minecraft:jigsaw" else WATER if n == "minecraft:water"
                      else VINE if n == "minecraft:cave_vines" else LEAF if n == "extrabiomes:sky_leaves"
-                     else LOG if n == "extrabiomes:sky_log" else CLOUD)
+                     else LOG if n == "extrabiomes:sky_log" else GILDED if n == "extrabiomes:gilded_sky_log"
+                     else SAPLING if n == "extrabiomes:sky_sapling_block" else CLOUD)
     grid = np.zeros((sx, sy, sz), dtype=np.int8)
     for pi, k in enumerate(kinds):
         grid[idx == pi] = k
@@ -165,7 +168,7 @@ def mock_city(out_path, seed=3):
     rnd = random.Random(seed)
     pads = {n: g for n, g in group("cross_") + group("straight_") + group("t_") + group("curve_")}
     puffs = [g for _, g in group("puff_")]
-    sats = [g for n, g in group("satellite_") if not n.startswith("satellite_tree")]
+    sats = [g for n, g in group("satellite_") if not n.startswith("satellite_tree") and "virga" not in n]
     tree_sats = [g for _, g in group("satellite_tree_")]
     fills = [g for _, g in group("filler_")]
     # (pad name, offset x, z) - a plus of pieces laid edge to edge
@@ -276,7 +279,9 @@ def main(argv):
     sheet(group("puff_"), os.path.join(out, "puffs.png"), cols=2)
     plain = [g for g in group("satellite_") if not g[0].startswith("satellite_tree")]
     treed = group("satellite_tree_")
-    sheet(plain, os.path.join(out, "satellites.png"), cols=3, u=9)
+    sheet([g for g in plain if "virga" not in g[0]], os.path.join(out, "satellites.png"), cols=3, u=9)
+    sheet([g for g in plain if "virga" in g[0]], os.path.join(out, "virga.png"), cols=3, u=8)
+    sheet(group("bank_"), os.path.join(out, "banks.png"), cols=1, u=6)
     sheet(treed, os.path.join(out, "satellites_trees.png"), cols=1, u=9)
     fillers = group("filler_")
     sheet([g for g in fillers if "tree" not in g[0]], os.path.join(out, "fillers.png"), cols=2, u=8)
