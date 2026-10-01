@@ -411,6 +411,10 @@ def map_block(name, states, be=None):
             "waterlogged": "false",
         }
 
+    # Bedrock registers the sapling as "sky_sapling_block"; Java's SaplingBlock only has "stage"
+    if name == "extrabiomes:sky_sapling_block":
+        return "extrabiomes:sky_sapling", {"stage": "0"}
+
     if name == "extrabiomes:sky_leaves":
         return "extrabiomes:sky_leaves", {
             "distance": "7",

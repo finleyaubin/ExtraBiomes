@@ -8,6 +8,8 @@ Checks every template under sky_city/clouds and sky_city/islands:
   * every jigsaw block has a matching block entity at its position,
   * every jigsaw sits on a cloud-backed cell (a neighbour is cloud/water),
   * no floating cloud: all solid cells are connected,
+  * island springs: every water cell outside the fountain shaft is sealed in cloud
+    except for one open face, which holds a cave vine (the water updater),
   * fountain pads and the hub island carry an enclosed water shaft down to a
     cave-vine updater with nothing below it, so the stream can fall to the
     ground and players can swim up.
@@ -107,6 +109,22 @@ def check_shaft(name, nm, cols, expect_top):
                     return
 
 
+def check_springs(name, nm, shaft_col):
+    sx, sy, sz = nm.shape
+    for x, y, z in np.argwhere(nm == "minecraft:water"):
+        if (x, z) == shaft_col:
+            continue
+        opening = []
+        for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
+            n = (x + dx, y + dy, z + dz)
+            inside = all(0 <= n[i] < (sx, sy, sz)[i] for i in range(3))
+            kind = nm[n] if inside else ""
+            if kind not in ("extrabiomes:dense_cloud", "minecraft:water"):
+                opening.append(kind)
+        if opening != ["minecraft:cave_vines"]:
+            fail(name, f"spring at {(x, y, z)} should have exactly one cave-vine opening, has {opening}")
+
+
 def main():
     count = 0
     for sub in ("clouds", "islands"):
@@ -125,6 +143,7 @@ def main():
             if f.startswith("island_") and not f.startswith("island_puff"):
                 cx = (dims[0] - 1) // 2
                 check_shaft(name, nm, [(cx + 1, cx)], dims[1] - 1)
+                check_springs(name, nm, (cx + 1, cx))
     for sub in ("paths", "buildings"):
         pass
     print(f"checked {count} structures")
