@@ -31,6 +31,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModItems.BUCKET_OF_GOO.get());
                 pOutput.accept(ModItems.FROG_HELMET.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD.get());
+                pOutput.accept(ModBlocks.DENSE_CLOUD_SLAB.get());
+                pOutput.accept(ModBlocks.DENSE_CLOUD_STAIRS.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
                 pOutput.accept(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
