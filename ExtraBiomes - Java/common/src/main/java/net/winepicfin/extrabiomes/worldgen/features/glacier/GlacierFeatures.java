@@ -1,14 +1,24 @@
 package net.winepicfin.extrabiomes.worldgen.features.glacier;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import net.minecraft.core.Holder;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.levelgen.feature.LakeFeature;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.placement.EnvironmentScanPlacement;
+import net.minecraft.world.level.levelgen.placement.SurfaceRelativeThresholdFilter;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -16,6 +26,7 @@ import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
@@ -31,10 +42,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
+import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Port of the Bedrock "extrabiomes:glacier/*" feature set:
@@ -95,6 +108,36 @@ public class GlacierFeatures {
     public static final ResourceKey<PlacedFeature> SELECT_SNOW_DRIFT_PLACED_KEY =
             placedKey("select_snow_drift");
 
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_BLUE_ICE_KEY = configuredKey("glacier_blue_ice");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MAGMA_FISSURE_KEY = configuredKey("glacier_magma_fissure");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_LAVA_POOL_KEY = configuredKey("glacier_lava_pool");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MELTWATER_POOL_KEY = configuredKey("glacier_meltwater_pool");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_CEILING_LAVAFALL_KEY = configuredKey("glacier_ceiling_lavafall");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_ICE_ENCASED_LOOT_KEY = configuredKey("glacier_ice_encased_loot");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_CREVASSE_KEY = configuredKey("glacier_crevasse");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_FINISH_KEY = configuredKey("glacier_finish");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_SNOW_PILLAR_KEY = configuredKey("glacier_snow_pillar");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_BASALT_PILLAR_KEY = configuredKey("glacier_basalt_pillar");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MELTWATER_STREAM_KEY = configuredKey("glacier_meltwater_stream");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_SURFACE_POND_KEY = configuredKey("glacier_surface_pond");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_ERRATIC_KEY = configuredKey("glacier_erratic");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MORAINE_KEY = configuredKey("glacier_moraine");
+
+    public static final ResourceKey<PlacedFeature> GLACIER_BLUE_ICE_PLACED_KEY = placedKey("glacier_blue_ice");
+    public static final ResourceKey<PlacedFeature> GLACIER_MAGMA_FISSURE_PLACED_KEY = placedKey("glacier_magma_fissure");
+    public static final ResourceKey<PlacedFeature> GLACIER_LAVA_POOL_PLACED_KEY = placedKey("glacier_lava_pool");
+    public static final ResourceKey<PlacedFeature> GLACIER_MELTWATER_POOL_PLACED_KEY = placedKey("glacier_meltwater_pool");
+    public static final ResourceKey<PlacedFeature> GLACIER_CEILING_LAVAFALL_PLACED_KEY = placedKey("glacier_ceiling_lavafall");
+    public static final ResourceKey<PlacedFeature> GLACIER_ICE_ENCASED_LOOT_PLACED_KEY = placedKey("glacier_ice_encased_loot");
+    public static final ResourceKey<PlacedFeature> GLACIER_CREVASSE_PLACED_KEY = placedKey("glacier_crevasse");
+    public static final ResourceKey<PlacedFeature> GLACIER_FINISH_PLACED_KEY = placedKey("glacier_finish");
+    public static final ResourceKey<PlacedFeature> GLACIER_SNOW_PILLAR_PLACED_KEY = placedKey("glacier_snow_pillar");
+    public static final ResourceKey<PlacedFeature> GLACIER_BASALT_PILLAR_PLACED_KEY = placedKey("glacier_basalt_pillar");
+    public static final ResourceKey<PlacedFeature> GLACIER_MELTWATER_STREAM_PLACED_KEY = placedKey("glacier_meltwater_stream");
+    public static final ResourceKey<PlacedFeature> GLACIER_SURFACE_POND_PLACED_KEY = placedKey("glacier_surface_pond");
+    public static final ResourceKey<PlacedFeature> GLACIER_ERRATIC_PLACED_KEY = placedKey("glacier_erratic");
+    public static final ResourceKey<PlacedFeature> GLACIER_MORAINE_PLACED_KEY = placedKey("glacier_moraine");
+
     private static final int SNOW_DRIFT_GROUND_OFFSET = -2;
     // Draped drifts follow the ground column by column, so they don't need sinking to hide dips and sit directly on the surface.
     private static final int DRAPED_SNOW_DRIFT_GROUND_OFFSET = 0;
@@ -115,6 +158,42 @@ public class GlacierFeatures {
         return Arrays.stream(sources).map(test -> OreConfiguration.target(test, result)).toList();
     }
 
+    private static List<OreConfiguration.TargetBlockState> blueIceTargets() {
+        List<OreConfiguration.TargetBlockState> targets = new ArrayList<>(iceTargets(Blocks.BLUE_ICE.defaultBlockState()));
+        targets.add(OreConfiguration.target(new BlockMatchTest(Blocks.PACKED_ICE), Blocks.BLUE_ICE.defaultBlockState()));
+        targets.add(OreConfiguration.target(new BlockMatchTest(Blocks.ICE), Blocks.BLUE_ICE.defaultBlockState()));
+        return targets;
+    }
+
+    private static List<OreConfiguration.TargetBlockState> magmaFissureTargets() {
+        return Stream.of(Blocks.PACKED_ICE, Blocks.BLUE_ICE, Blocks.STONE, Blocks.DEEPSLATE)
+                .map(block -> OreConfiguration.target(new BlockMatchTest(block), Blocks.MAGMA_BLOCK.defaultBlockState()))
+                .toList();
+    }
+
+    private static List<OreConfiguration.TargetBlockState> moraineTargets() {
+        return Stream.of(Blocks.ICE, Blocks.PACKED_ICE, Blocks.BLUE_ICE, Blocks.SNOW_BLOCK)
+                .map(block -> OreConfiguration.target(new BlockMatchTest(block), Blocks.GRAVEL.defaultBlockState()))
+                .toList();
+    }
+
+    private static ConfiguredFeature<?, ?> pool(Block fluid, Block barrier) {
+        return new ConfiguredFeature<>(Feature.LAKE,
+                new LakeFeature.Configuration(BlockStateProvider.simple(fluid), BlockStateProvider.simple(barrier)));
+    }
+
+    // Mirrors vanilla's lake_lava_underground: pools sit at least 5 blocks below the surface, on the first solid block below the pick.
+    private static List<PlacementModifier> poolPlacement(int rarity, int minY, int maxY) {
+        return List.of(
+                RarityFilter.onAverageOnceEvery(rarity),
+                InSquarePlacement.spread(),
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(minY), VerticalAnchor.absolute(maxY)),
+                EnvironmentScanPlacement.scanningFor(Direction.DOWN,
+                        BlockPredicate.allOf(BlockPredicate.not(BlockPredicate.matchesTag(BlockTags.AIR)), BlockPredicate.insideWorld(new BlockPos(0, -5, 0))), 32),
+                SurfaceRelativeThresholdFilter.of(Heightmap.Types.OCEAN_FLOOR_WG, Integer.MIN_VALUE, -5),
+                BiomeFilter.biome());
+    }
+
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // OreConfiguration's vein-size codec caps at 64, so the packed/top ice veins (90/110 in Bedrock) are clamped.
         context.register(GLACIER_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
@@ -123,6 +202,21 @@ public class GlacierFeatures {
                 new OreConfiguration(iceTargets(Blocks.PACKED_ICE.defaultBlockState()), 64, 0.0F)));
         context.register(GLACIER_TOP_ICE_KEY, new ConfiguredFeature<>(Feature.ORE,
                 new OreConfiguration(iceTargets(Blocks.ICE.defaultBlockState()), 64, 0.0F)));
+
+        context.register(GLACIER_BLUE_ICE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(blueIceTargets(), 64, 0.0F)));
+        context.register(GLACIER_MAGMA_FISSURE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(magmaFissureTargets(), 6, 0.3F)));
+        context.register(GLACIER_LAVA_POOL_KEY, pool(Blocks.LAVA, Blocks.BASALT));
+        context.register(GLACIER_MELTWATER_POOL_KEY, pool(Blocks.WATER, Blocks.SMOOTH_BASALT));
+        context.register(GLACIER_CEILING_LAVAFALL_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_CEILING_LAVAFALL.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(GLACIER_ICE_ENCASED_LOOT_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_ICE_ENCASED_LOOT.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(GLACIER_CREVASSE_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_CREVASSE.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(GLACIER_FINISH_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_FINISH.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(GLACIER_SNOW_PILLAR_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_CAVE_PILLAR.get(), new CavePillarFeature.Configuration(Blocks.SNOW_BLOCK.defaultBlockState(), false, 4, 9)));
+        context.register(GLACIER_BASALT_PILLAR_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_CAVE_PILLAR.get(), new CavePillarFeature.Configuration(Blocks.BASALT.defaultBlockState(), true, 3, 8)));
+        context.register(GLACIER_MELTWATER_STREAM_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_MELTWATER_STREAM.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(GLACIER_SURFACE_POND_KEY, pool(Blocks.WATER, Blocks.BLUE_ICE));
+        context.register(GLACIER_ERRATIC_KEY, new ConfiguredFeature<>(ModVolcanicPlacementModifiers.GLACIER_ERRATIC.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(GLACIER_MORAINE_KEY, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(moraineTargets(), 12, 0.0F)));
 
         // SNOW_DRIFT_GROUND_OFFSET sinks the wide, unevenly-shaped drift templates into the ground so uneven terrain under them doesn't read as floating (same technique as OasisPuddleFeature's -4).
         // Keep in sync with SELECT_WEIGHTS in tools/build_snow_drifts.py.
@@ -178,6 +272,112 @@ public class GlacierFeatures {
                         CountPlacement.of(60),
                         InSquarePlacement.spread(),
                         HeightRangePlacement.uniform(VerticalAnchor.absolute(64), VerticalAnchor.absolute(100)),
+                        BiomeFilter.biome()
+                )));
+
+        context.register(GLACIER_BLUE_ICE_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_BLUE_ICE_KEY),
+                List.of(
+                        CountPlacement.of(25),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(8)),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_MAGMA_FISSURE_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_MAGMA_FISSURE_KEY),
+                List.of(
+                        CountPlacement.of(14),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(40)),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_LAVA_POOL_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_LAVA_POOL_KEY), poolPlacement(10, -48, 48)));
+        context.register(GLACIER_MELTWATER_POOL_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_MELTWATER_POOL_KEY), poolPlacement(14, -32, 40)));
+        context.register(GLACIER_CEILING_LAVAFALL_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_CEILING_LAVAFALL_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(4),
+                        CountPlacement.of(16),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-56), VerticalAnchor.absolute(48)),
+                        EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_ICE_ENCASED_LOOT_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_ICE_ENCASED_LOOT_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(6),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-56), VerticalAnchor.absolute(40)),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_CREVASSE_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_CREVASSE_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(6),
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_FINISH_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_FINISH_KEY), List.of()));
+        context.register(GLACIER_BASALT_PILLAR_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_BASALT_PILLAR_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(2),
+                        CountPlacement.of(30),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-56), VerticalAnchor.absolute(48)),
+                        EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                        RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                        BiomeFilter.biome()
+                )));
+        // Runs after vanilla surface freezing (added later in the same step) so the streams stay liquid.
+        context.register(GLACIER_MELTWATER_STREAM_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_MELTWATER_STREAM_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(2),
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        BiomeFilter.biome()
+                )));
+        // Surface pools freeze over under the vanilla freeze pass, leaving clear water under a thin ice skin.
+        context.register(GLACIER_SURFACE_POND_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_SURFACE_POND_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(12),
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_ERRATIC_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_ERRATIC_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(3),
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_MORAINE_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_MORAINE_KEY),
+                List.of(
+                        CountPlacement.of(8),
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
+                        RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
+                        BiomeFilter.biome()
+                )));
+        context.register(GLACIER_SNOW_PILLAR_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(GLACIER_SNOW_PILLAR_KEY),
+                List.of(
+                        RarityFilter.onAverageOnceEvery(2),
+                        CountPlacement.of(40),
+                        InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-56), VerticalAnchor.absolute(48)),
+                        EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
+                        RandomOffsetPlacement.vertical(ConstantInt.of(1)),
                         BiomeFilter.biome()
                 )));
 

@@ -113,13 +113,13 @@ public class ModOverworldRegion extends Region {
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.COLD_MESA));
 
-        // Deep Dark Forest - bedrock temp=0.3, downfall=0.8, roofed/mega forest (replace_biomes amount 0.15).
+        // Deep Dark Forest - bedrock temp=0.3, downfall=0.8, roofed/mega forest (replace_biomes amount 0.15). Depth spans 30 blocks above the surface down to the surface itself (depth changes 1/128 per block, negative is above ground), so it never replaces underground cave biomes.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.COOL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
-                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .depth(Climate.Parameter.span(-30 / 128.0F, 0.0F))
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.DEEP_DARK_FOREST));
 

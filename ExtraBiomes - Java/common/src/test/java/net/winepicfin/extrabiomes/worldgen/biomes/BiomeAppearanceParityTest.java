@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 // Parity checks against every ExtraBiomes - Bedrock/packs/RP/biomes/<key>.client_biome.json
 // "minecraft:water_appearance" / "minecraft:foliage_appearance" / "minecraft:grass_appearance"
@@ -23,6 +24,8 @@ class BiomeAppearanceParityTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("biomes")
     void waterColorMatchesBedrock(Map.Entry<String, BiomeAppearanceTuning.Appearance> entry) {
+        // Remove once the glacier water colour is backported to Bedrock dev.
+        assumeFalse(entry.getKey().equals("glacier"), "Java-only pristine glacier water pending Bedrock backport");
         BedrockEntityJson bedrock = BedrockEntityJson.load("RP/biomes/" + entry.getKey() + ".client_biome.json");
         assertEquals(bedrock.getColor("minecraft:client_biome", "components", "minecraft:water_appearance", "surface_color"),
                 entry.getValue().waterColor());
