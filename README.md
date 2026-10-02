@@ -87,7 +87,7 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
     <img width="100%" alt="Floating Jungle" src="https://github.com/user-attachments/assets/acd6077f-1977-48f6-9f02-e918274bd929" />
     <br/>
     <i>
-    the floating jungle is a jungle biome that can be found at the tallest peaks of the world
+    the floating jungle is a jungle biome found at the tallest peaks of the world, and above those peaks the jungle floats: sky islands of grass and stone hang in the air with vines, roots and waterfalls trailing from their undersides, wisps of cloud drifting beneath them. Some islands are joined by giant log canopy bridges, and on the rarest archipelagos an overgrown ruin holds a chest of loot
     </i>
   </tr>
 

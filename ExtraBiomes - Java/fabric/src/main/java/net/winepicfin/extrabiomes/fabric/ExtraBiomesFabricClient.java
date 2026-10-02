@@ -76,6 +76,7 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
                 // (e.g. the horizontal slit rows in *_trapdoor.png) that were rendering solid black.
                 ModBlocks.MYSTIC_DOOR.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.GILDED_SKY_DOOR.get(),
                 ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get());
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.translucentBlocks().toArray(net.minecraft.world.level.block.Block[]::new));
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.SOURCE_GOO.get(), ModFluids.FLOWING_GOO.get(),
                 new SimpleFluidRenderHandler(GooFluid.STILL_TEXTURE, GooFluid.FLOWING_TEXTURE, GooFluid.OVERLAY_TEXTURE, 0xFFFFFFFF));
 

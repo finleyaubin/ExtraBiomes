@@ -45,6 +45,10 @@
   "item.extrabiomes.grass_stone": "Grass Stone",
   "block.extrabiomes.dense_cloud": "Dense Cloud",
   "item.extrabiomes.dense_cloud": "Dense Cloud",
+  "block.extrabiomes.dense_cloud_slab": "Dense Cloud Slab",
+  "item.extrabiomes.dense_cloud_slab": "Dense Cloud Slab",
+  "block.extrabiomes.dense_cloud_stairs": "Dense Cloud Stairs",
+  "item.extrabiomes.dense_cloud_stairs": "Dense Cloud Stairs",
   "block.extrabiomes.dense_cloud_brick": "Dense Cloud Brick",
   "item.extrabiomes.dense_cloud_brick": "Dense Cloud Brick",
   "block.extrabiomes.dense_cloud_brick_slab": "Dense Cloud Brick Slab",
@@ -336,5 +340,6 @@
   "advancements.extrabiomes.biome_explorer.title": "Biome Explorer",
   "advancements.extrabiomes.biome_explorer.description": "Discover every biome ExtraBiomes adds",
   "advancements.extrabiomes.bait_and_switch.title": "Bait and Switch",
-  "advancements.extrabiomes.bait_and_switch.description": "Use bait to lure a Piranha away from you"
+  "advancements.extrabiomes.bait_and_switch.description": "Use bait to lure a Piranha away from you",
+  "tag.item.extrabiomes.repairs_frog_armor": "Repairs Frog Armor"
 }
