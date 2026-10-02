@@ -45,9 +45,6 @@ The clouds under the Sky City are redone so they look like clouds instead of a c
 - Dense Cloud and Dense Cloud Brick (and the brick slab and stairs) are now slightly translucent.
 - Added Dense Cloud Slab and Dense Cloud Stairs, crafted from Dense Cloud like the brick versions. They break as easily as Dense Cloud and give the same floaty slow fall when you drop onto them.
 
-## Minecraft versions
-- Added support for Minecraft 1.21.8.
-
 ## World Generation
 - Moorlands now grow short and tall dry grass instead of dead bushes, with denser double tall grass.
 - Fixed a crash caused by feature ordering conflicts multiple other popular world gen mods accross different versions as Identified by https://github.com/finleyaubin/ExtraBiomes/tree/compat-grid.
