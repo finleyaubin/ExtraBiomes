@@ -3,6 +3,11 @@ name: Compat Grid
 # Tests each published ExtraBiomes build against other worldgen mods and commits the grid to the compat-grid branch.
 on:
   workflow_dispatch:
+    inputs:
+      versions:
+        description: Comma-separated Minecraft versions to test, e.g. 26.3,26.2 (default is every published version)
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -16,7 +21,9 @@ jobs:
       - uses: actions/checkout@v7
       - run: python3 tools/compat_grid.py selftest
       - id: plan
-        run: echo "combos=$(python3 tools/compat_grid.py plan)" >> "$GITHUB_OUTPUT"
+        env:
+          VERSIONS: ${{ inputs.versions }}
+        run: echo "combos=$(python3 tools/compat_grid.py plan ${VERSIONS:+--versions "$VERSIONS"})" >> "$GITHUB_OUTPUT"
 
   test:
     needs: plan
@@ -62,8 +69,16 @@ jobs:
           path: results
           merge-multiple: true
 
+      # A run of only some versions (the `versions` input) keeps the rows it didn't retest from the published grid.
       - name: Build grid
-        run: python3 tools/compat_grid.py grid results --out "$RUNNER_TEMP/grid" >> "$GITHUB_STEP_SUMMARY"
+        env:
+          VERSIONS: ${{ inputs.versions }}
+        run: |
+          PREVIOUS=()
+          if [ -n "$VERSIONS" ] && git fetch -q origin compat-grid 2>/dev/null && git show origin/compat-grid:grid.json > "$RUNNER_TEMP/previous-grid.json" 2>/dev/null; then
+            PREVIOUS=(--previous "$RUNNER_TEMP/previous-grid.json")
+          fi
+          python3 tools/compat_grid.py grid results "${PREVIOUS[@]}" --out "$RUNNER_TEMP/grid" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit grid to the compat-grid branch
         run: |

@@ -1,6 +1,6 @@
 """Worldgen compatibility grid: boots real servers with published ExtraBiomes + one partner mod each.
 
-  compat_grid.py plan                                   -> JSON list of {mc, loader} with a published ExtraBiomes
+  compat_grid.py plan [--versions 26.3,26.2]            -> JSON list of {mc, loader} with a published ExtraBiomes
   compat_grid.py run --mc 1.20.1 --loader fabric --out results/1.20.1-fabric.json [--work DIR]
   compat_grid.py grid results/ --out grid/              -> grid/README.md + grid/grid.json
 
@@ -52,8 +52,6 @@ UNDECLARED_DEPENDENCIES = {
     "HXF82T3G": ["s3dmwKy5"],  # Biomes O' Plenty -> GlitchCore
     "lWDHr9jE": ["XaDC71GB"],  # Tectonic -> Lithostitched
 }
-# TerraBlender's 26.3 build uses DataPackRegistryEvent$NewRegistry, which later 26.3 betas removed.
-NEOFORGE_PINS = {"26.3": "26.3.0.19-beta"}
 BOOT_TIMEOUT = 900
 HEADERS = {"User-Agent": "finleyaubin/ExtraBiomes compat-grid"}
 
@@ -150,8 +148,6 @@ def maven_versions(artifact_url, prefix):
 
 
 def neoforge_version(mc):
-    if mc in NEOFORGE_PINS:
-        return NEOFORGE_PINS[mc]
     # NeoForge's maven-metadata.xml can briefly list only the newest build after a publish; the directory listing can't.
     listing = fetch_json("https://maven.neoforged.net/api/maven/details/releases/net/neoforged/neoforge")
     matching = sorted_versions([f["name"] for f in listing["files"] if f.get("type") == "DIRECTORY"], neoforge_prefix(mc))
@@ -322,9 +318,10 @@ def cmd_fetch_jar(args):
     print(pick_jar(sorted(out.glob("*.jar"))))
 
 
-def cmd_plan(_):
+def cmd_plan(args):
+    wanted = args.versions.split(",") if args.versions else None
     combos = {(gv, loader) for v in fetch_json(f"https://api.modrinth.com/v2/project/{EXTRABIOMES}/version") for gv in v["game_versions"] for loader in v["loaders"]}
-    print(json.dumps([{"mc": mc, "loader": loader} for mc, loader in sorted(combos)]))
+    print(json.dumps([{"mc": mc, "loader": loader} for mc, loader in sorted(combos) if wanted is None or mc in wanted]))
 
 
 def cmd_run(args):
@@ -405,6 +402,7 @@ def cmd_grid(args):
         rows = merge_rows(json.loads(Path(args.previous).read_text()), rows)
     rows.sort(key=lambda r: (version_key(r["mc"]), r.get("branch", ""), r["loader"]))
     columns = [ALONE, *PARTNERS]
+    show_tested = args.dev or bool(args.previous)
     subject = ("the jar CI built from the tip of each branch (unreleased code)", "Compat Grid (dev) workflow") if args.dev else ("the published ExtraBiomes build", "Compat Grid workflow")
     lines = [
         "# ExtraBiomes worldgen compatibility" + (" (dev branches)" if args.dev else ""),
@@ -413,20 +411,20 @@ def cmd_grid(args):
         f"If your mod list hits a feature order cycle that isn't listed here, [Feature Recycler]({FEATURE_RECYCLER_URL}) can fix it.",
         "",
         f"Generated {today} by the {subject[1]}. Each cell boots a real server with {subject[0]} and one other mod, generates a world, and stops it."
-        + (" A run of only some branches updates just those rows, so the Tested column shows when each row was last run." if args.dev else ""),
+        + (" A run of only some branches or versions updates just those rows, so the Tested column shows when each row was last run." if show_tested else ""),
         "",
         "✅ works · ❌ feature order cycle · 💥 crash on startup · ⏱ didn't finish · ⚠️ the other mod fails even without ExtraBiomes · ➖ that mod (or a dependency) has no build for this version",
         "",
-        "| Minecraft | Loader | ExtraBiomes | " + ("Tested | " if args.dev else "") + " | ".join(columns) + " |",
-        "|" + "---|" * (len(columns) + 3 + args.dev),
+        "| Minecraft | Loader | ExtraBiomes | " + ("Tested | " if show_tested else "") + " | ".join(columns) + " |",
+        "|" + "---|" * (len(columns) + 3 + show_tested),
     ]
     for r in rows:
         cells = [ICONS[r["results"][c]["status"]] if c in r["results"] else "?" for c in columns]
-        lines.append(f"| {r['mc']} | {r['loader']} | {r['extrabiomes']} | " + (f"{r['tested']} | " if args.dev else "") + " | ".join(cells) + " |")
+        lines.append(f"| {r['mc']} | {r['loader']} | {r['extrabiomes']} | " + (f"{r['tested']} | " if show_tested else "") + " | ".join(cells) + " |")
     failures = [(r, c, e) for r in rows for c, e in r["results"].items() if e["status"] in ("cycle", "crash", "timeout")]
     if failures:
         lines += ["", "## Failures", ""]
-        lines += [f"- **{r['mc']} {r['loader']}{' (' + r['branch'] + ')' if 'branch' in r else ''} + {c}** ({e['status']}{', tested ' + r['tested'] if args.dev else ''}): `{e['reason']}`" for r, c, e in failures]
+        lines += [f"- **{r['mc']} {r['loader']}{' (' + r['branch'] + ')' if 'branch' in r else ''} + {c}** ({e['status']}{', tested ' + r['tested'] if show_tested else ''}): `{e['reason']}`" for r, c, e in failures]
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / "README.md").write_text("\n".join(lines) + "\n")
@@ -471,7 +469,8 @@ def cmd_selftest(_):
 def main():
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("plan")
+    plan = sub.add_parser("plan")
+    plan.add_argument("--versions", help="comma-separated Minecraft versions to test, e.g. 26.3,26.2; default is every published version")
     plan_dev = sub.add_parser("plan-dev")
     plan_dev.add_argument("--repo", required=True)
     plan_dev.add_argument("--branches", help="comma-separated branches; default is every Minecraft-version branch plus Java-Dev")
