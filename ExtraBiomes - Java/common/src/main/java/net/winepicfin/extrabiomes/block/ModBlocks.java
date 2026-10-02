@@ -216,6 +216,14 @@ public class ModBlocks {
         return new StandardWoodSigns(sign, wallSign, hangingSign, wallHangingSign);
     }
 
+    // Their textures carry partial alpha, so each loader must register them for the translucent layer.
+    public static List<Block> translucentBlocks() {
+        return Stream.of(
+                DENSE_CLOUD, DENSE_CLOUD_SLAB, DENSE_CLOUD_STAIRS,
+                DENSE_CLOUD_BRICK, DENSE_CLOUD_BRICK_SLAB, DENSE_CLOUD_BRICK_STAIRS
+        ).map(Supplier::get).toList();
+    }
+
     // Transparent texture pixels render opaque black unless these are registered for cutout on each loader.
     public static List<Block> cutoutBlocks() {
         return Stream.of(

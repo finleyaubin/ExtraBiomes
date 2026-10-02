@@ -69,6 +69,7 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putFluid(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.cutoutBlocks().toArray(Block[]::new));
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.translucentBlocks().toArray(Block[]::new));
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.SOURCE_GOO.get(), ModFluids.FLOWING_GOO.get(),
                 new SimpleFluidRenderHandler(GooFluid.STILL_TEXTURE, GooFluid.FLOWING_TEXTURE, GooFluid.OVERLAY_TEXTURE, 0xFFFFFFFF));
 
