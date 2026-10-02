@@ -14,12 +14,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.floatingjungle.FloatingJungleFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +41,7 @@ public class FloatingJungleGameTests {
     public void everyIslandTemplateLoadsWithinTheWriteWindow(GameTestHelper helper) {
         for (String name : ISLAND_TEMPLATES) {
             Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
-            StructureTemplate template = helper.getLevel().getStructureTemplateManager().get(id).orElse(null);
+            StructureTemplate template = helper.getLevel().getStructureManager().get(id).orElse(null);
             helper.assertTrue(template != null, Component.literal("Missing island template " + id));
             Vec3i size = template.getSize();
             helper.assertTrue(size.getX() <= MAX_SPAN && size.getZ() <= MAX_SPAN,
@@ -84,7 +86,8 @@ public class FloatingJungleGameTests {
             Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
             BlockPos at = origin.offset(0, 0, offset);
             offset += 64;
-            boolean placed = new SingleStructureFeature(id, Optional.empty(), -5, true, 0.8F)
+            SingleStructureConfiguration config = new SingleStructureConfiguration(id, Optional.empty(), -5, true, 0.8F);
+            boolean placed = new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config)
                     .place(level, level.getChunkSource().getGenerator(), level.getRandom(), at);
             helper.assertTrue(placed, Component.literal(name + " refused to place at " + at));
 
@@ -107,7 +110,8 @@ public class FloatingJungleGameTests {
 
     private static Set<Block> placeAndCollect(ServerLevel level, String template, BlockPos origin) {
         Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + template);
-        boolean placed = new SingleStructureFeature(id, Optional.empty(), 0, true, 0.95F)
+        SingleStructureConfiguration config = new SingleStructureConfiguration(id, Optional.empty(), 0, true, 0.95F);
+        boolean placed = new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config)
                 .place(level, level.getChunkSource().getGenerator(), level.getRandom(), origin);
         if (!placed) {
             throw new AssertionError(template + " refused to place at " + origin);
