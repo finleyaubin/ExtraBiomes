@@ -10,6 +10,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.CavePillarFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.CeilingLavafallFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.CrevasseFeature;
+import net.winepicfin.extrabiomes.worldgen.features.glacier.ErraticFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFinishFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.IceEncasedLootFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.MeltwaterStreamFeature;
@@ -32,14 +33,15 @@ public class ModVolcanicPlacementModifiers {
     public static final RegistrySupplier<BasaltBankFeature> BASALT_BANK = FEATURES.register("basalt_bank", () -> new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
     public static final RegistrySupplier<LavaFlowKickstartFeature> LAVA_FLOW_KICKSTART = FEATURES.register("lava_flow_kickstart", () -> new LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
 
-    public static final RegistrySupplier<MapCodec<CeilingLavafallFeature>> GLACIER_CEILING_LAVAFALL = FEATURES.register("glacier_ceiling_lavafall", () -> CeilingLavafallFeature.CODEC);
-    public static final RegistrySupplier<MapCodec<IceEncasedLootFeature>> GLACIER_ICE_ENCASED_LOOT = FEATURES.register("glacier_ice_encased_loot", () -> IceEncasedLootFeature.CODEC);
-    public static final RegistrySupplier<MapCodec<CrevasseFeature>> GLACIER_CREVASSE = FEATURES.register("glacier_crevasse", () -> CrevasseFeature.CODEC);
-    public static final RegistrySupplier<MapCodec<GlacierFinishFeature>> GLACIER_FINISH = FEATURES.register("glacier_finish", () -> GlacierFinishFeature.CODEC);
+    public static final RegistrySupplier<CeilingLavafallFeature> GLACIER_CEILING_LAVAFALL = FEATURES.register("glacier_ceiling_lavafall", () -> new CeilingLavafallFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<IceEncasedLootFeature> GLACIER_ICE_ENCASED_LOOT = FEATURES.register("glacier_ice_encased_loot", () -> new IceEncasedLootFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<CrevasseFeature> GLACIER_CREVASSE = FEATURES.register("glacier_crevasse", () -> new CrevasseFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<GlacierFinishFeature> GLACIER_FINISH = FEATURES.register("glacier_finish", () -> new GlacierFinishFeature(NoneFeatureConfiguration.CODEC));
 
-    public static final RegistrySupplier<MapCodec<MeltwaterStreamFeature>> GLACIER_MELTWATER_STREAM = FEATURES.register("glacier_meltwater_stream", () -> MeltwaterStreamFeature.CODEC);
+    public static final RegistrySupplier<MeltwaterStreamFeature> GLACIER_MELTWATER_STREAM = FEATURES.register("glacier_meltwater_stream", () -> new MeltwaterStreamFeature(NoneFeatureConfiguration.CODEC));
 
-    public static final RegistrySupplier<MapCodec<CavePillarFeature>> GLACIER_CAVE_PILLAR = FEATURES.register("glacier_cave_pillar", () -> CavePillarFeature.CODEC);
+    public static final RegistrySupplier<CavePillarFeature> GLACIER_CAVE_PILLAR = FEATURES.register("glacier_cave_pillar", () -> new CavePillarFeature(CavePillarFeature.Configuration.CODEC));
+    public static final RegistrySupplier<ErraticFeature> GLACIER_ERRATIC = FEATURES.register("glacier_erratic", () -> new ErraticFeature(NoneFeatureConfiguration.CODEC));
 
     public static void register() {
         MODIFIERS.register();

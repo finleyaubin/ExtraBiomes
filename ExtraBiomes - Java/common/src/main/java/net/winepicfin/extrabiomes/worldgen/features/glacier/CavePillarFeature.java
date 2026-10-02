@@ -1,40 +1,49 @@
 package net.winepicfin.extrabiomes.worldgen.features.glacier;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public record CavePillarFeature(BlockState state, boolean hanging, int minHeight, int maxHeight) implements Feature {
-    public static final MapCodec<CavePillarFeature> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            BlockState.CODEC.fieldOf("state").forGetter(CavePillarFeature::state),
-            Codec.BOOL.fieldOf("hanging").forGetter(CavePillarFeature::hanging),
-            Codec.INT.fieldOf("min_height").forGetter(CavePillarFeature::minHeight),
-            Codec.INT.fieldOf("max_height").forGetter(CavePillarFeature::maxHeight)
-    ).apply(instance, CavePillarFeature::new));
+public class CavePillarFeature extends Feature<CavePillarFeature.Configuration> {
+    public record Configuration(BlockState state, boolean hanging, int minHeight, int maxHeight) implements FeatureConfiguration {
+        public static final Codec<Configuration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                BlockState.CODEC.fieldOf("state").forGetter(Configuration::state),
+                Codec.BOOL.fieldOf("hanging").forGetter(Configuration::hanging),
+                Codec.INT.fieldOf("min_height").forGetter(Configuration::minHeight),
+                Codec.INT.fieldOf("max_height").forGetter(Configuration::maxHeight)
+        ).apply(instance, Configuration::new));
+    }
 
     // Pillars of the same block within this horizontal distance block a new one, so density stays low however open the caves are.
     private static final int SPACING = 6;
     private static final int SPACING_DEPTH = 3;
     private static final float EDGE_SKIP_CHANCE = 0.25F;
 
-    @Override
-    public MapCodec<CavePillarFeature> codec() {
-        return CODEC;
+    public CavePillarFeature(Codec<Configuration> codec) {
+        super(codec);
     }
 
     @Override
-    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+    public boolean place(FeaturePlaceContext<Configuration> context) {
+        WorldGenLevel level = context.level();
+        RandomSource random = context.random();
+        BlockPos origin = context.origin();
+        Configuration config = context.config();
+        BlockState state = config.state();
+        boolean hanging = config.hanging();
+        int minHeight = config.minHeight();
+        int maxHeight = config.maxHeight();
         int growth = hanging ? -1 : 1;
-        if (!level.getBlockState(origin).isAir() || !isSolid(level.getBlockState(origin.offset(0, -growth, 0))) || crowded(level, origin, growth)) {
+        if (!level.getBlockState(origin).isAir() || !isSolid(level.getBlockState(origin.offset(0, -growth, 0))) || crowded(level, state, origin, growth)) {
             return false;
         }
 
@@ -43,12 +52,12 @@ public record CavePillarFeature(BlockState state, boolean hanging, int minHeight
         Set<BlockPos> placed = new HashSet<>();
         for (int layer = 0; layer < height; layer++) {
             int radius = layer == height - 1 ? 0 : Math.round(baseRadius * (1 - 0.6F * layer / height));
-            growLayer(level, random, origin.offset(0, layer * growth, 0), radius, growth, placed);
+            growLayer(level, random, state, origin.offset(0, layer * growth, 0), radius, growth, placed);
         }
         return !placed.isEmpty();
     }
 
-    private void growLayer(WorldGenLevel level, RandomSource random, BlockPos center, int radius, int growth, Set<BlockPos> placed) {
+    private void growLayer(WorldGenLevel level, RandomSource random, BlockState state, BlockPos center, int radius, int growth, Set<BlockPos> placed) {
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dz = -radius; dz <= radius; dz++) {
                 int distance = dx * dx + dz * dz;
@@ -66,7 +75,7 @@ public record CavePillarFeature(BlockState state, boolean hanging, int minHeight
         }
     }
 
-    private boolean crowded(WorldGenLevel level, BlockPos origin, int growth) {
+    private boolean crowded(WorldGenLevel level, BlockState state, BlockPos origin, int growth) {
         for (int dx = -SPACING; dx <= SPACING; dx++) {
             for (int dz = -SPACING; dz <= SPACING; dz++) {
                 for (int depth = 0; depth < SPACING_DEPTH; depth++) {

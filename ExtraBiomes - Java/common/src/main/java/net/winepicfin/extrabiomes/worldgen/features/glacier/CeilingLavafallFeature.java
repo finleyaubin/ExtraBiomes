@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.glacier;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -9,10 +9,15 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Fluids;
 
-public class CeilingLavafallFeature implements Feature {
-    public static final MapCodec<CeilingLavafallFeature> CODEC = MapCodec.unit(CeilingLavafallFeature::new);
+public class CeilingLavafallFeature extends Feature<NoneFeatureConfiguration> {
+    public CeilingLavafallFeature(Codec<NoneFeatureConfiguration> codec) {
+        super(codec);
+    }
+
 
     // Lava is light level 15 and regular ice melts near light, then the water meets the lava and makes cobblestone, so everything the lava touches or lights is shielded in basalt.
     private static final int MAX_FALL = 48;
@@ -24,12 +29,11 @@ public class CeilingLavafallFeature implements Feature {
     private static final int NO_FLOOR = Integer.MIN_VALUE;
 
     @Override
-    public MapCodec<CeilingLavafallFeature> codec() {
-        return CODEC;
-    }
-
-    @Override
-    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel level = context.level();
+        ChunkGenerator generator = context.chunkGenerator();
+        RandomSource random = context.random();
+        BlockPos origin = context.origin();
         if (!level.getBlockState(origin.below()).isAir() || !isSealedRock(level, origin)) {
             return false;
         }
