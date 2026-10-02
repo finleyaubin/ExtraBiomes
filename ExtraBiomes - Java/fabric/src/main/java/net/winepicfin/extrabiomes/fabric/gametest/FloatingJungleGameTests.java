@@ -13,7 +13,6 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
@@ -74,6 +73,13 @@ public class FloatingJungleGameTests {
         helper.succeed();
     }
 
+    // The headless gametest world is superflat at the bottom of the build range, so a -5 ground offset would dip under the bedrock margin.
+    private static void buildStonePlatform(ServerLevel level, BlockPos at) {
+        for (BlockPos pos : BlockPos.betweenClosed(at.offset(-26, -12, -26), at.offset(26, -1, 26))) {
+            level.setBlock(pos, Blocks.STONE.defaultBlockState(), 2);
+        }
+    }
+
     private static Set<Block> placeAndCollect(ServerLevel level, String template, BlockPos origin) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + template);
         SingleStructureConfiguration config = new SingleStructureConfiguration(id, Optional.empty(), 0, true, 0.95F);
@@ -105,13 +111,14 @@ public class FloatingJungleGameTests {
     public static void giantTreesStandTallWithTheirDetails(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos abs = helper.absolutePos(BlockPos.ZERO);
-        int ground = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, abs.getX(), abs.getZ());
+        int ground = 0;
         BlockPos origin = new BlockPos((abs.getX() >> 4 << 4) + 8, ground, (abs.getZ() >> 4 << 4) + 8);
 
         int offset = 192;
         for (String name : GIANT_TREES) {
             ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
             BlockPos at = origin.offset(0, 0, offset);
+            buildStonePlatform(level, at);
             offset += 64;
             SingleStructureConfiguration config = new SingleStructureConfiguration(id, Optional.empty(), -5, true, 0.8F);
             boolean placed = new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config)
