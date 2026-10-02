@@ -26,7 +26,7 @@ public final class BiomeClimateTuning {
     public static final Climate FLOATING_JUNGLE = register("floating_jungle", 0.95f, 0.9f);
     public static final Climate FUNGLE_JUNGLE = register("fungle_jungle", 0.95f, 0.9f);
     public static final Climate FUTURE_DESERT = register("future_desert", 2.0f, 0.0f);
-    public static final Climate GLACIER = register("glacier", 0.0f, 1.0f);
+    public static final Climate GLACIER = register("glacier", 0.3f, 1.0f);
     public static final Climate GRAND_OASIS = register("grand_oasis", 2.0f, 0.0f);
     public static final Climate JELLYFISH_FIELDS = register("jellyfish_fields", 0.5f, 0.5f);
     public static final Climate JUNGLE_MARSH = register("jungle_marsh", 0.95f, 0.9f);
