@@ -101,7 +101,7 @@ public class ModEventBusClientEvents {
             for (var block : new net.minecraft.world.level.block.Block[]{
                     ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_SLAB.get(), ModBlocks.DENSE_CLOUD_STAIRS.get(),
                     ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get()}) {
-                ItemBlockRenderTypes.setRenderLayer(block, ChunkSectionLayer.TRANSLUCENT);
+                ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent());
             }
         });
     }
