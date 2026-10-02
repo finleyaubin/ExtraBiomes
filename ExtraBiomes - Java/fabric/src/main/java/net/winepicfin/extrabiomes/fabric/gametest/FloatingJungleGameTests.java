@@ -78,7 +78,8 @@ public class FloatingJungleGameTests {
     public void giantTreesStandTallWithTheirDetails(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos abs = helper.absolutePos(BlockPos.ZERO);
-        int ground = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, abs.getX(), abs.getZ());
+        // The gametest flat world's ground is too low: a -5 offset would put the box under SingleStructureFeature's bedrock margin.
+        int ground = Math.max(64, level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, abs.getX(), abs.getZ()));
         BlockPos origin = new BlockPos((abs.getX() >> 4 << 4) + 8, ground, (abs.getZ() >> 4 << 4) + 8);
 
         int offset = 192;
