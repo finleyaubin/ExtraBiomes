@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.glacier;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -10,12 +10,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class CrevasseFeature implements Feature {
-    public static final MapCodec<CrevasseFeature> CODEC = MapCodec.unit(CrevasseFeature::new);
+public class CrevasseFeature extends Feature<NoneFeatureConfiguration> {
+    public CrevasseFeature(Codec<NoneFeatureConfiguration> codec) {
+        super(codec);
+    }
+
 
     // Kept inside the 3x3 chunk write window: an origin at a chunk edge reaches 13 + 1 lining block either way.
     private static final int MIN_HALF_LENGTH = 6;
@@ -24,12 +29,11 @@ public class CrevasseFeature implements Feature {
     private static final float WALL_ICE_CHANCE = 0.3F;
 
     @Override
-    public MapCodec<CrevasseFeature> codec() {
-        return CODEC;
-    }
-
-    @Override
-    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel level = context.level();
+        ChunkGenerator generator = context.chunkGenerator();
+        RandomSource random = context.random();
+        BlockPos origin = context.origin();
         if (origin.getY() <= generator.getSeaLevel()) {
             return false;
         }

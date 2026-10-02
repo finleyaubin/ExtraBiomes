@@ -1,18 +1,18 @@
 package net.winepicfin.extrabiomes.worldgen.features.glacier;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.PotentSulfurBlock;
-import net.minecraft.world.level.block.state.properties.PotentSulfurState;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.ArrayList;
@@ -22,8 +22,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MeltwaterStreamFeature implements Feature {
-    public static final MapCodec<MeltwaterStreamFeature> CODEC = MapCodec.unit(MeltwaterStreamFeature::new);
+public class MeltwaterStreamFeature extends Feature<NoneFeatureConfiguration> {
+    public MeltwaterStreamFeature(Codec<NoneFeatureConfiguration> codec) {
+        super(codec);
+    }
+
 
     private static final int MIN_LENGTH = 4;
     private static final int MAX_STEPS = 20;
@@ -33,16 +36,14 @@ public class MeltwaterStreamFeature implements Feature {
     private static final int CAVERN_START_REACH = 3;
     private static final int MIN_CAVERN_LENGTH = 3;
     private static final int CAVERN_ONE_IN = 3;
-    private static final int GEYSER_ONE_IN = 2;
     private static final float MEANDER_CHANCE = 0.25F;
 
     @Override
-    public MapCodec<MeltwaterStreamFeature> codec() {
-        return CODEC;
-    }
-
-    @Override
-    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel level = context.level();
+        ChunkGenerator generator = context.chunkGenerator();
+        RandomSource random = context.random();
+        BlockPos origin = context.origin();
         if (origin.getY() <= generator.getSeaLevel()) {
             return false;
         }
@@ -63,10 +64,7 @@ public class MeltwaterStreamFeature implements Feature {
         BlockPos end = path.get(path.size() - 1);
         BlockPos upstream = path.get(Math.max(0, path.size() - 2));
         if (!cavern || !digCavern(level, random, end, end.getX() - upstream.getX(), end.getZ() - upstream.getZ(), origin)) {
-            List<BlockPos> pool = carvePlungePool(level, end);
-            if (random.nextInt(GEYSER_ONE_IN) == 0) {
-                plantGeyser(level, end, pool);
-            }
+            carvePlungePool(level, end);
         }
         return true;
     }
@@ -121,8 +119,7 @@ public class MeltwaterStreamFeature implements Feature {
         return candidates.get(random.nextInt(candidates.size()));
     }
 
-    private static List<BlockPos> carvePlungePool(WorldGenLevel level, BlockPos end) {
-        List<BlockPos> pool = new ArrayList<>();
+    private static void carvePlungePool(WorldGenLevel level, BlockPos end) {
         for (int dx = -1; dx <= 1; dx++) {
             for (int dz = -1; dz <= 1; dz++) {
                 boolean corner = dx != 0 && dz != 0;
@@ -132,26 +129,7 @@ public class MeltwaterStreamFeature implements Feature {
                 }
                 placeWater(level, column);
                 placeWater(level, column.below());
-                pool.add(column);
             }
-        }
-        return pool;
-    }
-
-    // Potent sulfur only erupts with 1-4 source blocks of water above it and a magma block below, which the two-deep pool provides.
-    private static void plantGeyser(WorldGenLevel level, BlockPos end, List<BlockPos> pool) {
-        for (BlockPos column : pool) {
-            BlockPos floor = column.below(2);
-            if (isCarvable(level.getBlockState(floor))) {
-                level.setBlock(floor, Blocks.SULFUR.defaultBlockState(), 2);
-            }
-        }
-
-        BlockPos vent = end.below(2);
-        BlockPos heat = end.below(3);
-        if (isCarvable(level.getBlockState(vent)) && isCarvable(level.getBlockState(heat))) {
-            level.setBlock(vent, Blocks.POTENT_SULFUR.defaultBlockState().setValue(PotentSulfurBlock.STATE, PotentSulfurState.DORMANT), 2);
-            level.setBlock(heat, Blocks.MAGMA_BLOCK.defaultBlockState(), 2);
         }
     }
 

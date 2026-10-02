@@ -6,9 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.animal.golem.SnowGolem;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -51,7 +51,7 @@ public final class GlacierSnowGolemSpawner {
             int x = player.getBlockX() + (int) (Math.cos(angle) * distance);
             int z = player.getBlockZ() + (int) (Math.sin(angle) * distance);
             int ceiling = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) - MIN_DEPTH_BELOW_SURFACE;
-            int floor = level.getMinY() + FLOOR_MARGIN;
+            int floor = level.getMinBuildHeight() + FLOOR_MARGIN;
             if (ceiling <= floor) {
                 continue;
             }
@@ -78,13 +78,12 @@ public final class GlacierSnowGolemSpawner {
     }
 
     private static void spawn(ServerLevel level, BlockPos pos, RandomSource random) {
-        SnowGolem golem = EntityTypes.SNOW_GOLEM.create(level, EntitySpawnReason.NATURAL);
+        SnowGolem golem = EntityType.SNOW_GOLEM.create(level);
         if (golem == null) {
             return;
         }
-        golem.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        golem.setYRot(random.nextFloat() * 360.0F);
-        golem.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
+        golem.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360.0F, 0.0F);
+        golem.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null, null);
         level.addFreshEntity(golem);
     }
 
