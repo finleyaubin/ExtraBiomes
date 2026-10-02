@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.glacier;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -10,22 +10,26 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
-public class GlacierFinishFeature implements Feature {
-    public static final MapCodec<GlacierFinishFeature> CODEC = MapCodec.unit(GlacierFinishFeature::new);
+public class GlacierFinishFeature extends Feature<NoneFeatureConfiguration> {
+    public GlacierFinishFeature(Codec<NoneFeatureConfiguration> codec) {
+        super(codec);
+    }
+
 
     // Lava lakes spill up to ~9 blocks into neighbouring chunks whose own pass already ran, so lava is rimmed across a margin; the rim stays inside the 3x3 chunk write window.
     private static final int LAVA_MARGIN = 10;
 
-    @Override
-    public MapCodec<GlacierFinishFeature> codec() {
-        return CODEC;
-    }
-
     // Runs once per chunk at its origin, after every other Glacier feature, so it also catches vanilla lava lakes and aquifer lava.
     @Override
-    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel level = context.level();
+        ChunkGenerator generator = context.chunkGenerator();
+        RandomSource random = context.random();
+        BlockPos origin = context.origin();
         boolean changed = false;
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int dx = -LAVA_MARGIN; dx < 16 + LAVA_MARGIN; dx++) {
@@ -34,7 +38,7 @@ public class GlacierFinishFeature implements Feature {
                 int z = origin.getZ() + dz;
                 boolean inChunk = dx >= 0 && dx < 16 && dz >= 0 && dz < 16;
                 int top = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
-                for (int y = top; y >= level.getMinY(); y--) {
+                for (int y = top; y >= level.getMinBuildHeight(); y--) {
                     // Surface water is left alone: vanilla surface freezing handles ponds, and meltwater streams must keep flowing.
                     boolean underground = y + 1 < top;
                     changed |= finishBlock(level, pos.set(x, y, z), inChunk && underground);
