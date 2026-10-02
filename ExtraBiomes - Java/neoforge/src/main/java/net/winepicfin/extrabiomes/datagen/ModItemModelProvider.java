@@ -58,6 +58,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         // Boat items - see ModItems.BOAT_MODEL_ENTRIES (common) for which wood type uses which texture.
         ModItems.BOAT_MODEL_ENTRIES.forEach(entry -> boatItem(entry.item(), entry.texture()));
         trimmedArmorItem(ModItems.FROG_HELMET);
+        evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_STAIRS);
+        evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_SLAB);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_STAIRS);
         evenSimplerBlockItem(ModBlocks.DENSE_CLOUD_BRICK_SLAB);
 

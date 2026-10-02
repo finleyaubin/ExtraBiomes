@@ -83,7 +83,7 @@ public final class GlacierSnowGolemSpawner {
             return;
         }
         golem.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360.0F, 0.0F);
-        golem.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null, null);
+        golem.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null);
         level.addFreshEntity(golem);
     }
 
