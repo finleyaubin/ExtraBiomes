@@ -105,7 +105,7 @@ public class FloatingJungleGameTests {
     public static void giantTreesStandTallWithTheirDetails(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos abs = helper.absolutePos(BlockPos.ZERO);
-        int ground = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, abs.getX(), abs.getZ());
+        int ground = Math.max(64, level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, abs.getX(), abs.getZ()));
         BlockPos origin = new BlockPos((abs.getX() >> 4 << 4) + 8, ground, (abs.getZ() >> 4 << 4) + 8);
 
         int offset = 192;
