@@ -36,7 +36,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockModel(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         blockWithItem(ModBlocks.DENSE_CLOUD);
         stairsBlock(((StairBlock) ModBlocks.DENSE_CLOUD_STAIRS.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()));
-        slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()));
+        slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_SLAB.get()), blockModel(ModBlocks.DENSE_CLOUD.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()));
         fluidBlock(ModBlocks.GOO.get());
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
