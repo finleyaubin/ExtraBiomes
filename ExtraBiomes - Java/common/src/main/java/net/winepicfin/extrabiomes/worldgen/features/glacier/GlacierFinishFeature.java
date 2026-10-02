@@ -38,7 +38,7 @@ public class GlacierFinishFeature extends Feature<NoneFeatureConfiguration> {
                 int z = origin.getZ() + dz;
                 boolean inChunk = dx >= 0 && dx < 16 && dz >= 0 && dz < 16;
                 int top = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
-                for (int y = top; y >= level.getMinBuildHeight(); y--) {
+                for (int y = top; y >= level.getMinY(); y--) {
                     // Surface water is left alone: vanilla surface freezing handles ponds, and meltwater streams must keep flowing.
                     boolean underground = y + 1 < top;
                     changed |= finishBlock(level, pos.set(x, y, z), inChunk && underground);

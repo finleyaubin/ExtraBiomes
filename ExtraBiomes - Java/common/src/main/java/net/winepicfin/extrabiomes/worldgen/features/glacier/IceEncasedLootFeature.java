@@ -3,14 +3,17 @@ package net.winepicfin.extrabiomes.worldgen.features.glacier;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -22,7 +25,7 @@ public class IceEncasedLootFeature extends Feature<NoneFeatureConfiguration> {
     }
 
 
-    private static final ResourceLocation LOOT_TABLE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "chests/ice_vault");
+    private static final ResourceKey<LootTable> LOOT_TABLE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "chests/ice_vault"));
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
@@ -40,7 +43,7 @@ public class IceEncasedLootFeature extends Feature<NoneFeatureConfiguration> {
         BlockState chest = Blocks.CHEST.defaultBlockState()
                 .setValue(ChestBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random));
         level.setBlock(origin, chest, 2);
-        RandomizableContainerBlockEntity.setLootTable(level, random, origin, LOOT_TABLE);
+        RandomizableContainer.setBlockEntityLootTable(level, random, origin, LOOT_TABLE);
         return true;
     }
 

@@ -27,10 +27,10 @@ public class ErraticFeature extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel level = context.level();
         RandomSource random = context.random();
         BlockPos origin = context.origin();
-        while (origin.getY() > level.getMinBuildHeight() + 3 && !RESTING_BLOCKS.contains(level.getBlockState(origin.below()).getBlock())) {
+        while (origin.getY() > level.getMinY() + 3 && !RESTING_BLOCKS.contains(level.getBlockState(origin.below()).getBlock())) {
             origin = origin.below();
         }
-        if (origin.getY() <= level.getMinBuildHeight() + 3) {
+        if (origin.getY() <= level.getMinY() + 3) {
             return false;
         }
 
