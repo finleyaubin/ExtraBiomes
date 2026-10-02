@@ -18,7 +18,7 @@ Glacier gets a full overhaul, above and below the ice.
 - Meltwater streams run downhill across the glacier. Most end in a plunge pool.
 - Some streams sink into a wide shaft that bores down through the ice. Where it meets hard rock it turns and follows the rock sideways, dropping again where it can, and it ends in a large open chamber. Shafts and tunnels are 5 to 11 blocks wide and chambers up to about 19.
 - Glacial ponds, gravel moraine and andesite boulders dot the surface.
-- Glacier water is now a pristine, clearer pale blue. The biome is slightly warmer, so surface water no longer freezes. It rains instead of snowing, and ice and snow blocks do not melt.
+- Glacier water is now a pristine pale blue. The biome is slightly warmer, so surface water no longer freezes. It rains instead of snowing, and ice and snow blocks do not melt.
 
 ## Floating Jungle
 Floating Jungle finally floats.
@@ -46,11 +46,10 @@ The clouds under the Sky City are redone so they look like clouds instead of a c
 - Added Dense Cloud Slab and Dense Cloud Stairs, crafted from Dense Cloud like the brick versions. They break as easily as Dense Cloud and give the same floaty slow fall when you drop onto them.
 
 ## Minecraft versions
-- Added support for Minecraft 1.21.8, 1.21.10 and 1.21.11.
+- Added support for Minecraft 1.21.8 and 1.21.10.
 
 ## World Generation
 - Moorlands now grow short and tall dry grass instead of dead bushes, with denser double tall grass.
-- Deep Dark Forest and other biomes' fog distances now match Bedrock on the versions that support it.
 - Fixed a crash caused by feature ordering conflicts multiple other popular world gen mods accross different versions as Identified by https://github.com/finleyaubin/ExtraBiomes/tree/compat-grid.
 
 ## Mobs
