@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-29",
+  "generated": "2026-10-02",
   "rows": [
     {
       "mc": "1.20.1",
@@ -2236,9 +2236,9 @@
           "reason": ""
         }
       },
-      "extrabiomes": "26.3@f68e8d7",
+      "extrabiomes": "26.3@b88fedd",
       "branch": "26.3",
-      "tested": "2026-09-29",
+      "tested": "2026-10-02",
       "loader_version": "0.19.5"
     },
     {
@@ -2246,19 +2246,19 @@
       "loader": "neoforge",
       "results": {
         "ExtraBiomes alone": {
-          "status": "pass",
+          "status": "crash",
           "version": "",
-          "reason": ""
+          "reason": "[21:10:37] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above"
         },
         "Terralith": {
           "status": "partner-broken",
           "version": "2.6.5+26.3",
-          "reason": "[16:22:04] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[21:10:39] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod lithostitched requires neoforge 26.3.0.20 or above"
         },
         "Biomes O' Plenty": {
-          "status": "pass",
+          "status": "partner-broken",
           "version": "26.3.0.0.7",
-          "reason": ""
+          "reason": "[21:10:45] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above"
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -2271,24 +2271,24 @@
           "reason": "no neoforge 26.3 build"
         },
         "WWOO": {
-          "status": "pass",
+          "status": "crash",
           "version": "3.0.1",
-          "reason": ""
+          "reason": "[21:10:50] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above"
         },
         "Wilder Wild": {
           "status": "partner-broken",
           "version": "4.3.1-mc26.3-neoforge",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+          "reason": "[21:11:15] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above"
         },
         "Geophilic": {
-          "status": "pass",
+          "status": "crash",
           "version": "3.7",
-          "reason": ""
+          "reason": "[21:11:50] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above"
         },
         "Ecologics": {
-          "status": "pass",
+          "status": "crash",
           "version": "2.7.0_2-NeoFab",
-          "reason": ""
+          "reason": "[21:12:10] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above"
         },
         "Terrestria": {
           "status": "n/a",
@@ -2313,12 +2313,12 @@
         "Tectonic": {
           "status": "partner-broken",
           "version": "3.0.31-neoforge-26.3",
-          "reason": "[16:24:37] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": "[21:12:31] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
         }
       },
-      "extrabiomes": "26.3@f68e8d7",
+      "extrabiomes": "26.3@b88fedd",
       "branch": "26.3",
-      "tested": "2026-09-29",
+      "tested": "2026-10-02",
       "loader_version": "26.3.0.19-beta"
     },
     {

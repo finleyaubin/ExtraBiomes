@@ -2,7 +2,7 @@
 
 Want another mod added to this grid? [Request it in an issue](https://github.com/finleyaubin/ExtraBiomes/issues). If your mod list hits a feature order cycle that isn't listed here, [Feature Recycler](https://www.curseforge.com/minecraft/mc-mods/feature-recycler) can fix it.
 
-Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real server with the jar CI built from the tip of each branch (unreleased code) and one other mod, generates a world, and stops it. A run of only some branches updates just those rows, so the Tested column shows when each row was last run.
+Generated 2026-10-02 by the Compat Grid (dev) workflow. Each cell boots a real server with the jar CI built from the tip of each branch (unreleased code) and one other mod, generates a world, and stops it. A run of only some branches updates just those rows, so the Tested column shows when each row was last run.
 
 ✅ works · ❌ feature order cycle · 💥 crash on startup · ⏱ didn't finish · ⚠️ the other mod fails even without ExtraBiomes · ➖ that mod (or a dependency) has no build for this version
 
@@ -35,7 +35,14 @@ Generated 2026-09-29 by the Compat Grid (dev) workflow. Each cell boots a real s
 | 26.1.2 | neoforge | 26.1.2@2245d2d | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ✅ | ✅ | ➖ | ➖ | ➖ | ✅ | ✅ |
 | 26.2 | fabric | 26.2@137a82d | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ |
 | 26.2 | neoforge | 26.2@137a82d | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
-| 26.3 | fabric | 26.3@f68e8d7 | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
-| 26.3 | neoforge | 26.3@f68e8d7 | 2026-09-29 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
+| 26.3 | fabric | 26.3@b88fedd | 2026-10-02 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
+| 26.3 | neoforge | 26.3@b88fedd | 2026-10-02 | 💥 crash | ⚠️ fails without ExtraBiomes too | ⚠️ fails without ExtraBiomes too | ➖ | ➖ | 💥 crash | ⚠️ fails without ExtraBiomes too | 💥 crash | 💥 crash | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
 | 26.3 | fabric | Java-Dev@a1ced97 | 2026-09-29 | ✅ | ✅ | ✅ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ✅ |
 | 26.3 | neoforge | Java-Dev@a1ced97 | 2026-09-29 | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ➖ | ➖ | ✅ | ⚠️ fails without ExtraBiomes too | ✅ | ✅ | ➖ | ➖ | ➖ | ➖ | ⚠️ fails without ExtraBiomes too |
+
+## Failures
+
+- **26.3 neoforge (26.3) + ExtraBiomes alone** (crash, tested 2026-10-02): `[21:10:37] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above`
+- **26.3 neoforge (26.3) + WWOO** (crash, tested 2026-10-02): `[21:10:50] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above`
+- **26.3 neoforge (26.3) + Geophilic** (crash, tested 2026-10-02): `[21:11:50] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above`
+- **26.3 neoforge (26.3) + Ecologics** (crash, tested 2026-10-02): `[21:12:10] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod extrabiomes requires neoforge 26.3.0.38-beta or above`
