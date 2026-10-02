@@ -4,6 +4,10 @@ treefrog sound effects by hikeart on youtube https://youtu.be/UiidibfhidE
 
 hopping spore sound effect by: https://mixkit.co/free-sound-effects/squeak/
 
+Glacier ice cracking ambience (Java):
+https://www.myinstants.com/en/instant/ice-cracking-by-quendel-18705/ ("ice cracking" by Quendel)
+https://www.myinstants.com/en/instant/ice-wall-cracking-79016/ ("ice wall cracking")
+
 Puckoo sound effects:
 https://soundbible.com/1301-Peacock-Call.html
 https://soundbible.com/1430-Peacock.html

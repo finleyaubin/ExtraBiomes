@@ -182,6 +182,12 @@ public final class DatapackRegistries {
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_multi", MultiFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "basalt_bank", BasaltBankFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "lava_flow_kickstart", net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_ceiling_lavafall", net.winepicfin.extrabiomes.worldgen.features.glacier.CeilingLavafallFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_ice_encased_loot", net.winepicfin.extrabiomes.worldgen.features.glacier.IceEncasedLootFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_crevasse", net.winepicfin.extrabiomes.worldgen.features.glacier.CrevasseFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_finish", net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFinishFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_meltwater_stream", net.winepicfin.extrabiomes.worldgen.features.glacier.MeltwaterStreamFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_cave_pillar", net.winepicfin.extrabiomes.worldgen.features.glacier.CavePillarFeature.CODEC);
         BuiltInRegistries.FEATURE_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
