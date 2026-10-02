@@ -98,6 +98,11 @@ public class ModEventBusClientEvents {
                     ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get()}) {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
             }
+            for (var block : new net.minecraft.world.level.block.Block[]{
+                    ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_SLAB.get(), ModBlocks.DENSE_CLOUD_STAIRS.get(),
+                    ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get()}) {
+                ItemBlockRenderTypes.setRenderLayer(block, ChunkSectionLayer.TRANSLUCENT);
+            }
         });
     }
 

@@ -10,8 +10,6 @@ import net.minecraft.gametest.framework.GameTestSequence;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.PotentSulfurBlock;
-import net.minecraft.world.level.block.state.properties.PotentSulfurState;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.biome.Biome;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
@@ -20,7 +18,6 @@ import org.slf4j.Logger;
 // Generates real Glacier chunks so runtime-only failures (far-chunk writes, loot table setup) surface, one chunk per step to stay under the tick watchdog.
 public class GlacierGenerationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
-    // Geysers are rare per chunk, so the sample is wide enough that a working generator almost never misses one.
     private static final int CHUNK_RADIUS = 6;
     private static final int MAX_SCAN_Y = 120;
     private static final int BIOME_SAMPLE_Y = 80;
@@ -54,8 +51,8 @@ public class GlacierGenerationGameTests {
                             level.getChunk(centerChunkX, centerChunkZ).getPersistedStatus());
                     int[] counts = scan(level, centerChunkX, centerChunkZ);
                     int unrimmedLava = counts[0];
-                    LOGGER.info("[GlacierGenerationGameTests] glacier at {}: columns={} lava={} unrimmedLava={} basalt={} magma={} blueIce={} chests={} snowBlocks={} ice={} undergroundSnow={} hangingBasalt={} waterTops={} gravelTops={} andesiteTops={} geysers={} eruptingGeysers={}",
-                            glacier.getFirst(), counts[8], counts[1], unrimmedLava, counts[2], counts[3], counts[4], counts[5], counts[6], counts[7], counts[9], counts[10], counts[11], counts[12], counts[13], counts[14], counts[15]);
+                    LOGGER.info("[GlacierGenerationGameTests] glacier at {}: columns={} lava={} unrimmedLava={} basalt={} magma={} blueIce={} chests={} snowBlocks={} ice={} undergroundSnow={} hangingBasalt={} waterTops={} gravelTops={} andesiteTops={}",
+                            glacier.getFirst(), counts[8], counts[1], unrimmedLava, counts[2], counts[3], counts[4], counts[5], counts[6], counts[7], counts[9], counts[10], counts[11], counts[12], counts[13]);
                     boolean scannedGlacier = counts[8] > 0 && counts[4] + counts[7] > 0;
                     if (unrimmedLava == 0 && scannedGlacier) {
                         LOGGER.info("[GlacierGenerationGameTests] glacierGeothermalFeaturesGenerate: passed");
@@ -68,9 +65,9 @@ public class GlacierGenerationGameTests {
                 .thenSucceed();
     }
 
-    // Returns {unrimmedLava, lava, basalt, magma, blueIce, chests, snowBlocks, ice, glacierColumns, undergroundSnow, hangingBasalt, waterTops, gravelTops, andesiteTops, geysers, eruptingGeysers}.
+    // Returns {unrimmedLava, lava, basalt, magma, blueIce, chests, snowBlocks, ice, glacierColumns, undergroundSnow, hangingBasalt, waterTops, gravelTops, andesiteTops}.
     private static int[] scan(ServerLevel level, int centerChunkX, int centerChunkZ) {
-        int[] counts = new int[16];
+        int[] counts = new int[14];
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         // Only the inner chunks: the outer ring's own neighbours were never generated, so lava spilling in from beyond it can't have been rimmed.
         int scanRadius = CHUNK_RADIUS - 1;
@@ -113,13 +110,6 @@ public class GlacierGenerationGameTests {
 
     private static void tally(ServerLevel level, BlockPos.MutableBlockPos pos, int[] counts) {
         BlockState state = level.getBlockState(pos);
-        if (state.is(Blocks.POTENT_SULFUR) && level.getBlockState(pos.below()).is(Blocks.MAGMA_BLOCK) && level.getBlockState(pos.above()).is(Blocks.WATER)) {
-            counts[14]++;
-            PotentSulfurState geyserState = state.getValue(PotentSulfurBlock.STATE);
-            if (geyserState == PotentSulfurState.DORMANT || geyserState == PotentSulfurState.ERUPTING) {
-                counts[15]++;
-            }
-        }
         if (state.is(Blocks.SNOW_BLOCK) && pos.getY() < SURFACE_CUTOFF_Y) {
             counts[9]++;
         }
