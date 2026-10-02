@@ -1,9 +1,11 @@
 package net.winepicfin.extrabiomes.worldgen.features.moss;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
@@ -70,10 +72,10 @@ import java.util.List;
  *       Java placement-modifier equivalent, but is naturally enforced by the engine anyway: setting
  *       a {@code moss_carpet} block triggers a neighbor shape update
  *       that pops it back off immediately if unsupported, same end result.</li>
- *   <li>{@code minecraft:jungle_bush_feature} is reused as literally vanilla's own feature - no new
- *       Java feature is registered for it. {@link #JUNGLE_BUSH_PLACED_KEY} is just a convenience
- *       {@link ResourceKey} pointing at vanilla's existing
- *       {@code data/minecraft/worldgen/placed_feature/jungle_bush.json} entry.</li>
+ *   <li>{@code minecraft:jungle_bush_feature} reuses vanilla's own {@link TreeFeatures#JUNGLE_BUSH} feature.
+ *       Vanilla's {@code minecraft:jungle_bush} placed feature is unusable as a top-level biome feature
+ *       (it only carries a survival check, no position or biome modifiers), so {@link #JUNGLE_BUSH_PLACED_KEY}
+ *       registers its own placed wrapper.</li>
  *   <li>The outer {@code custom_moss_patch_feature.json} ({@code minecraft:vegetation_patch_feature},
  *       which scans for floor and converts the ground to {@code moss_block} before invoking the
  *       aggregate above as its {@code vegetation_feature}) and the
@@ -109,14 +111,10 @@ public class MossFeatures {
     public static final ResourceKey<PlacedFeature> TALL_GRASS_SCATTER_PLACED_KEY = placedKey("tall_grass_scatter");
 
     /**
-     * Vanilla's own {@code minecraft:jungle_bush} placed feature - reused directly rather than
-     * re-registered. Register via
-     * {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MossFeatures.JUNGLE_BUSH_PLACED_KEY)}
-     * (the biome-wiring pass's {@code context.lookup(Registries.PLACED_FEATURE)} will resolve this
-     * key against vanilla's registered entry with no extra work needed here).
+     * extrabiomes:moss/jungle_bush - one vanilla jungle bush per chunk on the surface. Register via
+     * {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MossFeatures.JUNGLE_BUSH_PLACED_KEY)}.
      */
-    public static final ResourceKey<PlacedFeature> JUNGLE_BUSH_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath("minecraft", "jungle_bush"));
+    public static final ResourceKey<PlacedFeature> JUNGLE_BUSH_PLACED_KEY = placedKey("jungle_bush");
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -134,6 +132,16 @@ public class MossFeatures {
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+
+        context.register(JUNGLE_BUSH_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(TreeFeatures.JUNGLE_BUSH),
+                List.of(
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.OAK_SAPLING.defaultBlockState(), BlockPos.ZERO)),
+                        BiomeFilter.biome()
+                )
+        ));
 
         // Bedrock's source feature scatters 10 attempts with 0 spread, which always lands on the same block; collapsed to a single placement.
         context.register(MOSS_CARPET_SCATTER_PLACED_KEY, new PlacedFeature(

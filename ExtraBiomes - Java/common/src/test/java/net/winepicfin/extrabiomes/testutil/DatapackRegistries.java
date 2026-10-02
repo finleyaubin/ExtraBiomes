@@ -184,6 +184,13 @@ public final class DatapackRegistries {
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_multi", new MultiFeature(MultiFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "basalt_bank", new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "lava_flow_kickstart", new net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "glacier_ceiling_lavafall", new net.winepicfin.extrabiomes.worldgen.features.glacier.CeilingLavafallFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "glacier_ice_encased_loot", new net.winepicfin.extrabiomes.worldgen.features.glacier.IceEncasedLootFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "glacier_crevasse", new net.winepicfin.extrabiomes.worldgen.features.glacier.CrevasseFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "glacier_finish", new net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFinishFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "glacier_meltwater_stream", new net.winepicfin.extrabiomes.worldgen.features.glacier.MeltwaterStreamFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "glacier_erratic", new net.winepicfin.extrabiomes.worldgen.features.glacier.ErraticFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "glacier_cave_pillar", new net.winepicfin.extrabiomes.worldgen.features.glacier.CavePillarFeature(net.winepicfin.extrabiomes.worldgen.features.glacier.CavePillarFeature.Configuration.CODEC));
         BuiltInRegistries.FEATURE.freeze();
 
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
