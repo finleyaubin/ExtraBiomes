@@ -31,8 +31,10 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.BLOCK);
 
     // noOcclusion() is needed because dense cloud is thematically translucent, but copies fully-opaque vanilla materials (white_wool/stone_bricks) that would otherwise block light.
-    public static final RegistrySupplier<Block> DENSE_CLOUD = registerBlock("dense_cloud", () -> new Block(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS).noOcclusion()));
-    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_BRICK_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD = registerBlock("dense_cloud", () -> new TranslucentBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_SLAB = registerBlock("dense_cloud_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_STAIRS = registerBlock("dense_cloud_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_DESTROY_SECONDS).noOcclusion()));
+    public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK = registerBlock("dense_cloud_brick", () -> new TranslucentBlock(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).sound(SoundType.WOOL).strength(MiscBlockTuning.DENSE_CLOUD_BRICK_DESTROY_SECONDS).noOcclusion()));
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_SLAB = registerBlock("dense_cloud_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_SLAB).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> DENSE_CLOUD_BRICK_STAIRS = registerBlock("dense_cloud_brick_stairs", () -> new StairBlock(ModBlocks.DENSE_CLOUD_BRICK.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE_BRICK_STAIRS).sound(SoundType.WOOL).strength(0.5f).noOcclusion()));
     public static final RegistrySupplier<Block> NETHER_DIAMOND_ORE = registerBlock("nether_diamond_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHERRACK).strength(2f).requiresCorrectToolForDrops(), UniformInt.of(3, 7)));
@@ -204,6 +206,14 @@ public class ModBlocks {
         RegistrySupplier<Block> hangingSign = BLOCKS.register(name + "_hanging_sign", () -> new ModHangingSignBlock(BlockBehaviour.Properties.copy(hangingSignBase), woodType));
         RegistrySupplier<Block> wallHangingSign = BLOCKS.register(name + "_wall_hanging_sign", () -> new ModWallHangingSignBlock(BlockBehaviour.Properties.copy(wallHangingSignBase), woodType));
         return new StandardWoodSigns(sign, wallSign, hangingSign, wallHangingSign);
+    }
+
+    // Their textures carry partial alpha, so each loader must register them for the translucent layer.
+    public static List<Block> translucentBlocks() {
+        return Stream.of(
+                DENSE_CLOUD, DENSE_CLOUD_SLAB, DENSE_CLOUD_STAIRS,
+                DENSE_CLOUD_BRICK, DENSE_CLOUD_BRICK_SLAB, DENSE_CLOUD_BRICK_STAIRS
+        ).map(Supplier::get).toList();
     }
 
     // Transparent texture pixels render opaque black unless these are registered for cutout on each loader.

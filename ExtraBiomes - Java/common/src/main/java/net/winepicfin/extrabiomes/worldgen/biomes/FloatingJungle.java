@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.winepicfin.extrabiomes.worldgen.features.floatingjungle.FloatingJungleFeatures;
 
 public class FloatingJungle {
 
@@ -26,6 +27,8 @@ public class FloatingJungle {
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, FloatingJungleFeatures.SELECT_ISLAND_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, FloatingJungleFeatures.SELECT_GIANT_TREE_PLACED_KEY);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         // boulder: weighted stick-pile selection, vegetal decoration step (per Bedrock surface_pass ordering)
 
