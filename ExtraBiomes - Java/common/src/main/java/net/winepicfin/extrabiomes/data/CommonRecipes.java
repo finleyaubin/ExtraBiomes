@@ -70,6 +70,8 @@ public abstract class CommonRecipes extends RecipeProvider {
         boatRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModItems.SKY_BOAT.get(), ModItems.SKY_CHEST_BOAT.get());
         boatRecipes(pWriter, ModBlocks.GILDED_SKY_PLANKS.get(), ModItems.GILDED_SKY_BOAT.get(), ModItems.GILDED_SKY_CHEST_BOAT.get());
         brick(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_BRICK.get());
+        stair(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_STAIRS.get());
+        slab(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_SLAB.get());
         stair(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
         grassStoneRecipe(pWriter);
