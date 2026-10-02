@@ -7,7 +7,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -40,7 +40,7 @@ public class FloatingJungleGameTests {
     @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
     public void everyIslandTemplateLoadsWithinTheWriteWindow(GameTestHelper helper) {
         for (String name : ISLAND_TEMPLATES) {
-            Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
             StructureTemplate template = helper.getLevel().getStructureManager().get(id).orElse(null);
             helper.assertTrue(template != null, Component.literal("Missing island template " + id));
             Vec3i size = template.getSize();
@@ -83,7 +83,7 @@ public class FloatingJungleGameTests {
 
         int offset = 192;
         for (String name : GIANT_TREES) {
-            Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + name);
             BlockPos at = origin.offset(0, 0, offset);
             offset += 64;
             SingleStructureConfiguration config = new SingleStructureConfiguration(id, Optional.empty(), -5, true, 0.8F);
@@ -109,7 +109,7 @@ public class FloatingJungleGameTests {
     }
 
     private static Set<Block> placeAndCollect(ServerLevel level, String template, BlockPos origin) {
-        Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + template);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + template);
         SingleStructureConfiguration config = new SingleStructureConfiguration(id, Optional.empty(), 0, true, 0.95F);
         boolean placed = new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config)
                 .place(level, level.getChunkSource().getGenerator(), level.getRandom(), origin);
