@@ -6,7 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -62,7 +62,7 @@ public class FloatingJungleFeatures {
     private static ConfiguredFeature<?, ?> weightedSelector(String[] templates, int[] weights, int groundOffset, float minClearFraction) {
         List<Holder<PlacedFeature>> placed = new ArrayList<>();
         for (String template : templates) {
-            Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + template);
+            ResourceLocation structure = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "floating_jungle/" + template);
             SingleStructureConfiguration config = new SingleStructureConfiguration(structure, Optional.empty(), groundOffset, true, minClearFraction);
             Holder<ConfiguredFeature<?, ?>> structureFeature = Holder.direct(new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
             placed.add(PlacementUtils.inlinePlaced(structureFeature));
@@ -109,10 +109,10 @@ public class FloatingJungleFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

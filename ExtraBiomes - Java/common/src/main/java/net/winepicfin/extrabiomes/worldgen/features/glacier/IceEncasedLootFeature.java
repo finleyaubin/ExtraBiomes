@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.RandomizableContainer;
@@ -26,7 +26,7 @@ public class IceEncasedLootFeature extends Feature<NoneFeatureConfiguration> {
 
 
     private static final ResourceKey<LootTable> LOOT_TABLE =
-            ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "chests/ice_vault"));
+            ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "chests/ice_vault"));
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
