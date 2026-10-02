@@ -109,20 +109,20 @@ public class GlacierFeatures {
     public static final ResourceKey<PlacedFeature> SELECT_SNOW_DRIFT_PLACED_KEY =
             placedKey("select_snow_drift");
 
-    public static final ResourceKey<Feature> GLACIER_BLUE_ICE_KEY = configuredKey("glacier_blue_ice");
-    public static final ResourceKey<Feature> GLACIER_MAGMA_FISSURE_KEY = configuredKey("glacier_magma_fissure");
-    public static final ResourceKey<Feature> GLACIER_LAVA_POOL_KEY = configuredKey("glacier_lava_pool");
-    public static final ResourceKey<Feature> GLACIER_MELTWATER_POOL_KEY = configuredKey("glacier_meltwater_pool");
-    public static final ResourceKey<Feature> GLACIER_CEILING_LAVAFALL_KEY = configuredKey("glacier_ceiling_lavafall");
-    public static final ResourceKey<Feature> GLACIER_ICE_ENCASED_LOOT_KEY = configuredKey("glacier_ice_encased_loot");
-    public static final ResourceKey<Feature> GLACIER_CREVASSE_KEY = configuredKey("glacier_crevasse");
-    public static final ResourceKey<Feature> GLACIER_FINISH_KEY = configuredKey("glacier_finish");
-    public static final ResourceKey<Feature> GLACIER_SNOW_PILLAR_KEY = configuredKey("glacier_snow_pillar");
-    public static final ResourceKey<Feature> GLACIER_BASALT_PILLAR_KEY = configuredKey("glacier_basalt_pillar");
-    public static final ResourceKey<Feature> GLACIER_MELTWATER_STREAM_KEY = configuredKey("glacier_meltwater_stream");
-    public static final ResourceKey<Feature> GLACIER_SURFACE_POND_KEY = configuredKey("glacier_surface_pond");
-    public static final ResourceKey<Feature> GLACIER_ERRATIC_KEY = configuredKey("glacier_erratic");
-    public static final ResourceKey<Feature> GLACIER_MORAINE_KEY = configuredKey("glacier_moraine");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_BLUE_ICE_KEY = configuredKey("glacier_blue_ice");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MAGMA_FISSURE_KEY = configuredKey("glacier_magma_fissure");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_LAVA_POOL_KEY = configuredKey("glacier_lava_pool");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MELTWATER_POOL_KEY = configuredKey("glacier_meltwater_pool");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_CEILING_LAVAFALL_KEY = configuredKey("glacier_ceiling_lavafall");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_ICE_ENCASED_LOOT_KEY = configuredKey("glacier_ice_encased_loot");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_CREVASSE_KEY = configuredKey("glacier_crevasse");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_FINISH_KEY = configuredKey("glacier_finish");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_SNOW_PILLAR_KEY = configuredKey("glacier_snow_pillar");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_BASALT_PILLAR_KEY = configuredKey("glacier_basalt_pillar");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MELTWATER_STREAM_KEY = configuredKey("glacier_meltwater_stream");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_SURFACE_POND_KEY = configuredKey("glacier_surface_pond");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_ERRATIC_KEY = configuredKey("glacier_erratic");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> GLACIER_MORAINE_KEY = configuredKey("glacier_moraine");
 
     public static final ResourceKey<PlacedFeature> GLACIER_BLUE_ICE_PLACED_KEY = placedKey("glacier_blue_ice");
     public static final ResourceKey<PlacedFeature> GLACIER_MAGMA_FISSURE_PLACED_KEY = placedKey("glacier_magma_fissure");
@@ -181,10 +181,7 @@ public class GlacierFeatures {
     private static ConfiguredFeature<?, ?> pool(Block fluid, Block barrier) {
         return new ConfiguredFeature<>(Feature.LAKE, new LakeFeature.Configuration(
                 BlockStateProvider.simple(fluid),
-                BlockStateProvider.simple(barrier),
-                BlockPredicate.alwaysTrue(),
-                BlockPredicate.not(BlockPredicate.matchesTag(BlockTags.FEATURES_CANNOT_REPLACE)),
-                BlockPredicate.not(BlockPredicate.matchesTag(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE))));
+                BlockStateProvider.simple(barrier)));
     }
 
     // Mirrors vanilla's lake_lava_underground: pools sit at least 5 blocks below the surface, on the first solid block below the pick.
