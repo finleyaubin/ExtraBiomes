@@ -224,6 +224,14 @@ public class ModBlocks {
         return new StandardWoodSigns(sign, wallSign, hangingSign, wallHangingSign);
     }
 
+    // Their textures carry partial alpha, so each loader must register them for the translucent layer.
+    public static java.util.List<Block> translucentBlocks() {
+        return java.util.stream.Stream.of(
+                DENSE_CLOUD, DENSE_CLOUD_SLAB, DENSE_CLOUD_STAIRS,
+                DENSE_CLOUD_BRICK, DENSE_CLOUD_BRICK_SLAB, DENSE_CLOUD_BRICK_STAIRS
+        ).map(Supplier::get).toList();
+    }
+
     public static void register() {
         BLOCKS.register();
     }

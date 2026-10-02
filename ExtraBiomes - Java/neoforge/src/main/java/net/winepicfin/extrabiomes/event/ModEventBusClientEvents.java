@@ -90,6 +90,7 @@ public class ModEventBusClientEvents {
                     ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get()}) {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
             }
+            ModBlocks.translucentBlocks().forEach(block -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent()));
         });
     }
 
