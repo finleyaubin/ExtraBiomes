@@ -2218,19 +2218,19 @@
       "loader": "neoforge",
       "results": {
         "ExtraBiomes alone": {
-          "status": "crash",
+          "status": "pass",
           "version": "",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+          "reason": ""
         },
         "Terralith": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "2.6.5+26.3",
-          "reason": "[20:28:51] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": ""
         },
         "Biomes O' Plenty": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "26.3.0.0.7",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+          "reason": ""
         },
         "Oh The Biomes We've Gone": {
           "status": "n/a",
@@ -2243,24 +2243,24 @@
           "reason": "no neoforge 26.3 build"
         },
         "WWOO": {
-          "status": "crash",
+          "status": "pass",
           "version": "3.0.1",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+          "reason": ""
         },
         "Wilder Wild": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "4.3.1-mc26.3-neoforge",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+          "reason": ""
         },
         "Geophilic": {
-          "status": "crash",
+          "status": "pass",
           "version": "3.7",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+          "reason": ""
         },
         "Ecologics": {
-          "status": "crash",
+          "status": "partner-broken",
           "version": "2.7.0_2-NeoFab",
-          "reason": "Caused by: java.lang.ClassNotFoundException: net.neoforged.neoforge.registries.NewDatapackRegistryEvent"
+          "reason": "net.neoforged.neoforge.logging.CrashReportExtender$ModLoadingCrashException: Mod loading has failed"
         },
         "Terrestria": {
           "status": "n/a",
@@ -2283,14 +2283,14 @@
           "reason": "no neoforge 26.3 build"
         },
         "Tectonic": {
-          "status": "partner-broken",
+          "status": "pass",
           "version": "3.0.31-neoforge-26.3",
-          "reason": "[20:31:45] [main/ERROR] [ne.ne.fm.lo.FMLLoader/]: Mod apollib requires neoforge 26.3.0.20 or above"
+          "reason": ""
         }
       },
       "extrabiomes": "3.10.0-beta-9",
       "tested": "2026-10-02",
-      "loader_version": "26.3.0.19-beta"
+      "loader_version": "26.3.0.43-beta"
     }
   ]
 }
