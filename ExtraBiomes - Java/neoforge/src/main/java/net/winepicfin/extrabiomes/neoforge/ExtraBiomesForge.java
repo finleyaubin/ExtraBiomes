@@ -106,7 +106,7 @@ public class ExtraBiomesForge
 
         // Register our mod's ModConfigSpec so that NeoForge can create and load the config file for
         // us. NeoForge 21.1 moved registerConfig off ModLoadingContext and onto ModContainer.
-        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.LOCAL, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -
