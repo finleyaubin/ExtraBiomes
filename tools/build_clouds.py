@@ -1,29 +1,42 @@
 """Build jigsaw-native sky island + clouds for the sky city.
 
 Generation chain:
-  island (start piece, big flat-topped bushy island)
+  island (start piece, big flat-topped lumpy island with hanging cloud pouches)
     -> up jigsaw on its surface pulls in the cross plaza (hub)
       -> city expands via the existing horizontal connection jigsaws
         -> every piece has a down "cloud socket" that hangs a footprint-matched
            cloud pad under it (fails harmlessly over the island body)
-          -> every pad has a down "puff socket" that hangs a wide cloud blob
-             under its deepest point (fails harmlessly where space is taken)
+          -> every pad has a down "puff socket" that hangs a cumulus / streak /
+             mammatus / tower cloud under its deepest point (large pads get a
+             second one; fails harmlessly where space is taken)
+            -> every puff has down/side "satellite sockets" that pull small
+               cloudlets out and down, so clouds trail off and thin out away
+               from the city instead of stopping at a hard edge
           -> every pad also has side "filler sockets" along its edges that pull
-             flat cloud slabs sideways into the gaps between paths; a multi-size
-             filler pool means big slabs fill big gaps and small slabs squeeze
-             into tight ones (colliding slabs fail harmlessly)
+             organic cloud slabs sideways into the gaps between paths; a
+             multi-size filler pool means big slabs fill big gaps and small
+             slabs squeeze into tight ones (colliding slabs fail harmlessly)
 
 For every sky city piece this script:
   1. finds the piece's floor plan (solid columns in its bottom two layers),
   2. injects one downward-facing jigsaw block into the floor (the "cloud socket"),
-  3. generates cloud pad .mcstructure templates (flat top, domed bushy bottom)
+  3. generates cloud pad .mcstructure templates (flat top, rounded bushy bottom)
      whose footprint mirrors the piece's floor plan,
   4. writes a template pool JSON per piece listing the pad variants.
-It also generates the island start pieces, the shared puff pool, and the hub pool.
+It also generates the island start pieces, the shared puff/satellite/filler
+pools, and the hub pool.
+
+Shapes are built from soft-unioned ellipsoid lobes plus smooth value noise (not
+per-block white noise), then tidied: lone blocks removed, pinholes filled, and
+everything not connected to the piece's connector dropped.
 
 Re-runnable: existing sockets are reused, generated files are overwritten.
 """
-import os, json, math
+import os, json, math, random
+from collections import deque
+
+import numpy as np
+
 from mcstructure import (
     load, save, Tag, T_byte, T_int, T_str, T_list, T_comp,
     TAG_INT, TAG_LIST, TAG_COMPOUND, TAG_END,
@@ -42,6 +55,13 @@ CONNECTOR_NAME = "extrabiomes:sky_city_cloud"         # up jigsaw in the pad
 PUFF_SOCKET_NAME = "extrabiomes:sky_city_puff_socket" # down jigsaw in the pad
 PUFF_NAME = "extrabiomes:sky_city_cloud_puff"         # up jigsaw in the puff
 PUFF_POOL = "extrabiomes:sky_city_cloud_puff"
+SAT_SOCKET_NAME = "extrabiomes:sky_city_satellite_socket"  # down/side jigsaw in a puff
+SAT_NAME = "extrabiomes:sky_city_satellite"                # up + side jigsaws in the satellite
+SAT_POOL = "extrabiomes:sky_city_cloud_satellite"
+BANK_SOCKET_NAME = "extrabiomes:sky_city_bank_socket"  # side jigsaw on a satellite
+BANK_NAME = "extrabiomes:sky_city_bank"                # side jigsaws on the bank
+BANK_POOL = "extrabiomes:sky_city_cloud_bank"
+SAT_SIDE_POOL = "extrabiomes:sky_city_cloud_satellite_side"  # side sockets: treed + plain cloudlets
 FILLER_SOCKET_NAME = "extrabiomes:sky_city_filler_socket"  # side jigsaw in the pad
 FILLER_NAME = "extrabiomes:sky_city_filler"                # side jigsaws in the filler
 FILLER_POOL = "extrabiomes:sky_city_cloud_filler"
@@ -70,11 +90,182 @@ PIECES = {
 }
 
 
+# ---------------------------------------------------------------------------
+# build-time noise and shape helpers (numpy, arrays indexed [x][y][z])
+# ---------------------------------------------------------------------------
+
+def _lattice(ix, iy, iz, seed):
+    """Deterministic hash of integer lattice points -> floats in [0, 1)."""
+    n = (ix.astype(np.int64) * 374761393 + iy.astype(np.int64) * 668265263
+         + iz.astype(np.int64) * 2147483629 + seed * 2246822519) & 0xFFFFFFFF
+    n = ((n ^ (n >> 13)) * 1274126177) & 0xFFFFFFFF
+    n = n ^ (n >> 16)
+    return (n & 0xFFFF) / 65535.0
+
+
+def vnoise3(X, Y, Z, seed, scale):
+    """Smooth value noise in [0, 1]; features are about `scale` blocks across."""
+    x, y, z = X / scale, Y / scale, Z / scale
+    x0, y0, z0 = np.floor(x), np.floor(y), np.floor(z)
+    fx, fy, fz = x - x0, y - y0, z - z0
+    sx, sy, sz = fx * fx * (3 - 2 * fx), fy * fy * (3 - 2 * fy), fz * fz * (3 - 2 * fz)
+    out = 0.0
+    for dx in (0, 1):
+        for dy in (0, 1):
+            for dz in (0, 1):
+                v = _lattice(x0 + dx, y0 + dy, z0 + dz, seed)
+                wx = sx if dx else 1 - sx
+                wy = sy if dy else 1 - sy
+                wz = sz if dz else 1 - sz
+                out = out + v * wx * wy * wz
+    return out
+
+
+def fbm(X, Y, Z, seed, scale, octaves=2):
+    """Fractal sum of value noise, normalised to [0, 1]."""
+    total, amp, norm = 0.0, 1.0, 0.0
+    for o in range(octaves):
+        total = total + amp * vnoise3(X, Y, Z, seed + o * 131, scale / (2 ** o))
+        norm += amp
+        amp *= 0.5
+    return total / norm
+
+
+def grid_xyz(w, h, d):
+    return np.meshgrid(np.arange(w, dtype=float), np.arange(h, dtype=float),
+                       np.arange(d, dtype=float), indexing="ij")
+
+
+def lobe_field(X, Y, Z, lobes):
+    """Soft union of ellipsoids. lobes: (cx, cy, cz, rx, ry_up, ry_down, rz).
+    Strongest-lobe union with a little blending: lobes keep their own rounded
+    outline but fuse with a neck where they overlap.
+    The field is > 0 inside a lobe; callers threshold it."""
+    best = np.full_like(X, -1.0)
+    total = np.zeros_like(X)
+    for cx, cy, cz, rx, ru, rd, rz in lobes:
+        ry = np.where(Y >= cy, ru, rd)
+        q = 1.0 - (((X - cx) / rx) ** 2 + ((Y - cy) / ry) ** 2 + ((Z - cz) / rz) ** 2)
+        q = np.clip(q, 0.0, None)
+        best = np.maximum(best, q)
+        total += q
+    # mostly the strongest lobe (keeps creases between lobes crisp), with a
+    # little blending so neighbours fuse instead of just touching
+    return best + 0.3 * (total - best)
+
+
+def neighbor_count(s):
+    p = np.pad(s.astype(np.int8), 1)
+    return (p[:-2, 1:-1, 1:-1] + p[2:, 1:-1, 1:-1] + p[1:-1, :-2, 1:-1]
+            + p[1:-1, 2:, 1:-1] + p[1:-1, 1:-1, :-2] + p[1:-1, 1:-1, 2:])
+
+
+def tidy(s, passes=2):
+    """Drop nubs (<=1 solid neighbour) and fill pinholes (>=5 solid neighbours)."""
+    for _ in range(passes):
+        n = neighbor_count(s)
+        s = (s & (n >= 2)) | (~s & (n >= 5))
+    return s
+
+
+def fringe(s, seed, amount, protect_top=True):
+    """Eat wispy notches out of the sides and underside: the noisiest `amount`
+    of the cells that lose a side or bottom neighbour are removed, so rims read
+    as fuzzy cloud instead of smooth stair-steps. (There is no plain cloud slab
+    to round the edges with; only the brick variant has slabs and stairs.)
+    The top layer stays intact so roads and trunks keep their footing."""
+    if amount <= 0 or not s.any():
+        return s
+    w, h, d = s.shape
+    p = np.pad(s, 1)
+    full = (p[:-2, 1:-1, 1:-1] & p[2:, 1:-1, 1:-1] & p[1:-1, :-2, 1:-1]
+            & p[1:-1, 1:-1, :-2] & p[1:-1, 1:-1, 2:])
+    edge = s & ~full
+    if protect_top:
+        edge[:, h - 1, :] = False
+    if not edge.any():
+        return s
+    X, Y, Z = grid_xyz(w, h, d)
+    n = fbm(X, Y, Z, seed + 911, 2.3, 2)
+    cut = edge & (n >= np.quantile(n[edge], 1.0 - amount))
+    return s & ~cut
+
+
+def keep_connected(s, start):
+    """Keep only solid cells 6-connected to `start`; floaters are removed."""
+    seen = np.zeros_like(s)
+    if not s[start]:
+        return seen
+    q = deque([start])
+    seen[start] = True
+    while q:
+        x, y, z = q.popleft()
+        for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
+            nx, ny, nz = x + dx, y + dy, z + dz
+            if (0 <= nx < s.shape[0] and 0 <= ny < s.shape[1] and 0 <= nz < s.shape[2]
+                    and s[nx, ny, nz] and not seen[nx, ny, nz]):
+                seen[nx, ny, nz] = True
+                q.append((nx, ny, nz))
+    return seen
+
+
 def h32(x, z, seed):
-    """Deterministic 32-bit hash for build-time noise."""
+    """Deterministic 32-bit hash for per-cell choices."""
     n = (x * 374761393 + z * 668265263 + seed * 2246822519) & 0xFFFFFFFF
     n = ((n ^ (n >> 13)) * 1274126177) & 0xFFFFFFFF
     return (n ^ (n >> 16)) & 0xFFFFFFFF
+
+
+def soften(cells, dims, seed, protect_top=True, keep_cols=(), fraction=0.75):
+    """Round off stair-stepped silhouettes with half blocks. A cloud cell on an
+    exposed edge becomes a slab, or a stair on a straight edge:
+      * top surface with air on a side: bottom slab / bottom stair (back inward)
+      * underside with air on a side: top slab / upside-down stair (back inward)
+    Interior cells, flat faces, the top layer (if protected), anything next to a
+    jigsaw, water, vine or tree block, and the `keep_cols` columns stay full.
+    Returns how many cells were softened."""
+    w, h, d = dims
+    occ = np.zeros(dims, dtype=bool)
+    for (x, y, z) in cells:
+        occ[x, y, z] = True
+
+    def solid(x, y, z):
+        return 0 <= x < w and 0 <= y < h and 0 <= z < d and occ[x, y, z]
+
+    changes = {}
+    for (x, y, z), v in cells.items():
+        if v != 0 or (x, z) in keep_cols or (protect_top and y == h - 1):
+            continue
+        if any(cells.get((x + dx, y + dy, z + dz), 0) != 0
+               for dx in (-1, 0, 1) for dy in (-1, 0, 1) for dz in (-1, 0, 1)):
+            continue   # beside a jigsaw / water / vine / tree block: stay a full block
+        up, down = solid(x, y + 1, z), solid(x, y - 1, z)
+        if up == down:
+            continue
+        air = [n for n, (dx, dz) in DIR_XZ.items() if not solid(x + dx, y, z + dz)]
+        if not air or h32(x, y * 31 + z, seed) % 100 >= fraction * 100:
+            continue
+        half = "bottom" if down else "top"     # exposed top surface -> bottom half block
+        if len(air) == 1:
+            changes[(x, y, z)] = STAIR_PIDX[(half, OPPOSITE[air[0]])]
+        else:
+            changes[(x, y, z)] = SLAB_PIDX[half]
+    cells.update(changes)
+    return len(changes)
+
+
+def crop(s):
+    """Trim to the solid bounding box. Returns (grid, (ox, oy, oz))."""
+    xs = np.where(s.any(axis=(1, 2)))[0]
+    ys = np.where(s.any(axis=(0, 2)))[0]
+    zs = np.where(s.any(axis=(0, 1)))[0]
+    o = (int(xs[0]), int(ys[0]), int(zs[0]))
+    return s[xs[0]:xs[-1] + 1, ys[0]:ys[-1] + 1, zs[0]:zs[-1] + 1], o
+
+
+def grid_cells(s):
+    xs, ys, zs = np.nonzero(s)
+    return {(int(x), int(y), int(z)): 0 for x, y, z in zip(xs, ys, zs)}
 
 
 def flat_index(x, y, z, sy, sz):
@@ -251,30 +442,19 @@ def inject_socket(path, pool_id):
 
 
 def edge_distance(mask, sx, sz):
-    """Chebyshev distance to the nearest non-mask column (or outside)."""
-    INF = 10 ** 6
-    d = [[INF if mask[x][z] else 0 for z in range(sz)] for x in range(sx)]
-    changed = True
-    while changed:
-        changed = False
-        for x in range(sx):
-            for z in range(sz):
-                if not mask[x][z]:
-                    continue
-                nb = []
-                for dx in (-1, 0, 1):
-                    for dz in (-1, 0, 1):
-                        if dx == 0 and dz == 0:
-                            continue
-                        nx, nz = x + dx, z + dz
-                        if 0 <= nx < sx and 0 <= nz < sz:
-                            nb.append(d[nx][nz])
-                        else:
-                            nb.append(0)
-                v = min(nb) + 1
-                if v < d[x][z]:
-                    d[x][z] = v
-                    changed = True
+    """Euclidean distance from each mask column to the nearest non-mask column
+    (or to outside the bounding box). Round, not the diamond a Chebyshev
+    distance gives."""
+    non = [(x, z) for x in range(sx) for z in range(sz) if not mask[x][z]]
+    d = [[0.0] * sz for _ in range(sx)]
+    for x in range(sx):
+        for z in range(sz):
+            if not mask[x][z]:
+                continue
+            best = float(min(x + 1, sx - x, z + 1, sz - z))
+            for nx, nz in non:
+                best = min(best, math.hypot(x - nx, z - nz))
+            d[x][z] = best
     return d
 
 
@@ -326,6 +506,26 @@ def cloud_palette(version):
         "minecraft:water", {"liquid_depth": T_int(0)}, version))
     entries.append(palette_block(
         "minecraft:cave_vines", {"growing_plant_age": T_int(1)}, version))
+    entries.append(palette_block(
+        "extrabiomes:sky_leaves",
+        {"extrabiomes:decay": T_int(1), "extrabiomes:persist": T_int(0),
+         "extrabiomes:placed": T_byte(0)}, version))
+    entries.append(palette_block(
+        "extrabiomes:sky_log", {"minecraft:block_face": T_str("up")}, version))
+    entries.append(palette_block(
+        "extrabiomes:gilded_sky_log", {"minecraft:block_face": T_str("up")}, version))
+    entries.append(palette_block("extrabiomes:sky_sapling_block", {}, version))
+    for half in ("bottom", "top"):
+        entries.append(palette_block(
+            "extrabiomes:dense_cloud_slab",
+            {"extrabiomes:is_double": T_byte(0), "minecraft:vertical_half": T_str(half)}, version))
+    for half in ("bottom", "top"):
+        for card in ("north", "south", "west", "east"):
+            entries.append(palette_block(
+                "extrabiomes:dense_cloud_stairs",
+                {"extrabiomes:direction": T_int(0), "extrabiomes:is_upside_down": T_byte(0),
+                 "minecraft:cardinal_direction": T_str(card),
+                 "minecraft:vertical_half": T_str(half)}, version))
     return entries
 
 
@@ -336,6 +536,73 @@ WATER_PIDX = 7
 # cave vine under the column breaks on its first random tick, and that block
 # update kicks the water into flowing down to the ground.
 VINE_PIDX = 8
+LEAF_PIDX = 9   # natural sky leaves (placed=0, decay=1 like the stock sky tree): logs keep them alive, cutting the trunk lets them decay
+LOG_PIDX = 10
+GILDED_PIDX = 11  # gilded trunk variant
+SAPLING_PIDX = 12
+SLAB_PIDX = {"bottom": 13, "top": 14}
+# stairs: a stair's cardinal_direction is the side its tall back is on, for both halves
+STAIR_PIDX = {(half, card): 15 + 4 * hi + ci
+              for hi, half in enumerate(("bottom", "top"))
+              for ci, card in enumerate(("north", "south", "west", "east"))}
+DIR_XZ = {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}
+OPPOSITE = {"north": "south", "south": "north", "west": "east", "east": "west"}
+
+# The small sky tree (same silhouette as structures/extrabiomes/sky_tree), one
+# string per y layer from the trunk base up; rows are z, columns x, trunk at (2, 2).
+SKY_TREE = [
+    [".....", ".....", "..#..", ".....", "....."],
+    [".....", ".....", "..#..", ".....", "....."],
+    [".LLL.", "LLLLL", "LL#LL", "LLLLL", ".LLL."],
+    [".LLL.", "LLLLL", "LL#LL", "LLLLL", ".LLL."],
+    ["..L..", ".LLL.", "LL#LL", ".LLL.", "..L.."],
+    ["..L..", ".LLL.", "LL#LL", ".LLL.", "..L.."],
+    [".....", "..L..", ".L#L.", "..L..", "....."],
+    [".....", "..L..", ".L#L.", "..L..", "....."],
+    [".....", ".....", "..L..", ".....", "....."],
+    [".....", ".....", "..L..", ".....", "....."],
+]
+
+
+def make_tree(kind, gilded):
+    """Tree blocks as {(dx, dy, dz): palette index}, trunk at dx = dz = 0, plus
+    (canopy radius, height). Kinds: classic (the stock sky tree), tall (slim,
+    spruce-like) and broad (short trunk, round crown)."""
+    trunk = GILDED_PIDX if gilded else LOG_PIDX
+    b = {}
+    if kind == "classic":
+        for y, layer in enumerate(SKY_TREE):
+            for z, row in enumerate(layer):
+                for x, ch in enumerate(row):
+                    if ch != ".":
+                        b[(x - 2, y, z - 2)] = trunk if ch == "#" else LEAF_PIDX
+        return b, 2, len(SKY_TREE)
+    if kind == "tall":
+        H = 12
+        for y in range(H):
+            b[(0, y, 0)] = trunk
+        for y in range(3, H + 1):
+            k = H + 1 - y     # 1 at the tip
+            r = 0 if k == 1 else (1 if k <= 3 else (2 if k % 2 == 1 else 1))   # spruce skirts
+            for dx in range(-r, r + 1):
+                for dz in range(-r, r + 1):
+                    if r == 2 and abs(dx) == 2 and abs(dz) == 2:
+                        continue
+                    if (dx, y, dz) not in b:
+                        b[(dx, y, dz)] = LEAF_PIDX
+        return b, 2, H + 1
+    # broad: short trunk under a round crown
+    for y in range(6):
+        b[(0, y, 0)] = trunk
+    for dx in range(-3, 4):
+        for dz in range(-3, 4):
+            for y in range(2, 9):
+                if dx * dx + dz * dz + ((y - 5.2) * 1.25) ** 2 <= 3.4 ** 2 and (dx, y, dz) not in b:
+                    b[(dx, y, dz)] = LEAF_PIDX
+    return b, 3, 9
+
+
+TREE_KINDS = [("classic", 4), ("tall", 2), ("broad", 2)]
 
 
 def side_sockets(mask, sx, sz, ax, az, spacing=6):
@@ -355,31 +622,79 @@ def side_sockets(mask, sx, sz, ax, az, spacing=6):
     return out
 
 
+def pick_extra_puffs(mask, dist, sx, sz, anchor, water_cols, min_gap=11, limit=2):
+    """Extra puff socket columns for long pads, spread out so the puffs hung
+    from them (about 11-17 wide) don't overlap each other or the anchor's."""
+    chosen = [anchor]
+    cands = [(x, z) for x in range(sx) for z in range(sz)
+             if mask[x][z] and dist[x][z] >= 2 and (x, z) not in water_cols]
+    extras = []
+    while len(extras) < limit:
+        best = None
+        for x, z in cands:
+            gap = min(math.hypot(x - cx, z - cz) for cx, cz in chosen)
+            if gap >= min_gap and (best is None or gap > best[0]):
+                best = (gap, x, z)
+        if best is None:
+            break
+        chosen.append((best[1], best[2]))
+        extras.append((best[1], best[2]))
+    return extras
+
+
+# ---------------------------------------------------------------------------
+# pads: footprint-matched cloud hung under a city piece
+# ---------------------------------------------------------------------------
+
 def build_pad(short, variant, seed, mask, anchor, sx, sz, water_cols=()):
-    """One cloud pad: flat top, domed bushy bottom, puff socket at the deepest point.
+    """One cloud pad: flat top, rounded bushy bottom, puff socket at the deepest point.
 
     water_cols: piece floor columns holding water — the pad carries them through
     as an enclosed water shaft so the stream exits its underside and falls to the
     ground (climbable from below). Pads with a shaft skip the puff socket so no
     blob spawns under the outlet and intercepts the stream."""
+    rnd = random.Random(seed)
     H = cloud_height(sx, sz)
     ax, az = anchor
     dist = edge_distance(mask, sx, sz)
     water_cols = set(water_cols)
 
+    X, Y, Z = grid_xyz(sx, 1, sz)
+    n1 = fbm(X, Y, Z, seed, 4.5, 2)[:, 0, :] - 0.5       # broad swell
+    n2 = fbm(X, Y, Z, seed + 77, 2.5, 2)[:, 0, :] - 0.5   # fine lumps
+
+    puffs = [] if water_cols else [(ax, az)] + pick_extra_puffs(
+        mask, dist, sx, sz, (ax, az), water_cols)
+    # hanging bulges: soft downward lumps scattered over the interior
+    interior = [(x, z) for x in range(sx) for z in range(sz)
+                if mask[x][z] and dist[x][z] >= 1.5]
+    bulges = []
+    for _ in range(min(len(interior), 2 + (sx * sz) // 30)):
+        px, pz = rnd.choice(interior)
+        bulges.append((px, pz, rnd.uniform(2.8, 5.2), rnd.uniform(0.5, 0.95) * H))
+
+    # underside = a thin slab plus hanging hemispherical lobes, so the bottom
+    # reads as a few rounded masses rather than concentric steps
+    Rrim = max(3.5, H * 0.75)
+    hang = [(px, pz, max(3.5, H * 0.8), H) for px, pz in puffs]
+    for bx, bz, rad, amp in bulges:
+        hang.append((bx, bz, rad, amp))
     depth = [[0] * sz for _ in range(sx)]
     for x in range(sx):
         for z in range(sz):
             if not mask[x][z]:
                 continue
-            d = dist[x][z] + h32(x, z, seed) % 2
-            if h32(x * 7 + 3, z * 5 + 1, seed) % 5 == 0:
-                d += 2  # hanging tuft
-            # dome towards the anchor so the underside bellies out to full depth
-            dome = H - max(abs(x - ax), abs(z - az))
-            d = max(d, dome)
-            depth[x][z] = max(1, min(H, d))
-    depth[ax][az] = H  # puff socket lives at the bottom of the anchor column
+            d = 2.0 + n2[x][z] * 1.2
+            for hx, hz, rad, amp in hang:
+                r = math.hypot(x - hx, z - hz) / rad
+                if r < 1.0:
+                    d = max(d, amp * math.sqrt(1.0 - r * r) + n2[x][z])
+            wob = dist[x][z] + n1[x][z] * 3.0                   # wavy, so contours aren't squares
+            t = min(1.0, max(0.0, (wob - 0.5) / Rrim))
+            d = min(d, 1.0 + (H - 1) * math.sqrt(1.0 - (1.0 - t) ** 2))  # round lip at the rim
+            depth[x][z] = max(1, min(H, int(round(d))))
+    for px, pz in puffs:
+        depth[px][pz] = H  # puff socket lives at the bottom of its column
 
     # water shafts run full depth, walled by full-depth cloud so they only exit below
     for wx, wz in water_cols:
@@ -407,11 +722,11 @@ def build_pad(short, variant, seed, mask, anchor, sx, sz, water_cols=()):
             CONNECTOR_NAME, "minecraft:empty", "minecraft:empty",
             CLOUD_BLOCK, ax, top, az),
     }
-    if not water_cols:
-        cells[(ax, 0, az)] = 2  # down socket for the puff below
-        bpd[str(flat_index(ax, 0, az, H, sz))] = jigsaw_entity(
+    for px, pz in puffs:
+        cells[(px, 0, pz)] = 2  # down socket for the puff below
+        bpd[str(flat_index(px, 0, pz, H, sz))] = jigsaw_entity(
             PUFF_SOCKET_NAME, PUFF_NAME, PUFF_POOL,
-            CLOUD_BLOCK, ax, 0, az, joint="rollable")
+            CLOUD_BLOCK, px, 0, pz, joint="rollable")
 
     # side sockets pull filler slabs into the gaps between paths
     for x, z, fd in side_sockets(mask, sx, sz, ax, az):
@@ -421,121 +736,642 @@ def build_pad(short, variant, seed, mask, anchor, sx, sz, water_cols=()):
         bpd[str(flat_index(x, top, z, H, sz))] = jigsaw_entity(
             FILLER_SOCKET_NAME, FILLER_NAME, FILLER_POOL,
             CLOUD_BLOCK, x, top, z)
+    shaft = {(wx + dx, wz + dz) for wx, wz in water_cols for dx in (-1, 0, 1) for dz in (-1, 0, 1)}
+    soften(cells, (sx, H, sz), seed, keep_cols=shaft, fraction=0.9)
     root = make_structure(sx, H, sz, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
     save(os.path.join(CLOUD_DIR, f"{short}_{variant}.mcstructure"), root, "")
 
 
-def build_filler(variant, seed, w, h):
-    """Gap-filler slab with a domed bushy bottom. The connector jigsaws sit one
-    layer BELOW the top: they align with the pad side sockets (one under the
-    piece floor), so the filler's flat top rises level with the road surface and
-    paths/buildings read as cutting through a continuous cloud field."""
-    mask = [[True] * w for _ in range(w)]
-    dist = edge_distance(mask, w, w)
-    c = (w - 1) // 2
+# ---------------------------------------------------------------------------
+# fillers: organic slabs that close the gaps between paths
+# ---------------------------------------------------------------------------
+
+def build_filler(variant, seed, w, d, h, trees=0, prefix="filler"):
+    """Gap-filler slab: lobed oval outline, rounded bushy bottom. trees > 0 plants
+    that many sky trees on its flat top (drawn from the same pool as the plain
+    fillers, so where there's no headroom a plain slab is placed instead).
+    The connector jigsaws sit one layer BELOW the top: they align with the pad
+    side sockets (one under the piece floor), so the filler's flat top rises
+    level with the road surface and paths/buildings read as cutting through a
+    continuous cloud field."""
+    cx, cz = (w - 1) / 2.0, (d - 1) / 2.0
     top = h - 1
     joint = h - 2  # connector layer, level with the pad top
-    cells = {}
+    X, Y, Z = grid_xyz(w, 1, d)
+    n1 = fbm(X, Y, Z, seed, 4.5, 2)[:, 0, :]
+    n2 = fbm(X, Y, Z, seed + 53, 2.5, 2)[:, 0, :] - 0.5
+
+    conns = [(int(cx), 0, 2), (int(cx), d - 1, 3), (0, int(cz), 4), (w - 1, int(cz), 5)]
+    rnd = random.Random(seed)
+    hang = []
+    for _ in range(1 + (w * d) // 45):
+        hang.append((rnd.uniform(0.25, 0.75) * w, rnd.uniform(0.25, 0.75) * d,
+                     rnd.uniform(0.28, 0.45) * min(w, d) + 1.5, rnd.uniform(0.6, 1.0) * h))
+    solid = np.zeros((w, h, d), dtype=bool)
     for x in range(w):
-        for z in range(w):
-            d = dist[x][z] + h32(x, z, seed) % 2
-            dome = h - max(abs(x - c), abs(z - c))
-            d = max(2, min(h, max(d, dome)))  # min 2 so the joint layer is backed
-            for i in range(d):
-                cells[(x, top - i, z)] = 0
+        for z in range(d):
+            ex, ez = (x - cx) / (w / 2.0), (z - cz) / (d / 2.0)
+            r = math.hypot(ex, ez)
+            ang = math.atan2(ez, ex)
+            # outline holds at the four side midpoints (where the connectors sit)
+            # and indents between them by a smooth noise amount
+            indent = 0.34 * n1[x][z] * math.sin(2 * ang) ** 2
+            R = 1.0 - indent
+            if r >= R:
+                continue
+            t = 1.0 - r / R                      # 0 at the edge, 1 at the centre
+            depth = 2.0 + n2[x][z]
+            for hx, hz, rad, amp in hang:
+                rr = math.hypot(x - hx, z - hz) / rad
+                if rr < 1.0:
+                    depth = max(depth, amp * math.sqrt(1.0 - rr * rr))
+            depth = min(depth, 2.0 + 6.0 * t)     # slope off toward the rim
+            depth = max(2, min(h, int(round(depth))))
+            top_y = top
+            for i in range(depth):
+                solid[x, top_y - i, z] = True
+    for px, pz, _ in conns:
+        for y in (joint, top):
+            solid[px, y, pz] = True
+        inx = 1 if px == 0 else (-1 if px == w - 1 else 0)
+        inz = 1 if pz == 0 else (-1 if pz == d - 1 else 0)
+        solid[px + inx, joint, pz + inz] = True
+    solid = tidy(solid, 1)
+    for px, pz, _ in conns:
+        solid[px, joint, pz] = True
+    solid = keep_connected(solid, (int(cx), top, int(cz)))
+    for px, pz, _ in conns:
+        solid[px, joint, pz] = True
+
+    cells = grid_cells(solid)
     bpd = {}
-    for x, z, fd in ((c, 0, 2), (c, w - 1, 3), (0, c, 4), (w - 1, c, 5)):
+    for x, z, fd in conns:
         cells[(x, joint, z)] = FACING_PIDX[fd]
-        bpd[str(flat_index(x, joint, z, h, w))] = jigsaw_entity(
+        bpd[str(flat_index(x, joint, z, h, d))] = jigsaw_entity(
             FILLER_NAME, "minecraft:empty", "minecraft:empty",
             CLOUD_BLOCK, x, joint, z)
-    root = make_structure(w, h, w, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
-    save(os.path.join(CLOUD_DIR, f"filler_{variant}.mcstructure"), root, "")
+    soften(cells, (w, h, d), seed, fraction=0.8)
+    H = h
+    if trees:
+        planted, extra = plant_trees(cells, solid[:, top, :].copy(), None, h, rnd, trees)
+        if planted == 0:
+            raise ValueError(f"{prefix}_{variant}: no flat spot for a tree")
+        bpd, H = rekey_bpd(bpd, h, d, h + extra), h + extra
+    root = make_structure(w, H, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
+    save(os.path.join(CLOUD_DIR, f"{prefix}_{variant}.mcstructure"), root, "")
 
 
-# vertical radius profile of a puffy blob, index 0 = top layer
-def blob_profile(h):
-    prof = []
-    for i in range(h):
-        t = i / max(1, h - 1)
-        # small at top, widest ~1/3 down, wispy at the bottom
-        if t <= 0.35:
-            prof.append(0.75 + 0.25 * (t / 0.35))
-        else:
-            prof.append(1.0 - 0.85 * ((t - 0.35) / 0.65) ** 1.2)
-    return prof
+# ---------------------------------------------------------------------------
+# puffs and satellites: free-hanging clouds built from lobes
+# ---------------------------------------------------------------------------
+
+def shape_cumulus(rnd, w, h, d):
+    """Round billowing cumulus: a core with a ring of smaller lobes."""
+    cx, cz = (w - 1) / 2.0, (d - 1) / 2.0
+    lobes = [(cx, h * 0.56, cz, 0.30 * w, h * 0.42, h * 0.52, 0.30 * d)]
+    n = rnd.randint(5, 7)
+    for k in range(n):
+        ang = 2 * math.pi * k / n + rnd.uniform(-0.35, 0.35)
+        reach = rnd.uniform(0.6, 1.0)
+        s = rnd.uniform(0.8, 1.2)
+        lobes.append((cx + math.cos(ang) * 0.30 * w * reach * 1.15,
+                      h * rnd.uniform(0.36, 0.6),
+                      cz + math.sin(ang) * 0.30 * d * reach * 1.15,
+                      0.19 * w * s, h * rnd.uniform(0.26, 0.38) * s,
+                      h * rnd.uniform(0.38, 0.52) * s, 0.19 * d * s))
+    return lobes
 
 
-def build_puff(variant, seed, w, h):
-    """A wide free-floating blob that hangs below a pad's puff socket."""
-    r = (w - 1) / 2.0
-    c = (w - 1) / 2.0
-    prof = blob_profile(h)
-    cells = {}
-    for y in range(h):
-        i = h - 1 - y  # 0 at top
-        ry = r * prof[i]
-        for x in range(w):
-            for z in range(w):
-                dx, dz = x - c, z - c
-                n = (h32(x, z, seed + i * 97) % 1000) / 1000.0 - 0.5
-                if dx * dx + dz * dz <= (ry + n * 1.4) ** 2:
-                    cells[(x, y, z)] = 0
-    cx = int(c)
-    cells[(cx, h - 1, cx)] = 1
-    bpd = {
-        str(flat_index(cx, h - 1, cx, h, w)): jigsaw_entity(
-            PUFF_NAME, "minecraft:empty", "minecraft:empty",
-            CLOUD_BLOCK, cx, h - 1, cx),
-    }
-    root = make_structure(w, h, w, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
+def shape_streak(rnd, w, h, d):
+    """Long, low stratus streak: a row of overlapping flat lobes, bowed in z."""
+    cz = (d - 1) / 2.0
+    lobes = []
+    n = rnd.randint(5, 7)
+    bow = rnd.uniform(-0.15, 0.15) * d
+    for k in range(n):
+        u = k / (n - 1)
+        s = rnd.uniform(0.85, 1.2) * (0.7 + 0.5 * math.sin(math.pi * u))
+        lobes.append((0.1 * w + 0.8 * w * u + rnd.uniform(-0.04, 0.04) * w,
+                      h * rnd.uniform(0.45, 0.62),
+                      cz + bow * math.sin(math.pi * u) + rnd.uniform(-0.12, 0.12) * d,
+                      0.17 * w * s, h * 0.34 * s, h * 0.5 * s, 0.30 * d * s))
+    return lobes
+
+
+def shape_mammatus(rnd, w, h, d):
+    """Flat deck with rounded pouches hanging from its underside."""
+    cx, cz = (w - 1) / 2.0, (d - 1) / 2.0
+    lobes = [(cx, h - 2.0, cz, 0.5 * w, 1.9, 2.4, 0.5 * d)]
+    cols = 3 if w >= 12 else 2
+    for i in range(cols):
+        for j in range(cols):
+            if rnd.random() < 0.2:
+                continue
+            px = w * (i + 0.5 + rnd.uniform(-0.25, 0.25)) / cols
+            pz = d * (j + 0.5 + rnd.uniform(-0.25, 0.25)) / cols
+            reach = rnd.uniform(0.45, 1.0)
+            rad = 0.16 * (w + d) / 2 * rnd.uniform(0.85, 1.2)
+            lobes.append((px, h * 0.62, pz, rad, 2.2, h * 0.62 * reach + 0.6, rad))
+    return lobes
+
+
+def shape_tower(rnd, w, h, d):
+    """Heaped cauliflower column, widest at the top and narrowing downward."""
+    cx, cz = (w - 1) / 2.0, (d - 1) / 2.0
+    lobes = []
+    n = 4
+    for k in range(n):
+        u = k / (n - 1)
+        s = 1.0 - 0.5 * u
+        lobes.append((cx + rnd.uniform(-0.12, 0.12) * w, h * (0.78 - 0.55 * u),
+                      cz + rnd.uniform(-0.12, 0.12) * d,
+                      0.36 * w * s, h * 0.2, h * 0.26, 0.36 * d * s))
+    return lobes
+
+
+PUFF_SHAPES = {"cumulus": shape_cumulus, "streak": shape_streak,
+               "mammatus": shape_mammatus, "tower": shape_tower}
+
+
+def finish_cloud(name, solid, conn_xz, rnd, sockets, fringe_amount=0.0):
+    """Tidy a lobe grid, crop it, add the up connector (and optional outgoing
+    satellite sockets) and write it as a structure.
+
+    conn_xz: (x, z) of the up connector on the top layer before cropping.
+    sockets: how many satellite sockets to add (0 for satellites)."""
+    h = solid.shape[1]
+    px, pz = conn_xz
+    # solid cap around the connector so the cloud merges with whatever hangs above
+    solid[max(0, px - 1):px + 2, h - 1, max(0, pz - 1):pz + 2] = True
+    solid = tidy(solid, 2)
+    solid = fringe(solid, rnd.randrange(1 << 30), fringe_amount)
+    solid[px, h - 1, pz] = True
+    solid = keep_connected(solid, (px, h - 1, pz))
+    solid, (ox, oy, oz) = crop(solid)
+    px, pz = px - ox, pz - oz
+    w, h, d = solid.shape
+    top = h - 1
+    cells = grid_cells(solid)
+    cells[(px, top, pz)] = 1
+    bpd = {str(flat_index(px, top, pz, h, d)): jigsaw_entity(
+        PUFF_NAME if sockets else SAT_NAME, "minecraft:empty", "minecraft:empty",
+        CLOUD_BLOCK, px, top, pz)}
+    return solid, cells, bpd, (w, h, d), (px, top, pz)
+
+
+def add_sat_sockets(solid, cells, bpd, dims, conn, rnd, count):
+    """Down socket on the bottom layer plus side sockets on the bounding-box
+    faces, each on a solid cell with solid behind it."""
+    w, h, d = dims
+    taken = {conn}
+    options = []
+    # down: farthest solid bottom cell from the connector, backed by cloud above
+    bottoms = [(x, z) for x in range(w) for z in range(d)
+               if solid[x, 0, z] and h > 1 and solid[x, 1, z]]
+    if bottoms:
+        bx, bz = max(bottoms, key=lambda c: math.hypot(c[0] - conn[0], c[1] - conn[2]))
+        options.append(("down", (bx, 0, bz), 0))
+    mid = (h - 1) * 0.45
+    faces = [(4, lambda y, z: (0, y, z), lambda y, z: (1, y, z)),
+             (5, lambda y, z: (w - 1, y, z), lambda y, z: (w - 2, y, z)),
+             (2, lambda y, x: (x, y, 0), lambda y, x: (x, y, 1)),
+             (3, lambda y, x: (x, y, d - 1), lambda y, x: (x, y, d - 2))]
+    rnd.shuffle(faces)
+    for fd, face, inward in faces:
+        span = d if fd in (4, 5) else w
+        best = None
+        for y in range(1, h - 1):
+            for u in range(span):
+                c, i = face(y, u), inward(y, u)
+                if solid[c] and solid[i]:
+                    score = abs(y - mid) + rnd.uniform(0, 1.5) - 0.15 * abs(u - span / 2.0)
+                    if best is None or score < best[0]:
+                        best = (score, c)
+        if best is not None:
+            options.append((fd, best[1], fd))
+    chosen = []
+    if options and options[0][0] == "down":
+        chosen.append(options.pop(0))
+    rnd.shuffle(options)
+    chosen += options[:max(0, count - len(chosen))]
+    for kind, (x, y, z), fd in chosen:
+        if (x, y, z) in taken:
+            continue
+        taken.add((x, y, z))
+        cells[(x, y, z)] = 2 if kind == "down" else FACING_PIDX[fd]
+        # a satellite hung below a puff has the puff over its head, so only the
+        # side-attached ones (open sky above) draw from the pool with trees
+        bpd[str(flat_index(x, y, z, h, d))] = jigsaw_entity(
+            SAT_SOCKET_NAME, SAT_NAME, SAT_POOL if kind == "down" else SAT_SIDE_POOL,
+            CLOUD_BLOCK, x, y, z, joint="rollable")
+
+
+def build_puff(variant, seed, kind, w, h, d, satellites=2):
+    """A free-hanging cloud that hangs below a pad's puff socket. The connector
+    sits off-centre, so the body spreads sideways rather than piling up under
+    the pad."""
+    rnd = random.Random(seed)
+    X, Y, Z = grid_xyz(w, h, d)
+    lobes = PUFF_SHAPES[kind](rnd, w, h, d)
+    px = int(round((w - 1) / 2.0 + rnd.uniform(-0.2, 0.2) * w))
+    pz = int(round((d - 1) / 2.0 + rnd.uniform(-0.2, 0.2) * d))
+    lobes.append((px, h - 1.0, pz, 3.6, 2.0, 2.8, 3.6))   # neck up to the pad
+    F = lobe_field(X, Y, Z, lobes) + (fbm(X, Y, Z, seed, 5.0, 2) - 0.5) * 0.3
+    solid, cells, bpd, dims, conn = finish_cloud(
+        f"puff_{variant}", F > 0.18, (px, pz), rnd, sockets=True, fringe_amount=0.2)
+    add_sat_sockets(solid, cells, bpd, dims, conn, rnd, satellites)
+    w, h, d = dims
+    soften(cells, dims, seed, fraction=0.55)
+    root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
     save(os.path.join(CLOUD_DIR, f"puff_{variant}.mcstructure"), root, "")
+    return dims
+
+
+def sat_lobes(rnd, kind, w, h, d):
+    cx, cz = (w - 1) / 2.0, (d - 1) / 2.0
+    top = h - 1.0
+    if kind == "cumulus":
+        lobes = [(cx, top - 1.2, cz, 0.36 * w, 1.6, h * 0.6, 0.36 * d)]
+        for _ in range(3):
+            ang = rnd.uniform(0, 2 * math.pi)
+            lobes.append((cx + math.cos(ang) * 0.22 * w, top - rnd.uniform(1.2, 2.2),
+                          cz + math.sin(ang) * 0.22 * d, 0.24 * w, 1.4, h * 0.45, 0.24 * d))
+    elif kind == "streak":
+        lobes = []
+        for k in range(4):
+            u = k / 3.0
+            lobes.append((0.15 * w + 0.7 * w * u, top - 1.0 - rnd.uniform(0, 0.5),
+                          cz + rnd.uniform(-0.1, 0.1) * d, 0.22 * w, 1.4, 2.4, 0.4 * d))
+    elif kind == "pouch":
+        lobes = [(cx, top - 1.0, cz, 0.42 * w, 1.5, h * 0.9, 0.42 * d),
+                 (cx + 0.18 * w, top - 1.5, cz - 0.1 * d, 0.26 * w, 1.2, h * 0.6, 0.26 * d)]
+    else:  # wisp: two flat lobes, barely there
+        lobes = [(cx - 0.18 * w, top - 0.8, cz, 0.3 * w, 1.3, 2.0, 0.4 * d),
+                 (cx + 0.2 * w, top - 1.0, cz + 0.1 * d, 0.26 * w, 1.2, 1.8, 0.36 * d)]
+    return lobes
+
+
+def add_face_connectors(cells, bpd, dims, name, conn=None):
+    """Outward-facing connectors on the middle of each bounding-box face, at the
+    top-1 and second layers, carved inward until they meet the body so none is a
+    floating block."""
+    w, h, d = dims
+    mx, mz = (w - 1) // 2, (d - 1) // 2
+    layers = sorted({max(0, h - 2), min(1, h - 1)}) if h >= 3 else [0]
+    for jl in layers:
+        for x, z, fd, ix, iz in ((0, mz, 4, 1, mz), (w - 1, mz, 5, w - 2, mz),
+                                 (mx, 0, 2, mx, 1), (mx, d - 1, 3, mx, d - 2)):
+            if (x, jl, z) in bpd or (x, jl, z) == conn:
+                continue
+            cells[(x, jl, z)] = FACING_PIDX[fd]
+            sx_, sz_ = ix - x, iz - z
+            cx_, cz_ = ix, iz
+            for _ in range(6):
+                if not (0 <= cx_ < w and 0 <= cz_ < d) or (cx_, jl, cz_) in cells:
+                    break
+                cells[(cx_, jl, cz_)] = 0
+                cx_, cz_ = cx_ + sx_, cz_ + sz_
+            bpd[str(flat_index(x, jl, z, h, d))] = jigsaw_entity(
+                name, "minecraft:empty", "minecraft:empty", CLOUD_BLOCK, x, jl, z)
+
+
+def add_bank_socket(solid, cells, bpd, dims, rnd):
+    """One side socket that pulls a distant cloud bank outward, off-centre on a
+    bounding-box face so it never shares a cell with that face's connector."""
+    w, h, d = dims
+    faces = [(4, lambda y, u: (0, y, u), lambda y, u: (1, y, u), d),
+             (5, lambda y, u: (w - 1, y, u), lambda y, u: (w - 2, y, u), d),
+             (2, lambda y, u: (u, y, 0), lambda y, u: (u, y, 1), w),
+             (3, lambda y, u: (u, y, d - 1), lambda y, u: (u, y, d - 2), w)]
+    rnd.shuffle(faces)
+    for fd, face, inward, span in faces:
+        mid = (span - 1) // 2
+        opts = [face(y, u) for y in range(1, h - 1) for u in range(span)
+                if abs(u - mid) >= 2 and solid[face(y, u)] and solid[inward(y, u)]
+                and cells.get(face(y, u)) == 0]
+        if opts:
+            x, y, z = rnd.choice(opts)
+            cells[(x, y, z)] = FACING_PIDX[fd]
+            bpd[str(flat_index(x, y, z, h, d))] = jigsaw_entity(
+                BANK_SOCKET_NAME, BANK_NAME, BANK_POOL, CLOUD_BLOCK, x, y, z, joint="rollable")
+            return True
+    return False
+
+
+def add_hanging_wisps(cells, bpd, solid, h, d, rnd, count, max_len=5):
+    """Hang `count` 1-block threads of cloud 2..max_len long under the body,
+    spaced apart. The template is shifted up to make room. Returns
+    (cells, bpd, new height)."""
+    bottoms = [(x, z) for x in range(solid.shape[0]) for z in range(solid.shape[2])
+               if solid[x, 0, z] and cells.get((x, 0, z)) == 0]
+    rnd.shuffle(bottoms)
+    picked = []
+    for x, z in bottoms:
+        if all(math.hypot(x - px, z - pz) >= 3 for px, pz, _ in picked):
+            picked.append((x, z, rnd.randint(2, max_len)))
+            if len(picked) == count:
+                break
+    if not picked:
+        return cells, bpd, h
+    shift = max(n for _, _, n in picked)
+    out = {(x, y + shift, z): v for (x, y, z), v in cells.items()}
+    for x, z, n in picked:
+        for k in range(1, n + 1):
+            out[(x, shift - k, z)] = 0
+    return out, rekey_bpd(bpd, h, d, h + shift, shift), h + shift
+
+
+def build_satellite(variant, seed, kind, w, h, d, trees=0, prefix="satellite",
+                    bank_socket=False, wisps=0):
+    """A small cloudlet. One up connector plus outward side connectors at two
+    heights on every face, so it can hang below a socket or hook onto one from
+    the side at a varied height. trees > 0 plants that many sky trees on the top
+    surface (only used where the top is open sky, see SAT_SIDE_POOL);
+    bank_socket adds a socket that pulls a distant bank out from one side;
+    wisps hangs that many thin threads of cloud from the underside."""
+    rnd = random.Random(seed)
+    X, Y, Z = grid_xyz(w, h, d)
+    lobes = sat_lobes(rnd, kind, w, h, d)
+    F = lobe_field(X, Y, Z, lobes) + (fbm(X, Y, Z, seed, 4.0, 2) - 0.5) * 0.25
+    solid = F > 0.15
+    cxz = (int(round((w - 1) / 2.0)), int(round((d - 1) / 2.0)))
+    solid, cells, bpd, dims, conn = finish_cloud(
+        f"{prefix}_{variant}", solid, cxz, rnd, sockets=False, fringe_amount=0.14)
+    w, h, d = dims
+    if trees:
+        # level the crown into a plateau so trunks have flat footing: any column
+        # whose surface is within 2 of the top is raised to the top layer
+        for x in range(w):
+            for z in range(d):
+                ys = np.nonzero(solid[x, :, z])[0]
+                if len(ys) and ys.max() >= h - 3:
+                    for y in range(int(ys.max()) + 1, h):
+                        solid[x, y, z] = True
+                        cells.setdefault((x, y, z), 0)
+    top_solid = solid[:, h - 1, :].copy()
+    add_face_connectors(cells, bpd, dims, SAT_NAME, conn)
+    if bank_socket:
+        add_bank_socket(solid, cells, bpd, dims, rnd)
+    soften(cells, dims, seed, protect_top=bool(trees), fraction=0.6)
+    if wisps:
+        cells, bpd, h = add_hanging_wisps(cells, bpd, solid, h, d, rnd, wisps)
+        dims = (w, h, d)
+    if trees:
+        planted, extra = plant_trees(cells, top_solid, conn, h, rnd, trees)
+        if planted == 0:
+            raise ValueError(f"{prefix}_{variant}: no flat spot for a tree")
+        bpd, h = rekey_bpd(bpd, h, d, h + extra), h + extra
+        dims = (w, h, d)
+    root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
+    save(os.path.join(CLOUD_DIR, f"{prefix}_{variant}.mcstructure"), root, "")
+    return dims
+
+
+def build_virga(variant, seed, w, d, h):
+    """Rain-streak cloud: a thin flat cap with 5-8 single-block threads hanging
+    from it, tapering to nothing. Hangs under a puff like a satellite."""
+    rnd = random.Random(seed)
+    cx, cz = (w - 1) / 2.0, (d - 1) / 2.0
+    top = h - 1
+    cells, inner = {}, []
+    for x in range(w):
+        for z in range(d):
+            r = math.hypot((x - cx) / (w / 2.0), (z - cz) / (d / 2.0))
+            if r <= 1.0 - 0.25 * (vnoise3(np.array(x * 1.0), np.array(0.0), np.array(z * 1.0), seed, 2.5) - 0.5):
+                cells[(x, top, z)] = 0
+                if r <= 0.72:
+                    cells[(x, top - 1, z)] = 0
+                    inner.append((x, z))
+    rnd.shuffle(inner)
+    picked, want = [], rnd.randint(5, 8)
+    for x, z in inner:
+        if all(math.hypot(x - px, z - pz) >= 2.2 for px, pz in picked):
+            picked.append((x, z))
+            if len(picked) == want:
+                break
+    for x, z in picked:
+        for k in range(rnd.randint(3, h - 2)):
+            cells[(x, top - 2 - k, z)] = 0
+    ccx, ccz = int(cx), int(cz)
+    cells[(ccx, top, ccz)] = 1
+    bpd = {str(flat_index(ccx, top, ccz, h, d)): jigsaw_entity(
+        SAT_NAME, "minecraft:empty", "minecraft:empty", CLOUD_BLOCK, ccx, top, ccz)}
+    root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
+    save(os.path.join(CLOUD_DIR, f"satellite_virga_{variant}.mcstructure"), root, "")
+    return (w, h, d)
+
+
+def shape_bank(rnd, w, h, d):
+    """Long, low stratus deck: overlapping flat lobes with a wandering centre line."""
+    lobes = []
+    n = rnd.randint(7, 10)
+    wander = rnd.uniform(-0.15, 0.15) * d
+    for k in range(n):
+        u = (k + 0.5) / n
+        s = rnd.uniform(0.8, 1.25) * (0.75 + 0.35 * math.sin(math.pi * u))
+        lobes.append((w * (0.06 + 0.88 * u) + rnd.uniform(-0.03, 0.03) * w,
+                      h * rnd.uniform(0.5, 0.65),
+                      d * 0.5 + wander * math.sin(2 * math.pi * u) + rnd.uniform(-0.15, 0.15) * d,
+                      w / n * 1.25 * s, h * 0.36 * s, h * 0.55 * s, d * 0.36 * s))
+    return lobes
+
+
+def build_bank(variant, seed, w, h, d, trees=0):
+    """A big, low cloud bank that trails far out from the city, hooked on by a
+    satellite's bank socket. Four-sided connectors let it attach either way
+    round; some carry trees on a levelled top."""
+    rnd = random.Random(seed)
+    X, Y, Z = grid_xyz(w, h, d)
+    F = lobe_field(X, Y, Z, shape_bank(rnd, w, h, d)) + (fbm(X, Y, Z, seed, 5.0, 2) - 0.5) * 0.3
+    solid = tidy(F > 0.15, 2)
+    solid = fringe(solid, seed, 0.2, protect_top=bool(trees))
+    start = tuple(int(v) for v in min(np.argwhere(solid),
+                  key=lambda c: abs(c[0] - w / 2) + abs(c[1] - h * 0.6) * 3 + abs(c[2] - d / 2)))
+    solid = keep_connected(solid, start)
+    solid, _ = crop(solid)
+    w, h, d = solid.shape
+    if trees:
+        for x in range(w):
+            for z in range(d):
+                ys = np.nonzero(solid[x, :, z])[0]
+                if len(ys) and ys.max() >= h - 3:
+                    solid[x, int(ys.max()) + 1:, z] = True
+    cells = grid_cells(solid)
+    bpd = {}
+    add_face_connectors(cells, bpd, (w, h, d), BANK_NAME)
+    soften(cells, (w, h, d), seed, protect_top=bool(trees), fraction=0.6)
+    if trees:
+        planted, extra = plant_trees(cells, solid[:, h - 1, :].copy(), None, h, rnd, trees)
+        if planted == 0:
+            raise ValueError(f"bank_{variant}: no flat spot for a tree")
+        bpd, h = rekey_bpd(bpd, h, d, h + extra), h + extra
+    root = make_structure(w, h, d, cells, cloud_palette(VERSION_FROM_PIECE), bpd)
+    save(os.path.join(CLOUD_DIR, f"bank_{variant}.mcstructure"), root, "")
+    return (w, h, d)
+
+
+def rekey_bpd(bpd, h, d, new_h, dy=0):
+    """Jigsaw entities are keyed by flat index, which depends on the template
+    height; re-key them after the bounding box grows (dy = how far the existing
+    blocks were shifted up)."""
+    out = {}
+    for key, ent in bpd.items():
+        f = int(key)
+        x, y, z = f // (h * d), (f // d) % h, f % d
+        out[str(flat_index(x, y + dy, z, new_h, d))] = ent
+    return out
+
+
+def plant_trees(cells, top_solid, conn, top_layer_h, rnd, count):
+    """Plant up to `count` sky trees on a cloud's flat top surface, as many as fit.
+    Each trunk gets a random kind (classic / tall / broad, one in four with a
+    gilded trunk) on a mostly flat 3x3 patch, with its canopy inside the
+    template, clear of the up connector (if any) and of other canopies, plus a
+    sapling or two at its foot. Returns (trees planted, extra height needed)."""
+    w, d = top_solid.shape
+    top = top_layer_h - 1
+    cands = []
+    for x in range(2, w - 2):
+        for z in range(2, d - 2):
+            patch = top_solid[x - 1:x + 2, z - 1:z + 2]
+            if top_solid[x, z] and patch.sum() >= 7 and cells.get((x, top, z)) == 0 \
+                    and (conn is None or math.hypot(x - conn[0], z - conn[2]) >= 3):
+                edge = min(x, w - 1 - x, z, d - 1 - z)
+                cands.append((edge + rnd.uniform(0, 1.2), x, z))
+    cands.sort(reverse=True)
+    kinds, weights = zip(*TREE_KINDS)
+    placed = []   # (x, z, radius)
+    extra = 0
+    for _, x, z in cands:
+        if len(placed) == count:
+            break
+        edge = min(x, w - 1 - x, z, d - 1 - z)
+        kind = rnd.choices(kinds, weights)[0]
+        blocks, r, hgt = make_tree(kind, rnd.random() < 0.25)
+        if edge < r:   # not enough room for this canopy: fall back to the stock tree
+            blocks, r, hgt = make_tree("classic", rnd.random() < 0.25)
+        if edge < r or any(math.hypot(x - px, z - pz) < r + pr + 1 for px, pz, pr in placed):
+            continue
+        placed.append((x, z, r))
+        extra = max(extra, hgt)
+        for (dx, dy, dz), pidx in blocks.items():
+            pos = (x + dx, top + 1 + dy, z + dz)
+            if pidx != LEAF_PIDX or pos not in cells:
+                cells[pos] = pidx
+        spots = [(x + dx, z + dz) for dx in range(-2, 3) for dz in range(-2, 3)
+                 if (dx or dz) and 0 <= x + dx < w and 0 <= z + dz < d
+                 and top_solid[x + dx, z + dz] and cells.get((x + dx, top, z + dz)) == 0
+                 and (x + dx, top + 1, z + dz) not in cells]
+        rnd.shuffle(spots)
+        for sx_, sz_ in spots[:rnd.randint(1, 2)]:
+            cells[(sx_, top + 1, sz_)] = SAPLING_PIDX
+    return len(placed), extra
+
+
+# ---------------------------------------------------------------------------
+# islands
+# ---------------------------------------------------------------------------
+
+def add_spring(cells, solid, cx, top, rnd):
+    """A spring on the island's flank: a sealed water source one block inside the
+    rim, opening onto a cave-vine cell on the outside face. Structure-placed
+    water isn't ticked, but the vine breaks on its first random tick and that
+    update sets the water flowing, so a stream spills off the island and falls
+    to the ground (same trick as the fountain shaft). Tries a few spots; keeps
+    well clear of the fountain shaft at (cx + 1, cx)."""
+    for _ in range(12):
+        y = top - rnd.randint(4, 6)
+        axis = rnd.choice("xz")
+        sign = rnd.choice((-1, 1))
+        off = rnd.choice([o for o in range(-9, 10) if abs(o) >= 3])
+
+        def at(t):
+            a, b = cx + sign * t, cx + off
+            return (a, y, b) if axis == "x" else (b, y, a)
+
+        last = None
+        for t in range(3, cx):
+            x_, y_, z_ = at(t)
+            if not solid[x_, y_, z_]:
+                break
+            last = t
+        if last is None or last < 8:
+            continue
+        L, S, B = at(last), at(last - 1), at(last - 2)
+        # everything around the pocket and the open cell is forced to cloud
+        for t in (last - 1, last):
+            x_, y_, z_ = at(t)
+            for dy in (-1, 0, 1):
+                for dp in (-1, 0, 1):
+                    q = (x_, y_ + dy, z_ + dp) if axis == "x" else (x_ + dp, y_ + dy, z_)
+                    if (dy or dp) and q not in cells:
+                        cells[q] = 0
+        cells.setdefault(B, 0)
+        cells[S] = WATER_PIDX
+        cells[L] = VINE_PIDX
+        return True
+    return False
 
 
 def build_island(variant, seed, w, h, as_puff=False):
-    """Start piece: flat top the city sits on, overhung bulging sides, wispy bottom.
+    """Start piece: flat top the city sits on, lumpy overhanging rim, and a
+    cumulus-like underbelly of hanging pouches.
 
     as_puff: write an island_puff variant whose jigsaw is a plain puff connector
     (name must match the pad puff socket's target) with no further expansion, so
     the same island shape can hang below cloud pads without spawning a second city.
     """
+    rnd = random.Random(seed)
     c = (w - 1) / 2.0
-    r_top = c - 2.5
-    cells = {}
-    top = h - 1
-    for y in range(h):
-        i = top - y  # 0 = surface layer
-        t = i / (h - 1)
-        if i == 0:
-            mult = 1.0
-        elif i <= 3:
-            mult = 1.0 + 0.06 * i          # belly out just below the rim
-        else:
-            mult = 1.18 * (1.0 - ((i - 3) / (h - 3)) ** 1.35)
-        ry = r_top * mult
-        for x in range(w):
-            for z in range(w):
-                dx, dz = x - c, z - c
-                ang = int((math.atan2(dz, dx) + math.pi) * 8 / (2 * math.pi))
-                lump = (h32(ang, i // 2, seed) % 1000) / 1000.0 - 0.5
-                n = (h32(x, z, seed + i * 131) % 1000) / 1000.0 - 0.5
-                rr = ry + lump * 2.2 + n * 1.2
-                if i == 0:
-                    rr = ry + lump * 1.2   # keep the surface edge tidier
-                if rr > c:
-                    rr = c
-                if dx * dx + dz * dz <= rr * rr:
-                    cells[(x, y, z)] = 0
     cx = int(c)
+    top = h - 1
+    X, Y, Z = grid_xyz(w, h, w)
+    i = top - Y                       # 0 = surface layer
+    mult = np.where(i == 0, 1.0,
+                    np.where(i <= 3, 1.0 + 0.055 * i,
+                             1.16 * (1.0 - np.clip((i - 3) / (h - 3.0), 0, 1) ** 1.35)))
+    r_top = c - 2.6
+    body = h - 4                       # bowl layers; the pouches hang below it
+    ex = 1.0 + rnd.uniform(-0.08, 0.08)   # slightly oval, never a perfect disc
+    dx, dz = (X - c) / ex, (Z - c) * ex
+    rho2 = (dx * dx + dz * dz) / (r_top * r_top)
+    n = fbm(X, Y * 1.3, Z, seed, 8.0, 3) - 0.5
+    bowl = rho2 + (np.clip(i, 0, None) / body) ** 2.0
+    # implicit ellipsoid with strong 3D noise: lumps instead of concentric rings;
+    # the surface layer only gets mild noise so the rim stays tidy
+    solid = np.where(i == 0, rho2 <= 1.0 + n * 0.9, bowl <= 1.0 + n * 1.1) & (i < body)
+    solid &= (dx * dx + dz * dz) <= (c - 0.5) ** 2
+
+    lobes = []                                           # hanging pouches below
+    for _ in range(rnd.randint(11, 15)):
+        ang = rnd.uniform(0, 2 * math.pi)
+        rad = rnd.uniform(0.05, 0.78) * r_top * (1.0 - 0.0)
+        top_y = rnd.uniform(4.0, 6.5)
+        rad_xz = rnd.uniform(2.6, 6.0)
+        lobes.append((c + math.cos(ang) * rad, top_y, c + math.sin(ang) * rad,
+                      rad_xz, 2.5, top_y - rnd.uniform(0.0, 0.7), rad_xz))
+    solid |= lobe_field(X, Y, Z, lobes) > 0.2
+    solid = tidy(solid, 2)
+    solid = fringe(solid, seed, 0.12)
+
+    # enclosed core around the fountain's water shaft (one block east of the
+    # jigsaw column) so the stream can't leak sideways out of the island
+    solid[cx:cx + 3, :, cx - 1:cx + 2] = True
+    solid = keep_connected(solid, (cx, top, cx))
+    cells = grid_cells(solid)
     if not as_puff:
-        # water shaft below the fountain hub's outlet, which sits one block east
-        # (+x) of the jigsaw column: carries the stream through the island so it
-        # falls out the underside and players can swim up from the ground
-        shaft_ys = [y for y in range(h) if cells.get((cx + 1, y, cx)) == 0]
+        # water shaft below the fountain hub's outlet: carries the stream through
+        # the island so it falls out the underside and players can swim up from
+        # the ground
+        shaft_ys = [y for y in range(h) if (cx + 1, y, cx) in cells]
         for y in shaft_ys:
             cells[(cx + 1, y, cx)] = WATER_PIDX
         if shaft_ys:
             cells[(cx + 1, min(shaft_ys), cx)] = VINE_PIDX  # water updater
+    for _ in range(1 if as_puff else 2):
+        add_spring(cells, solid, cx, top, rnd)
+    shaft_cols = {(cx + dx, cx + dz) for dx in range(0, 3) for dz in range(-1, 2)}
+    soften(cells, (w, h, w), seed, keep_cols=shaft_cols, fraction=0.4)
     cells[(cx, top, cx)] = 1  # up jigsaw: city hub spawner, or puff connector
     if as_puff:
         entity = jigsaw_entity(PUFF_NAME, "minecraft:empty", "minecraft:empty",
@@ -573,65 +1409,145 @@ def write_pool(filename, pool_id, locations):
         },
     }
     with open(os.path.join(POOL_DIR, filename), "w", encoding="utf-8") as f:
-        json.dump(pool, f, indent=2)
+        json.dump(pool, f, indent=4)
 
 
-os.makedirs(CLOUD_DIR, exist_ok=True)
-os.makedirs(ISLAND_DIR, exist_ok=True)
-os.makedirs(POOL_DIR, exist_ok=True)
+def clear_generated(directory, prefixes):
+    """Drop stale templates whose count or naming changed between runs."""
+    for name in os.listdir(directory):
+        if name.endswith(".mcstructure") and any(name.startswith(p) for p in prefixes):
+            os.remove(os.path.join(directory, name))
 
-# grab a palette 'version' value from an existing piece so new blocks match
-_, _ref = load(os.path.join(SC, "paths", "path.mcstructure"))
-VERSION_FROM_PIECE = (
-    _ref.value["structure"].value["palette"].value["default"]
-    .value["block_palette"].value[0].value["version"].value
-)
 
-ensure_fountain_openings()
-
-for rel, short in PIECES.items():
-    piece_path = os.path.join(SC, rel.replace("/", os.sep) + ".mcstructure")
-    pool_id = f"extrabiomes:sky_city_cloud_{short}"
-    ax, az, size, mask, water = inject_socket(piece_path, pool_id)
-    sx, sy, sz = size
-    for v in range(VARIANTS):
-        build_pad(short, v, seed=v * 1000 + len(short), mask=mask,
-                  anchor=(ax, az), sx=sx, sz=sz, water_cols=water)
-    write_pool(f"{short}.json", pool_id,
-               [f"extrabiomes/sky_city/clouds/{short}_{v}" for v in range(VARIANTS)])
-    note = f", water shafts {sorted(water)}" if water else ""
-    print(f"{rel}: socket ({ax},0,{az}), footprint {sx}x{sz}, pad height {cloud_height(sx, sz)}{note}")
-
-PUFFS = [(7, 4), (9, 5), (11, 5), (13, 6), (11, 6), (9, 4)]
-for v, (w, h) in enumerate(PUFFS):
-    build_puff(v, seed=8000 + v * 37, w=w, h=h)
-# only the biggest puffs, plus the occasional huge island hanging below a pad
-write_pool("puff.json", PUFF_POOL, [
-    ("extrabiomes/sky_city/clouds/puff_2", 2),
-    ("extrabiomes/sky_city/clouds/puff_3", 4),
-    ("extrabiomes/sky_city/clouds/puff_4", 3),
-    ("extrabiomes/sky_city/islands/island_puff_0", 1),
-    ("extrabiomes/sky_city/islands/island_puff_1", 1),
-    ("extrabiomes/sky_city/islands/island_puff_2", 1),
-])
-print(f"puffs: {PUFFS}")
-
-FILLERS = [(14, 6, 3), (12, 6, 3), (10, 6, 3), (8, 5, 2), (6, 5, 2), (4, 4, 1)]  # (w, h, weight)
-for v, (w, h, _) in enumerate(FILLERS):
-    build_filler(v, seed=5000 + v * 61, w=w, h=h)
-write_pool("filler.json", FILLER_POOL,
-           [(f"extrabiomes/sky_city/clouds/filler_{v}", wt)
-            for v, (_, _, wt) in enumerate(FILLERS)])
-print(f"fillers: {FILLERS}")
-
+# (kind, w, h, d, weight) - big, off-centre clouds that spread out from the pad
+PUFFS = [
+    ("cumulus", 17, 9, 15, 3), ("cumulus", 15, 8, 17, 3), ("cumulus", 19, 9, 17, 2),
+    ("streak", 23, 6, 10, 2), ("streak", 19, 5, 9, 2),
+    ("mammatus", 15, 10, 15, 3), ("mammatus", 17, 9, 13, 2),
+    ("tower", 13, 12, 13, 1),
+]
+# (kind, w, h, d, weight) - small trailing cloudlets
+SATELLITES = [
+    ("cumulus", 15, 9, 13, 3), ("cumulus", 12, 7, 11, 3), ("pouch", 11, 10, 10, 2),
+    ("streak", 17, 5, 9, 2), ("wisp", 13, 5, 9, 3), ("wisp", 10, 4, 8, 2),
+]
+# (w, d, h, weight) - gap fillers, from wide slabs down to pocket-sized
+FILLERS = [
+    (15, 9, 6, 3), (13, 13, 6, 3), (11, 7, 5, 3), (9, 9, 5, 2),
+    (7, 5, 4, 2), (12, 8, 5, 2), (5, 5, 4, 1),
+]
+# (kind, w, h, d, weight, trees) - wide, flat-topped cloudlets that carry sky trees
+TREE_SATELLITES = [
+    ("cumulus", 15, 8, 13, 3, 4), ("cumulus", 13, 7, 11, 3, 3), ("streak", 19, 5, 11, 2, 4),
+]
+# (w, d, h, weight, max trees) - filler slabs big enough for a canopy, treed
+TREE_FILLERS = [
+    (15, 9, 6, 2, 2), (13, 13, 6, 2, 4), (12, 8, 5, 2, 2), (11, 7, 5, 2, 2), (9, 9, 5, 1, 1),
+]
+# (w, d, h, weight) - rain-streak clouds that hang under puffs like satellites
+VIRGAS = [(11, 10, 11, 2), (13, 12, 13, 1), (9, 9, 9, 2)]
+# (w, h, d, weight, max trees) - far-reaching low banks hooked on by a satellite
+BANKS = [(31, 5, 11, 2, 0), (37, 6, 13, 2, 0), (31, 6, 13, 2, 3), (27, 6, 11, 2, 2)]
 ISLANDS = [(40, 14), (38, 13), (42, 14)]
-for v, (w, h) in enumerate(ISLANDS):
-    build_island(v, seed=91 + v * 53, w=w, h=h)
-    build_island(v, seed=91 + v * 53, w=w, h=h, as_puff=True)
-write_pool("island.json", ISLAND_POOL,
-           [f"extrabiomes/sky_city/islands/island_{v}" for v in range(len(ISLANDS))])
-# the fountain is the guaranteed start piece: its water shaft runs down through
-# the island so players can always swim up into the city
-write_pool("hub.json", HUB_POOL, ["extrabiomes/sky_city/paths/fountain"])
-print(f"islands: {ISLANDS}")
-print("done")
+
+
+def main():
+    os.makedirs(CLOUD_DIR, exist_ok=True)
+    os.makedirs(ISLAND_DIR, exist_ok=True)
+    os.makedirs(POOL_DIR, exist_ok=True)
+    clear_generated(CLOUD_DIR, ("puff_", "satellite_", "filler_", "bank_"))  # "satellite_" also covers satellite_tree_
+
+    # grab a palette 'version' value from an existing piece so new blocks match
+    global VERSION_FROM_PIECE
+    _, _ref = load(os.path.join(SC, "paths", "path.mcstructure"))
+    VERSION_FROM_PIECE = (
+        _ref.value["structure"].value["palette"].value["default"]
+        .value["block_palette"].value[0].value["version"].value
+    )
+
+    ensure_fountain_openings()
+
+    for rel, short in PIECES.items():
+        piece_path = os.path.join(SC, rel.replace("/", os.sep) + ".mcstructure")
+        pool_id = f"extrabiomes:sky_city_cloud_{short}"
+        ax, az, size, mask, water = inject_socket(piece_path, pool_id)
+        sx, sy, sz = size
+        for v in range(VARIANTS):
+            build_pad(short, v, seed=v * 1000 + len(short), mask=mask,
+                      anchor=(ax, az), sx=sx, sz=sz, water_cols=water)
+        write_pool(f"{short}.json", pool_id,
+                   [f"extrabiomes/sky_city/clouds/{short}_{v}" for v in range(VARIANTS)])
+        note = f", water shafts {sorted(water)}" if water else ""
+        print(f"{rel}: socket ({ax},0,{az}), footprint {sx}x{sz}, pad height {cloud_height(sx, sz)}{note}")
+
+    puff_dims = []
+    for v, (kind, w, h, d, _) in enumerate(PUFFS):
+        puff_dims.append(build_puff(v, seed=8000 + v * 37, kind=kind, w=w, h=h, d=d))
+    # weighted puff shapes, plus the occasional huge island hanging below a pad
+    write_pool("puff.json", PUFF_POOL,
+               [(f"extrabiomes/sky_city/clouds/puff_{v}", p[4]) for v, p in enumerate(PUFFS)]
+               + [(f"extrabiomes/sky_city/islands/island_puff_{v}", 1)
+                  for v in range(len(ISLANDS))])
+    print(f"puffs: {puff_dims}")
+
+    # plain satellites hang threads of cloud from their undersides; streaks also
+    # carry a socket that pulls a far-reaching bank out sideways
+    WISPS = {"cumulus": 4, "pouch": 3, "streak": 3, "wisp": 0}
+    sat_dims = []
+    for v, (kind, w, h, d, _) in enumerate(SATELLITES):
+        sat_dims.append(build_satellite(v, seed=3000 + v * 41, kind=kind, w=w, h=h, d=d,
+                                        wisps=WISPS[kind], bank_socket=(kind == "streak")))
+    virga_dims = [build_virga(v, seed=4000 + v * 29, w=w, d=d, h=h)
+                  for v, (w, d, h, _) in enumerate(VIRGAS)]
+    write_pool("satellite.json", SAT_POOL,
+               [(f"extrabiomes/sky_city/clouds/satellite_{v}", s[4])
+                for v, s in enumerate(SATELLITES)]
+               + [(f"extrabiomes/sky_city/clouds/satellite_virga_{v}", s[3])
+                  for v, s in enumerate(VIRGAS)])
+    print(f"satellites: {sat_dims}")
+    print(f"virga: {virga_dims}")
+
+    tree_dims = []
+    for v, (kind, w, h, d, _, n) in enumerate(TREE_SATELLITES):
+        tree_dims.append(build_satellite(v, seed=3500 + v * 43, kind=kind, w=w, h=h, d=d,
+                                         trees=n, prefix="satellite_tree", bank_socket=True))
+    # side sockets: treed cloudlets first choice, plain ones as the fallback where
+    # the taller treed shape doesn't fit
+    write_pool("satellite_side.json", SAT_SIDE_POOL,
+               [(f"extrabiomes/sky_city/clouds/satellite_tree_{v}", t[4])
+                for v, t in enumerate(TREE_SATELLITES)]
+               + [(f"extrabiomes/sky_city/clouds/satellite_{v}", 1)
+                  for v in range(len(SATELLITES))])
+    print(f"tree satellites: {tree_dims}")
+
+    bank_dims = [build_bank(v, seed=7000 + v * 71, w=w, h=h, d=d, trees=n)
+                 for v, (w, h, d, _, n) in enumerate(BANKS)]
+    write_pool("bank.json", BANK_POOL,
+               [(f"extrabiomes/sky_city/clouds/bank_{v}", b_[3]) for v, b_ in enumerate(BANKS)])
+    print(f"banks: {bank_dims}")
+
+    for v, (w, d, h, _) in enumerate(FILLERS):
+        build_filler(v, seed=5000 + v * 61, w=w, d=d, h=h)
+    for v, (w, d, h, _, n) in enumerate(TREE_FILLERS):
+        build_filler(v, seed=6000 + v * 59, w=w, d=d, h=h, trees=n, prefix="filler_tree")
+    write_pool("filler.json", FILLER_POOL,
+               [(f"extrabiomes/sky_city/clouds/filler_{v}", f[3])
+                for v, f in enumerate(FILLERS)]
+               + [(f"extrabiomes/sky_city/clouds/filler_tree_{v}", f[3])
+                  for v, f in enumerate(TREE_FILLERS)])
+    print(f"fillers: {FILLERS}")
+
+    for v, (w, h) in enumerate(ISLANDS):
+        build_island(v, seed=91 + v * 53, w=w, h=h)
+        build_island(v, seed=91 + v * 53, w=w, h=h, as_puff=True)
+    write_pool("island.json", ISLAND_POOL,
+               [f"extrabiomes/sky_city/islands/island_{v}" for v in range(len(ISLANDS))])
+    # the fountain is the guaranteed start piece: its water shaft runs down through
+    # the island so players can always swim up into the city
+    write_pool("hub.json", HUB_POOL, ["extrabiomes/sky_city/paths/fountain"])
+    print(f"islands: {ISLANDS}")
+    print("done")
+
+
+if __name__ == "__main__":
+    main()
