@@ -21,7 +21,7 @@ ExtraBiomes is a world generation addon/mod for Minecraft, available for both Be
 - [Modrinth](https://modrinth.com/mod/extrabiome)
 - [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
 
-The Java port is currently in beta, supporting only version 1.20.1 at the moment, and requires [architectury-api](https://github.com/architectury/architectury-api), [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
+The Java port is currently in beta and supports Minecraft 1.20.1 through 26.3 (1.20.1, 1.20.2, 1.20.4, 1.20.6, 1.21.1, 1.21.3, 1.21.4, 1.21.5, 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2 and 26.3). It requires [architectury-api](https://github.com/architectury/architectury-api), [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
 ## Overworld Surface Biomes
 <table>
   <tr>
