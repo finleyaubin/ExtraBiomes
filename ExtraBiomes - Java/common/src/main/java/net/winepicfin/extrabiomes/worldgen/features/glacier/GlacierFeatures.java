@@ -3,7 +3,7 @@ package net.winepicfin.extrabiomes.worldgen.features.glacier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
+import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
@@ -331,7 +331,7 @@ public class GlacierFeatures {
                         InSquarePlacement.spread(),
                         HeightRangePlacement.uniform(VerticalAnchor.absolute(-56), VerticalAnchor.absolute(48)),
                         EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-                        OffsetPlacement.vertical(ConstantInt.of(-1)),
+                        RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
                         BiomeFilter.biome()
                 )));
         // Runs after vanilla surface freezing (added later in the same step) so the streams stay liquid.
@@ -366,7 +366,7 @@ public class GlacierFeatures {
                         CountPlacement.of(8),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR_WG),
-                        OffsetPlacement.vertical(ConstantInt.of(-1)),
+                        RandomOffsetPlacement.vertical(ConstantInt.of(-1)),
                         BiomeFilter.biome()
                 )));
         context.register(GLACIER_SNOW_PILLAR_PLACED_KEY, new PlacedFeature(
@@ -377,7 +377,7 @@ public class GlacierFeatures {
                         InSquarePlacement.spread(),
                         HeightRangePlacement.uniform(VerticalAnchor.absolute(-56), VerticalAnchor.absolute(48)),
                         EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12),
-                        OffsetPlacement.vertical(ConstantInt.of(1)),
+                        RandomOffsetPlacement.vertical(ConstantInt.of(1)),
                         BiomeFilter.biome()
                 )));
 
