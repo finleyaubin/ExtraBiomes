@@ -2,7 +2,7 @@
 # Changes
 
 ## Glacier
-Glacier gets a full overhaul, above and below the ice. None of this is in the Bedrock addon yet.
+Glacier gets a full overhaul, above and below the ice.
 
 ### Underground
 - Glacier caves are now geothermal. Every pool of lava is lined in basalt, and lava drips from cave ceilings in lavafalls wrapped in a wide shell of basalt that keeps nearby ice from melting into cobblestone.
@@ -21,7 +21,7 @@ Glacier gets a full overhaul, above and below the ice. None of this is in the Be
 - Glacier water is now a pristine, clearer pale blue. The biome is slightly warmer, so surface water no longer freezes. It rains instead of snowing, and ice and snow blocks do not melt.
 
 ## Floating Jungle
-Floating Jungle finally floats. None of this is in the Bedrock addon yet.
+Floating Jungle finally floats.
 
 - Sky islands now hang 28 to 60 blocks above the mountain peaks: grass and moss tops over stone cones, with jungle trees, vines and roots trailing from their undersides and flat-bottomed wisps of cloud drifting below. Some have a waterfall spilling off the rim.
 - Archipelagos join a large island to smaller ones with giant log canopy bridges, and the rarest has an overgrown ruin around a chest of loot.
@@ -29,7 +29,7 @@ Floating Jungle finally floats. None of this is in the Bedrock addon yet.
 - Colossal jungle trees rise from the peaks, about ten times the height of a normal jungle tree at 100 to 130 blocks. Each has a trunk around 20 blocks thick, buttress roots, sweeping branches, a layered crown, moss, azalea leaves and hanging vines. They are very rare, and do not generate where the peak leaves no room below the build limit.
 
 ## Sky City
-The clouds under the Sky City are redone so they look like clouds instead of a computer-built grid. The city on top is unchanged. None of this is in the Bedrock addon yet.
+The clouds under the Sky City are redone so they look like clouds instead of a computer-built grid. The city on top is unchanged. 
 
 - The island the city sits on has a lumpy, irregular outline and an underbelly of hanging cloud pouches instead of a smooth stepped cone.
 - Clouds under each street and building now hang as rounded lobes, and the gaps between paths are filled with organic oval slabs in several sizes instead of identical squares.
@@ -51,7 +51,7 @@ The clouds under the Sky City are redone so they look like clouds instead of a c
 ## World Generation
 - Moorlands now grow short and tall dry grass instead of dead bushes, with denser double tall grass.
 - Deep Dark Forest and other biomes' fog distances now match Bedrock on the versions that support it.
-- Fixed a crash caused by feature ordering conflicts with Terralith and Oh The Biomes We've Gone.
+- Fixed a crash caused by feature ordering conflicts multiple other popular world gen mods accross different versions as Identified by https://github.com/finleyaubin/ExtraBiomes/tree/compat-grid.
 
 ## Mobs
 - Saddles can now be equipped on Puckoos.
@@ -60,4 +60,4 @@ The clouds under the Sky City are redone so they look like clouds instead of a c
 - The licence is now listed as GPL-3.0-only.
 
 ## Beta status
-Still a beta release - the Java port remains newer and less battle-tested than the Bedrock addon, so please keep reporting anything that looks wrong on the GitHub issue tracker.
+Still a beta release - the Java port remains newer and less battle-tested than the Bedrock addon, so please keep reporting anything that looks wrong on the GitHub issue tracker, however I think that extrabiomes is nearing the first full release.
