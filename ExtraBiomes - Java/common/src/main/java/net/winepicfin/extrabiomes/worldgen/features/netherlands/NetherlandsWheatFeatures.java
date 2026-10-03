@@ -12,9 +12,12 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
 
 import java.util.List;
 
@@ -66,16 +69,9 @@ public class NetherlandsWheatFeatures {
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // No CountPlacement/InSquarePlacement: the feature iterates every column of its chunk itself, so
-        // this only needs to run exactly once per chunk. Deliberately no BiomeFilter either - without
-        // CountPlacement/InSquarePlacement this only ever samples ONE random point per chunk, and near a
-        // biome boundary that single sample can land just outside the_netherlands_mutated even though
-        // ModSurfaceRules (which checks biome per-column, not once per chunk) already painted farmland
-        // across most of the chunk - skipping the whole chunk's wheat/hydration pass and leaving bare
-        // farmland with chunk-aligned gaps. The feature's own per-column farmland check already only
-        // ever touches columns ModSurfaceRules actually painted for this biome, so the outer BiomeFilter
-        // was redundant on top of being unreliable.
-        List<PlacementModifier> once = List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG));
+        // The feature iterates every column of its chunk and only touches farmland ModSurfaceRules painted for this biome, so it runs once per chunk.
+        // The sample/snap pair only lets BiomeFilter test a column in the biome instead of the chunk corner, which near a border could sit in another biome and skip the whole chunk.
+        List<PlacementModifier> once = List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG));
         context.register(WHEAT_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_FLOOR_KEY), once));
     }
 
