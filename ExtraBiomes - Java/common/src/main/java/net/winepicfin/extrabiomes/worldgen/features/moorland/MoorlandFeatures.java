@@ -25,9 +25,8 @@ import java.util.List;
 /**
  * Java port of the Bedrock "moorland" feature subsystem:
  * <ul>
- *   <li>features/moorland/moorlands_podzol_feature.json (aggregate -> minecraft:optional_podzol_feature)
- *       + feature_rules/moorland/moorland_after_surface_podzol_feature.json (after_surface_pass,
- *       iterations noise-clamped [15,160], x/z uniform [0,16], y = heightmap)</li>
+ *   <li>moorlands_podzol_feature / moorland_after_surface_podzol_feature: not a feature on Java - podzol is
+ *       painted by noise in ModSurfaceRules so it forms big blobs that cross chunk borders.</li>
  *   <li>features/moorland/select_grass_feature.json (aggregate of the 4 grass scatter_features below,
  *       unconditionally run together) + feature_rules/moorland/moorland_scatter_tall_grass_feature.json
  *       (surface_pass, iterations 30, x/z uniform [0,16], y = heightmap +/- 4)
@@ -40,10 +39,6 @@ import java.util.List;
  * Simplifications (Bedrock vanilla feature bodies aren't shipped as JSON we can read, since they're
  * built into the game - these are ported to their closest vanilla Java 1.20.1 equivalents):
  * <ul>
- *   <li>minecraft:optional_podzol_feature -> {@link PodzolConversionFeature}: converts the surface
- *       block to podzol if it's grass/dirt/coarse dirt, no-op otherwise. The vanilla feature's own body
- *       isn't readable, so each placement is a single block; the per-chunk count follows Bedrock's rule
- *       (15-160, varying smoothly over 80-block regions).</li>
  *   <li>minecraft:grass_double_plant_patch_feature -> {@link DoubleTallGrassFeature} placing both
  *       halves of {@link Blocks#TALL_GRASS} on ~95% of the biome's columns.</li>
  *   <li>minecraft:fixup_waterlily_position_feature -> {@link WaterLilyFixupFeature}: searches
@@ -55,8 +50,6 @@ public class MoorlandFeatures {
     // Registered in Registries.FEATURE (not just DeferredRegister) so codecs get stable registry names for ConfiguredFeature serialization/datagen.
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
 
-    public static final RegistrySupplier<PodzolConversionFeature> PODZOL_CONVERSION_FEATURE =
-            FEATURES.register("moorland_podzol_conversion", () -> new PodzolConversionFeature(NoneFeatureConfiguration.CODEC));
     public static final RegistrySupplier<DoubleTallGrassFeature> DOUBLE_TALL_GRASS_FEATURE =
             FEATURES.register("moorland_double_tall_grass", () -> new DoubleTallGrassFeature(NoneFeatureConfiguration.CODEC));
     public static final RegistrySupplier<WaterLilyFixupFeature> WATERLILY_FIXUP_FEATURE =
@@ -67,17 +60,13 @@ public class MoorlandFeatures {
         FEATURES.register();
     }
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_PODZOL_KEY = registerKey("moorland_podzol");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_DOUBLE_TALL_GRASS_KEY = registerKey("moorland_double_tall_grass");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_WATERLILY_KEY = registerKey("moorland_waterlily");
 
-    public static final ResourceKey<PlacedFeature> MOORLAND_PODZOL_PLACED_KEY = createKey("moorland_podzol_placed");
     public static final ResourceKey<PlacedFeature> MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY = createKey("moorland_double_tall_grass_placed");
     public static final ResourceKey<PlacedFeature> MOORLAND_WATERLILY_PLACED_KEY = createKey("moorland_waterlily_placed");
 
     public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(MOORLAND_PODZOL_KEY, new ConfiguredFeature<>(PODZOL_CONVERSION_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
-
         context.register(MOORLAND_DOUBLE_TALL_GRASS_KEY, new ConfiguredFeature<>(DOUBLE_TALL_GRASS_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
         context.register(MOORLAND_WATERLILY_KEY, new ConfiguredFeature<>(WATERLILY_FIXUP_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
@@ -85,9 +74,6 @@ public class MoorlandFeatures {
 
     public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
-
-        // The feature picks its own per-chunk placement count and checks the biome per column, so no count, spread or BiomeFilter modifiers.
-        register(context, MOORLAND_PODZOL_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_PODZOL_KEY), List.of());
 
         // No BiomeFilter: the feature checks the biome per column, as a single chunk-corner sample would skip chunks straddling a border.
         register(context, MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_DOUBLE_TALL_GRASS_KEY),
