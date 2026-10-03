@@ -42,11 +42,8 @@ public class Moorlands {
 
         // boulder subsystem: stick piles (Bedrock surface_pass)
 
-        // moorland subsystem: select_grass_feature aggregate members (Bedrock surface_pass)
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_TALL_GRASS_PLACED_KEY);
+        // moorland subsystem: tall grass field (Bedrock surface_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_SHORT_DRY_GRASS_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_TALL_DRY_GRASS_PLACED_KEY);
 
         // moorland subsystem: waterlily surface fixup (Bedrock surface_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_WATERLILY_PLACED_KEY);
