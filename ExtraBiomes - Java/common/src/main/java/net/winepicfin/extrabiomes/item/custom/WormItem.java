@@ -12,12 +12,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.custom.WormEntity;
 
 // Bedrock parity: extrabiomes:worm is directly placeable from the item, not just via spawn egg - mirrors vanilla's bucket-of-fish placement flow.
 public class WormItem extends Item {
+    private static final double COMPOSTER_FLOOR_HEIGHT = 2.0 / 16.0;
+
     public WormItem(Properties properties) {
         super(properties);
     }
@@ -32,9 +35,11 @@ public class WormItem extends Item {
         BlockPos clickedPos = context.getClickedPos();
         BlockState clickedState = level.getBlockState(clickedPos);
         Direction clickedFace = context.getClickedFace();
-        BlockPos spawnPos = clickedState.getCollisionShape(level, clickedPos).isEmpty()
+        boolean intoComposter = clickedState.is(Blocks.COMPOSTER) && clickedFace == Direction.UP;
+        BlockPos spawnPos = intoComposter || clickedState.getCollisionShape(level, clickedPos).isEmpty()
                 ? clickedPos
                 : clickedPos.relative(clickedFace);
+        double spawnY = spawnPos.getY() + (intoComposter ? COMPOSTER_FLOOR_HEIGHT : 0.0);
 
         WormEntity worm = ModEntities.WORM.get().create(serverLevel);
         if (worm == null) {
@@ -47,7 +52,7 @@ public class WormItem extends Item {
         }
 
         float yaw = Mth.wrapDegrees(level.random.nextFloat() * 360.0F);
-        worm.moveTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, yaw, 0.0F);
+        worm.moveTo(spawnPos.getX() + 0.5, spawnY, spawnPos.getZ() + 0.5, yaw, 0.0F);
         worm.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(spawnPos), MobSpawnType.BUCKET, null, null);
         serverLevel.addFreshEntity(worm);
 
