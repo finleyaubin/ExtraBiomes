@@ -9,6 +9,7 @@
 - The mod menu entry has its icon and links to the project page and issue tracker.
 
 ## World Generation
+- Moorlands no longer grow dead bushes, and almost every block of its floor is now tall grass.
 - The Netherlands tulips are planted in neat colour stripes like Bedrock, instead of being scattered at random.
 
 ## Worms
