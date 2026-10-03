@@ -13,11 +13,14 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
 import net.winepicfin.extrabiomes.worldgen.features.ore.ModOrePlacement;
 
 import java.util.List;
@@ -75,9 +78,9 @@ public class MoorlandFeatures {
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // No BiomeFilter: the feature checks the biome per column, as a single chunk-corner sample would skip chunks straddling a border.
+        // The feature checks the biome per column; the sample/snap pair only lets BiomeFilter test a column in the biome instead of the chunk corner.
         register(context, MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_DOUBLE_TALL_GRASS_KEY),
-                List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+                List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
 
         register(context, MOORLAND_WATERLILY_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_WATERLILY_KEY),
                 ModOrePlacement.commonOrePlacement(4, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
