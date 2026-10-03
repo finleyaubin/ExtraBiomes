@@ -12,6 +12,10 @@
 - Moorlands no longer grow dead bushes, and almost every block of its floor is now tall grass.
 - The Netherlands tulips are planted in neat colour stripes like Bedrock, instead of being scattered at random.
 
+## Pebbles
+- Throwing a pebble now has a 0.8 second charge-up: hold right-click and release, like a bow. Releasing early does nothing and keeps the pebble. This replaces the old half-second throw cooldown.
+- Sneak-clicking the air no longer uses up a pebble without throwing it, and you can now throw pebbles while aiming at a block.
+
 ## Worms
 - Two worms placed inside a composter that has compost in it will breed. Each breeding uses one level of compost, and the new worm drops out of the bottom of the composter, or if that is covered, the first open side, checked in the order north, east, south, west.
 - Worm items can be placed straight into a composter by right-clicking its top.
