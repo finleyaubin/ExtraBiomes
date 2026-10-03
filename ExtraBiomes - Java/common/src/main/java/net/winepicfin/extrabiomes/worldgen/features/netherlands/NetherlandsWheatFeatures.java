@@ -48,6 +48,9 @@ public class NetherlandsWheatFeatures {
     public static final RegistrySupplier<NetherlandsWheatFieldFeature> WHEAT_FIELD_FEATURE =
             FEATURES.register("netherlands_wheat_field", () -> new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
 
+    public static final RegistrySupplier<NetherlandsTulipFieldFeature> TULIP_FIELD_FEATURE =
+            FEATURES.register("netherlands_tulip_field", () -> new NetherlandsTulipFieldFeature(NoneFeatureConfiguration.CODEC));
+
     /** Must be called once from the mod's main class, e.g. {@code NetherlandsWheatFeatures.register();}. */
     public static void register() {
         FEATURES.register();
