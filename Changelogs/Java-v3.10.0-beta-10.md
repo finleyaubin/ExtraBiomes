@@ -10,6 +10,7 @@
 
 ## World Generation
 - Moorlands no longer grow dead bushes, and almost every block of its floor is now tall grass.
+- Moorlands mud patches are now about 20 blocks across like Bedrock, instead of small speckles, and podzol now comes in broad sparse and dense areas instead of changing from chunk to chunk.
 - The Netherlands tulips are planted in neat colour stripes like Bedrock, instead of being scattered at random.
 
 ## Pebbles
