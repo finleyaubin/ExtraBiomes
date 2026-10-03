@@ -26,12 +26,16 @@ public class ModNoiseParameters {
     public static final ResourceKey<NormalNoise.NoiseParameters> MEDIUM_PATCH = key("medium_patch");
     public static final ResourceKey<NormalNoise.NoiseParameters> LARGE_PATCH = key("large_patch");
     public static final ResourceKey<NormalNoise.NoiseParameters> REGIONAL_BAND = key("regional_band");
+    public static final ResourceKey<NormalNoise.NoiseParameters> PODZOL_PATCH = key("podzol_patch");
+    public static final ResourceKey<NormalNoise.NoiseParameters> PODZOL_REGION = key("podzol_region");
 
     public static void bootstrap(BootstrapContext<NormalNoise.NoiseParameters> context) {
         context.register(SMALL_PATCH, new NormalNoise.NoiseParameters(-5, 1.0));
         context.register(MEDIUM_PATCH, new NormalNoise.NoiseParameters(-4, 1.0));
         context.register(LARGE_PATCH, new NormalNoise.NoiseParameters(-3, 1.0));
         context.register(REGIONAL_BAND, new NormalNoise.NoiseParameters(-2, 1.0));
+        context.register(PODZOL_PATCH, new NormalNoise.NoiseParameters(-5, 1.0));
+        context.register(PODZOL_REGION, new NormalNoise.NoiseParameters(-6, 1.0));
     }
 
     private static ResourceKey<NormalNoise.NoiseParameters> key(String name) {
