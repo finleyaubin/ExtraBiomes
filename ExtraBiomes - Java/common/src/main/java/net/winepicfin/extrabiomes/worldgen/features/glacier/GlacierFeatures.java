@@ -41,6 +41,9 @@ import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
+import net.winepicfin.extrabiomes.worldgen.placement.LakeSafeOrigin;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
@@ -192,6 +195,7 @@ public class GlacierFeatures {
         return List.of(
                 RarityFilter.onAverageOnceEvery(rarity),
                 InSquarePlacement.spread(),
+                LakeSafeOrigin.INSTANCE,
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(minY), VerticalAnchor.absolute(maxY)),
                 EnvironmentScanPlacement.scanningFor(Direction.DOWN,
                         BlockPredicate.allOf(BlockPredicate.not(BlockPredicate.matchesTag(BlockTags.AIR)), BlockPredicate.insideWorld(new BlockPos(0, -5, 0))), 32),
@@ -328,7 +332,7 @@ public class GlacierFeatures {
                         BiomeFilter.biome()
                 )));
         context.register(GLACIER_FINISH_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(GLACIER_FINISH_KEY), List.of()));
+                configuredFeatures.getOrThrow(GLACIER_FINISH_KEY), List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE)));
         context.register(GLACIER_BASALT_PILLAR_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(GLACIER_BASALT_PILLAR_KEY),
                 List.of(
@@ -355,6 +359,7 @@ public class GlacierFeatures {
                 List.of(
                         RarityFilter.onAverageOnceEvery(12),
                         InSquarePlacement.spread(),
+                        LakeSafeOrigin.INSTANCE,
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome()
                 )));

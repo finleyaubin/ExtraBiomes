@@ -12,8 +12,11 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
 
 import java.util.List;
 
@@ -27,10 +30,10 @@ public class NetherlandsTulipFeatures {
         context.register(TULIP_FIELD_KEY, new ConfiguredFeature<>(NetherlandsWheatFeatures.TULIP_FIELD_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
     }
 
-    // No BiomeFilter: the feature checks the biome per column, as a single chunk-corner sample would skip chunks straddling a border.
+    // The feature checks the biome per column; the sample/snap pair only lets BiomeFilter test a column in the biome instead of the chunk corner.
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         context.register(TULIP_FIELD_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(TULIP_FIELD_KEY),
-                List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG))));
+                List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG))));
     }
 }
