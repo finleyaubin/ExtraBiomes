@@ -45,6 +45,7 @@ public class ModSurfaceRules {
     // waiting on random ticks to notice the buried water pockets one at a time.
     private static final SurfaceRules.RuleSource FARMLAND = SurfaceRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7));
     private static final SurfaceRules.RuleSource MUD = makeStateRule(Blocks.MUD);
+    private static final SurfaceRules.RuleSource PODZOL = makeStateRule(Blocks.PODZOL);
     private static final SurfaceRules.RuleSource PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
     private static final SurfaceRules.RuleSource MYCELIUM = makeStateRule(Blocks.MYCELIUM);
     private static final SurfaceRules.RuleSource GRASS_STONE = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.GRASS_STONE.get());
@@ -216,7 +217,9 @@ public class ModSurfaceRules {
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
-                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.50, 0.6), MUD))),
+                                                SurfaceRules.sequence(
+                                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.50, 0.6), MUD),
+                                                        moorlandPodzol()))),
                                 grassOverStone)),
 
                 // No base rule needed (Bedrock top/mid already match vanilla default grass/dirt); only the mycelium noise patch is added.
@@ -278,6 +281,16 @@ public class ModSurfaceRules {
         return SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), SurfaceRules.sequence(
                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(TOP_DEPTH, false, CaveSurface.FLOOR), top),
                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(FOUNDATION_DEPTH, false, CaveSurface.FLOOR), foundation)));
+    }
+
+    // Big podzol blobs; a larger-scale noise widens them in "dense" regions and shrinks them in "sparse" ones, like Bedrock's per-region podzol count.
+    private static SurfaceRules.RuleSource moorlandPodzol() {
+        return SurfaceRules.sequence(
+                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.PODZOL_REGION, 0.2, 1.0),
+                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.PODZOL_PATCH, 0.0, 1.0), PODZOL)),
+                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.PODZOL_REGION, -0.2, 0.2),
+                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.PODZOL_PATCH, 0.2, 1.0), PODZOL)),
+                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.PODZOL_PATCH, 0.4, 1.0), PODZOL));
     }
 
     private static SurfaceRules.RuleSource makeStateRule(Block block)
