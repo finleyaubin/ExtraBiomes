@@ -28,9 +28,6 @@ public class Moorlands {
 
         // boulder subsystem: boulders (LOCAL_MODIFICATIONS, matches vanilla's forest_rock step) and stick piles (VEGETAL_DECORATION)
 
-        // moorland subsystem: podzol surface conversion (Bedrock after_surface_pass) -> LOCAL_MODIFICATIONS
-        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MoorlandFeatures.MOORLAND_PODZOL_PLACED_KEY);
-
         // addPlainVegetation() already adds flower_plains alongside trees_plains/patch_grass_plain,
         // matching vanilla's plains biomes exactly. A second addDefaultFlowers() call used to sit here
         // too, forcing minecraft:flower_default directly next to minecraft:patch_grass_plain - a pair
