@@ -4,7 +4,7 @@
 - The Frog Helmet and the Jellyfishing Net can now be crafted, using the same recipes as Bedrock.
 - Palm trees, and the log-supported leaves of the Floating Jungle giant trees, now decay when their logs are removed. Their leaves were being generated as permanent.
 - Huge mushroom blocks now render like vanilla ones: faces that used to touch another mushroom block show the pore texture once the neighbour is gone, instead of the cap texture.
-- Jellyfish now actually spawn in Jellyfish Fields. They shared a spawn cap of 5 with squid and dolphins; they now use the same, much larger, cap as piranhas.
+- Jellyfish now actually spawn in Jellyfish Fields. They shared a spawn cap of 5 with squid and dolphins; they now use the same, much larger, cap as piranhas. They stay rare on beaches, where only about one in fifty spawn attempts succeeds.
 - The advancement tab background is palm wood instead of stone on 1.21.1, matching later versions.
 - The mod menu entry has its icon and links to the project page and issue tracker.
 
