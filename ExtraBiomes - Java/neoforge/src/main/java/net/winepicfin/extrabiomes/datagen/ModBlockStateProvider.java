@@ -190,15 +190,15 @@ public class ModBlockStateProvider implements DataProvider {
         saplingBlock(ModBlocks.YELLOW_MUSHROOM.get());
         saplingBlock(ModBlocks.GLOW_MUSHROOM.get());
         // Mushrooms
-        blockWithItemCutout(ModBlocks.BLACK_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.BLUE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.CYAN_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.GREEN_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.ORANGE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.PURPLE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.WHITE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.YELLOW_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.GLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLACK_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLUE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.CYAN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GREEN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.ORANGE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.PURPLE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.WHITE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.YELLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GLOW_MUSHROOM_BLOCK);
     }
 
     // ---- helpers -----------------------------------------------------------------------------
@@ -229,6 +229,24 @@ public class ModBlockStateProvider implements DataProvider {
     // produce it here, so this now matches Fabric's runtime-registration approach instead.
     private void blockWithItemCutout(RegistrySupplier<Block> blockRegistryObject) {
         blockWithItem(blockRegistryObject);
+    }
+
+    private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        ResourceLocation texture = blockTexture(block);
+        ResourceLocation cap = ModelTemplates.SINGLE_FACE.create(block, new TextureMapping().put(TextureSlot.TEXTURE, texture), models::put);
+        ResourceLocation inside = ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside");
+        MultiPartGenerator generator = MultiPartGenerator.multiPart(block);
+        PipeBlock.PROPERTY_BY_DIRECTION.forEach((direction, property) -> {
+            VariantProperties.Rotation rotationX = direction == Direction.UP ? VariantProperties.Rotation.R270
+                    : direction == Direction.DOWN ? VariantProperties.Rotation.R90 : VariantProperties.Rotation.R0;
+            VariantProperties.Rotation rotationY = direction.getAxis().isHorizontal() ? yRot((int) direction.toYRot() + 180) : VariantProperties.Rotation.R0;
+            generator.with(Condition.condition().term(property, true), Variant.variant().with(VariantProperties.MODEL, cap).with(VariantProperties.X_ROT, rotationX).with(VariantProperties.Y_ROT, rotationY));
+            generator.with(Condition.condition().term(property, false), Variant.variant().with(VariantProperties.MODEL, inside).with(VariantProperties.X_ROT, rotationX).with(VariantProperties.Y_ROT, rotationY));
+        });
+        blockStates.put(block, generator);
+        ResourceLocation inventory = ModelTemplates.CUBE_ALL.createWithSuffix(block, "_inventory", new TextureMapping().put(TextureSlot.ALL, texture), models::put);
+        delegateItemModel(block, inventory);
     }
 
     private void cubeAllBlock(Block block, ResourceLocation texture) {
