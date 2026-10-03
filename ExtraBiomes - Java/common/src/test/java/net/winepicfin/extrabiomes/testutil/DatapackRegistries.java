@@ -43,6 +43,7 @@ import net.winepicfin.extrabiomes.worldgen.features.moorland.DoubleTallGrassFeat
 import net.winepicfin.extrabiomes.worldgen.features.moorland.PodzolConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.WaterLilyFixupFeature;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.GooConversionFeature;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.CaveVineFeature;
