@@ -43,6 +43,7 @@ import net.winepicfin.extrabiomes.worldgen.features.moorland.DoubleTallGrassFeat
 import net.winepicfin.extrabiomes.worldgen.features.moorland.PodzolConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.WaterLilyFixupFeature;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.GooConversionFeature;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
@@ -178,6 +179,7 @@ public final class DatapackRegistries {
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_waterlily_fixup", new WaterLilyFixupFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "mystic_goo_conversion", new GooConversionFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "netherlands_wheat_field", new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "netherlands_tulip_field", new NetherlandsTulipFieldFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_cave_vine", new CaveVineFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_fallen_jungle_tree", new FallenJungleTreeFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_multi", new MultiFeature(MultiFeatureConfiguration.CODEC));
