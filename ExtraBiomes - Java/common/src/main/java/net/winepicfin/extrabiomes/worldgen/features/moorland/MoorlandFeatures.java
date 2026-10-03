@@ -7,7 +7,6 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -50,7 +48,9 @@ import java.util.List;
  * built into the game - these are ported to their closest vanilla Java 1.20.1 equivalents):
  * <ul>
  *   <li>minecraft:optional_podzol_feature -> {@link PodzolConversionFeature}: converts the surface
- *       block to podzol if it's grass/dirt/coarse dirt, no-op otherwise.</li>
+ *       block to podzol if it's grass/dirt/coarse dirt, no-op otherwise. The vanilla feature's own body
+ *       isn't readable, so each placement is a single block; the per-chunk count follows Bedrock's rule
+ *       (15-160, varying smoothly over 80-block regions).</li>
  *   <li>minecraft:grass_double_plant_patch_feature -> {@link DoubleTallGrassFeature} placing both
  *       halves of {@link Blocks#TALL_GRASS} on ~95% of the biome's columns.</li>
  *   <li>minecraft:fixup_waterlily_position_feature -> {@link WaterLilyFixupFeature}: searches
@@ -108,10 +108,8 @@ public class MoorlandFeatures {
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
-        // Java has no analogue of Bedrock's per-chunk noise-derived placement count, so it's approximated with a uniform random count over the same [15,160] range.
-        register(context, MOORLAND_PODZOL_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_PODZOL_KEY),
-                List.of(CountPlacement.of(UniformInt.of(15, 160)), InSquarePlacement.spread(),
-                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome()));
+        // The feature picks its own per-chunk placement count and checks the biome per column, so no count, spread or BiomeFilter modifiers.
+        register(context, MOORLAND_PODZOL_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_PODZOL_KEY), List.of());
 
         // No BiomeFilter: the feature checks the biome per column, as a single chunk-corner sample would skip chunks straddling a border.
         register(context, MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_DOUBLE_TALL_GRASS_KEY),
