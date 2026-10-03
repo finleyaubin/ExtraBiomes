@@ -52,6 +52,9 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeatu
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeatureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.BasaltBankFeature;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.MinYFilter;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
+import net.winepicfin.extrabiomes.worldgen.placement.LakeSafeOrigin;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.RiverNoiseFilter;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructure;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
@@ -196,6 +199,9 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
         register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "river_noise_filter", (PlacementModifierType<RiverNoiseFilter>) () -> RiverNoiseFilter.CODEC);
         register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "min_y_filter", (PlacementModifierType<MinYFilter>) () -> MinYFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "in_biome_chunk_sample", (PlacementModifierType<InBiomeChunkSample>) () -> InBiomeChunkSample.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "lake_safe_origin", (PlacementModifierType<LakeSafeOrigin>) () -> LakeSafeOrigin.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "chunk_origin_snap", (PlacementModifierType<ChunkOriginSnap>) () -> ChunkOriginSnap.CODEC);
         BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.STRUCTURE_TYPE, false);
