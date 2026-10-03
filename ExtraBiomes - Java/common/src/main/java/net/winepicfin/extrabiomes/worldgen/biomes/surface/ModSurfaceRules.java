@@ -216,7 +216,7 @@ public class ModSurfaceRules {
                         SurfaceRules.sequence(
                                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
                                         SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
-                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.LARGE_PATCH, 0.50, 0.6), MUD))),
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.50, 0.6), MUD))),
                                 grassOverStone)),
 
                 // No base rule needed (Bedrock top/mid already match vanilla default grass/dirt); only the mycelium noise patch is added.
