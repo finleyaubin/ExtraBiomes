@@ -95,9 +95,9 @@ public class FabricBiomeModifiers {
                 ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_SWAMP, 2, 3);
         BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM), MobCategory.CREATURE,
                 ModEntities.HOPPLESHROOM.get(), MobSpawnWeightTuning.HOPPLESHROOM, 1, 5);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.SPAWNS_JELLYFISH), MobCategory.WATER_CREATURE,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(ModTags.Biomes.SPAWNS_JELLYFISH), MobCategory.WATER_AMBIENT,
                 ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH, 3, 8);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_BEACH), MobCategory.WATER_CREATURE,
+        BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_BEACH), MobCategory.WATER_AMBIENT,
                 ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH_BEACH, 1, 1);
         BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld(), MobCategory.MONSTER,
                 ModEntities.HARPY.get(), MobSpawnWeightTuning.HARPY, 1, 1);
