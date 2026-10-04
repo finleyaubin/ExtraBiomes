@@ -22,3 +22,4 @@
 ## Worms
 - Two worms placed inside a composter that has compost in it will breed. Each breeding uses one level of compost, and the new worm drops out of the bottom of the composter, or if that is covered, the first open side, checked in the order north, east, south, west.
 - Worm items can be placed straight into a composter by right-clicking its top.
+- A worm renamed to Ciaran is half as long, like a worm renamed to Archie is much longer.
