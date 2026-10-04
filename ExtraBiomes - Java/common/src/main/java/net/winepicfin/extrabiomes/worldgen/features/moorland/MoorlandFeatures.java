@@ -40,9 +40,10 @@ import java.util.List;
  *   <li>features/moorland/select_grass_feature.json (aggregate of the 4 grass scatter_features below,
  *       unconditionally run together) + feature_rules/moorland/moorland_scatter_tall_grass_feature.json
  *       (surface_pass, iterations 30, x/z uniform [0,16], y = heightmap +/- 4)
- *     Only the double tall grass member is ported, as a per-chunk column walk (see {@link DoubleTallGrassFeature}):
- *     the Java port deliberately drops the short grass and dry grass (dead bush) scatters so the moorland
- *     floor is almost entirely tall grass.</li>
+ *     The double tall grass member is ported as a per-chunk column walk (see {@link DoubleTallGrassFeature}) that
+ *     replaces air and short grass, and the short grass scatter is dropped, so the moorland floor is almost entirely
+ *     tall grass. The short and tall dry grass scatters are kept and placed first, so the walk leaves the dry grass
+ *     in place and it stays mixed into the tall grass.</li>
  *   <li>feature_rules/moorland/moorlands_surface_waterlily_feature.json (surface_pass, iterations 4,
  *       places minecraft:fixup_waterlily_position_feature)</li>
  * </ul>
