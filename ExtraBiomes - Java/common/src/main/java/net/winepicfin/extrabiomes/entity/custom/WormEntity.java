@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -105,6 +106,9 @@ public class WormEntity extends Animal {
         this.level().levelEvent(1500, composterPos, 1);
         this.setAge(BREEDING_COOLDOWN_TICKS);
         mate.get().setAge(BREEDING_COOLDOWN_TICKS);
+        if ((this.isArchie() && mate.get().isCiaran()) || (this.isCiaran() && mate.get().isArchie())) {
+            baby.setCustomName(Component.literal("Pete"));
+        }
         baby.moveTo(exit.get().getX() + 0.5, exit.get().getY(), exit.get().getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
         this.level().addFreshEntity(baby);
     }
@@ -125,6 +129,14 @@ public class WormEntity extends Animal {
     private boolean isOpen(BlockPos pos) {
         return this.level().getBlockState(pos).getCollisionShape(this.level(), pos).isEmpty()
                 && this.level().getFluidState(pos).isEmpty();
+    }
+
+    private boolean isArchie() {
+        return this.hasCustomName() && "Archie".equals(this.getCustomName().getString());
+    }
+
+    private boolean isCiaran() {
+        return this.hasCustomName() && "Ciaran".equalsIgnoreCase(this.getCustomName().getString());
     }
 
     @Override
