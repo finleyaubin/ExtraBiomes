@@ -12,7 +12,7 @@
     "sources": "https://github.com/finleyaubin/ExtraBiomes",
     "issues": "https://github.com/finleyaubin/ExtraBiomes/issues"
   },
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "icon": "extrabiomes_logo.png",
   "environment": "*",
   "entrypoints": {
