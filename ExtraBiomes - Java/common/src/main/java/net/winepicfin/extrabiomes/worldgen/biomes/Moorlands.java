@@ -39,6 +39,10 @@ public class Moorlands {
 
         // boulder subsystem: stick piles (Bedrock surface_pass)
 
+        // moorland subsystem: dry grass scatters (Bedrock surface_pass); placed before the tall grass field so it skips the columns they occupy
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_SHORT_DRY_GRASS_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_TALL_DRY_GRASS_PLACED_KEY);
+
         // moorland subsystem: tall grass field (Bedrock surface_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY);
 

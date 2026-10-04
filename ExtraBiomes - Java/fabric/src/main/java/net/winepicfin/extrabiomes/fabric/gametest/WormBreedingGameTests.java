@@ -2,8 +2,9 @@ package net.winepicfin.extrabiomes.fabric.gametest;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.phys.AABB;
@@ -16,8 +17,8 @@ import org.slf4j.Logger;
 public class WormBreedingGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
-    public static void wormsBreedInsideCompostingComposter(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    public void wormsBreedInsideCompostingComposter(GameTestHelper helper) {
         LOGGER.info("[WormBreedingGameTests] wormsBreedInsideCompostingComposter: starting");
         BlockPos composter = new BlockPos(2, 2, 2);
         helper.setBlock(composter.below(), Blocks.STONE);
@@ -29,9 +30,9 @@ public class WormBreedingGameTests {
         helper.succeedWhen(() -> {
             helper.assertBlockProperty(composter, ComposterBlock.LEVEL, 2);
             int worms = helper.getLevel().getEntitiesOfClass(WormEntity.class, helper.getBounds().inflate(8.0)).size();
-            helper.assertTrue(worms == 3, "Expected 3 worms after breeding but found " + worms);
+            helper.assertTrue(worms == 3, Component.literal("Expected 3 worms after breeding but found " + worms));
             int northWorms = helper.getLevel().getEntitiesOfClass(WormEntity.class, new AABB(helper.absolutePos(composter.north()))).size();
-            helper.assertTrue(northWorms == 1, "Expected the baby on the north side (bottom is covered) but found " + northWorms);
+            helper.assertTrue(northWorms == 1, Component.literal("Expected the baby on the north side (bottom is covered) but found " + northWorms));
             LOGGER.info("[WormBreedingGameTests] wormsBreedInsideCompostingComposter: passed");
         });
     }
