@@ -1,19 +1,19 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 
 // Bedrock plants each tulip colour as a 3-wide stripe along X at a fixed z per chunk (red 1, orange 5, pink 9, white 13); walking every column of the chunk reproduces those stripes without writing into neighbouring chunks.
-public class NetherlandsTulipFieldFeature extends Feature<NoneFeatureConfiguration> {
+public class NetherlandsTulipFieldFeature implements Feature {
     private record Stripe(int centerZ, Block tulip) {
     }
 
@@ -25,14 +25,16 @@ public class NetherlandsTulipFieldFeature extends Feature<NoneFeatureConfigurati
             new Stripe(13, Blocks.WHITE_TULIP),
     };
 
-    public NetherlandsTulipFieldFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<NetherlandsTulipFieldFeature> CODEC = MapCodec.unit(NetherlandsTulipFieldFeature::new);
+
+    @Override
+    public MapCodec<NetherlandsTulipFieldFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        ChunkPos chunkPos = ChunkPos.containing(context.origin());
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        ChunkPos chunkPos = ChunkPos.containing(origin);
         boolean placedAny = false;
 
         for (Stripe stripe : STRIPES) {
