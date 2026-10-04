@@ -51,6 +51,8 @@ public class WormModel<T extends Entity> extends HierarchicalModel<T> {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		// "Archie" easter egg: the long extra tail only shows when the worm is renamed to Archie.
 		this.Archie.visible = entity.hasCustomName() && "Archie".equals(entity.getCustomName().getString());
+		// "Ciaran" easter egg: the worm renamed to Ciaran loses its long rear segment (and the Archie tail attached to it), so it is half as long.
+		this.body2.visible = !(entity.hasCustomName() && "Ciaran".equalsIgnoreCase(entity.getCustomName().getString()));
 		// animation.worm.move
 		this.head1.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;
 		this.head2.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * (-45f))) * 0.017453292f;
