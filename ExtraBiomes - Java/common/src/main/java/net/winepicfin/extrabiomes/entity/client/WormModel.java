@@ -49,6 +49,8 @@ public class WormModel<T extends LivingEntityRenderState> extends EntityModel<T>
 		float limbSwing = state.walkAnimationPos;
 		// "Archie" easter egg: the long extra tail only shows when the worm is renamed to Archie.
 		this.Archie.visible = state.nameTag != null && "Archie".equals(state.nameTag.getString());
+		// "Ciaran" easter egg: the worm renamed to Ciaran loses its long rear segment (and the Archie tail attached to it), so it is half as long.
+		this.body2.visible = !(state.nameTag != null && "Ciaran".equalsIgnoreCase(state.nameTag.getString()));
 		// animation.worm.move
 		this.head1.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;
 		this.head2.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * (-45f))) * 0.017453292f;
