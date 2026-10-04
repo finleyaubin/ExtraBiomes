@@ -19,12 +19,8 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
 case "$EDITION" in
-  Bedrock) CHANGELOG="Changelogs/Bedrock-${VERSION}.md"; TAG="Bedrock-V${VERSION}"; LINKS=() ;;
-  # Same links the Java release workflow prints on its slides.
-  Java) CHANGELOG="Changelogs/Java-v${VERSION}.md"; TAG="Java-v${VERSION}"
-        LINKS=(--link "Modrinth=modrinth.com/mod/extrabiome/versions"
-               --link "CurseForge=curseforge.com/minecraft/mc-mods/extrabiomes/files"
-               --link "GitHub release=github.com/finleyaubin/ExtraBiomes/releases/tag/${TAG}") ;;
+  Bedrock) CHANGELOG="Changelogs/Bedrock-${VERSION}.md"; TAG="Bedrock-V${VERSION}" ;;
+  Java) CHANGELOG="Changelogs/Java-v${VERSION}.md"; TAG="Java-v${VERSION}" ;;
   *) echo "edition must be Bedrock or Java" >&2; exit 1 ;;
 esac
 [ -f "$CHANGELOG" ] || { echo "No changelog at $CHANGELOG" >&2; exit 1; }
@@ -35,7 +31,7 @@ cp "$CHANGELOG" "$WORK/changelog.md"
 
 pip install --quiet pillow
 python3 tools/render_slides.py "$WORK/changelog.md" \
-  --version "$VERSION" --edition "$EDITION" --out "$WORK/slides" "${LINKS[@]}"
+  --version "$VERSION" --edition "$EDITION" --out "$WORK/slides"
 
 DIR="media-slides/$(echo "$EDITION" | tr '[:upper:]' '[:lower:]')/${VERSION}"
 WT=$(mktemp -d)
