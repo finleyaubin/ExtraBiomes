@@ -8,7 +8,7 @@
     "${mod_authors}"
   ],
   "contact": {},
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "icon": "extrabiomes_logo.png",
   "environment": "*",
   "entrypoints": {
