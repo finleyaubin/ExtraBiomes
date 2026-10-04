@@ -21,7 +21,11 @@ ExtraBiomes is a world generation addon/mod for Minecraft, available for both Be
 - [Modrinth](https://modrinth.com/mod/extrabiome)
 - [GitHub Releases](https://github.com/finleyaubin/ExtraBiomes/releases)
 
-The Java port is currently in beta, supporting only version 1.20.1 at the moment, and requires [architectury-api](https://github.com/architectury/architectury-api), [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
+The Java port is currently in beta and supports Minecraft 1.20.1 through 26.3 (1.20.1, 1.20.2, 1.20.4, 1.20.6, 1.21.1, 1.21.3, 1.21.4, 1.21.5, 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2 and 26.3). It requires [architectury-api](https://github.com/architectury/architectury-api), [TerraBlender](https://modrinth.com/mod/terrablender) and [GeckoLib](https://modrinth.com/mod/geckolib) as dependencies. It can also be compiled from source by cloning this repo.
+
+#### Compatibility 
+Compatibility has been tested with [the mods in this grid](https://github.com/finleyaubin/ExtraBiomes/tree/compat-grid) however if you happen to run into a feature cycle out of order bug, create a github issue, stating the mod and versions and I will look into it, but in the meantime using [Feature Recycler](https://www.curseforge.com/minecraft/mc-mods/feature-recycler) will solve it
+
 ## Overworld Surface Biomes
 <table>
   <tr>
@@ -115,7 +119,7 @@ The Java port is currently in beta, supporting only version 1.20.1 at the moment
 
   <tr>
     <td align="center">
-    <img style="border-radius:12px;" width="700" alt="Floating Jungle" src="https://github.com/user-attachments/assets/acd6077f-1977-48f6-9f02-e918274bd929" />
+    <img style="border-radius:12px;" width="700" alt="Floating Jungle" src="https://github.com/user-attachments/assets/511beffc-2fac-4ef4-863e-f3364cf06411" />
     <br/>
     <i>
     the floating jungle is a jungle biome found at the tallest peaks of the world, and above those peaks the jungle floats: sky islands of grass and stone hang in the air with vines, roots and waterfalls trailing from their undersides, wisps of cloud drifting beneath them. Some islands are joined by giant log canopy bridges, and on the rarest archipelagos an overgrown ruin holds a chest of loot
