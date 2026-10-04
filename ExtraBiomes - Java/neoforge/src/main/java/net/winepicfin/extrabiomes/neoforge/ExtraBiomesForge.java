@@ -45,6 +45,7 @@ import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheat
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.ModStructureTypes;
+import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
@@ -87,6 +88,7 @@ public class ExtraBiomesForge
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
         ModVolcanicPlacementModifiers.register();
+        GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
         NetherlandsWheatFeatures.register();
@@ -104,7 +106,7 @@ public class ExtraBiomesForge
 
         // Register our mod's ModConfigSpec so that NeoForge can create and load the config file for
         // us. NeoForge 21.1 moved registerConfig off ModLoadingContext and onto ModContainer.
-        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.LOCAL, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -
