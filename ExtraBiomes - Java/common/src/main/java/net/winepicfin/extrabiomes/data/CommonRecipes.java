@@ -66,7 +66,7 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .pattern("#+#")
                 .pattern("# #")
                 .pattern("/ /")
-                .define('#', Items.LIME_WOOL)
+                .define('#', Items.WOOL.lime())
                 .define('+', Items.TURTLE_HELMET)
                 .define('/', ModItems.FROGS_LEGS.get())
                 .unlockedBy(getHasName(ModItems.FROGS_LEGS.get()), has(ModItems.FROGS_LEGS.get()))
