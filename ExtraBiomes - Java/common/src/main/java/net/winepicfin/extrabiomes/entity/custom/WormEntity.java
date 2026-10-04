@@ -77,8 +77,8 @@ public class WormEntity extends Animal {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel level) {
+        super.customServerAiStep(level);
         if (this.tickCount % COMPOSTER_CHECK_INTERVAL_TICKS == 0) {
             breedInComposter();
         }
@@ -99,7 +99,7 @@ public class WormEntity extends Animal {
         if (mate.isEmpty() || exit.isEmpty()) {
             return;
         }
-        WormEntity baby = ModEntities.WORM.get().create(this.level());
+        WormEntity baby = ModEntities.WORM.get().create(this.level(), EntitySpawnReason.BREEDING);
         if (baby == null) {
             return;
         }

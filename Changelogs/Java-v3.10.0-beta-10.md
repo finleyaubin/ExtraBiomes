@@ -34,7 +34,7 @@ An example worm farm using this setup can be shown here:
 - Palm trees, and the log-supported leaves of the Floating Jungle giant trees, now decay when their logs are removed. Their leaves were being generated as permanent.
 - Huge mushroom blocks now render like vanilla ones: faces that used to touch another mushroom block show the pore texture once the neighbour is gone, instead of the cap texture.
 - Jellyfish now actually spawn in Jellyfish Fields. They shared a spawn cap of 5 with squid and dolphins; they now use the same, much larger, cap as piranhas. They stay rare on beaches, where only about one in fifty spawn attempts succeeds.
-- The advancement tab background is palm wood instead of stone on 1.21.1, matching later versions.
+- The advancement tab background is palm wood instead of stone.
 - The mod menu entry has its icon and links to the project page and issue tracker.
 - Fixed a rare world generation crash ("Requested chunk unavailable during world generation") caused by Glacier water pools and ponds placed in the last columns of a chunk.
 - Removed the "missing BiomeFilter" errors from the log for the Moorlands, Netherlands, Glacier and Volcanic Moss Tundra features.
