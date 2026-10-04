@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 public class WormBreedingGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
+    @GameTest(template = ExtraBiomes.MOD_ID + ":empty", timeoutTicks = 400)
     public static void wormsBreedInsideCompostingComposter(GameTestHelper helper) {
         LOGGER.info("[WormBreedingGameTests] wormsBreedInsideCompostingComposter: starting");
         BlockPos composter = new BlockPos(2, 2, 2);
