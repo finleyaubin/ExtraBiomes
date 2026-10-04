@@ -41,10 +41,7 @@ public class TheNetherlands {
         // and Bedrock's reference for this biome has only its tulip fields below, no vanilla grass/flowers.
         // Despite Bedrock's 'nether'/'nether_wastes' spawn-category tags, this biome generates in the OVERWORLD and is themed after the real-world Netherlands (tulips, windmills, wheat, canals).
         // Base (non-mutated) TheNetherlands gets tulip fields; TheNetherlandsMutated gets wheat/canal instead.
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.ORANGE_TULIP_FLOOR_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.PINK_TULIP_FLOOR_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.RED_TULIP_FLOOR_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.WHITE_TULIP_FLOOR_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, NetherlandsTulipFeatures.TULIP_FIELD_PLACED_KEY);
         // Windmill generation moved off this biome-features list entirely - it's now a real jigsaw
         // Structure (see WindmillStructures), which attaches to biomes via its own Structure.biomes()
         // HolderSet rather than a per-biome addFeature call.
