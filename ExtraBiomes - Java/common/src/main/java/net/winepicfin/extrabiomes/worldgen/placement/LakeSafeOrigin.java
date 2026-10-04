@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.placement;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
@@ -13,7 +13,7 @@ public class LakeSafeOrigin extends PlacementFilter {
     private static final int MAX_LOCAL_COORDINATE = 13;
 
     public static final LakeSafeOrigin INSTANCE = new LakeSafeOrigin();
-    public static final MapCodec<LakeSafeOrigin> CODEC = MapCodec.unit(INSTANCE);
+    public static final Codec<LakeSafeOrigin> CODEC = Codec.unit(INSTANCE);
 
     @Override
     protected boolean shouldPlace(PlacementContext context, RandomSource random, BlockPos pos) {

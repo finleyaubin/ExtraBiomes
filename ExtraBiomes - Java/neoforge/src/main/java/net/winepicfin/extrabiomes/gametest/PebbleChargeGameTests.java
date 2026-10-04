@@ -6,7 +6,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -24,7 +23,7 @@ public class PebbleChargeGameTests {
     @GameTest(template = "empty", batch = "extrabiomes")
     public static void pebbleThrowsOnlyAfterEightTenthsOfASecondCharge(GameTestHelper helper) {
         LOGGER.info("[PebbleChargeGameTests] pebbleThrowsOnlyAfterEightTenthsOfASecondCharge: starting");
-        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        Player player = helper.makeMockPlayer();
         player.setPos(helper.absoluteVec(new Vec3(1.5, 2.0, 1.5)));
         ItemStack pebbles = new ItemStack(ModItems.PEBBLE.get(), 2);
         player.setItemInHand(InteractionHand.MAIN_HAND, pebbles);
