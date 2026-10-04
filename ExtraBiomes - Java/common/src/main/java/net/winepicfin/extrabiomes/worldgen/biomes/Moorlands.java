@@ -26,9 +26,6 @@ public class Moorlands {
 
         // boulder subsystem: boulders (LOCAL_MODIFICATIONS, matches vanilla's forest_rock step) and stick piles (VEGETAL_DECORATION)
 
-        // moorland subsystem: podzol surface conversion (Bedrock after_surface_pass) -> LOCAL_MODIFICATIONS
-        biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MoorlandFeatures.MOORLAND_PODZOL_PLACED_KEY);
-
         // addPlainVegetation() already adds flower_plains alongside trees_plains/patch_grass_plain,
         // matching vanilla's plains biomes exactly. A second addDefaultFlowers() call used to sit here
         // too, forcing minecraft:flower_default directly next to minecraft:patch_grass_plain - a pair
@@ -38,11 +35,12 @@ public class Moorlands {
 
         // boulder subsystem: stick piles (Bedrock surface_pass)
 
-        // moorland subsystem: select_grass_feature aggregate members (Bedrock surface_pass)
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_TALL_GRASS_PLACED_KEY);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY);
+        // moorland subsystem: dry grass scatters (Bedrock surface_pass); placed before the tall grass field so it skips the columns they occupy
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_SHORT_DRY_GRASS_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_TALL_DRY_GRASS_PLACED_KEY);
+
+        // moorland subsystem: tall grass field (Bedrock surface_pass)
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_DOUBLE_TALL_GRASS_PLACED_KEY);
 
         // moorland subsystem: waterlily surface fixup (Bedrock surface_pass)
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MoorlandFeatures.MOORLAND_WATERLILY_PLACED_KEY);

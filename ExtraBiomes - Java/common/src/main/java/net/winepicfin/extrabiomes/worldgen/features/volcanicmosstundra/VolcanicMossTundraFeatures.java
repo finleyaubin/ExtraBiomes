@@ -31,6 +31,8 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.features.moss.MossFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
@@ -184,10 +186,10 @@ public class VolcanicMossTundraFeatures {
         context.register(NO_OP_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(NO_OP_KEY), List.of()));
 
         context.register(LAVA_RIVER_CORE_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(LAVA_RIVER_CORE_KEY),
-                List.of(new RiverNoiseFilter(0.0, 0.003),
+                List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE, new RiverNoiseFilter(0.0, 0.003),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG))));
         context.register(LAVA_RIVER_BANK_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(LAVA_RIVER_BANK_KEY),
-                List.of(new RiverNoiseFilter(0.003, 0.006),
+                List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE, new RiverNoiseFilter(0.003, 0.006),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG))));
         context.register(HIGH_ELEVATION_MOSS_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(HIGH_ELEVATION_MOSS_FLOOR_KEY),
                 List.of(CountPlacement.of(10), InSquarePlacement.spread(),
@@ -199,12 +201,12 @@ public class VolcanicMossTundraFeatures {
                         new MinYFilter(75, MOSS_RAMP_BLOCKS), BiomeFilter.biome())));
 
         context.register(BASALT_BANK_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(BASALT_BANK_KEY),
-                List.of(new RiverNoiseFilter(0.006, 0.01),
+                List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE, new RiverNoiseFilter(0.006, 0.01),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG))));
 
-        // No placement modifiers - place() is called exactly once at the chunk origin, which is all
-        // LavaFlowKickstartFeature needs since it scans the whole chunk itself.
-        context.register(LAVA_FLOW_KICKSTART_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(LAVA_FLOW_KICKSTART_KEY), List.of()));
+        // place() is called exactly once at the chunk origin, which is all LavaFlowKickstartFeature needs since it scans the whole chunk itself.
+        context.register(LAVA_FLOW_KICKSTART_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(LAVA_FLOW_KICKSTART_KEY),
+                List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE)));
 
         for (String pillar : PILLARS) registerNoModifiers(context, configuredFeatures, pillar);
         for (String boulder : BOULDERS) registerNoModifiers(context, configuredFeatures, boulder);
