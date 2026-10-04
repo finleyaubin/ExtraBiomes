@@ -21,6 +21,11 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same branch or PR replaces the run in progress, so branch updates and quick follow-up pushes don't each build to the end.
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 
 # Stages: setup -> datagen -> test (parallel suites) beside package -> build (the required check).
 # Datagen output travels between jobs as an artifact.
@@ -60,9 +65,15 @@ jobs:
             fi
           done
 
+      # Forge's game tests boot one server per test and take most of an hour, so they run on the protected branches after a merge; branch and PR builds skip them.
       - name: List test suites
         id: suites
-        run: echo "list=$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2 | tr ',' '\n' | jq -R . | jq -sc '["unit"] + .')" >> "$GITHUB_OUTPUT"
+        run: |
+          PLATFORMS=$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2 | tr ',' '\n')
+          if ! printf '%s' "$GITHUB_REF_NAME" | grep -qE '^(main|Java-Dev|[0-9]+(\.[0-9]+)+)$'; then
+            PLATFORMS=$(printf '%s\n' "$PLATFORMS" | grep -vx forge || true)
+          fi
+          echo "list=$(printf '%s\n' "$PLATFORMS" | jq -R . | jq -sc '["unit"] + map(select(. != ""))')" >> "$GITHUB_OUTPUT"
 
   datagen:
     needs: setup
