@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnCapTuning;
+import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import org.slf4j.Logger;
@@ -78,6 +79,17 @@ public class BiomeModifierApplicationGameTests {
         assertHasFeature(helper, darkForest, GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
 
         LOGGER.info("[BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: passed");
+        helper.succeed();
+    }
+
+    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
+    public static void jellyfishFieldsGetsJellyfishSpawn(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] jellyfishFieldsGetsJellyfishSpawn: starting");
+        Biome jellyfishFields = biome(helper, ModBiomes.JELLYFISH_FIELDS);
+
+        assertHasSpawn(helper, jellyfishFields, MobCategory.WATER_AMBIENT, ModEntities.JELLYFISH.get());
+
+        LOGGER.info("[BiomeModifierApplicationGameTests] jellyfishFieldsGetsJellyfishSpawn: passed");
         helper.succeed();
     }
 

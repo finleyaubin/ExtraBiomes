@@ -51,6 +51,23 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .define('#', ModItems.WORM.get())
                 .unlockedBy(getHasName(ModItems.WORM.get()), has(ModItems.WORM.get()))
                 .save(pWriter);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.FROG_HELMET.get())
+                .pattern("#+#")
+                .pattern("# #")
+                .pattern("/ /")
+                .define('#', Items.LIME_WOOL)
+                .define('+', Items.TURTLE_HELMET)
+                .define('/', ModItems.FROGS_LEGS.get())
+                .unlockedBy(getHasName(ModItems.FROGS_LEGS.get()), has(ModItems.FROGS_LEGS.get()))
+                .save(pWriter);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.JELLYFISHING_NET_EMPTY.get())
+                .pattern("  A")
+                .pattern(" # ")
+                .pattern("#  ")
+                .define('#', Items.STICK)
+                .define('A', Items.STRING)
+                .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+                .save(pWriter);
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
         oreBlasting(pWriter, List.of(ModBlocks.NETHER_COAL_ORE.get()), RecipeCategory.MISC, Items.COAL, 0.1f, 100, "coal", Boolean.TRUE);
         oreBlasting(pWriter, List.of(ModBlocks.NETHER_COPPER_ORE.get()), RecipeCategory.MISC, Items.COPPER_INGOT, 0.7f, 100, "copper_ingot", Boolean.TRUE);
