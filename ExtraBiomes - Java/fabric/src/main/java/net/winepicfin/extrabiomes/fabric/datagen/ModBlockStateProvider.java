@@ -240,7 +240,7 @@ public class ModBlockStateProvider implements DataProvider {
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
         Identifier texture = blockTexture(block);
-        Identifier cap = ModelTemplates.SINGLE_FACE.create(block, new TextureMapping().put(TextureSlot.TEXTURE, texture), models::put);
+        Identifier cap = ModelTemplates.SINGLE_FACE.create(block, new TextureMapping().put(TextureSlot.TEXTURE, mat(texture)), models::put);
         Identifier inside = ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside");
         MultiPartGenerator generator = MultiPartGenerator.multiPart(block);
         PipeBlock.PROPERTY_BY_DIRECTION.forEach((direction, property) -> {
@@ -251,7 +251,7 @@ public class ModBlockStateProvider implements DataProvider {
             generator.with(new ConditionBuilder().term(property, false), BlockModelGenerators.plainVariant(inside).with(rotationX).with(rotationY));
         });
         blockStates.put(block, generator);
-        Identifier inventory = ModelTemplates.CUBE_ALL.createWithSuffix(block, "_inventory", new TextureMapping().put(TextureSlot.ALL, texture), models::put);
+        Identifier inventory = ModelTemplates.CUBE_ALL.createWithSuffix(block, "_inventory", new TextureMapping().put(TextureSlot.ALL, mat(texture)), models::put);
         delegateItemModel(block, inventory);
     }
 

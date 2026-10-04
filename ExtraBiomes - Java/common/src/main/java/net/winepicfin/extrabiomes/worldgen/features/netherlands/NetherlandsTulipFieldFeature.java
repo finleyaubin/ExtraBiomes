@@ -32,7 +32,7 @@ public class NetherlandsTulipFieldFeature extends Feature<NoneFeatureConfigurati
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel level = context.level();
-        ChunkPos chunkPos = new ChunkPos(context.origin());
+        ChunkPos chunkPos = ChunkPos.containing(context.origin());
         boolean placedAny = false;
 
         for (Stripe stripe : STRIPES) {
