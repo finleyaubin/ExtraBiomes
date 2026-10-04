@@ -42,8 +42,9 @@ public class ModEntities {
             () -> EntityType.Builder.of(HoppleshroomEntity::new, MobCategory.CREATURE).sized(0.6f, 0.8f).build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "hoppleshroom"))));
     public static final RegistrySupplier<EntityType<GiantTortoiseEntity>> GIANT_TORTOISE = ENTITIES.register("giant_tortoise",
             () -> EntityType.Builder.of(GiantTortoiseEntity::new, MobCategory.MONSTER).sized(1.6f, 1.0f).build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "giant_tortoise"))));
+    // WATER_AMBIENT like piranha: WATER_CREATURE's cap of 5 per area is used up by vanilla squid/dolphins, so Jellyfish Fields barely spawned any.
     public static final RegistrySupplier<EntityType<JellyfishEntity>> JELLYFISH = ENTITIES.register("jellyfish",
-            () -> EntityType.Builder.of(JellyfishEntity::new, MobCategory.WATER_CREATURE).sized(0.8f, 1.0f).build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellyfish"))));
+            () -> EntityType.Builder.of(JellyfishEntity::new, MobCategory.WATER_AMBIENT).sized(0.8f, 1.0f).build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "jellyfish"))));
     // WATER_AMBIENT, not WATER_CREATURE: its higher per-area spawn cap (20 vs 5) was what kept jungle water from teeming, and its despawn distance is closer to Bedrock's.
     public static final RegistrySupplier<EntityType<PiranhaEntity>> PIRANHA = ENTITIES.register("piranha",
             () -> EntityType.Builder.of(PiranhaEntity::new, MobCategory.WATER_AMBIENT).sized(0.6f, 0.3f).build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "piranha"))));

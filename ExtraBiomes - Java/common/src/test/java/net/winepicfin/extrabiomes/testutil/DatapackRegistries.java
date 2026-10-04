@@ -40,9 +40,9 @@ import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.DoubleTallGrassFeature;
-import net.winepicfin.extrabiomes.worldgen.features.moorland.PodzolConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.WaterLilyFixupFeature;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.GooConversionFeature;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
@@ -52,6 +52,9 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeatu
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeatureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.BasaltBankFeature;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.MinYFilter;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
+import net.winepicfin.extrabiomes.worldgen.placement.LakeSafeOrigin;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.RiverNoiseFilter;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructure;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
@@ -174,11 +177,11 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.FEATURE, false);
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "single_structure", new SingleStructureFeature(SingleStructureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "bryce_pillars", new BrycePillarsFeature(BrycePillarsConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_podzol_conversion", new PodzolConversionFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_double_tall_grass", new DoubleTallGrassFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_waterlily_fixup", new WaterLilyFixupFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "mystic_goo_conversion", new GooConversionFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "netherlands_wheat_field", new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
+        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "netherlands_tulip_field", new NetherlandsTulipFieldFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_cave_vine", new CaveVineFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_fallen_jungle_tree", new FallenJungleTreeFeature(NoneFeatureConfiguration.CODEC));
         register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_multi", new MultiFeature(MultiFeatureConfiguration.CODEC));
@@ -196,6 +199,9 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
         register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "river_noise_filter", (PlacementModifierType<RiverNoiseFilter>) () -> RiverNoiseFilter.CODEC);
         register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "min_y_filter", (PlacementModifierType<MinYFilter>) () -> MinYFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "in_biome_chunk_sample", (PlacementModifierType<InBiomeChunkSample>) () -> InBiomeChunkSample.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "lake_safe_origin", (PlacementModifierType<LakeSafeOrigin>) () -> LakeSafeOrigin.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "chunk_origin_snap", (PlacementModifierType<ChunkOriginSnap>) () -> ChunkOriginSnap.CODEC);
         BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.STRUCTURE_TYPE, false);
