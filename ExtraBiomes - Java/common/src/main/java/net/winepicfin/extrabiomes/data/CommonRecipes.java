@@ -62,7 +62,7 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .define('#', ModItems.WORM.get())
                 .unlockedBy(getHasName(ModItems.WORM.get()), has(ModItems.WORM.get()))
                 .save(pWriter);
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.FROG_HELMET.get())
+        shaped(RecipeCategory.COMBAT, ModItems.FROG_HELMET.get())
                 .pattern("#+#")
                 .pattern("# #")
                 .pattern("/ /")
@@ -71,7 +71,7 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .define('/', ModItems.FROGS_LEGS.get())
                 .unlockedBy(getHasName(ModItems.FROGS_LEGS.get()), has(ModItems.FROGS_LEGS.get()))
                 .save(pWriter);
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.JELLYFISHING_NET_EMPTY.get())
+        shaped(RecipeCategory.TOOLS, ModItems.JELLYFISHING_NET_EMPTY.get())
                 .pattern("  A")
                 .pattern(" # ")
                 .pattern("#  ")

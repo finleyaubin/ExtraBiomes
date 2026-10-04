@@ -77,8 +77,8 @@ public class WormEntity extends Animal {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel level) {
+        super.customServerAiStep(level);
         if (this.tickCount % COMPOSTER_CHECK_INTERVAL_TICKS == 0) {
             breedInComposter();
         }
@@ -99,7 +99,7 @@ public class WormEntity extends Animal {
         if (mate.isEmpty() || exit.isEmpty()) {
             return;
         }
-        WormEntity baby = ModEntities.WORM.get().create(this.level());
+        WormEntity baby = ModEntities.WORM.get().create(this.level(), EntitySpawnReason.BREEDING);
         if (baby == null) {
             return;
         }
@@ -110,7 +110,7 @@ public class WormEntity extends Animal {
         if ((this.isArchie() && mate.get().isCiaran()) || (this.isCiaran() && mate.get().isArchie())) {
             baby.setCustomName(Component.literal("Pete"));
         }
-        baby.moveTo(exit.get().getX() + 0.5, exit.get().getY(), exit.get().getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
+        baby.snapTo(exit.get().getX() + 0.5, exit.get().getY(), exit.get().getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
         this.level().addFreshEntity(baby);
     }
 

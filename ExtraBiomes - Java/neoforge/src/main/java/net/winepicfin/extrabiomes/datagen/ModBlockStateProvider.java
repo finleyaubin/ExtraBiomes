@@ -13,6 +13,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
+import net.minecraft.client.data.models.blockstates.ConditionBuilder;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
@@ -250,11 +251,11 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation inside = ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside");
         MultiPartGenerator generator = MultiPartGenerator.multiPart(block);
         PipeBlock.PROPERTY_BY_DIRECTION.forEach((direction, property) -> {
-            VariantProperties.Rotation rotationX = direction == Direction.UP ? VariantProperties.Rotation.R270
-                    : direction == Direction.DOWN ? VariantProperties.Rotation.R90 : VariantProperties.Rotation.R0;
-            VariantProperties.Rotation rotationY = direction.getAxis().isHorizontal() ? yRot((int) direction.toYRot() + 180) : VariantProperties.Rotation.R0;
-            generator.with(Condition.condition().term(property, true), Variant.variant().with(VariantProperties.MODEL, cap).with(VariantProperties.X_ROT, rotationX).with(VariantProperties.Y_ROT, rotationY));
-            generator.with(Condition.condition().term(property, false), Variant.variant().with(VariantProperties.MODEL, inside).with(VariantProperties.X_ROT, rotationX).with(VariantProperties.Y_ROT, rotationY));
+            VariantMutator rotationX = direction == Direction.UP ? BlockModelGenerators.X_ROT_270
+                    : direction == Direction.DOWN ? BlockModelGenerators.X_ROT_90 : BlockModelGenerators.NOP;
+            VariantMutator rotationY = direction.getAxis().isHorizontal() ? yRot((int) direction.toYRot() + 180) : BlockModelGenerators.NOP;
+            generator.with(new ConditionBuilder().term(property, true), BlockModelGenerators.plainVariant(cap).with(rotationX).with(rotationY));
+            generator.with(new ConditionBuilder().term(property, false), BlockModelGenerators.plainVariant(inside).with(rotationX).with(rotationY));
         });
         blockStates.put(block, generator);
         ResourceLocation inventory = ModelTemplates.CUBE_ALL.createWithSuffix(block, "_inventory", new TextureMapping().put(TextureSlot.ALL, texture), models::put);
