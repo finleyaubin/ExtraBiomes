@@ -17,11 +17,14 @@ import org.slf4j.Logger;
 public class WormBreedingGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty", maxTicks = 100)
     public void wormsBreedInsideCompostingComposter(GameTestHelper helper) {
         LOGGER.info("[WormBreedingGameTests] wormsBreedInsideCompostingComposter: starting");
         BlockPos composter = new BlockPos(2, 2, 2);
         helper.setBlock(composter.below(), Blocks.STONE);
+        for (BlockPos side : new BlockPos[]{composter.north(), composter.east(), composter.south(), composter.west()}) {
+            helper.setBlock(side, Blocks.AIR);
+        }
         helper.setBlock(composter, Blocks.COMPOSTER.defaultBlockState().setValue(ComposterBlock.LEVEL, 3));
         Vec3 inside = new Vec3(2.5, 2.125, 2.5);
         helper.spawnWithNoFreeWill(ModEntities.WORM.get(), inside);
