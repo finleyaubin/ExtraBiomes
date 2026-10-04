@@ -13,6 +13,9 @@ import net.winepicfin.extrabiomes.worldgen.features.glacier.CrevasseFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFinishFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.IceEncasedLootFeature;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.MeltwaterStreamFeature;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
+import net.winepicfin.extrabiomes.worldgen.placement.LakeSafeOrigin;
 
 /**
  * Registers the custom {@link PlacementModifierType}s this subsystem's two hand-rolled
@@ -28,6 +31,9 @@ public class ModVolcanicPlacementModifiers {
 
     public static final RegistrySupplier<MapCodec<RiverNoiseFilter>> RIVER_NOISE_FILTER = MODIFIERS.register("river_noise_filter", () -> RiverNoiseFilter.CODEC);
     public static final RegistrySupplier<MapCodec<MinYFilter>> MIN_Y_FILTER = MODIFIERS.register("min_y_filter", () -> MinYFilter.CODEC);
+    public static final RegistrySupplier<MapCodec<InBiomeChunkSample>> IN_BIOME_CHUNK_SAMPLE = MODIFIERS.register("in_biome_chunk_sample", () -> InBiomeChunkSample.CODEC);
+    public static final RegistrySupplier<MapCodec<LakeSafeOrigin>> LAKE_SAFE_ORIGIN = MODIFIERS.register("lake_safe_origin", () -> LakeSafeOrigin.CODEC);
+    public static final RegistrySupplier<MapCodec<ChunkOriginSnap>> CHUNK_ORIGIN_SNAP = MODIFIERS.register("chunk_origin_snap", () -> ChunkOriginSnap.CODEC);
 
     public static final RegistrySupplier<MapCodec<BasaltBankFeature>> BASALT_BANK = FEATURES.register("basalt_bank", () -> BasaltBankFeature.CODEC);
     public static final RegistrySupplier<MapCodec<LavaFlowKickstartFeature>> LAVA_FLOW_KICKSTART = FEATURES.register("lava_flow_kickstart", () -> LavaFlowKickstartFeature.CODEC);
