@@ -46,7 +46,7 @@ public class DoubleTallGrassFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos upper = lower.above();
         BlockState lowerState = level.getBlockState(lower);
         if (!level.getBiome(lower).is(ModBiomes.MOORLANDS)
-                || !(lowerState.isAir() || lowerState.is(Blocks.SHORT_GRASS))
+                || !(lowerState.isAir() || lowerState.is(Blocks.GRASS))
                 || !level.getBlockState(upper).isAir()
                 || !level.getBlockState(lower.below()).is(BlockTags.DIRT)) {
             return false;

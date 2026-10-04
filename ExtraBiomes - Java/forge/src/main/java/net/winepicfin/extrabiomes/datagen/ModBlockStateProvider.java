@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -151,15 +152,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         saplingBlock(ModBlocks.YELLOW_MUSHROOM);
         saplingBlock(ModBlocks.GLOW_MUSHROOM);
         // Mushrooms
-        blockWithItemCutout(ModBlocks.BLACK_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.BLUE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.CYAN_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.GREEN_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.ORANGE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.PURPLE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.WHITE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.YELLOW_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.GLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLACK_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLUE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.CYAN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GREEN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.ORANGE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.PURPLE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.WHITE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.YELLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GLOW_MUSHROOM_BLOCK);
     }
     private void blockWithItem(RegistrySupplier<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(),cubeAll(blockRegistryObject.get()));
@@ -170,6 +171,20 @@ public class ModBlockStateProvider extends BlockStateProvider {
     // the removed runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) API).
     private void blockWithItemCutout(RegistrySupplier<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(name(blockRegistryObject.get()), blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject){
+        Block block = blockRegistryObject.get();
+        ModelFile cap = models().singleTexture(name(block), mcLoc("block/template_single_face"), "texture", blockTexture(block)).renderType("cutout");
+        ModelFile inside = new ModelFile.UncheckedModelFile(mcLoc("block/mushroom_block_inside"));
+        MultiPartBlockStateBuilder builder = getMultipartBuilder(block);
+        PipeBlock.PROPERTY_BY_DIRECTION.forEach((direction, property) -> {
+            int rotationX = direction == Direction.UP ? 270 : direction == Direction.DOWN ? 90 : 0;
+            int rotationY = direction.getAxis().isHorizontal() ? ((int) direction.toYRot() + 180) % 360 : 0;
+            builder.part().modelFile(cap).rotationX(rotationX).rotationY(rotationY).addModel().condition(property, true);
+            builder.part().modelFile(inside).rotationX(rotationX).rotationY(rotationY).addModel().condition(property, false);
+        });
+        simpleBlockItem(block, models().cubeAll(name(block) + "_inventory", blockTexture(block)).renderType("cutout"));
     }
 
     private void saplingBlock(RegistrySupplier<Block> blockRegistryObject){

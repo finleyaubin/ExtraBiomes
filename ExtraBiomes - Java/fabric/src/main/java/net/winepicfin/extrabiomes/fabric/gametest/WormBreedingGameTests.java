@@ -28,7 +28,7 @@ public class WormBreedingGameTests {
 
         helper.succeedWhen(() -> {
             helper.assertBlockProperty(composter, ComposterBlock.LEVEL, 2);
-            int worms = helper.getLevel().getEntitiesOfClass(WormEntity.class, helper.getBounds().inflate(8.0)).size();
+            int worms = helper.getLevel().getEntitiesOfClass(WormEntity.class, new AABB(helper.absolutePos(composter)).inflate(8.0)).size();
             helper.assertTrue(worms == 3, "Expected 3 worms after breeding but found " + worms);
             int northWorms = helper.getLevel().getEntitiesOfClass(WormEntity.class, new AABB(helper.absolutePos(composter.north()))).size();
             helper.assertTrue(northWorms == 1, "Expected the baby on the north side (bottom is covered) but found " + northWorms);

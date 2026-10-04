@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.placement;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -16,7 +16,7 @@ public class InBiomeChunkSample extends PlacementModifier {
     private static final int SAMPLES = 16;
 
     public static final InBiomeChunkSample INSTANCE = new InBiomeChunkSample();
-    public static final MapCodec<InBiomeChunkSample> CODEC = MapCodec.unit(INSTANCE);
+    public static final Codec<InBiomeChunkSample> CODEC = Codec.unit(INSTANCE);
 
     @Override
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {

@@ -41,7 +41,7 @@ public class PebbleItem extends Item {
 
     @Override
     public void releaseUsing(ItemStack itemstack, Level level, LivingEntity entity, int timeLeft) {
-        boolean charged = getUseDuration(itemstack, entity) - timeLeft >= CHARGE_TICKS;
+        boolean charged = getUseDuration(itemstack) - timeLeft >= CHARGE_TICKS;
         if (!charged || !(entity instanceof Player player)) {
             return;
         }
@@ -60,7 +60,7 @@ public class PebbleItem extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack itemstack, LivingEntity entity) {
+    public int getUseDuration(ItemStack itemstack) {
         return MAX_USE_TICKS;
     }
 

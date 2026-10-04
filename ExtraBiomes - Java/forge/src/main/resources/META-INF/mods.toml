@@ -2,11 +2,14 @@
 modLoader="javafml" #mandatory
 loaderVersion="${loader_version_range}" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license="MIT License"
+issueTrackerURL="https://github.com/finleyaubin/ExtraBiomes/issues"
 [[mods]]
     modId="${mod_id}"
     version="${version}"
     displayName="${mod_name}"
     logoFile="extrabiomes_logo.png"
+    displayURL="https://modrinth.com/mod/extrabiome"
+    credits="Built on Architectury API, TerraBlender and GeckoLib"
     authors="${mod_authors}"
     description='''${mod_description}'''
 [[dependencies.extrabiomes]]
