@@ -26,7 +26,7 @@ public class DoubleTallGrassFeature extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel level = context.level();
-        ChunkPos chunkPos = new ChunkPos(context.origin());
+        ChunkPos chunkPos = ChunkPos.containing(context.origin());
         boolean placedAny = false;
 
         for (int x = 0; x < 16; x++) {
