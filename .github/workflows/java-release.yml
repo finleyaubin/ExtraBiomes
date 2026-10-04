@@ -363,7 +363,6 @@ jobs:
                       + (if $i == "" then {} else {image:{url:$i}} end)]}' \
             | curl -sSf -X POST -H 'Content-Type: application/json' -d @- "$WEBHOOK"
 
-
       - name: Render story slides
         if: needs.prepare.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
         env:
@@ -371,11 +370,7 @@ jobs:
         run: |
           pip install --quiet pillow
           python3 ../tools/render_slides.py /tmp/changelog.md \
-            --version "${{ needs.prepare.outputs.VERSION }}" --edition Java --out /tmp/slides \
-            --link "Modrinth=modrinth.com/mod/extrabiome/versions" \
-            --link "CurseForge=curseforge.com/minecraft/mc-mods/extrabiomes/files" \
-            --link "GitHub release=github.com/$GITHUB_REPOSITORY/releases/tag/${{ needs.prepare.outputs.RELEASE_TAG }}"
-
+            --version "${{ needs.prepare.outputs.VERSION }}" --edition Java --out /tmp/slides
 
       # Meta cURLs image_url from its own servers, so each slide has to be public at publish time.
       # Release assets are the wrong host for it: releases/download/... answers with a 302 to a
@@ -415,7 +410,6 @@ jobs:
           # URL can still answer 404 for a short while after the push.
           echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           echo "DIR=$DIR" >> $GITHUB_OUTPUT
-
 
       - name: Post Instagram stories
         if: needs.prepare.outputs.EXISTS == 'false' && env.IG_TOKEN != ''
