@@ -197,15 +197,15 @@ public class ModBlockStateProvider implements DataProvider {
         saplingBlock(ModBlocks.YELLOW_MUSHROOM.get());
         saplingBlock(ModBlocks.GLOW_MUSHROOM.get());
         // Mushrooms
-        blockWithItem(ModBlocks.BLACK_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.BLUE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.CYAN_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.GREEN_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.ORANGE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.PURPLE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.WHITE_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.YELLOW_MUSHROOM_BLOCK);
-        blockWithItem(ModBlocks.GLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLACK_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLUE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.CYAN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GREEN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.ORANGE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.PURPLE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.WHITE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.YELLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GLOW_MUSHROOM_BLOCK);
     }
 
     // ---- helpers -----------------------------------------------------------------------------
@@ -228,6 +228,24 @@ public class ModBlockStateProvider implements DataProvider {
 
     private void blockWithItem(RegistrySupplier<Block> blockRegistryObject) {
         cubeAllBlock(blockRegistryObject.get(), blockTexture(blockRegistryObject.get()));
+    }
+
+    private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        Identifier texture = blockTexture(block);
+        Identifier cap = ModelTemplates.SINGLE_FACE.create(block, new TextureMapping().put(TextureSlot.TEXTURE, texture), models::put);
+        Identifier inside = ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside");
+        MultiPartGenerator generator = MultiPartGenerator.multiPart(block);
+        PipeBlock.PROPERTY_BY_DIRECTION.forEach((direction, property) -> {
+            VariantMutator rotationX = direction == Direction.UP ? BlockModelGenerators.X_ROT_270
+                    : direction == Direction.DOWN ? BlockModelGenerators.X_ROT_90 : BlockModelGenerators.NOP;
+            VariantMutator rotationY = direction.getAxis().isHorizontal() ? yRot((int) direction.toYRot() + 180) : BlockModelGenerators.NOP;
+            generator.with(new ConditionBuilder().term(property, true), BlockModelGenerators.plainVariant(cap).with(rotationX).with(rotationY));
+            generator.with(new ConditionBuilder().term(property, false), BlockModelGenerators.plainVariant(inside).with(rotationX).with(rotationY));
+        });
+        blockStates.put(block, generator);
+        Identifier inventory = ModelTemplates.CUBE_ALL.createWithSuffix(block, "_inventory", new TextureMapping().put(TextureSlot.ALL, texture), models::put);
+        delegateItemModel(block, inventory);
     }
 
     private void cubeAllBlock(Block block, Identifier texture) {

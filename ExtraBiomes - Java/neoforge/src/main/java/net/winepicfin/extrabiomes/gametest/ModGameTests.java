@@ -54,7 +54,13 @@ public final class ModGameTests {
             new Test(BiomeModifierApplicationGameTests.class, "darkForestGetsHugeMushrooms",
                     BiomeModifierApplicationGameTests::darkForestGetsHugeMushrooms),
             new Test(BiomeModifierApplicationGameTests.class, "plainsGetsHarpySpawn",
-                    BiomeModifierApplicationGameTests::plainsGetsHarpySpawn));
+                    BiomeModifierApplicationGameTests::plainsGetsHarpySpawn),
+            new Test(BiomeModifierApplicationGameTests.class, "jellyfishFieldsGetsJellyfishSpawn",
+                    BiomeModifierApplicationGameTests::jellyfishFieldsGetsJellyfishSpawn),
+            new Test(WormBreedingGameTests.class, "wormsBreedInsideCompostingComposter",
+                    WormBreedingGameTests::wormsBreedInsideCompostingComposter),
+            new Test(PebbleChargeGameTests.class, "pebbleThrowsOnlyAfterEightTenthsOfASecondCharge",
+                    PebbleChargeGameTests::pebbleThrowsOnlyAfterEightTenthsOfASecondCharge));
 
     private ModGameTests() {
     }
