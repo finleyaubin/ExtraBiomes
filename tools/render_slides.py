@@ -25,8 +25,10 @@ THEMES = {
 }
 THEME = THEMES["glacier"]
 EDITION = "Java"
-LINKS = []
+LINK_LINE = "Link in bio"
 LINK_STEP = 40
+HEAD_TOP = 190   # first heading line, just under the profile row Instagram draws over stories
+HEAD_STEP = 118  # line pitch for a heading that wraps onto several lines
 
 BAND_H = round((W - 2 * MARGIN) * 9 / 16)  # changelog screenshots are always 16:9
 LOGO = Path(__file__).parent / "title.png"
@@ -113,6 +115,17 @@ def wrap(draw, text, fnt, width):
     return lines + [current] if current else lines
 
 
+def heading_layout(draw, heading, size=108, smallest=32):
+    """-> (font, lines). Wraps on word boundaries; if a single word is still wider than the text
+    column the point size shrinks until it fits, so a long heading can never run off the slide."""
+    width = W - 2 * MARGIN
+    for pt in range(size, smallest - 1, -4):
+        fnt = font("bold", pt)
+        if all(draw.textlength(word, font=fnt) <= width for word in heading.split()):
+            break
+    return fnt, wrap(draw, heading, fnt, width)
+
+
 def background():
     image = Image.new("RGB", (W, H), THEME["top"])
     draw = ImageDraw.Draw(image)
@@ -124,34 +137,13 @@ def background():
 
 
 def links_height():
-    return len(LINKS) * LINK_STEP
-
-
-def link_parts(link):
-    """"Modrinth=modrinth.com/..." -> ("Modrinth  ", "modrinth.com/..."); a bare URL has no name."""
-    name, _, url = link.rpartition("=")
-    return (f"{name}  " if name else ""), url
-
-
-def link_width(draw, link, size):
-    name, url = link_parts(link)
-    return draw.textlength(name, font=font("bold", size)) + draw.textlength(url, font=font("regular", size))
-
-
-def fitted_size(draw, link, largest, smallest):
-    return next((size for size in range(largest, smallest - 1, -2)
-                 if link_width(draw, link, size) <= W - 2 * MARGIN), smallest)
+    return LINK_STEP
 
 
 def draw_links(draw, top):
-    # Stories posted through the API can't carry link stickers, so the release pages are printed.
-    size = min((fitted_size(draw, link, 30, 18) for link in LINKS), default=30)
-    for offset, link in enumerate(LINKS):
-        name, url = link_parts(link)
-        y = top + offset * LINK_STEP
-        draw.text((MARGIN, y), name, font=font("bold", size), fill=THEME["ink"])
-        draw.text((MARGIN + draw.textlength(name, font=font("bold", size)), y), url,
-                  font=font("regular", size), fill=THEME["accent"])
+    # Stories posted through the API can't carry link stickers, and a printed URL can't be tapped
+    # anyway, so the slides point at the profile's bio link instead.
+    draw.text((MARGIN, top), LINK_LINE, font=font("bold", 32), fill=THEME["accent"])
 
 
 def chrome(image, version, footer):
@@ -203,8 +195,11 @@ def cover_slide(sections, version, footer):
 
 def section_slides(heading, entries, version, footer):
     """One slide per screenful of entries - long sections continue onto further slides."""
-    heading_font, sub_font, body_font = font("bold", 108), font("bold", 46), font("regular", 44)
+    sub_font, body_font = font("bold", 46), font("regular", 44)
     scratch = ImageDraw.Draw(Image.new("RGB", (1, 1)))
+    heading_font, heading_lines = heading_layout(scratch, heading)
+    # Every extra heading line pushes the rule and the body down by one line pitch.
+    body_top = BODY_TOP + (len(heading_lines) - 1) * HEAD_STEP
     image, draw, y = None, None, 0
     slides = []
     for index, (kind, text) in enumerate(entries):
@@ -223,12 +218,14 @@ def section_slides(heading, entries, version, footer):
         if image is None or y + required > BODY_BOTTOM - links_height():
             image = background()
             draw = chrome(image, version, footer)
-            draw.text((MARGIN, BODY_TOP - 190), heading, font=heading_font, fill=THEME["ink"])
-            # The rule runs the width of the heading itself, not a fixed stub.
-            draw.line([(MARGIN, BODY_TOP - 50), (draw.textlength(heading, font=heading_font) + MARGIN, BODY_TOP - 50)],
+            for number, line in enumerate(heading_lines):
+                draw.text((MARGIN, HEAD_TOP + number * HEAD_STEP), line, font=heading_font, fill=THEME["ink"])
+            # The rule runs the width of the widest heading line, not a fixed stub.
+            widest = max(draw.textlength(line, font=heading_font) for line in heading_lines)
+            draw.line([(MARGIN, body_top - 50), (widest + MARGIN, body_top - 50)],
                       fill=THEME["accent"], width=8)
             slides.append(image)
-            y = BODY_TOP
+            y = body_top
         if kind == "image":
             paste_image(image, photo, y)
             y += needed
@@ -276,10 +273,11 @@ def selftest():
         ["https://e/a.png", "https://e/b.png"]
     draw = ImageDraw.Draw(Image.new("RGB", (1, 1)))
     assert len(wrap(draw, "word " * 60, font("regular", 44), 500)) > 1
-    long_link = "GitHub release=github.com/finleyaubin/ExtraBiomes/releases/tag/Java-v3.10.0-beta-8"
-    assert link_parts(long_link)[0] == "GitHub release  "
-    assert link_parts("modrinth.com/x") == ("", "modrinth.com/x")
-    assert link_width(draw, long_link, fitted_size(draw, long_link, 30, 18)) <= W - 2 * MARGIN
+    for heading in ("World Generation", "Floating Jungle", "Sky City", "Extraordinarilylongheadingword"):
+        fnt, lines = heading_layout(draw, heading)
+        assert " ".join(lines) == heading, (heading, lines)
+        assert all(draw.textlength(line, font=fnt) <= W - 2 * MARGIN for line in lines), (heading, lines)
+    assert len(heading_layout(draw, "World Generation")[1]) == 2
     print("ok")
 
 
@@ -292,15 +290,12 @@ def main():
     parser.add_argument("--theme", choices=sorted(THEMES), default="glacier")
     parser.add_argument("--edition", choices=["Java", "Bedrock"],
                         help="defaults to the changelog filename's prefix")
-    parser.add_argument("--link", action="append", default=[],
-                        help="'Name=url' printed at the foot of every slide (repeatable)")
     parser.add_argument("--selftest", action="store_true")
     args = parser.parse_args()
     if args.selftest:
         return selftest()
-    global THEME, EDITION, LINKS
+    global THEME, EDITION
     THEME = THEMES[args.theme]
-    LINKS = args.link
     prefix = args.changelog.name.split("-")[0] if args.changelog else ""
     EDITION = args.edition or (prefix if prefix in ("Java", "Bedrock") else "Java")
     if not args.changelog:
