@@ -24,9 +24,9 @@ public class WormBreedingGameTests {
         BlockPos composter = new BlockPos(2, 2, 2);
         Vec3 inside = new Vec3(2.5, 2.125, 2.5);
 
-        ChunkPos chunk = new ChunkPos(helper.absolutePos(composter));
+        ChunkPos chunk = new ChunkPos(helper.absolutePos(composter).getX() >> 4, helper.absolutePos(composter).getZ() >> 4);
         // A worm only ticks once its chunk is entity-ticking, and the test area's own ticket can lapse on a lagging server.
-        helper.getLevel().setChunkForced(chunk.x, chunk.z, true);
+        helper.getLevel().setChunkForced(chunk.x(), chunk.z(), true);
         helper.startSequence()
                 .thenWaitUntil(() -> helper.assertTrue(helper.getLevel().isPositionEntityTicking(helper.absolutePos(composter)),
                         Component.literal("Test chunk is not entity-ticking yet")))
@@ -45,7 +45,7 @@ public class WormBreedingGameTests {
                     helper.assertTrue(worms == 3, Component.literal("Expected 3 worms after breeding but found " + worms));
                     int northWorms = helper.getLevel().getEntitiesOfClass(WormEntity.class, new AABB(helper.absolutePos(composter.north()))).size();
                     helper.assertTrue(northWorms == 1, Component.literal("Expected the baby on the north side (bottom is covered) but found " + northWorms));
-                    helper.getLevel().setChunkForced(chunk.x, chunk.z, false);
+                    helper.getLevel().setChunkForced(chunk.x(), chunk.z(), false);
                     LOGGER.info("[WormBreedingGameTests] wormsBreedInsideCompostingComposter: passed");
                 })
                 .thenSucceed();
