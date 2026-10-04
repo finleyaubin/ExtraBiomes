@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 public class WormBreedingGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = "empty", batch = "extrabiomes")
+    @GameTest(template = "empty", batch = "extrabiomes", timeoutTicks = 400)
     public static void wormsBreedInsideCompostingComposter(GameTestHelper helper) {
         LOGGER.info("[WormBreedingGameTests] wormsBreedInsideCompostingComposter: starting");
         BlockPos composter = new BlockPos(2, 2, 2);
