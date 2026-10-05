@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -121,9 +122,21 @@ public class JellyfishEntity extends WaterAnimal {
     public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, EntitySpawnReason reason,
                                                      BlockPos pos, RandomSource random) {
         if (level.getBiome(pos).is(BiomeTags.IS_BEACH)) {
-            return random.nextFloat() < JellyfishTuning.BEACH_SPAWN_CHANCE;
+            return pos.getY() >= JellyfishTuning.BEACH_MIN_Y && pos.getY() <= JellyfishTuning.BEACH_MAX_Y
+                    && random.nextFloat() < JellyfishTuning.BEACH_SPAWN_CHANCE
+                    && isWaterNearby(level, pos);
         }
         return WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
+    }
+
+    private static boolean isWaterNearby(ServerLevelAccessor level, BlockPos pos) {
+        int range = JellyfishTuning.BEACH_WATER_RANGE;
+        for (BlockPos p : BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range))) {
+            if (level.getFluidState(p).is(FluidTags.WATER)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
