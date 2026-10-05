@@ -45,25 +45,44 @@ public class ModItemTagGenerator extends ItemTagsProvider {
 
         this.tag(ItemTags.LOGS).add(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
-                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
                 ModBlocks.SKY_LOG.get().asItem(),
-                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.GILDED_SKY_LOG.get().asItem()
+                ModBlocks.GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.PALM_LOG.get().asItem(),
+                ModBlocks.PALM_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
+                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
         );
         this.tag(ItemTags.LOGS_THAT_BURN).add(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
-                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
                 ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
                 ModBlocks.SKY_LOG.get().asItem(),
-                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.GILDED_SKY_LOG.get().asItem()
+                ModBlocks.GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.PALM_LOG.get().asItem(),
+                ModBlocks.PALM_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
+                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
+        );
+        this.tag(ItemTags.LEAVES).add(
+                ModBlocks.MYSTIC_LEAVES.get().asItem(),
+                ModBlocks.SKY_LEAVES.get().asItem(),
+                ModBlocks.PALM_LEAVES.get().asItem()
         );
         this.tag(ItemTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
