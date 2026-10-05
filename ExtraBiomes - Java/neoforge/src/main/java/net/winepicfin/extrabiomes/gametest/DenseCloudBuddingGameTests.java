@@ -4,7 +4,13 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignTextSlot;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.block.ModBlocks;
@@ -46,6 +52,29 @@ public class DenseCloudBuddingGameTests {
         helper.assertTrue(DenseCloudBudding.sitsOverHeatedWater(level, near), Component.literal("Ice 20 blocks above the water was rejected"));
         helper.assertFalse(DenseCloudBudding.sitsOverHeatedWater(level, far), Component.literal("Ice 21 blocks above the water was accepted"));
         LOGGER.info("[DenseCloudBuddingGameTests] iceMustBeWithinTwentyBlocksOfTheWater: passed");
+        helper.succeed();
+    }
+
+    public static void cloudCondenserBuildingDemonstratesTheMechanic(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = helper.absolutePos(BlockPos.ZERO);
+        BlockPos corner = new BlockPos(origin.getX() + 120, 215, origin.getZ());
+        Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/buildings/cloud_condenser");
+        StructureTemplate template = level.getStructureTemplateManager().getOrCreate(id);
+        helper.assertTrue(template.getSize().getX() > 0, Component.literal("cloud_condenser structure failed to load"));
+        template.placeInWorld(level, corner, corner, new StructurePlaceSettings(), level.getRandom(), 2);
+
+        BlockPos ice = corner.offset(6, 8, 5);
+        helper.assertTrue(level.getBlockState(ice).is(Blocks.BLUE_ICE), Component.literal("Condenser has no blue ice where expected"));
+        helper.assertTrue(DenseCloudBudding.sitsOverHeatedWater(level, ice), Component.literal("Condenser ice does not sit over magma-heated water"));
+        String signText = level.getBlockEntity(corner.offset(3, 2, 5)) instanceof SignBlockEntity sign
+                ? sign.getText(SignTextSlot.FRONT).getMessages(false).get(0).getString() : "<no sign block entity>";
+        helper.assertTrue(signText.equals("Cloud Condenser"), Component.literal("Condenser entrance sign text is wrong: " + signText));
+
+        int before = countCloud(level, ice);
+        budFor(level, ice.east());
+        helper.assertTrue(countCloud(level, ice) > before, Component.literal("Condenser cloud did not bud"));
+        LOGGER.info("[DenseCloudBuddingGameTests] cloudCondenserBuildingDemonstratesTheMechanic: passed, cloud {} -> {}", before, countCloud(level, ice));
         helper.succeed();
     }
 
