@@ -84,6 +84,8 @@ public class FabricVanillaCompat {
         StrippableBlockRegistry.register(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_WOOD.get());
         StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_LOG.get(), ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
         StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_WOOD.get(), ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
+        StrippableBlockRegistry.register(ModBlocks.PALM_LOG.get(), ModBlocks.STRIPPED_PALM_LOG.get());
+        StrippableBlockRegistry.register(ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPPED_PALM_WOOD.get());
     }
 
     private static void registerFlammable(Block block, int burn, int spread) {
