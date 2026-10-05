@@ -24,4 +24,3 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 - Palm leaves, along with the Mystic and Sky leaves, are now mined quickly with a hoe and with shears. They were missing from the leaves tag, so no tool was effective on them.
 - Palm logs and palm wood can now be stripped with an axe.
 - Stripped Palm Wood is now counted as a log, and the palm and gilded sky logs now appear in the log item tags, so they work with recipes and tools that look for logs.
-- Fixed signs and hanging signs from every wood type rendering with no board on the newest versions, leaving just floating text. They now show the proper sign, with matching textures for each wood.
