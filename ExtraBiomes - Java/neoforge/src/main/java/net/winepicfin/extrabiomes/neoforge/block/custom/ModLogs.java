@@ -47,6 +47,12 @@ public class ModLogs extends RotatedPillarBlock {
             if (state.is(ModBlocks.SKY_WOOD.get())) {
                 return ModBlocks.STRIPPED_SKY_WOOD.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
             }
+            if (state.is(ModBlocks.PALM_LOG.get())) {
+                return ModBlocks.STRIPPED_PALM_LOG.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
+            }
+            if (state.is(ModBlocks.PALM_WOOD.get())) {
+                return ModBlocks.STRIPPED_PALM_WOOD.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
+            }
             if (state.is(ModBlocks.GILDED_SKY_LOG.get())) {
                 return ModBlocks.STRIPPED_GILDED_SKY_LOG.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
             }
