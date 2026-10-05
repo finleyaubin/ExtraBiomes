@@ -61,7 +61,11 @@ public final class ModGameTests {
             new Test(WormBreedingGameTests.class, "wormsBreedInsideCompostingComposter",
                     WormBreedingGameTests::wormsBreedInsideCompostingComposter),
             new Test(PebbleChargeGameTests.class, "pebbleThrowsOnlyAfterEightTenthsOfASecondCharge",
-                    PebbleChargeGameTests::pebbleThrowsOnlyAfterEightTenthsOfASecondCharge));
+                    PebbleChargeGameTests::pebbleThrowsOnlyAfterEightTenthsOfASecondCharge),
+            new Test(DenseCloudBuddingGameTests.class, "denseCloudBudsOnlyAroundIceOverMagmaHeatedWater",
+                    DenseCloudBuddingGameTests::denseCloudBudsOnlyAroundIceOverMagmaHeatedWater),
+            new Test(DenseCloudBuddingGameTests.class, "iceMustBeWithinTwentyBlocksOfTheWater",
+                    DenseCloudBuddingGameTests::iceMustBeWithinTwentyBlocksOfTheWater));
 
     private ModGameTests() {
     }
