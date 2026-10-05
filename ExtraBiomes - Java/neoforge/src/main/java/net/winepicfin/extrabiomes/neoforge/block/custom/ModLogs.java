@@ -7,9 +7,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ItemAbility;
-import net.winepicfin.extrabiomes.block.ModBlocks;
-import org.jetbrains.annotations.Nullable;
 
 public class ModLogs extends RotatedPillarBlock {
 
