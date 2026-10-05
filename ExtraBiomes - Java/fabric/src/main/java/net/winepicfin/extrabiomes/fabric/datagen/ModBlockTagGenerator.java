@@ -151,7 +151,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.PALM_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
@@ -169,7 +169,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.PALM_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
@@ -178,6 +178,11 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.GILDED_SKY_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
+        ));
+        this.valueLookupBuilder(BlockTags.LEAVES).add(keys(
+                ModBlocks.MYSTIC_LEAVES.get(),
+                ModBlocks.SKY_LEAVES.get(),
+                ModBlocks.PALM_LEAVES.get()
         ));
         this.valueLookupBuilder(BlockTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get(),
