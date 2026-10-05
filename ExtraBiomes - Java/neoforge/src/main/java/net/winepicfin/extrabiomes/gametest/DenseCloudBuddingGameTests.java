@@ -39,7 +39,8 @@ public class DenseCloudBuddingGameTests {
         helper.assertTrue(countCloud(level, iceHeated) > 1, Component.literal("Cloud did not bud around ice over magma-heated water"));
         helper.assertTrue(countCloud(level, iceUnheated) == 1, Component.literal("Cloud budded around ice over unheated water"));
         helper.assertTrue(everyCloudInShape(level, iceHeated), Component.literal("Cloud budded outside the allowed cloud shape"));
-        LOGGER.info("[DenseCloudBuddingGameTests] denseCloudBudsOnlyAroundIceOverMagmaHeatedWater: passed with {} cloud blocks", countCloud(level, iceHeated));
+        LOGGER.info("[DenseCloudBuddingGameTests] {} cloud blocks grew around the heated ice", countCloud(level, iceHeated));
+        LOGGER.info("[DenseCloudBuddingGameTests] denseCloudBudsOnlyAroundIceOverMagmaHeatedWater: passed");
         helper.succeed();
     }
 
@@ -76,7 +77,8 @@ public class DenseCloudBuddingGameTests {
         int before = countCloud(level, ice);
         budFor(level, ice.east());
         helper.assertTrue(countCloud(level, ice) > before, Component.literal("Condenser cloud did not bud"));
-        LOGGER.info("[DenseCloudBuddingGameTests] cloudCondenserBuildingDemonstratesTheMechanic: passed, cloud {} -> {}", before, countCloud(level, ice));
+        LOGGER.info("[DenseCloudBuddingGameTests] condenser cloud grew from {} to {} blocks", before, countCloud(level, ice));
+        LOGGER.info("[DenseCloudBuddingGameTests] cloudCondenserBuildingDemonstratesTheMechanic: passed");
         helper.succeed();
     }
 
