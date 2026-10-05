@@ -152,7 +152,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.PALM_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
@@ -170,7 +170,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.PALM_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
@@ -179,6 +179,16 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.GILDED_SKY_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
+        );
+        this.tag(BlockTags.LEAVES).add(
+                ModBlocks.MYSTIC_LEAVES.getKey(),
+                ModBlocks.SKY_LEAVES.getKey(),
+                ModBlocks.PALM_LEAVES.getKey()
+        );
+        this.tag(BlockTags.LEAVES).add(
+                ModBlocks.MYSTIC_LEAVES.get(),
+                ModBlocks.SKY_LEAVES.get(),
+                ModBlocks.PALM_LEAVES.get()
         );
         this.tag(BlockTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get(),
