@@ -1,7 +1,6 @@
 package net.winepicfin.extrabiomes.client;
 
 import dev.architectury.event.events.client.ClientTickEvent;
-import dev.architectury.registry.client.particle.ParticleProviderRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -33,7 +32,6 @@ public final class DenseCloudSteam {
     }
 
     public static void init() {
-        ParticleProviderRegistry.register(ModParticles.STEAM, SteamParticle.Provider::new);
         ClientTickEvent.CLIENT_LEVEL_POST.register(DenseCloudSteam::tick);
     }
 
