@@ -82,6 +82,9 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 // a "leave this position alone" marker (e.g. jellycoral relying on the surrounding ocean rather than its
                 // own explicit water fill) would overwrite whatever's already there instead of leaving it untouched.
                 .addProcessor(new BlockIgnoreProcessor(List.of(Blocks.STRUCTURE_VOID)));
+        if (config.onlyReplaceAir()) {
+            settings.addProcessor(OnlyReplaceAirProcessor.INSTANCE);
+        }
         if (config.weatheredVariation()) {
             settings.addProcessor(net.winepicfin.extrabiomes.worldgen.features.stonepillars.PillarWeatheringProcessor.INSTANCE);
         }
