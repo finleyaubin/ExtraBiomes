@@ -134,7 +134,8 @@ class DatapackSchemaTest {
             // neoforge/biome_modifier/*.json needs NeoForgeRegistries.BIOME_MODIFIER_SERIALIZERS,
             // which lives in a NeoForge dependency common doesn't have on its test classpath -
             // deliberately out of scope here (see DatapackRegistries).
-            if (relativePath.getName(1).toString().equals("neoforge")) {
+            // The neoforge namespace's data_maps/* use NeoForge's own data map codecs, so they are skipped for the same reason.
+            if (relativePath.getName(0).toString().equals("neoforge") || relativePath.getName(1).toString().equals("neoforge")) {
                 return SKIP;
             }
             for (Route route : values()) {
