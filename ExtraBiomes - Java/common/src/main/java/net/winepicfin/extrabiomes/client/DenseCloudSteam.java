@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -18,8 +19,13 @@ import java.util.List;
 public final class DenseCloudSteam {
     private static final int SCAN_INTERVAL_TICKS = 20;
     private static final int SCAN_RADIUS = 16;
+    private static final double COLUMN_PUFFS_PER_BLOCK = 0.6;
+    private static final int BILLOW_PUFFS = 3;
 
-    private static List<BlockPos> waterSurfaces = List.of();
+    private record Plume(BlockPos waterSurface, int capY) {
+    }
+
+    private static List<Plume> plumes = List.of();
 
     private DenseCloudSteam() {
     }
@@ -31,25 +37,45 @@ public final class DenseCloudSteam {
     private static void tick(ClientLevel level) {
         Player player = Minecraft.getInstance().player;
         if (player == null || player.getY() + SCAN_RADIUS < DenseCloudBudding.MIN_ICE_Y) {
-            waterSurfaces = List.of();
+            plumes = List.of();
             return;
         }
         if (level.getGameTime() % SCAN_INTERVAL_TICKS == 0) {
-            waterSurfaces = scan(level, player.blockPosition());
+            plumes = scan(level, player.blockPosition());
         }
-        for (BlockPos surface : waterSurfaces) {
-            if (level.getRandom().nextInt(2) == 0) {
-                level.addParticle(ParticleTypes.CLOUD,
-                        surface.getX() + 0.2 + level.getRandom().nextDouble() * 0.6,
-                        surface.getY() + 1.0,
-                        surface.getZ() + 0.2 + level.getRandom().nextDouble() * 0.6,
-                        0.0, 0.05, 0.0);
-            }
+        for (Plume plume : plumes) {
+            emit(level, level.getRandom(), plume);
         }
     }
 
-    private static List<BlockPos> scan(ClientLevel level, BlockPos center) {
-        List<BlockPos> found = new ArrayList<>();
+    // A thin column of slow puffs fills the space up to the first block in the way, then puffs drift outward there so the steam billows under it.
+    private static void emit(ClientLevel level, RandomSource random, Plume plume) {
+        double x = plume.waterSurface().getX() + 0.5;
+        double z = plume.waterSurface().getZ() + 0.5;
+        double bottom = plume.waterSurface().getY() + 1.0;
+        double top = plume.capY();
+        double height = top - bottom;
+        int columnPuffs = (int) Math.ceil(height * COLUMN_PUFFS_PER_BLOCK);
+        for (int i = 0; i < columnPuffs; i++) {
+            level.addParticle(ParticleTypes.CLOUD,
+                    x + (random.nextDouble() - 0.5) * 0.4,
+                    bottom + random.nextDouble() * Math.max(height - 0.3, 0.0),
+                    z + (random.nextDouble() - 0.5) * 0.4,
+                    0.0, 0.015, 0.0);
+        }
+        for (int i = 0; i < BILLOW_PUFFS; i++) {
+            double angle = random.nextDouble() * Math.PI * 2.0;
+            double speed = 0.02 + random.nextDouble() * 0.03;
+            level.addParticle(ParticleTypes.CLOUD,
+                    x + (random.nextDouble() - 0.5) * 0.3,
+                    top - 0.4,
+                    z + (random.nextDouble() - 0.5) * 0.3,
+                    Math.cos(angle) * speed, 0.0, Math.sin(angle) * speed);
+        }
+    }
+
+    private static List<Plume> scan(ClientLevel level, BlockPos center) {
+        List<Plume> found = new ArrayList<>();
         int minX = center.getX() - SCAN_RADIUS;
         int maxX = center.getX() + SCAN_RADIUS;
         int minZ = center.getZ() - SCAN_RADIUS;
@@ -72,7 +98,7 @@ public final class DenseCloudSteam {
                                 pos.set(x, y, z);
                                 if (!level.getBlockState(pos).is(Blocks.BLUE_ICE)) continue;
                                 BlockPos surface = DenseCloudBudding.heatedWaterSurface(level, pos);
-                                if (surface != null) found.add(surface);
+                                if (surface != null) found.add(new Plume(surface, firstBlockAbove(level, surface, pos.getY())));
                             }
                         }
                     }
@@ -80,5 +106,14 @@ public final class DenseCloudSteam {
             }
         }
         return found;
+    }
+
+    private static int firstBlockAbove(ClientLevel level, BlockPos waterSurface, int iceY) {
+        BlockPos.MutableBlockPos pos = waterSurface.mutable();
+        for (int y = waterSurface.getY() + 1; y < iceY; y++) {
+            pos.setY(y);
+            if (!level.getBlockState(pos).isAir()) return y;
+        }
+        return iceY;
     }
 }
