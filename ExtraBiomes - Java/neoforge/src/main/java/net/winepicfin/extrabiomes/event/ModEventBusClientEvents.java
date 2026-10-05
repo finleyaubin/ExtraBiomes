@@ -16,6 +16,8 @@ import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEve
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.winepicfin.extrabiomes.client.DenseCloudSteam;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.neoforge.fluid.BaseFluidType;
@@ -36,6 +38,11 @@ import net.winepicfin.extrabiomes.neoforge.entity.client.layers.WolfFrogHatLayer
 
 @EventBusSubscriber(modid = ExtraBiomes.MOD_ID, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(DenseCloudSteam::init);
+    }
+
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
