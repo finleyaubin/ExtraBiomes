@@ -40,9 +40,9 @@ import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.DoubleTallGrassFeature;
-import net.winepicfin.extrabiomes.worldgen.features.moorland.PodzolConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.WaterLilyFixupFeature;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.GooConversionFeature;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.CaveVineFeature;
@@ -50,6 +50,9 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.FallenJung
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeature;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.BasaltBankFeature;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.MinYFilter;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
+import net.winepicfin.extrabiomes.worldgen.placement.LakeSafeOrigin;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.RiverNoiseFilter;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructure;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
@@ -172,11 +175,11 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.FEATURE_TYPE, false);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "single_structure", SingleStructureFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "bryce_pillars", BrycePillarsFeature.CODEC);
-        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_podzol_conversion", PodzolConversionFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_double_tall_grass", DoubleTallGrassFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_waterlily_fixup", WaterLilyFixupFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "mystic_goo_conversion", GooConversionFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "netherlands_wheat_field", NetherlandsWheatFieldFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "netherlands_tulip_field", NetherlandsTulipFieldFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_cave_vine", CaveVineFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_fallen_jungle_tree", FallenJungleTreeFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_multi", MultiFeature.CODEC);
@@ -193,6 +196,9 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
         register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "river_noise_filter", RiverNoiseFilter.CODEC);
         register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "min_y_filter", MinYFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "in_biome_chunk_sample", InBiomeChunkSample.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "lake_safe_origin", LakeSafeOrigin.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "chunk_origin_snap", ChunkOriginSnap.CODEC);
         BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.STRUCTURE_TYPE, false);
