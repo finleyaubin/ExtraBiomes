@@ -1,16 +1,17 @@
 package net.winepicfin.extrabiomes.client;
 
 import dev.architectury.event.events.client.ClientTickEvent;
+import dev.architectury.registry.client.particle.ParticleProviderRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.winepicfin.extrabiomes.block.custom.DenseCloudBudding;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ import java.util.List;
 public final class DenseCloudSteam {
     private static final int SCAN_INTERVAL_TICKS = 20;
     private static final int SCAN_RADIUS = 16;
-    private static final double COLUMN_PUFFS_PER_BLOCK = 0.6;
+    private static final double RIBBON_PUFFS_PER_BLOCK = 1.2;
+    private static final int STRANDS = 3;
     private static final int BILLOW_PUFFS = 3;
 
     private record Plume(BlockPos waterSurface, int capY) {
@@ -31,6 +33,7 @@ public final class DenseCloudSteam {
     }
 
     public static void init() {
+        ParticleProviderRegistry.register(ModParticles.STEAM, SteamParticle.Provider::new);
         ClientTickEvent.CLIENT_LEVEL_POST.register(DenseCloudSteam::tick);
     }
 
@@ -48,27 +51,33 @@ public final class DenseCloudSteam {
         }
     }
 
-    // A thin column of slow puffs fills the space up to the first block in the way, then puffs drift outward there so the steam billows under it.
+    // Puffs are placed along a few swaying strands that widen as they rise, so the steam reads as wavy ribbons up to the first block in the way, where more puffs drift outward and billow under it.
     private static void emit(ClientLevel level, RandomSource random, Plume plume) {
         double x = plume.waterSurface().getX() + 0.5;
         double z = plume.waterSurface().getZ() + 0.5;
         double bottom = plume.waterSurface().getY() + 1.0;
         double top = plume.capY();
-        double height = top - bottom;
-        int columnPuffs = (int) Math.ceil(height * COLUMN_PUFFS_PER_BLOCK);
-        for (int i = 0; i < columnPuffs; i++) {
-            level.addParticle(ParticleTypes.CLOUD,
-                    x + (random.nextDouble() - 0.5) * 0.4,
-                    bottom + random.nextDouble() * Math.max(height - 0.3, 0.0),
-                    z + (random.nextDouble() - 0.5) * 0.4,
-                    0.0, 0.015, 0.0);
+        double height = Math.max(top - bottom, 0.0);
+        double time = level.getGameTime();
+        int ribbonPuffs = (int) Math.ceil(height * RIBBON_PUFFS_PER_BLOCK) + 1;
+        for (int i = 0; i < ribbonPuffs; i++) {
+            double above = random.nextDouble() * height;
+            double rise = height > 0.0 ? above / height : 0.0;
+            double phase = random.nextInt(STRANDS) * 2.1;
+            double wave = above * 1.6 + time * 0.12 + phase;
+            double amplitude = 0.08 + 0.3 * rise;
+            level.addParticle(ModParticles.STEAM.get(),
+                    x + Math.sin(wave) * amplitude,
+                    bottom + above,
+                    z + Math.cos(wave * 0.8 + phase) * amplitude * 0.8,
+                    0.0, 0.03, 0.0);
         }
         for (int i = 0; i < BILLOW_PUFFS; i++) {
             double angle = random.nextDouble() * Math.PI * 2.0;
-            double speed = 0.02 + random.nextDouble() * 0.03;
-            level.addParticle(ParticleTypes.CLOUD,
+            double speed = 0.02 + random.nextDouble() * 0.04;
+            level.addParticle(ModParticles.STEAM.get(),
                     x + (random.nextDouble() - 0.5) * 0.3,
-                    top - 0.4,
+                    top - 0.5,
                     z + (random.nextDouble() - 0.5) * 0.3,
                     Math.cos(angle) * speed, 0.0, Math.sin(angle) * speed);
         }
