@@ -6,8 +6,9 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
-import net.minecraft.world.level.block.entity.SignTextSlot;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.WrittenBookContent;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -67,9 +68,10 @@ public class DenseCloudBuddingGameTests {
         BlockPos ice = corner.offset(6, 14, 5);
         helper.assertTrue(level.getBlockState(ice).is(Blocks.BLUE_ICE), Component.literal("Condenser has no blue ice where expected"));
         helper.assertTrue(DenseCloudBudding.sitsOverHeatedWater(level, ice), Component.literal("Condenser ice does not sit over magma-heated water"));
-        String signText = level.getBlockEntity(corner.offset(3, 2, 5)) instanceof SignBlockEntity sign
-                ? sign.getText(SignTextSlot.FRONT).getMessages(false).get(0).getString() : "<no sign block entity>";
-        helper.assertTrue(signText.equals("Cloud Condenser"), Component.literal("Condenser entrance sign text is wrong: " + signText));
+        WrittenBookContent book = level.getBlockEntity(corner.offset(2, 1, 5)) instanceof LecternBlockEntity lectern
+                ? lectern.getBook().get(DataComponents.WRITTEN_BOOK_CONTENT) : null;
+        String bookText = book == null ? "<no book>" : book.title().raw() + " | " + book.pages().get(0).raw().getString();
+        helper.assertTrue(bookText.startsWith("Cloud Condenser | Cloud Condenser"), Component.literal("Condenser lectern book is wrong: " + bookText));
 
         int before = countCloud(level, ice);
         budFor(level, ice.east());
