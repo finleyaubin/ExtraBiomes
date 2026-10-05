@@ -82,7 +82,8 @@ public class PebbleItem extends Item {
             }else {
                 blockstate1 = ModBlocks.MOSSY_PEBBLE.get().getStateForThrowing();
             }
-            if (!blockstate1.canSurvive(level, blockpos1)) {
+            BlockState existing = level.getBlockState(blockpos1);
+            if (!(existing.canBeReplaced() && existing.getFluidState().isEmpty()) || !blockstate1.canSurvive(level, blockpos1)) {
                 return InteractionResult.FAIL;
             }
             level.playSound(player, blockpos1, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
