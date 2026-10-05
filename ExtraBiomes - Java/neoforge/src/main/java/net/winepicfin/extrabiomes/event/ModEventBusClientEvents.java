@@ -19,7 +19,10 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.winepicfin.extrabiomes.client.DenseCloudSteam;
+import net.winepicfin.extrabiomes.client.SteamParticle;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.neoforge.fluid.BaseFluidType;
@@ -43,6 +46,11 @@ public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(DenseCloudSteam::init);
+    }
+
+    @SubscribeEvent
+    public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.STEAM.get(), SteamParticle.Provider::new);
     }
 
     @SubscribeEvent
