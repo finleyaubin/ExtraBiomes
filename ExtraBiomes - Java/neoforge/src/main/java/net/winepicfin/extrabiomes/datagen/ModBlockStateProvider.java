@@ -216,7 +216,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     private void pebbleBlock(Block pebbleBlock,String type){
-        getVariantBuilder(pebbleBlock).forAllStates(blockState -> {
+        getVariantBuilder(pebbleBlock).forAllStatesExcept(blockState -> {
             Integer size = blockState.getValue(PebbleBlock.SIZE);
             ModelFile modelFile;
             switch (size){
@@ -233,7 +233,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder()
                     .modelFile(modelFile)
                     .build();
-            }
+            }, net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
         );
         simpleBlockItem(pebbleBlock, new ModelFile.UncheckedModelFile(modLoc("block/small_"+type)));
     }
