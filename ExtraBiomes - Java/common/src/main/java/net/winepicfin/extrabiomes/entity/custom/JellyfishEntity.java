@@ -5,6 +5,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -101,6 +103,28 @@ public class JellyfishEntity extends WaterAnimal {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setVariant(tag.getInt("Variant"));
+    }
+
+    // Beaches only roll BEACH_SPAWN_CHANCE (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
+    // elsewhere, keep the normal water-creature light/depth check.
+    public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, MobSpawnType reason,
+                                                     BlockPos pos, RandomSource random) {
+        if (level.getBiome(pos).is(BiomeTags.IS_BEACH)) {
+            return pos.getY() >= JellyfishTuning.BEACH_MIN_Y && pos.getY() <= JellyfishTuning.BEACH_MAX_Y
+                    && random.nextFloat() < JellyfishTuning.BEACH_SPAWN_CHANCE
+                    && isWaterNearby(level, pos);
+        }
+        return WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
+    }
+
+    private static boolean isWaterNearby(ServerLevelAccessor level, BlockPos pos) {
+        int range = JellyfishTuning.BEACH_WATER_RANGE;
+        for (BlockPos p : BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range))) {
+            if (level.getFluidState(p).is(FluidTags.WATER)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
