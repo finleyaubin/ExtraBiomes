@@ -1,0 +1,99 @@
+name: Compat Grid
+
+# Tests each published ExtraBiomes build against other worldgen mods and commits the grid to the compat-grid branch.
+on:
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: Comma-separated Minecraft versions to test, e.g. 26.3,26.2 (default is every published version)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      combos: ${{ steps.plan.outputs.combos }}
+    steps:
+      - uses: actions/checkout@v7
+      - run: python3 tools/compat_grid.py selftest
+      - id: plan
+        env:
+          VERSIONS: ${{ inputs.versions }}
+        run: echo "combos=$(python3 tools/compat_grid.py plan ${VERSIONS:+--versions "$VERSIONS"})" >> "$GITHUB_OUTPUT"
+
+  test:
+    needs: plan
+    name: ${{ matrix.mc }} ${{ matrix.loader }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.combos) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+            25
+
+      - name: Boot servers
+        run: python3 tools/compat_grid.py run --mc "${{ matrix.mc }}" --loader "${{ matrix.loader }}" --out "results/${{ matrix.mc }}-${{ matrix.loader }}.json"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: compat-${{ matrix.mc }}-${{ matrix.loader }}
+          path: results/
+
+  publish:
+    needs: test
+    if: always() && needs.test.result != 'cancelled'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: compat-*
+          path: results
+          merge-multiple: true
+
+      # A run of only some versions (the `versions` input) keeps the rows it didn't retest from the published grid.
+      - name: Build grid
+        env:
+          VERSIONS: ${{ inputs.versions }}
+        run: |
+          PREVIOUS=()
+          if [ -n "$VERSIONS" ] && git fetch -q origin compat-grid 2>/dev/null && git show origin/compat-grid:grid.json > "$RUNNER_TEMP/previous-grid.json" 2>/dev/null; then
+            PREVIOUS=(--previous "$RUNNER_TEMP/previous-grid.json")
+          fi
+          python3 tools/compat_grid.py grid results "${PREVIOUS[@]}" --out "$RUNNER_TEMP/grid" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit grid to the compat-grid branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          WT="$RUNNER_TEMP/compat-grid"
+          if git fetch origin compat-grid 2>/dev/null; then
+            git worktree add -q -B compat-grid "$WT" origin/compat-grid
+          else
+            git worktree add -q --detach "$WT" HEAD
+            git -C "$WT" checkout -q --orphan compat-grid
+            git -C "$WT" rm -rqf .
+          fi
+          cp "$RUNNER_TEMP/grid/README.md" "$RUNNER_TEMP/grid/grid.json" "$WT/"
+          cd "$WT"
+          git add README.md grid.json
+          git commit -qm "Compat grid $(date -u +%F)" || echo "grid unchanged"
+          git push -q origin compat-grid
