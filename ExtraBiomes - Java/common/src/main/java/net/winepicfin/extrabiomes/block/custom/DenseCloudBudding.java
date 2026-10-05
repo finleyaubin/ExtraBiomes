@@ -42,16 +42,21 @@ public final class DenseCloudBudding {
     }
 
     public static boolean sitsOverHeatedWater(Level level, BlockPos icePos) {
+        return heatedWaterSurface(level, icePos) != null;
+    }
+
+    public static BlockPos heatedWaterSurface(Level level, BlockPos icePos) {
         BlockPos.MutableBlockPos pos = icePos.mutable();
         for (int i = 1; i <= MAX_ICE_HEIGHT_ABOVE_WATER; i++) {
             pos.move(Direction.DOWN);
             BlockState state = level.getBlockState(pos);
             if (state.getFluidState().is(FluidTags.WATER)) {
-                return waterEndsOnMagma(level, pos);
+                BlockPos surface = pos.immutable();
+                return waterEndsOnMagma(level, pos) ? surface : null;
             }
-            if (!state.isAir() && !state.is(ModBlocks.DENSE_CLOUD.get())) return false;
+            if (!state.isAir() && !state.is(ModBlocks.DENSE_CLOUD.get())) return null;
         }
-        return false;
+        return null;
     }
 
     private static boolean waterEndsOnMagma(Level level, BlockPos.MutableBlockPos pos) {
