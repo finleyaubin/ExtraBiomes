@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jetbrains.annotations.NotNull;
 
 public class DenseCloudBlock extends TransparentBlock {
@@ -22,7 +23,8 @@ public class DenseCloudBlock extends TransparentBlock {
     public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         if (random.nextInt(DenseCloudBudding.BUD_ONE_IN) != 0) return;
         BlockPos target = pos.relative(Direction.getRandom(random));
-        if (level.getBlockState(target).isAir() && DenseCloudBudding.canBudAt(level, target)) {
+        if (level.getBlockState(target).isAir() && level.isUnobstructed(defaultBlockState(), target, CollisionContext.empty())
+                && DenseCloudBudding.canBudAt(level, target)) {
             level.setBlockAndUpdate(target, defaultBlockState());
         }
     }
