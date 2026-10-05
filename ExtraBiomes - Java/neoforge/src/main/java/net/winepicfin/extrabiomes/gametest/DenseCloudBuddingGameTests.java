@@ -64,7 +64,7 @@ public class DenseCloudBuddingGameTests {
         helper.assertTrue(template.getSize().getX() > 0, Component.literal("cloud_condenser structure failed to load"));
         template.placeInWorld(level, corner, corner, new StructurePlaceSettings(), level.getRandom(), 2);
 
-        BlockPos ice = corner.offset(6, 8, 5);
+        BlockPos ice = corner.offset(6, 14, 5);
         helper.assertTrue(level.getBlockState(ice).is(Blocks.BLUE_ICE), Component.literal("Condenser has no blue ice where expected"));
         helper.assertTrue(DenseCloudBudding.sitsOverHeatedWater(level, ice), Component.literal("Condenser ice does not sit over magma-heated water"));
         String signText = level.getBlockEntity(corner.offset(3, 2, 5)) instanceof SignBlockEntity sign
