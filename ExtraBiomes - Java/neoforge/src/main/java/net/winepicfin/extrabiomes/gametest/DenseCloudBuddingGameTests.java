@@ -69,7 +69,8 @@ public class DenseCloudBuddingGameTests {
         BlockPos ice = corner.offset(6, 14, 5);
         helper.assertTrue(level.getBlockState(ice).is(Blocks.BLUE_ICE), Component.literal("Condenser has no blue ice where expected"));
         helper.assertTrue(DenseCloudBudding.sitsOverHeatedWater(level, ice), Component.literal("Condenser ice does not sit over magma-heated water"));
-        WrittenBookContent book = level.getBlockEntity(corner.offset(2, 1, 5)) instanceof LecternBlockEntity lectern
+        helper.assertTrue(corner.offset(6, 3, 5).equals(DenseCloudBudding.heatedWaterSurface(level, ice)), Component.literal("Condenser steam would not rise from the top of its water"));
+        WrittenBookContent book =level.getBlockEntity(corner.offset(2, 1, 5)) instanceof LecternBlockEntity lectern
                 ? lectern.getBook().get(DataComponents.WRITTEN_BOOK_CONTENT) : null;
         String bookText = book == null ? "<no book>" : book.title().raw() + " | " + book.pages().get(0).raw().getString();
         helper.assertTrue(bookText.startsWith("Cloud Condenser | Cloud Condenser"), Component.literal("Condenser lectern book is wrong: " + bookText));
