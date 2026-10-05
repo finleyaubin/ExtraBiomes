@@ -18,7 +18,7 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 ### Sky City
 <!-- screenshot: the Cloud Condenser -->
 
-- New building: the Cloud Condenser. It has a magma-heated water tank with blue ice hung above it on a tall wooden frame, a puff of Dense Cloud already growing around the ice, and four numbered signs that walk through how the farm works. It generates along the Sky City paths like the other buildings.
+- New building: the Cloud Condenser. It has a magma-heated water tank with blue ice hung above it on a tall wooden frame, a puff of Dense Cloud already growing around the ice, and a lectern at the entrance with a book that walks through how the farm works. It sits on a trimmed brick plaza with benches, flowers and lantern posts. It generates along the Sky City paths like the other buildings.
 
 ## Fixes
 - Palm leaves, along with the Mystic and Sky leaves, are now mined quickly with a hoe and with shears. They were missing from the leaves tag, so no tool was effective on them.
