@@ -113,9 +113,22 @@ public class JellyfishEntity extends WaterAnimal {
     public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, MobSpawnType reason,
                                                      BlockPos pos, RandomSource random) {
         if (level.getBiome(pos).is(BiomeTags.IS_BEACH)) {
-            return level.getFluidState(pos).isEmpty() && level.getBlockState(pos.below()).isSolid();
+            return level.getFluidState(pos).isEmpty() && level.getBlockState(pos.below()).isSolid()
+                    && pos.getY() >= JellyfishTuning.BEACH_MIN_Y && pos.getY() <= JellyfishTuning.BEACH_MAX_Y
+                    && random.nextFloat() < JellyfishTuning.BEACH_SPAWN_CHANCE
+                    && isWaterNearby(level, pos);
         }
         return level.getFluidState(pos).is(FluidTags.WATER) && WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
+    }
+
+    private static boolean isWaterNearby(ServerLevelAccessor level, BlockPos pos) {
+        int range = JellyfishTuning.BEACH_WATER_RANGE;
+        for (BlockPos p : BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range))) {
+            if (level.getFluidState(p).is(FluidTags.WATER)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable

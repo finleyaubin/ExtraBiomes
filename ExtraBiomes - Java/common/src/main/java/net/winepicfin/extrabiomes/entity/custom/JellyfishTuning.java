@@ -9,6 +9,13 @@ public final class JellyfishTuning {
     public static final float GRAY_STEP_PER_TICK = 1.0F / 160.0F;
     public static final float SCALE_Y_STEP_PER_TICK = 0.9F / 160.0F;
 
+    // Per valid beach spawn attempt; the WATER_AMBIENT cap alone would otherwise fill every beach, since jellyfish is its only entry there.
+    public static final float BEACH_SPAWN_CHANCE = 0.02F;
+
+    public static final int BEACH_MIN_Y = 62;
+    public static final int BEACH_MAX_Y = 64;
+    public static final int BEACH_WATER_RANGE = 5;
+
     private JellyfishTuning() {
     }
 }
