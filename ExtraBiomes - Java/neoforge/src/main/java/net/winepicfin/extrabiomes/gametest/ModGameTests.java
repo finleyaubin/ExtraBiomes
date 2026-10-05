@@ -65,6 +65,8 @@ public final class ModGameTests {
                     DenseCloudBuddingGameTests::denseCloudBudsOnlyAroundIceOverMagmaHeatedWater),
             new Test(DenseCloudBuddingGameTests.class, "iceMustBeWithinTwentyBlocksOfTheWater",
                     DenseCloudBuddingGameTests::iceMustBeWithinTwentyBlocksOfTheWater),
+            new Test(LogStrippingGameTests.class, "everyModLogAndWoodStripsWithAnAxe",
+                    LogStrippingGameTests::everyModLogAndWoodStripsWithAnAxe),
             new Test(DenseCloudBuddingGameTests.class, "cloudCondenserBuildingDemonstratesTheMechanic",
                     DenseCloudBuddingGameTests::cloudCondenserBuildingDemonstratesTheMechanic));
 
