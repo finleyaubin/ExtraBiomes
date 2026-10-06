@@ -24,4 +24,6 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 - Palm leaves, along with the Mystic and Sky leaves, are now mined quickly with a hoe and with shears. They were missing from the leaves tag, so no tool was effective on them.
 - Palm logs and palm wood can now be stripped with an axe.
 - Stripped Palm Wood is now counted as a log, and the palm and gilded sky logs now appear in the log item tags, so they work with recipes and tools that look for logs.
+- Pebbles no longer destroy other blocks. Placing one used to wipe out redstone, levers and other small blocks on the ground, and pebbles generating in the world could replace tree trunks. They now only take the place of air, or of lava and water, and a pebble placed in water is waterlogged.
+- Jellyfish on beaches now only spawn between Y 62 and 64 and within 5 blocks of water, instead of anywhere on the sand.
 - Fixed signs and hanging signs from every wood type rendering with no board on the newest versions, leaving just floating text. They now show the proper sign, with matching textures for each wood.
