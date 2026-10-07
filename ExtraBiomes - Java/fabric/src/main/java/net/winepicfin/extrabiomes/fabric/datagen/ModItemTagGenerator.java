@@ -80,7 +80,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.PALM_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
         ));
-        this.tag(ItemTags.LEAVES).add(keys(
+        this.valueLookupBuilder(ItemTags.LEAVES).add(keys(
                 ModBlocks.MYSTIC_LEAVES.get().asItem(),
                 ModBlocks.SKY_LEAVES.get().asItem(),
                 ModBlocks.PALM_LEAVES.get().asItem()
