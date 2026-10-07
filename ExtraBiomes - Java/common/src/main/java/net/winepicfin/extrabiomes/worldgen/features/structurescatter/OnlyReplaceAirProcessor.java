@@ -1,6 +1,5 @@
 package net.winepicfin.extrabiomes.worldgen.features.structurescatter;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -8,13 +7,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.Fluids;
 
 import javax.annotation.Nullable;
 
-// Runtime-only like PreserveBedrockProcessor: STRUCTURE_PROCESSOR is frozen before mod init, so codec() is never invoked.
-public final class OnlyReplaceAirProcessor implements StructureProcessor {
+// Runtime-only like PreserveBedrockProcessor: STRUCTURE_PROCESSOR is frozen before mod init, so a real type can't be registered.
+public final class OnlyReplaceAirProcessor extends StructureProcessor {
     public static final OnlyReplaceAirProcessor INSTANCE = new OnlyReplaceAirProcessor();
 
     private OnlyReplaceAirProcessor() {
@@ -22,7 +22,7 @@ public final class OnlyReplaceAirProcessor implements StructureProcessor {
 
     @Nullable
     @Override
-    public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, BlockPos originalPos, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
+    public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos, StructureTemplate.StructureBlockInfo blockInfo, StructureTemplate.StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings) {
         BlockState existing = level.getBlockState(relativeBlockInfo.pos());
         if (existing.isAir()) {
             return relativeBlockInfo;
@@ -38,7 +38,7 @@ public final class OnlyReplaceAirProcessor implements StructureProcessor {
     }
 
     @Override
-    public MapCodec<OnlyReplaceAirProcessor> codec() {
-        return MapCodec.unit(INSTANCE);
+    protected StructureProcessorType<?> getType() {
+        return StructureProcessorType.NOP;
     }
 }

@@ -117,4 +117,5 @@ public class ModItemTagGenerator extends ItemTagsProvider {
 
     private static Item[] items(List<RegistrySupplier<Block>> blocks) {
         return blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new);
+    }
 }

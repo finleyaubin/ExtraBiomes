@@ -239,4 +239,5 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
     private static Block[] blocks(List<RegistrySupplier<Block>> blocks) {
         return blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new);
+    }
 }
