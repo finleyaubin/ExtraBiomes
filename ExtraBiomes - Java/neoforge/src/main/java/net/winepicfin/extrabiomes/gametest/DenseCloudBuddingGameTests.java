@@ -62,7 +62,7 @@ public class DenseCloudBuddingGameTests {
         BlockPos origin = helper.absolutePos(BlockPos.ZERO);
         BlockPos corner = new BlockPos(origin.getX() + 120, 215, origin.getZ());
         Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/buildings/cloud_condenser");
-        StructureTemplate template = level.getStructureTemplateManager().getOrCreate(id);
+        StructureTemplate template = level.getStructureManager().getOrCreate(id);
         helper.assertTrue(template.getSize().getX() > 0, Component.literal("cloud_condenser structure failed to load"));
         template.placeInWorld(level, corner, corner, new StructurePlaceSettings(), level.getRandom(), 2);
 
