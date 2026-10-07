@@ -3,12 +3,19 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.tags.ItemTags;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // Fabric port of forge/datagen/ModItemTagGenerator.java, using Fabric API's
@@ -89,6 +96,32 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         ));
+
+        this.tag(ItemTags.WALLS).add(itemKeys(ModTagContents.WALLS));
+        this.tag(ItemTags.STAIRS).add(itemKeys(ModTagContents.STONE_STAIRS));
+        this.tag(ItemTags.SLABS).add(itemKeys(ModTagContents.STONE_SLABS));
+        this.tag(ItemTags.WOODEN_STAIRS).add(itemKeys(ModTagContents.WOODEN_STAIRS));
+        this.tag(ItemTags.WOODEN_SLABS).add(itemKeys(ModTagContents.WOODEN_SLABS));
+        this.tag(ItemTags.WOODEN_BUTTONS).add(itemKeys(ModTagContents.WOODEN_BUTTONS));
+        this.tag(ItemTags.WOODEN_PRESSURE_PLATES).add(itemKeys(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.tag(ItemTags.WOODEN_DOORS).add(itemKeys(ModTagContents.WOODEN_DOORS));
+        this.tag(ItemTags.WOODEN_TRAPDOORS).add(itemKeys(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(ItemTags.SIGNS).add(keys(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new)));
+        this.tag(ItemTags.HANGING_SIGNS).add(keys(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new)));
+        this.tag(ItemTags.SAPLINGS).add(itemKeys(ModTagContents.SAPLINGS));
+        this.tag(ItemTags.SAND).add(itemKeys(ModTagContents.SAND));
+
+        this.tag(STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
+        this.tag(STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
+        this.tag(ORES).add(itemKeys(ModTagContents.ORES));
+    }
+
+    private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_logs"));
+    private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_woods"));
+    private static final TagKey<Item> ORES = TagKey.create(Registries.ITEM, new ResourceLocation("c", "ores"));
+
+    private static net.minecraft.resources.ResourceKey<Item>[] itemKeys(List<RegistrySupplier<Block>> blocks) {
+        return keys(blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new));
     }
 
     @SafeVarargs
