@@ -3,22 +3,23 @@ package net.winepicfin.extrabiomes.client;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.util.RandomSource;
 
 // A soft, translucent, fullbright puff that fades in, swells as it rises and fades out.
-public class SteamParticle extends SingleQuadParticle {
+public class SteamParticle extends TextureSheetParticle {
     private static final float START_ALPHA = 0.32f;
     private static final float GROWTH = 0.8f;
+    private static final int FULL_BRIGHT = 0xF000F0;
 
     private final float baseSize;
     private final double swayPhase;
 
     protected SteamParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
-        super(level, x, y, z, sprites.get(level.getRandom()));
+        super(level, x, y, z);
+        pickSprite(sprites);
         this.xd = xd;
         this.yd = yd;
         this.zd = zd;
@@ -44,13 +45,13 @@ public class SteamParticle extends SingleQuadParticle {
     }
 
     @Override
-    protected int getLightCoords(float partialTick) {
-        return LightCoordsUtil.FULL_BRIGHT;
+    protected int getLightColor(float partialTick) {
+        return FULL_BRIGHT;
     }
 
     @Override
-    protected Layer getLayer() {
-        return Layer.TRANSLUCENT;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
@@ -61,7 +62,7 @@ public class SteamParticle extends SingleQuadParticle {
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xd, double yd, double zd, RandomSource random) {
+        public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xd, double yd, double zd) {
             return new SteamParticle(level, x, y, z, xd, yd, zd, sprites);
         }
     }

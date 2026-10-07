@@ -116,9 +116,9 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(ORES).add(itemKeys(ModTagContents.ORES));
     }
 
-    private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_logs"));
-    private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_woods"));
-    private static final TagKey<Item> ORES = TagKey.create(Registries.ITEM, new ResourceLocation("c", "ores"));
+    private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs"));
+    private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
+    private static final TagKey<Item> ORES = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ores"));
 
     private static net.minecraft.resources.ResourceKey<Item>[] itemKeys(List<RegistrySupplier<Block>> blocks) {
         return keys(blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new));

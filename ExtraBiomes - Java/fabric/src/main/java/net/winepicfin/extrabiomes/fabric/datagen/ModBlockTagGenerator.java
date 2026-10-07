@@ -236,9 +236,9 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
     }
 
-    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, new ResourceLocation("c", "stripped_logs"));
-    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("c", "stripped_woods"));
-    private static final TagKey<Block> ORES = TagKey.create(Registries.BLOCK, new ResourceLocation("c", "ores"));
+    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs"));
+    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
+    private static final TagKey<Block> ORES = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "ores"));
 
     private static net.minecraft.resources.ResourceKey<Block>[] keys(List<RegistrySupplier<Block>> blocks) {
         return keys(blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new));
