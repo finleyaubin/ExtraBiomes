@@ -2,6 +2,8 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -11,8 +13,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // Fabric port of forge/datagen/ModBlockTagGenerator.java. Fabric API's FabricTagProvider.BlockTagProvider
@@ -195,18 +199,32 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.GILDED_SKY_PLANKS.get()
         ));
 
-        this.tag(BlockTags.WALLS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_WALL.get()
-        ));
-        this.tag(BlockTags.STAIRS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()
-        ));
-        this.tag(BlockTags.SLABS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
-        ));
+        this.tag(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
+        this.tag(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
+        this.tag(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
+
+        // The vanilla stairs/slabs/doors/trapdoors/buttons/pressure_plates/signs tags already nest
+        // these wooden_* tags, so filling the wooden_* ones is enough for the parent tags too.
+        this.tag(BlockTags.WOODEN_STAIRS).add(keys(ModTagContents.WOODEN_STAIRS));
+        this.tag(BlockTags.WOODEN_SLABS).add(keys(ModTagContents.WOODEN_SLABS));
+        this.tag(BlockTags.WOODEN_BUTTONS).add(keys(ModTagContents.WOODEN_BUTTONS));
+        this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(keys(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.tag(BlockTags.WOODEN_DOORS).add(keys(ModTagContents.WOODEN_DOORS));
+        this.tag(BlockTags.WOODEN_TRAPDOORS).add(keys(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(BlockTags.STANDING_SIGNS).add(keys(ModTagContents.STANDING_SIGNS));
+        this.tag(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
+        this.tag(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));
+        this.tag(BlockTags.WALL_HANGING_SIGNS).add(keys(ModTagContents.WALL_HANGING_SIGNS));
+        this.tag(BlockTags.SAPLINGS).add(keys(ModTagContents.SAPLINGS));
+        this.tag(BlockTags.SAND).add(keys(ModTagContents.SAND));
+
+        this.tag(ConventionalBlockTags.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
+        this.tag(ConventionalBlockTags.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
+        this.tag(ConventionalBlockTags.ORES).add(keys(ModTagContents.ORES));
+    }
+
+    private static ResourceKey<Block>[] keys(List<RegistrySupplier<Block>> blocks) {
+        return keys(blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new));
     }
 
     // Vanilla's BlockTags no longer exposes LOGS_THAT_BURN as a constant (26.2), but the tag itself
