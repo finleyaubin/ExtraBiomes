@@ -5,8 +5,8 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.RandomSource;
 
 // A soft, translucent, fullbright puff that fades in, swells as it rises and fades out.
@@ -44,8 +44,8 @@ public class SteamParticle extends SingleQuadParticle {
     }
 
     @Override
-    protected int getLightCoords(float partialTick) {
-        return LightCoordsUtil.FULL_BRIGHT;
+    protected int getLightColor(float partialTick) {
+        return LightTexture.FULL_BRIGHT;
     }
 
     @Override
