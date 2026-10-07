@@ -4,12 +4,18 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.WrittenBookContent;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.block.custom.DenseCloudBlock;
 import net.winepicfin.extrabiomes.block.custom.DenseCloudBudding;
@@ -38,7 +44,8 @@ public class DenseCloudBuddingGameTests {
         helper.assertTrue(countCloud(level, iceHeated) > 1, "Cloud did not bud around ice over magma-heated water");
         helper.assertTrue(countCloud(level, iceUnheated) == 1, "Cloud budded around ice over unheated water");
         helper.assertTrue(everyCloudInShape(level, iceHeated), "Cloud budded outside the allowed cloud shape");
-        LOGGER.info("[DenseCloudBuddingGameTests] denseCloudBudsOnlyAroundIceOverMagmaHeatedWater: passed with {} cloud blocks", countCloud(level, iceHeated));
+        LOGGER.info("[DenseCloudBuddingGameTests] {} cloud blocks grew around the heated ice", countCloud(level, iceHeated));
+        LOGGER.info("[DenseCloudBuddingGameTests] denseCloudBudsOnlyAroundIceOverMagmaHeatedWater: passed");
         helper.succeed();
     }
 
@@ -53,6 +60,33 @@ public class DenseCloudBuddingGameTests {
         helper.assertTrue(DenseCloudBudding.sitsOverHeatedWater(level, near), "Ice 20 blocks above the water was rejected");
         helper.assertFalse(DenseCloudBudding.sitsOverHeatedWater(level, far), "Ice 21 blocks above the water was accepted");
         LOGGER.info("[DenseCloudBuddingGameTests] iceMustBeWithinTwentyBlocksOfTheWater: passed");
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty", batch = "extrabiomes")
+    public static void cloudCondenserBuildingDemonstratesTheMechanic(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = helper.absolutePos(BlockPos.ZERO);
+        BlockPos corner = new BlockPos(origin.getX() + 120, 215, origin.getZ());
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/buildings/cloud_condenser");
+        StructureTemplate template = level.getStructureManager().getOrCreate(id);
+        helper.assertTrue(template.getSize().getX() > 0, "cloud_condenser structure failed to load");
+        template.placeInWorld(level, corner, corner, new StructurePlaceSettings(), level.getRandom(), 2);
+
+        BlockPos ice = corner.offset(6, 14, 5);
+        helper.assertTrue(level.getBlockState(ice).is(Blocks.BLUE_ICE), "Condenser has no blue ice where expected");
+        helper.assertTrue(DenseCloudBudding.sitsOverHeatedWater(level, ice), "Condenser ice does not sit over magma-heated water");
+        helper.assertTrue(corner.offset(6, 3, 5).equals(DenseCloudBudding.heatedWaterSurface(level, ice)), "Condenser steam would not rise from the top of its water");
+        WrittenBookContent book = level.getBlockEntity(corner.offset(2, 1, 5)) instanceof LecternBlockEntity lectern
+                ? lectern.getBook().get(DataComponents.WRITTEN_BOOK_CONTENT) : null;
+        String bookText = book == null ? "<no book>" : book.title().raw() + " | " + book.pages().get(0).raw().getString();
+        helper.assertTrue(bookText.startsWith("Cloud Condenser | Cloud Condenser"), "Condenser lectern book is wrong: " + bookText);
+
+        int before = countCloud(level, ice);
+        budFor(level, ice.east());
+        helper.assertTrue(countCloud(level, ice) > before, "Condenser cloud did not bud");
+        LOGGER.info("[DenseCloudBuddingGameTests] condenser cloud grew from {} to {} blocks", before, countCloud(level, ice));
+        LOGGER.info("[DenseCloudBuddingGameTests] cloudCondenserBuildingDemonstratesTheMechanic: passed");
         helper.succeed();
     }
 
