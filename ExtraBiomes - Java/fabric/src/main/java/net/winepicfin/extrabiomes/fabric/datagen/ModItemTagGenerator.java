@@ -2,13 +2,18 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.ItemTags;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // Fabric port of forge/datagen/ModItemTagGenerator.java, using Fabric API's
@@ -89,6 +94,28 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
 
         this.valueLookupBuilder(ItemTags.BOATS).add(keys(ModItems.BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
         this.valueLookupBuilder(ItemTags.CHEST_BOATS).add(keys(ModItems.CHEST_BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
+
+        this.valueLookupBuilder(ItemTags.WALLS).add(items(ModTagContents.WALLS));
+        this.valueLookupBuilder(ItemTags.STAIRS).add(items(ModTagContents.STONE_STAIRS));
+        this.valueLookupBuilder(ItemTags.SLABS).add(items(ModTagContents.STONE_SLABS));
+        this.valueLookupBuilder(ItemTags.WOODEN_STAIRS).add(items(ModTagContents.WOODEN_STAIRS));
+        this.valueLookupBuilder(ItemTags.WOODEN_SLABS).add(items(ModTagContents.WOODEN_SLABS));
+        this.valueLookupBuilder(ItemTags.WOODEN_BUTTONS).add(items(ModTagContents.WOODEN_BUTTONS));
+        this.valueLookupBuilder(ItemTags.WOODEN_PRESSURE_PLATES).add(items(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.valueLookupBuilder(ItemTags.WOODEN_DOORS).add(items(ModTagContents.WOODEN_DOORS));
+        this.valueLookupBuilder(ItemTags.WOODEN_TRAPDOORS).add(items(ModTagContents.WOODEN_TRAPDOORS));
+        this.valueLookupBuilder(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
+        this.valueLookupBuilder(ItemTags.HANGING_SIGNS).add(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
+        this.valueLookupBuilder(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
+        this.valueLookupBuilder(ItemTags.SAND).add(items(ModTagContents.SAND));
+
+        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
+        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
+        this.valueLookupBuilder(ConventionalItemTags.ORES).add(items(ModTagContents.ORES));
+    }
+
+    private static Item[] items(List<RegistrySupplier<Block>> blocks) {
+        return blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new);
     }
 
     // valueLookupBuilder()'s TagAppender takes Item directly (Fabric API 1.21.6+), so this is now an identity passthrough.

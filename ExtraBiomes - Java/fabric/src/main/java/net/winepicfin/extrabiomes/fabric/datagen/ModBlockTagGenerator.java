@@ -2,13 +2,17 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import dev.architectury.registry.registries.RegistrySupplier;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // Fabric port of forge/datagen/ModBlockTagGenerator.java. Fabric API's FabricTagProvider.BlockTagProvider
@@ -191,18 +195,28 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.GILDED_SKY_PLANKS.get()
         ));
 
-        this.valueLookupBuilder(BlockTags.WALLS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_WALL.get()
-        ));
-        this.valueLookupBuilder(BlockTags.STAIRS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()
-        ));
-        this.valueLookupBuilder(BlockTags.SLABS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
-        ));
+        this.valueLookupBuilder(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
+        this.valueLookupBuilder(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
+        this.valueLookupBuilder(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
+
+        // The vanilla stairs/slabs/doors/trapdoors/buttons/pressure_plates/signs tags already nest
+        // these wooden_* tags, so filling the wooden_* ones is enough for the parent tags too.
+        this.valueLookupBuilder(BlockTags.WOODEN_STAIRS).add(keys(ModTagContents.WOODEN_STAIRS));
+        this.valueLookupBuilder(BlockTags.WOODEN_SLABS).add(keys(ModTagContents.WOODEN_SLABS));
+        this.valueLookupBuilder(BlockTags.WOODEN_BUTTONS).add(keys(ModTagContents.WOODEN_BUTTONS));
+        this.valueLookupBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(keys(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.valueLookupBuilder(BlockTags.WOODEN_DOORS).add(keys(ModTagContents.WOODEN_DOORS));
+        this.valueLookupBuilder(BlockTags.WOODEN_TRAPDOORS).add(keys(ModTagContents.WOODEN_TRAPDOORS));
+        this.valueLookupBuilder(BlockTags.STANDING_SIGNS).add(keys(ModTagContents.STANDING_SIGNS));
+        this.valueLookupBuilder(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
+        this.valueLookupBuilder(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));
+        this.valueLookupBuilder(BlockTags.WALL_HANGING_SIGNS).add(keys(ModTagContents.WALL_HANGING_SIGNS));
+        this.valueLookupBuilder(BlockTags.SAPLINGS).add(keys(ModTagContents.SAPLINGS));
+        this.valueLookupBuilder(BlockTags.SAND).add(keys(ModTagContents.SAND));
+
+        this.valueLookupBuilder(ConventionalBlockTags.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
+        this.valueLookupBuilder(ConventionalBlockTags.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
+        this.valueLookupBuilder(ConventionalBlockTags.ORES).add(keys(ModTagContents.ORES));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
@@ -218,6 +232,10 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         ));
 
 
+    }
+
+    private static Block[] keys(List<RegistrySupplier<Block>> blocks) {
+        return blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new);
     }
 
     // valueLookupBuilder()'s TagAppender takes Block directly (Fabric API 1.21.6+), so this is now an identity passthrough.
