@@ -59,7 +59,6 @@ public class DataGenerators {
         // lookup too, not the plain one.
         event.addProvider(new AdvancementProvider(packOutput, biomeTagLookupProvider,
                 List.of(new ModAdvancements())));
-        event.addProvider(new ModDataMapProvider(packOutput, lookupProvider));
     }
 
     @SubscribeEvent
