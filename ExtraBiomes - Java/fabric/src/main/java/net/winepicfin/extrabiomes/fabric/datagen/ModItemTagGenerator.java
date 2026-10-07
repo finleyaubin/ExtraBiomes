@@ -114,8 +114,8 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(ConventionalItemTags.ORES).add(itemKeys(ModTagContents.ORES));
     }
 
-    private static Item[] itemKeys(List<RegistrySupplier<Block>> blocks) {
-        return blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new);
+    private static net.minecraft.resources.ResourceKey<Item>[] itemKeys(List<RegistrySupplier<Block>> blocks) {
+        return keys(blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new));
     }
 
     @SafeVarargs

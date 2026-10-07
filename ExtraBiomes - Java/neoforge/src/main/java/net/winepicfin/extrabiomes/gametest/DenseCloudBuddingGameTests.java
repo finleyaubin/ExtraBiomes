@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.WrittenBookContent;
@@ -61,8 +61,8 @@ public class DenseCloudBuddingGameTests {
         ServerLevel level = helper.getLevel();
         BlockPos origin = helper.absolutePos(BlockPos.ZERO);
         BlockPos corner = new BlockPos(origin.getX() + 120, 215, origin.getZ());
-        Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/buildings/cloud_condenser");
-        StructureTemplate template = level.getStructureTemplateManager().getOrCreate(id);
+        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/buildings/cloud_condenser");
+        StructureTemplate template = level.getStructureManager().getOrCreate(id);
         helper.assertTrue(template.getSize().getX() > 0, Component.literal("cloud_condenser structure failed to load"));
         template.placeInWorld(level, corner, corner, new StructurePlaceSettings(), level.getRandom(), 2);
 
