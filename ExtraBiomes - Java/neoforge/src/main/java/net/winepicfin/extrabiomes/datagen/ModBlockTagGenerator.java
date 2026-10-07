@@ -12,9 +12,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
@@ -199,18 +202,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.GILDED_SKY_PLANKS.getKey()
         );
 
-        this.tag(BlockTags.WALLS).add(
-                ModBlocks.BLACK_SANDSTONE_WALL.getKey()
-        );
-        this.tag(BlockTags.STAIRS).add(
-                ModBlocks.BLACK_SANDSTONE_STAIRS.getKey(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.getKey()
-        );
-        this.tag(BlockTags.SLABS).add(
-                ModBlocks.BLACK_SANDSTONE_SLAB.getKey(),
-                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.getKey(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.getKey()
-        );
+        this.tag(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
+        this.tag(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
+        this.tag(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
@@ -225,6 +219,28 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 Blocks.NETHERRACK.builtInRegistryHolder().key()
         );
 
+        // The vanilla stairs/slabs/doors/trapdoors/buttons/pressure_plates/signs tags already nest
+        // these wooden_* tags, so filling the wooden_* ones is enough for the parent tags too.
+        this.tag(BlockTags.WOODEN_STAIRS).add(keys(ModTagContents.WOODEN_STAIRS));
+        this.tag(BlockTags.WOODEN_SLABS).add(keys(ModTagContents.WOODEN_SLABS));
+        this.tag(BlockTags.WOODEN_BUTTONS).add(keys(ModTagContents.WOODEN_BUTTONS));
+        this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(keys(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.tag(BlockTags.WOODEN_DOORS).add(keys(ModTagContents.WOODEN_DOORS));
+        this.tag(BlockTags.WOODEN_TRAPDOORS).add(keys(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(BlockTags.STANDING_SIGNS).add(keys(ModTagContents.STANDING_SIGNS));
+        this.tag(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
+        this.tag(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));
+        this.tag(BlockTags.WALL_HANGING_SIGNS).add(keys(ModTagContents.WALL_HANGING_SIGNS));
+        this.tag(BlockTags.SAPLINGS).add(keys(ModTagContents.SAPLINGS));
+        this.tag(BlockTags.SAND).add(keys(ModTagContents.SAND));
 
+        this.tag(Tags.Blocks.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
+        this.tag(Tags.Blocks.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
+        this.tag(Tags.Blocks.ORES).add(keys(ModTagContents.ORES));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static ResourceKey<Block>[] keys(List<RegistrySupplier<Block>> blocks) {
+        return blocks.stream().map(RegistrySupplier::getKey).toArray(ResourceKey[]::new);
     }
 }
