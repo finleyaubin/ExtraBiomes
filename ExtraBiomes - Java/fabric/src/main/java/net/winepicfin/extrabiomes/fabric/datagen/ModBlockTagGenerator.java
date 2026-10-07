@@ -228,7 +228,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         this.tag(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
         this.tag(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));
         this.tag(BlockTags.WALL_HANGING_SIGNS).add(keys(ModTagContents.WALL_HANGING_SIGNS));
-        this.tag(BlockTags.SAPLINGS).add(keys(ModTagContents.SAPLINGS));
+        this.tag(SAPLINGS).add(keys(ModTagContents.SAPLINGS));
         this.tag(BlockTags.SAND).add(keys(ModTagContents.SAND));
 
         this.tag(ConventionalBlockTags.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
@@ -242,6 +242,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
 
     // Vanilla's BlockTags no longer exposes LOGS_THAT_BURN as a constant (26.2), but the tag itself
     // (data/minecraft/tags/block/logs_that_burn.json) still exists, so it's recreated here by id.
+    private static final TagKey<Block> SAPLINGS = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings"));
     private static final TagKey<Block> LOGS_THAT_BURN = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
 
     // TagAppender.add() takes ResourceKey<Block>, not Block, so this maps each block to its registry key.

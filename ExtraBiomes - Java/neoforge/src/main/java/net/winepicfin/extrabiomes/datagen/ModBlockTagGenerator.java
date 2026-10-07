@@ -23,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 public class ModBlockTagGenerator extends BlockTagsProvider {
 
     // no longer exposed as a BlockTags constant in 26.2, but the vanilla tag data still exists
+    private static final TagKey<Block> SAPLINGS = TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("saplings"));
     private static final TagKey<Block> LOGS_THAT_BURN =
             TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("logs_that_burn"));
 
@@ -231,7 +232,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
         this.tag(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));
         this.tag(BlockTags.WALL_HANGING_SIGNS).add(keys(ModTagContents.WALL_HANGING_SIGNS));
-        this.tag(BlockTags.SAPLINGS).add(keys(ModTagContents.SAPLINGS));
+        this.tag(SAPLINGS).add(keys(ModTagContents.SAPLINGS));
         this.tag(BlockTags.SAND).add(keys(ModTagContents.SAND));
 
         this.tag(Tags.Blocks.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
