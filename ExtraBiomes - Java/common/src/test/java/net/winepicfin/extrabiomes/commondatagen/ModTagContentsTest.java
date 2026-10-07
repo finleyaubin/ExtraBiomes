@@ -52,6 +52,16 @@ class ModTagContentsTest {
                 + " (or it is not followed by a comma)");
     }
 
+    /** The loaders this version actually builds (enabled_platforms in gradle.properties); all of them if the key is absent. */
+    private static List<String> enabledPlatforms() throws IOException {
+        for (String line : Files.readAllLines(Paths.get("..", "gradle.properties"))) {
+            if (line.startsWith("enabled_platforms=")) {
+                return List.of(line.substring("enabled_platforms=".length()).trim().split("\\s*,\\s*"));
+            }
+        }
+        return List.of("neoforge", "fabric", "forge");
+    }
+
     @Test
     void everyWoodSetPieceIsInItsTag() throws IOException {
         String contents = read(TAG_CONTENTS).replace(");", ",);");
@@ -104,7 +114,11 @@ class ModTagContentsTest {
 
         // Every loader (neoforge/fabric/forge) has a block and an item generator; each shared list must be
         // used by at least one of that loader's two, so no loader silently skips a tag.
+        List<String> enabled = enabledPlatforms();
         for (String loader : List.of("neoforge", "fabric", "forge")) {
+            if (!enabled.contains(loader)) {
+                continue; // source folder can linger for a loader that is switched off for this version
+            }
             List<Path> mine = generators.stream().filter(p -> p.toString().contains("/" + loader + "/")
                     || p.toString().contains("\\" + loader + "\\")).toList();
             if (mine.isEmpty()) {
