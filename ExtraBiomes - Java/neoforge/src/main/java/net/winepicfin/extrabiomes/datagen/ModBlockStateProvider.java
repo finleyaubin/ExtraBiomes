@@ -222,7 +222,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     // caller must pass the property belonging to the actual block being generated for - matches
     // fabric/'s equivalent ModBlockStateProvider#pebbleBlock, which hit and fixed this same bug.
     private void pebbleBlock(Block pebbleBlock, String type, IntegerProperty sizeProperty){
-        getVariantBuilder(pebbleBlock).forAllStates(blockState -> {
+        getVariantBuilder(pebbleBlock).forAllStatesExcept(blockState -> {
             Integer size = blockState.getValue(sizeProperty);
             ModelFile modelFile;
             switch (size){
@@ -239,7 +239,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder()
                     .modelFile(modelFile)
                     .build();
-            }
+            }, net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
         );
         simpleBlockItem(pebbleBlock, new ModelFile.UncheckedModelFile(modLoc("block/small_"+type)));
     }
