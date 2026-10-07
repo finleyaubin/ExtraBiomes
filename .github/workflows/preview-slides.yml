@@ -16,11 +16,6 @@ on:
         description: Changelog version, e.g. 3.10.0-beta-9 (Java defaults to mod_version in gradle.properties; required for Bedrock)
         type: string
         required: false
-      theme:
-        description: Slide theme
-        type: choice
-        options: [glacier, bryce]
-        default: glacier
 
 permissions:
   contents: read
@@ -62,7 +57,7 @@ jobs:
           pip install --quiet pillow
           python3 tools/render_slides.py "${{ steps.changelog.outputs.FILE }}" \
             --version "${{ steps.changelog.outputs.VERSION }}" --edition "${{ inputs.edition }}" \
-            --theme "${{ inputs.theme }}" --out slides
+            --out slides
 
       - name: Upload slides
         uses: actions/upload-artifact@v7
