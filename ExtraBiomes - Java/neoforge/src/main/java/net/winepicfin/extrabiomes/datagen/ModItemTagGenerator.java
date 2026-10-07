@@ -6,14 +6,17 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagGenerator extends ItemTagsProvider {
@@ -90,5 +93,27 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         );
+
+        this.tag(ItemTags.WALLS).add(items(ModTagContents.WALLS));
+        this.tag(ItemTags.STAIRS).add(items(ModTagContents.STONE_STAIRS));
+        this.tag(ItemTags.SLABS).add(items(ModTagContents.STONE_SLABS));
+        this.tag(ItemTags.WOODEN_STAIRS).add(items(ModTagContents.WOODEN_STAIRS));
+        this.tag(ItemTags.WOODEN_SLABS).add(items(ModTagContents.WOODEN_SLABS));
+        this.tag(ItemTags.WOODEN_BUTTONS).add(items(ModTagContents.WOODEN_BUTTONS));
+        this.tag(ItemTags.WOODEN_PRESSURE_PLATES).add(items(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.tag(ItemTags.WOODEN_DOORS).add(items(ModTagContents.WOODEN_DOORS));
+        this.tag(ItemTags.WOODEN_TRAPDOORS).add(items(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
+        this.tag(ItemTags.HANGING_SIGNS).add(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
+        this.tag(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
+        this.tag(ItemTags.SAND).add(items(ModTagContents.SAND));
+
+        this.tag(Tags.Items.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
+        this.tag(Tags.Items.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
+        this.tag(Tags.Items.ORES).add(items(ModTagContents.ORES));
+    }
+
+    private static Item[] items(List<RegistrySupplier<Block>> blocks) {
+        return blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new);
     }
 }
