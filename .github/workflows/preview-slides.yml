@@ -1,0 +1,80 @@
+name: Preview Story Slides
+
+# Manual dry run of the release pipeline's "Render story slides" step. Run it from the Actions
+# tab on the branch you're about to release: it renders the changelog on that branch into the same
+# Instagram story slides the announce job would, and uploads them as an artifact to download and
+# eyeball. It never posts, commits to media-slides, or touches Discord, so it's safe to re-run.
+on:
+  workflow_dispatch:
+    inputs:
+      edition:
+        description: Which edition's changelog to render
+        type: choice
+        options: [Java, Bedrock]
+        default: Java
+      version:
+        description: Changelog version, e.g. 3.10.0-beta-9 (Java defaults to mod_version in gradle.properties; required for Bedrock)
+        type: string
+        required: false
+      theme:
+        description: Slide theme
+        type: choice
+        options: [glacier, bryce]
+        default: glacier
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Same resolution as the release workflows: Java's changelog is named after mod_version (not
+      # the tag), Bedrock's after the version part of its tag, which a branch has no way to supply.
+      - name: Resolve changelog
+        id: changelog
+        env:
+          EDITION: ${{ inputs.edition }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [ -z "$VERSION" ]; then
+            if [ "$EDITION" = "Java" ]; then
+              VERSION=$(grep '^mod_version=' "ExtraBiomes - Java/gradle.properties" | cut -d'=' -f2)
+            else
+              echo "::error::Bedrock has no version to read from a branch - pass the version input"
+              exit 1
+            fi
+          fi
+          FILE="Changelogs/$EDITION-v$VERSION.md"
+          # Bedrock's release workflow strips the leading v from the tag, so its files have none.
+          [ -f "$FILE" ] || FILE="Changelogs/$EDITION-$VERSION.md"
+          if [ ! -f "$FILE" ]; then
+            echo "::error::No changelog found for $EDITION $VERSION (looked for $FILE)"
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "FILE=$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Render story slides
+        run: |
+          pip install --quiet pillow
+          python3 tools/render_slides.py "${{ steps.changelog.outputs.FILE }}" \
+            --version "${{ steps.changelog.outputs.VERSION }}" --edition "${{ inputs.edition }}" \
+            --theme "${{ inputs.theme }}" --out slides
+
+      - name: Upload slides
+        uses: actions/upload-artifact@v7
+        with:
+          name: story-slides-${{ inputs.edition }}-${{ steps.changelog.outputs.VERSION }}
+          path: slides/*.jpg
+          if-no-files-found: error
+
+      - name: Summarize
+        run: |
+          {
+            echo "### Story slides preview"
+            echo "Rendered \`${{ steps.changelog.outputs.FILE }}\` as **${{ inputs.edition }} ${{ steps.changelog.outputs.VERSION }}** from \`$GITHUB_REF_NAME\`: $(ls slides/*.jpg | wc -l) slides."
+            echo "Download them from the **Artifacts** section of this run. Nothing was posted."
+          } >> "$GITHUB_STEP_SUMMARY"
