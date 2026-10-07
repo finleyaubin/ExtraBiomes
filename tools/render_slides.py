@@ -287,7 +287,8 @@ def main():
     parser.add_argument("--version", default="")
     parser.add_argument("--footer", default=None)
     parser.add_argument("--out", type=Path, default=Path("slides"))
-    parser.add_argument("--theme", choices=sorted(THEMES), default="glacier")
+    parser.add_argument("--theme", choices=sorted(THEMES),
+                        help="defaults to bryce for Bedrock, glacier for Java")
     parser.add_argument("--edition", choices=["Java", "Bedrock"],
                         help="defaults to the changelog filename's prefix")
     parser.add_argument("--selftest", action="store_true")
@@ -295,9 +296,9 @@ def main():
     if args.selftest:
         return selftest()
     global THEME, EDITION
-    THEME = THEMES[args.theme]
     prefix = args.changelog.name.split("-")[0] if args.changelog else ""
     EDITION = args.edition or (prefix if prefix in ("Java", "Bedrock") else "Java")
+    THEME = THEMES[args.theme or ("bryce" if EDITION == "Bedrock" else "glacier")]
     if not args.changelog:
         parser.error("changelog path required")
     footer = args.footer or (
