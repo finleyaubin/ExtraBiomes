@@ -1,5 +1,8 @@
 package net.winepicfin.extrabiomes.datagen;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.common.Tags;
 import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import java.util.List;
@@ -20,6 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagGenerator extends ItemTagsProvider {
+
+    private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_logs"));
+    private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_woods"));
 
     public ModItemTagGenerator(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
         super(packOutput, lookupProvider, blockTags, ExtraBiomes.MOD_ID, existingFileHelper);
@@ -108,8 +114,8 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
         this.tag(ItemTags.SAND).add(items(ModTagContents.SAND));
 
-        this.tag(Tags.Items.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
-        this.tag(Tags.Items.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
+        this.tag(STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
+        this.tag(STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Items.ORES).add(items(ModTagContents.ORES));
     }
 
