@@ -2,7 +2,10 @@ package net.winepicfin.extrabiomes.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
@@ -19,6 +22,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
+
+    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_logs"));
+    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_woods"));
 
     public ModBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, ExtraBiomes.MOD_ID, existingFileHelper);
@@ -215,8 +221,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.SAPLINGS).add(blocks(ModTagContents.SAPLINGS));
         this.tag(BlockTags.SAND).add(blocks(ModTagContents.SAND));
 
-        this.tag(Tags.Blocks.STRIPPED_LOGS).add(blocks(ModTagContents.STRIPPED_LOGS));
-        this.tag(Tags.Blocks.STRIPPED_WOODS).add(blocks(ModTagContents.STRIPPED_WOODS));
+        this.tag(STRIPPED_LOGS).add(blocks(ModTagContents.STRIPPED_LOGS));
+        this.tag(STRIPPED_WOODS).add(blocks(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Blocks.ORES).add(blocks(ModTagContents.ORES));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
