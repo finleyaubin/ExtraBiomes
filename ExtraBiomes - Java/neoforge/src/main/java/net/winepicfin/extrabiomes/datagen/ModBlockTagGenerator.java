@@ -22,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
+    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_logs"));
+    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_woods"));
 
-    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, new ResourceLocation("c", "stripped_logs"));
-    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("c", "stripped_woods"));
 
     public ModBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, ExtraBiomes.MOD_ID, existingFileHelper);

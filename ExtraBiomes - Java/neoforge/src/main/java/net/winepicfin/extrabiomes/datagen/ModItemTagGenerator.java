@@ -23,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagGenerator extends ItemTagsProvider {
+    private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_logs"));
+    private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_woods"));
 
-    private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_logs"));
-    private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("c", "stripped_woods"));
 
     public ModItemTagGenerator(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
         super(packOutput, lookupProvider, blockTags, ExtraBiomes.MOD_ID, existingFileHelper);
