@@ -23,7 +23,7 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 - Retuned where several biomes generate to be closer to the Bedrock version (simulated, not yet checked in a live world):
   - Moorlands are far more common: they now generate in temperate and dry lowlands from cool to warm climates, and moved to a full-weight region.
   - The Netherlands and The Netherlands Mutated generate across a wider range of temperatures, and so are several times more common.
-  - Jungle Marsh moved to a full-weight region and is wider. Glacier, Fungle Jungle and Taiga Spikes cover more terrain, and Jellyfish Fields now also appear in warm oceans.
+  - Jungle Marsh is wider. Glacier, Fungle Jungle and Taiga Spikes cover more terrain, and Jellyfish Fields now also appear in warm oceans.
   - Floating Jungle and Charred Forest were almost impossible to find. Both now have much wider ranges.
   - Mystic Forest is less common, and Deep Dark Green is much rarer underground.
 
