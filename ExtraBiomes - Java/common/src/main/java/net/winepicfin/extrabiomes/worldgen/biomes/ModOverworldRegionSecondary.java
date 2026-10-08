@@ -129,16 +129,6 @@ public class ModOverworldRegionSecondary extends Region {
                 .weirdness(variantWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.LUSH_MESA_BRYCE));
 
-        // Jungle Marsh - bedrock temp=0.95, downfall=0.9, jungle+swamp tags; replace_biomes amount 0.5. Beta 11: moved here from ModOverworldRegionRare (1/6 weight cap) and widened to EROSION_3-6 / COAST-MID_INLAND (~0.14% -> ~0.8% of the world). Shares the variant-weirdness corner of Jungle Pillars' box (Pillars is listed first). If BiomeGenerationGameTests reports it unreachable here, move it back to the Rare region.
-        new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.WARM)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_3, ParameterUtils.Erosion.EROSION_6))
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.JUNGLE_MARSH));
-
         // Volcanic Moss Tundra - moved here from ModOverworldRegion since its box overlapped Cold Mesa's there.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
