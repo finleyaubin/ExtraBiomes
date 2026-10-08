@@ -31,7 +31,7 @@ import java.util.function.Consumer;
  * counterpart in climate space (Cold Mesa Bryce, Lush Mesa Bryce, Desert Bryce, Jungle Pillars,
  * Shattered Swamp - all sharing the same low-erosion/positive-weirdness "spire" recipe described
  * on {@link ModOverworldRegion}'s javadoc), plus the rest of the FROZEN-temperature cluster that
- * isn't already split off into {@link ModOverworldRegionRare} (Cold Mesa Plateau, Glacier), plus
+ * isn't already split off into {@link ModOverworldRegionRare} (Cold Mesa Plateau; Glacier and Volcanic Moss Tundra moved to the Rare region in beta 11), plus
  * Deep Dark Green (a cave-only biome with no surface climate box to speak of, kept here simply to
  * balance the two regions' biome counts rather than for any climate-overlap reason). Climate boxes
  * themselves are carried over unchanged from their previous home in {@link ModOverworldRegion}.
@@ -89,15 +89,7 @@ public class ModOverworldRegionSecondary extends Region {
                 .weirdness(variantWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.DESERT_BRYCE));
 
-        // Glacier - bedrock temp=0, downfall=1 (replace_biomes amount 0.7, the highest in the pack). Beta 11: humidity widened WET-HUMID -> NEUTRAL-HUMID and erosion EROSION_0-2 -> EROSION_0-3 (~0.14% -> ~0.7% of the world). It now overlaps Volcanic Moss Tundra's box and takes some of its area (Volcanic Moss ~0.5% -> ~0.27% in simulation); if that matters, restrict Glacier's weirdness to the variant half.
-        new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.FROZEN)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.HUMID))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3))
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.GLACIER));
+        // Glacier moved to ModOverworldRegionRare in beta 11 (see there).
 
         // Jungle Pillars - bedrock temp=0.95, downfall=0.9, stone_pillars tag (replace_biomes amount 0.15). Low erosion, positive-weirdness half only.
         new ParameterUtils.ParameterPointListBuilder()
@@ -129,15 +121,7 @@ public class ModOverworldRegionSecondary extends Region {
                 .weirdness(variantWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.LUSH_MESA_BRYCE));
 
-        // Volcanic Moss Tundra - moved here from ModOverworldRegion since its box overlapped Cold Mesa's there.
-        new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.FROZEN)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.HUMID))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_2, ParameterUtils.Erosion.EROSION_4))
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(Climate.Parameter.span(-1.0F, 0.0F))
-                .build().forEach(point -> builder.add(point, ModBiomes.VOLCANIC_MOSS_TUNDRA));
+        // Volcanic Moss Tundra moved to ModOverworldRegionRare in beta 11 (see there).
 
         builder.build().forEach(mapper::accept);
     }
