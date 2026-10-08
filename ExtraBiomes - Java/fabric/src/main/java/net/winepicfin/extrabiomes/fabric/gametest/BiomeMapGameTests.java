@@ -90,6 +90,8 @@ public class BiomeMapGameTests {
 
         Map<String, Integer> index = new HashMap<>();
         List<String> palette = new ArrayList<>();
+        List<Biome> paletteBiomes = new ArrayList<>();
+        List<int[]> paletteXZ = new ArrayList<>();
         ByteBuffer data = ByteBuffer.allocate(cells * cells * 2).order(ByteOrder.LITTLE_ENDIAN);
         for (int row = 0; row < cells; row++) {
             for (int col = 0; col < cells; col++) {
@@ -106,6 +108,8 @@ public class BiomeMapGameTests {
                     i = palette.size();
                     index.put(id, i);
                     palette.add(id);
+                    paletteBiomes.add(biome.value());
+                    paletteXZ.add(new int[]{x, z});
                 }
                 data.putShort((short) (int) i);
             }
@@ -123,10 +127,29 @@ public class BiomeMapGameTests {
             if (i > 0) json.append(',');
             json.append('"').append(palette.get(i)).append('"');
         }
-        json.append("],\"data\":\"").append(Base64.getEncoder().encodeToString(data.array())).append("\"}");
+        // Real in-game colours (grass is sampled at the first place the biome was seen, since some biomes tint by position).
+        json.append("],\"grass\":[").append(colors(paletteBiomes, paletteXZ, 0))
+                .append("],\"foliage\":[").append(colors(paletteBiomes, paletteXZ, 1))
+                .append("],\"water\":[").append(colors(paletteBiomes, paletteXZ, 2))
+                .append("],\"data\":\"").append(Base64.getEncoder().encodeToString(data.array())).append("\"}");
         if (out.getParent() != null) Files.createDirectories(out.getParent());
         Files.writeString(out, json.toString());
         LOGGER.info("[BiomeMapGameTests] wrote {} ({} biomes)", out, palette.size());
+    }
+
+    private static String colors(List<Biome> biomes, List<int[]> xz, int kind) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < biomes.size(); i++) {
+            if (i > 0) sb.append(',');
+            Biome b = biomes.get(i);
+            int c = switch (kind) {
+                case 0 -> b.getGrassColor(xz.get(i)[0], xz.get(i)[1]);
+                case 1 -> b.getFoliageColor();
+                default -> b.getWaterColor();
+            };
+            sb.append(c & 0xFFFFFF);
+        }
+        return sb.toString();
     }
 
     private static String env(String name, String fallback) {

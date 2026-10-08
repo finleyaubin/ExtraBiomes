@@ -3,7 +3,7 @@
 
 Chunkbase only reproduces vanilla worldgen, so it can't show TerraBlender biomes. This tool boots the
 real mod through Fabric's game-test server (BiomeMapGameTests), samples the real TerraBlender-patched
-overworld biome source for any seed, and renders the result as a PNG plus a self-contained HTML viewer
+overworld biome source for any seed, and renders the result as a PNG plus a self-contained HTML viewer, coloured with each biome's own grass/foliage (water for oceans and rivers)
 (hover for coordinates/biome, click a legend entry to highlight it, wheel to zoom, drag to pan).
 
   biome_map.py --seed 12345                          -> map of +-4000 blocks around 0,0
@@ -108,6 +108,32 @@ def color_for(biome_id):
     return hsv(hue, 0.35, 0.6)
 
 
+WATER_LIKE = ("ocean", "river", "jellyfish_fields")
+SAND_LIKE = ("beach", "stony_shore")
+
+
+def natural_colors(m):
+    """In-game colours the sampler recorded: grass/foliage average for land, water for open water.
+    Returns None for maps written before the sampler recorded colours (falls back to hashed colours)."""
+    if not all(k in m for k in ("grass", "foliage", "water")):
+        return None
+    out = []
+    for i, biome_id in enumerate(m["palette"]):
+        path = biome_id.partition(":")[2]
+        if any(w in path for w in WATER_LIKE):
+            c = m["water"][i]
+        elif any(w in path for w in SAND_LIKE) and path in VANILLA:
+            out.append(VANILLA[path])
+            continue
+        else:
+            g, f = m["grass"][i], m["foliage"][i]
+            c = tuple((((g >> sh) & 255) + ((f >> sh) & 255)) // 2 for sh in (16, 8, 0))
+            out.append(c)
+            continue
+        out.append(((c >> 16) & 255, (c >> 8) & 255, c & 255))
+    return out
+
+
 def pretty(biome_id):
     return biome_id.partition(":")[2].replace("_", " ").title().replace("Tiaga", "Taiga")
 
@@ -132,7 +158,7 @@ def load(path):
 def render(m, cells, out_dir, scale=4):
     out_dir.mkdir(parents=True, exist_ok=True)
     w, h, palette = m["width"], m["height"], m["palette"]
-    colors = [color_for(b) for b in palette]
+    colors = natural_colors(m) or [color_for(b) for b in palette]
     # Like the viewer's default, mute vanilla in the PNG so ExtraBiomes stands out.
     shown = [c if b.startswith(MOD_NS + ":") else tuple(int(v * 0.5 + 60 * 0.5) for v in c) for b, c in zip(palette, colors)]
     counts = [0] * len(palette)
