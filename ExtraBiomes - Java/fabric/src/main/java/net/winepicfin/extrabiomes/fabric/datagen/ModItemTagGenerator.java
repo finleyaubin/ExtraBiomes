@@ -2,13 +2,17 @@ package net.winepicfin.extrabiomes.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.tags.ItemTags;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // Fabric port of forge/datagen/ModItemTagGenerator.java, using Fabric API's
@@ -48,7 +52,14 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.GILDED_SKY_LOG.get().asItem()
+                ModBlocks.GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.PALM_LOG.get().asItem(),
+                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
+                ModBlocks.PALM_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
         ));
         this.valueLookupBuilder(ItemTags.LOGS_THAT_BURN).add(keys(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
@@ -59,7 +70,19 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.GILDED_SKY_LOG.get().asItem()
+                ModBlocks.GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
+                ModBlocks.GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.PALM_LOG.get().asItem(),
+                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
+                ModBlocks.PALM_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
+        ));
+        this.valueLookupBuilder(ItemTags.LEAVES).add(keys(
+                ModBlocks.MYSTIC_LEAVES.get().asItem(),
+                ModBlocks.SKY_LEAVES.get().asItem(),
+                ModBlocks.PALM_LEAVES.get().asItem()
         ));
         this.valueLookupBuilder(ItemTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
@@ -70,10 +93,32 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 
         this.valueLookupBuilder(ItemTags.BOATS).add(keys(ModItems.BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
         this.valueLookupBuilder(ItemTags.CHEST_BOATS).add(keys(ModItems.CHEST_BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new)));
+
+        this.valueLookupBuilder(ItemTags.WALLS).add(items(ModTagContents.WALLS));
+        this.valueLookupBuilder(ItemTags.STAIRS).add(items(ModTagContents.STONE_STAIRS));
+        this.valueLookupBuilder(ItemTags.SLABS).add(items(ModTagContents.STONE_SLABS));
+        this.valueLookupBuilder(ItemTags.WOODEN_STAIRS).add(items(ModTagContents.WOODEN_STAIRS));
+        this.valueLookupBuilder(ItemTags.WOODEN_SLABS).add(items(ModTagContents.WOODEN_SLABS));
+        this.valueLookupBuilder(ItemTags.WOODEN_BUTTONS).add(items(ModTagContents.WOODEN_BUTTONS));
+        this.valueLookupBuilder(ItemTags.WOODEN_PRESSURE_PLATES).add(items(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.valueLookupBuilder(ItemTags.WOODEN_DOORS).add(items(ModTagContents.WOODEN_DOORS));
+        this.valueLookupBuilder(ItemTags.WOODEN_TRAPDOORS).add(items(ModTagContents.WOODEN_TRAPDOORS));
+        this.valueLookupBuilder(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
+        this.valueLookupBuilder(ItemTags.SAND).add(items(ModTagContents.SAND));
+        this.valueLookupBuilder(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new));
+        this.valueLookupBuilder(ItemTags.HANGING_SIGNS).add(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new));
+
+        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
+        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
+        this.valueLookupBuilder(ConventionalItemTags.ORES).add(items(ModTagContents.ORES));
     }
 
     // valueLookupBuilder()'s TagAppender takes Item directly (Fabric API 1.21.6+), so this is now an identity passthrough.
     private static net.minecraft.world.item.Item[] keys(net.minecraft.world.item.Item... items) {
         return items;
+    }
+
+    private static net.minecraft.world.item.Item[] items(List<RegistrySupplier<Block>> blocks) {
+        return blocks.stream().map(b -> b.get().asItem()).toArray(net.minecraft.world.item.Item[]::new);
     }
 }
