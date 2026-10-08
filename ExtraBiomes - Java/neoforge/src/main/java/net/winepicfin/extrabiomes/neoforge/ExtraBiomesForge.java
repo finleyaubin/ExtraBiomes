@@ -21,6 +21,7 @@ import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.entity.client.BaitRenderer;
 import net.winepicfin.extrabiomes.entity.client.ModBoatRenderer;
@@ -86,6 +87,7 @@ public class ExtraBiomesForge
         ModBlocks.register();
         ModBlockEntities.register();
         ModSounds.register();
+        ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();
