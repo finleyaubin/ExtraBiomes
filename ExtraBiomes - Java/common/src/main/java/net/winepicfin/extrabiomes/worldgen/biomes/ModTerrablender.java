@@ -16,5 +16,6 @@ public class ModTerrablender {
         Regions.register(new ModOverworldRegion(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
         Regions.register(new ModOverworldRegionSecondary(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_secondary"), Config.secondaryBiomeWeight));
         Regions.register(new ModOverworldRegionRare(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_rare"), Config.rareBiomeWeight));
+        Regions.register(new ModOverworldRegionFrozen(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_frozen"), Config.frozenBiomeWeight));
     }
 }
