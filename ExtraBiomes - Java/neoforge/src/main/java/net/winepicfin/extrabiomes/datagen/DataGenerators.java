@@ -42,6 +42,7 @@ public class DataGenerators {
         event.addProvider(new ModBlockTagGenerator(packOutput, lookupProvider));
         event.addProvider(new ModBiomeTagProvider(packOutput, lookupProvider));
         event.addProvider(new ModItemTagGenerator(packOutput, lookupProvider));
+        event.addProvider(new ModDataMapProvider(packOutput, lookupProvider));
     }
 
     @SubscribeEvent

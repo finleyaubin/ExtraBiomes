@@ -23,6 +23,7 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.util.random.Weighted;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
@@ -602,34 +603,42 @@ public class ModBlockStateProvider implements DataProvider {
         });
     }
 
-    // Standing/wall signs render their text via a block entity renderer - the blockstate model is
-    // just an invisible placeholder, same as vanilla's own sign blocks. It still needs a "particle"
-    // texture key though, or break particles fall back to the missing-texture sprite.
-    private void signBlockState(Block signBlock, Block wallSignBlock, Identifier texture) {
-        Identifier modelId = ModelLocationUtils.getModelLocation(signBlock);
-        models.put(modelId, () -> {
-            JsonObject json = new JsonObject();
-            JsonObject textures = new JsonObject();
-            textures.addProperty("particle", texture.toString());
-            json.add("textures", textures);
-            return json;
-        });
-        simpleBlockState(signBlock, modelId);
-        simpleBlockState(wallSignBlock, modelId);
+    private void signBlockState(Block signBlock, Block wallSignBlock, Identifier planks) {
+        TextureMapping textures = signTextures(planks, "_sign");
+        blockStates.put(signBlock, BlockModelGenerators.createSign(signBlock,
+                signVariant(ModelTemplates.SIGN_ROT_0, signBlock, "_rot_0", textures),
+                signVariant(ModelTemplates.SIGN_ROT_1, signBlock, "_rot_1", textures),
+                signVariant(ModelTemplates.SIGN_ROT_2, signBlock, "_rot_2", textures),
+                signVariant(ModelTemplates.SIGN_ROT_3, signBlock, "_rot_3", textures)));
+        blockStates.put(wallSignBlock, MultiVariantGenerator.dispatch(wallSignBlock,
+                BlockModelGenerators.plainVariant(ModelTemplates.WALL_SIGN.create(wallSignBlock, textures, models::put)))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
     }
 
-    // No "minecraft:block/hanging_sign" parent exists; the chain/plank mesh is block-entity-rendered like regular signs.
-    private void hangingSignBlockState(Block signBlock, Block wallSignBlock, Identifier texture) {
-        Identifier modelId = ModelLocationUtils.getModelLocation(signBlock);
-        models.put(modelId, () -> {
-            JsonObject json = new JsonObject();
-            JsonObject textures = new JsonObject();
-            textures.addProperty("particle", texture.toString());
-            json.add("textures", textures);
-            return json;
-        });
-        simpleBlockState(signBlock, modelId);
-        simpleBlockState(wallSignBlock, modelId);
+    private void hangingSignBlockState(Block signBlock, Block wallSignBlock, Identifier planks) {
+        TextureMapping textures = signTextures(planks, "_hanging_sign");
+        blockStates.put(signBlock, BlockModelGenerators.createHangingSign(signBlock,
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_0, signBlock, "_rot_0", textures),
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_1, signBlock, "_rot_1", textures),
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_2, signBlock, "_rot_2", textures),
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_3, signBlock, "_rot_3", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_0, signBlock, "_attached_rot_0", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_1, signBlock, "_attached_rot_1", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_2, signBlock, "_attached_rot_2", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_3, signBlock, "_attached_rot_3", textures)));
+        blockStates.put(wallSignBlock, MultiVariantGenerator.dispatch(wallSignBlock,
+                BlockModelGenerators.plainVariant(ModelTemplates.WALL_HANGING_SIGN.create(wallSignBlock, textures, models::put)))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
+    }
+
+    private MultiVariant signVariant(ModelTemplate template, Block block, String suffix, TextureMapping textures) {
+        return BlockModelGenerators.plainVariant(template.createWithSuffix(block, suffix, textures, models::put));
+    }
+
+    // The sign board is a block model since 26.x (the block entity renderer only draws the text), so it needs the real sign texture; planks stay as the break-particle.
+    private static TextureMapping signTextures(Identifier planks, String suffix) {
+        Identifier sign = planks.withPath(planks.getPath().replace("_planks", suffix));
+        return new TextureMapping().put(TextureSlot.ALL, mat(sign)).put(TextureSlot.PARTICLE, mat(planks));
     }
 
     // References the pre-existing static models under common/src/main/resources/assets/extrabiomes/
