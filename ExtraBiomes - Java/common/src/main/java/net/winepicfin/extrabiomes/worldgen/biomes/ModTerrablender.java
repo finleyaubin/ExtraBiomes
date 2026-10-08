@@ -16,5 +16,7 @@ public class ModTerrablender {
         Regions.register(new ModOverworldRegion(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld"), Config.biomeWeight));
         Regions.register(new ModOverworldRegionSecondary(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_secondary"), Config.secondaryBiomeWeight));
         Regions.register(new ModOverworldRegionRare(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_rare"), Config.rareBiomeWeight));
+        // Glacier and Volcanic Moss Tundra: vast but spaced out, so they share the Rare region's weight (no extra config option).
+        Regions.register(new ModOverworldRegionFrozen(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID,"overworld_frozen"), Config.rareBiomeWeight));
     }
 }
