@@ -2,9 +2,32 @@
 Dense Cloud is now farmable, and the Sky City has a new building that shows you how, alongside a round of fixes from playtesting beta 10.
 # Changes
 
+## World Generation
+### Biome placement 
+- The map below shows the same seed on extrabiomes v3.10.0- beta 10 and 11, extrabiome's biomes have been highlighted.
+<img width="100%" alt="before_after" src="https://github.com/user-attachments/assets/110ed8bb-faa2-45a5-bd66-3eae1615d476" />
+
+- several biomes generate to be closer to the Bedrock version:
+  - Moorlands are far more common: they now generate in temperate and dry lowlands from cool to warm climates, and moved to a full-weight region.
+  - The Netherlands is about seven times more common: it and The Netherlands Mutated swapped terrain bands, so the tulip version now takes the larger share.
+  - Jungle Marsh is wider. Fungle Jungle and Taiga Spikes cover more terrain, and Jellyfish Fields now also appear in warm oceans.
+  - Glaciers and Volcanic Moss Tundras are now vast, spread-out biomes: each one is much bigger, but they turn up less often.
+  - Floating Jungle and Charred Forest were almost impossible to find. Both now have much wider ranges.
+  - Mystic Forest is less common, and Deep Dark Green is rarer underground.
+  - The default biome weights are doubled (primary 40, secondary 40, rare 20), so ExtraBiomes biomes cover a larger share of the world. Glacier and Volcanic Moss Tundra have their own new "Frozen Biome Weight" option (default 20). Existing config files keep their old values until edited or deleted.
+
+### Sky City
+<img width="100%" alt="Cloud Condenser" src="https://github.com/user-attachments/assets/92845848-ad37-4cf1-a0c6-96de3db49604" />
+
+
+- New building: the Cloud Condenser. It has a magma-heated water tank with blue ice hung above it on a tall wooden frame, a puff of Dense Cloud already growing around the ice, and a lectern at the entrance with a book that walks through how the farm works. It sits on a trimmed brick plaza with benches, flowers and lantern posts. It generates along the Sky City paths like the other buildings.
+
+
 ## Blocks
 ### Dense Cloud farming
-<!-- screenshot: grown cloud around the blue ice -->
+<img width="100%" alt="Dense Cloud Farm" src="https://github.com/user-attachments/assets/e274c269-ffec-41e7-9d5f-d41a5e558e93" />
+
+
 
 Dense Cloud can now be grown instead of only being mined from Sky Cities. Build a column with magma at the bottom, water on top of it, and a blue ice block above the water. Dense Cloud then buds outward from any Dense Cloud next to the ice, in a flattened cloud shape around it.
 
@@ -12,22 +35,8 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 - Cloud grows out to 10 blocks sideways and 5 blocks up or down from the ice.
 - Cloud only buds from existing Dense Cloud, so place a block of it next to the ice to start the farm. Only full Dense Cloud blocks bud, not the slabs, stairs or bricks.
 - Cloud never grows into a space a player or mob is standing in.
-- It breaks almost instantly, so it can be harvested by hand or blown up.
+- It breaks almost instantly or have a low blast resistance so can easily be exploded, so it can be harvested by hand or with a machine.
 
-## World Generation
-### Sky City
-<!-- screenshot: the Cloud Condenser -->
-
-- New building: the Cloud Condenser. It has a magma-heated water tank with blue ice hung above it on a tall wooden frame, a puff of Dense Cloud already growing around the ice, and a lectern at the entrance with a book that walks through how the farm works. It sits on a trimmed brick plaza with benches, flowers and lantern posts. It generates along the Sky City paths like the other buildings.
-
-- Retuned where several biomes generate to be closer to the Bedrock version (simulated, not yet checked in a live world):
-  - Moorlands are far more common: they now generate in temperate and dry lowlands from cool to warm climates, and moved to a full-weight region.
-  - The Netherlands is about seven times more common: it and The Netherlands Mutated swapped terrain bands, so the tulip version now takes the larger share.
-  - Jungle Marsh is wider. Fungle Jungle and Taiga Spikes cover more terrain, and Jellyfish Fields now also appear in warm oceans.
-  - Glaciers and Volcanic Moss Tundras are now vast, spread-out biomes: each one is much bigger, but they turn up less often.
-  - Floating Jungle and Charred Forest were almost impossible to find. Both now have much wider ranges.
-  - Mystic Forest is less common, and Deep Dark Green is much rarer underground.
-  - The default biome weights are doubled (primary 40, secondary 40, rare 20), so ExtraBiomes biomes cover a larger share of the world. Glacier and Volcanic Moss Tundra have their own new "Frozen Biome Weight" option (default 20). Existing config files keep their old values until edited or deleted.
 
 ## Fixes
 - Palm leaves, along with the Mystic and Sky leaves, are now mined quickly with a hoe and with shears. They were missing from the leaves tag, so no tool was effective on them.
