@@ -16,6 +16,7 @@ import net.winepicfin.extrabiomes.fabric.worldgen.FabricSpawnCaps;
 import net.winepicfin.extrabiomes.fabric.worldgen.FabricTerraBlenderFixedBiomeCompat;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
@@ -52,6 +53,7 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModEntities.register();
         ModBlockEntities.register();
         ModSounds.register();
+        ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();

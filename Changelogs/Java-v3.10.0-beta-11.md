@@ -1,0 +1,47 @@
+# ExtraBiomes for Java Edition v3.10.0 Beta 11
+Dense Cloud is now farmable, and the Sky City has a new building that shows you how, alongside a round of fixes from playtesting beta 10.
+# Changes
+
+## World Generation
+### Biome placement 
+- The map below shows the same seed on extrabiomes v3.10.0- beta 10 and 11, extrabiome's biomes have been highlighted.
+<img width="100%" alt="before_after" src="https://github.com/user-attachments/assets/110ed8bb-faa2-45a5-bd66-3eae1615d476" />
+
+- several biomes generate to be closer to the Bedrock version:
+  - Moorlands are far more common: they now generate in temperate and dry lowlands from cool to warm climates, and moved to a full-weight region.
+  - The Netherlands is about seven times more common: it and The Netherlands Mutated swapped terrain bands, so the tulip version now takes the larger share.
+  - Jungle Marsh is wider. Fungle Jungle and Taiga Spikes cover more terrain, and Jellyfish Fields now also appear in warm oceans.
+  - Glaciers and Volcanic Moss Tundras are now vast, spread-out biomes: each one is much bigger, but they turn up less often.
+  - Floating Jungle and Charred Forest were almost impossible to find. Both now have much wider ranges.
+  - Mystic Forest is less common, and Deep Dark Green is rarer underground.
+  - The default biome weights are doubled (primary 40, secondary 40, rare 20), so ExtraBiomes biomes cover a larger share of the world. Glacier and Volcanic Moss Tundra have their own new "Frozen Biome Weight" option (default 20). Existing config files keep their old values until edited or deleted.
+
+### Sky City
+<img width="100%" alt="Cloud Condenser" src="https://github.com/user-attachments/assets/92845848-ad37-4cf1-a0c6-96de3db49604" />
+
+
+- New building: the Cloud Condenser. It has a magma-heated water tank with blue ice hung above it on a tall wooden frame, a puff of Dense Cloud already growing around the ice, and a lectern at the entrance with a book that walks through how the farm works. It sits on a trimmed brick plaza with benches, flowers and lantern posts. It generates along the Sky City paths like the other buildings.
+
+
+## Blocks
+### Dense Cloud farming
+<img width="100%" alt="Dense Cloud Farm" src="https://github.com/user-attachments/assets/e274c269-ffec-41e7-9d5f-d41a5e558e93" />
+
+
+
+Dense Cloud can now be grown instead of only being mined from Sky Cities. Build a column with magma at the bottom, water on top of it, and a blue ice block above the water. Dense Cloud then buds outward from any Dense Cloud next to the ice, in a flattened cloud shape around it.
+
+- The blue ice must be at Y 200 or higher, around where Sky Cities generate, and at most 20 blocks above the water. The water has to sit directly on a magma block.
+- Cloud grows out to 10 blocks sideways and 5 blocks up or down from the ice.
+- Cloud only buds from existing Dense Cloud, so place a block of it next to the ice to start the farm. Only full Dense Cloud blocks bud, not the slabs, stairs or bricks.
+- Cloud never grows into a space a player or mob is standing in.
+- It breaks almost instantly or have a low blast resistance so can easily be exploded, so it can be harvested by hand or with a machine.
+
+
+## Fixes
+- Palm leaves, along with the Mystic and Sky leaves, are now mined quickly with a hoe and with shears. They were missing from the leaves tag, so no tool was effective on them.
+- Palm logs and palm wood can now be stripped with an axe.
+- Stripped Palm Wood is now counted as a log, and the palm and gilded sky logs now appear in the log item tags, so they work with recipes and tools that look for logs.
+- Added the missing block and item tags for our blocks, so recipes and other mods that ask for a whole group now accept ours. The Mystic, Sky, Palm and Gilded Sky doors, trapdoors, buttons, pressure plates, stairs, slabs, signs and hanging signs are now in the matching wooden tags. Saplings are now in the sapling tag, Black Sand in the sand tag, Dense Cloud and Black Sandstone stairs and slabs in the stairs and slabs tags, and the stripped logs and woods and the nether ores in the common tags (`c:` on Fabric, `forge:` on Forge and NeoForge). A test now checks that every wood type, sapling and nether ore is tagged on every loader.
+- Pebbles no longer destroy other blocks. Placing one used to wipe out redstone, levers and other small blocks on the ground, and pebbles generating in the world could replace tree trunks. They now only take the place of air, or of lava and water, and a pebble placed in water is waterlogged.
+- Jellyfish on beaches now only spawn between Y 62 and 64 and within 5 blocks of water, instead of anywhere on the sand.
