@@ -133,6 +133,8 @@ def render(m, cells, out_dir, scale=4):
     out_dir.mkdir(parents=True, exist_ok=True)
     w, h, palette = m["width"], m["height"], m["palette"]
     colors = [color_for(b) for b in palette]
+    # Like the viewer's default, mute vanilla in the PNG so ExtraBiomes stands out.
+    shown = [c if b.startswith(MOD_NS + ":") else tuple(int(v * 0.5 + 60 * 0.5) for v in c) for b, c in zip(palette, colors)]
     counts = [0] * len(palette)
     for c in cells:
         counts[c] += 1
@@ -140,7 +142,7 @@ def render(m, cells, out_dir, scale=4):
     # PNG: each cell becomes a scale x scale block
     rows = []
     for y in range(h):
-        row = b"".join(bytes(colors[c]) * scale for c in cells[y * w:(y + 1) * w])
+        row = b"".join(bytes(shown[c]) * scale for c in cells[y * w:(y + 1) * w])
         rows.extend([row] * scale)
     (out_dir / "map.png").write_bytes(png_bytes(w * scale, h * scale, b"".join(rows)))
     legend = sorted(
@@ -152,6 +154,21 @@ def render(m, cells, out_dir, scale=4):
             .replace("__LEGEND__", json.dumps(legend))
             .replace("__DATA__", m["data"]), encoding="utf-8")
     mod = [e for e in legend if e["mod"]]
+    # Nearest cell to spawn (0, 0) for every ExtraBiomes biome - handy for /tp.
+    nearest = {}
+    for i, c in enumerate(cells):
+        if palette[c].startswith(MOD_NS + ":"):
+            x = m["minX"] + (i % w) * m["step"] + m["step"] // 2
+            z = m["minZ"] + (i // w) * m["step"] + m["step"] // 2
+            d = x * x + z * z
+            if c not in nearest or d < nearest[c][0]:
+                nearest[c] = (d, x, z)
+    lines = [f"{'biome':26s} {'area':>7s}  nearest to 0,0"]
+    for e in mod:
+        n = nearest.get(e["idx"])
+        lines.append(f"{e['name']:26s} {e['pct']:6.2f}%  " + (f"x={n[1]} z={n[2]} ({int(n[0] ** 0.5)} blocks)  /tp @s {n[1]} ~ {n[2]}" if n else "not in this map"))
+    (out_dir / "summary.txt").write_text("\n".join(lines) + "\n")
+    print("\n".join(lines))
     print(f"seed {m['seed']}: {w}x{h} cells of {m['step']} blocks, {len(palette)} biomes "
           f"({len(mod)} ExtraBiomes, {sum(e['pct'] for e in mod):.2f}% of the area)")
     print("wrote", out_dir / "map.html", "and", out_dir / "map.png")
