@@ -30,6 +30,11 @@ public class ForgeConfig
                     "Future Desert, The Netherlands, The Netherlands Mutated), the default value is " + Config.DEFAULT_RARE_BIOME_WEIGHT)
             .defineInRange("Rare Biome Weight", Config.DEFAULT_RARE_BIOME_WEIGHT, 0, Integer.MAX_VALUE);
 
+    // Weight for ModOverworldRegionFrozen (Glacier, Volcanic Moss Tundra), separate from the rare weight so the vast frozen biomes can be tuned on their own.
+    private static final ForgeConfigSpec.IntValue FROZENBIOMEWEIGHT = BUILDER
+            .comment("The Weight of ExtraBiomes' frozen biomes (Glacier, Volcanic Moss Tundra), the default value is " + Config.DEFAULT_FROZEN_BIOME_WEIGHT)
+            .defineInRange("Frozen Biome Weight", Config.DEFAULT_FROZEN_BIOME_WEIGHT, 0, Integer.MAX_VALUE);
+
     private static final ForgeConfigSpec.BooleanValue WEAKERPIRANHAS = BUILDER
             .comment("When true, piranhas deal less attack damage and spawn less frequently, the default value is " + Config.DEFAULT_WEAKER_PIRANHAS)
             .define("Weaker Piranhas", Config.DEFAULT_WEAKER_PIRANHAS);
@@ -47,6 +52,7 @@ public class ForgeConfig
         Config.biomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : BIOMEWEIGHT.get();
         Config.secondaryBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : SECONDARYBIOMEWEIGHT.get();
         Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : RAREBIOMEWEIGHT.get();
+        Config.frozenBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : FROZENBIOMEWEIGHT.get();
         Config.weakerPiranhas = WEAKERPIRANHAS.get();
         Config.load();
     }

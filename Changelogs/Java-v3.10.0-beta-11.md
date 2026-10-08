@@ -27,6 +27,7 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
   - Glaciers and Volcanic Moss Tundras are now vast, spread-out biomes: each one is much bigger, but they turn up less often.
   - Floating Jungle and Charred Forest were almost impossible to find. Both now have much wider ranges.
   - Mystic Forest is less common, and Deep Dark Green is much rarer underground.
+  - The default biome weights are doubled (primary 40, secondary 40, rare 20), so ExtraBiomes biomes cover a larger share of the world. Glacier and Volcanic Moss Tundra have their own new "Frozen Biome Weight" option (default 20). Existing config files keep their old values until edited or deleted.
 
 ## Fixes
 - Palm leaves, along with the Mystic and Sky leaves, are now mined quickly with a hoe and with shears. They were missing from the leaves tag, so no tool was effective on them.
