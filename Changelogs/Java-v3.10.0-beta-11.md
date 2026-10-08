@@ -4,7 +4,7 @@ Dense Cloud is now farmable, and the Sky City has a new building that shows you 
 
 ## Blocks
 ### Dense Cloud farming
-<img width="100%" " alt="Dense Cloud Farm" src="https://github.com/user-attachments/assets/e274c269-ffec-41e7-9d5f-d41a5e558e93" />
+<img width="100%" alt="Dense Cloud Farm" src="https://github.com/user-attachments/assets/e274c269-ffec-41e7-9d5f-d41a5e558e93" />
 
 
 
