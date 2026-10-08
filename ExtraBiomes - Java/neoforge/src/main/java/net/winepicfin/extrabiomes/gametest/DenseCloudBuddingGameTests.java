@@ -38,7 +38,8 @@ public class DenseCloudBuddingGameTests {
         helper.assertTrue(countCloud(level, iceHeated) > 1, "Cloud did not bud around ice over magma-heated water");
         helper.assertTrue(countCloud(level, iceUnheated) == 1, "Cloud budded around ice over unheated water");
         helper.assertTrue(everyCloudInShape(level, iceHeated), "Cloud budded outside the allowed cloud shape");
-        LOGGER.info("[DenseCloudBuddingGameTests] denseCloudBudsOnlyAroundIceOverMagmaHeatedWater: passed with {} cloud blocks", countCloud(level, iceHeated));
+        LOGGER.info("[DenseCloudBuddingGameTests] {} cloud blocks grew around the heated ice", countCloud(level, iceHeated));
+        LOGGER.info("[DenseCloudBuddingGameTests] denseCloudBudsOnlyAroundIceOverMagmaHeatedWater: passed");
         helper.succeed();
     }
 
