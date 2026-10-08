@@ -176,12 +176,12 @@ public class BoulderFeatures {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
 
         // facing_direction unspecified in Bedrock source -> random rotation here
-        registerSingleStructure(context, PEBBLE_REGULAR_KEY, "boulder/pebble", Optional.empty());
-        registerSingleStructure(context, PEBBLE_SMALL_KEY, "boulder/small_pebble", Optional.empty());
-        registerSingleStructure(context, PEBBLE_LARGE_KEY, "boulder/large_pebble", Optional.empty());
-        registerSingleStructure(context, PEBBLE_REGULAR_MOSSY_KEY, "boulder/mossy_pebble", Optional.empty());
-        registerSingleStructure(context, PEBBLE_SMALL_MOSSY_KEY, "boulder/small_mossy_pebble", Optional.empty());
-        registerSingleStructure(context, PEBBLE_LARGE_MOSSY_KEY, "boulder/large_mossy_pebble", Optional.empty());
+        registerPebble(context, PEBBLE_REGULAR_KEY, "boulder/pebble", Optional.empty());
+        registerPebble(context, PEBBLE_SMALL_KEY, "boulder/small_pebble", Optional.empty());
+        registerPebble(context, PEBBLE_LARGE_KEY, "boulder/large_pebble", Optional.empty());
+        registerPebble(context, PEBBLE_REGULAR_MOSSY_KEY, "boulder/mossy_pebble", Optional.empty());
+        registerPebble(context, PEBBLE_SMALL_MOSSY_KEY, "boulder/small_mossy_pebble", Optional.empty());
+        registerPebble(context, PEBBLE_LARGE_MOSSY_KEY, "boulder/large_mossy_pebble", Optional.empty());
 
         // pebble.json weights (total 8) converted to sequential-trial chances; large_mossy is the guaranteed remainder, so it becomes the RANDOM_SELECTOR default.
         context.register(PEBBLE_SELECT_KEY, new RandomSelectorFeature(
@@ -233,6 +233,11 @@ public class BoulderFeatures {
                 List.of(new WeightedPlacedFeature(placedFeatures.getOrThrow(STICK_PILE_0_PLACED_KEY), 0.5F)),
                 placedFeatures.getOrThrow(STICK_PILE_1_PLACED_KEY)
         ));
+    }
+
+    private static void registerPebble(BootstrapContext<Feature> context, ResourceKey<Feature> key, String structurePath, Optional<Rotation> rotation) {
+        Identifier structure = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, structurePath);
+        context.register(key, SingleStructureFeature.onlyReplacingAir(structure, rotation, 0));
     }
 
     private static void registerSingleStructure(BootstrapContext<Feature> context, ResourceKey<Feature> key, String structurePath, Optional<Rotation> rotation) {
