@@ -161,25 +161,7 @@ public class ModOverworldRegionRare extends Region {
 
         // Moorlands moved to ModOverworldRegion in beta 11 (frequency), see there.
 
-        // Glacier - bedrock temp=0, downfall=1 (replace_biomes amount 0.7). Beta 11: moved here from ModOverworldRegionSecondary and made vast but spaced out: it is now a wide, smooth-noise box (FROZEN, NEUTRAL-HUMID humidity, COAST-MID_INLAND, every erosion and weirdness) instead of a rugged erosion 0-3 slice, so each patch is much bigger (~800 -> ~1200 blocks across in simulation) while the 1/6-weight Rare region keeps patches ~10 km apart. Humidity is what separates it from Volcanic Moss Tundra, and COAST-MID_INLAND from Shattered Taiga Spikes (FAR_INLAND), so none of the three overlap.
-        new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.FROZEN)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.HUMID))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.FULL_RANGE)
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.GLACIER));
-
-        // Volcanic Moss Tundra - moved here from ModOverworldRegionSecondary in beta 11, same vast-but-spaced-out treatment as Glacier: FROZEN, ARID-DRY humidity (Glacier takes the wetter half), COAST-MID_INLAND, every erosion and weirdness (~420 -> ~780 blocks across in simulation, ~10 km apart).
-        new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.FROZEN)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.DRY))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.FULL_RANGE)
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.VOLCANIC_MOSS_TUNDRA));
+        // Glacier and Volcanic Moss Tundra live in ModOverworldRegionFrozen (beta 11).
 
         builder.build().forEach(mapper::accept);
     }
