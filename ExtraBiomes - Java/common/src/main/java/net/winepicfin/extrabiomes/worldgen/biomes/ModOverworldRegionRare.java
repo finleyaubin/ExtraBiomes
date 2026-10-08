@@ -109,22 +109,22 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.FUTURE_DESERT));
 
-        // The Netherlands - bedrock temp=0.5, downfall=0.5 (Dutch tulip fields/windmills, overworld); replace_biomes amount 0.1 over forest AND plains. Beta 11: temperature widened NEUTRAL -> COOL..WARM (~0.18% -> ~0.6% of the world).
+        // The Netherlands - bedrock temp=0.5, downfall=0.5 (Dutch tulip fields/windmills, overworld); replace_biomes amount 0.1 over forest AND plains. Beta 11: swapped bands with Mutated - the regular Netherlands now takes the larger EROSION_3-4 band (was EROSION_0-2) and temperature COOL..NEUTRAL (~0.18% -> ~1.3% of the world). Temperature stops at NEUTRAL so it can't overlap Jungle Marsh (WARM, EROSION_4-6), (Marsh failed BiomeGenerationGameTests once already and is sensitive to neighbouring boxes).
         new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.COOL, ParameterUtils.Temperature.WARM))
+                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.COOL, ParameterUtils.Temperature.NEUTRAL))
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_3, ParameterUtils.Erosion.EROSION_4))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS));
 
-        // The Netherlands Mutated - replace_biomes amount 0.1. Beta 11: temperature widened NEUTRAL -> NEUTRAL..WARM and erosion narrowed EROSION_3-4 -> EROSION_3, so it no longer overlaps Jungle Marsh (EROSION_4-6) now that their temperatures overlap.
+        // The Netherlands Mutated - replace_biomes amount 0.1. Beta 11: swapped bands with the regular Netherlands: now EROSION_0-2 (was EROSION_3-4), temperature NEUTRAL..WARM, ~0.4% of the world, so the tulip version is the more common one.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.NEUTRAL, ParameterUtils.Temperature.WARM))
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.EROSION_3)
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS_MUTATED));
