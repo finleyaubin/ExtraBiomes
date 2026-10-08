@@ -108,6 +108,24 @@ def color_for(biome_id):
     return hsv(hue, 0.35, 0.6)
 
 
+# Vanilla's standard grass colours. 26.x moved vanilla's colours out of Biome (the getters return 0 for
+# colormap-driven biomes), so the map uses this table whenever the recorded colour is 0; biomes that
+# set their own colour (all of ExtraBiomes) use the recorded value.
+VANILLA_GRASS = {
+    "plains": 0x91BD59, "sunflower_plains": 0x91BD59, "forest": 0x79C05A, "flower_forest": 0x79C05A,
+    "birch_forest": 0x88BB67, "old_growth_birch_forest": 0x88BB67, "dark_forest": 0x507A32,
+    "taiga": 0x86B783, "old_growth_pine_taiga": 0x86B783, "old_growth_spruce_taiga": 0x86B783,
+    "snowy_taiga": 0x80B497, "snowy_plains": 0x80B497, "ice_spikes": 0x80B497, "snowy_slopes": 0x80B497,
+    "grove": 0x80B497, "frozen_peaks": 0x80B497, "jagged_peaks": 0x80B497, "snowy_beach": 0x83B593,
+    "desert": 0xBFB755, "savanna": 0xBFB755, "savanna_plateau": 0xBFB755, "windswept_savanna": 0xBFB755,
+    "badlands": 0x90814D, "eroded_badlands": 0x90814D, "wooded_badlands": 0x9E814D,
+    "jungle": 0x59C93C, "sparse_jungle": 0x64C73F, "bamboo_jungle": 0x6DCC4B,
+    "swamp": 0x6A7039, "mangrove_swamp": 0x8DB127, "meadow": 0x83BB6D, "cherry_grove": 0xB6DB61,
+    "stony_peaks": 0x83BB6D, "windswept_hills": 0x8AB689, "windswept_forest": 0x8AB689,
+    "windswept_gravelly_hills": 0x8AB689, "mushroom_fields": 0x55C93F, "pale_garden": 0x778272,
+    "dripstone_caves": 0x91BD59, "lush_caves": 0x91BD59, "deep_dark": 0x91BD59, "beach": 0x91BD59,
+}
+
 WATER_LIKE = ("ocean", "river", "jellyfish_fields")
 SAND_LIKE = ("beach", "stony_shore")
 
@@ -122,11 +140,15 @@ def natural_colors(m):
         path = biome_id.partition(":")[2]
         if any(w in path for w in WATER_LIKE):
             c = m["water"][i]
-        elif any(w in path for w in SAND_LIKE) and path in VANILLA:
+        elif path in ("beach", "stony_shore") and path in VANILLA:
             out.append(VANILLA[path])
             continue
         else:
             g, f = m["grass"][i], m["foliage"][i]
+            if (g == 0 or f == 0) and path in VANILLA_GRASS:  # colormap-driven vanilla biome (dark forest reports a modified 0)
+                g = f = VANILLA_GRASS[path]
+            elif f == 0:
+                f = g
             c = tuple((((g >> sh) & 255) + ((f >> sh) & 255)) // 2 for sh in (16, 8, 0))
             out.append(c)
             continue
