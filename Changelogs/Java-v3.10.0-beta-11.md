@@ -4,7 +4,8 @@ Dense Cloud is now farmable, and the Sky City has a new building that shows you 
 
 ## Blocks
 ### Dense Cloud farming
-<!-- screenshot: grown cloud around the blue ice -->
+![Uploading 2026-10-08_21.31.31.png…]()
+
 
 Dense Cloud can now be grown instead of only being mined from Sky Cities. Build a column with magma at the bottom, water on top of it, and a blue ice block above the water. Dense Cloud then buds outward from any Dense Cloud next to the ice, in a flattened cloud shape around it.
 
@@ -16,10 +17,12 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 
 ## World Generation
 ### Sky City
-<!-- screenshot: the Cloud Condenser -->
+![Uploading 2026-10-08_21.26.42.png…]()
+
 
 - New building: the Cloud Condenser. It has a magma-heated water tank with blue ice hung above it on a tall wooden frame, a puff of Dense Cloud already growing around the ice, and a lectern at the entrance with a book that walks through how the farm works. It sits on a trimmed brick plaza with benches, flowers and lantern posts. It generates along the Sky City paths like the other buildings.
 
+### Biome placement 
 - Retuned where several biomes generate to be closer to the Bedrock version (simulated, not yet checked in a live world):
   - Moorlands are far more common: they now generate in temperate and dry lowlands from cool to warm climates, and moved to a full-weight region.
   - The Netherlands is about seven times more common: it and The Netherlands Mutated swapped terrain bands, so the tulip version now takes the larger share.
