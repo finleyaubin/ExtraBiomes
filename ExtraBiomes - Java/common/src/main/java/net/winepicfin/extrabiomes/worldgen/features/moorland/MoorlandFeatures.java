@@ -81,6 +81,10 @@ public class MoorlandFeatures {
     public static final ResourceKey<PlacedFeature> MOORLAND_SHORT_DRY_GRASS_PLACED_KEY = createKey("moorland_short_dry_grass_placed");
     public static final ResourceKey<PlacedFeature> MOORLAND_TALL_DRY_GRASS_PLACED_KEY = createKey("moorland_tall_dry_grass_placed");
 
+    // Far fewer than Bedrock's 30 so dry grass stays a sparse accent in the tall grass floor.
+    private static final int SHORT_DRY_GRASS_PATCHES_PER_CHUNK = 2;
+    private static final int TALL_DRY_GRASS_PATCHES_PER_CHUNK = 1;
+
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         // 30/8/4 mirror each Bedrock scatter_feature's own inner gaussian jitter around the outer placement
         // position; that inner jitter is now folded into the placed feature's own modifiers (bootstrapPlaced
@@ -103,10 +107,10 @@ public class MoorlandFeatures {
         // same as the removed RandomPatchConfiguration's own numbers).
         PlacementModifier airOnly = BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE);
         register(context, MOORLAND_SHORT_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_SHORT_DRY_GRASS_KEY),
-                withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
+                withPatchModifiers(ModOrePlacement.commonOrePlacement(SHORT_DRY_GRASS_PATCHES_PER_CHUNK, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
                         30, 8, 4, airOnly));
         register(context, MOORLAND_TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_DRY_GRASS_KEY),
-                withPatchModifiers(ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
+                withPatchModifiers(ModOrePlacement.commonOrePlacement(TALL_DRY_GRASS_PATCHES_PER_CHUNK, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)),
                         30, 8, 4, airOnly));
 
         // The feature checks the biome per column; the sample/snap pair only lets BiomeFilter test a column in the biome instead of the chunk corner.
