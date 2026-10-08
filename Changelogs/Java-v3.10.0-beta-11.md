@@ -12,7 +12,7 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 - Cloud grows out to 10 blocks sideways and 5 blocks up or down from the ice.
 - Cloud only buds from existing Dense Cloud, so place a block of it next to the ice to start the farm. Only full Dense Cloud blocks bud, not the slabs, stairs or bricks.
 - Cloud never grows into a space a player or mob is standing in.
-- It breaks almost instantly and can be pushed with pistons, so it can be harvested by hand or with a machine.
+- It breaks almost instantly, so it can be harvested by hand or blown up.
 
 ## World Generation
 ### Sky City
