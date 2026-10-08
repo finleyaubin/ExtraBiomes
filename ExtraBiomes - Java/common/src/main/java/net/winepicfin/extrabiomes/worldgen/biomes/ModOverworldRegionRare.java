@@ -39,11 +39,11 @@ import java.util.function.Consumer;
  * generation-behaviour change that deserves its own playtested patch, not a side effect of
  * moving files around.
  * <p>
- * Two more biomes live here for a different reason entirely: Shattered Taiga Spikes and Charred
- * Forest are NOT low-frequency (Jungle Marsh and Moorlands lived here too until beta 11, when they
- * moved to {@link ModOverworldRegionSecondary} and {@link ModOverworldRegion} respectively because a
- * 1/6-weight region could not make their high Bedrock amounts reachable; if the gametest reports either
- * unreachable in its new region, move it back here). Those two are NOT low-frequency by that metric
+ * Three more biomes live here for a different reason entirely: Jungle Marsh, Shattered Taiga Spikes and Charred
+ * Forest are NOT low-frequency (Moorlands lived here too until beta 11, when it moved to
+ * {@link ModOverworldRegion} because a 1/6-weight region could not make its high Bedrock amount
+ * common; a move of Jungle Marsh to {@link ModOverworldRegionSecondary} was tried and made it
+ * unreachable, so it stays here). Those two are NOT low-frequency by that metric
  * and would otherwise belong in the primary region, but {@code BiomeGenerationGameTests} (the
  * gametest that searches a live generated world for every mod biome within 15000 blocks of spawn)
  * found them consistently unreachable there, across multiple random seeds, despite each having a
@@ -119,17 +119,25 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS));
 
-        // The Netherlands Mutated - replace_biomes amount 0.1. Beta 11: temperature widened NEUTRAL -> NEUTRAL..WARM (~0.5% -> ~1.3% of the world).
+        // The Netherlands Mutated - replace_biomes amount 0.1. Beta 11: temperature widened NEUTRAL -> NEUTRAL..WARM and erosion narrowed EROSION_3-4 -> EROSION_3, so it no longer overlaps Jungle Marsh (EROSION_4-6) now that their temperatures overlap.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.NEUTRAL, ParameterUtils.Temperature.WARM))
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_3, ParameterUtils.Erosion.EROSION_4))
+                .erosion(ParameterUtils.Erosion.EROSION_3)
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS_MUTATED));
 
-        // Jungle Marsh moved to ModOverworldRegionSecondary in beta 11 (frequency), see there.
+        // Jungle Marsh - bedrock temp=0.95, downfall=0.9, jungle+swamp tags; replace_biomes amount 0.5, NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc. Beta 11: widened EROSION_4-6 / COAST-NEAR_INLAND to COAST-MID_INLAND (an attempt to move it to ModOverworldRegionSecondary with EROSION_3-6 failed BiomeGenerationGameTests: not found within 15000 blocks on Fabric and NeoForge).
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.WARM)
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.MID_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
+                .build().forEach(point -> builder.add(point, ModBiomes.JUNGLE_MARSH));
 
         // Shattered Tiaga Spikes - mutated variant of Tiaga Spikes (which stays in ModOverworldRegion); NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
         new ParameterUtils.ParameterPointListBuilder()
