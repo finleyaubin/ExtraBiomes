@@ -71,6 +71,10 @@ public class MoorlandFeatures {
         FEATURES.register();
     }
 
+    // Far fewer than Bedrock's 30 so dry grass stays a sparse accent in the tall grass floor.
+    private static final int SHORT_DRY_GRASS_PATCHES_PER_CHUNK = 2;
+    private static final int TALL_DRY_GRASS_PATCHES_PER_CHUNK = 1;
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_DOUBLE_TALL_GRASS_KEY = registerKey("moorland_double_tall_grass");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_WATERLILY_KEY = registerKey("moorland_waterlily");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MOORLAND_SHORT_DRY_GRASS_KEY = registerKey("moorland_short_dry_grass");
@@ -110,9 +114,9 @@ public class MoorlandFeatures {
 
         // The y = heightmap +/- 4 spread is already folded into each configured feature's own RandomPatchConfiguration y_spread above.
         register(context, MOORLAND_SHORT_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_SHORT_DRY_GRASS_KEY),
-                ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+                ModOrePlacement.commonOrePlacement(SHORT_DRY_GRASS_PATCHES_PER_CHUNK, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
         register(context, MOORLAND_TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(MOORLAND_TALL_DRY_GRASS_KEY),
-                ModOrePlacement.commonOrePlacement(30, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
+                ModOrePlacement.commonOrePlacement(TALL_DRY_GRASS_PATCHES_PER_CHUNK, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG)));
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {
