@@ -1,5 +1,11 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import dev.architectury.registry.registries.RegistrySupplier;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
+import java.util.List;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
@@ -151,7 +157,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.PALM_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
@@ -169,7 +175,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.PALM_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
                 ModBlocks.PALM_WOOD.get(),
-                ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
@@ -179,6 +185,11 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         ));
+        this.tag(BlockTags.LEAVES).add(keys(
+                ModBlocks.MYSTIC_LEAVES.get(),
+                ModBlocks.SKY_LEAVES.get(),
+                ModBlocks.PALM_LEAVES.get()
+        ));
         this.tag(BlockTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.SKY_PLANKS.get(),
@@ -186,18 +197,28 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.GILDED_SKY_PLANKS.get()
         ));
 
-        this.tag(BlockTags.WALLS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_WALL.get()
-        ));
-        this.tag(BlockTags.STAIRS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get()
-        ));
-        this.tag(BlockTags.SLABS).add(keys(
-                ModBlocks.BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(),
-                ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get()
-        ));
+        this.tag(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
+        this.tag(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
+        this.tag(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
+
+        // The vanilla stairs/slabs/doors/trapdoors/buttons/pressure_plates/signs tags already nest
+        // these wooden_* tags, so filling the wooden_* ones is enough for the parent tags too.
+        this.tag(BlockTags.WOODEN_STAIRS).add(keys(ModTagContents.WOODEN_STAIRS));
+        this.tag(BlockTags.WOODEN_SLABS).add(keys(ModTagContents.WOODEN_SLABS));
+        this.tag(BlockTags.WOODEN_BUTTONS).add(keys(ModTagContents.WOODEN_BUTTONS));
+        this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(keys(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.tag(BlockTags.WOODEN_DOORS).add(keys(ModTagContents.WOODEN_DOORS));
+        this.tag(BlockTags.WOODEN_TRAPDOORS).add(keys(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(BlockTags.STANDING_SIGNS).add(keys(ModTagContents.STANDING_SIGNS));
+        this.tag(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
+        this.tag(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));
+        this.tag(BlockTags.WALL_HANGING_SIGNS).add(keys(ModTagContents.WALL_HANGING_SIGNS));
+        this.tag(BlockTags.SAPLINGS).add(keys(ModTagContents.SAPLINGS));
+        this.tag(BlockTags.SAND).add(keys(ModTagContents.SAND));
+
+        this.tag(STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
+        this.tag(STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
+        this.tag(ORES).add(keys(ModTagContents.ORES));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
@@ -213,6 +234,14 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
         ));
 
 
+    }
+
+    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs"));
+    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
+    private static final TagKey<Block> ORES = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", "ores"));
+
+    private static net.minecraft.resources.ResourceKey<Block>[] keys(List<RegistrySupplier<Block>> blocks) {
+        return keys(blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new));
     }
 
     @SafeVarargs

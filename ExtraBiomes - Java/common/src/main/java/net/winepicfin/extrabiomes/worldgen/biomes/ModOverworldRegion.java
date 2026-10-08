@@ -123,7 +123,7 @@ public class ModOverworldRegion extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.DEEP_DARK_FOREST));
 
-        // Floating Jungle - bedrock temp=0.95, downfall=0.9 (replace_biomes amount 0.2). Placed on
+        // Floating Jungle - bedrock temp=0.95, downfall=0.9 (replace_biomes amount 0.2). Beta 11: temperature widened WARM -> WARM..HOT and weirdness from PEAK_NORMAL alone to PEAK_NORMAL..HIGH_SLICE_NORMAL_DESCENDING plus a PEAK_VARIANT box, because the single narrow box made it ~0.007% of the world (about one patch per 200 km); this brings it to roughly its Bedrock-intended share. Placed on
         // vanilla's actual Peaks/Slopes recipe (see OverworldBiomeBuilder#pickPeakBiome/
         // pickSlopeBiome): erosion index 0-1 is what produces the jagged mountain terrain shape,
         // not just the PEAK_NORMAL weirdness point alone - the original EROSION_4-6 band put this
@@ -133,20 +133,28 @@ public class ModOverworldRegion extends Region {
         // widening to EROSION_0-1 roughly doubles the qualifying climate area while staying within
         // vanilla's own peak/near-peak erosion range.
         new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.WARM)
+                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.WARM, ParameterUtils.Temperature.HOT))
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.MID_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_1))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.PEAK_NORMAL)
+                .weirdness(ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.PEAK_NORMAL, ParameterUtils.Weirdness.HIGH_SLICE_NORMAL_DESCENDING))
+                .build().forEach(point -> builder.add(point, ModBiomes.FLOATING_JUNGLE));
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.WARM, ParameterUtils.Temperature.HOT))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.MID_INLAND, ParameterUtils.Continentalness.FAR_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_1))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(ParameterUtils.Weirdness.PEAK_VARIANT)
                 .build().forEach(point -> builder.add(point, ModBiomes.FLOATING_JUNGLE));
 
-        // Fungle Jungle - bedrock temp=0.95, downfall=0.9, mushroom_island tag (replace_biomes amount 0.4). Capped to NEAR_INLAND rather than the wider INLAND alias (INLAND=[-0.11,0.55] is not a synonym for NEAR_INLAND=[-0.11,0.03]).
+        // Fungle Jungle - bedrock temp=0.95, downfall=0.9, mushroom_island tag (replace_biomes amount 0.4). Beta 11: erosion widened EROSION_0-2 -> EROSION_0-3 (it was ~20% of its Bedrock-intended share). Capped to NEAR_INLAND rather than the wider INLAND alias (INLAND=[-0.11,0.55] is not a synonym for NEAR_INLAND=[-0.11,0.03]).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.NEAR_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.FUNGLE_JUNGLE));
@@ -179,12 +187,12 @@ public class ModOverworldRegion extends Region {
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.LUSH_MESA));
 
-        // Tiaga Spikes - bedrock temp=0, downfall=1. Capped to COAST-NEAR_INLAND to leave room for Cold Mesa Bryce (MID_INLAND, in ModOverworldRegionSecondary).
+        // Tiaga Spikes - bedrock temp=0, downfall=1. Beta 11: erosion widened EROSION_0-3 -> EROSION_0-4. Capped to COAST-NEAR_INLAND to leave room for Cold Mesa Bryce (MID_INLAND, in ModOverworldRegionSecondary).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.FROZEN)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.NEAR_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.TAIGA_SPIKES));
@@ -201,6 +209,16 @@ public class ModOverworldRegion extends Region {
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.TROPICAL_ISLAND));
+
+        // Moorlands - bedrock temp=0.5, downfall=0.5, plains/river tags; replace_biomes amount 0.4 over plains AND savanna. Beta 11: moved here from ModOverworldRegionRare (a 1/6-weight region can never make a 0.4-amount biome common) and widened from NEUTRAL temperature / NEAR_INLAND-MID_INLAND / EROSION_5-6 (~0.13% of the world) to COOL-WARM temperature, DRY-NEUTRAL humidity and EROSION_4-6 (~2.7%). Kept at NEAR_INLAND-MID_INLAND rather than FAR_INLAND: far inland widened it to ~4%, more than any other mod biome. If BiomeGenerationGameTests reports it unreachable here, move it back to the Rare region.
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.COOL, ParameterUtils.Temperature.WARM))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.DRY, ParameterUtils.Humidity.NEUTRAL))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
+                .build().forEach(point -> builder.add(point, ModBiomes.MOORLANDS));
 
         // Volcanic Moss Tundra moved to ModOverworldRegionSecondary - its box overlapped Cold Mesa's above.
 

@@ -15,7 +15,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.custom.projectile.PebbleProjectileEntity;
@@ -82,9 +85,11 @@ public class PebbleItem extends Item {
             }else {
                 blockstate1 = ModBlocks.MOSSY_PEBBLE.get().getStateForThrowing();
             }
-            if (!blockstate1.canSurvive(level, blockpos1)) {
+            BlockState existing = level.getBlockState(blockpos1);
+            if (!(existing.isAir() || existing.getBlock() instanceof LiquidBlock) || !blockstate1.canSurvive(level, blockpos1)) {
                 return InteractionResult.FAIL;
             }
+            blockstate1 = blockstate1.setValue(BlockStateProperties.WATERLOGGED, existing.getFluidState().getType() == Fluids.WATER);
             level.playSound(player, blockpos1, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
             level.setBlock(blockpos1, blockstate1, 11);
             level.gameEvent(player, GameEvent.BLOCK_PLACE, blockpos);
