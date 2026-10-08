@@ -1,0 +1,83 @@
+name: Seed Biome Map
+
+# Manual: renders an ExtraBiomes-aware biome map (PNG + interactive HTML) for any seed, using the real
+# TerraBlender-patched overworld generator (fabric/.../gametest/BiomeMapGameTests.java, driven by
+# tools/biome_map.py). Run it from the Actions tab or with:
+#   gh workflow run biome-map.yml --ref <branch> -f seed=12345 -f radius=8000
+# then download the "biome-map" artifact from the run.
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: Numeric seed, or any text (hashed like the world-creation screen)
+        required: true
+        default: "0"
+      radius:
+        description: Half-width of the map in blocks
+        default: "8000"
+      step:
+        description: Blocks per map cell (multiple of 4; bigger is faster and coarser)
+        default: "32"
+      center:
+        description: Map centre as X,Z in blocks
+        default: "0,0"
+
+permissions:
+  contents: read
+
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        working-directory: "ExtraBiomes - Java"
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 25
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+      - name: Prepare Gradle
+        run: |
+          chmod +x gradlew
+          echo "org.gradle.caching=true" >> ~/.gradle/gradle.properties
+
+      # Same data generation as the Build Mod workflow's datagen job: the biomes themselves are generated.
+      - name: Generate data
+        run: |
+          PLATFORMS=",$(grep '^enabled_platforms=' gradle.properties | cut -d'=' -f2),"
+          if [[ "$PLATFORMS" == *",neoforge,"* ]]; then
+            ./gradlew :neoforge:downloadAssets
+            ./gradlew :neoforge:runData
+          fi
+          ./gradlew :fabric:downloadAssets
+          ./gradlew :fabric:mergeGeneratedData
+        shell: bash
+        timeout-minutes: 30
+
+      - name: Sample the biome map
+        env:
+          MAP_SEED: ${{ inputs.seed }}
+          MAP_RADIUS: ${{ inputs.radius }}
+          MAP_STEP: ${{ inputs.step }}
+          MAP_CENTER: ${{ inputs.center }}
+        run: |
+          mkdir -p fabric/run
+          printf 'max-tick-time=1000000\n' > fabric/run/server.properties
+          cd ..
+          python3 tools/biome_map.py --seed "$MAP_SEED" --radius "$MAP_RADIUS" --step "$MAP_STEP" --center "$MAP_CENTER" --out biome-map-out
+        shell: bash
+
+      - name: Upload map
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: biome-map
+          path: biome-map-out/
+          if-no-files-found: warn
