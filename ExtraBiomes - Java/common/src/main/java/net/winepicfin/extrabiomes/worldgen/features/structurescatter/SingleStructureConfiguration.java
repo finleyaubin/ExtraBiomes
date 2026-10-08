@@ -102,61 +102,66 @@ import java.util.Optional;
  *                     instead of leaving a flat base floating. {@code false} (the default for every
  *                     existing convenience constructor) keeps the template rigid.
  */
-public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction, boolean embedInStone, boolean weatheredVariation, boolean followTerrain) implements FeatureConfiguration {
+public record SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction, boolean embedInStone, boolean weatheredVariation, boolean followTerrain, boolean onlyReplaceAir) implements FeatureConfiguration {
 
     public SingleStructureConfiguration(ResourceLocation structure) {
-        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Rotation fixedRotation) {
-        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, int groundOffset) {
-        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     // Jellycoral-style use: random rotation + a required submerged (water/waterlogged) fraction,
     // for templates that no longer bundle their own explicit water fill.
     public SingleStructureConfiguration(ResourceLocation structure, int groundOffset, float minSubmergedFraction) {
-        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), minSubmergedFraction, false, false, false);
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), minSubmergedFraction, false, false, false, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of(), 0.0F, false, false, false, false);
     }
 
     // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required solid floor.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of(), 0.0F, false, false, false, false);
     }
 
     // Oasis-puddle-style use: required solid floor restricted to a specific set of blocks.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, false, false, false, false);
     }
 
     // Stone-pillar-style use: required solid floor restricted to a specific set of blocks, sunk into real stone rather than anchored to the dirt/grass surface, with noise-based weathering/vegetation.
     public SingleStructureConfiguration(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, boolean embedInStone, boolean weatheredVariation) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, embedInStone, weatheredVariation, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, embedInStone, weatheredVariation, false, false);
     }
 
     // Snow-drift-style use: low, wide template draped over the terrain column by column.
     public SingleStructureConfiguration(ResourceLocation structure, int groundOffset, boolean centered, boolean followTerrain) {
-        this(structure, Optional.empty(), groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, followTerrain);
+        this(structure, Optional.empty(), groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, followTerrain, false);
+    }
+
+    // Pebble-style use: never overwrites anything but air (trunks, redstone, levers, ...).
+    public static SingleStructureConfiguration onlyReplacingAir(ResourceLocation structure, Optional<Rotation> rotation, int groundOffset) {
+        return new SingleStructureConfiguration(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, true);
     }
 
     public SingleStructureConfiguration(ResourceLocation structure, BlockPos anchor) {
-        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public static final Codec<SingleStructureConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -171,6 +176,7 @@ public record SingleStructureConfiguration(ResourceLocation structure, Optional<
             Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_submerged_fraction", 0.0F).forGetter(SingleStructureConfiguration::minSubmergedFraction),
             Codec.BOOL.optionalFieldOf("embed_in_stone", false).forGetter(SingleStructureConfiguration::embedInStone),
             Codec.BOOL.optionalFieldOf("weathered_variation", false).forGetter(SingleStructureConfiguration::weatheredVariation),
-            Codec.BOOL.optionalFieldOf("follow_terrain", false).forGetter(SingleStructureConfiguration::followTerrain)
+            Codec.BOOL.optionalFieldOf("follow_terrain", false).forGetter(SingleStructureConfiguration::followTerrain),
+            Codec.BOOL.optionalFieldOf("only_replace_air", false).forGetter(SingleStructureConfiguration::onlyReplaceAir)
     ).apply(instance, SingleStructureConfiguration::new));
 }

@@ -366,7 +366,6 @@ jobs:
       - name: Run unit tests
         if: matrix.suite == 'unit'
         run: ./gradlew :common:test
-        continue-on-error: true
         timeout-minutes: 10
 
 

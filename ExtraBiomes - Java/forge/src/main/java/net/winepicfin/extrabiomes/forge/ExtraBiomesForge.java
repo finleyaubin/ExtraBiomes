@@ -16,10 +16,12 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.client.DenseCloudSteam;
 import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.entity.client.BaitRenderer;
 import net.winepicfin.extrabiomes.entity.client.ModBoatRenderer;
@@ -81,6 +83,7 @@ public class ExtraBiomesForge
         ModEntities.register();
         ModBlockEntities.register();
         ModSounds.register();
+        ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();
@@ -211,6 +214,7 @@ public class ExtraBiomesForge
     {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            event.enqueueWork(DenseCloudSteam::init);
             Sheets.addWoodType(ModWoodTypes.MYSTIC);
             Sheets.addWoodType(ModWoodTypes.PALM);
             Sheets.addWoodType(ModWoodTypes.SKY);

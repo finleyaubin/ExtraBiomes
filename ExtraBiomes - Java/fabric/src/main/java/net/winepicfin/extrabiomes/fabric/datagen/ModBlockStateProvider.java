@@ -353,11 +353,9 @@ public class ModBlockStateProvider implements DataProvider {
                 int baseRotation = rot(facing);
                 boolean isLeft = shape == StairsShape.INNER_LEFT || shape == StairsShape.OUTER_LEFT;
                 int bottomRotation = isLeft ? baseRotation - 90 : baseRotation;
-                // Top half is visually mirrored (the model is flipped via X_ROT 180), which swaps
-                // which physical corner "left"/"right" ends up on - see this class's javadoc for the
-                // caveat around this being a best-effort reconstruction rather than a byte-for-byte
-                // port of vanilla's private createStairs() logic.
-                int topRotation = isLeft ? baseRotation : baseRotation - 90;
+                // Flipped over by X_ROT 180, the right-hand corners need a further quarter turn to match vanilla's stairs blockstates.
+                boolean isRight = shape == StairsShape.INNER_RIGHT || shape == StairsShape.OUTER_RIGHT;
+                int topRotation = isRight ? baseRotation + 90 : baseRotation;
 
                 Variant bottomVariant = Variant.variant().with(VariantProperties.MODEL, model);
                 if (bottomRotation != 0) bottomVariant = bottomVariant.with(VariantProperties.Y_ROT, yRot(bottomRotation)).with(VariantProperties.UV_LOCK, true);
@@ -417,10 +415,8 @@ public class ModBlockStateProvider implements DataProvider {
                         .generate((facing, inWall, isOpen) -> {
                             ResourceLocation model = inWall ? (isOpen ? wallOpen : wallClosed) : (isOpen ? open : closed);
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.UV_LOCK, true);
-                            int y = rot(facing);
-                            // Fence gates face outward the opposite way stairs do (their unrotated
-                            // model already faces "south"), so offset by 180 from the stairs table.
-                            y = (y + 180) % 360;
+                            // The unrotated gate model faces south, a quarter turn off the rot() table.
+                            int y = (rot(facing) + 270) % 360;
                             if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
                             return v;
                         })));
@@ -458,15 +454,15 @@ public class ModBlockStateProvider implements DataProvider {
                         .generate((face, facing, powered1) -> {
                             ResourceLocation model = powered1 ? powered : unpowered;
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model);
-                            int y = rot(facing);
+                            int y = (rot(facing) + (face == AttachFace.CEILING ? 270 : 90)) % 360;
                             switch (face) {
-                                case FLOOR -> {
-                                }
-                                case WALL -> v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R90);
+                                case WALL -> v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true);
                                 case CEILING -> v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                default -> {
+                                }
                             }
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(face == AttachFace.CEILING ? (360 - y) % 360 : y));
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
+                            return v;
                         })));
         delegateItemModel(block, inventory);
     }
@@ -483,30 +479,34 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, up);
     }
 
-    // The model JSON these blockstates reference was never actually generated on Fabric, leaving doors/trapdoors as the missing-model placeholder.
     private void doorBlockState(Block block, ResourceLocation bottomTexture, ResourceLocation topTexture) {
-        ResourceLocation bottomModel = modelOf(bottomTexture);
-        ResourceLocation topModel = modelOf(topTexture);
-        // Uses the closed/left-hinge DOOR_BOTTOM_LEFT/TOP_LEFT template; Y_ROT alone approximates the other facing/open/hinge combos well enough.
         TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
-        ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
-        ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
+        ResourceLocation bottomName = modelOf(bottomTexture);
+        ResourceLocation topName = modelOf(topTexture);
+        ResourceLocation bottomLeft = ModelTemplates.DOOR_BOTTOM_LEFT.create(suffixed(bottomName, "_left"), tm, models::put);
+        ResourceLocation bottomLeftOpen = ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(suffixed(bottomName, "_left_open"), tm, models::put);
+        ResourceLocation bottomRight = ModelTemplates.DOOR_BOTTOM_RIGHT.create(suffixed(bottomName, "_right"), tm, models::put);
+        ResourceLocation bottomRightOpen = ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(suffixed(bottomName, "_right_open"), tm, models::put);
+        ResourceLocation topLeft = ModelTemplates.DOOR_TOP_LEFT.create(suffixed(topName, "_left"), tm, models::put);
+        ResourceLocation topLeftOpen = ModelTemplates.DOOR_TOP_LEFT_OPEN.create(suffixed(topName, "_left_open"), tm, models::put);
+        ResourceLocation topRight = ModelTemplates.DOOR_TOP_RIGHT.create(suffixed(topName, "_right"), tm, models::put);
+        ResourceLocation topRightOpen = ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(suffixed(topName, "_right_open"), tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
                 PropertyDispatch.properties(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
-                            int y = rot(facing);
-                            boolean rightHinge = hinge == DoorHingeSide.RIGHT;
-                            if (open) {
-                                y += rightHinge ? 90 : -90;
-                                if (!rightHinge) y += 180;
-                            }
+                            boolean right = hinge == DoorHingeSide.RIGHT;
+                            ResourceLocation model = half == DoubleBlockHalf.LOWER
+                                    ? (right ? (open ? bottomRightOpen : bottomRight) : (open ? bottomLeftOpen : bottomLeft))
+                                    : (right ? (open ? topRightOpen : topRight) : (open ? topLeftOpen : topLeft));
+                            int y = (rot(facing) + (open ? (right ? 270 : 90) : 0)) % 360;
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model);
-                            int normalized = ((y % 360) + 360) % 360;
-                            if (normalized != 0) v = v.with(VariantProperties.Y_ROT, yRot(normalized));
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            return y != 0 ? v.with(VariantProperties.Y_ROT, yRot(y)) : v;
                         })));
+    }
+
+    private static ResourceLocation suffixed(ResourceLocation name, String suffix) {
+        return new ResourceLocation(name.getNamespace(), name.getPath() + suffix);
     }
 
     private void trapdoorBlockState(Block block, ResourceLocation baseTexture) {
@@ -527,9 +527,8 @@ public class ModBlockStateProvider implements DataProvider {
                         .generate((facing, isOpen, half) -> {
                             ResourceLocation model = isOpen ? open : (half == Half.TOP ? top : bottom);
                             Variant v = Variant.variant().with(VariantProperties.MODEL, model);
-                            int y = rot(facing);
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            int y = isOpen ? (rot(facing) + 90) % 360 : 0;
+                            return y != 0 ? v.with(VariantProperties.Y_ROT, yRot(y)) : v;
                         })));
     }
 
