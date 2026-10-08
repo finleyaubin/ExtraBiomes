@@ -41,61 +41,66 @@ import java.util.Optional;
  * own converted .nbt and its own {@link SingleStructureConfiguration}. See
  * {@link OasisPuddleFeature} for a complete worked example.
  */
-public record SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction, boolean embedInStone, boolean weatheredVariation, boolean followTerrain) implements Feature {
+public record SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered, Optional<BlockPos> anchor, float minClearFraction, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, float minSubmergedFraction, boolean embedInStone, boolean weatheredVariation, boolean followTerrain, boolean onlyReplaceAir) implements Feature {
 
     public SingleStructureFeature(Identifier structure) {
-        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.empty(), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public SingleStructureFeature(Identifier structure, Rotation fixedRotation) {
-        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.of(fixedRotation), 0, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public SingleStructureFeature(Identifier structure, int groundOffset) {
-        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     // Jellycoral-style use: random rotation + a required submerged (water/waterlogged) fraction,
     // for templates that no longer bundle their own explicit water fill.
     public SingleStructureFeature(Identifier structure, int groundOffset, float minSubmergedFraction) {
-        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), minSubmergedFraction, false, false, false);
+        this(structure, Optional.empty(), groundOffset, false, Optional.empty(), 0.0F, false, List.of(), minSubmergedFraction, false, false, false, false);
     }
 
     public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     // Mushroom-style use: fixed/random rotation + centered + a required clear-space fraction.
     public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean centered, float minClearFraction) {
-        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, centered, Optional.empty(), minClearFraction, false, List.of(), 0.0F, false, false, false, false);
     }
 
     // Stick-pile-style use: fixed/random rotation + a required clear-space fraction + a required solid floor.
     public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, float minClearFraction, boolean requireGroundedFloor) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of(), 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), minClearFraction, requireGroundedFloor, List.of(), 0.0F, false, false, false, false);
     }
 
     // Oasis-puddle-style use: required solid floor restricted to a specific set of blocks.
     public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, false, false, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, false, false, false, false);
     }
 
     // Stone-pillar-style use: required solid floor restricted to a specific set of blocks, sunk into real stone rather than anchored to the dirt/grass surface, with noise-based weathering/vegetation.
     public SingleStructureFeature(Identifier structure, Optional<Rotation> rotation, int groundOffset, boolean requireGroundedFloor, List<Block> requiredFloorBlocks, boolean embedInStone, boolean weatheredVariation) {
-        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, embedInStone, weatheredVariation, false);
+        this(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, requireGroundedFloor, requiredFloorBlocks, 0.0F, embedInStone, weatheredVariation, false, false);
     }
 
     // Snow-drift-style use: low, wide template draped over the terrain column by column.
     public SingleStructureFeature(Identifier structure, int groundOffset, boolean centered, boolean followTerrain) {
-        this(structure, Optional.empty(), groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, followTerrain);
+        this(structure, Optional.empty(), groundOffset, centered, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, followTerrain, false);
+    }
+
+    // Pebble-style use: never overwrites anything but air (trunks, redstone, levers, ...).
+    public static SingleStructureFeature onlyReplacingAir(Identifier structure, Optional<Rotation> rotation, int groundOffset) {
+        return new SingleStructureFeature(structure, rotation, groundOffset, false, Optional.empty(), 0.0F, false, List.of(), 0.0F, false, false, false, true);
     }
 
     public SingleStructureFeature(Identifier structure, BlockPos anchor) {
-        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of(), 0.0F, false, false, false);
+        this(structure, Optional.empty(), 0, false, Optional.of(anchor), 0.0F, false, List.of(), 0.0F, false, false, false, false);
     }
 
     public static final MapCodec<SingleStructureFeature> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -110,7 +115,8 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
             Codec.floatRange(0.0F, 1.0F).optionalFieldOf("min_submerged_fraction", 0.0F).forGetter(SingleStructureFeature::minSubmergedFraction),
             Codec.BOOL.optionalFieldOf("embed_in_stone", false).forGetter(SingleStructureFeature::embedInStone),
             Codec.BOOL.optionalFieldOf("weathered_variation", false).forGetter(SingleStructureFeature::weatheredVariation),
-            Codec.BOOL.optionalFieldOf("follow_terrain", false).forGetter(SingleStructureFeature::followTerrain)
+            Codec.BOOL.optionalFieldOf("follow_terrain", false).forGetter(SingleStructureFeature::followTerrain),
+            Codec.BOOL.optionalFieldOf("only_replace_air", false).forGetter(SingleStructureFeature::onlyReplaceAir)
     ).apply(instance, SingleStructureFeature::new));
 
     @Override
@@ -156,6 +162,9 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
                 // a "leave this position alone" marker (e.g. jellycoral relying on the surrounding ocean rather than its
                 // own explicit water fill) would overwrite whatever's already there instead of leaving it untouched.
                 .addProcessor(new BlockIgnoreProcessor(List.of(Blocks.STRUCTURE_VOID)));
+        if (config.onlyReplaceAir()) {
+            settings.addProcessor(OnlyReplaceAirProcessor.INSTANCE);
+        }
         if (config.weatheredVariation()) {
             settings.addProcessor(net.winepicfin.extrabiomes.worldgen.features.stonepillars.PillarWeatheringProcessor.INSTANCE);
         }

@@ -39,8 +39,11 @@ import java.util.function.Consumer;
  * generation-behaviour change that deserves its own playtested patch, not a side effect of
  * moving files around.
  * <p>
- * Four more biomes live here for a different reason entirely: Jungle Marsh (replace_biomes amount
- * 0.5), Shattered Taiga Spikes, Charred Forest and Moorlands are NOT low-frequency by that metric
+ * Three more biomes live here for a different reason entirely: Jungle Marsh, Shattered Taiga Spikes and Charred
+ * Forest are NOT low-frequency (Moorlands lived here too until beta 11, when it moved to
+ * {@link ModOverworldRegion} because a 1/6-weight region could not make its high Bedrock amount
+ * common; a move of Jungle Marsh to {@link ModOverworldRegionSecondary} was tried and made it
+ * unreachable, so it stays here). Those two are NOT low-frequency by that metric
  * and would otherwise belong in the primary region, but {@code BiomeGenerationGameTests} (the
  * gametest that searches a live generated world for every mod biome within 15000 blocks of spawn)
  * found them consistently unreachable there, across multiple random seeds, despite each having a
@@ -76,19 +79,19 @@ public class ModOverworldRegionRare extends Region {
         // Used by the Future Desert box below; kept unchanged from ModOverworldRegion even though it no longer pairs against Desert Bryce there - see class javadoc.
         Climate.Parameter normalWeirdness = ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.MID_SLICE_NORMAL_ASCENDING, ParameterUtils.Weirdness.LOW_SLICE_NORMAL_DESCENDING);
 
-        // Mystic Forest - bedrock temp=0.95, downfall=0.9. Lowest replace_biomes amount (0.05) in the whole biome set.
+        // Mystic Forest - bedrock temp=0.95, downfall=0.9. Lowest replace_biomes amount (0.05) in the whole biome set. Beta 11: erosion trimmed EROSION_0-4 -> EROSION_0-3 (it was ~11x its Bedrock-intended share).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.NEUTRAL)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.HUMID, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.INLAND, ParameterUtils.Continentalness.FAR_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.MYSTIC_FOREST));
 
-        // Jellyfish Fields - bedrock temp=0.5, downfall=0.5, ocean/warm tags; replace_biomes amount 0.08. Confined to DEEP_OCEAN..OCEAN so it doesn't bleed into the COAST (land/beach) band.
+        // Jellyfish Fields - bedrock temp=0.5, downfall=0.5, ocean/warm tags; replace_biomes amount 0.08. Confined to DEEP_OCEAN..OCEAN so it doesn't bleed into the COAST (land/beach) band. Beta 11: temperature widened NEUTRAL -> NEUTRAL..WARM so it also covers warm oceans (Bedrock replaces ocean, deep_ocean and warm_ocean).
         new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.NEUTRAL)
+                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.NEUTRAL, ParameterUtils.Temperature.WARM))
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.DEEP_OCEAN, ParameterUtils.Continentalness.OCEAN))
                 .erosion(ParameterUtils.Erosion.FULL_RANGE)
@@ -106,31 +109,31 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.FUTURE_DESERT));
 
-        // The Netherlands - bedrock temp=0.5, downfall=0.5 (Dutch tulip fields/windmills, overworld); replace_biomes amount 0.1.
+        // The Netherlands - bedrock temp=0.5, downfall=0.5 (Dutch tulip fields/windmills, overworld); replace_biomes amount 0.1 over forest AND plains. Beta 11: swapped bands with Mutated - the regular Netherlands now takes the larger EROSION_3-4 band (was EROSION_0-2) and temperature COOL..NEUTRAL (~0.18% -> ~1.3% of the world). Temperature stops at NEUTRAL so it can't overlap Jungle Marsh (WARM, EROSION_4-6), (Marsh failed BiomeGenerationGameTests once already and is sensitive to neighbouring boxes).
         new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.NEUTRAL)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS));
-
-        // The Netherlands Mutated - replace_biomes amount 0.1.
-        new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.NEUTRAL)
+                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.COOL, ParameterUtils.Temperature.NEUTRAL))
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
                 .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_3, ParameterUtils.Erosion.EROSION_4))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
+                .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS));
+
+        // The Netherlands Mutated - replace_biomes amount 0.1. Beta 11: swapped bands with the regular Netherlands: now EROSION_0-2 (was EROSION_3-4), temperature NEUTRAL..WARM, ~0.4% of the world, so the tulip version is the more common one.
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.span(ParameterUtils.Temperature.NEUTRAL, ParameterUtils.Temperature.WARM))
+                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_2))
+                .depth(ParameterUtils.Depth.FULL_RANGE)
+                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.THE_NETHERLANDS_MUTATED));
 
-        // Jungle Marsh - bedrock temp=0.95, downfall=0.9, jungle+swamp tags; replace_biomes amount 0.5, NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
+        // Jungle Marsh - bedrock temp=0.95, downfall=0.9, jungle+swamp tags; replace_biomes amount 0.5, NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc. Beta 11: widened EROSION_4-6 / COAST-NEAR_INLAND to COAST-MID_INLAND (an attempt to move it to ModOverworldRegionSecondary with EROSION_3-6 failed BiomeGenerationGameTests: not found within 15000 blocks on Fabric and NeoForge).
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.WARM)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.WET, ParameterUtils.Humidity.HUMID))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.NEAR_INLAND))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.COAST, ParameterUtils.Continentalness.MID_INLAND))
                 .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_4, ParameterUtils.Erosion.EROSION_6))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
@@ -146,25 +149,19 @@ public class ModOverworldRegionRare extends Region {
                 .weirdness(ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.LOW_SLICE_VARIANT_ASCENDING, ParameterUtils.Weirdness.MID_SLICE_VARIANT_DESCENDING))
                 .build().forEach(point -> builder.add(point, ModBiomes.SHATTERED_TAIGA_SPIKES));
 
-        // Charred Forest - bedrock temp=2, downfall=0.5 (hot, replaces pale garden/birch forest). NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
+        // Charred Forest - bedrock temp=2, downfall=0.5 (hot, replaces pale garden/birch forest). Beta 11: continentalness widened NEAR_INLAND -> NEAR_INLAND..MID_INLAND, erosion EROSION_0-3 -> EROSION_0-4 and weirdness to the full normal half (~0.012% -> ~0.05% of the world). NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
         new ParameterUtils.ParameterPointListBuilder()
                 .temperature(ParameterUtils.Temperature.HOT)
                 .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.ARID, ParameterUtils.Humidity.NEUTRAL))
-                .continentalness(ParameterUtils.Continentalness.NEAR_INLAND)
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_3))
+                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
+                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_0, ParameterUtils.Erosion.EROSION_4))
                 .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.span(ParameterUtils.Weirdness.PEAK_NORMAL, ParameterUtils.Weirdness.MID_SLICE_NORMAL_DESCENDING))
+                .weirdness(normalWeirdness)
                 .build().forEach(point -> builder.add(point, ModBiomes.CHARRED_FOREST));
 
-        // Moorlands - bedrock temp=0.5, downfall=0.5, plains/river tags. NOT low-frequency - lives here for worldgen-stability reasons, not rarity. See class javadoc.
-        new ParameterUtils.ParameterPointListBuilder()
-                .temperature(ParameterUtils.Temperature.NEUTRAL)
-                .humidity(ParameterUtils.Humidity.span(ParameterUtils.Humidity.NEUTRAL, ParameterUtils.Humidity.WET))
-                .continentalness(ParameterUtils.Continentalness.span(ParameterUtils.Continentalness.NEAR_INLAND, ParameterUtils.Continentalness.MID_INLAND))
-                .erosion(ParameterUtils.Erosion.span(ParameterUtils.Erosion.EROSION_5, ParameterUtils.Erosion.EROSION_6))
-                .depth(ParameterUtils.Depth.FULL_RANGE)
-                .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
-                .build().forEach(point -> builder.add(point, ModBiomes.MOORLANDS));
+        // Moorlands moved to ModOverworldRegion in beta 11 (frequency), see there.
+
+        // Glacier and Volcanic Moss Tundra live in ModOverworldRegionFrozen (beta 11).
 
         builder.build().forEach(mapper::accept);
     }
