@@ -8,11 +8,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import org.slf4j.Logger;
@@ -77,6 +80,9 @@ public class BiomeMapGameTests {
         BiomeSource biomeSource = generator.getBiomeSource();
         RandomState randomState = RandomState.create(registryAccess.lookupOrThrow(Registries.NOISE), seed, generator.generatorSettings().value());
 
+        Climate.Sampler climateSampler = randomState.createClimateSampler(SamplerContext.EMPTY_UNCACHED);
+        BiomeResolver resolver = biomeSource.createResolver(climateSampler);
+
         int cells = Math.max(1, (radius * 2) / step);
         int minX = centerX - cells * step / 2;
         int minZ = centerZ - cells * step / 2;
@@ -93,7 +99,7 @@ public class BiomeMapGameTests {
                 if (surface) {
                     y = generator.getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, level, randomState);
                 }
-                Holder<Biome> biome = biomeSource.getNoiseBiome(x >> 2, y >> 2, z >> 2, randomState.sampler());
+                Holder<Biome> biome = resolver.getNoiseBiome(x >> 2, y >> 2, z >> 2);
                 String id = biome.unwrapKey().map(k -> k.identifier().toString()).orElse("unknown");
                 Integer i = index.get(id);
                 if (i == null) {
