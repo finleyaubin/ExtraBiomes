@@ -13,6 +13,11 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.winepicfin.extrabiomes.client.DenseCloudSteam;
+import net.winepicfin.extrabiomes.client.SteamParticle;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -31,6 +36,16 @@ import net.winepicfin.extrabiomes.neoforge.entity.client.layers.WolfFrogHatLayer
 
 @Mod.EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(DenseCloudSteam::init);
+    }
+
+    @SubscribeEvent
+    public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.STEAM.get(), SteamParticle.Provider::new);
+    }
+
     @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);

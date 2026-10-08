@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 @PrefixGameTestTemplate(false)
 public class SkyCityStructureEditGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String[] BUILDINGS = {"house_1", "sky_challet", "tower_1", "tower_2"};
+    private static final String[] BUILDINGS = {"house_1", "sky_challet", "tower_1", "tower_2", "cloud_condenser"};
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
