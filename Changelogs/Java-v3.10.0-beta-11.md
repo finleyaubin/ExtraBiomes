@@ -4,7 +4,8 @@ Dense Cloud is now farmable, and the Sky City has a new building that shows you 
 
 ## Blocks
 ### Dense Cloud farming
-![Uploading 2026-10-08_21.31.31.png…]()
+<img width="100%" " alt="Dense Cloud Farm" src="https://github.com/user-attachments/assets/e274c269-ffec-41e7-9d5f-d41a5e558e93" />
+
 
 
 Dense Cloud can now be grown instead of only being mined from Sky Cities. Build a column with magma at the bottom, water on top of it, and a blue ice block above the water. Dense Cloud then buds outward from any Dense Cloud next to the ice, in a flattened cloud shape around it.
@@ -13,11 +14,11 @@ Dense Cloud can now be grown instead of only being mined from Sky Cities. Build 
 - Cloud grows out to 10 blocks sideways and 5 blocks up or down from the ice.
 - Cloud only buds from existing Dense Cloud, so place a block of it next to the ice to start the farm. Only full Dense Cloud blocks bud, not the slabs, stairs or bricks.
 - Cloud never grows into a space a player or mob is standing in.
-- It breaks almost instantly and can be pushed with pistons, so it can be harvested by hand or with a machine.
+- It breaks almost instantly or have a low blast resistance so can easily be exploded, so it can be harvested by hand or with a machine.
 
 ## World Generation
 ### Sky City
-![Uploading 2026-10-08_21.26.42.png…]()
+<img width="100%" alt="Cloud Condenser" src="https://github.com/user-attachments/assets/92845848-ad37-4cf1-a0c6-96de3db49604" />
 
 
 - New building: the Cloud Condenser. It has a magma-heated water tank with blue ice hung above it on a tall wooden frame, a puff of Dense Cloud already growing around the ice, and a lectern at the entrance with a book that walks through how the farm works. It sits on a trimmed brick plaza with benches, flowers and lantern posts. It generates along the Sky City paths like the other buildings.
