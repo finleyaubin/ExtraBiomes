@@ -35,6 +35,10 @@ import net.winepicfin.extrabiomes.entity.client.PiranhaModel;
 import net.winepicfin.extrabiomes.entity.client.PiranhaRenderer;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 import net.winepicfin.extrabiomes.entity.client.PuckooRenderer;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.winepicfin.extrabiomes.client.DenseCloudSteam;
+import net.winepicfin.extrabiomes.client.SteamParticle;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.entity.client.RazorFeatherRenderer;
 import net.winepicfin.extrabiomes.entity.client.TreefrogModel;
 import net.winepicfin.extrabiomes.entity.client.TreefrogRenderer;
@@ -55,6 +59,8 @@ import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 public class ExtraBiomesFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        DenseCloudSteam.init();
+        ParticleFactoryRegistry.getInstance().register(ModParticles.STEAM.get(), SteamParticle.Provider::new);
         // No Fabric equivalent of Forge's Sheets.addWoodType is needed here: Fabric API's
         // WoodTypeRegistry-backed registration (see platform/fabric/ExtraBiomesExpectPlatformImpl)
         // runs during mod init, before Sheets' own static sign/hanging-sign material maps are
