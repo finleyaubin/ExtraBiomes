@@ -353,11 +353,9 @@ public class ModBlockStateProvider implements DataProvider {
                 int baseRotation = rot(facing);
                 boolean isLeft = shape == StairsShape.INNER_LEFT || shape == StairsShape.OUTER_LEFT;
                 int bottomRotation = isLeft ? baseRotation - 90 : baseRotation;
-                // Top half is visually mirrored (the model is flipped via X_ROT 180), which swaps
-                // which physical corner "left"/"right" ends up on - see this class's javadoc for the
-                // caveat around this being a best-effort reconstruction rather than a byte-for-byte
-                // port of vanilla's private createStairs() logic.
-                int topRotation = isLeft ? baseRotation : baseRotation - 90;
+                // Flipped over by X_ROT 180, the right-hand corners need a further quarter turn to match vanilla's stairs blockstates.
+                boolean isRight = shape == StairsShape.INNER_RIGHT || shape == StairsShape.OUTER_RIGHT;
+                int topRotation = isRight ? baseRotation + 90 : baseRotation;
 
                 Variant bottomVariant = Variant.variant().with(VariantProperties.MODEL, model);
                 if (bottomRotation != 0) bottomVariant = bottomVariant.with(VariantProperties.Y_ROT, yRot(bottomRotation)).with(VariantProperties.UV_LOCK, true);
