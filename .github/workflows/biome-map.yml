@@ -1,11 +1,16 @@
 name: Seed Biome Map
 
-# Manual: renders an ExtraBiomes-aware biome map (PNG + interactive HTML) for any seed, using the real
+# Renders an ExtraBiomes-aware biome map (PNG + interactive HTML) for any seed, using the real
 # TerraBlender-patched overworld generator (fabric/.../gametest/BiomeMapGameTests.java, driven by
-# tools/biome_map.py). Run it from the Actions tab or with:
-#   gh workflow run biome-map.yml --ref <branch> -f seed=12345 -f radius=8000
-# then download the "biome-map" artifact from the run.
+# tools/biome_map.py). Two ways to start it, then download the "biome-map" artifact from the run:
+#   - Actions tab / `gh workflow run biome-map.yml -f seed=12345 -f radius=8000` (GitHub only lists a
+#     workflow_dispatch workflow once the file is on the default branch)
+#   - push a tag, which works from any branch: map_<seed>_<radius>_<step>[_<centerX>_<centerZ>], with a
+#     leading n for a negative number, e.g. `git tag map_2898347353723448247_8000_32 && git push origin map_2898347353723448247_8000_32`
 on:
+  push:
+    tags:
+      - 'map_*'
   workflow_dispatch:
     inputs:
       seed:
@@ -63,15 +68,24 @@ jobs:
 
       - name: Sample the biome map
         env:
-          MAP_SEED: ${{ inputs.seed }}
-          MAP_RADIUS: ${{ inputs.radius }}
-          MAP_STEP: ${{ inputs.step }}
-          MAP_CENTER: ${{ inputs.center }}
+          IN_SEED: ${{ inputs.seed }}
+          IN_RADIUS: ${{ inputs.radius }}
+          IN_STEP: ${{ inputs.step }}
+          IN_CENTER: ${{ inputs.center }}
         run: |
+          num() { printf '%s' "$1" | sed 's/^n/-/'; }
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            IFS=_ read -r _ SEED RADIUS STEP CX CZ <<< "$GITHUB_REF_NAME"
+            MAP_SEED=$(num "$SEED"); MAP_RADIUS=${RADIUS:-8000}; MAP_STEP=${STEP:-32}
+            MAP_CENTER="$(num "${CX:-0}"),$(num "${CZ:-0}")"
+          else
+            MAP_SEED=$IN_SEED; MAP_RADIUS=$IN_RADIUS; MAP_STEP=$IN_STEP; MAP_CENTER=$IN_CENTER
+          fi
+          echo "seed=$MAP_SEED radius=$MAP_RADIUS step=$MAP_STEP centre=$MAP_CENTER"
           mkdir -p fabric/run
           printf 'max-tick-time=1000000\n' > fabric/run/server.properties
           cd ..
-          python3 tools/biome_map.py --seed "$MAP_SEED" --radius "$MAP_RADIUS" --step "$MAP_STEP" --center "$MAP_CENTER" --out biome-map-out
+          python3 tools/biome_map.py --seed="$MAP_SEED" --radius="$MAP_RADIUS" --step="$MAP_STEP" --center="$MAP_CENTER" --out biome-map-out
         shell: bash
 
       - name: Upload map
