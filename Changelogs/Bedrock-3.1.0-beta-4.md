@@ -1,7 +1,6 @@
 # ExtraBiomes 3.1.0 Beta 4
-This beta brings recent java gameplay changes back to Bedrock.
-
-**World generation changes only appear in newly generated chunks, so create a new world (or explore fresh terrain) to see them.**
+This beta brings recent Java gameplay changes back to Bedrock. the biggest changes being the floating jungle, glacier and underground netherlands revamp.
+also the dense cloud farming mechanics, changes too the sky city's clouds, new spawn eggs and worm breeding.
 
 # Changes
 ## Biomes
@@ -13,7 +12,7 @@ Bedrock port of the Java Glacier overhaul.
 - Meltwater and frozen pools underground, plus ice-sealed vault chests with new loot (igloo loot and pottery sherds).
 - Surface features: crevasses with snow bridges, meltwater streams ending in plunge pools (some with potent sulfur vents over magma), deep erosion shafts that end in chambers, glacial ponds, gravel moraines and andesite erratics.
 - Water is now clear and pale blue with a clearer underwater fog.
-- The climate is warmer, so the Glacier rains instead of snowing.
+- The climate is warmer, so the Glacier rains instead of snowing this allows for surface water that would freeze otherwise.
 - Snow golems now spawn in the Glacier's caves.
 - Added an ambient ice cracking sound.
 
@@ -33,8 +32,8 @@ Bedrock port of the Java Glacier overhaul.
 <img width="100%" alt="the underground netherlands" src="https://github.com/user-attachments/assets/a4561ef9-855a-46a8-99a9-25e2cab0d5ba" />
 
 - The netherrack layer now runs all the way down to bedrock instead of stopping about 10 blocks under the surface.
-- Ore veins extend down to the bottom of the world.
-- Added underground basalt and blackstone patches and hanging basalt pillars.
+- the nether ore veins extend down to the bottom of the world.
+- Added underground basalt and blackstone patches and hanging basalt pillars (may need some tweaking).
 - Added lava springs in the netherrack walls that spill out into lavafalls. They start flowing when you get near them.
 
 ## Structures
@@ -69,9 +68,9 @@ Bedrock port of the Java Glacier overhaul.
 ### Worms
 - Two worms inside a composter that has compost in it will breed. Each breeding uses one level of compost, and the new worm drops out of the composter.
 - Worm items can be put straight into a composter by right-clicking its top.
-- Worms breeding in a composter have a 5 minute cooldown before they can breed again, and show love hearts.
+- Worms breeding in a composter have a 5 minute cooldown before they can breed again, and show love particals above.
 ### Jellyfish
-- Jellyfish on beaches now only spawn between Y 62 and 64, instead of anywhere on the sand.
+- Jellyfish on beaches now only spawn between Y 62 and 64, instead of anywhere on the sand to make sure they only wash up on the waters edge and not half way up a hill.
 
 ## Items
 <img width="100%" alt="image" src="https://github.com/user-attachments/assets/7a501ee1-d3cb-469d-bb84-d0c3515022e6" />
@@ -79,8 +78,6 @@ Bedrock port of the Java Glacier overhaul.
 - Replaced the spawn eggs for all mobs with custom icons to match the new default behavior.
 
 ## Fixes
-- Distant terrain no longer has dark, anti-aliased looking outlines around blocks. The block texture atlas now uses the vanilla mipmap and padding settings, so neighbouring textures stop bleeding into each other at range.
+- Fixed a bug that has been around for a while where distant blocks showed weirdly coloured outlines, I had assumed this was a quirk of my linux dev setup where I am emulating the android version of the game, but turns our I had got the 2 mipmap padding values in the resource pack the wrong way round lmao
 - Snow no longer piles up a block above slabs, stairs and trapdoors, leaving floating snow layers over half-height blocks. The sky, gilded sky, mystic, palm and black sandstone variants now let snow pass through them the way the dense cloud blocks do.
 
-## Known issues
-- Lava springs and the deep netherrack layer in The Netherlands are new and still being tuned, so their density may change in a later beta.
