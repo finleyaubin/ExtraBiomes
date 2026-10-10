@@ -1,0 +1,45 @@
+{
+    "format_version": "1.8.0",
+    "minecraft:spawn_rules": {
+        "description": {
+            "identifier": "minecraft:snow_golem",
+            "population_control": "ambient"
+        },
+        "conditions": [
+            {
+                "minecraft:spawns_underground": {},
+                "minecraft:spawns_on_block_filter": [
+                    "minecraft:snow",
+                    "minecraft:ice",
+                    "minecraft:packed_ice",
+                    "minecraft:blue_ice",
+                    "minecraft:stone",
+                    "minecraft:deepslate",
+                    "minecraft:basalt",
+                    "minecraft:smooth_basalt",
+                    "minecraft:gravel",
+                    "minecraft:andesite"
+                ],
+                "minecraft:height_filter": {
+                    "min": -64,
+                    "max": 48
+                },
+                "minecraft:weight": {
+                    "default": 10
+                },
+                "minecraft:density_limit": {
+                    "underground": 3
+                },
+                "minecraft:herd": {
+                    "min_size": 1,
+                    "max_size": 1
+                },
+                "minecraft:biome_filter": {
+                    "test": "has_biome_tag",
+                    "operator": "==",
+                    "value": "glacier"
+                }
+            }
+        ]
+    }
+}

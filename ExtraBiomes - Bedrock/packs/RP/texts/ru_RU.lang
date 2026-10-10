@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Плотное Плотное Облако
 tile.extrabiomes:dense_cloud_brick.name=Плотное Плотное Облако Кирпич из Плотного Облака
 tile.extrabiomes:dense_cloud_brick_slab.name=Плотное Плотное Облако Кирпич из Плотного Облака Плита
 tile.extrabiomes:dense_cloud_brick_stairs.name=Плотное Плотное Облако Кирпич из Плотного Облака Лестница
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=чёрный песок
 tile.extrabiomes:black_sandstone.name=чёрный песчаник

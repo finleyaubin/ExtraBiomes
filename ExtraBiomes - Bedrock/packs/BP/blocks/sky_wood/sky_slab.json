@@ -1,11 +1,11 @@
 {
-    "format_version": "1.20.100",
+    "format_version": "1.26.0",
     "minecraft:block": {
         "description": {
             "identifier": "extrabiomes:sky_slab",
             "menu_category": {
                 "category": "construction",
-                "group": "itemGroup.name.slab"
+                "group": "minecraft:itemGroup.name.slab"
             },
             "states": {
                 "extrabiomes:is_double": [false, true]
@@ -17,6 +17,10 @@
             }
         },
         "components": {
+            "minecraft:precipitation_interactions": {
+                "precipitation_behavior": "none"
+            },
+            "minecraft:geometry": "geometry.slab_down",
             "minecraft:map_color": "#ff78f8",
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 2
@@ -84,6 +88,14 @@
                     "minecraft:selection_box": {
                         "origin": [-8, 0, -8],
                         "size": [16, 16, 16]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:vertical_half') == 'top' || q.block_state('extrabiomes:is_double') == true",
+                "components": {
+                    "minecraft:precipitation_interactions": {
+                        "precipitation_behavior": "obstruct_rain_accumulate_snow"
                     }
                 }
             }

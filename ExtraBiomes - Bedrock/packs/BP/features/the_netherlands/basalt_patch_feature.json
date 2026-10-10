@@ -1,0 +1,19 @@
+{
+    "format_version": "1.13.0",
+    "minecraft:ore_feature": {
+        "description": {
+            "identifier": "extrabiomes:the_netherlands/basalt_patch_feature"
+        },
+        "count": 40,
+        "replace_rules": [
+            {
+                "places_block": "minecraft:basalt",
+                "may_replace": [
+                    {
+                        "name": "minecraft:netherrack"
+                    }
+                ]
+            }
+        ]
+    }
+}

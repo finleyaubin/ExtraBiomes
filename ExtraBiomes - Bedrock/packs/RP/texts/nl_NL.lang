@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Dichte Dichte Wolk
 tile.extrabiomes:dense_cloud_brick.name=Dichte Dichte Wolk Dichte Wolksteen
 tile.extrabiomes:dense_cloud_brick_slab.name=Dichte Dichte Wolk Dichte Wolksteen Plaat
 tile.extrabiomes:dense_cloud_brick_stairs.name=Dichte Dichte Wolk Dichte Wolksteen Trap
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Zwart Zand
 tile.extrabiomes:black_sandstone.name=Zwarte Zandsteen

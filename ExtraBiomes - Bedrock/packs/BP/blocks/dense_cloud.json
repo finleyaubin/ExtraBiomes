@@ -12,7 +12,7 @@
             "minecraft:material_instances": {
                 "*": {
                     "texture": "extrabiomes_dense_cloud",
-                    "render_method": "opaque"
+                    "render_method": "blend"
                 }
             },
             "minecraft:map_color": "#ffffff",
