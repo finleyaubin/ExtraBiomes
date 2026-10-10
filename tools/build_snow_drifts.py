@@ -549,7 +549,20 @@ def write_structure(name, sx, sy, sz, cells):
     root = make_structure(sx, sy, sz, cells)
     save(os.path.join(STRUCT_DIR, f"{name}.mcstructure"), root, "")
 
-GLACIER_BLOCKS = ['minecraft:air', 'minecraft:snow_layer', 'minecraft:snow', 'minecraft:powder_snow', 'minecraft:ice', 'minecraft:packed_ice', 'minecraft:blue_ice', 'minecraft:stone', 'minecraft:dirt', 'minecraft:gravel', 'minecraft:water']
+# Raw terrain at before_surface_pass is stone plus the veins, ores and patches the underground passes already placed;
+# the Cold Mesa's red sand and terracotta are allowed too for when its bands exist by then.
+GLACIER_BLOCKS = [
+    'minecraft:air', 'minecraft:snow_layer', 'minecraft:snow', 'minecraft:powder_snow', 'minecraft:ice',
+    'minecraft:packed_ice', 'minecraft:blue_ice', 'minecraft:water', 'minecraft:stone', 'minecraft:deepslate',
+    'minecraft:dirt', 'minecraft:gravel', 'minecraft:sand', 'minecraft:clay', 'minecraft:andesite',
+    'minecraft:diorite', 'minecraft:granite', 'minecraft:tuff', 'minecraft:calcite',
+    'minecraft:red_sand', 'minecraft:red_sandstone', 'minecraft:sandstone', 'minecraft:coarse_dirt',
+    'minecraft:hardened_clay',
+] + [f'minecraft:{colour}_terracotta' for colour in (
+    'white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
+    'blue', 'brown', 'green', 'red', 'black')
+] + [f'minecraft:{prefix}{ore}_ore' for prefix in ('', 'deepslate_')
+     for ore in ('coal', 'iron', 'copper', 'gold', 'redstone', 'lapis', 'diamond', 'emerald')]
 
 
 def write_structure_feature(name):
