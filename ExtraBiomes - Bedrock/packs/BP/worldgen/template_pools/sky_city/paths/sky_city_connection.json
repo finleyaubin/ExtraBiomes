@@ -96,6 +96,14 @@
             {
                 "element": {
                     "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/buildings/cloud_condenser",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
                     "location": "extrabiomes/sky_city/buildings/sky_challet",
                     "projection": "rigid"
                 },
