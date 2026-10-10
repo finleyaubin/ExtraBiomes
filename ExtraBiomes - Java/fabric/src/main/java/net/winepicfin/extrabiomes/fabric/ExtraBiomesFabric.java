@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.fabric;
 
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.core.registries.Registries;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
@@ -16,6 +17,7 @@ import net.winepicfin.extrabiomes.fabric.worldgen.FabricSpawnCaps;
 import net.winepicfin.extrabiomes.fabric.worldgen.FabricTerraBlenderFixedBiomeCompat;
 import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
@@ -24,11 +26,12 @@ import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheat
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.ModStructureTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
-import terrablender.api.SurfaceRuleManager;
+import terrablender.api.MaterialRuleManager;
 
 // Fabric bootstrap entry point - see forge/.../forge/ExtraBiomesForge.java for the Forge
 // equivalent. Registration order matters here in a way it doesn't on Forge: architectury's Fabric
@@ -51,12 +54,14 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModItems.register();
         ModBlockEntities.register();
         ModSounds.register();
+        ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
         ModVolcanicPlacementModifiers.register();
+        GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
         NetherlandsWheatFeatures.register();
@@ -71,13 +76,15 @@ public class ExtraBiomesFabric implements ModInitializer {
         WolfFrogHatInteractHandler.register();
         FabricServerEvents.register();
 
-        SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID, ModSurfaceRules.makeRules());
-        // addSurfaceRules above only reaches biomes namespaced "extrabiomes" - this instead injects
+        MaterialRuleManager.addRules(MaterialRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID,
+                registries -> ModSurfaceRules.makeRules(registries.lookupOrThrow(Registries.BIOME)));
+        // addRules above only reaches biomes namespaced "extrabiomes" - this instead injects
         // into the shared default ruleset every other namespace (including vanilla's own badlands/
         // eroded_badlands/wooded_badlands) falls back to, so those get the same depth-banded
         // terracotta too. See ModSurfaceRules.makeVanillaBadlandsAdditions() javadoc.
-        SurfaceRuleManager.addToDefaultSurfaceRulesAtStage(SurfaceRuleManager.RuleCategory.OVERWORLD,
-                SurfaceRuleManager.RuleStage.BEFORE_BEDROCK, 0, ModSurfaceRules.makeVanillaBadlandsAdditions());
+        MaterialRuleManager.addToDefaultRulesAtStage(MaterialRuleManager.RuleCategory.OVERWORLD,
+                MaterialRuleManager.RuleStage.BEFORE_BEDROCK, 0,
+                registries -> ModSurfaceRules.makeVanillaBadlandsAdditions(registries.lookupOrThrow(Registries.BIOME)));
 
         // FabricConfig.load() (which triggers ModTerrablender.registerBiomes()) is NOT called
         // here - see ExtraBiomesTerraBlenderApi for why it has to run from the "terrablender"

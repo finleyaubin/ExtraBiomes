@@ -1,12 +1,12 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -27,13 +27,16 @@ import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
-import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.fish.WaterAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
@@ -105,22 +108,37 @@ public class JellyfishEntity extends WaterAnimal {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Variant", this.getVariant());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariant(tag.getInt("Variant"));
+        this.setVariant(tag.getIntOr("Variant", 0));
     }
 
-    // No extra restriction on beach (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
+    // Beaches only roll BEACH_SPAWN_CHANCE (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
     // elsewhere, keep the normal water-creature light/depth check.
     public static boolean checkJellyfishSpawnRules(EntityType<JellyfishEntity> type, ServerLevelAccessor level, EntitySpawnReason reason,
                                                      BlockPos pos, RandomSource random) {
-        return level.getBiome(pos).is(BiomeTags.IS_BEACH) || WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
+        if (level.getBiome(pos).is(BiomeTags.IS_BEACH)) {
+            return pos.getY() >= JellyfishTuning.BEACH_MIN_Y && pos.getY() <= JellyfishTuning.BEACH_MAX_Y
+                    && random.nextFloat() < JellyfishTuning.BEACH_SPAWN_CHANCE
+                    && isWaterNearby(level, pos);
+        }
+        return WaterAnimal.checkSurfaceWaterAnimalSpawnRules(type, level, reason, pos, random);
+    }
+
+    private static boolean isWaterNearby(ServerLevelAccessor level, BlockPos pos) {
+        int range = JellyfishTuning.BEACH_WATER_RANGE;
+        for (BlockPos p : BlockPos.betweenClosed(pos.offset(-range, -range, -range), pos.offset(range, range, range))) {
+            if (level.getFluidState(p).is(FluidTags.WATER)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
@@ -139,7 +157,7 @@ public class JellyfishEntity extends WaterAnimal {
         this.grayAmount = Mth.clamp(this.grayAmount + Mth.clamp((inWater ? 0.0F : 1.0F) - this.grayAmount, -JellyfishTuning.GRAY_STEP_PER_TICK, JellyfishTuning.GRAY_STEP_PER_TICK), 0.0F, 1.0F);
         this.scaleY = Mth.clamp(this.scaleY + Mth.clamp((inWater ? 1.0F : 0.1F) - this.scaleY, -JellyfishTuning.SCALE_Y_STEP_PER_TICK, JellyfishTuning.SCALE_Y_STEP_PER_TICK), 0.1F, 1.0F);
 
-        if (!this.level().isClientSide && this.tickCount % 10 == 0) {
+        if (!this.level().isClientSide() && this.tickCount % 10 == 0) {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.2D));
             for (LivingEntity target : targets) {
                 if (target == this) {
@@ -160,17 +178,17 @@ public class JellyfishEntity extends WaterAnimal {
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             ItemStack jam = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISH_JAM_BOTTLE.get()));
             player.setItemInHand(hand, jam);
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         if (held.is(ModItems.JELLYFISHING_NET_EMPTY.get())) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 player.playSound(SoundEvents.BUCKET_FILL_FISH, 1.0F, 1.0F);
                 ItemStack fullNet = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISHING_NET_FULL.get()));
                 player.setItemInHand(hand, fullNet);
                 this.playSound(SoundEvents.GENERIC_SPLASH, 1.0F, 1.0F);
                 this.discard();
             }
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }
@@ -184,11 +202,11 @@ public class JellyfishEntity extends WaterAnimal {
     // WaterAnimal.handleAirSupply() deals drowning damage once air runs out; tick()'s
     // grayAmount/scaleY already shows it drying out visually instead.
     @Override
-    protected void handleAirSupply(int preTickAirSupply) {
+    protected void handleAirSupply(ServerLevel level, int preTickAirSupply) {
     }
 
     @Override
-    protected boolean isAffectedByFluids() {
+    public boolean isAffectedByFluids() {
         return true;
     }
 

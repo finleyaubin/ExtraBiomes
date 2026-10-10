@@ -24,10 +24,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels(){
         blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
+        blockWithItem(ModBlocks.NETHER_COAL_ORE);
+        blockWithItem(ModBlocks.NETHER_COPPER_ORE);
+        blockWithItem(ModBlocks.NETHER_EMERALD_ORE);
+        blockWithItem(ModBlocks.NETHER_IRON_ORE);
+        blockWithItem(ModBlocks.NETHER_LAPIS_ORE);
+        blockWithItem(ModBlocks.NETHER_REDSTONE_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         stairsBlock(((StairBlock) ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         blockWithItem(ModBlocks.DENSE_CLOUD);
+        stairsBlock(((StairBlock) ModBlocks.DENSE_CLOUD_STAIRS.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()));
+        slabBlock(((SlabBlock) ModBlocks.DENSE_CLOUD_SLAB.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()));
         fluidBlock(ModBlocks.GOO.get());
         pebbleBlock(ModBlocks.PEBBLE.get(),"pebble");
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(),"mossy_pebble");
@@ -183,7 +191,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     private void pebbleBlock(Block pebbleBlock,String type){
-        getVariantBuilder(pebbleBlock).forAllStates(blockState -> {
+        getVariantBuilder(pebbleBlock).forAllStatesExcept(blockState -> {
             Integer size = blockState.getValue(PebbleBlock.SIZE);
             ModelFile modelFile;
             switch (size){
@@ -200,7 +208,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder()
                     .modelFile(modelFile)
                     .build();
-            }
+            }, net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED
         );
         simpleBlockItem(pebbleBlock, new ModelFile.UncheckedModelFile(modLoc("block/small_"+type)));
     }

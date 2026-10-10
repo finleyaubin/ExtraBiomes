@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -26,12 +26,14 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.fish.WaterAnimal;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.winepicfin.extrabiomes.Config;
@@ -157,12 +159,12 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
                     (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F, 0.4F,
                     (this.random.nextFloat() * 2.0F - 1.0F) * 0.05F));
             this.setOnGround(false);
-            this.hasImpulse = true;
+            this.needsSync = true;
             this.playSound(SoundEvents.COD_FLOP, this.getSoundVolume(), this.getVoicePitch());
         }
 
         super.aiStep();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.entityData.set(DATA_BITING, this.getTarget() != null || this.chasedBait != null);
         }
     }
@@ -203,19 +205,17 @@ public class PiranhaEntity extends WaterAnimal implements Enemy {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Variant", this.getVariant());
         tag.putFloat("Size", this.getSizeScale());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariant(tag.getInt("Variant"));
-        if (tag.contains("Size")) {
-            this.setSizeScale(tag.getFloat("Size"));
-        }
+        this.setVariant(tag.getIntOr("Variant", 0));
+        tag.read("Size", Codec.FLOAT).ifPresent(this::setSizeScale);
     }
 
     @Nullable

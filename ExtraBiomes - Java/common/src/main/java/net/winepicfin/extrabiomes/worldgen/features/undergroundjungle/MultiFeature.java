@@ -1,37 +1,40 @@
 package net.winepicfin.extrabiomes.worldgen.features.undergroundjungle;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-/**
- * Runs every {@link PlacedFeature} in its {@link MultiFeatureConfiguration} unconditionally at the
- * same origin - a minimal, reusable Java equivalent of Bedrock's {@code minecraft:aggregate_feature}
- * for use in config slots that only accept a single {@code PlacedFeature} (see
- * {@link MultiFeatureConfiguration}'s javadoc for why this exists instead of the usual "just register
- * each sub-feature separately" convention).
- */
-public class MultiFeature extends Feature<MultiFeatureConfiguration> {
+import java.util.List;
 
-    public MultiFeature(Codec<MultiFeatureConfiguration> codec) {
-        super(codec);
+/**
+ * Runs every sub-{@link PlacedFeature} unconditionally at the same origin - a minimal, reusable
+ * Java equivalent of Bedrock's {@code minecraft:aggregate_feature} for use in config slots that
+ * only accept a single {@code PlacedFeature} (e.g. a {@code VegetationPatchFeature}'s
+ * {@code vegetation_feature}) rather than wired directly into a biome via several independent
+ * {@code addFeature} calls (the usual, simpler convention documented on {@code MossFeatures}).
+ */
+public record MultiFeature(List<Holder<PlacedFeature>> features) implements Feature {
+
+    public static final MapCodec<MultiFeature> CODEC = RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                    PlacedFeature.CODEC.listOf().fieldOf("features").forGetter(MultiFeature::features)
+            ).apply(instance, MultiFeature::new));
+
+    @Override
+    public MapCodec<MultiFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<MultiFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        ChunkGenerator generator = context.chunkGenerator();
-        RandomSource random = context.random();
-        BlockPos origin = context.origin();
-
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
         boolean placedAny = false;
-        for (Holder<PlacedFeature> feature : context.config().features()) {
+        for (Holder<PlacedFeature> feature : features) {
             if (feature.value().place(level, generator, random, origin)) {
                 placedAny = true;
             }

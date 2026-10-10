@@ -1,18 +1,28 @@
 package net.winepicfin.extrabiomes.event;
 
-import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
+import net.neoforged.neoforge.client.fluid.FluidTintSources;
+import net.winepicfin.extrabiomes.neoforge.fluid.ModFluids;
+import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.client.renderer.entity.state.WolfRenderState;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.winepicfin.extrabiomes.client.DenseCloudSteam;
+import net.winepicfin.extrabiomes.client.SteamParticle;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.neoforge.fluid.BaseFluidType;
@@ -31,11 +41,21 @@ import net.winepicfin.extrabiomes.entity.client.layers.PuckooBaseModelLayers;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 import net.winepicfin.extrabiomes.neoforge.entity.client.layers.WolfFrogHatLayer;
 
-@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, value = Dist.CLIENT)
 public class ModEventBusClientEvents {
     @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(DenseCloudSteam::init);
+    }
+
+    @SubscribeEvent
+    public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.STEAM.get(), SteamParticle.Provider::new);
+    }
+
+    @SubscribeEvent
     public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), StandingSignRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
     }
 
@@ -62,35 +82,26 @@ public class ModEventBusClientEvents {
 
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        WolfRenderer wolfRenderer = event.getRenderer(EntityType.WOLF);
+        WolfRenderer wolfRenderer = event.getRenderer(EntityTypes.WOLF);
         if (wolfRenderer != null) {
             wolfRenderer.addLayer(new WolfFrogHatLayer(wolfRenderer));
         }
     }
 
-    // NeoForge 21.4 removed the datagen-time "render_type" blockstate/model JSON field along with
-    // the BlockStateProvider that wrote it (see ModBlockStateProvider's header comment) - the
-    // runtime-registration replacement is this same ItemBlockRenderTypes API Fabric's
-    // BlockRenderLayerMap already wraps (see ExtraBiomesFabricClient for the identical block list).
-    // Without this, saplings/mushrooms/leaves/doors/trapdoors default to RenderType.solid() and their
-    // texture's transparent pixels render as opaque black instead of being cut out.
     @SubscribeEvent
-    public static void setupClient(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            for (var block : new net.minecraft.world.level.block.Block[]{
-                    ModBlocks.MYSTIC_SAPLING.get(), ModBlocks.SKY_SAPLING.get(), ModBlocks.PALM_SAPLING.get(),
-                    ModBlocks.BLACK_MUSHROOM.get(), ModBlocks.BLUE_MUSHROOM.get(), ModBlocks.CYAN_MUSHROOM.get(),
-                    ModBlocks.GREEN_MUSHROOM.get(), ModBlocks.ORANGE_MUSHROOM.get(), ModBlocks.PURPLE_MUSHROOM.get(),
-                    ModBlocks.WHITE_MUSHROOM.get(), ModBlocks.YELLOW_MUSHROOM.get(), ModBlocks.GLOW_MUSHROOM.get(),
-                    ModBlocks.BLACK_MUSHROOM_BLOCK.get(), ModBlocks.BLUE_MUSHROOM_BLOCK.get(), ModBlocks.CYAN_MUSHROOM_BLOCK.get(),
-                    ModBlocks.GREEN_MUSHROOM_BLOCK.get(), ModBlocks.ORANGE_MUSHROOM_BLOCK.get(), ModBlocks.PURPLE_MUSHROOM_BLOCK.get(),
-                    ModBlocks.WHITE_MUSHROOM_BLOCK.get(), ModBlocks.YELLOW_MUSHROOM_BLOCK.get(), ModBlocks.GLOW_MUSHROOM_BLOCK.get(),
-                    ModBlocks.MYSTIC_LEAVES.get(), ModBlocks.SKY_LEAVES.get(), ModBlocks.PALM_LEAVES.get(),
-                    ModBlocks.MYSTIC_DOOR.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.GILDED_SKY_DOOR.get(),
-                    ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get()}) {
-                ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
-            }
-        });
+    public static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
+        event.registerEntityModifier(WolfRenderer.class, (Wolf wolf, WolfRenderState state) -> state.setRenderData(WolfFrogHatLayer.WOLF, wolf));
+    }
+
+    @SubscribeEvent
+    public static void registerFluidModels(RegisterFluidModelsEvent event) {
+        if (ModFluidTypes.GOO_FLUID_TYPE.get() instanceof BaseFluidType goo) {
+            event.register(new FluidModel.Unbaked(
+                    new Material(goo.getStillTextureId(), true),
+                    new Material(goo.getFlowingTextureId(), true),
+                    new Material(goo.getOverlayTextureId(), true),
+                    FluidTintSources.constant(goo.getTintColour())), ModFluids.SOURCE_GOO, ModFluids.FLOWING_GOO);
+        }
     }
 
     // FluidType lost its own initializeClient(Consumer) hook - client extensions for fluid types

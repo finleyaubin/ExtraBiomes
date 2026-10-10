@@ -3,19 +3,23 @@ package net.winepicfin.extrabiomes.fabric.gametest;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.worldgen.MobSpawnCapTuning;
+import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import org.slf4j.Logger;
@@ -33,8 +37,8 @@ import org.slf4j.Logger;
 public class BiomeModifierApplicationGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
-    public static void jungleGetsUndergroundJungleFeaturesAndSpawns(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    public void jungleGetsUndergroundJungleFeaturesAndSpawns(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: starting");
         Biome jungle = biome(helper, Biomes.JUNGLE);
 
@@ -50,15 +54,15 @@ public class BiomeModifierApplicationGameTests {
         // MobCategoryAccessor mixin applied and FabricSpawnCaps' write landed.
         int waterAmbientCap = MobCategory.WATER_AMBIENT.getMaxInstancesPerChunk();
         helper.assertTrue(waterAmbientCap == MobSpawnCapTuning.WATER_AMBIENT_MAX_INSTANCES_PER_CHUNK,
-                "Expected WATER_AMBIENT spawn cap " + MobSpawnCapTuning.WATER_AMBIENT_MAX_INSTANCES_PER_CHUNK
-                        + " but it was " + waterAmbientCap);
+                Component.literal("Expected WATER_AMBIENT spawn cap " + MobSpawnCapTuning.WATER_AMBIENT_MAX_INSTANCES_PER_CHUNK
+                        + " but it was " + waterAmbientCap));
 
         LOGGER.info("[BiomeModifierApplicationGameTests] jungleGetsUndergroundJungleFeaturesAndSpawns: passed");
         helper.succeed();
     }
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
-    public static void mushroomFieldsGetsHugeMushroomsAndSpawns(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    public void mushroomFieldsGetsHugeMushroomsAndSpawns(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] mushroomFieldsGetsHugeMushroomsAndSpawns: starting");
         Biome mushroomFields = biome(helper, Biomes.MUSHROOM_FIELDS);
 
@@ -70,8 +74,8 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
-    public static void darkForestGetsHugeMushrooms(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    public void darkForestGetsHugeMushrooms(GameTestHelper helper) {
         LOGGER.info("[BiomeModifierApplicationGameTests] darkForestGetsHugeMushrooms: starting");
         Biome darkForest = biome(helper, Biomes.DARK_FOREST);
 
@@ -81,14 +85,26 @@ public class BiomeModifierApplicationGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty")
-    public static void plainsGetsHarpySpawn(GameTestHelper helper) {
-        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: starting");
-        Biome plains = biome(helper, Biomes.PLAINS);
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    public void jellyfishFieldsGetsJellyfishSpawn(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] jellyfishFieldsGetsJellyfishSpawn: starting");
+        Biome jellyfishFields = biome(helper, ModBiomes.JELLYFISH_FIELDS);
 
-        assertHasSpawn(helper, plains, MobCategory.MONSTER, ModEntities.HARPY.get());
+        assertHasSpawn(helper, jellyfishFields, MobCategory.WATER_AMBIENT, ModEntities.JELLYFISH.get());
 
-        LOGGER.info("[BiomeModifierApplicationGameTests] plainsGetsHarpySpawn: passed");
+        LOGGER.info("[BiomeModifierApplicationGameTests] jellyfishFieldsGetsJellyfishSpawn: passed");
+        helper.succeed();
+    }
+
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty")
+    public void overworldGetsHarpySpawn(GameTestHelper helper) {
+        LOGGER.info("[BiomeModifierApplicationGameTests] overworldGetsHarpySpawn: starting");
+        // Since 26.3 the gametest overworld is flat desert, the only biome foundInOverworld() matches here.
+        Biome desert = biome(helper, Biomes.DESERT);
+
+        assertHasSpawn(helper, desert, MobCategory.MONSTER, ModEntities.HARPY.get());
+
+        LOGGER.info("[BiomeModifierApplicationGameTests] overworldGetsHarpySpawn: passed");
         helper.succeed();
     }
 
@@ -108,12 +124,14 @@ public class BiomeModifierApplicationGameTests {
                 }
             }
         }
-        helper.assertTrue(present, "Expected " + expected.location() + " in " + step + " but it was missing");
+        helper.assertTrue(present, Component.literal("Expected " + expected.identifier() + " in " + step + " but it was missing"));
     }
 
     private static void assertHasSpawn(GameTestHelper helper, Biome biome, MobCategory category, EntityType<?> expected) {
-        boolean present = biome.getMobSettings().getMobs(category).unwrap().stream()
-                .anyMatch(spawnerData -> spawnerData.type == expected);
-        helper.assertTrue(present, "Expected " + category + " spawn of " + expected + " but it was missing");
+        MobSpawnSettings mobSpawnSettings = biome.getAttributes().applyModifier(
+                EnvironmentAttributes.NATURAL_MOB_SPAWNS, EnvironmentAttributes.NATURAL_MOB_SPAWNS.defaultValue());
+        boolean present = mobSpawnSettings.getMobsInCategory(category).unwrap().stream()
+                .anyMatch(spawnerData -> spawnerData.value().type() == expected);
+        helper.assertTrue(present, Component.literal("Expected " + category + " spawn of " + expected + " but it was missing"));
     }
 }

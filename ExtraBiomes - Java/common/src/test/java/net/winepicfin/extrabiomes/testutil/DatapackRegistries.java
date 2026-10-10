@@ -11,47 +11,48 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.packs.FilePackResources;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.advancements.BaitLureTrigger;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
-import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.DoubleTallGrassFeature;
-import net.winepicfin.extrabiomes.worldgen.features.moorland.PodzolConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.WaterLilyFixupFeature;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.GooConversionFeature;
+import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFieldFeature;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.CaveVineFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.FallenJungleTreeFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeature;
-import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeatureConfiguration;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.BasaltBankFeature;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.MinYFilter;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
+import net.winepicfin.extrabiomes.worldgen.placement.LakeSafeOrigin;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.RiverNoiseFilter;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructure;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
@@ -144,7 +145,7 @@ public final class DatapackRegistries {
             // register() helper (which re-freezes after each call, and `new Block(...)` needs
             // frozen=false at construction time, before register() ever runs).
             Block block = placeholderBlock(id);
-            Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), block);
+            Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), block);
         }
         BuiltInRegistries.BLOCK.freeze();
 
@@ -153,8 +154,8 @@ public final class DatapackRegistries {
         setFrozen(BuiltInRegistries.ITEM, false);
         for (String id : modIds) {
             net.minecraft.world.item.Item item = new net.minecraft.world.item.Item(new net.minecraft.world.item.Item.Properties()
-                    .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id))));
-            Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), item);
+                    .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id))));
+            Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id), item);
         }
         BuiltInRegistries.ITEM.freeze();
 
@@ -166,29 +167,38 @@ public final class DatapackRegistries {
         for (String id : modIds) {
             net.minecraft.world.entity.EntityType<?> entityType =
                     net.minecraft.world.entity.EntityType.Builder.createNothing(net.minecraft.world.entity.MobCategory.MISC)
-                            .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
+                            .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
             register(BuiltInRegistries.ENTITY_TYPE, Registries.ENTITY_TYPE, id, entityType);
         }
         BuiltInRegistries.ENTITY_TYPE.freeze();
 
-        setFrozen(BuiltInRegistries.FEATURE, false);
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "single_structure", new SingleStructureFeature(SingleStructureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "bryce_pillars", new BrycePillarsFeature(BrycePillarsConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_podzol_conversion", new PodzolConversionFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_double_tall_grass", new DoubleTallGrassFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "moorland_waterlily_fixup", new WaterLilyFixupFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "mystic_goo_conversion", new GooConversionFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "netherlands_wheat_field", new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_cave_vine", new CaveVineFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_fallen_jungle_tree", new FallenJungleTreeFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "underground_jungle_multi", new MultiFeature(MultiFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "basalt_bank", new BasaltBankFeature(NoneFeatureConfiguration.CODEC));
-        register(BuiltInRegistries.FEATURE, Registries.FEATURE, "lava_flow_kickstart", new net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature(NoneFeatureConfiguration.CODEC));
-        BuiltInRegistries.FEATURE.freeze();
+        setFrozen(BuiltInRegistries.FEATURE_TYPE, false);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "single_structure", SingleStructureFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "bryce_pillars", BrycePillarsFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_double_tall_grass", DoubleTallGrassFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_waterlily_fixup", WaterLilyFixupFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "mystic_goo_conversion", GooConversionFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "netherlands_wheat_field", NetherlandsWheatFieldFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "netherlands_tulip_field", NetherlandsTulipFieldFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_cave_vine", CaveVineFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_fallen_jungle_tree", FallenJungleTreeFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "underground_jungle_multi", MultiFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "basalt_bank", BasaltBankFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "lava_flow_kickstart", net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.LavaFlowKickstartFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_ceiling_lavafall", net.winepicfin.extrabiomes.worldgen.features.glacier.CeilingLavafallFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_ice_encased_loot", net.winepicfin.extrabiomes.worldgen.features.glacier.IceEncasedLootFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_crevasse", net.winepicfin.extrabiomes.worldgen.features.glacier.CrevasseFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_finish", net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFinishFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_meltwater_stream", net.winepicfin.extrabiomes.worldgen.features.glacier.MeltwaterStreamFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_cave_pillar", net.winepicfin.extrabiomes.worldgen.features.glacier.CavePillarFeature.CODEC);
+        BuiltInRegistries.FEATURE_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
-        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "river_noise_filter", (PlacementModifierType<RiverNoiseFilter>) () -> RiverNoiseFilter.CODEC);
-        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "min_y_filter", (PlacementModifierType<MinYFilter>) () -> MinYFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "river_noise_filter", RiverNoiseFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "min_y_filter", MinYFilter.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "in_biome_chunk_sample", InBiomeChunkSample.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "lake_safe_origin", LakeSafeOrigin.CODEC);
+        register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, Registries.PLACEMENT_MODIFIER_TYPE, "chunk_origin_snap", ChunkOriginSnap.CODEC);
         BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.STRUCTURE_TYPE, false);
@@ -243,7 +253,7 @@ public final class DatapackRegistries {
     // their Holder.Reference value still null, surfacing later as "Trying to access unbound value".
     private static <T> void register(Registry<T> registry, ResourceKey<? extends Registry<T>> registryKey, String path, T value) {
         ((net.minecraft.core.WritableRegistry<T>) registry).register(
-                ResourceKey.create(registryKey, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, path)), value, RegistrationInfo.BUILT_IN);
+                ResourceKey.create(registryKey, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, path)), value, RegistrationInfo.BUILT_IN);
     }
 
     // A plain Block has no BlockState properties at all, which is fine for most loot
@@ -254,7 +264,7 @@ public final class DatapackRegistries {
     // (see ModBlocks.registerStandardWoodSet/registerBlock call sites), not a per-id hardcoded list.
     private static Block placeholderBlock(String id) {
         BlockBehaviour.Properties properties = BlockBehaviour.Properties.of()
-                .setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
+                .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, id)));
         if (id.equals("pebble_block")) {
             return new PebbleBlock(properties);
         }
@@ -326,6 +336,14 @@ public final class DatapackRegistries {
         }
     }
 
+    private static <T> void bindRegistryTags(MultiPackResourceManager resources, Registry<T> registry) {
+        setFrozen(registry, false);
+        net.minecraft.core.WritableRegistry<T> writable = (net.minecraft.core.WritableRegistry<T>) registry;
+        writable.bindTags(net.minecraft.tags.TagLoader.loadTagsForRegistry(
+                resources, registry.key(), net.minecraft.tags.TagLoader.ElementLookup.fromWritableRegistry(writable)));
+        registry.freeze();
+    }
+
     private static HolderLookup.Provider load() {
         List<PackResources> packs = new ArrayList<>();
         // Vanilla's own built-in datapack (data/minecraft/**, read straight off the merged
@@ -335,7 +353,10 @@ public final class DatapackRegistries {
         // can't locate this jar reliably from a plain Gradle test JVM (no dev-launch classpath
         // marker), so open it directly instead via the jar backing a known vanilla class.
         packs.add(new FilePackResources.FileResourcesSupplier(vanillaJarPath())
-                .openPrimary(new PackLocationInfo("vanilla", Component.literal("vanilla"), PackSource.BUILT_IN, Optional.empty())));
+                .openResources(
+                        new PackLocationInfo("vanilla", Component.literal("vanilla"), PackSource.BUILT_IN, Optional.empty()),
+                        new Pack.Metadata(Component.literal("vanilla"), PackCompatibility.COMPATIBLE, FeatureFlags.VANILLA_SET, List.of()))
+                .findFirst().orElseThrow());
         for (Path root : DATA_ROOTS) {
             packs.add(new PathPackResources(
                     new PackLocationInfo(root.toString(), Component.literal(root.toString()), PackSource.BUILT_IN, Optional.empty()),
@@ -347,19 +368,19 @@ public final class DatapackRegistries {
             // #minecraft:ancient_city_replaceable) instead of tolerating an unbound one - block/item
             // tags aren't part of registriesToLoad()'s dynamic-registry set, so bind them explicitly
             // first from the same vanilla+mod packs.
-            setFrozen(BuiltInRegistries.BLOCK, false);
-            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.BLOCK);
-            BuiltInRegistries.BLOCK.freeze();
-            setFrozen(BuiltInRegistries.ITEM, false);
-            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.ITEM);
-            BuiltInRegistries.ITEM.freeze();
-            setFrozen(BuiltInRegistries.ENTITY_TYPE, false);
-            net.minecraft.tags.TagLoader.loadTagsForRegistry(resources, (net.minecraft.core.WritableRegistry<?>) BuiltInRegistries.ENTITY_TYPE);
-            BuiltInRegistries.ENTITY_TYPE.freeze();
+            // As of 26.1, TagLoader.loadTagsForRegistry(ResourceManager, WritableRegistry) merely computes
+            // and discards the tag map instead of binding it - bindTags(...) must be called explicitly now.
+            bindRegistryTags(resources, BuiltInRegistries.BLOCK);
+            bindRegistryTags(resources, BuiltInRegistries.ITEM);
+            bindRegistryTags(resources, BuiltInRegistries.ENTITY_TYPE);
+            // Vanilla's data-driven villager trades reference potions via #minecraft:tradeable.
+            bindRegistryTags(resources, BuiltInRegistries.POTION);
             RegistryAccess base = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
             List<net.minecraft.core.HolderLookup.RegistryLookup<?>> baseLookups =
                     base.registries().<net.minecraft.core.HolderLookup.RegistryLookup<?>>map(entry -> entry.value()).toList();
-            RegistryAccess.Frozen loaded = RegistryDataLoader.load(resources, baseLookups, registriesToLoad());
+            // RegistryDataLoader.load() became async (returns a CompletableFuture) as of 26.1; run it
+            // synchronously on the calling thread since tests just need the result immediately.
+            RegistryAccess.Frozen loaded = RegistryDataLoader.load(resources, baseLookups, registriesToLoad(), Runnable::run).join();
             // RegistryDataLoader.load()'s result only carries the registries it just loaded
             // (registriesToLoad()) - callers (DatapackSchemaTest) need item/block/enchantment/...
             // lookups too (e.g. loot table/advancement/recipe predicates), so merge base back in.
@@ -369,40 +390,20 @@ public final class DatapackRegistries {
         }
     }
 
-    // The worldgen registries this mod actually authors data for. Deliberately narrower than
-    // RegistryDataLoader.WORLDGEN_REGISTRIES as a whole - the full vanilla list also loads
-    // registries like enchantment/trim_pattern/wolf_variant whose own vanilla JSON leans on
-    // item/entity_type tags for HolderSet fields, which need a full ReloadableServerResources-
-    // style tag pass this test doesn't set up. None of that is relevant to validating this mod's
-    // own worldgen JSON, so only load the registries this mod (and its cross-references) touch.
-    //
+    // Full WORLD_REGISTRIES: vanilla's recipes/advancements/loot tables cross-reference nearly all of it.
     // Computed lazily (not a static field) - touching RegistryDataLoader's own class before
     // Bootstrap.bootStrap() has run trips the same "Not bootstrapped" failure this method's
     // caller is careful to avoid.
     private static List<RegistryDataLoader.RegistryData<?>> registriesToLoad() {
-        Set<ResourceKey<?>> keys = Set.of(
-                Registries.CONFIGURED_FEATURE,
-                Registries.PLACED_FEATURE,
-                Registries.STRUCTURE,
-                Registries.STRUCTURE_SET,
-                Registries.TEMPLATE_POOL,
-                Registries.PROCESSOR_LIST,
-                Registries.BIOME,
-                Registries.NOISE,
-                Registries.DENSITY_FUNCTION,
-                Registries.NOISE_SETTINGS,
-                Registries.CONFIGURED_CARVER,
-                // Not authored by this mod, but every vanilla nether biome this test also loads
-                // as base content (basalt_deltas, crimson_forest, ...) references its ambient
-                // sound presets through this registry.
-                Registries.MULTI_NOISE_BIOME_SOURCE_PARAMETER_LIST,
-                // Not authored by this mod, but this mod's own loot tables/recipes/advancements
-                // reference vanilla enchantments (looting, fortune, silk_touch, ...) by id, and
-                // vanilla's own enchantment JSON in turn references damage types (thorns, ...).
-                Registries.ENCHANTMENT,
-                Registries.DAMAGE_TYPE);
-        return RegistryDataLoader.WORLDGEN_REGISTRIES.stream()
-                .filter(data -> keys.contains(data.key()))
+        // Advancements reference recipes and loot tables reference predicates by id.
+        Set<ResourceKey<?>> reloadableKeys = Set.of(
+                Registries.RECIPE,
+                Registries.ADVANCEMENT,
+                Registries.LOOT_TABLE,
+                Registries.PREDICATE);
+        return java.util.stream.Stream.concat(
+                        RegistryDataLoader.WORLD_REGISTRIES.stream(),
+                        RegistryDataLoader.RELOADABLE_REGISTRIES.stream().filter(data -> reloadableKeys.contains(data.key())))
                 .toList();
     }
 

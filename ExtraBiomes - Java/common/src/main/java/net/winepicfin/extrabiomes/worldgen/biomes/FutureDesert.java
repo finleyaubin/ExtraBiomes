@@ -1,11 +1,13 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.future.FutureTreeFeatures;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class FutureDesert {
 
@@ -16,7 +18,7 @@ public class FutureDesert {
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
@@ -30,11 +32,11 @@ public class FutureDesert {
                 .temperature(BiomeClimateTuning.FUTURE_DESERT.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x113290))
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.FUTURE_DESERT.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xC0D8FF))
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.FUTURE_DESERT.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.FUTURE_DESERT.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.FUTURE_DESERT.grassColor()).build())
                 .build();

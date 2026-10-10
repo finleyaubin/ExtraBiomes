@@ -7,8 +7,12 @@
   "authors": [
     "${mod_authors}"
   ],
-  "contact": {},
-  "license": "MIT",
+  "contact": {
+    "homepage": "https://modrinth.com/mod/extrabiome",
+    "sources": "https://github.com/finleyaubin/ExtraBiomes",
+    "issues": "https://github.com/finleyaubin/ExtraBiomes/issues"
+  },
+  "license": "GPL-3.0-only",
   "icon": "extrabiomes_logo.png",
   "environment": "*",
   "entrypoints": {
@@ -20,8 +24,11 @@
     ],
     "fabric-gametest": [
       "net.winepicfin.extrabiomes.fabric.gametest.BiomeGenerationGameTests",
+      "net.winepicfin.extrabiomes.fabric.gametest.BiomeMapGameTests",
       "net.winepicfin.extrabiomes.fabric.gametest.BiomeModifierApplicationGameTests",
-      "net.winepicfin.extrabiomes.fabric.gametest.SpawnEggItemGameTests"
+      "net.winepicfin.extrabiomes.fabric.gametest.FloatingJungleGameTests",
+      "net.winepicfin.extrabiomes.fabric.gametest.SpawnEggItemGameTests",
+      "net.winepicfin.extrabiomes.fabric.gametest.WormBreedingGameTests"
     ],
     "fabric-datagen": [
       "net.winepicfin.extrabiomes.fabric.datagen.FabricDataGenerators"
@@ -35,9 +42,8 @@
   ],
   "depends": {
     "fabricloader": ">=0.15.7",
-    "fabric": "*",
     "fabric-api": "*",
-    "minecraft": "1.21.4",
+    "minecraft": "26.3",
     "terrablender": "*"
   },
   "suggests": {

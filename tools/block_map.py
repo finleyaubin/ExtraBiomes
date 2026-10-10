@@ -138,8 +138,18 @@ def map_block(name, states, be=None):
     if name in ("minecraft:black_concrete", "minecraft:white_concrete",
                 "minecraft:cyan_carpet", "minecraft:crafting_table",
                 "minecraft:blackstone", "minecraft:cracked_polished_blackstone_bricks",
-                "minecraft:moss_block"):
+                "minecraft:moss_block", "minecraft:dirt", "minecraft:grass_block", "minecraft:moss_carpet"):
         return name, {}
+    if name == "minecraft:hanging_roots":
+        return name, {"waterlogged": "false"}
+    if name in ("minecraft:jungle_leaves", "minecraft:oak_leaves"):
+        return name, {"persistent": _b(states.get("persistent_bit", 0)), "distance": "7", "waterlogged": "false"}
+    if name == "minecraft:vine":
+        bits = int(states.get("vine_direction_bits", 0))
+        return name, {
+            "up": "false",
+            "south": _b(bool(bits & 1)), "west": _b(bool(bits & 2)), "north": _b(bool(bits & 4)), "east": _b(bool(bits & 8)),
+        }
     if name == "minecraft:magma":
         return "minecraft:magma_block", {}
     if name == "minecraft:lava":
@@ -162,7 +172,8 @@ def map_block(name, states, be=None):
     if name == "minecraft:iron_chain":
         return "minecraft:chain", {"axis": _s(states.get("pillar_axis", "y"))}
 
-    if name in ("minecraft:ice", "minecraft:blue_ice", "minecraft:packed_ice"):
+    if name in ("minecraft:ice", "minecraft:blue_ice", "minecraft:packed_ice",
+                "minecraft:powder_snow", "minecraft:gravel", "minecraft:andesite", "minecraft:calcite"):
         return name, {}
 
     if name == "minecraft:stone":
@@ -321,16 +332,16 @@ def map_block(name, states, be=None):
                 "extrabiomes:gilded_sky_planks", "extrabiomes:sky_planks"):
         return name, {}
 
-    if name in ("extrabiomes:dense_cloud_brick_slab", "extrabiomes:gilded_sky_slab",
-                "extrabiomes:sky_slab"):
+    if name in ("extrabiomes:dense_cloud_brick_slab", "extrabiomes:dense_cloud_slab",
+                "extrabiomes:gilded_sky_slab", "extrabiomes:sky_slab"):
         if states.get("extrabiomes:is_double") in (1, True):
             stype = "double"
         else:
             stype = _s(states.get("minecraft:vertical_half", "bottom"))
         return name, {"type": stype, "waterlogged": "false"}
 
-    if name in ("extrabiomes:dense_cloud_brick_stairs", "extrabiomes:gilded_sky_stairs",
-                "extrabiomes:sky_stairs"):
+    if name in ("extrabiomes:dense_cloud_brick_stairs", "extrabiomes:dense_cloud_stairs",
+                "extrabiomes:gilded_sky_stairs", "extrabiomes:sky_stairs"):
         direction = int(states.get("extrabiomes:direction", 0))
         half = _s(states.get("minecraft:vertical_half", "bottom"))
         if direction in STAIR_CORNER:
@@ -399,6 +410,10 @@ def map_block(name, states, be=None):
             "west": _b(states.get("extrabiomes:west", 0)),
             "waterlogged": "false",
         }
+
+    # Bedrock registers the sapling as "sky_sapling_block"; Java's SaplingBlock only has "stage"
+    if name == "extrabiomes:sky_sapling_block":
+        return "extrabiomes:sky_sapling", {"stage": "0"}
 
     if name == "extrabiomes:sky_leaves":
         return "extrabiomes:sky_leaves", {

@@ -4,15 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.RandomSelectorFeature;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 
 import java.util.List;
 
@@ -45,47 +43,32 @@ import java.util.List;
  * default (remaining 25%).
  */
 public class PalmTreeFeatures {
-    private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_SMALL_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_small"));
-    private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_MEDIUM_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_medium"));
-    private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_WIDE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_wide"));
-    private static final ResourceKey<ConfiguredFeature<?, ?>> PALM_LARGE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_large"));
+    private static final ResourceKey<Feature> PALM_SMALL_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_small"));
+    private static final ResourceKey<Feature> PALM_MEDIUM_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_medium"));
+    private static final ResourceKey<Feature> PALM_WIDE_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_wide"));
+    private static final ResourceKey<Feature> PALM_LARGE_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm_tree_large"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_PALM_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_palm_tree"));
+    public static final ResourceKey<Feature> SELECT_PALM_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_palm_tree"));
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
         // anchor = each structure's measured base-log column (trunks lean, so it isn't local (0,0,0)) so the origin's heightmap/water check tests the trunk's true ground column, not an arbitrary corner.
-        context.register(PALM_SMALL_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_2"), new BlockPos(1, 0, 1))
-        ));
-        context.register(PALM_MEDIUM_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_1"), new BlockPos(5, 0, 2))
-        ));
-        context.register(PALM_WIDE_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_3"), new BlockPos(4, 0, 5))
-        ));
-        context.register(PALM_LARGE_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_4"), new BlockPos(6, 0, 4))
-        ));
+        context.register(PALM_SMALL_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_2"), new BlockPos(1, 0, 1)));
+        context.register(PALM_MEDIUM_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_1"), new BlockPos(5, 0, 2)));
+        context.register(PALM_WIDE_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_3"), new BlockPos(4, 0, 5)));
+        context.register(PALM_LARGE_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "palm/palm_tree_4"), new BlockPos(6, 0, 4)));
 
-        context.register(SELECT_PALM_KEY, new ConfiguredFeature<>(
-                Feature.RANDOM_SELECTOR,
-                new RandomFeatureConfiguration(
+        context.register(SELECT_PALM_KEY, new RandomSelectorFeature(
                         List.of(
-                                new WeightedPlacedFeature(PlacementUtils.inlinePlaced(context.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(PALM_LARGE_KEY)), 0.1F),
-                                new WeightedPlacedFeature(PlacementUtils.inlinePlaced(context.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(PALM_WIDE_KEY)), 2.0F / 9.0F),
-                                new WeightedPlacedFeature(PlacementUtils.inlinePlaced(context.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(PALM_MEDIUM_KEY)), 0.45F / 0.7F)
+                                new WeightedPlacedFeature(PlacementUtils.inlinePlaced(context.lookup(Registries.FEATURE).getOrThrow(PALM_LARGE_KEY)), 0.1F),
+                                new WeightedPlacedFeature(PlacementUtils.inlinePlaced(context.lookup(Registries.FEATURE).getOrThrow(PALM_WIDE_KEY)), 2.0F / 9.0F),
+                                new WeightedPlacedFeature(PlacementUtils.inlinePlaced(context.lookup(Registries.FEATURE).getOrThrow(PALM_MEDIUM_KEY)), 0.45F / 0.7F)
                         ),
-                        PlacementUtils.inlinePlaced(context.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(PALM_SMALL_KEY))
-                )
-        ));
+                        PlacementUtils.inlinePlaced(context.lookup(Registries.FEATURE).getOrThrow(PALM_SMALL_KEY))
+                ));
     }
 }

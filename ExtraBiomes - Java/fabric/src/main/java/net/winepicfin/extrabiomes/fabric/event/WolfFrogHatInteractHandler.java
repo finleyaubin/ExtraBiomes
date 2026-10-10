@@ -6,7 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,7 +28,7 @@ public class WolfFrogHatInteractHandler {
             boolean shearing = heldItem.getItem() == Items.SHEARS && headItem.getItem() == ModItems.FROG_HELMET.get();
             if (!equipping && !shearing) return InteractionResult.PASS;
 
-            if (level.isClientSide) return InteractionResult.SUCCESS;
+            if (level.isClientSide()) return InteractionResult.SUCCESS;
 
             if (equipping) {
                 wolf.setItemSlot(EquipmentSlot.HEAD, heldItem.copy());

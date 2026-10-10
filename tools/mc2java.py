@@ -157,6 +157,8 @@ LOOT_TABLE_MAP = {
     "loot_tables/chests/common_skycity.json": "extrabiomes:chests/common_skycity",
     "loot_tables/chests/rare_skycity.json": "extrabiomes:chests/rare_skycity",
     "loot_tables/chests/epic_skycity.json": "extrabiomes:chests/epic_skycity",
+    "loot_tables/chests/snow_spire_summit.json": "extrabiomes:chests/snow_spire_summit",
+    "loot_tables/chests/floating_jungle_ruin.json": "extrabiomes:chests/floating_jungle_ruin",
 }
 
 
@@ -259,6 +261,30 @@ def convert(path, warnings, id_counter):
         npidx = layer0[(nx * sy + ny) * sz + nz]
         return npidx >= 0 and palette[npidx]["name"] != "minecraft:air"
 
+    # Leaf `distance` (1 = touching a log ... 7 = no log in range). Bedrock has no such
+    # state, and structure placement doesn't recompute it, so a flat "7" would let
+    # non-persistent leaves decay even when a log is right beside them. Compute it
+    # from the structure's own sky logs so trees keep their leaves until the trunk goes.
+    leaf_dist = {}
+    def _kind(flat):
+        pi = layer0[flat]
+        return palette[pi]["name"] if pi is not None and pi >= 0 else None
+    frontier = [f for f in range(len(layer0)) if _kind(f) == "extrabiomes:sky_log"]
+    level = 0
+    while frontier and level < 6:
+        level += 1
+        nxt = []
+        for f in frontier:
+            x, y, z = coord(f)
+            for dx, dy, dz in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
+                nx, ny, nz = x + dx, y + dy, z + dz
+                if 0 <= nx < sx and 0 <= ny < sy and 0 <= nz < sz:
+                    nf = (nx * sy + ny) * sz + nz
+                    if nf not in leaf_dist and _kind(nf) == "extrabiomes:sky_leaves":
+                        leaf_dist[nf] = level
+                        nxt.append(nf)
+        frontier = nxt
+
     blocks = []
     for flat, pidx in enumerate(layer0):
         if pidx < 0:  # void -> emit nothing
@@ -284,6 +310,8 @@ def convert(path, warnings, id_counter):
             props = {"orientation": orientation}
         else:
             java_name, props = block_map.map_block(name, states, be)
+            if java_name == "extrabiomes:sky_leaves" and flat in leaf_dist:
+                props["distance"] = str(leaf_dist[flat])
             if java_name is None:
                 warnings.append("unmapped block id: %s states=%s" % (name, states))
                 java_name, props = "minecraft:air", {}

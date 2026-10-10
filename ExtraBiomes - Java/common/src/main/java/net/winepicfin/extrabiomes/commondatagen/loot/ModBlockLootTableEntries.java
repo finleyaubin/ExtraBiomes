@@ -1,6 +1,8 @@
 package net.winepicfin.extrabiomes.commondatagen.loot;
 
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -10,8 +12,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
@@ -24,6 +27,7 @@ import java.util.function.Function;
 // Shared body of both loaders' block loot table generators; dropSelf/add/createXTable are protected BlockLootSubProvider members a plain external helper can't call directly, so this takes bound method references that each loader's own subclass creates and hands in.
 public class ModBlockLootTableEntries {
     public static void populate(
+            HolderGetter<Block> blocks,
             Consumer<Block> dropSelf,
             BiConsumer<Block, Function<Block, LootTable.Builder>> add,
             Function<Block, LootTable.Builder> createSlabItemTable,
@@ -31,16 +35,28 @@ public class ModBlockLootTableEntries {
             BiFunctionLeaves createLeavesDrops,
             BiFunctionOre createOreDrop,
             Function<net.minecraft.world.level.ItemLike, LootTable.Builder> createSingleItemTable,
-            BiFunctionMushroom createMushroomBlockDrop) {
+            BiFunctionMushroom createMushroomBlockDrop,
+            Function<Block, LootTable.Builder> createCopperOreDrops,
+            Function<Block, LootTable.Builder> createLapisOreDrops,
+            Function<Block, LootTable.Builder> createRedstoneOreDrops) {
         dropSelf.accept(ModBlocks.DENSE_CLOUD.get());
+        dropSelf.accept(ModBlocks.DENSE_CLOUD_STAIRS.get());
+        add.accept(ModBlocks.DENSE_CLOUD_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.DENSE_CLOUD_SLAB.get()));
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK.get());
         dropSelf.accept(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         add.accept(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get()));
         add.accept(ModBlocks.NETHER_DIAMOND_ORE.get(), block -> createOreDrop.apply(ModBlocks.NETHER_DIAMOND_ORE.get(), Items.DIAMOND));
+        add.accept(ModBlocks.NETHER_COAL_ORE.get(), block -> createOreDrop.apply(block, Items.COAL));
+        add.accept(ModBlocks.NETHER_EMERALD_ORE.get(), block -> createOreDrop.apply(block, Items.EMERALD));
+        add.accept(ModBlocks.NETHER_IRON_ORE.get(), block -> createOreDrop.apply(block, Items.RAW_IRON));
+        add.accept(ModBlocks.NETHER_COPPER_ORE.get(), createCopperOreDrops);
+        add.accept(ModBlocks.NETHER_LAPIS_ORE.get(), createLapisOreDrops);
+        add.accept(ModBlocks.NETHER_REDSTONE_ORE.get(), createRedstoneOreDrops);
         dropSelf.accept(ModBlocks.STICK_PILE.get());
-        add.accept(ModBlocks.PEBBLE.get(), block -> createPebbleTable(block, PebbleBlock.SIZE, ModItems.PEBBLE.get()));
-        add.accept(ModBlocks.MOSSY_PEBBLE.get(), block -> createPebbleTable(block, MossyPebbleBlock.SIZE, ModItems.MOSSY_PEBBLE.get()));
+        add.accept(ModBlocks.PEBBLE.get(), block -> createPebbleTable(blocks, block, PebbleBlock.SIZE, ModItems.PEBBLE.get()));
+        add.accept(ModBlocks.MOSSY_PEBBLE.get(), block -> createPebbleTable(blocks, block, MossyPebbleBlock.SIZE, ModItems.MOSSY_PEBBLE.get()));
 
+        dropSelf.accept(ModBlocks.GRASS_STONE.get());
         dropSelf.accept(ModBlocks.BLACK_SAND.get());
         dropSelf.accept(ModBlocks.BLACK_SANDSTONE.get());
         dropSelf.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
@@ -149,18 +165,22 @@ public class ModBlockLootTableEntries {
     }
 
     // Pebble blocks store their pile size (1-3) as a block state and must drop that many pebble items.
-    private static LootTable.Builder createPebbleTable(Block block, IntegerProperty sizeProperty, Item item) {
+    private static LootTable.Builder createPebbleTable(HolderGetter<Block> blocks, Block block, IntegerProperty sizeProperty, Item item) {
         LootTable.Builder table = LootTable.lootTable();
         for (int size = 1; size <= 3; size++) {
             table.withPool(LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1))
+                    .setRolls(exactly(1))
                     .when(ExplosionCondition.survivesExplosion())
                     .add(LootItem.lootTableItem(item)
-                            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(size)))
-                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                                    .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(sizeProperty, size)))));
+                            .apply(SetItemCountFunction.setCount(exactly(size)))
+                            .when(MatchBlock.blockMatches(blocks, block,
+                                    StatePropertiesPredicate.Builder.properties().hasProperty(sizeProperty, size)))));
         }
         return table;
+    }
+
+    private static Holder<ContextIntProvider> exactly(int value) {
+        return Holder.direct(new ConstantValue(value));
     }
 
     // createLeavesDrops/createOreDrop take more parameters than stock BiFunction shapes support, so each loader binds a tiny adapter lambda around its own protected method instead.

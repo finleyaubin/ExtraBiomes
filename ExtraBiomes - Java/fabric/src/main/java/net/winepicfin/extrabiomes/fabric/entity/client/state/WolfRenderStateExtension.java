@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.fabric.entity.client.state;
 
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import org.jetbrains.annotations.Nullable;
 
 // Implemented by a mixin onto WolfRenderState (see fabric/.../mixin/WolfRenderStateMixin) so

@@ -5,12 +5,15 @@
 # not just a warning.
 modLoader="javafml" #mandatory
 loaderVersion="${neoforge_loader_version_range}" #mandatory
-license="MIT License"
+license="GPL-3.0-only"
+issueTrackerURL="https://github.com/finleyaubin/ExtraBiomes/issues"
 [[mods]]
     modId="${mod_id}"
     version="${version}"
     displayName="${mod_name}"
-    logoFile="extrabiomes_logo.png"
+    iconFile="extrabiomes_logo.png"
+    displayURL="https://modrinth.com/mod/extrabiome"
+    credits="Built on Architectury API, TerraBlender and GeckoLib"
     authors="${mod_authors}"
     description='''${mod_description}'''
 [[dependencies.extrabiomes]]
@@ -28,7 +31,19 @@ license="MIT License"
 [[dependencies.extrabiomes]]
     modId="terrablender"
     type="required"
-    versionRange="[1.0.0.59,)"
+    versionRange="[5.0.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="geckolib"
+    type="required"
+    versionRange="[5.1,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.extrabiomes]]
+    modId="architectury"
+    type="required"
+    versionRange="[16,)"
     ordering="NONE"
     side="BOTH"
 # Optional - see neoforge/compat/create/CreateWindmillCompat.java. Not required to play; only enables

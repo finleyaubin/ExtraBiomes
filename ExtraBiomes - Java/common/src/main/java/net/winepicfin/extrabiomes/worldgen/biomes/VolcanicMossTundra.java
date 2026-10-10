@@ -1,11 +1,14 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.VolcanicMossTundraFeatures;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 /**
  * Java port of extrabiomes:volcanic_moss_tundra ("ExtraBiomes - Bedrock/packs/BP/biomes/
@@ -24,7 +27,7 @@ public class VolcanicMossTundra {
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
 
@@ -45,14 +48,14 @@ public class VolcanicMossTundra {
                 .temperature(BiomeClimateTuning.VOLCANIC_MOSS_TUNDRA.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x113290))
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.VOLCANIC_MOSS_TUNDRA.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xC0D8FF))
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.VOLCANIC_MOSS_TUNDRA.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.VOLCANIC_MOSS_TUNDRA.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.VOLCANIC_MOSS_TUNDRA.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.VOLCANIC_MOSS_TUNDRA.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.VOLCANIC_MOSS_TUNDRA.grassColor()).build())
                 .build();
     }
 }

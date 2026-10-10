@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -19,15 +19,15 @@ import java.util.concurrent.CompletableFuture;
 // net.winepicfin.extrabiomes.fabric.worldgen.FabricBiomeModifiers, registered directly from the mod
 // entrypoint (see ExtraBiomesFabric), not through datagen.
 public class ModDynamicRegistryProvider extends FabricDynamicRegistryProvider {
-    public ModDynamicRegistryProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public ModDynamicRegistryProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
     protected void configure(HolderLookup.Provider registries, Entries entries) {
-        entries.addAll(registries.lookupOrThrow(Registries.CONFIGURED_FEATURE));
+        entries.addAll(registries.lookupOrThrow(Registries.FEATURE));
         entries.addAll(registries.lookupOrThrow(Registries.PLACED_FEATURE));
-        entries.addAll(registries.lookupOrThrow(Registries.CONFIGURED_CARVER));
+        entries.addAll(registries.lookupOrThrow(Registries.CARVER));
         entries.addAll(registries.lookupOrThrow(Registries.TEMPLATE_POOL));
         entries.addAll(registries.lookupOrThrow(Registries.STRUCTURE));
         entries.addAll(registries.lookupOrThrow(Registries.STRUCTURE_SET));

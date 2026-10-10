@@ -1,12 +1,15 @@
 package net.winepicfin.extrabiomes.data;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -37,19 +40,19 @@ import java.util.List;
  */
 public abstract class CommonRecipes extends RecipeProvider {
 
-    protected CommonRecipes(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output);
+    protected CommonRecipes(BootstrapContext<Recipe<?>> output, BootstrapContext<Advancement> advancementOutput) {
+        super(output, advancementOutput);
     }
 
     public static final List<ItemLike> DIAMOND_SMELTABLES = List.of(ModBlocks.NETHER_DIAMOND_ORE.get());
     public static final List<ItemLike> FROG_SMELTABLES = List.of(ModItems.FROGS_LEGS.get());
     public static final List<ItemLike> PIRANHA_SMELTABLES = List.of(ModItems.PIRANHA.get());
 
-    public static void build(HolderLookup.Provider registries, RecipeOutput pWriter) {
-        new CommonRecipes(registries, pWriter) {
+    public static void build(BootstrapContext<Recipe<?>> output, BootstrapContext<Advancement> advancementOutput) {
+        new CommonRecipes(output, advancementOutput) {
             @Override
             protected void buildRecipes() {
-                this.buildAll(pWriter);
+                this.buildAll(this.output);
             }
         }.buildRecipes();
     }
@@ -62,7 +65,30 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .define('#', ModItems.WORM.get())
                 .unlockedBy(getHasName(ModItems.WORM.get()), has(ModItems.WORM.get()))
                 .save(pWriter);
+        shaped(RecipeCategory.COMBAT, ModItems.FROG_HELMET.get())
+                .pattern("#+#")
+                .pattern("# #")
+                .pattern("/ /")
+                .define('#', Items.WOOL.lime())
+                .define('+', Items.TURTLE_HELMET)
+                .define('/', ModItems.FROGS_LEGS.get())
+                .unlockedBy(getHasName(ModItems.FROGS_LEGS.get()), has(ModItems.FROGS_LEGS.get()))
+                .save(pWriter);
+        shaped(RecipeCategory.TOOLS, ModItems.JELLYFISHING_NET_EMPTY.get())
+                .pattern("  A")
+                .pattern(" # ")
+                .pattern("#  ")
+                .define('#', Items.STICK)
+                .define('A', Items.STRING)
+                .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+                .save(pWriter);
         oreBlasting(pWriter, DIAMOND_SMELTABLES, RecipeCategory.MISC, Items.DIAMOND, 0.25f, 100, "diamond", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_COAL_ORE.get()), RecipeCategory.MISC, Items.COAL, 0.1f, 100, "coal", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_COPPER_ORE.get()), RecipeCategory.MISC, Items.COPPER_INGOT, 0.7f, 100, "copper_ingot", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_EMERALD_ORE.get()), RecipeCategory.MISC, Items.EMERALD, 1.0f, 100, "emerald", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_IRON_ORE.get()), RecipeCategory.MISC, Items.IRON_INGOT, 0.7f, 100, "iron_ingot", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_LAPIS_ORE.get()), RecipeCategory.MISC, Items.LAPIS_LAZULI, 0.2f, 100, "lapis_lazuli", Boolean.TRUE);
+        oreBlasting(pWriter, List.of(ModBlocks.NETHER_REDSTONE_ORE.get()), RecipeCategory.MISC, Items.REDSTONE, 0.7f, 100, "redstone", Boolean.TRUE);
         foodCooking(pWriter, FROG_SMELTABLES, RecipeCategory.MISC, ModItems.COOKED_FROGS_LEGS.get(), 0.25f, 100, "cooked_frogs_legs", Boolean.TRUE);
         foodCooking(pWriter, PIRANHA_SMELTABLES, RecipeCategory.FOOD, ModItems.COOKED_PIRANHA.get(), 0.25f, 100, "cooked_piranha", Boolean.TRUE);
         pebbleRecipes(pWriter);
@@ -76,8 +102,11 @@ public abstract class CommonRecipes extends RecipeProvider {
         boatRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModItems.SKY_BOAT.get(), ModItems.SKY_CHEST_BOAT.get());
         boatRecipes(pWriter, ModBlocks.GILDED_SKY_PLANKS.get(), ModItems.GILDED_SKY_BOAT.get(), ModItems.GILDED_SKY_CHEST_BOAT.get());
         brick(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_BRICK.get());
+        stair(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_STAIRS.get());
+        slab(pWriter, ModBlocks.DENSE_CLOUD.get(), ModBlocks.DENSE_CLOUD_SLAB.get());
         stair(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
+        grassStoneRecipe(pWriter);
         blackSandRecipes(pWriter);
         gildRecipes(pWriter,
                 List.of(
@@ -110,14 +139,14 @@ public abstract class CommonRecipes extends RecipeProvider {
     }
 
     protected void oreBlasting(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean createSmelting) {
-        modOreCooking(recipeOutput, RecipeSerializer.BLASTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_blasting");
+        modOreCooking(recipeOutput, true, ingredients, category, result, experience, cookingTime, group, "_from_blasting");
         if (createSmelting) {
-            modOreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime * 2, group, "_from_smelting");
+            modOreCooking(recipeOutput, false, ingredients, category, result, experience, cookingTime * 2, group, "_from_smelting");
         }
     }
 
     protected void foodCooking(RecipeOutput recipeOutput, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, Boolean campfireAndSmoker) {
-        modOreCooking(recipeOutput, RecipeSerializer.SMELTING_RECIPE, ingredients, category, result, experience, cookingTime, group, "_from_cooking");
+        modOreCooking(recipeOutput, false, ingredients, category, result, experience, cookingTime, group, "_from_cooking");
         if (campfireAndSmoker) {
             campfireCooking(recipeOutput, "campfire_cooking", 600, ingredients, result, experience);
             smokingCooking(recipeOutput, "smoking", 100, ingredients, result, experience);
@@ -131,11 +160,13 @@ public abstract class CommonRecipes extends RecipeProvider {
     // a Factory through every call site, dispatch to the two loader-agnostic convenience methods
     // (.blasting()/.smelting()) that already bind the right serializer+factory pair, matching this
     // method's only two real callers below.
-    protected void modOreCooking(RecipeOutput recipeOutput, RecipeSerializer<? extends AbstractCookingRecipe> recipeSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
+    protected void modOreCooking(RecipeOutput recipeOutput, boolean blasting, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeSuffix) {
         for (ItemLike itemlike : ingredients) {
-            SimpleCookingRecipeBuilder builder = recipeSerializer == RecipeSerializer.BLASTING_RECIPE
-                    ? SimpleCookingRecipeBuilder.blasting(Ingredient.of(itemlike), category, result, experience, cookingTime)
-                    : SimpleCookingRecipeBuilder.smelting(Ingredient.of(itemlike), category, result, experience, cookingTime);
+            // CookingBookCategory only affects which recipe-book tab this shows under (not gameplay);
+            // MISC matches this method's mixed ore/misc callers with no single better fit.
+            SimpleCookingRecipeBuilder builder = blasting
+                    ? SimpleCookingRecipeBuilder.blasting(Ingredient.of(itemlike), category, CookingBookCategory.MISC, result, experience, cookingTime)
+                    : SimpleCookingRecipeBuilder.smelting(Ingredient.of(itemlike), category, CookingBookCategory.MISC, result, experience, cookingTime);
             builder.group(group).unlockedBy(getHasName(itemlike), has(itemlike))
                     .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(result) + recipeSuffix + "_" + getItemName(itemlike));
         }
@@ -304,6 +335,17 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .save(recipeOutput);
     }
 
+    private void grassStoneRecipe(RecipeOutput recipeOutput) {
+        // Not from Bedrock (no equivalent recipe there) - added per playtest request.
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.GRASS_STONE.get())
+                .pattern("#")
+                .pattern("S")
+                .define('#', Items.SHORT_GRASS)
+                .define('S', Items.STONE)
+                .unlockedBy(getHasName(Items.STONE), has(Items.STONE))
+                .save(recipeOutput);
+    }
+
     private void blackSandRecipes(RecipeOutput recipeOutput) {
         // Not from Bedrock (no equivalent recipe there) - added per playtest request, using vanilla's own "8 around a dye" bulk-dyeing shape.
         shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.BLACK_SAND.get(), 8)
@@ -311,14 +353,14 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .pattern("#$#")
                 .pattern("###")
                 .define('#', Items.SAND)
-                .define('$', Items.BLACK_DYE)
+                .define('$', Items.DYE.black())
                 .unlockedBy(getHasName(Items.SAND), has(Items.SAND))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":black_sand_from_dye");
 
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SAND.get()), RecipeCategory.MISC, Items.GLASS, 0.1F, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SAND.get()), RecipeCategory.MISC, CookingBookCategory.MISC, Items.GLASS, 0.1F, 200)
                 .unlockedBy(getHasName(ModBlocks.BLACK_SAND.get()), has(ModBlocks.BLACK_SAND.get()))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":glass_from_black_sand");
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SANDSTONE.get()), RecipeCategory.BUILDING_BLOCKS, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), 0.1F, 200)
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.BLACK_SANDSTONE.get()), RecipeCategory.BUILDING_BLOCKS, CookingBookCategory.BLOCKS, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), 0.1F, 200)
                 .unlockedBy(getHasName(ModBlocks.BLACK_SANDSTONE.get()), has(ModBlocks.BLACK_SANDSTONE.get()))
                 .save(recipeOutput);
 

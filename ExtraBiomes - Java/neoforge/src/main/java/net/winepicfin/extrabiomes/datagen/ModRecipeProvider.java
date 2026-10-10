@@ -1,33 +1,32 @@
 package net.winepicfin.extrabiomes.datagen;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.MultiRegistryBootstrap;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
+import net.winepicfin.extrabiomes.advancements.ModAdvancements;
 import net.winepicfin.extrabiomes.data.CommonRecipes;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Set;
 
-// RecipeProvider itself is no longer a DataProvider as of 1.21.3 (its nested Runner is) - the
-// Runner supplies buildRecipes() with the registries/output pair CommonRecipes.build now needs.
-public class ModRecipeProvider extends RecipeProvider.Runner {
-    public ModRecipeProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(packOutput, lookupProvider);
+// CommonRecipes.build writes recipe-unlock criteria straight into the same BootstrapContext<Advancement>
+// ModAdvancements uses, so both must run against one shared context inside a single MultiRegistryBootstrap
+// requesting RECIPE + ADVANCEMENT - two separate RegistrySetBuilder.add() calls targeting ADVANCEMENT would
+// throw "Multiple entries with same key" (see ModWorldGenProvider's identical note for FEATURE/PLACED_FEATURE).
+public class ModRecipeProvider implements MultiRegistryBootstrap {
+    public static final ModRecipeProvider BOOTSTRAP = new ModRecipeProvider();
+
+    @Override
+    public Set<ResourceKey<? extends Registry<?>>> requestedRegistries() {
+        return Set.of(Registries.RECIPE, Registries.ADVANCEMENT);
     }
 
     @Override
-    protected @NotNull RecipeProvider createRecipeProvider(HolderLookup.@NotNull Provider registries, @NotNull RecipeOutput output) {
-        return new RecipeProvider(registries, output) {
-            @Override
-            protected void buildRecipes() {
-                CommonRecipes.build(this.registries, this.output);
-            }
-        };
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return "Recipes";
+    public void run(BootstrapGetter getter) {
+        BootstrapContext<Advancement> advancements = getter.get(Registries.ADVANCEMENT);
+        CommonRecipes.build(getter.get(Registries.RECIPE), advancements);
+        new ModAdvancements(advancements).generate();
     }
 }

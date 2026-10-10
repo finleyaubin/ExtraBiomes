@@ -2,12 +2,13 @@ package net.winepicfin.extrabiomes.neoforge.fluid;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogParameters;
-import net.minecraft.client.renderer.FogRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.FogEnvironment;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -24,14 +25,16 @@ import org.joml.Vector4f;
 // extensions for blocks/items/fluid types all register centrally through
 // RegisterClientExtensionsEvent now (see ModEventBusClientEvents#registerClientExtensions), so
 // this class implements IClientFluidTypeExtensions itself and is handed to that event directly.
+//
+// 26.1 moved fluid textures/tint to FluidModel - see ModEventBusClientEvents#registerFluidModels.
 public class BaseFluidType extends FluidType implements IClientFluidTypeExtensions {
-    private final ResourceLocation stillTexture;
-    private final ResourceLocation flowingTexture;
-    private final ResourceLocation overlayTexture;
+    private final Identifier stillTexture;
+    private final Identifier flowingTexture;
+    private final Identifier overlayTexture;
     private final int tintColour;
     private final Vector3f fogColour;
 
-    public BaseFluidType(final ResourceLocation stillTexture, final ResourceLocation flowingTexture, final ResourceLocation overlayTexture, final int tintColor, final Vector3f fogColor, final Properties properties) {
+    public BaseFluidType(final Identifier stillTexture, final Identifier flowingTexture, final Identifier overlayTexture, final int tintColor, final Vector3f fogColor, final Properties properties) {
         super(properties);
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
@@ -40,33 +43,34 @@ public class BaseFluidType extends FluidType implements IClientFluidTypeExtensio
         this.fogColour = fogColor;
     }
 
-    @Override
-    public ResourceLocation getStillTexture() {
+    public Identifier getStillTextureId() {
         return stillTexture;
     }
 
-    @Override
-    public ResourceLocation getFlowingTexture() {
+    public Identifier getFlowingTextureId() {
         return flowingTexture;
     }
 
-    @Override
-    public ResourceLocation getOverlayTexture() {
+    public Identifier getOverlayTextureId() {
         return overlayTexture;
     }
 
-    @Override
-    public int getTintColor() {
+    public int getTintColour() {
         return tintColour;
     }
 
+    // modifyFogColor became void (mutates fluidFogColor in place) as of the 26.1 fog rework -
+    // it used to return a new Vector4f.
     @Override
-    public @NotNull Vector4f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
-        return new Vector4f(fogColour.x, fogColour.y, fogColour.z, fluidFogColor.w());
+    public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
+        fluidFogColor.set(fogColour.x, fogColour.y, fogColour.z, fluidFogColor.w());
     }
 
+    // FogParameters (start/end/shape/color record) is gone as of the 1.21.6 fog rework - FogData is a
+    // mutable holder the vanilla environment already populated, so this just tightens its distances.
     @Override
-    public @NotNull FogParameters modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, FogParameters fogParameters) {
-        return new FogParameters(0.6f, 3f, fogParameters.shape(), fogParameters.red(), fogParameters.green(), fogParameters.blue(), fogParameters.alpha());
+    public void modifyFogRender(Camera camera, @Nullable FogEnvironment environment, float renderDistance, float partialTick, FogData fogData) {
+        fogData.environmentalStart = 0.6f;
+        fogData.environmentalEnd = 3f;
     }
 }

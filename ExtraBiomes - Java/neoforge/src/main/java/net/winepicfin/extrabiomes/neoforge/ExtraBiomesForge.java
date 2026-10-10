@@ -1,9 +1,7 @@
 package net.winepicfin.extrabiomes.neoforge;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -23,6 +21,8 @@ import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
+import net.winepicfin.extrabiomes.gametest.ModGameTests;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.sound.ModSounds;
 import net.winepicfin.extrabiomes.entity.client.BaitRenderer;
 import net.winepicfin.extrabiomes.entity.client.GiantTortoiseRenderer;
@@ -40,20 +40,20 @@ import net.winepicfin.extrabiomes.item.ModCreativeModeTabs;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.neoforge.util.ModVanillaCompat;
 import net.winepicfin.extrabiomes.neoforge.worldgen.ModSpawnCaps;
-import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.ModStructureTypes;
+import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
-import terrablender.api.SurfaceRuleManager;
+import terrablender.api.MaterialRuleManager;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file. This is the Forge
 // bootstrap entry point; ExtraBiomes (common) holds only the loader-agnostic MOD_ID constant.
@@ -74,6 +74,7 @@ public class ExtraBiomesForge
         startDatagenExitWatchdogIfRunningDataGen();
         startGameTestExitWatchdogIfRunningGameTestServer();
 
+        ModGameTests.register(modEventBus);
         ModCreativeModeTabs.register();
         ModFluids.register();
         ModFluidTypes.register(modEventBus);
@@ -82,12 +83,14 @@ public class ExtraBiomesForge
         ModBlocks.register();
         ModBlockEntities.register();
         ModSounds.register();
+        ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
         ModVolcanicPlacementModifiers.register();
+        GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
         NetherlandsWheatFeatures.register();
@@ -105,7 +108,7 @@ public class ExtraBiomesForge
 
         // Register our mod's ModConfigSpec so that NeoForge can create and load the config file for
         // us. NeoForge 21.1 moved registerConfig off ModLoadingContext and onto ModContainer.
-        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, ForgeConfig.SPEC);
+        ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.LOCAL, ForgeConfig.SPEC);
     }
 
     // The pre-Loom (ForgeGradle) version of this project's runData exited on its own -
@@ -195,36 +198,31 @@ public class ExtraBiomesForge
     {
         event.enqueueWork(() ->
         {
-            // Register our surface rules
-            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID, ModSurfaceRules.makeRules());
-            // addSurfaceRules above only reaches biomes namespaced "extrabiomes" - this instead
+            // Register our surface rules. TerraBlender's RuleBuilder is now a
+            // Function<RegistryAccess, MaterialRule> - it calls this lazily during world load (when
+            // a biome lookup actually exists), rather than taking a pre-built MaterialRule here.
+            MaterialRuleManager.addRules(MaterialRuleManager.RuleCategory.OVERWORLD, ExtraBiomes.MOD_ID,
+                    registries -> ModSurfaceRules.makeRules(registries.lookupOrThrow(Registries.BIOME)));
+            // addRules above only reaches biomes namespaced "extrabiomes" - this instead
             // injects into the shared default ruleset every other namespace (including vanilla's
             // own badlands/eroded_badlands/wooded_badlands) falls back to, so those get the same
             // depth-banded terracotta too. See ModSurfaceRules.makeVanillaBadlandsAdditions() javadoc.
-            SurfaceRuleManager.addToDefaultSurfaceRulesAtStage(SurfaceRuleManager.RuleCategory.OVERWORLD,
-                    SurfaceRuleManager.RuleStage.BEFORE_BEDROCK, 0, ModSurfaceRules.makeVanillaBadlandsAdditions());
+            MaterialRuleManager.addToDefaultRulesAtStage(MaterialRuleManager.RuleCategory.OVERWORLD,
+                    MaterialRuleManager.RuleStage.BEFORE_BEDROCK, 0,
+                    registries -> ModSurfaceRules.makeVanillaBadlandsAdditions(registries.lookupOrThrow(Registries.BIOME)));
             ModVanillaCompat.register();
             ModSpawnCaps.register();
         });
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = ExtraBiomes.MOD_ID, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            Sheets.addWoodType(ModWoodTypes.MYSTIC);
-            Sheets.addWoodType(ModWoodTypes.PALM);
-            Sheets.addWoodType(ModWoodTypes.SKY);
-            Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
-            ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
-
-            // Saplings/mushrooms/leaves get their cutout render type from their block model's
-            // "render_type" field (set in ModBlockStateProvider's datagen) instead of here -
-            // the runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) overloads are
-            // deprecated for removal in favor of setting render_type on the model itself.
+            // Sheets.addWoodType() is gone in 26.2 - vanilla's Sheets no longer manages sign
+            // sprites/atlases at all, so custom sign wood types need no separate registration here.
             EntityRenderers.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
             EntityRenderers.register(ModEntities.WORM.get(), WormRenderer::new);
             EntityRenderers.register(ModEntities.TREEFROG.get(), TreefrogRenderer::new);

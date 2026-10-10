@@ -1,10 +1,10 @@
 package net.winepicfin.extrabiomes.worldgen.features.undergroundjungle;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
@@ -13,9 +13,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CaveVines;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
  * Java port of Bedrock's {@code features/underground_jungle/cave_vine_feature.json}
@@ -47,28 +46,28 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  *       separate blocks are needed.</li>
  * </ul>
  */
-public class CaveVineFeature extends Feature<NoneFeatureConfiguration> {
+public class CaveVineFeature implements Feature {
 
     private static final int CEILING_SEARCH_RANGE = 12;
 
     /** cave_vine_feature.json's height_distribution, ported verbatim as a weighted list of ranges. */
     private static final IntProvider HEIGHT_DISTRIBUTION = new WeightedListInt(
-            SimpleWeightedRandomList.<IntProvider>builder()
+            WeightedList.<IntProvider>builder()
                     .add(UniformInt.of(1, 13), 2)
                     .add(UniformInt.of(1, 2), 3)
                     .add(UniformInt.of(1, 7), 10)
                     .build());
 
-    public CaveVineFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<CaveVineFeature> CODEC = MapCodec.unit(CaveVineFeature::new);
+
+    @Override
+    public MapCodec<CaveVineFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        RandomSource random = context.random();
-
-        BlockPos attachPoint = findCeiling(level, context.origin());
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        BlockPos attachPoint = findCeiling(level, origin);
         if (attachPoint == null) {
             return false;
         }

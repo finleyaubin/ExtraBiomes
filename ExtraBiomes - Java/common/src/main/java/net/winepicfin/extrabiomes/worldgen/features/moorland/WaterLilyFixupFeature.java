@@ -1,13 +1,13 @@
 package net.winepicfin.extrabiomes.worldgen.features.moorland;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
  * Java port of Bedrock's "minecraft:fixup_waterlily_position_feature", placed by
@@ -17,18 +17,20 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  * first water block topped by air, placing a lily pad there. Fails (no-op) if no such spot is
  * found within the search depth, mirroring Bedrock's "optional" fixup behavior.
  */
-public class WaterLilyFixupFeature extends Feature<NoneFeatureConfiguration> {
+public class WaterLilyFixupFeature implements Feature {
 
     private static final int SEARCH_DEPTH = 8;
 
-    public WaterLilyFixupFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<WaterLilyFixupFeature> CODEC = MapCodec.unit(WaterLilyFixupFeature::new);
+
+    @Override
+    public MapCodec<WaterLilyFixupFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        BlockPos.MutableBlockPos pos = context.origin().mutable();
+    public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        BlockPos.MutableBlockPos pos = origin.mutable();
 
         for (int i = 0; i < SEARCH_DEPTH; i++) {
             BlockState state = level.getBlockState(pos);

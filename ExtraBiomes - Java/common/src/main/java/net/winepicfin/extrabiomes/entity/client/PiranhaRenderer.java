@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.state.PiranhaRenderState;
@@ -12,10 +12,10 @@ import net.winepicfin.extrabiomes.entity.custom.PiranhaEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaRenderState, PiranhaModel<PiranhaRenderState>> {
-    private static final ResourceLocation[] TEXTURES = {
-            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha.png"),
-            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha2.png"),
-            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha3.png"),
+    private static final Identifier[] TEXTURES = {
+            Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha.png"),
+            Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha2.png"),
+            Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/fish/piranha3.png"),
     };
 
     public PiranhaRenderer(EntityRendererProvider.Context context) {
@@ -35,7 +35,7 @@ public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaRenderSta
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(PiranhaRenderState state) {
+    public @NotNull Identifier getTextureLocation(PiranhaRenderState state) {
         return TEXTURES[state.variant];
     }
 
@@ -52,10 +52,10 @@ public class PiranhaRenderer extends MobRenderer<PiranhaEntity, PiranhaRenderSta
     @Override
     protected void setupRotations(PiranhaRenderState state, PoseStack poseStack, float bodyRot, float scale) {
         super.setupRotations(state, poseStack, bodyRot, scale);
-        poseStack.mulPose(Axis.YP.rotationDegrees(4.3F * Mth.sin(0.6F * state.ageInTicks)));
+        poseStack.rotate(Axis.YP.rotationDegrees(4.3F * Mth.sin(0.6F * state.ageInTicks)));
         if (!state.isInWater) {
             poseStack.translate(0.1F, 0.1F, -0.1F);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
+            poseStack.rotate(Axis.ZP.rotationDegrees(90.0F));
         }
     }
 }

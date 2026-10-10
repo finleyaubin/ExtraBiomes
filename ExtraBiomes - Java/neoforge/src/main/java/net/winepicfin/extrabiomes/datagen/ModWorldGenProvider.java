@@ -1,12 +1,8 @@
 package net.winepicfin.extrabiomes.datagen;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.ModBiomes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModNoiseParameters;
 import net.winepicfin.extrabiomes.neoforge.worldgen.ModBiomeModifiers;
@@ -26,6 +22,7 @@ import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheat
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructures;
 import net.winepicfin.extrabiomes.worldgen.features.jellycoral.JellyCoralFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.stonepillars.StonePillarsFeature;
+import net.winepicfin.extrabiomes.worldgen.features.floatingjungle.FloatingJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.taigaspike.TaigaSpikeFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.charred.CharredForestFeatures;
@@ -36,13 +33,9 @@ import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillar
 import net.winepicfin.extrabiomes.worldgen.features.palm.PalmTreeFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.VolcanicMossTundraFeatures;
 
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-
-public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
-    public ModWorldGenProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-        super(output, registries,BUILDER, Set.of(ExtraBiomes.MOD_ID));
-    }
+// event.createWorldRegistryObjects(BUILDER) (DataGenerators) wires this straight into NeoForge's
+// GatherDataEvent - no per-loader provider subclass needed any more (see DatapackBuiltinEntriesProvider.forWorldLayer).
+public class ModWorldGenProvider {
     // NOTE: RegistrySetBuilder.add() must only be called ONCE per registry - calling it repeatedly for
     // the same registry (as this used to, ~17 times each for CONFIGURED_FEATURE/PLACED_FEATURE) makes
     // RegistrySetBuilder.createState() insert that registry key more than once into its internal
@@ -51,7 +44,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
     // Each registry therefore gets exactly one .add() call below, with all of this mod's bootstrap
     // methods for that registry chained together inside a single lambda.
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-            .add(Registries.CONFIGURED_FEATURE, context -> {
+            .add(Registries.FEATURE, context -> {
                 ModConfigureFeatures.bootstrap(context);
                 OasisPuddleFeature.bootstrapConfigured(context);
                 OasisFossilFeatures.bootstrapConfigured(context);
@@ -67,6 +60,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 JellyCoralFeatures.bootstrapConfigured(context);
                 StonePillarsFeature.bootstrapConfigured(context);
                 TaigaSpikeFeatures.bootstrapConfigured(context);
+                FloatingJungleFeatures.bootstrapConfigured(context);
                 UndergroundJungleFeatures.bootstrapConfigured(context);
                 CharredForestFeatures.bootstrapConfigured(context);
                 FutureTreeFeatures.bootstrapConfigured(context);
@@ -92,6 +86,7 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
                 JellyCoralFeatures.bootstrapPlaced(context);
                 StonePillarsFeature.bootstrapPlaced(context);
                 TaigaSpikeFeatures.bootstrapPlaced(context);
+                FloatingJungleFeatures.bootstrapPlaced(context);
                 UndergroundJungleFeatures.bootstrapPlaced(context);
                 CharredForestFeatures.bootstrapPlaced(context);
                 FutureTreeFeatures.bootstrapPlaced(context);

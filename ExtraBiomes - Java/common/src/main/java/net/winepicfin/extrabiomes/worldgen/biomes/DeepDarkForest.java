@@ -1,12 +1,14 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class DeepDarkForest {
 
@@ -17,7 +19,7 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addMossyStoneBlock(biomeBuilder);
         // Bedrock's deep_dark_forest carries both "taiga"+"mega" (old-growth taiga trees) and "roofed" (dark oak) tags at once, so both are added rather than picking just one.
@@ -31,11 +33,11 @@ public class DeepDarkForest {
         BiomeDefaultFeatures.addForestGrass(biomeBuilder);
         BiomeDefaultFeatures.addGiantTaigaVegetation(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         // Bedrock's 'has_structure_trail_ruins' tag is handled via structure_set/biome tags (see ModBiomeTagProvider), not here.
 
-        // shattered_swamp/swamp_huge_mushroom_feature.json applies to swamp OR roofed-forest tagged biomes
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY);
+        // swamp_huge_mushroom is delivered by the ADD_DARK_FOREST_HUGE_MUSHROOMS modifier via ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS,
+        // not baked in here: see that tag's javadoc for why a baked-in copy makes a feature order cycle with mods that append vegetal features.
 
         // Same sculk vein + deep dark sculk patch vanilla's underground deep_dark biome uses (BiomeDefaultFeatures.addSculk).
         // Sculk vein is a multiface growth that clings to any solid surface it can spread onto, including the trunks of this
@@ -48,14 +50,18 @@ public class DeepDarkForest {
                 .temperature(BiomeClimateTuning.DEEP_DARK_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x000000))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 12.0F)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.DEEP_DARK_FOREST.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x000000))
+                .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 4.0F)
+                .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 32.0F)
+                .setAttribute(EnvironmentAttributes.SKY_FOG_END_DISTANCE, 32.0F)
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DEEP_DARK_FOREST.waterColor())
-                        .waterFogColor(0x050533)
-                        .skyColor(BiomeAppearanceTuning.DEEP_DARK_FOREST.skyColor())
-                        .fogColor(0x0d0d17)
                         .foliageColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.DEEP_DARK_FOREST.grassColor()).build())
                 .build();
     }
 }

@@ -7,9 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 /**
  * Multi-sine "river shore" formula adapted from Bedrock's
@@ -43,7 +42,7 @@ import java.util.stream.Stream;
  * narrowest/most central band) is the lava channel itself, bank (0.003-0.006) is the magma rim
  * around it, and basalt_bank (0.006-0.01) is the next ring out where basalt columns cluster.
  */
-public class RiverNoiseFilter extends PlacementModifier {
+public class RiverNoiseFilter implements PlacementModifier {
     private static final int EDGE_MARGIN = 2;
 
     public static final MapCodec<RiverNoiseFilter> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -81,24 +80,22 @@ public class RiverNoiseFilter extends PlacementModifier {
     }
 
     @Override
-    public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos) {
+    public void modify(PlacementContext context, RandomSource random, BlockPos pos, Consumer<BlockPos> consumer) {
         int originX = pos.getX();
         int originZ = pos.getZ();
         int y = pos.getY();
-        Stream.Builder<BlockPos> matches = Stream.builder();
         for (int dx = EDGE_MARGIN; dx < 16 - EDGE_MARGIN; dx++) {
             for (int dz = EDGE_MARGIN; dz < 16 - EDGE_MARGIN; dz++) {
                 int worldX = originX + dx;
                 int worldZ = originZ + dz;
                 double v = noise(worldX, worldZ);
-                if (v >= min && v < max) matches.add(new BlockPos(worldX, y, worldZ));
+                if (v >= min && v < max) consumer.accept(new BlockPos(worldX, y, worldZ));
             }
         }
-        return matches.build();
     }
 
     @Override
-    public PlacementModifierType<?> type() {
-        return ModVolcanicPlacementModifiers.RIVER_NOISE_FILTER.get();
+    public MapCodec<? extends PlacementModifier> codec() {
+        return CODEC;
     }
 }

@@ -25,6 +25,10 @@ THEMES = {
 }
 THEME = THEMES["glacier"]
 EDITION = "Java"
+LINK_LINE = "Link in bio"
+LINK_STEP = 40
+HEAD_TOP = 190   # first heading line, just under the profile row Instagram draws over stories
+HEAD_STEP = 118  # line pitch for a heading that wraps onto several lines
 
 BAND_H = round((W - 2 * MARGIN) * 9 / 16)  # changelog screenshots are always 16:9
 LOGO = Path(__file__).parent / "title.png"
@@ -111,6 +115,17 @@ def wrap(draw, text, fnt, width):
     return lines + [current] if current else lines
 
 
+def heading_layout(draw, heading, size=108, smallest=32):
+    """-> (font, lines). Wraps on word boundaries; if a single word is still wider than the text
+    column the point size shrinks until it fits, so a long heading can never run off the slide."""
+    width = W - 2 * MARGIN
+    for pt in range(size, smallest - 1, -4):
+        fnt = font("bold", pt)
+        if all(draw.textlength(word, font=fnt) <= width for word in heading.split()):
+            break
+    return fnt, wrap(draw, heading, fnt, width)
+
+
 def background():
     image = Image.new("RGB", (W, H), THEME["top"])
     draw = ImageDraw.Draw(image)
@@ -121,13 +136,25 @@ def background():
     return image
 
 
+def links_height():
+    return LINK_STEP
+
+
+def draw_links(draw, top):
+    # Stories posted through the API can't carry link stickers, and a printed URL can't be tapped
+    # anyway, so the slides point at the profile's bio link instead.
+    draw.text((MARGIN, top), LINK_LINE, font=font("bold", 32), fill=THEME["accent"])
+
+
 def chrome(image, version, footer):
     """The section name is the headline on its own slide, so brand, version and edition sit
     quietly in the footer instead of competing with it from the top of every slide."""
     draw = ImageDraw.Draw(image)
-    draw.text((MARGIN, H - 190), f"ExtraBiomes {version} · {EDITION} Edition",
+    top = H - 190 - links_height()
+    draw.text((MARGIN, top), f"ExtraBiomes {version} · {EDITION} Edition",
               font=font("bold", 32), fill=THEME["accent"])
-    draw.text((MARGIN, H - 144), footer, font=font("regular", 32), fill=THEME["muted"])
+    draw.text((MARGIN, top + 46), footer, font=font("regular", 32), fill=THEME["muted"])
+    draw_links(draw, top + 96)
     return draw
 
 
@@ -155,20 +182,24 @@ def cover_slide(sections, version, footer):
     # left, so a longer version or edition string can't push either off the slide.
     entry_font = font("regular", 46)
     lines = [heading for heading, _ in sections]
-    contents_top = H - 300 - len(lines) * 64
+    contents_top = H - 300 - links_height() - len(lines) * 64
     hero = next((fetch(url) for _, entries in sections for kind, url in entries if kind == "image"), None)
     if hero is not None:
         paste_image(image, hero, y + 110 + (contents_top - y - 170 - BAND_H) // 2)
     for offset, line in enumerate(lines):
         draw.text((MARGIN, contents_top + offset * 64), line, font=entry_font, fill=THEME["muted"])
-    draw.text((MARGIN, H - 190), footer, font=font("regular", 34), fill=THEME["muted"])
+    draw.text((MARGIN, H - 190 - links_height()), footer, font=font("regular", 34), fill=THEME["muted"])
+    draw_links(draw, H - 140 - links_height())
     return image
 
 
 def section_slides(heading, entries, version, footer):
     """One slide per screenful of entries - long sections continue onto further slides."""
-    heading_font, sub_font, body_font = font("bold", 108), font("bold", 46), font("regular", 44)
+    sub_font, body_font = font("bold", 46), font("regular", 44)
     scratch = ImageDraw.Draw(Image.new("RGB", (1, 1)))
+    heading_font, heading_lines = heading_layout(scratch, heading)
+    # Every extra heading line pushes the rule and the body down by one line pitch.
+    body_top = BODY_TOP + (len(heading_lines) - 1) * HEAD_STEP
     image, draw, y = None, None, 0
     slides = []
     for index, (kind, text) in enumerate(entries):
@@ -184,15 +215,17 @@ def section_slides(heading, entries, version, footer):
         required = needed
         if kind == "sub" and index + 1 < len(entries):
             required += BAND_H + 48 if entries[index + 1][0] == "image" else 120
-        if image is None or y + required > BODY_BOTTOM:
+        if image is None or y + required > BODY_BOTTOM - links_height():
             image = background()
             draw = chrome(image, version, footer)
-            draw.text((MARGIN, BODY_TOP - 190), heading, font=heading_font, fill=THEME["ink"])
-            # The rule runs the width of the heading itself, not a fixed stub.
-            draw.line([(MARGIN, BODY_TOP - 50), (draw.textlength(heading, font=heading_font) + MARGIN, BODY_TOP - 50)],
+            for number, line in enumerate(heading_lines):
+                draw.text((MARGIN, HEAD_TOP + number * HEAD_STEP), line, font=heading_font, fill=THEME["ink"])
+            # The rule runs the width of the widest heading line, not a fixed stub.
+            widest = max(draw.textlength(line, font=heading_font) for line in heading_lines)
+            draw.line([(MARGIN, body_top - 50), (widest + MARGIN, body_top - 50)],
                       fill=THEME["accent"], width=8)
             slides.append(image)
-            y = BODY_TOP
+            y = body_top
         if kind == "image":
             paste_image(image, photo, y)
             y += needed
@@ -240,6 +273,11 @@ def selftest():
         ["https://e/a.png", "https://e/b.png"]
     draw = ImageDraw.Draw(Image.new("RGB", (1, 1)))
     assert len(wrap(draw, "word " * 60, font("regular", 44), 500)) > 1
+    for heading in ("World Generation", "Floating Jungle", "Sky City", "Extraordinarilylongheadingword"):
+        fnt, lines = heading_layout(draw, heading)
+        assert " ".join(lines) == heading, (heading, lines)
+        assert all(draw.textlength(line, font=fnt) <= W - 2 * MARGIN for line in lines), (heading, lines)
+    assert len(heading_layout(draw, "World Generation")[1]) == 2
     print("ok")
 
 
@@ -249,7 +287,8 @@ def main():
     parser.add_argument("--version", default="")
     parser.add_argument("--footer", default=None)
     parser.add_argument("--out", type=Path, default=Path("slides"))
-    parser.add_argument("--theme", choices=sorted(THEMES), default="glacier")
+    parser.add_argument("--theme", choices=sorted(THEMES),
+                        help="defaults to bryce for Bedrock, glacier for Java")
     parser.add_argument("--edition", choices=["Java", "Bedrock"],
                         help="defaults to the changelog filename's prefix")
     parser.add_argument("--selftest", action="store_true")
@@ -257,9 +296,9 @@ def main():
     if args.selftest:
         return selftest()
     global THEME, EDITION
-    THEME = THEMES[args.theme]
     prefix = args.changelog.name.split("-")[0] if args.changelog else ""
     EDITION = args.edition or (prefix if prefix in ("Java", "Bedrock") else "Java")
+    THEME = THEMES[args.theme or ("bryce" if EDITION == "Bedrock" else "glacier")]
     if not args.changelog:
         parser.error("changelog path required")
     footer = args.footer or (

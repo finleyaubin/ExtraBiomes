@@ -2,24 +2,31 @@ package net.winepicfin.extrabiomes.datagen;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.winepicfin.extrabiomes.commondatagen.TexturePaths;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.client.data.models.blockstates.BlockStateGenerator;
-import net.minecraft.client.data.models.blockstates.Condition;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
+import net.minecraft.client.data.models.blockstates.ConditionBuilder;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.blockstates.Variant;
-import net.minecraft.client.data.models.blockstates.VariantProperties;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.renderer.block.dispatch.VariantMutator;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -34,6 +41,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+
+import static net.minecraft.client.data.models.BlockModelGenerators.UV_LOCK;
+import static net.minecraft.client.data.models.BlockModelGenerators.X_ROT_180;
+import static net.minecraft.client.data.models.BlockModelGenerators.X_ROT_90;
+import static net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_180;
+import static net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_270;
+import static net.minecraft.client.data.models.BlockModelGenerators.Y_ROT_90;
+import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
 
 // NeoForge 21.4 removed its own BlockStateProvider/ConfiguredModel/ModelFile/ExistingFileHelper
 // convenience API (net.neoforged.neoforge.client.model.generators.*, net.neoforged.neoforge.common.
@@ -54,9 +69,9 @@ public class ModBlockStateProvider implements DataProvider {
     // via delegateItemModel()/saplingItemModel() needs a matching entry here, or that block's item
     // silently renders as a missing/no-model item.
     private final PackOutput.PathProvider itemPathProvider;
-    private final Map<Block, BlockStateGenerator> blockStates = new HashMap<>();
-    private final Map<ResourceLocation, Supplier<JsonElement>> models = new HashMap<>();
-    private final Map<ResourceLocation, Supplier<JsonElement>> items = new HashMap<>();
+    private final Map<Block, BlockModelDefinitionGenerator> blockStates = new HashMap<>();
+    private final Map<Identifier, Supplier<JsonElement>> models = new HashMap<>();
+    private final Map<Identifier, Supplier<JsonElement>> items = new HashMap<>();
 
     public ModBlockStateProvider(PackOutput output) {
         this.blockStatePathProvider = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "blockstates");
@@ -65,8 +80,8 @@ public class ModBlockStateProvider implements DataProvider {
         registerStatesAndModels();
     }
 
-    private void clientItem(Block block, ResourceLocation modelId) {
-        ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
+    private void clientItem(Block block, Identifier modelId) {
+        Identifier itemId = BuiltInRegistries.BLOCK.getKey(block);
         items.put(itemId, () -> {
             JsonObject model = new JsonObject();
             model.addProperty("type", "minecraft:model");
@@ -79,25 +94,34 @@ public class ModBlockStateProvider implements DataProvider {
 
     private void registerStatesAndModels() {
         blockWithItem(ModBlocks.NETHER_DIAMOND_ORE);
+        blockWithItem(ModBlocks.NETHER_COAL_ORE);
+        blockWithItem(ModBlocks.NETHER_COPPER_ORE);
+        blockWithItem(ModBlocks.NETHER_EMERALD_ORE);
+        blockWithItem(ModBlocks.NETHER_IRON_ORE);
+        blockWithItem(ModBlocks.NETHER_LAPIS_ORE);
+        blockWithItem(ModBlocks.NETHER_REDSTONE_ORE);
         blockWithItem(ModBlocks.DENSE_CLOUD_BRICK);
         stairsBlock(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get(), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         slabBlock(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get(), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()), blockTexture(ModBlocks.DENSE_CLOUD_BRICK.get()));
         blockWithItem(ModBlocks.DENSE_CLOUD);
+        stairsBlock(ModBlocks.DENSE_CLOUD_STAIRS.get(), blockTexture(ModBlocks.DENSE_CLOUD.get()));
+        slabBlock(ModBlocks.DENSE_CLOUD_SLAB.get(), blockTexture(ModBlocks.DENSE_CLOUD.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()), blockTexture(ModBlocks.DENSE_CLOUD.get()));
         fluidBlock(ModBlocks.GOO.get());
         pebbleBlock(ModBlocks.PEBBLE.get(), "pebble", PebbleBlock.SIZE);
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(), "mossy_pebble", MossyPebbleBlock.SIZE);
         stickPileBlock(ModBlocks.STICK_PILE.get());
+        grassStoneBlock(ModBlocks.GRASS_STONE.get());
         // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
-        cubeBottomTopBlock(ModBlocks.BLACK_SANDSTONE.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("black_sandstone_bottom"), modLoc("black_sandstone_top"));
-        cubeBottomTopBlock(ModBlocks.CHISELED_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), modLoc("black_sandstone_top"), modLoc("black_sandstone_top"));
-        cubeBottomTopBlock(ModBlocks.CUT_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("black_sandstone_top"), modLoc("black_sandstone_top"));
-        cubeAllBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), modLoc("black_sandstone_top"));
-        stairsBlock(ModBlocks.BLACK_SANDSTONE_STAIRS.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("black_sandstone_bottom"), modLoc("black_sandstone_top"));
-        stairsBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(), modLoc("black_sandstone_top"));
-        slabBlock(ModBlocks.BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), modLoc("black_sandstone_bottom"), modLoc("black_sandstone_top"));
-        slabBlock(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), modLoc("black_sandstone_top"), modLoc("black_sandstone_top"));
-        slabBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), modLoc("black_sandstone_top"));
+        cubeBottomTopBlock(ModBlocks.BLACK_SANDSTONE.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
+        cubeBottomTopBlock(ModBlocks.CHISELED_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CHISELED_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
+        cubeBottomTopBlock(ModBlocks.CUT_BLACK_SANDSTONE.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
+        cubeAllBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), texLoc("black_sandstone_top"));
+        stairsBlock(ModBlocks.BLACK_SANDSTONE_STAIRS.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
+        stairsBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(), texLoc("black_sandstone_top"));
+        slabBlock(ModBlocks.BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
+        slabBlock(ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), blockTexture(ModBlocks.CUT_BLACK_SANDSTONE.get()), texLoc("black_sandstone_top"), texLoc("black_sandstone_top"));
+        slabBlock(ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), texLoc("black_sandstone_top"));
         wallBlock(ModBlocks.BLACK_SANDSTONE_WALL.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()));
         // mystic wood
         blockWithItem(ModBlocks.MYSTIC_PLANKS);
@@ -113,9 +137,9 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.MYSTIC_PRESSURE_PLATE.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         fenceBlock(ModBlocks.MYSTIC_FENCE.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         fenceGateBlock(ModBlocks.MYSTIC_FENCE_GATE.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
-        doorBlockState(ModBlocks.MYSTIC_DOOR.get(), modLoc("mystic_door_bottom"), modLoc("mystic_door_top"));
-        trapdoorBlockState(ModBlocks.MYSTIC_TRAPDOOR.get(), modLoc("mystic_trapdoor"));
-        signBlockState(ModBlocks.MYSTIC_SIGN.get(), ModBlocks.MYSTIC_WALL_SIGN.get());
+        doorBlockState(ModBlocks.MYSTIC_DOOR.get(), texLoc("mystic_door_bottom"), texLoc("mystic_door_top"));
+        trapdoorBlockState(ModBlocks.MYSTIC_TRAPDOOR.get(), texLoc("mystic_trapdoor"));
+        signBlockState(ModBlocks.MYSTIC_SIGN.get(), ModBlocks.MYSTIC_WALL_SIGN.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         hangingSignBlockState(ModBlocks.MYSTIC_HANGING_SIGN.get(), ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.MYSTIC_PLANKS.get()));
         // sky wood
         blockWithItem(ModBlocks.SKY_PLANKS);
@@ -131,9 +155,9 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.SKY_PRESSURE_PLATE.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         fenceBlock(ModBlocks.SKY_FENCE.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         fenceGateBlock(ModBlocks.SKY_FENCE_GATE.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
-        doorBlockState(ModBlocks.SKY_DOOR.get(), modLoc("sky_door_bottom"), modLoc("sky_door_top"));
-        trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), modLoc("sky_trapdoor"));
-        signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get());
+        doorBlockState(ModBlocks.SKY_DOOR.get(), texLoc("sky_door_bottom"), texLoc("sky_door_top"));
+        trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), texLoc("sky_trapdoor"));
+        signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.SKY_HANGING_SIGN.get(), ModBlocks.SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
@@ -149,9 +173,9 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.PALM_PRESSURE_PLATE.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         fenceBlock(ModBlocks.PALM_FENCE.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         fenceGateBlock(ModBlocks.PALM_FENCE_GATE.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
-        doorBlockState(ModBlocks.PALM_DOOR.get(), modLoc("palm_door_bottom"), modLoc("palm_door_top"));
-        trapdoorBlockState(ModBlocks.PALM_TRAPDOOR.get(), modLoc("palm_trapdoor"));
-        signBlockState(ModBlocks.PALM_SIGN.get(), ModBlocks.PALM_WALL_SIGN.get());
+        doorBlockState(ModBlocks.PALM_DOOR.get(), texLoc("palm_door_bottom"), texLoc("palm_door_top"));
+        trapdoorBlockState(ModBlocks.PALM_TRAPDOOR.get(), texLoc("palm_trapdoor"));
+        signBlockState(ModBlocks.PALM_SIGN.get(), ModBlocks.PALM_WALL_SIGN.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         hangingSignBlockState(ModBlocks.PALM_HANGING_SIGN.get(), ModBlocks.PALM_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.PALM_PLANKS.get()));
         // Gilded Sky wood
         blockWithItem(ModBlocks.GILDED_SKY_PLANKS);
@@ -165,9 +189,9 @@ public class ModBlockStateProvider implements DataProvider {
         pressurePlateBlock(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         fenceBlock(ModBlocks.GILDED_SKY_FENCE.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         fenceGateBlock(ModBlocks.GILDED_SKY_FENCE_GATE.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
-        doorBlockState(ModBlocks.GILDED_SKY_DOOR.get(), modLoc("gilded_sky_door_bottom"), modLoc("gilded_sky_door_top"));
-        trapdoorBlockState(ModBlocks.GILDED_SKY_TRAPDOOR.get(), modLoc("gilded_sky_trapdoor"));
-        signBlockState(ModBlocks.GILDED_SKY_SIGN.get(), ModBlocks.GILDED_SKY_WALL_SIGN.get());
+        doorBlockState(ModBlocks.GILDED_SKY_DOOR.get(), texLoc("gilded_sky_door_bottom"), texLoc("gilded_sky_door_top"));
+        trapdoorBlockState(ModBlocks.GILDED_SKY_TRAPDOOR.get(), texLoc("gilded_sky_trapdoor"));
+        signBlockState(ModBlocks.GILDED_SKY_SIGN.get(), ModBlocks.GILDED_SKY_WALL_SIGN.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.GILDED_SKY_HANGING_SIGN.get(), ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.GILDED_SKY_PLANKS.get()));
         // Small Mushrooms
         saplingBlock(ModBlocks.BLACK_MUSHROOM.get());
@@ -180,25 +204,38 @@ public class ModBlockStateProvider implements DataProvider {
         saplingBlock(ModBlocks.YELLOW_MUSHROOM.get());
         saplingBlock(ModBlocks.GLOW_MUSHROOM.get());
         // Mushrooms
-        blockWithItemCutout(ModBlocks.BLACK_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.BLUE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.CYAN_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.GREEN_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.ORANGE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.PURPLE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.WHITE_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.YELLOW_MUSHROOM_BLOCK);
-        blockWithItemCutout(ModBlocks.GLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLACK_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.BLUE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.CYAN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GREEN_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.ORANGE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.PURPLE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.WHITE_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.YELLOW_MUSHROOM_BLOCK);
+        hugeMushroomBlock(ModBlocks.GLOW_MUSHROOM_BLOCK);
     }
 
     // ---- helpers -----------------------------------------------------------------------------
 
-    private ResourceLocation blockTexture(Block block) {
-        return TextureMapping.getBlockTexture(block);
+    private Identifier blockTexture(Block block) {
+        return texLoc(BuiltInRegistries.BLOCK.getKey(block).getPath());
     }
 
-    private ResourceLocation modLoc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + path);
+    private Identifier modelOf(Identifier texture) {
+        return modLoc(texture.getPath().substring(texture.getPath().lastIndexOf('/') + 1));
+    }
+
+    private Identifier texLoc(String stem) {
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, TexturePaths.block(stem));
+    }
+
+    private Identifier modLoc(String path) {
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "block/" + path);
+    }
+
+    // TextureMapping.put took a bare Identifier pre-26.1; it now wants the sprite wrapped in a Material.
+    private static net.minecraft.client.resources.model.sprite.Material mat(Identifier sprite) {
+        return new net.minecraft.client.resources.model.sprite.Material(sprite);
     }
 
     private void blockWithItem(RegistrySupplier<Block> blockRegistryObject) {
@@ -213,25 +250,54 @@ public class ModBlockStateProvider implements DataProvider {
         blockWithItem(blockRegistryObject);
     }
 
-    private void cubeAllBlock(Block block, ResourceLocation texture) {
-        ResourceLocation model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, texture), models::put);
+    private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        Identifier texture = blockTexture(block);
+        Identifier cap = ModelTemplates.SINGLE_FACE.create(block, new TextureMapping().put(TextureSlot.TEXTURE, mat(texture)), models::put);
+        Identifier inside = ModelLocationUtils.decorateBlockModelLocation("mushroom_block_inside");
+        MultiPartGenerator generator = MultiPartGenerator.multiPart(block);
+        PipeBlock.PROPERTY_BY_DIRECTION.forEach((direction, property) -> {
+            VariantMutator rotationX = direction == Direction.UP ? BlockModelGenerators.X_ROT_270
+                    : direction == Direction.DOWN ? BlockModelGenerators.X_ROT_90 : BlockModelGenerators.NOP;
+            VariantMutator rotationY = direction.getAxis().isHorizontal() ? yRot((int) direction.toYRot() + 180) : BlockModelGenerators.NOP;
+            generator.with(new ConditionBuilder().term(property, true), BlockModelGenerators.plainVariant(cap).with(rotationX).with(rotationY));
+            generator.with(new ConditionBuilder().term(property, false), BlockModelGenerators.plainVariant(inside).with(rotationX).with(rotationY));
+        });
+        blockStates.put(block, generator);
+        Identifier inventory = ModelTemplates.CUBE_ALL.createWithSuffix(block, "_inventory", new TextureMapping().put(TextureSlot.ALL, mat(texture)), models::put);
+        delegateItemModel(block, inventory);
+    }
+
+    private void cubeAllBlock(Block block, Identifier texture) {
+        Identifier model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, mat(texture)), models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
     }
 
-    private void cubeBottomTopBlock(Block block, ResourceLocation side, ResourceLocation bottom, ResourceLocation top) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
-        ResourceLocation model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, tm, models::put);
+    private void cubeBottomTopBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.BOTTOM, mat(bottom)).put(TextureSlot.TOP, mat(top));
+        Identifier model = ModelTemplates.CUBE_BOTTOM_TOP.create(block, tm, models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
     }
 
-    private void simpleBlockState(Block block, ResourceLocation model) {
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block, Variant.variant().with(VariantProperties.MODEL, model)));
+    private void grassStoneBlock(Block block) {
+        TextureMapping common = new TextureMapping().put(TextureSlot.SIDE, mat(texLoc("grass_stone_side"))).put(TextureSlot.BOTTOM, mat(texLoc("grass_stone_bottom"))).put(TextureSlot.TOP, mat(texLoc("grass_stone_top")));
+        TextureMapping egg = new TextureMapping().put(TextureSlot.SIDE, mat(texLoc("grass_stone_side"))).put(TextureSlot.BOTTOM, mat(texLoc("grass_stone_bottom"))).put(TextureSlot.TOP, mat(texLoc("grass_stone_top_egg")));
+        Identifier commonModel = ModelTemplates.CUBE_BOTTOM_TOP.create(block, common, models::put);
+        Identifier eggModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_egg", egg, models::put);
+        blockStates.put(block, MultiVariantGenerator.dispatch(block, new MultiVariant(WeightedList.of(
+                new Weighted<>(BlockModelGenerators.plainModel(commonModel), 1200),
+                new Weighted<>(BlockModelGenerators.plainModel(eggModel), 1)))));
+        delegateItemModel(block, commonModel);
     }
 
-    private void delegateItemModel(Block block, ResourceLocation blockModel) {
-        ResourceLocation itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
+    private void simpleBlockState(Block block, Identifier model) {
+        blockStates.put(block, MultiVariantGenerator.dispatch(block, plainVariant(model)));
+    }
+
+    private void delegateItemModel(Block block, Identifier blockModel) {
+        Identifier itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
         models.put(itemModelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", blockModel.toString());
@@ -241,28 +307,28 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void logBlock(Block block) {
-        ResourceLocation side = blockTexture(block);
-        ResourceLocation end = ResourceLocation.fromNamespaceAndPath(side.getNamespace(), side.getPath() + "_top");
+        Identifier side = blockTexture(block);
+        Identifier end = Identifier.fromNamespaceAndPath(side.getNamespace(), side.getPath() + "_top");
         axisBlock(block, side, end);
     }
 
-    private void axisBlock(Block block, ResourceLocation texture) {
+    private void axisBlock(Block block, Identifier texture) {
         axisBlock(block, texture, texture);
     }
 
-    private void axisBlock(Block block, ResourceLocation side, ResourceLocation end) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.END, end);
-        ResourceLocation model = ModelTemplates.CUBE_COLUMN.create(block, tm, models::put);
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(RotatedPillarBlock.AXIS)
-                        .select(Direction.Axis.Y, Variant.variant().with(VariantProperties.MODEL, model))
-                        .select(Direction.Axis.Z, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                        .select(Direction.Axis.X, Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R90).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))));
+    private void axisBlock(Block block, Identifier side, Identifier end) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.END, mat(end));
+        Identifier model = ModelTemplates.CUBE_COLUMN.create(block, tm, models::put);
+        blockStates.put(block, MultiVariantGenerator.dispatch(block, plainVariant(model)).with(
+                PropertyDispatch.modify(RotatedPillarBlock.AXIS)
+                        .select(Direction.Axis.Y, BlockModelGenerators.NOP)
+                        .select(Direction.Axis.Z, X_ROT_90.then(UV_LOCK))
+                        .select(Direction.Axis.X, X_ROT_90.then(Y_ROT_90).then(UV_LOCK))));
         delegateItemModel(block, model);
     }
 
     private void saplingBlock(Block block) {
-        ResourceLocation model = ModelTemplates.CROSS.create(block, TextureMapping.cross(block), models::put);
+        Identifier model = ModelTemplates.CROSS.create(block, new TextureMapping().put(TextureSlot.CROSS, mat(blockTexture(block))), models::put);
         simpleBlockState(block, model);
         saplingItemModel(block);
     }
@@ -270,14 +336,14 @@ public class ModBlockStateProvider implements DataProvider {
     // Palm sapling has its own custom multi-blade geometry on Bedrock, not vanilla's flat
     // crossed-quad shape - references the static converted model at
     // common/src/main/resources/assets/extrabiomes/models/block/palm_sapling.json.
-    private void customSaplingBlock(Block block, ResourceLocation model) {
+    private void customSaplingBlock(Block block, Identifier model) {
         simpleBlockState(block, model);
         saplingItemModel(block);
     }
 
     private void saplingItemModel(Block block) {
-        ResourceLocation itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
-        ResourceLocation texture = blockTexture(block);
+        Identifier itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
+        Identifier texture = blockTexture(block);
         models.put(itemModelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", "minecraft:item/generated");
@@ -299,29 +365,29 @@ public class ModBlockStateProvider implements DataProvider {
         };
     }
 
-    private static VariantProperties.Rotation yRot(int degrees) {
+    private static VariantMutator yRot(int degrees) {
         return switch (((degrees % 360) + 360) % 360) {
-            case 90 -> VariantProperties.Rotation.R90;
-            case 180 -> VariantProperties.Rotation.R180;
-            case 270 -> VariantProperties.Rotation.R270;
-            default -> VariantProperties.Rotation.R0;
+            case 90 -> Y_ROT_90;
+            case 180 -> Y_ROT_180;
+            case 270 -> Y_ROT_270;
+            default -> BlockModelGenerators.NOP;
         };
     }
 
-    private void stairsBlock(Block block, ResourceLocation texture) {
+    private void stairsBlock(Block block, Identifier texture) {
         stairsBlock(block, texture, texture, texture);
     }
 
-    private void stairsBlock(Block block, ResourceLocation side, ResourceLocation bottom, ResourceLocation top) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
-        ResourceLocation straight = ModelTemplates.STAIRS_STRAIGHT.create(block, tm, models::put);
-        ResourceLocation inner = ModelTemplates.STAIRS_INNER.create(block, tm, models::put);
-        ResourceLocation outer = ModelTemplates.STAIRS_OUTER.create(block, tm, models::put);
+    private void stairsBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.BOTTOM, mat(bottom)).put(TextureSlot.TOP, mat(top));
+        Identifier straight = ModelTemplates.STAIRS_STRAIGHT.create(block, tm, models::put);
+        Identifier inner = ModelTemplates.STAIRS_INNER.create(block, tm, models::put);
+        Identifier outer = ModelTemplates.STAIRS_OUTER.create(block, tm, models::put);
 
-        PropertyDispatch.C3<Direction, Half, StairsShape> dispatch = PropertyDispatch.properties(StairBlock.FACING, StairBlock.HALF, StairBlock.SHAPE);
+        PropertyDispatch.C3<MultiVariant, Direction, Half, StairsShape> dispatch = PropertyDispatch.initial(StairBlock.FACING, StairBlock.HALF, StairBlock.SHAPE);
         for (Direction facing : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
             for (StairsShape shape : StairsShape.values()) {
-                ResourceLocation model = switch (shape) {
+                Identifier model = switch (shape) {
                     case STRAIGHT -> straight;
                     case INNER_LEFT, INNER_RIGHT -> inner;
                     case OUTER_LEFT, OUTER_RIGHT -> outer;
@@ -332,181 +398,184 @@ public class ModBlockStateProvider implements DataProvider {
                 int bottomRotation = isLeft ? baseRotation - 90 : baseRotation;
                 int topRotation = isRight ? baseRotation + 90 : baseRotation;
 
-                Variant bottomVariant = Variant.variant().with(VariantProperties.MODEL, model);
-                if (bottomRotation != 0) bottomVariant = bottomVariant.with(VariantProperties.Y_ROT, yRot(bottomRotation)).with(VariantProperties.UV_LOCK, true);
+                MultiVariant bottomVariant = plainVariant(model);
+                if (bottomRotation != 0) bottomVariant = bottomVariant.with(yRot(bottomRotation)).with(UV_LOCK);
                 dispatch.select(facing, Half.BOTTOM, shape, bottomVariant);
 
-                Variant topVariant = Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.X_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true);
-                if (topRotation != 0) topVariant = topVariant.with(VariantProperties.Y_ROT, yRot(topRotation));
+                MultiVariant topVariant = plainVariant(model).with(X_ROT_180).with(UV_LOCK);
+                if (topRotation != 0) topVariant = topVariant.with(yRot(topRotation));
                 dispatch.select(facing, Half.TOP, shape, topVariant);
             }
         }
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(dispatch));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(dispatch));
         delegateItemModel(block, straight);
     }
 
-    private void slabBlock(Block block, ResourceLocation texture) {
+    private void slabBlock(Block block, Identifier texture) {
         slabBlock(block, texture, texture, texture);
     }
 
-    private void slabBlock(Block block, ResourceLocation side, ResourceLocation bottom, ResourceLocation top) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, side).put(TextureSlot.BOTTOM, bottom).put(TextureSlot.TOP, top);
-        ResourceLocation bottomModel = ModelTemplates.SLAB_BOTTOM.create(block, tm, models::put);
-        ResourceLocation topModel = ModelTemplates.SLAB_TOP.create(block, tm, models::put);
-        ResourceLocation doubleModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_double", tm, models::put);
+    private void slabBlock(Block block, Identifier side, Identifier bottom, Identifier top) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.SIDE, mat(side)).put(TextureSlot.BOTTOM, mat(bottom)).put(TextureSlot.TOP, mat(top));
+        Identifier bottomModel = ModelTemplates.SLAB_BOTTOM.create(block, tm, models::put);
+        Identifier topModel = ModelTemplates.SLAB_TOP.create(block, tm, models::put);
+        Identifier doubleModel = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_double", tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(SlabBlock.TYPE)
-                        .select(SlabType.BOTTOM, Variant.variant().with(VariantProperties.MODEL, bottomModel))
-                        .select(SlabType.TOP, Variant.variant().with(VariantProperties.MODEL, topModel))
-                        .select(SlabType.DOUBLE, Variant.variant().with(VariantProperties.MODEL, doubleModel))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(SlabBlock.TYPE)
+                        .select(SlabType.BOTTOM, plainVariant(bottomModel))
+                        .select(SlabType.TOP, plainVariant(topModel))
+                        .select(SlabType.DOUBLE, plainVariant(doubleModel))));
         delegateItemModel(block, bottomModel);
     }
 
-    private void fenceBlock(Block block, ResourceLocation texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation post = ModelTemplates.FENCE_POST.create(block, tm, models::put);
-        ResourceLocation side = ModelTemplates.FENCE_SIDE.create(block, tm, models::put);
-        ResourceLocation inventory = ModelTemplates.FENCE_INVENTORY.create(block, tm, models::put);
+    private void fenceBlock(Block block, Identifier texture) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
+        Identifier post = ModelTemplates.FENCE_POST.create(block, tm, models::put);
+        Identifier side = ModelTemplates.FENCE_SIDE.create(block, tm, models::put);
+        Identifier inventory = ModelTemplates.FENCE_INVENTORY.create(block, tm, models::put);
 
         blockStates.put(block, MultiPartGenerator.multiPart(block)
-                .with(Variant.variant().with(VariantProperties.MODEL, post))
-                .with(Condition.condition().term(CrossCollisionBlock.NORTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(CrossCollisionBlock.EAST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(CrossCollisionBlock.SOUTH, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(CrossCollisionBlock.WEST, true), Variant.variant().with(VariantProperties.MODEL, side).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
+                .with(plainVariant(post))
+                .with(BlockModelGenerators.condition().term(CrossCollisionBlock.NORTH, true), plainVariant(side).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(CrossCollisionBlock.EAST, true), plainVariant(side).with(Y_ROT_90).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(CrossCollisionBlock.SOUTH, true), plainVariant(side).with(Y_ROT_180).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(CrossCollisionBlock.WEST, true), plainVariant(side).with(Y_ROT_270).with(UV_LOCK)));
         delegateItemModel(block, inventory);
     }
 
-    private void fenceGateBlock(Block block, ResourceLocation texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation closed = ModelTemplates.FENCE_GATE_CLOSED.create(block, tm, models::put);
-        ResourceLocation open = ModelTemplates.FENCE_GATE_OPEN.create(block, tm, models::put);
-        ResourceLocation wallClosed = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(block, tm, models::put);
-        ResourceLocation wallOpen = ModelTemplates.FENCE_GATE_WALL_OPEN.create(block, tm, models::put);
+    private void fenceGateBlock(Block block, Identifier texture) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
+        Identifier closed = ModelTemplates.FENCE_GATE_CLOSED.create(block, tm, models::put);
+        Identifier open = ModelTemplates.FENCE_GATE_OPEN.create(block, tm, models::put);
+        Identifier wallClosed = ModelTemplates.FENCE_GATE_WALL_CLOSED.create(block, tm, models::put);
+        Identifier wallOpen = ModelTemplates.FENCE_GATE_WALL_OPEN.create(block, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(FenceGateBlock.FACING, FenceGateBlock.IN_WALL, FenceGateBlock.OPEN)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(FenceGateBlock.FACING, FenceGateBlock.IN_WALL, FenceGateBlock.OPEN)
                         .generate((facing, inWall, isOpen) -> {
-                            ResourceLocation model = inWall ? (isOpen ? wallOpen : wallClosed) : (isOpen ? open : closed);
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model).with(VariantProperties.UV_LOCK, true);
+                            Identifier model = inWall ? (isOpen ? wallOpen : wallClosed) : (isOpen ? open : closed);
+                            MultiVariant v = plainVariant(model).with(UV_LOCK);
                             int y = rot(facing);
                             y = (y + 270) % 360;
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
+                            if (y != 0) v = v.with(yRot(y));
                             return v;
                         })));
         delegateItemModel(block, closed);
     }
 
-    private void wallBlock(Block block, ResourceLocation texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.WALL, texture);
-        ResourceLocation post = ModelTemplates.WALL_POST.create(block, tm, models::put);
-        ResourceLocation low = ModelTemplates.WALL_LOW_SIDE.create(block, tm, models::put);
-        ResourceLocation tall = ModelTemplates.WALL_TALL_SIDE.create(block, tm, models::put);
-        ResourceLocation inventory = ModelTemplates.WALL_INVENTORY.create(block, tm, models::put);
+    private void wallBlock(Block block, Identifier texture) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.WALL, mat(texture));
+        Identifier post = ModelTemplates.WALL_POST.create(block, tm, models::put);
+        Identifier low = ModelTemplates.WALL_LOW_SIDE.create(block, tm, models::put);
+        Identifier tall = ModelTemplates.WALL_TALL_SIDE.create(block, tm, models::put);
+        Identifier inventory = ModelTemplates.WALL_INVENTORY.create(block, tm, models::put);
 
         blockStates.put(block, MultiPartGenerator.multiPart(block)
-                .with(Condition.condition().term(WallBlock.UP, true), Variant.variant().with(VariantProperties.MODEL, post))
-                .with(Condition.condition().term(WallBlock.NORTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(WallBlock.EAST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(WallBlock.WEST_WALL, WallSide.LOW), Variant.variant().with(VariantProperties.MODEL, low).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(WallBlock.NORTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(WallBlock.EAST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(WallBlock.SOUTH_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R180).with(VariantProperties.UV_LOCK, true))
-                .with(Condition.condition().term(WallBlock.WEST_WALL, WallSide.TALL), Variant.variant().with(VariantProperties.MODEL, tall).with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270).with(VariantProperties.UV_LOCK, true)));
+                .with(BlockModelGenerators.condition().term(WallBlock.UP, true), plainVariant(post))
+                .with(BlockModelGenerators.condition().term(WallBlock.NORTH, WallSide.LOW), plainVariant(low).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(WallBlock.EAST, WallSide.LOW), plainVariant(low).with(Y_ROT_90).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(WallBlock.SOUTH, WallSide.LOW), plainVariant(low).with(Y_ROT_180).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(WallBlock.WEST, WallSide.LOW), plainVariant(low).with(Y_ROT_270).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(WallBlock.NORTH, WallSide.TALL), plainVariant(tall).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(WallBlock.EAST, WallSide.TALL), plainVariant(tall).with(Y_ROT_90).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(WallBlock.SOUTH, WallSide.TALL), plainVariant(tall).with(Y_ROT_180).with(UV_LOCK))
+                .with(BlockModelGenerators.condition().term(WallBlock.WEST, WallSide.TALL), plainVariant(tall).with(Y_ROT_270).with(UV_LOCK)));
         delegateItemModel(block, inventory);
     }
 
-    private void buttonBlock(Block block, ResourceLocation texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation unpowered = ModelTemplates.BUTTON.create(block, tm, models::put);
-        ResourceLocation powered = ModelTemplates.BUTTON_PRESSED.create(block, tm, models::put);
-        ResourceLocation inventory = ModelTemplates.BUTTON_INVENTORY.create(block, tm, models::put);
+    private void buttonBlock(Block block, Identifier texture) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
+        Identifier unpowered = ModelTemplates.BUTTON.create(block, tm, models::put);
+        Identifier powered = ModelTemplates.BUTTON_PRESSED.create(block, tm, models::put);
+        Identifier inventory = ModelTemplates.BUTTON_INVENTORY.create(block, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(ButtonBlock.FACE, ButtonBlock.FACING, ButtonBlock.POWERED)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(ButtonBlock.FACE, ButtonBlock.FACING, ButtonBlock.POWERED)
                         .generate((face, facing, powered1) -> {
-                            ResourceLocation model = powered1 ? powered : unpowered;
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model);
+                            Identifier model = powered1 ? powered : unpowered;
+                            MultiVariant v = plainVariant(model);
                             int y = (rot(facing) + 90) % 360;
                             switch (face) {
                                 case FLOOR -> {
                                 }
-                                case WALL -> v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R90);
+                                case WALL -> v = v.with(X_ROT_90);
                                 case CEILING -> {
-                                    v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                    v = v.with(X_ROT_180);
                                     y = (y + 180) % 360;
                                 }
                             }
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            if (y != 0) v = v.with(yRot(y));
+                            return v.with(UV_LOCK);
                         })));
         delegateItemModel(block, inventory);
     }
 
-    private void pressurePlateBlock(Block block, ResourceLocation texture) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, texture);
-        ResourceLocation up = ModelTemplates.PRESSURE_PLATE_UP.create(block, tm, models::put);
-        ResourceLocation down = ModelTemplates.PRESSURE_PLATE_DOWN.create(block, tm, models::put);
+    private void pressurePlateBlock(Block block, Identifier texture) {
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, mat(texture));
+        Identifier up = ModelTemplates.PRESSURE_PLATE_UP.create(block, tm, models::put);
+        Identifier down = ModelTemplates.PRESSURE_PLATE_DOWN.create(block, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(PressurePlateBlock.POWERED)
-                        .select(false, Variant.variant().with(VariantProperties.MODEL, up))
-                        .select(true, Variant.variant().with(VariantProperties.MODEL, down))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(PressurePlateBlock.POWERED)
+                        .select(false, plainVariant(up))
+                        .select(true, plainVariant(down))));
         delegateItemModel(block, up);
     }
 
-    private void doorBlockState(Block block, ResourceLocation bottomModel, ResourceLocation topModel) {
-        TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomModel).put(TextureSlot.TOP, topModel);
+    private void doorBlockState(Block block, Identifier bottomTexture, Identifier topTexture) {
+        Identifier bottomModel = modelOf(bottomTexture);
+        Identifier topModel = modelOf(topTexture);
+        TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, mat(bottomTexture)).put(TextureSlot.TOP, mat(topTexture));
         ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
         ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
+                            Identifier model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
                             int y = rot(facing);
                             if (open) {
                                 y += 90;
                                 if (hinge == DoorHingeSide.RIGHT) y += 180;
                             }
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model);
+                            MultiVariant v = plainVariant(model);
                             int normalized = ((y % 360) + 360) % 360;
-                            if (normalized != 0) v = v.with(VariantProperties.Y_ROT, yRot(normalized));
-                            return v.with(VariantProperties.UV_LOCK, true);
+                            if (normalized != 0) v = v.with(yRot(normalized));
+                            return v.with(UV_LOCK);
                         })));
     }
 
     // Our trapdoor textures (mystic/sky/palm/gilded_sky) have a directional plank/slat pattern, the
     // same kind vanilla's acacia/spruce/birch trapdoors use - those all ship on the
     // "template_orientable_trapdoor_*" parent.
-    private void trapdoorBlockState(Block block, ResourceLocation baseModelName) {
-        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
-        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
-        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+    private void trapdoorBlockState(Block block, Identifier baseTexture) {
+        Identifier baseModelName = modelOf(baseTexture);
+        Identifier bottom = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        Identifier top = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        Identifier open = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
-        putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseModelName);
-        putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseModelName);
-        putTrapdoorModel(open, "minecraft:block/template_orientable_trapdoor_open", baseModelName);
+        putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseTexture);
+        putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseTexture);
+        putTrapdoorModel(open, "minecraft:block/template_orientable_trapdoor_open", baseTexture);
         delegateItemModel(block, bottom);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> {
-                            ResourceLocation model = isOpen ? open : (half == Half.TOP ? top : bottom);
+                            Identifier model = isOpen ? open : (half == Half.TOP ? top : bottom);
                             int y = (rot(facing) + 90) % 360;
-                            Variant v = Variant.variant().with(VariantProperties.MODEL, model);
+                            MultiVariant v = plainVariant(model);
                             if (isOpen && half == Half.TOP) {
-                                v = v.with(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
+                                v = v.with(X_ROT_180);
                                 y = (y + 180) % 360;
                             }
-                            if (y != 0) v = v.with(VariantProperties.Y_ROT, yRot(y));
+                            if (y != 0) v = v.with(yRot(y));
                             return v;
                         })));
     }
 
-    private void putTrapdoorModel(ResourceLocation modelId, String parent, ResourceLocation texture) {
+    private void putTrapdoorModel(Identifier modelId, String parent, Identifier texture) {
         models.put(modelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", parent);
@@ -517,50 +586,69 @@ public class ModBlockStateProvider implements DataProvider {
         });
     }
 
-    private void signBlockState(Block signBlock, Block wallSignBlock) {
-        ResourceLocation air = ResourceLocation.fromNamespaceAndPath("minecraft", "block/air");
-        simpleBlockState(signBlock, air);
-        simpleBlockState(wallSignBlock, air);
+    private void signBlockState(Block signBlock, Block wallSignBlock, Identifier planks) {
+        TextureMapping textures = signTextures(planks, "_sign");
+        blockStates.put(signBlock, BlockModelGenerators.createSign(signBlock,
+                signVariant(ModelTemplates.SIGN_ROT_0, signBlock, "_rot_0", textures),
+                signVariant(ModelTemplates.SIGN_ROT_1, signBlock, "_rot_1", textures),
+                signVariant(ModelTemplates.SIGN_ROT_2, signBlock, "_rot_2", textures),
+                signVariant(ModelTemplates.SIGN_ROT_3, signBlock, "_rot_3", textures)));
+        blockStates.put(wallSignBlock, MultiVariantGenerator.dispatch(wallSignBlock,
+                plainVariant(ModelTemplates.WALL_SIGN.create(wallSignBlock, textures, models::put)))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
     }
 
-    private void hangingSignBlockState(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
-        ResourceLocation modelId = ModelLocationUtils.getModelLocation(signBlock);
-        models.put(modelId, () -> {
-            JsonObject json = new JsonObject();
-            JsonObject textures = new JsonObject();
-            textures.addProperty("particle", texture.toString());
-            json.add("textures", textures);
-            return json;
-        });
-        simpleBlockState(signBlock, modelId);
-        simpleBlockState(wallSignBlock, modelId);
+    private void hangingSignBlockState(Block signBlock, Block wallSignBlock, Identifier planks) {
+        TextureMapping textures = signTextures(planks, "_hanging_sign");
+        blockStates.put(signBlock, BlockModelGenerators.createHangingSign(signBlock,
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_0, signBlock, "_rot_0", textures),
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_1, signBlock, "_rot_1", textures),
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_2, signBlock, "_rot_2", textures),
+                signVariant(ModelTemplates.HANGING_SIGN_ROT_3, signBlock, "_rot_3", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_0, signBlock, "_attached_rot_0", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_1, signBlock, "_attached_rot_1", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_2, signBlock, "_attached_rot_2", textures),
+                signVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_3, signBlock, "_attached_rot_3", textures)));
+        blockStates.put(wallSignBlock, MultiVariantGenerator.dispatch(wallSignBlock,
+                plainVariant(ModelTemplates.WALL_HANGING_SIGN.create(wallSignBlock, textures, models::put)))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
+    }
+
+    private MultiVariant signVariant(ModelTemplate template, Block block, String suffix, TextureMapping textures) {
+        return plainVariant(template.createWithSuffix(block, suffix, textures, models::put));
+    }
+
+    // The sign board is a block model since 26.x (the block entity renderer only draws the text), so it needs the real sign texture; planks stay as the break-particle.
+    private static TextureMapping signTextures(Identifier planks, String suffix) {
+        Identifier sign = planks.withPath(planks.getPath().replace("_planks", suffix));
+        return new TextureMapping().put(TextureSlot.ALL, mat(sign)).put(TextureSlot.PARTICLE, mat(planks));
     }
 
     // References the pre-existing static models under common/src/main/resources/assets/extrabiomes/
     // models/block/{small,medium,large}_<type>.json.
     private void pebbleBlock(Block block, String type, IntegerProperty sizeProperty) {
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(sizeProperty)
-                        .select(1, Variant.variant().with(VariantProperties.MODEL, modLoc("small_" + type)))
-                        .select(2, Variant.variant().with(VariantProperties.MODEL, modLoc("medium_" + type)))
-                        .select(3, Variant.variant().with(VariantProperties.MODEL, modLoc("large_" + type)))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(sizeProperty)
+                        .select(1, plainVariant(modLoc("small_" + type)))
+                        .select(2, plainVariant(modLoc("medium_" + type)))
+                        .select(3, plainVariant(modLoc("large_" + type)))));
         delegateItemModel(block, modLoc("small_" + type));
     }
 
     private void stickPileBlock(Block block) {
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.property(RotatedPillarBlock.AXIS)
-                        .select(Direction.Axis.X, Variant.variant().with(VariantProperties.MODEL, modLoc("stick_pile_x")))
-                        .select(Direction.Axis.Y, Variant.variant().with(VariantProperties.MODEL, modLoc("stick_pile_y")))
-                        .select(Direction.Axis.Z, Variant.variant().with(VariantProperties.MODEL, modLoc("stick_pile_z")))));
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(RotatedPillarBlock.AXIS)
+                        .select(Direction.Axis.X, plainVariant(modLoc("stick_pile_x")))
+                        .select(Direction.Axis.Y, plainVariant(modLoc("stick_pile_y")))
+                        .select(Direction.Axis.Z, plainVariant(modLoc("stick_pile_z")))));
         delegateItemModel(block, modLoc("stick_pile_y"));
     }
 
     private void fluidBlock(Block block) {
-        simpleBlockState(block, ResourceLocation.fromNamespaceAndPath("minecraft", "block/water"));
+        simpleBlockState(block, Identifier.fromNamespaceAndPath("minecraft", "block/water"));
     }
 
-    private ResourceLocation key(Block block) {
+    private Identifier key(Block block) {
         return Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block));
     }
 
@@ -568,8 +656,8 @@ public class ModBlockStateProvider implements DataProvider {
     public CompletableFuture<?> run(CachedOutput cache) {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         blockStates.forEach((block, generator) -> {
-            ResourceLocation id = key(block);
-            futures.add(DataProvider.saveStable(cache, generator.get(), blockStatePathProvider.json(id)));
+            Identifier id = key(block);
+            futures.add(DataProvider.saveStable(cache, BlockStateModelDispatcher.CODEC.encodeStart(JsonOps.INSTANCE, generator.create()).getOrThrow(), blockStatePathProvider.json(id)));
         });
         models.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), modelPathProvider.json(id))));
         items.forEach((id, supplier) -> futures.add(DataProvider.saveStable(cache, supplier.get(), itemPathProvider.json(id))));

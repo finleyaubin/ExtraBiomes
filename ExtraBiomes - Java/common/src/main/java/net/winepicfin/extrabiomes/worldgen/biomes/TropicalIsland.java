@@ -1,10 +1,14 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.AquaticPlacements;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -18,15 +22,15 @@ public class TropicalIsland {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.PARROT, 5, 1, 2));
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.TURTLE, 5, 2, 3));
+        spawnBuilder.addSpawn(EntityTypes.PARROT, MobCategory.CREATURE, 5, UniformInt.of(1, 2));
+        spawnBuilder.addSpawn(EntityTypes.TURTLE, MobCategory.CREATURE, 5, UniformInt.of(2, 3));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         // Matches vanilla warmOcean() mob spawns (pufferfish + warmOceanSpawns, which also adds commonSpawns).
-        spawnBuilder.addSpawn(MobCategory.WATER_AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.PUFFERFISH, 15, 1, 3));
+        spawnBuilder.addSpawn(EntityTypes.PUFFERFISH, MobCategory.WATER_AMBIENT, 15, UniformInt.of(1, 3));
         BiomeDefaultFeatures.warmOceanSpawns(spawnBuilder, 10, 4);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
@@ -50,14 +54,14 @@ public class TropicalIsland {
                 .temperature(BiomeClimateTuning.TROPICAL_ISLAND.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x50D8CE))
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.TROPICAL_ISLAND.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xC0D8FF))
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.TROPICAL_ISLAND.waterColor())
-                        .waterFogColor(0x50D8CE)
-                        .skyColor(BiomeAppearanceTuning.TROPICAL_ISLAND.skyColor())
-                        .fogColor(0xC0D8FF)
                         .foliageColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.TROPICAL_ISLAND.grassColor()).build())
                 .build();
     }
 }

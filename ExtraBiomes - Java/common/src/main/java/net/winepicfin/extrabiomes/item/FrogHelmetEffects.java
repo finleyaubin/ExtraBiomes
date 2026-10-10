@@ -36,7 +36,7 @@ public final class FrogHelmetEffects {
     }
 
     public static MobEffectInstance playerJumpBoost() {
-        return new MobEffectInstance(MobEffects.JUMP, PLAYER_EFFECT_DURATION_TICKS, AMPLIFIER, AMBIENT, VISIBLE, SHOW_ICON);
+        return new MobEffectInstance(MobEffects.JUMP_BOOST, PLAYER_EFFECT_DURATION_TICKS, AMPLIFIER, AMBIENT, VISIBLE, SHOW_ICON);
     }
 
     public static MobEffectInstance wolfWaterBreathing() {
@@ -44,6 +44,6 @@ public final class FrogHelmetEffects {
     }
 
     public static MobEffectInstance wolfJumpBoost() {
-        return new MobEffectInstance(MobEffects.JUMP, WOLF_EFFECT_DURATION_TICKS, AMPLIFIER, AMBIENT, VISIBLE, SHOW_ICON);
+        return new MobEffectInstance(MobEffects.JUMP_BOOST, WOLF_EFFECT_DURATION_TICKS, AMPLIFIER, AMBIENT, VISIBLE, SHOW_ICON);
     }
 }

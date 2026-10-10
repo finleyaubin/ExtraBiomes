@@ -1,11 +1,14 @@
 package net.winepicfin.extrabiomes.worldgen.biomes;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.ARGB;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.ModPlacedFeatures;
+import net.minecraft.world.attribute.AmbientSounds;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class LushMesa {
 
@@ -16,14 +19,19 @@ public class LushMesa {
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultFlowers(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addJungleTrees(biomeBuilder);
+        // Matches vanilla's own jungle() convention (trees, then warm flowers, then jungle grass).
+        // addDefaultFlowers's flower_default used to sit here instead: Terralith and Oh The Biomes
+        // We've Gone each order flower_default relative to patch_grass_jungle in opposite directions
+        // through their own biomes, so no placement of flower_default next to patch_grass_jungle is
+        // safe - flower_warm avoids the shared node entirely and matches vanilla's real jungle order.
+        BiomeDefaultFeatures.addWarmFlowers(biomeBuilder);
         BiomeDefaultFeatures.addJungleGrass(biomeBuilder);
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
-        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder, true);
         // boulder: weighted boulder selection (with pebble scatter), local modification step
         BiomeDefaultFeatures.addJungleVines(biomeBuilder);
         BiomeDefaultFeatures.addJungleMelons(biomeBuilder);
@@ -36,14 +44,15 @@ public class LushMesa {
                 .temperature(BiomeClimateTuning.LUSH_MESA.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x1B9ED8))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_END_DISTANCE, 60.0F)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.LUSH_MESA.skyColor()))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xf8e6b4))
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.LUSH_MESA.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.LUSH_MESA.skyColor())
-                        .fogColor(0xf8e6b4)
                         .foliageColorOverride(BiomeAppearanceTuning.LUSH_MESA.foliageColor())
-                        .grassColorOverride(BiomeAppearanceTuning.LUSH_MESA.grassColor())
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).build())
+                        .grassColorOverride(BiomeAppearanceTuning.LUSH_MESA.grassColor()).build())
                 .build();
     }
 }

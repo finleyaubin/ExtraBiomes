@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 // tag-provider convenience only covers Block/Item/Fluid/Enchantment/EntityType/GameEvent - so this
 // extends the vanilla class directly, same as Forge does.
 public class ModBiomeTagProvider extends BiomeTagsProvider {
-    public ModBiomeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    public ModBiomeTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider);
     }
 
@@ -64,7 +64,6 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
 
         this.tag(BiomeTags.HAS_TRAIL_RUINS).add(ModBiomes.DEEP_DARK_FOREST);
         this.tag(BiomeTags.MINESHAFT_BLOCKING).add(ModBiomes.DEEP_DARK_GREEN);
-        this.tag(BiomeTags.WITHOUT_PATROL_SPAWNS).add(ModBiomes.FUNGLE_JUNGLE);
 
         this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).add(ModBiomes.DEEP_DARK_GREEN, ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE,
                 ModBiomes.COLD_MESA_PLATEAU, ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES, ModBiomes.VOLCANIC_MOSS_TUNDRA);
@@ -81,11 +80,14 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         // mod-local tag, so a third-party mod's swamp/mushroom biome is picked up automatically
         // without needing to know ExtraBiomes exists. We also contribute our own biomes into those
         // same convention tags, the same courtesy other mods extend to us.
-        this.tag(ConventionalBiomeTags.SWAMP).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP);
-        this.tag(ConventionalBiomeTags.MUSHROOM).add(Biomes.MUSHROOM_FIELDS);
+        this.tag(ConventionalBiomeTags.IS_SWAMP).add(Biomes.SWAMP, Biomes.MANGROVE_SWAMP, ModBiomes.SHATTERED_SWAMP);
+        this.tag(ConventionalBiomeTags.IS_MUSHROOM).add(Biomes.MUSHROOM_FIELDS);
+        this.tag(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES).addTag(ConventionalBiomeTags.IS_MUSHROOM).add(ModBiomes.FUNGLE_JUNGLE);
+        this.tag(ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS).add(Biomes.DARK_FOREST, ModBiomes.JUNGLE_MARSH,
+                ModBiomes.DEEP_DARK_FOREST, ModBiomes.MYSTIC_FOREST, ModBiomes.SHATTERED_SWAMP);
 
-        this.tag(ModTags.Biomes.IS_WETLAND).addTag(ConventionalBiomeTags.SWAMP).add(ModBiomes.MOORLANDS);
-        this.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM).addTag(ConventionalBiomeTags.MUSHROOM).add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
+        this.tag(ModTags.Biomes.IS_WETLAND).addTag(ConventionalBiomeTags.IS_SWAMP).add(ModBiomes.MOORLANDS);
+        this.tag(ModTags.Biomes.SPAWNS_HOPPLESHROOM).addTag(ConventionalBiomeTags.IS_MUSHROOM).add(Biomes.CRIMSON_FOREST, Biomes.WARPED_FOREST);
         this.tag(ModTags.Biomes.SPAWNS_JELLYFISH).add(ModBiomes.JELLYFISH_FIELDS);
     }
 }

@@ -4,11 +4,10 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.BambooFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
@@ -59,16 +58,16 @@ import java.util.List;
  */
 public class ShatteredSwampFeatures {
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> BAMBOO_KEY = configuredKey("shattered_swamp_bamboo");
+    public static final ResourceKey<Feature> BAMBOO_KEY = configuredKey("shattered_swamp_bamboo");
     public static final ResourceKey<PlacedFeature> BAMBOO_PLACED_KEY = placedKey("shattered_swamp_bamboo");
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
         // No probability given in the Bedrock JSON, so this uses vanilla's own default bamboo density (same value as vanilla's "bamboo_some_podzol" configured feature).
-        context.register(BAMBOO_KEY, new ConfiguredFeature<>(Feature.BAMBOO, new ProbabilityFeatureConfiguration(0.2F)));
+        context.register(BAMBOO_KEY, new BambooFeature(0.2F));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         context.register(BAMBOO_PLACED_KEY, new PlacedFeature(
                 configuredFeatures.getOrThrow(BAMBOO_KEY),
@@ -81,11 +80,11 @@ public class ShatteredSwampFeatures {
         ));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "shatteredswamp/" + name));
+    private static ResourceKey<Feature> configuredKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "shatteredswamp/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "shatteredswamp/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "shatteredswamp/" + name));
     }
 }

@@ -1,10 +1,12 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.crafting.Recipe;
 import net.winepicfin.extrabiomes.data.CommonRecipes;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,20 +17,21 @@ import java.util.concurrent.CompletableFuture;
 // Fabric-specific base class (FabricRecipeProvider, constructor takes FabricDataOutput instead of
 // Forge's plain PackOutput) and delegates to it.
 //
-// As of 1.21.2, RecipeProvider generation is factory-based: FabricRecipeProvider requires
-// createRecipeProvider(HolderLookup.Provider, RecipeOutput) to return the RecipeProvider instance
-// whose buildRecipes() actually runs, rather than a single void buildRecipes(RecipeOutput) override.
+// As of 26.3, RecipeProvider generation is factory-based: FabricRecipeProvider requires
+// createRecipeProvider(HolderLookup.Provider, BootstrapContext<Recipe<?>>, BootstrapContext<Advancement>)
+// to return the RecipeProvider instance whose buildRecipes() actually runs, rather than a single void
+// buildRecipes(RecipeOutput) override.
 public class ModRecipeProvider extends FabricRecipeProvider {
-    public ModRecipeProvider(FabricDataOutput packOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public ModRecipeProvider(FabricPackOutput packOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(packOutput, registriesFuture);
     }
 
     @Override
-    protected RecipeProvider createRecipeProvider(@NotNull HolderLookup.Provider registries, @NotNull RecipeOutput output) {
-        return new RecipeProvider(registries, output) {
+    protected RecipeProvider createRecipeProvider(@NotNull HolderLookup.Provider registries, @NotNull BootstrapContext<Recipe<?>> recipes, @NotNull BootstrapContext<Advancement> advancements) {
+        return new RecipeProvider(recipes, advancements) {
             @Override
             public void buildRecipes() {
-                CommonRecipes.build(registries, output);
+                CommonRecipes.build(recipes, advancements);
             }
         };
     }

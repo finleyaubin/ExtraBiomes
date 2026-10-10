@@ -3,9 +3,9 @@ package net.winepicfin.extrabiomes.fabric.gametest;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.gametest.framework.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.StructureBlockEntity;
@@ -26,15 +26,15 @@ import org.slf4j.Logger;
 // fix the block, click Save in the structure block GUI" instead of hand-editing the .nbt bytes.
 public class SkyCityStructureEditGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String[] BUILDINGS = {"house_1", "sky_challet", "tower_1", "tower_2"};
+    private static final String[] BUILDINGS = {"house_1", "sky_challet", "tower_1", "tower_2", "cloud_condenser"};
     private static final String[] PATHS = {"cross", "curve", "fountain", "path_end", "path", "roundabout", "s_bend", "straight", "t"};
     private static final int MARGIN = 4;
 
     // manualOnly: excluded from /test runall (and CI's discovery, see gradle-build.yml) - dev tool only.
-    @GameTest(template = ExtraBiomes.MOD_ID + ":sky_city_edit_void", timeoutTicks = 60000, manualOnly = true)
-    public static void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":sky_city_edit_void", maxTicks = 60000, manualOnly = true)
+    public void layoutSkyCityBuildingsForEditing(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        StructureTemplateManager templates = level.getStructureManager();
+        StructureTemplateManager templates = level.getStructureTemplateManager();
         int buildingsRowDepth = placeRow(helper, level, templates, BUILDINGS, "buildings", 1);
         placeRow(helper, level, templates, PATHS, "paths", 1 + buildingsRowDepth + MARGIN);
         helper.succeed();
@@ -48,7 +48,7 @@ public class SkyCityStructureEditGameTests {
         int xCursor = 1;
         int maxDepth = 0;
         for (String name : names) {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/" + subfolder + "/" + name);
+            Identifier id = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "sky_city/" + subfolder + "/" + name);
             StructureTemplate template = templates.getOrCreate(id);
             Vec3i size = template.getSize();
 

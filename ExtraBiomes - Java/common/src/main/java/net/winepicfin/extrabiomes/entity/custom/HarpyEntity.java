@@ -20,8 +20,8 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.animal.golem.IronGolem;
+import net.minecraft.world.entity.animal.golem.SnowGolem;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -34,7 +34,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
     public HarpyEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         this.moveControl = new FlyingMoveControl(this, 20, true);
-        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.FIRE_IN_NEIGHBOR, -1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -89,7 +89,7 @@ public class HarpyEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, @NotNull DamageSource source) {
         return false;
     }
 

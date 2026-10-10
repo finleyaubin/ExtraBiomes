@@ -5,7 +5,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -14,14 +14,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.HugeBrownMushroomFeature;
+import net.minecraft.world.level.levelgen.feature.HugeRedMushroomFeature;
+import net.minecraft.world.level.levelgen.feature.RandomSelectorFeature;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
+import net.minecraft.world.level.levelgen.feature.VegetationPatchFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -35,8 +34,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
 import net.minecraft.world.level.block.Rotation;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 
 import java.util.List;
 import java.util.Optional;
@@ -88,17 +86,17 @@ import java.util.Optional;
  */
 public class MushroomFeatures {
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_BLACK_MUSHROOM_KEY = cfKey("huge_black_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_BLUE_MUSHROOM_KEY = cfKey("huge_blue_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_BROWN_MUSHROOM1_KEY = cfKey("huge_brown_mushroom1");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_CYAN_MUSHROOM_KEY = cfKey("huge_cyan_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_GLOW_MUSHROOM_KEY = cfKey("huge_glow_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_GREEN_MUSHROOM_KEY = cfKey("huge_green_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_ORANGE_MUSHROOM_KEY = cfKey("huge_orange_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_PURPLE_MUSHROOM_KEY = cfKey("huge_purple_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_RED_MUSHROOM1_KEY = cfKey("huge_red_mushroom1");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_WHITE_MUSHROOM_KEY = cfKey("huge_white_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> HUGE_YELLOW_MUSHROOM_KEY = cfKey("huge_yellow_mushroom");
+    public static final ResourceKey<Feature> HUGE_BLACK_MUSHROOM_KEY = cfKey("huge_black_mushroom");
+    public static final ResourceKey<Feature> HUGE_BLUE_MUSHROOM_KEY = cfKey("huge_blue_mushroom");
+    public static final ResourceKey<Feature> HUGE_BROWN_MUSHROOM1_KEY = cfKey("huge_brown_mushroom1");
+    public static final ResourceKey<Feature> HUGE_CYAN_MUSHROOM_KEY = cfKey("huge_cyan_mushroom");
+    public static final ResourceKey<Feature> HUGE_GLOW_MUSHROOM_KEY = cfKey("huge_glow_mushroom");
+    public static final ResourceKey<Feature> HUGE_GREEN_MUSHROOM_KEY = cfKey("huge_green_mushroom");
+    public static final ResourceKey<Feature> HUGE_ORANGE_MUSHROOM_KEY = cfKey("huge_orange_mushroom");
+    public static final ResourceKey<Feature> HUGE_PURPLE_MUSHROOM_KEY = cfKey("huge_purple_mushroom");
+    public static final ResourceKey<Feature> HUGE_RED_MUSHROOM1_KEY = cfKey("huge_red_mushroom1");
+    public static final ResourceKey<Feature> HUGE_WHITE_MUSHROOM_KEY = cfKey("huge_white_mushroom");
+    public static final ResourceKey<Feature> HUGE_YELLOW_MUSHROOM_KEY = cfKey("huge_yellow_mushroom");
 
     public static final ResourceKey<PlacedFeature> HUGE_BLACK_MUSHROOM_PLACED_KEY = pfKey("huge_black_mushroom");
     public static final ResourceKey<PlacedFeature> HUGE_BLUE_MUSHROOM_PLACED_KEY = pfKey("huge_blue_mushroom");
@@ -113,12 +111,12 @@ public class MushroomFeatures {
     public static final ResourceKey<PlacedFeature> HUGE_YELLOW_MUSHROOM_PLACED_KEY = pfKey("huge_yellow_mushroom");
 
     // Re-registered locally (not referencing vanilla's placed features) so these can sit inside our own RANDOM_SELECTOR alongside the colored variants.
-    public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_HUGE_RED_MUSHROOM_KEY = cfKey("vanilla_huge_red_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_HUGE_BROWN_MUSHROOM_KEY = cfKey("vanilla_huge_brown_mushroom");
+    public static final ResourceKey<Feature> VANILLA_HUGE_RED_MUSHROOM_KEY = cfKey("vanilla_huge_red_mushroom");
+    public static final ResourceKey<Feature> VANILLA_HUGE_BROWN_MUSHROOM_KEY = cfKey("vanilla_huge_brown_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_HUGE_RED_MUSHROOM_PLACED_KEY = pfKey("vanilla_huge_red_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_HUGE_BROWN_MUSHROOM_PLACED_KEY = pfKey("vanilla_huge_brown_mushroom");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_HUGE_MUSHROOM_KEY = cfKey("select_huge_mushroom");
+    public static final ResourceKey<Feature> SELECT_HUGE_MUSHROOM_KEY = cfKey("select_huge_mushroom");
     /** Generic placement (just a biome filter) - use this as an ingredient of other features. */
     public static final ResourceKey<PlacedFeature> SELECT_HUGE_MUSHROOM_PLACED_KEY = pfKey("select_huge_mushroom");
     /** Bedrock's {@code mushroom_island_surface_huge_mushroom_feature.json} distribution. */
@@ -129,23 +127,23 @@ public class MushroomFeatures {
     public static final ResourceKey<PlacedFeature> HUGE_GLOW_MUSHROOM_UNDERGROUND_PLACED_KEY = pfKey("huge_glow_mushroom_underground");
 
     // Vanilla small mushroom stand-in for Bedrock's legacy small_mushrooms_feature.
-    public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_SMALL_RED_MUSHROOM_KEY = cfKey("vanilla_small_red_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_SMALL_BROWN_MUSHROOM_KEY = cfKey("vanilla_small_brown_mushroom");
+    public static final ResourceKey<Feature> VANILLA_SMALL_RED_MUSHROOM_KEY = cfKey("vanilla_small_red_mushroom");
+    public static final ResourceKey<Feature> VANILLA_SMALL_BROWN_MUSHROOM_KEY = cfKey("vanilla_small_brown_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_SMALL_RED_MUSHROOM_PLACED_KEY = pfKey("vanilla_small_red_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_SMALL_BROWN_MUSHROOM_PLACED_KEY = pfKey("vanilla_small_brown_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> VANILLA_SMALL_MUSHROOM_KEY = cfKey("vanilla_small_mushroom");
+    public static final ResourceKey<Feature> VANILLA_SMALL_MUSHROOM_KEY = cfKey("vanilla_small_mushroom");
     public static final ResourceKey<PlacedFeature> VANILLA_SMALL_MUSHROOM_PLACED_KEY = pfKey("vanilla_small_mushroom");
 
     // This mod's own colour variants of the small mushroom (ModBlocks.<COLOR>_MUSHROOM) - each bonemeal-grows into the matching HUGE_<COLOR>_MUSHROOM_KEY above.
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_BLACK_MUSHROOM_KEY = cfKey("small_black_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_BLUE_MUSHROOM_KEY = cfKey("small_blue_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_CYAN_MUSHROOM_KEY = cfKey("small_cyan_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_GREEN_MUSHROOM_KEY = cfKey("small_green_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_ORANGE_MUSHROOM_KEY = cfKey("small_orange_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_PURPLE_MUSHROOM_KEY = cfKey("small_purple_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_WHITE_MUSHROOM_KEY = cfKey("small_white_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_YELLOW_MUSHROOM_KEY = cfKey("small_yellow_mushroom");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SMALL_GLOW_MUSHROOM_KEY = cfKey("small_glow_mushroom");
+    public static final ResourceKey<Feature> SMALL_BLACK_MUSHROOM_KEY = cfKey("small_black_mushroom");
+    public static final ResourceKey<Feature> SMALL_BLUE_MUSHROOM_KEY = cfKey("small_blue_mushroom");
+    public static final ResourceKey<Feature> SMALL_CYAN_MUSHROOM_KEY = cfKey("small_cyan_mushroom");
+    public static final ResourceKey<Feature> SMALL_GREEN_MUSHROOM_KEY = cfKey("small_green_mushroom");
+    public static final ResourceKey<Feature> SMALL_ORANGE_MUSHROOM_KEY = cfKey("small_orange_mushroom");
+    public static final ResourceKey<Feature> SMALL_PURPLE_MUSHROOM_KEY = cfKey("small_purple_mushroom");
+    public static final ResourceKey<Feature> SMALL_WHITE_MUSHROOM_KEY = cfKey("small_white_mushroom");
+    public static final ResourceKey<Feature> SMALL_YELLOW_MUSHROOM_KEY = cfKey("small_yellow_mushroom");
+    public static final ResourceKey<Feature> SMALL_GLOW_MUSHROOM_KEY = cfKey("small_glow_mushroom");
     public static final ResourceKey<PlacedFeature> SMALL_BLACK_MUSHROOM_PLACED_KEY = pfKey("small_black_mushroom");
     public static final ResourceKey<PlacedFeature> SMALL_BLUE_MUSHROOM_PLACED_KEY = pfKey("small_blue_mushroom");
     public static final ResourceKey<PlacedFeature> SMALL_CYAN_MUSHROOM_PLACED_KEY = pfKey("small_cyan_mushroom");
@@ -156,18 +154,18 @@ public class MushroomFeatures {
     public static final ResourceKey<PlacedFeature> SMALL_YELLOW_MUSHROOM_PLACED_KEY = pfKey("small_yellow_mushroom");
     public static final ResourceKey<PlacedFeature> SMALL_GLOW_MUSHROOM_PLACED_KEY = pfKey("small_glow_mushroom");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_MUSHROOM_KEY = cfKey("select_mushroom");
+    public static final ResourceKey<Feature> SELECT_MUSHROOM_KEY = cfKey("select_mushroom");
     public static final ResourceKey<PlacedFeature> SELECT_MUSHROOM_PLACED_KEY = pfKey("select_mushroom");
     /** Standalone underground scatter for {@link #SELECT_MUSHROOM_PLACED_KEY}, used directly by {@code ModBiomes} - the bare key above has no modifiers since it also serves as {@link #MYCELIUM_FLOOR_KEY}'s nested vegetation feature. */
     public static final ResourceKey<PlacedFeature> SELECT_MUSHROOM_UNDERGROUND_PLACED_KEY = pfKey("select_mushroom_underground");
 
     public static final TagKey<Block> MYCELIUM_FLOOR_REPLACEABLE = TagKey.create(Registries.BLOCK,
-            ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mycelium_floor_replaceable"));
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MYCELIUM_FLOOR_KEY = cfKey("mycelium_floor");
+            Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mycelium_floor_replaceable"));
+    public static final ResourceKey<Feature> MYCELIUM_FLOOR_KEY = cfKey("mycelium_floor");
     /** Bedrock's {@code mushroom_surface_mycelium_floor_feature.json} distribution. */
     public static final ResourceKey<PlacedFeature> MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY = pfKey("mushroom_surface_mycelium_floor");
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
         registerStructure(context, HUGE_BLACK_MUSHROOM_KEY, "huge_black_mushroom", Optional.empty());
         registerStructure(context, HUGE_BLUE_MUSHROOM_KEY, "huge_blue_mushroom", Optional.empty());
         registerStructure(context, HUGE_BROWN_MUSHROOM1_KEY, "huge_brown_mushroom1", Optional.of(Rotation.NONE));
@@ -180,14 +178,16 @@ public class MushroomFeatures {
         registerStructure(context, HUGE_WHITE_MUSHROOM_KEY, "huge_white_mushroom", Optional.empty());
         registerStructure(context, HUGE_YELLOW_MUSHROOM_KEY, "huge_yellow_mushroom", Optional.empty());
 
-        register(context, VANILLA_HUGE_RED_MUSHROOM_KEY, Feature.HUGE_RED_MUSHROOM,
-                new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 2));
-        register(context, VANILLA_HUGE_BROWN_MUSHROOM_KEY, Feature.HUGE_BROWN_MUSHROOM,
-                new HugeMushroomFeatureConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM_BLOCK), BlockStateProvider.simple(Blocks.MUSHROOM_STEM), 3));
+        // canPlaceOn is a new required field since 26.1 (the huge mushroom features gained it); alwaysTrue()
+        // preserves the old behavior where huge mushrooms generated regardless of the block underneath.
+        context.register(VANILLA_HUGE_RED_MUSHROOM_KEY,
+                new HugeRedMushroomFeature(BlockStateProvider.holderOf(Blocks.RED_MUSHROOM_BLOCK), BlockStateProvider.holderOf(Blocks.MUSHROOM_STEM), 2, BlockPredicate.alwaysTrue()));
+        context.register(VANILLA_HUGE_BROWN_MUSHROOM_KEY,
+                new HugeBrownMushroomFeature(BlockStateProvider.holderOf(Blocks.BROWN_MUSHROOM_BLOCK), BlockStateProvider.holderOf(Blocks.MUSHROOM_STEM), 3, BlockPredicate.alwaysTrue()));
 
         // Weights are sequential-trial chances (w_i / weight remaining from i onward, since RandomFeatureConfiguration tries entries in order and the last is the guaranteed default), rebalanced to ~3:1 favoring custom colors over Bedrock's literal weights after playtesting showed the literal weights (any one vanilla color individually outnumbers any one custom color 5:1) read as almost no modded mushrooms.
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
-        register(context, SELECT_HUGE_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
+        context.register(SELECT_HUGE_MUSHROOM_KEY, new RandomSelectorFeature(
                 List.of(
                         new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BLACK_MUSHROOM_PLACED_KEY), 3f / 43f),
                         new WeightedPlacedFeature(placedFeatures.getOrThrow(HUGE_BLUE_MUSHROOM_PLACED_KEY), 3f / 40f),
@@ -205,8 +205,8 @@ public class MushroomFeatures {
                 placedFeatures.getOrThrow(VANILLA_HUGE_BROWN_MUSHROOM_PLACED_KEY)
         ));
 
-        register(context, VANILLA_SMALL_RED_MUSHROOM_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.RED_MUSHROOM)));
-        register(context, VANILLA_SMALL_BROWN_MUSHROOM_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.BROWN_MUSHROOM)));
+        context.register(VANILLA_SMALL_RED_MUSHROOM_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.RED_MUSHROOM)));
+        context.register(VANILLA_SMALL_BROWN_MUSHROOM_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.BROWN_MUSHROOM)));
         // The 9 custom-colour small mushrooms (ModBlocks.<COLOR>_MUSHROOM) already exist and already
         // bonemeal-grow into their matching huge mushroom (see ModBlocks, each is a vanilla
         // MushroomBlock tied to this class's own HUGE_<COLOR>_MUSHROOM_KEY) - they just were never
@@ -225,7 +225,7 @@ public class MushroomFeatures {
         // Same sequential-trial weighting convention as SELECT_HUGE_MUSHROOM_KEY above (~3:1 favoring
         // custom colours over vanilla): 9 customs at weight 3 each (27) + vanilla red at weight 5 (10
         // remaining, 5 to red / 5 as the guaranteed brown default) = 37 total.
-        register(context, VANILLA_SMALL_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
+        context.register(VANILLA_SMALL_MUSHROOM_KEY, new RandomSelectorFeature(
                 List.of(
                         new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_BLACK_MUSHROOM_PLACED_KEY), 3f / 37f),
                         new WeightedPlacedFeature(placedFeatures2.getOrThrow(SMALL_BLUE_MUSHROOM_PLACED_KEY), 3f / 34f),
@@ -246,16 +246,17 @@ public class MushroomFeatures {
         // MYCELIUM_FLOOR_REPLACEABLE bug), but at real density a huge mushroom's multi-block cap
         // dominates the view far more than a single small block does, so it reads as "too many huge
         // mushrooms" well before the raw growth-event count looks high. Tilted toward small.
-        register(context, SELECT_MUSHROOM_KEY, Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(
+        context.register(SELECT_MUSHROOM_KEY, new RandomSelectorFeature(
                 List.of(new WeightedPlacedFeature(placedFeatures3.getOrThrow(SELECT_HUGE_MUSHROOM_PLACED_KEY), 0.15f)),
                 placedFeatures3.getOrThrow(VANILLA_SMALL_MUSHROOM_PLACED_KEY)
         ));
 
         HolderGetter<PlacedFeature> placedFeatures4 = context.lookup(Registries.PLACED_FEATURE);
+        HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
         // Field order is (replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance) - a prior swap of verticalRange/extraEdgeColumnChance here failed datagen ("Value 0 outside of range [1:256]").
-        register(context, MYCELIUM_FLOOR_KEY, Feature.VEGETATION_PATCH, new VegetationPatchConfiguration(
-                MYCELIUM_FLOOR_REPLACEABLE,
-                BlockStateProvider.simple(Blocks.MYCELIUM),
+        context.register(MYCELIUM_FLOOR_KEY, new VegetationPatchFeature(
+                blocks.getOrThrow(MYCELIUM_FLOOR_REPLACEABLE),
+                BlockStateProvider.holderOf(Blocks.MYCELIUM),
                 placedFeatures4.getOrThrow(SELECT_MUSHROOM_PLACED_KEY),
                 CaveSurface.FLOOR,
                 ConstantInt.of(1),
@@ -272,7 +273,7 @@ public class MushroomFeatures {
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         // No extra modifiers on these building-block placements - they're only ever placed by a wrapping RANDOM_SELECTOR or another PlacedFeature that supplies its own distribution.
         register(context, HUGE_BLACK_MUSHROOM_PLACED_KEY, configuredFeatures.getOrThrow(HUGE_BLACK_MUSHROOM_KEY));
@@ -359,35 +360,30 @@ public class MushroomFeatures {
                 BiomeFilter.biome());
     }
 
-    private static void registerStructure(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, String structureName, Optional<Rotation> fixedRotation) {
+    private static void registerStructure(BootstrapContext<Feature> context, ResourceKey<Feature> key, String structureName, Optional<Rotation> fixedRotation) {
         // centered=true: the stem sits dead-center in its footprint, not at the local (0,0,0) corner, or it lands several blocks from the feature's actual origin.
-        SingleStructureConfiguration config = new SingleStructureConfiguration(
-                ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
+        context.register(key, new SingleStructureFeature(
+                Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "mushroom/" + structureName),
                 fixedRotation,
                 0,
                 true,
                 0.9F
-        );
-        context.register(key, new ConfiguredFeature<>(ModStructureScatterFeatures.SINGLE_STRUCTURE.get(), config));
+        ));
     }
 
-    private static void registerSmallMushroom(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, net.minecraft.world.level.block.Block block) {
-        context.register(key, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(block))));
+    private static void registerSmallMushroom(BootstrapContext<Feature> context, ResourceKey<Feature> key, net.minecraft.world.level.block.Block block) {
+        context.register(key, new SimpleBlockFeature(BlockStateProvider.holderOf(block)));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> cfKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+    private static ResourceKey<Feature> cfKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> pfKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
-    private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
-        context.register(key, new ConfiguredFeature<>(feature, configuration));
-    }
-
-    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, net.minecraft.core.Holder<ConfiguredFeature<?, ?>> configuration, PlacementModifier... modifiers) {
+    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, net.minecraft.core.Holder<Feature> configuration, PlacementModifier... modifiers) {
         context.register(key, new PlacedFeature(configuration, List.of(modifiers)));
     }
 }

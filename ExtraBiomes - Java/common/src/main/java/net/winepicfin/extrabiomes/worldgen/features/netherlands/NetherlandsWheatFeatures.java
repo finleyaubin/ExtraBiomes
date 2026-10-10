@@ -1,20 +1,22 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
+import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.worldgen.placement.ChunkOriginSnap;
+import net.winepicfin.extrabiomes.worldgen.placement.InBiomeChunkSample;
 
 import java.util.List;
 
@@ -43,44 +45,40 @@ import java.util.List;
  */
 public class NetherlandsWheatFeatures {
     // Registered in Registries.FEATURE (not just DeferredRegister) so the codec gets a stable registry name for ConfiguredFeature serialization/datagen.
-    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
+    public static final DeferredRegister<MapCodec<? extends Feature>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE_TYPE);
 
-    public static final RegistrySupplier<NetherlandsWheatFieldFeature> WHEAT_FIELD_FEATURE =
-            FEATURES.register("netherlands_wheat_field", () -> new NetherlandsWheatFieldFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistrySupplier<MapCodec<NetherlandsWheatFieldFeature>> WHEAT_FIELD_FEATURE =
+            FEATURES.register("netherlands_wheat_field", () -> NetherlandsWheatFieldFeature.CODEC);
+
+    public static final RegistrySupplier<MapCodec<NetherlandsTulipFieldFeature>> TULIP_FIELD_FEATURE =
+            FEATURES.register("netherlands_tulip_field", () -> NetherlandsTulipFieldFeature.CODEC);
 
     /** Must be called once from the mod's main class, e.g. {@code NetherlandsWheatFeatures.register();}. */
     public static void register() {
         FEATURES.register();
     }
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> WHEAT_FLOOR_KEY = key("netherlands_wheat_floor");
+    public static final ResourceKey<Feature> WHEAT_FLOOR_KEY = key("netherlands_wheat_floor");
     public static final ResourceKey<PlacedFeature> WHEAT_FLOOR_PLACED_KEY = placedKey("netherlands_wheat_floor");
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(WHEAT_FLOOR_KEY, new ConfiguredFeature<>(WHEAT_FIELD_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(WHEAT_FLOOR_KEY, new NetherlandsWheatFieldFeature());
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
-        // No CountPlacement/InSquarePlacement: the feature iterates every column of its chunk itself, so
-        // this only needs to run exactly once per chunk. Deliberately no BiomeFilter either - without
-        // CountPlacement/InSquarePlacement this only ever samples ONE random point per chunk, and near a
-        // biome boundary that single sample can land just outside the_netherlands_mutated even though
-        // ModSurfaceRules (which checks biome per-column, not once per chunk) already painted farmland
-        // across most of the chunk - skipping the whole chunk's wheat/hydration pass and leaving bare
-        // farmland with chunk-aligned gaps. The feature's own per-column farmland check already only
-        // ever touches columns ModSurfaceRules actually painted for this biome, so the outer BiomeFilter
-        // was redundant on top of being unreliable.
-        List<PlacementModifier> once = List.of(HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG));
+        // The feature iterates every column of its chunk and only touches farmland ModSurfaceRules painted for this biome, so it runs once per chunk.
+        // The sample/snap pair only lets BiomeFilter test a column in the biome instead of the chunk corner, which near a border could sit in another biome and skip the whole chunk.
+        List<PlacementModifier> once = List.of(InBiomeChunkSample.INSTANCE, BiomeFilter.biome(), ChunkOriginSnap.INSTANCE, HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG));
         context.register(WHEAT_FLOOR_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(WHEAT_FLOOR_KEY), once));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> key(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+    private static ResourceKey<Feature> key(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

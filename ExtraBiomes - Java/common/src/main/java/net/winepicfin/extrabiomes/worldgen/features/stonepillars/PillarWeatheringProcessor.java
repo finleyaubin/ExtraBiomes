@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.stonepillars;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -13,12 +14,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
+import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,20 +34,20 @@ import java.util.Set;
  * sapling/bamboo/azalea/fern where a ledge is wide enough) on exposed tops. Both the reskin and
  * the vegetation use the same coherent-noise style already established by
  * {@link net.winepicfin.extrabiomes.worldgen.features.brycepillars.BrycePillarsFeature} (a static
- * seeded {@link PerlinSimplexNoise} field, sampled per-column) so variation clusters into patches
+ * seeded {@link SimplexNoise} field, sampled per-column) so variation clusters into patches
  * instead of a speckled per-block roll.
  * <p>
  * Runtime-only, like {@link net.winepicfin.extrabiomes.worldgen.features.structurescatter.PreserveBedrockProcessor} -
  * never serialized, only ever constructed once and passed to {@link StructureTemplate#placeInWorld}.
- * See that class's javadoc for why {@link #getType()} returns {@link StructureProcessorType#NOP}
+ * See that class's javadoc for why {@link #codec()} just returns a {@code MapCodec.unit(INSTANCE)}
  * rather than throwing or registering a real type of its own.
  */
-public final class PillarWeatheringProcessor extends StructureProcessor {
+public final class PillarWeatheringProcessor implements StructureProcessor {
     public static final PillarWeatheringProcessor INSTANCE = new PillarWeatheringProcessor();
 
-    private static final PerlinSimplexNoise WEATHER_NOISE = new PerlinSimplexNoise(RandomSource.create(5551L), List.of(0));
-    private static final PerlinSimplexNoise VEGETATION_NOISE = new PerlinSimplexNoise(RandomSource.create(9113L), List.of(0));
-    private static final PerlinSimplexNoise SOIL_NOISE = new PerlinSimplexNoise(RandomSource.create(7331L), List.of(0));
+    private static final SimplexNoise WEATHER_NOISE = new SimplexNoise(RandomSource.create(5551L));
+    private static final SimplexNoise VEGETATION_NOISE = new SimplexNoise(RandomSource.create(9113L));
+    private static final SimplexNoise SOIL_NOISE = new SimplexNoise(RandomSource.create(7331L));
     private static final double WEATHER_SCALE_XZ = 0.07D;
     private static final double WEATHER_SCALE_Y = 0.10D;
     // No template here is anywhere near this tall (tallest pillar variant is 106) - used only to
@@ -79,20 +81,20 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
     @Nullable
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pos,
-                                                               StructureTemplate.StructureBlockInfo blockInfo,
+                                                               BlockPos originalPos,
                                                                StructureTemplate.StructureBlockInfo relativeBlockInfo,
                                                                StructurePlaceSettings settings) {
         if (!relativeBlockInfo.state().is(Blocks.STONE)) {
             return relativeBlockInfo;
         }
         BlockPos worldPos = relativeBlockInfo.pos();
-        // A blend of an XZ sample and a Y-leaning sample - a single 2D field alone would only ever produce perfectly vertical bands, since PerlinSimplexNoise has no native 3D overload.
-        double xz = WEATHER_NOISE.getValue(worldPos.getX() * WEATHER_SCALE_XZ, worldPos.getZ() * WEATHER_SCALE_XZ, false);
-        double y = WEATHER_NOISE.getValue(worldPos.getY() * WEATHER_SCALE_Y, (worldPos.getX() - worldPos.getZ()) * WEATHER_SCALE_Y * 0.5D, false);
+        // A blend of an XZ sample and a Y-leaning sample - a single 2D field alone would only ever produce perfectly vertical bands, since SimplexNoise has no native 3D overload.
+        double xz = WEATHER_NOISE.get(worldPos.getX() * WEATHER_SCALE_XZ, worldPos.getZ() * WEATHER_SCALE_XZ);
+        double y = WEATHER_NOISE.get(worldPos.getY() * WEATHER_SCALE_Y, (worldPos.getX() - worldPos.getZ()) * WEATHER_SCALE_Y * 0.5D);
         double n = xz * 0.65D + y * 0.35D;
 
-        // blockInfo.pos() is still template-local (pre-rotation), so its Y is unaffected by which random Rotation this placement picked - exactly the "fraction up the structure" this gradient needs.
-        double heightFraction = Math.max(0.0D, Math.min(1.0D, blockInfo.pos().getY() / ASSUMED_MAX_TEMPLATE_HEIGHT));
+        // originalPos is still template-local (pre-rotation), so its Y is unaffected by which random Rotation this placement picked - exactly the "fraction up the structure" this gradient needs.
+        double heightFraction = Math.max(0.0D, Math.min(1.0D, originalPos.getY() / ASSUMED_MAX_TEMPLATE_HEIGHT));
         double gradientShift = (heightFraction - 0.5D) * 2.0D * GRADIENT_WEIGHT;
 
         BlockState variant = pickVariant(n + gradientShift);
@@ -143,19 +145,19 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
             }
         }
 
+        Map<BlockPos, Set<Direction>> vines = new HashMap<>();
         for (BlockPos p : stonePositions) {
-            Map<Direction, Boolean> faces = null;
             for (Direction dir : Direction.Plane.HORIZONTAL) {
                 BlockPos n = p.relative(dir);
                 if (!isOpen(level, n) || !isOpen(level, n.relative(dir)) || !isExteriorFace(level, n, dir)) continue;
                 double density = vegetationDensity(n);
                 float chance = ((n.getY() - box.minY()) < sy * 0.45D ? VINE_CHANCE_LOW : VINE_CHANCE_HIGH) * (float) density;
                 if (random.nextFloat() >= chance) continue;
-                if (faces == null) faces = new EnumMap<>(Direction.class);
-                faces.put(dir.getOpposite(), Boolean.TRUE);
-            }
-            if (faces != null) {
-                placeVine(level, p, faces.keySet());
+                // The vine belongs in the open cell, attached to the rock face it was reached from.
+                // Putting it at p would swap that exposed stone for a see-through block, hollowing
+                // out the pillar's own silhouette - and two neighbouring faces of the same air cell
+                // have to merge into one multi-face vine rather than overwrite each other.
+                vines.computeIfAbsent(n, unused -> EnumSet.noneOf(Direction.class)).add(dir.getOpposite());
             }
 
             BlockPos above = p.above();
@@ -163,7 +165,7 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
             double density = vegetationDensity(above);
             if (random.nextFloat() >= TOP_GROWTH_CHANCE * (float) density) continue;
 
-            boolean mossy = SOIL_NOISE.getValue(p.getX() * VEGETATION_SCALE, p.getZ() * VEGETATION_SCALE, false) < 0.0D;
+            boolean mossy = SOIL_NOISE.get(p.getX() * VEGETATION_SCALE, p.getZ() * VEGETATION_SCALE) < 0.0D;
             level.setBlock(p, (mossy ? Blocks.MOSS_BLOCK : Blocks.GRASS_BLOCK).defaultBlockState(), Block.UPDATE_CLIENTS);
 
             float topRoll = random.nextFloat();
@@ -179,6 +181,14 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
             }
             // else: bare grass/moss patch, no topper.
         }
+
+        // Deferred so the loop's own grass/topper writes can't be read as "this cell is taken"
+        // halfway through; a cell a topper actually landed in is skipped rather than overwritten.
+        vines.forEach((pos, faces) -> {
+            if (isOpen(level, pos)) {
+                placeVine(level, pos, faces);
+            }
+        });
     }
 
     /**
@@ -217,7 +227,7 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
 
     /** 0..1 clustering weight - only positions in a noise field's upper range grow anything, so vegetation reads as patches rather than an even coat. */
     private static double vegetationDensity(BlockPos pos) {
-        double n = VEGETATION_NOISE.getValue(pos.getX() * VEGETATION_SCALE, pos.getZ() * VEGETATION_SCALE, false);
+        double n = VEGETATION_NOISE.get(pos.getX() * VEGETATION_SCALE, pos.getZ() * VEGETATION_SCALE);
         return Math.max(0.0D, (n + 1.0D) / 2.0D);
     }
 
@@ -233,7 +243,7 @@ public final class PillarWeatheringProcessor extends StructureProcessor {
     }
 
     @Override
-    protected StructureProcessorType<?> getType() {
-        return StructureProcessorType.NOP;
+    public MapCodec<PillarWeatheringProcessor> codec() {
+        return MapCodec.unit(INSTANCE);
     }
 }

@@ -2,7 +2,8 @@ package net.winepicfin.extrabiomes.entity.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -92,13 +93,13 @@ public class HoppleshroomEntity extends Animal {
 
     // Fall damage is reduced by a flat 12 rather than cancelled, so near-continuous hopping never hurts it but a long enough drop still kills it.
     @Override
-    protected int calculateFallDamage(float distance, float multiplier) {
+    protected int calculateFallDamage(double distance, float multiplier) {
         return Math.max(0, super.calculateFallDamage(distance, multiplier) + FALL_DAMAGE_MODIFIER);
     }
 
     public void hop(double vx, double vz) {
         this.setDeltaMovement(vx, this.getJumpPower(), vz);
-        this.hasImpulse = true;
+        this.needsSync = true;
     }
 
     @Override
@@ -179,15 +180,15 @@ public class HoppleshroomEntity extends Animal {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Variant", this.getVariant());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariant(tag.getInt("Variant"));
+        this.setVariant(tag.getIntOr("Variant", 0));
     }
 
     @Nullable

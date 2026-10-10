@@ -11,3 +11,9 @@ CLAUDE.md
 *.kra-autosave
 *.kra.autosave
 *.autosave
+*-autosave.kra
+/compat-work/
+/results/
+
+# Output of tools/biome_map.py
+/tools/biome_maps/

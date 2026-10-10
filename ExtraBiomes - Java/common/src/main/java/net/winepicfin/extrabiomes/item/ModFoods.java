@@ -9,7 +9,7 @@ import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 public class ModFoods {
     public static final FoodProperties FROGS_LEGS = new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).build();
     public static final Consumable FROGS_LEGS_CONSUMABLE = Consumable.builder()
-            .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.JUMP, 600, 1), 0.8F))
+            .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 600, 1), 0.8F))
             .build();
     public static final FoodProperties COOKED_FROGS_LEGS = new FoodProperties.Builder().nutrition(7).saturationModifier(0.6f).build();
     public static final FoodProperties PIRANHA = new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).build();

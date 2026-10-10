@@ -4,11 +4,13 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.neoforged.neoforge.common.Tags;
@@ -53,7 +55,7 @@ public class ModBiomeModifiers {
     public static final ResourceKey<BiomeModifier> ADD_SPAWN_WORM = registerKey("add_spawn_worm");
     public static final ResourceKey<BiomeModifier> ADD_SPAWN_PUCKOO_BEACH = registerKey("add_spawn_puckoo_beach");
 
-    private static final TagKey<Biome> IS_OVERWORLD = TagKey.create(Registries.BIOME, ResourceLocation.parse("minecraft:is_overworld"));
+    private static final TagKey<Biome> IS_OVERWORLD = TagKey.create(Registries.BIOME, Identifier.parse("minecraft:is_overworld"));
 
     public static void bootstrap(BootstrapContext<BiomeModifier> context) {
         var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -77,21 +79,15 @@ public class ModBiomeModifiers {
                 HolderSet.direct(placedFeatures.getOrThrow(UndergroundJungleFeatures.CAVE_VINE_PLACED_KEY)),
                 GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
-        // Registered before the boulder/stick_pile block below - see the long comment there for
-        // why the ORDER of these two blocks (not just their content) matters: JungleMarsh.java
-        // bakes extrabiomes:swamp_huge_mushroom directly into its own VEGETAL_DECORATION list at
-        // biome-registration time (i.e. always before any BiomeModifier runs at all), so on
-        // vanilla Dark Forest - which gets both swamp_huge_mushroom and select_stick_pile purely
-        // via modifiers - the mushroom modifier must also be registered (and therefore applied)
-        // before the stick_pile-for-forest one, or the two biomes end up wanting opposite relative
-        // orders for the same pair of features and vanilla's FeatureSorter crashes with
-        // "Feature order cycle found" the moment a chunk needs both biomes' feature lists at once.
-        // Tag-based (Tags.Biomes.IS_MUSHROOM, same convention tag ModBiomeTagProvider already folds
-        // Biomes.MUSHROOM_FIELDS into) rather than a hardcoded biome list, matching
-        // ADD_BOULDER/ADD_UNDERGROUND_JUNGLE_VEGETATION below - any biome (vanilla, this
-        // mod's, or a third-party mod's) carrying the tag gets these, not just vanilla's own biome.
+        // Every biome that gets swamp_huge_mushroom or the mushroom-island features gets it HERE, through
+        // ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS / GETS_MUSHROOM_ISLAND_FEATURES - none of this mod's own biomes
+        // bake these into their definitions. A baked-in copy sits before every feature a third-party mod appends
+        // (Dynamic Trees, Wilder Wild) while a modifier-delivered copy sits after them, so the same pair of features
+        // ends up in opposite orders in two biomes and vanilla's FeatureSorter crashes with "Feature order cycle
+        // found". Delivered by one modifier everywhere, every biome gets the same relative order. Registered before
+        // the boulder/stick_pile block below so swamp_huge_mushroom still precedes select_stick_pile in every biome.
         context.register(ADD_MUSHROOM_FIELDS_HUGE_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
+                biomes.getOrThrow(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_ISLAND_HUGE_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
         // Small mod-added mushroom variants (via the mycelium-floor-patch mechanism -
@@ -100,11 +96,11 @@ public class ModBiomeModifiers {
         // ever got the huge mushroom modifier above - they had no path to this mod's own small
         // mushroom colours at all. Same generation step FungleJungle uses this feature at (LOCAL_MODIFICATIONS).
         context.register(ADD_MUSHROOM_FIELDS_SMALL_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                biomes.getOrThrow(Tags.Biomes.IS_MUSHROOM),
+                biomes.getOrThrow(ModTags.Biomes.GETS_MUSHROOM_ISLAND_FEATURES),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.MUSHROOM_SURFACE_MYCELIUM_FLOOR_PLACED_KEY)),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS));
         context.register(ADD_DARK_FOREST_HUGE_MUSHROOMS, new BiomeModifiers.AddFeaturesBiomeModifier(
-                HolderSet.direct(biomes.getOrThrow(Biomes.DARK_FOREST)),
+                biomes.getOrThrow(ModTags.Biomes.GETS_SWAMP_HUGE_MUSHROOMS),
                 HolderSet.direct(placedFeatures.getOrThrow(MushroomFeatures.SWAMP_HUGE_MUSHROOM_PLACED_KEY)),
                 GenerationStep.Decoration.VEGETAL_DECORATION));
 
@@ -144,48 +140,46 @@ public class ModBiomeModifiers {
 
         // Mob spawns (Bedrock spawn_rules -> vanilla + mod biomes)
         // jungle tag: giant_tortoise, piranha, treefrog
-        context.register(ADD_SPAWN_GIANT_TORTOISE, new BiomeModifiers.AddSpawnsBiomeModifier(
+        context.register(ADD_SPAWN_GIANT_TORTOISE, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.GIANT_TORTOISE.get(), MobSpawnWeightTuning.GIANT_TORTOISE, 1, 2))));
-        context.register(ADD_SPAWN_PIRANHA_JUNGLE, new BiomeModifiers.AddSpawnsBiomeModifier(
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.GIANT_TORTOISE.get(), UniformInt.of(1, 2)), MobSpawnWeightTuning.GIANT_TORTOISE)));
+        context.register(ADD_SPAWN_PIRANHA_JUNGLE, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_JUNGLE,
-                        MobSpawnWeightTuning.PIRANHA_JUNGLE_MIN_GROUP, MobSpawnWeightTuning.PIRANHA_JUNGLE_MAX_GROUP))));
-        context.register(ADD_SPAWN_PIRANHA_SWAMP, new BiomeModifiers.AddSpawnsBiomeModifier(
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), UniformInt.of(MobSpawnWeightTuning.PIRANHA_JUNGLE_MIN_GROUP, MobSpawnWeightTuning.PIRANHA_JUNGLE_MAX_GROUP)), MobSpawnWeightTuning.PIRANHA_JUNGLE)));
+        context.register(ADD_SPAWN_PIRANHA_SWAMP, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(Tags.Biomes.IS_SWAMP),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), MobSpawnWeightTuning.PIRANHA_SWAMP, 2, 5))));
-        context.register(ADD_SPAWN_TREEFROG_JUNGLE, new BiomeModifiers.AddSpawnsBiomeModifier(
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.PIRANHA.get(), UniformInt.of(2, 5)), MobSpawnWeightTuning.PIRANHA_SWAMP)));
+        context.register(ADD_SPAWN_TREEFROG_JUNGLE, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(BiomeTags.IS_JUNGLE),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_JUNGLE, 2, 3))));
-        context.register(ADD_SPAWN_TREEFROG_SWAMP, new BiomeModifiers.AddSpawnsBiomeModifier(
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), UniformInt.of(2, 3)), MobSpawnWeightTuning.TREEFROG_JUNGLE)));
+        context.register(ADD_SPAWN_TREEFROG_SWAMP, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(ModTags.Biomes.IS_WETLAND),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), MobSpawnWeightTuning.TREEFROG_SWAMP, 2, 3))));
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.TREEFROG.get(), UniformInt.of(2, 3)), MobSpawnWeightTuning.TREEFROG_SWAMP)));
         // crimson / warped / mushroom + this mod's nether biomes
-        context.register(ADD_SPAWN_HOPPLESHROOM, new BiomeModifiers.AddSpawnsBiomeModifier(
+        context.register(ADD_SPAWN_HOPPLESHROOM, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(ModTags.Biomes.SPAWNS_HOPPLESHROOM),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.HOPPLESHROOM.get(), MobSpawnWeightTuning.HOPPLESHROOM, 1, 5))));
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.HOPPLESHROOM.get(), UniformInt.of(1, 5)), MobSpawnWeightTuning.HOPPLESHROOM)));
         // jellyfish: dense in JellyfishFields, rare on beaches
-        context.register(ADD_SPAWN_JELLYFISH, new BiomeModifiers.AddSpawnsBiomeModifier(
+        context.register(ADD_SPAWN_JELLYFISH, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(ModTags.Biomes.SPAWNS_JELLYFISH),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH, 3, 8))));
-        context.register(ADD_SPAWN_JELLYFISH_BEACH, new BiomeModifiers.AddSpawnsBiomeModifier(
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), UniformInt.of(3, 8)), MobSpawnWeightTuning.JELLYFISH)));
+        context.register(ADD_SPAWN_JELLYFISH_BEACH, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(BiomeTags.IS_BEACH),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), MobSpawnWeightTuning.JELLYFISH_BEACH, 1, 1))));
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.JELLYFISH.get(), UniformInt.of(1, 1)), MobSpawnWeightTuning.JELLYFISH_BEACH)));
         // harpy (no Bedrock biome filter) and worm ("animal" tag): overworld-wide
-        context.register(ADD_SPAWN_HARPY, new BiomeModifiers.AddSpawnsBiomeModifier(
+        context.register(ADD_SPAWN_HARPY, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(IS_OVERWORLD),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.HARPY.get(), MobSpawnWeightTuning.HARPY, 1, 1))));
-        context.register(ADD_SPAWN_WORM, new BiomeModifiers.AddSpawnsBiomeModifier(
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.HARPY.get(), UniformInt.of(1, 1)), MobSpawnWeightTuning.HARPY)));
+        context.register(ADD_SPAWN_WORM, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(IS_OVERWORLD),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.WORM.get(), MobSpawnWeightTuning.WORM, 1, 3))));
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.WORM.get(), UniformInt.of(1, 3)), MobSpawnWeightTuning.WORM)));
         // puckoo: any beach-tagged biome, vanilla or modded
-        context.register(ADD_SPAWN_PUCKOO_BEACH, new BiomeModifiers.AddSpawnsBiomeModifier(
+        context.register(ADD_SPAWN_PUCKOO_BEACH, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(BiomeTags.IS_BEACH),
-                List.of(new MobSpawnSettings.SpawnerData(ModEntities.PUCKOO.get(), MobSpawnWeightTuning.PUCKOO_BEACH,
-                        MobSpawnWeightTuning.PUCKOO_BEACH_MIN_GROUP, MobSpawnWeightTuning.PUCKOO_BEACH_MAX_GROUP))));
+                new Weighted<>(new MobSpawnSettings.SpawnerData(ModEntities.PUCKOO.get(), UniformInt.of(MobSpawnWeightTuning.PUCKOO_BEACH_MIN_GROUP, MobSpawnWeightTuning.PUCKOO_BEACH_MAX_GROUP)), MobSpawnWeightTuning.PUCKOO_BEACH)));
     }
 
     private static ResourceKey<BiomeModifier> registerKey(String name) {
-        return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 }

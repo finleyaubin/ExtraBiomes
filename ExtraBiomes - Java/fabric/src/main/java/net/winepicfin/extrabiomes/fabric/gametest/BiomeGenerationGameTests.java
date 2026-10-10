@@ -4,9 +4,10 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
@@ -47,8 +48,8 @@ public class BiomeGenerationGameTests {
     private static final int SEARCH_INCREMENT_BLOCKS = 32;
     private static final int SEARCH_STEP_BLOCKS = 128;
 
-    @GameTest(template = ExtraBiomes.MOD_ID + ":empty", timeoutTicks = 60000)
-    public static void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
+    @GameTest(structure = ExtraBiomes.MOD_ID + ":empty", maxTicks = 60000)
+    public void allModBiomesAppearInOverworldGeneration(GameTestHelper helper) {
         LOGGER.info("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: starting");
         ServerLevel level = helper.getLevel();
         RegistryAccess registryAccess = level.registryAccess();
@@ -59,7 +60,7 @@ public class BiomeGenerationGameTests {
         LevelUtils.initializeBiomes(registryAccess, overworld.type(), LevelStem.OVERWORLD, generator, seed);
 
         BiomeSource biomeSource = generator.getBiomeSource();
-        RandomState randomState = RandomState.create(generator.generatorSettings().value(), registryAccess.lookupOrThrow(Registries.NOISE), seed);
+        RandomState randomState = RandomState.create(registryAccess.lookupOrThrow(Registries.NOISE), seed, generator.generatorSettings().value());
         // Fixed coordinate, not level.getSharedSpawnPos() - see the Forge test's javadoc for why:
         // Vanilla's spawn-suitability search can converge on a different valid candidate depending
         // on chunk-completion ordering on machines with different core counts, which drifted the
@@ -69,7 +70,7 @@ public class BiomeGenerationGameTests {
 
         List<String> missing = new ArrayList<>();
         for (String expectedPath : BiomeClimateTuning.BY_BEDROCK_KEY.keySet()) {
-            Pair<BlockPos, Holder<Biome>> found = biomeSource.findClosestBiome3d(origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS, holder -> matchesPath(holder, expectedPath), randomState.sampler(), level);
+            Pair<BlockPos, Holder<Biome>> found = biomeSource.findClosestBiome3d(origin, SEARCH_RADIUS_BLOCKS, SEARCH_INCREMENT_BLOCKS, SEARCH_STEP_BLOCKS, holder -> matchesPath(holder, expectedPath), randomState, level);
             if (found == null) {
                 missing.add(expectedPath);
                 LOGGER.error("[BiomeGenerationGameTests] {}: NOT FOUND within {} blocks", expectedPath, SEARCH_RADIUS_BLOCKS);
@@ -84,14 +85,14 @@ public class BiomeGenerationGameTests {
             LOGGER.error("[BiomeGenerationGameTests] allModBiomesAppearInOverworldGeneration: failed");
         }
         helper.assertTrue(missing.isEmpty(),
-                missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
-                        + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing);
+                Component.literal(missing.size() + "/" + BiomeClimateTuning.BY_BEDROCK_KEY.size() + " biomes not found within "
+                        + SEARCH_RADIUS_BLOCKS + " blocks of spawn: " + missing));
         helper.succeed();
     }
 
     private static boolean matchesPath(Holder<Biome> holder, String expectedPath) {
-        return holder.unwrapKey().map(key -> key.location().getNamespace().equals(ExtraBiomes.MOD_ID)
-                        && key.location().getPath().equals(expectedPath))
+        return holder.unwrapKey().map(key -> key.identifier().getNamespace().equals(ExtraBiomes.MOD_ID)
+                        && key.identifier().getPath().equals(expectedPath))
                 .orElse(false);
     }
 }

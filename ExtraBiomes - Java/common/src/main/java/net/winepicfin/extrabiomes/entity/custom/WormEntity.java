@@ -1,7 +1,10 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.util.Prediction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -21,9 +24,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Optional;
 
 // Ported from Bedrock extrabiomes:worm — a tiny passive ground critter.
 public class WormEntity extends Animal {
@@ -31,6 +42,9 @@ public class WormEntity extends Animal {
     private static final float SPAWN_CHANCE_CLEAR = 0.15F;
     private static final float SPAWN_CHANCE_RAIN = 0.75F;
     private static final float SPAWN_CHANCE_THUNDER = 1.0F;
+    private static final int BREEDING_COOLDOWN_TICKS = 6000;
+    private static final int COMPOSTER_CHECK_INTERVAL_TICKS = 20;
+    private static final List<Direction> EXIT_ORDER = List.of(Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
 
     public WormEntity(EntityType<? extends Animal> type, Level level) {
         super(type, level);
@@ -64,6 +78,70 @@ public class WormEntity extends Animal {
     }
 
     @Override
+    protected void customServerAiStep(ServerLevel level) {
+        super.customServerAiStep(level);
+        if (this.tickCount % COMPOSTER_CHECK_INTERVAL_TICKS == 0) {
+            breedInComposter();
+        }
+    }
+
+    private void breedInComposter() {
+        BlockPos composterPos = this.blockPosition();
+        BlockState composter = this.level().getBlockState(composterPos);
+        if (!composter.is(Blocks.COMPOSTER) || this.getAge() != 0) {
+            return;
+        }
+        int compost = composter.getValue(ComposterBlock.LEVEL);
+        if (compost == 0) {
+            return;
+        }
+        Optional<WormEntity> mate = findMateIn(composterPos);
+        Optional<BlockPos> exit = findExitFrom(composterPos);
+        if (mate.isEmpty() || exit.isEmpty()) {
+            return;
+        }
+        WormEntity baby = ModEntities.WORM.get().create(this.level(), EntitySpawnReason.BREEDING);
+        if (baby == null) {
+            return;
+        }
+        this.level().setBlock(composterPos, composter.setValue(ComposterBlock.LEVEL, compost - 1), 3);
+        this.level().levelEvent(1500, composterPos, 1);
+        this.setAge(BREEDING_COOLDOWN_TICKS);
+        mate.get().setAge(BREEDING_COOLDOWN_TICKS);
+        if ((this.isArchie() && mate.get().isCiaran()) || (this.isCiaran() && mate.get().isArchie())) {
+            baby.setCustomName(Component.literal("Pete"));
+        }
+        baby.snapTo(exit.get().getX() + 0.5, exit.get().getY(), exit.get().getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
+        this.level().addFreshEntity(baby);
+    }
+
+    private Optional<WormEntity> findMateIn(BlockPos pos) {
+        List<WormEntity> worms = this.level().getEntitiesOfClass(WormEntity.class, new AABB(pos),
+                worm -> worm != this && worm.getAge() == 0 && worm.blockPosition().equals(pos));
+        return worms.stream().findFirst();
+    }
+
+    private Optional<BlockPos> findExitFrom(BlockPos pos) {
+        return EXIT_ORDER.stream()
+                .map(pos::relative)
+                .filter(this::isOpen)
+                .findFirst();
+    }
+
+    private boolean isOpen(BlockPos pos) {
+        return this.level().getBlockState(pos).getCollisionShape(this.level(), pos).isEmpty()
+                && this.level().getFluidState(pos).isEmpty();
+    }
+
+    private boolean isArchie() {
+        return this.hasCustomName() && "Archie".equals(this.getCustomName().getString());
+    }
+
+    private boolean isCiaran() {
+        return this.hasCustomName() && "Ciaran".equalsIgnoreCase(this.getCustomName().getString());
+    }
+
+    @Override
     public boolean isFood(ItemStack stack) {
         return false;
     }
@@ -71,18 +149,18 @@ public class WormEntity extends Animal {
     @Override
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player.isSecondaryUseActive() && hand == InteractionHand.MAIN_HAND) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 ItemStack wormItem = new ItemStack(ModItems.WORM.get());
                 if (this.hasCustomName()) {
                     wormItem.set(DataComponents.CUSTOM_NAME, this.getCustomName());
                 }
                 if (!player.getInventory().add(wormItem)) {
-                    player.drop(wormItem, false);
+                    player.drop(wormItem, false, Prediction.SERVER_ONLY);
                 }
                 this.playSound(SoundEvents.ITEM_PICKUP, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 1.4F + 2.0F) * 2.0F);
                 this.discard();
             }
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }

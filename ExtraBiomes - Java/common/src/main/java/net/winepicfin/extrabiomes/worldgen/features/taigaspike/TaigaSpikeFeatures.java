@@ -5,15 +5,14 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.RandomSelectorFeature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
@@ -21,10 +20,9 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.RandomOffsetPlacement;
+import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.ModStructureScatterFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureConfiguration;
+import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
 
 import java.util.List;
 
@@ -58,7 +56,7 @@ import java.util.List;
  * minecraft:snow_layer both map cleanly - zero warnings from the converter).
  * <p>
  * Reuses the shared {@link net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature}/
- * {@link SingleStructureConfiguration} infra (one ConfiguredFeature per spike variant, random rotation
+ * {@link SingleStructureFeature} infra (one ConfiguredFeature per spike variant, random rotation
  * since Bedrock's structure_template_feature entries specify no fixed facing_direction), wrapped in a
  * single vanilla {@link Feature#RANDOM_SELECTOR} ConfiguredFeature for the 1:1:7 weighting (as a
  * sequential-trial chain: spike_1 chance 1/9, spike_2 chance (1/9)/(8/9)=1/8 conditional on spike_1
@@ -68,8 +66,8 @@ import java.util.List;
  * <p>
  * Bedrock's y = above_top_solid + uniform[-13, -4] (a *range* of embed depths, unlike stone_pillars'
  * fixed -5) is reproduced with {@code HeightmapPlacement.onHeightmap(WORLD_SURFACE_WG)} followed by
- * {@code RandomOffsetPlacement.vertical(UniformInt.of(-13, -4))} - groundOffset in
- * SingleStructureConfiguration is left at 0 for all three variants since the vertical randomness is
+ * {@code OffsetPlacement.vertical(UniformInt.of(-13, -4))} - groundOffset in
+ * SingleStructureFeature is left at 0 for all three variants since the vertical randomness is
  * handled by the placement modifier instead.
  * <p>
  * Bedrock's constraints.block_intersection.block_allowlist [air, water, snow_layer, grass_block, snow,
@@ -79,60 +77,48 @@ import java.util.List;
  * matching Bedrock's intent of "don't stamp a spike through a cave/structure/water body unexpectedly".
  */
 public class TaigaSpikeFeatures {
-    private static final ResourceKey<ConfiguredFeature<?, ?>> SPIKE_1_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_1"));
-    private static final ResourceKey<ConfiguredFeature<?, ?>> SPIKE_2_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_2"));
-    private static final ResourceKey<ConfiguredFeature<?, ?>> SPIKE_3_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_3"));
+    private static final ResourceKey<Feature> SPIKE_1_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_1"));
+    private static final ResourceKey<Feature> SPIKE_2_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_2"));
+    private static final ResourceKey<Feature> SPIKE_3_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_3"));
 
     private static final ResourceKey<PlacedFeature> SPIKE_1_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_1"));
+            ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_1"));
     private static final ResourceKey<PlacedFeature> SPIKE_2_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_2"));
+            ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_2"));
     private static final ResourceKey<PlacedFeature> SPIKE_3_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_3"));
+            ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taiga_spike_3"));
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> SELECT_TAIGA_SPIKE_KEY =
-            ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_taiga_spike"));
+    public static final ResourceKey<Feature> SELECT_TAIGA_SPIKE_KEY =
+            ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_taiga_spike"));
     public static final ResourceKey<PlacedFeature> TAIGA_SPIKE_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_taiga_spike"));
+            ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "select_taiga_spike"));
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        context.register(SPIKE_1_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_1"))
-        ));
-        context.register(SPIKE_2_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_2"))
-        ));
-        context.register(SPIKE_3_KEY, new ConfiguredFeature<>(
-                ModStructureScatterFeatures.SINGLE_STRUCTURE.get(),
-                new SingleStructureConfiguration(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_3"))
-        ));
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(SPIKE_1_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_1")));
+        context.register(SPIKE_2_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_2")));
+        context.register(SPIKE_3_KEY, new SingleStructureFeature(Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "taigaspike/spike_3")));
 
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
-        context.register(SELECT_TAIGA_SPIKE_KEY, new ConfiguredFeature<>(
-                Feature.RANDOM_SELECTOR,
-                new RandomFeatureConfiguration(
+        context.register(SELECT_TAIGA_SPIKE_KEY, new RandomSelectorFeature(
                         List.of(
                                 new WeightedPlacedFeature(placedFeatures.getOrThrow(SPIKE_1_PLACED_KEY), 1.0f / 9.0f),
                                 new WeightedPlacedFeature(placedFeatures.getOrThrow(SPIKE_2_PLACED_KEY), 1.0f / 8.0f)
                         ),
                         placedFeatures.getOrThrow(SPIKE_3_PLACED_KEY)
-                )
-        ));
+                ));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
 
         // Shared origin-block constraint for all three variants, mirroring Bedrock's block_intersection.block_allowlist.
         List<PlacementModifier> perSpikeModifiers = List.of(
                 BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(
                         BlockPos.ZERO,
-                        Blocks.AIR, Blocks.WATER, Blocks.SNOW, Blocks.GRASS_BLOCK, Blocks.SNOW_BLOCK, Blocks.DIRT, Blocks.STONE
+                        List.of(Blocks.AIR, Blocks.WATER, Blocks.SNOW, Blocks.GRASS_BLOCK, Blocks.SNOW_BLOCK, Blocks.DIRT, Blocks.STONE)
                 ))
         );
 
@@ -149,7 +135,7 @@ public class TaigaSpikeFeatures {
                         CountPlacement.of(1),
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                        RandomOffsetPlacement.vertical(UniformInt.of(-13, -4)),
+                        OffsetPlacement.vertical(UniformInt.of(-13, -4)),
                         BiomeFilter.biome()
                 )
         ));

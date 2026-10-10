@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.util;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
@@ -11,7 +11,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 public class ModTags {
     public static class Blocks{
         public static TagKey<Block> tag(String name){
-            return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+            return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
     public static class Items{
@@ -20,7 +20,7 @@ public class ModTags {
         public static final TagKey<Item> REPAIRS_FROG_ARMOR = tag("repairs_frog_armor");
 
         public static TagKey<Item> tag(String name){
-            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
     public static class Biomes{
@@ -41,6 +41,16 @@ public class ModTags {
         // or stick piles.
         public static final TagKey<Biome> GETS_BOULDERS = tag("gets_boulders");
         public static final TagKey<Biome> GETS_STICK_PILES = tag("gets_stick_piles");
+        // Biomes that get extrabiomes:swamp_huge_mushroom (vanilla Dark Forest plus this mod's swampy/forest biomes) and
+        // biomes that get the mushroom-island huge mushroom and mycelium floor (the mushroom convention tag plus Fungle
+        // Jungle). These features are delivered by a biome modifier in EVERY member biome, never baked into this mod's own
+        // biome definitions. Mods such as Dynamic Trees and Wilder Wild append their own vegetal-step features to every
+        // biome through modifiers that run before this mod's, so a baked-in copy sits before those features in our biome
+        // while the modifier-delivered copy sits after them in vanilla's - opposite orders for the same pair, which
+        // vanilla's FeatureSorter reports as "Feature order cycle found". Delivering it the same way everywhere gives
+        // every biome the same relative order, whatever other mods append.
+        public static final TagKey<Biome> GETS_SWAMP_HUGE_MUSHROOMS = tag("gets_swamp_huge_mushrooms");
+        public static final TagKey<Biome> GETS_MUSHROOM_ISLAND_FEATURES = tag("gets_mushroom_island_features");
         // Piranha's swamp spawn reads forge:is_swamp / c:swamp directly (see ModBiomeModifiers/
         // FabricBiomeModifiers) - those cross-loader convention tags already cover any third-party
         // mod's swamp biome, so there's no need for our own equivalent. This tag is just that
@@ -53,7 +63,7 @@ public class ModTags {
         public static final TagKey<Biome> SPAWNS_HOPPLESHROOM = tag("spawns_hoppleshroom");
         public static final TagKey<Biome> SPAWNS_JELLYFISH = tag("spawns_jellyfish");
         public static TagKey<Biome> tag(String name){
-           return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
+           return TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
         }
     }
 

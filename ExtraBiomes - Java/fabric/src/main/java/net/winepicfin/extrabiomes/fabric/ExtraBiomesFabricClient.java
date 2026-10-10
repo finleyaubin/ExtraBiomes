@@ -1,22 +1,21 @@
 package net.winepicfin.extrabiomes.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
-import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.renderer.RenderType;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
+import net.minecraft.client.color.block.BlockTintSources;
+import net.minecraft.client.model.object.boat.BoatModel;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
 import net.minecraft.client.renderer.entity.BoatRenderer;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
-import net.minecraft.world.entity.EntityType;
-import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.minecraft.world.entity.EntityTypes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.client.BaitModel;
@@ -34,6 +33,10 @@ import net.winepicfin.extrabiomes.entity.client.PiranhaModel;
 import net.winepicfin.extrabiomes.entity.client.PiranhaRenderer;
 import net.winepicfin.extrabiomes.entity.client.PuckooModel;
 import net.winepicfin.extrabiomes.entity.client.PuckooRenderer;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
+import net.winepicfin.extrabiomes.client.DenseCloudSteam;
+import net.winepicfin.extrabiomes.client.SteamParticle;
+import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.entity.client.RazorFeatherRenderer;
 import net.winepicfin.extrabiomes.entity.client.TreefrogModel;
 import net.winepicfin.extrabiomes.entity.client.TreefrogRenderer;
@@ -54,6 +57,8 @@ import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 public class ExtraBiomesFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        DenseCloudSteam.init();
+        ParticleProviderRegistry.getInstance().register(ModParticles.STEAM.get(), SteamParticle.Provider::new);
         // No Fabric equivalent of Forge's Sheets.addWoodType is needed here: Fabric API's
         // WoodTypeRegistry-backed registration (see platform/fabric/ExtraBiomesExpectPlatformImpl)
         // runs during mod init, before Sheets' own static sign/hanging-sign material maps are
@@ -61,44 +66,36 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         // which happens no earlier than resource/model reload), so our wood types are already
         // present by then.
 
-        BlockRenderLayerMap.INSTANCE.putFluid(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
-        BlockRenderLayerMap.INSTANCE.putFluid(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
+        // BlockRenderLayerMap (both the fluid-translucency and block-cutout calls formerly here)
+        // is gone in 26.1 - chunk render layer is now derived automatically from sprite
+        // transparency, so there's nothing left to register.
+        FluidRenderingRegistry.register(ModFluids.SOURCE_GOO.get(), ModFluids.FLOWING_GOO.get(),
+                new FluidModel.Unbaked(
+                        new Material(GooFluid.STILL_TEXTURE, true),
+                        new Material(GooFluid.FLOWING_TEXTURE, true),
+                        new Material(GooFluid.OVERLAY_TEXTURE, true),
+                        BlockTintSources.constant(0xFFFFFFFF)));
 
-        // Without this, saplings/mushrooms/leaves default to RenderType.solid() and their
-        // texture's transparent pixels render as opaque black instead of being cut out.
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
-                ModBlocks.MYSTIC_SAPLING.get(), ModBlocks.SKY_SAPLING.get(), ModBlocks.PALM_SAPLING.get(),
-                ModBlocks.BLACK_MUSHROOM.get(), ModBlocks.BLUE_MUSHROOM.get(), ModBlocks.CYAN_MUSHROOM.get(),
-                ModBlocks.GREEN_MUSHROOM.get(), ModBlocks.ORANGE_MUSHROOM.get(), ModBlocks.PURPLE_MUSHROOM.get(),
-                ModBlocks.WHITE_MUSHROOM.get(), ModBlocks.YELLOW_MUSHROOM.get(), ModBlocks.GLOW_MUSHROOM.get(),
-                ModBlocks.MYSTIC_LEAVES.get(), ModBlocks.SKY_LEAVES.get(), ModBlocks.PALM_LEAVES.get(),
-                // Same deal for doors/trapdoors - their textures have transparent window cutouts
-                // (e.g. the horizontal slit rows in *_trapdoor.png) that were rendering solid black.
-                ModBlocks.MYSTIC_DOOR.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.GILDED_SKY_DOOR.get(),
-                ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get());
-        FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.SOURCE_GOO.get(), ModFluids.FLOWING_GOO.get(),
-                new SimpleFluidRenderHandler(GooFluid.STILL_TEXTURE, GooFluid.FLOWING_TEXTURE, GooFluid.OVERLAY_TEXTURE, 0xFFFFFFFF));
-
-        registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
+        registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), StandingSignRenderer::new);
         registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
 
-        EntityModelLayerRegistry.registerModelLayer(PuckooBaseModelLayers.PUCKOO_BASE_LAYER, PuckooModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.WORM, WormModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.TREEFROG, TreefrogModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.HOPPLESHROOM, HoppleshroomModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.GIANT_TORTOISE, GiantTortoiseModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.JELLYFISH, JellyfishModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.BAIT, BaitModel::createBodyLayer);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.MYSTIC_BOAT, BoatModel::createBoatModel);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.MYSTIC_CHEST_BOAT, BoatModel::createChestBoatModel);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PALM_BOAT, BoatModel::createBoatModel);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.PALM_CHEST_BOAT, BoatModel::createChestBoatModel);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_BOAT, BoatModel::createBoatModel);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBoatModel);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
+        ModelLayerRegistry.registerModelLayer(PuckooBaseModelLayers.PUCKOO_BASE_LAYER, PuckooModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.WORM, WormModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.TREEFROG, TreefrogModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.HOPPLESHROOM, HoppleshroomModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.GIANT_TORTOISE, GiantTortoiseModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.JELLYFISH, JellyfishModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.PIRANHA, PiranhaModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.HARPY, HarpyModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.BAIT, BaitModel::createBodyLayer);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.MYSTIC_BOAT, BoatModel::createBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.MYSTIC_CHEST_BOAT, BoatModel::createChestBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.PALM_BOAT, BoatModel::createBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.PALM_CHEST_BOAT, BoatModel::createChestBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_BOAT, BoatModel::createBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
 
         EntityRendererRegistry.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
         EntityRendererRegistry.register(ModEntities.WORM.get(), WormRenderer::new);
@@ -123,8 +120,8 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
         EntityRendererRegistry.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
 
-        LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-            if (entityType == EntityType.WOLF && entityRenderer instanceof WolfRenderer wolfRenderer) {
+        LivingEntityRenderLayerRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
+            if (entityType == EntityTypes.WOLF && entityRenderer instanceof WolfRenderer wolfRenderer) {
                 registrationHelper.register(new WolfFrogHatLayer(wolfRenderer));
             }
         });
@@ -146,9 +143,10 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
     // ModHangingSignBlockEntity are plain subclasses adding no new rendered state, so a renderer
     // built for the vanilla supertype works unchanged on ours.
     @SuppressWarnings("unchecked")
-    private static <E extends net.minecraft.world.level.block.entity.BlockEntity, S extends net.minecraft.world.level.block.entity.BlockEntity> void registerBlockEntityRenderer(
+    private static <E extends net.minecraft.world.level.block.entity.BlockEntity, S extends net.minecraft.world.level.block.entity.BlockEntity,
+            RS extends net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState> void registerBlockEntityRenderer(
             net.minecraft.world.level.block.entity.BlockEntityType<E> type,
-            net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<S> provider) {
-        BlockEntityRendererRegistry.register(type, (net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<E>) provider);
+            net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<S, RS> provider) {
+        BlockEntityRendererRegistry.register(type, (net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider<E, RS>) provider);
     }
 }

@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.WorldGenLevel;
@@ -26,6 +25,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.winepicfin.extrabiomes.fabric.fluid.ModFluids;
 import net.winepicfin.extrabiomes.fabric.mixin.WoodTypeAccessor;
+import net.winepicfin.extrabiomes.item.custom.ExtraBiomesSpawnEggItem;
 
 import java.util.function.Supplier;
 
@@ -74,13 +74,7 @@ public class ExtraBiomesExpectPlatformImpl {
     }
 
     public static Item createSpawnEggItem(Supplier<? extends EntityType<? extends Mob>> typeSupplier, int backgroundColor, int highlightColor, Item.Properties properties) {
-        // backgroundColor/highlightColor no longer go through the Item itself in 1.21.4 - egg colors
-        // are now item-model tints (see common's ExtraBiomesSpawnEggItem for the equivalent comment).
-        EntityType<? extends Mob> type = typeSupplier.get();
-        if (type == null) {
-            throw new IllegalStateException("EntityType for spawn egg was null - registration order issue? ModEntities.register() must be called before ModItems.register()");
-        }
-        return new SpawnEggItem(type, properties);
+        return new ExtraBiomesSpawnEggItem(typeSupplier, backgroundColor, highlightColor, properties);
     }
 
     public static boolean isCreateLoaded() {

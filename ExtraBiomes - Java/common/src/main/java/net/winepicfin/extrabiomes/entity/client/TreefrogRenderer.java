@@ -2,7 +2,7 @@ package net.winepicfin.extrabiomes.entity.client;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.client.state.TreefrogRenderState;
 import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
@@ -25,7 +25,7 @@ public class TreefrogRenderer extends MobRenderer<TreefrogEntity, TreefrogRender
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(TreefrogRenderState state) {
-        return ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/treefrog.png");
+    public @NotNull Identifier getTextureLocation(TreefrogRenderState state) {
+        return Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/treefrog.png");
     }
 }

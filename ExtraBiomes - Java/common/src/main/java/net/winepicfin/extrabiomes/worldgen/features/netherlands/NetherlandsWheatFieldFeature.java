@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.features.netherlands;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -8,10 +8,9 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 /**
  * Deterministic replacement for a scattered wheat patch: vanilla's CountPlacement/InSquarePlacement
@@ -28,18 +27,19 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
  * needless source of bugs for no benefit - this feature already visits every column once, so a
  * fraction of them becoming water instead of wheat costs nothing extra.
  */
-public class NetherlandsWheatFieldFeature extends Feature<NoneFeatureConfiguration> {
+public class NetherlandsWheatFieldFeature implements Feature {
     private static final float HYDRATION_CHANCE = 1f / 12f;
 
-    public NetherlandsWheatFieldFeature(Codec<NoneFeatureConfiguration> codec) {
-        super(codec);
+    public static final MapCodec<NetherlandsWheatFieldFeature> CODEC = MapCodec.unit(NetherlandsWheatFieldFeature::new);
+
+    @Override
+    public MapCodec<NetherlandsWheatFieldFeature> codec() {
+        return CODEC;
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel level = context.level();
-        RandomSource random = context.random();
-        ChunkPos chunkPos = new ChunkPos(context.origin());
+    public boolean place(WorldGenLevel level, ChunkGenerator generatorIn, RandomSource random, BlockPos origin) {
+        ChunkPos chunkPos = new ChunkPos(origin.getX() >> 4, origin.getZ() >> 4);
         boolean placedAny = false;
 
         for (int x = 0; x < 16; x++) {

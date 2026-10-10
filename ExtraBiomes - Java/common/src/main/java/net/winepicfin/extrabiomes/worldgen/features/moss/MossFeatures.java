@@ -1,25 +1,25 @@
 package net.winepicfin.extrabiomes.worldgen.features.moss;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.SimpleBlockFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 
 import java.util.List;
@@ -70,10 +70,10 @@ import java.util.List;
  *       Java placement-modifier equivalent, but is naturally enforced by the engine anyway: setting
  *       a {@code moss_carpet} block triggers a neighbor shape update
  *       that pops it back off immediately if unsupported, same end result.</li>
- *   <li>{@code minecraft:jungle_bush_feature} is reused as literally vanilla's own feature - no new
- *       Java feature is registered for it. {@link #JUNGLE_BUSH_PLACED_KEY} is just a convenience
- *       {@link ResourceKey} pointing at vanilla's existing
- *       {@code data/minecraft/worldgen/placed_feature/jungle_bush.json} entry.</li>
+ *   <li>{@code minecraft:jungle_bush_feature} reuses vanilla's own {@link TreeFeatures#JUNGLE_BUSH} feature.
+ *       Vanilla's {@code minecraft:jungle_bush} placed feature is unusable as a top-level biome feature
+ *       (it only carries a survival check, no position or biome modifiers), so {@link #JUNGLE_BUSH_PLACED_KEY}
+ *       registers its own placed wrapper.</li>
  *   <li>The outer {@code custom_moss_patch_feature.json} ({@code minecraft:vegetation_patch_feature},
  *       which scans for floor and converts the ground to {@code moss_block} before invoking the
  *       aggregate above as its {@code vegetation_feature}) and the
@@ -86,7 +86,7 @@ import java.util.List;
  */
 public class MossFeatures {
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> MOSS_CARPET_KEY = configuredKey("moss_carpet");
+    public static final ResourceKey<Feature> MOSS_CARPET_KEY = configuredKey("moss_carpet");
 
     /**
      * extrabiomes:moss/moss_carpet_scatter - places a single {@link Blocks#MOSS_CARPET} on top of
@@ -95,11 +95,7 @@ public class MossFeatures {
      */
     public static final ResourceKey<PlacedFeature> MOSS_CARPET_SCATTER_PLACED_KEY = placedKey("moss_carpet_scatter");
 
-    public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_KEY = configuredKey("tall_grass");
-    /** Inner air-guarded placement of a single {@link Blocks#SHORT_GRASS} block - not a top-level decoration by itself. */
-    public static final ResourceKey<PlacedFeature> TALL_GRASS_INNER_PLACED_KEY = placedKey("tall_grass_inner");
-
-    public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_GRASS_PATCH_KEY = configuredKey("tall_grass_patch");
+    public static final ResourceKey<Feature> TALL_GRASS_KEY = configuredKey("tall_grass");
 
     /**
      * extrabiomes:moss/tall_grass_scatter - the moorland-style tall-grass scatter (30 tries,
@@ -109,31 +105,29 @@ public class MossFeatures {
     public static final ResourceKey<PlacedFeature> TALL_GRASS_SCATTER_PLACED_KEY = placedKey("tall_grass_scatter");
 
     /**
-     * Vanilla's own {@code minecraft:jungle_bush} placed feature - reused directly rather than
-     * re-registered. Register via
-     * {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MossFeatures.JUNGLE_BUSH_PLACED_KEY)}
-     * (the biome-wiring pass's {@code context.lookup(Registries.PLACED_FEATURE)} will resolve this
-     * key against vanilla's registered entry with no extra work needed here).
+     * extrabiomes:moss/jungle_bush - one vanilla jungle bush per chunk on the surface. Register via
+     * {@code biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MossFeatures.JUNGLE_BUSH_PLACED_KEY)}.
      */
-    public static final ResourceKey<PlacedFeature> JUNGLE_BUSH_PLACED_KEY =
-            ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath("minecraft", "jungle_bush"));
+    public static final ResourceKey<PlacedFeature> JUNGLE_BUSH_PLACED_KEY = placedKey("jungle_bush");
 
-    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
+    public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        context.register(MOSS_CARPET_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.MOSS_CARPET.defaultBlockState())));
 
-        context.register(MOSS_CARPET_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState()))));
-
-        context.register(TALL_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
-                new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_GRASS.defaultBlockState()))));
-
-        Holder<PlacedFeature> tallGrassInner = placedFeatures.getOrThrow(TALL_GRASS_INNER_PLACED_KEY);
-        context.register(TALL_GRASS_PATCH_KEY, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-                new RandomPatchConfiguration(30, 8, 3, tallGrassInner)));
+        context.register(TALL_GRASS_KEY, new SimpleBlockFeature(BlockStateProvider.holderOf(Blocks.SHORT_GRASS.defaultBlockState())));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
-        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+        HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
+
+        context.register(JUNGLE_BUSH_PLACED_KEY, new PlacedFeature(
+                configuredFeatures.getOrThrow(TreeFeatures.JUNGLE_BUSH),
+                List.of(
+                        InSquarePlacement.spread(),
+                        HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.OAK_SAPLING)),
+                        BiomeFilter.biome()
+                )
+        ));
 
         // Bedrock's source feature scatters 10 attempts with 0 spread, which always lands on the same block; collapsed to a single placement.
         context.register(MOSS_CARPET_SCATTER_PLACED_KEY, new PlacedFeature(
@@ -146,26 +140,26 @@ public class MossFeatures {
                 )
         ));
 
-        context.register(TALL_GRASS_INNER_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(TALL_GRASS_KEY),
-                List.<PlacementModifier>of(BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR)))
-        ));
-
+        // random_patch's tries/xz_spread/y_spread (30/8/3) are now the count + random_offset modifiers below,
+        // since 26.1 removed the random_patch feature/RandomPatchConfiguration.
         context.register(TALL_GRASS_SCATTER_PLACED_KEY, new PlacedFeature(
-                configuredFeatures.getOrThrow(TALL_GRASS_PATCH_KEY),
+                configuredFeatures.getOrThrow(TALL_GRASS_KEY),
                 List.of(
                         InSquarePlacement.spread(),
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                        BiomeFilter.biome()
+                        BiomeFilter.biome(),
+                        CountPlacement.of(30),
+                        OffsetPlacement.ofTriangle(8, 3),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Blocks.AIR))
                 )
         ));
     }
 
-    private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "moss/" + name));
+    private static ResourceKey<Feature> configuredKey(String name) {
+        return ResourceKey.create(Registries.FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "moss/" + name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "moss/" + name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "moss/" + name));
     }
 }

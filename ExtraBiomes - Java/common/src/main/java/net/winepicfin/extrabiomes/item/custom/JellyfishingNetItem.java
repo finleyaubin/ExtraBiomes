@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.item.custom;
 
+import net.minecraft.util.Prediction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -29,12 +30,12 @@ public class JellyfishingNetItem extends Item {
         Level level = context.getLevel();
         Player player = context.getPlayer();
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
-        if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
             JellyfishEntity jellyfish = ModEntities.JELLYFISH.get().create(serverLevel, EntitySpawnReason.BUCKET);
             if (jellyfish != null) {
-                jellyfish.moveTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+                jellyfish.snapTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
                         context.getClickedFace() == Direction.UP ? 0.0F : 0.0F, 0.0F);
-                jellyfish.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(pos), EntitySpawnReason.BUCKET, null);
+                jellyfish.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), EntitySpawnReason.BUCKET, null);
                 serverLevel.addFreshEntity(jellyfish);
                 level.playSound(null, pos, SoundEvents.BUCKET_EMPTY_FISH, SoundSource.NEUTRAL, 1.0F, 1.0F);
                 if (player != null) {
@@ -43,7 +44,7 @@ public class JellyfishingNetItem extends Item {
                         context.getItemInHand().shrink(1);
                         ItemStack emptyNet = new ItemStack(ModItems.JELLYFISHING_NET_EMPTY.get());
                         if (!player.getInventory().add(emptyNet)) {
-                            player.drop(emptyNet, false);
+                            player.drop(emptyNet, false, Prediction.SERVER_ONLY);
                         }
                     }
                 }

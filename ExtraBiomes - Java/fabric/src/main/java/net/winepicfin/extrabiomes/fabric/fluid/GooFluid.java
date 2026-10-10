@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.item.ModItems;
@@ -38,9 +38,9 @@ import java.util.Optional;
 // (Entity.clearFire() via isInWaterRainOrBubble()), so on Fabric, unlike Forge, standing in
 // Goo also puts out fire - a known, unavoidable divergence without a mixin into that method.
 public abstract class GooFluid extends FlowingFluid {
-    public static final ResourceLocation STILL_TEXTURE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_still");
-    public static final ResourceLocation FLOWING_TEXTURE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_flow");
-    public static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo");
+    public static final Identifier STILL_TEXTURE = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_still");
+    public static final Identifier FLOWING_TEXTURE = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo_flow");
+    public static final Identifier OVERLAY_TEXTURE = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "misc/goo");
 
     @Override
     public Fluid getFlowing() {

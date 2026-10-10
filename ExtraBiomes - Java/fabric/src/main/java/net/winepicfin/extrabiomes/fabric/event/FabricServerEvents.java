@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Entity;
@@ -39,8 +39,8 @@ public class FabricServerEvents {
             }
         });
 
-        ServerTickEvents.END_WORLD_TICK.register(FabricServerEvents::tickWolves);
-        ServerTickEvents.END_WORLD_TICK.register(HarpySpawner::tick);
+        ServerTickEvents.END_LEVEL_TICK.register(FabricServerEvents::tickWolves);
+        ServerTickEvents.END_LEVEL_TICK.register(HarpySpawner::tick);
 
         // Fabric equivalent of forge/.../event/PhantomHarpyTargetHandler.java.
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
@@ -71,6 +71,8 @@ public class FabricServerEvents {
 
     private static boolean isDenseCloudBlock(BlockState state) {
         return state.is(ModBlocks.DENSE_CLOUD.get())
+                || state.is(ModBlocks.DENSE_CLOUD_SLAB.get())
+                || state.is(ModBlocks.DENSE_CLOUD_STAIRS.get())
                 || state.is(ModBlocks.DENSE_CLOUD_BRICK.get())
                 || state.is(ModBlocks.DENSE_CLOUD_BRICK_SLAB.get())
                 || state.is(ModBlocks.DENSE_CLOUD_BRICK_STAIRS.get());
@@ -80,7 +82,7 @@ public class FabricServerEvents {
         for (Entity entity : level.getAllEntities()) {
             if (!(entity instanceof Wolf wolf)) continue;
             if (wolf.getItemBySlot(EquipmentSlot.HEAD).getItem() != ModItems.FROG_HELMET.get()) continue;
-            if (wolf.isInWaterOrBubble()) continue;
+            if (wolf.isInWater()) continue;
 
             wolf.addEffect(FrogHelmetEffects.wolfWaterBreathing());
             wolf.addEffect(FrogHelmetEffects.wolfJumpBoost());

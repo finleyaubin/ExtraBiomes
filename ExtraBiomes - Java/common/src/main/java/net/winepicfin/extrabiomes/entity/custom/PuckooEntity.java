@@ -1,7 +1,6 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
-import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Util;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,11 +17,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -36,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.DoubleSupplier;
 
-public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooBaseVariants> {
+public class PuckooEntity extends AbstractHorse {
     private static final EntityDataAccessor<Integer> DATA_ID_TYPE_VARIANT = SynchedEntityData.defineId(PuckooEntity.class, EntityDataSerializers.INT);
 
     // Out of 9: 4/9 inherit this parent's variant, 4/9 inherit the other parent's, 1/9 random.
@@ -69,14 +70,14 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         builder.define(DATA_ID_TYPE_VARIANT, 0);
     }
 
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Variant", this.getTypeVariant());
     }
 
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        this.setTypeVariant(tag.getInt("Variant"));
+        this.setTypeVariant(tag.getIntOr("Variant", 0));
     }
 
     @Override
@@ -93,7 +94,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     @Override
     protected void tickRidden(Player player, Vec3 travelVector) {
         super.tickRidden(player, travelVector);
-        if (this.isTamed() || this.level().isClientSide) {
+        if (this.isTamed() || this.level().isClientSide()) {
             return;
         }
         if (this.buckCooldown > 0) {
@@ -126,18 +127,18 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!this.isTamed() && !this.isBaby() && !this.isVehicle() && stack.is(ModItems.MOSSY_PEBBLE.get())) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 stack.shrink(1);
                 this.modifyTemper(FEED_TEMPER_GAIN);
                 if (this.getTemper() >= this.getMaxTemper()) {
                     this.setTamed(true);
-                    this.setOwnerUUID(player.getUUID());
+                    this.setOwner(player);
                     this.broadcastTamingFeedback(true);
                 } else {
                     this.broadcastTamingFeedback(false);
                 }
             }
-            return this.level().isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }
@@ -180,7 +181,7 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
 
     // A puckoo is outright fall-immune (Bedrock's deals_damage: false), unlike AbstractHorse's reduced-but-real default; matters most when power-jumped off a cliff while ridden.
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, @NotNull DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, @NotNull DamageSource source) {
         return false;
     }
 
@@ -251,7 +252,6 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         return this.entityData.get(DATA_ID_TYPE_VARIANT);
     }
 
-    @Override
     public void setVariant(PuckooBaseVariants variant) {
         this.setTypeVariant(variant.getId() & 255 | this.getTypeVariant() & -256);
     }
@@ -265,7 +265,6 @@ public class PuckooEntity extends AbstractHorse implements VariantHolder<PuckooB
         return PuckooKoiMarkings.byId((this.getTypeVariant() & '\uff00') >> 8);
     }
 
-    @Override
     public @NotNull PuckooBaseVariants getVariant() {
         return PuckooBaseVariants.byId(this.getTypeVariant() & 255);
     }

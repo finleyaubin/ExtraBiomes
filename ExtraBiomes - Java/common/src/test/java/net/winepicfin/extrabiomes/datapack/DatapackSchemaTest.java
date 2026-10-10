@@ -11,7 +11,7 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.tags.TagFile;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -108,9 +108,9 @@ class DatapackSchemaTest {
         STRUCTURE_SET(StructureSet.DIRECT_CODEC, "worldgen", "structure_set"),
         TEMPLATE_POOL(StructureTemplatePool.DIRECT_CODEC, "worldgen", "template_pool"),
         BIOME(Biome.DIRECT_CODEC, "worldgen", "biome"),
-        CONFIGURED_FEATURE(ConfiguredFeature.DIRECT_CODEC, "worldgen", "configured_feature"),
+        CONFIGURED_FEATURE(Feature.DIRECT_CODEC, "worldgen", "feature"),
         PLACED_FEATURE(PlacedFeature.DIRECT_CODEC, "worldgen", "placed_feature"),
-        NOISE(NormalNoise.NoiseParameters.DIRECT_CODEC, "worldgen", "noise"),
+        NOISE(NormalNoise.DIRECT_CODEC, "worldgen", "noise"),
         ADVANCEMENT(Advancement.CODEC, "advancement"),
         RECIPE(Recipe.CODEC, "recipe"),
         TAG(TagFile.CODEC, "tags"),
@@ -134,7 +134,8 @@ class DatapackSchemaTest {
             // neoforge/biome_modifier/*.json needs NeoForgeRegistries.BIOME_MODIFIER_SERIALIZERS,
             // which lives in a NeoForge dependency common doesn't have on its test classpath -
             // deliberately out of scope here (see DatapackRegistries).
-            if (relativePath.getName(1).toString().equals("neoforge")) {
+            // The neoforge namespace's data_maps/* use NeoForge's own data map codecs, so they are skipped for the same reason.
+            if (relativePath.getName(0).toString().equals("neoforge") || relativePath.getName(1).toString().equals("neoforge")) {
                 return SKIP;
             }
             for (Route route : values()) {

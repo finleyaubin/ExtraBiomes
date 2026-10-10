@@ -106,7 +106,7 @@ public class ExtraBiomesExpectPlatformImpl {
         if (type == null) {
             throw new IllegalStateException("EntityType for spawn egg was null - registration order issue? ModEntities.register() must be called before ModItems.register()");
         }
-        return new SpawnEggItem(type, properties);
+        return new SpawnEggItem(properties.spawnEgg(type));
     }
 
     public static boolean isCreateLoaded() {

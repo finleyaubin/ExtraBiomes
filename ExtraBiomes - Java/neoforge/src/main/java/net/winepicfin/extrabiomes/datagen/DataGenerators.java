@@ -2,17 +2,12 @@ package net.winepicfin.extrabiomes.datagen;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.advancements.AdvancementProvider;
-import net.minecraft.data.registries.RegistryPatchGenerator;
+import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.winepicfin.extrabiomes.advancements.ModAdvancements;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // NeoForge 21.4 reshaped GatherDataEvent: it's now abstract, fired separately as
@@ -21,51 +16,38 @@ import java.util.concurrent.CompletableFuture;
 // subtype only fires when that half of datagen is actually running), and getExistingFileHelper()
 // is gone along with the ExistingFileHelper class itself (see ModBlockStateProvider's header
 // comment) - confirmed via javap on neoforge-21.4.157-universal.jar's GatherDataEvent.class.
-@EventBusSubscriber(modid = ExtraBiomes.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+//
+// As of 26.3, recipes/advancements/loot tables are themselves full BootstrapContext-backed
+// registries (Registries.RECIPE/ADVANCEMENT/LOOT_TABLE) rather than DataProviders, wired in via
+// event.createWorldRegistryObjects()/createReloadableRegistryObjects() instead of addProvider() -
+// see ModWorldGenProvider and ModRecipeProvider for the RegistrySetBuilders themselves.
+@EventBusSubscriber(modid = ExtraBiomes.MOD_ID)
 public class DataGenerators {
     @SubscribeEvent
     public static void gatherServerData(GatherDataEvent.Server event){
-        DataGenerator generator = event.getGenerator();
-        PackOutput packOutput = generator.getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        // World registries (biomes, features, placed features, structures, noise, biome modifiers).
+        // This also patches event.getWorldLookupProvider() with our own entries, so the tag
+        // providers below see our custom biomes without any manual RegistryPatchGenerator step.
+        event.createWorldRegistryObjects(ModWorldGenProvider.BUILDER);
 
-        // BiomeTagsProvider validates every tag entry against this lookup, but the plain
-        // event.getLookupProvider() future doesn't include our datapack-registered biomes (those only
-        // exist via ModWorldGenProvider.BUILDER's own registry patch) - so tagging our own biomes would
-        // fail with "missing following references". Patch the lookup with our biome/feature registries
-        // before handing it to the biome tag provider.
-        //
-        // RegistrySetBuilder#buildPatch() gained a required Cloner.Factory arg as of 1.20.4 (and its
-        // return type changed from HolderLookup.Provider to a PatchedRegistries record) - vanilla's own
-        // RegistryPatchGenerator.createLookup() helper does this "patch an existing lookup with a
-        // RegistrySetBuilder" pattern without needing to build that Factory by hand (see forge/'s
-        // identical DataGenerators.java fix for the same issue).
-        CompletableFuture<HolderLookup.Provider> biomeTagLookupProvider = RegistryPatchGenerator.createLookup(lookupProvider, ModWorldGenProvider.BUILDER)
-                .thenApply(RegistrySetBuilder.PatchedRegistries::full);
+        // Reloadable registries: recipes + their unlock advancements (see ModRecipeProvider for why
+        // they must share one MultiRegistryBootstrap) and loot tables.
+        RegistrySetBuilder reloadableBuilder = new RegistrySetBuilder()
+                .add(ModRecipeProvider.BOOTSTRAP)
+                .add(Registries.LOOT_TABLE, ModLootTableProvider.create(event.getWorldLookupProvider()));
+        event.createReloadableRegistryObjects(reloadableBuilder);
 
-        event.addProvider(new ModRecipeProvider(packOutput, lookupProvider));
-        event.addProvider(ModLootTableProvider.create(packOutput, lookupProvider));
-
-        ModBlockTagGenerator blockTagGenerator = event.addProvider(new ModBlockTagGenerator(packOutput, lookupProvider));
-        event.addProvider(new ModBiomeTagProvider(packOutput, biomeTagLookupProvider));
-        event.addProvider(new ModItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter()));
-
-        event.addProvider(new ModWorldGenProvider(packOutput, lookupProvider));
-
-        // ModAdvancements resolves biome Holders via registries.lookupOrThrow(Registries.BIOME) (the
-        // 1.20.6 LocationPredicate.Builder.inBiome(Holder<Biome>) rework, replacing the old
-        // setBiome(ResourceKey<Biome>) overload that needed no registry lookup) - same
-        // datapack-registered-biomes gap as ModBiomeTagProvider above, so this needs the patched
-        // lookup too, not the plain one.
-        event.addProvider(new AdvancementProvider(packOutput, biomeTagLookupProvider,
-                List.of(new ModAdvancements())));
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getWorldLookupProvider();
+        var packOutput = event.getGenerator().getPackOutput();
+        event.addProvider(new ModBlockTagGenerator(packOutput, lookupProvider));
+        event.addProvider(new ModBiomeTagProvider(packOutput, lookupProvider));
+        event.addProvider(new ModItemTagGenerator(packOutput, lookupProvider));
+        event.addProvider(new ModDataMapProvider(packOutput, lookupProvider));
     }
 
     @SubscribeEvent
     public static void gatherClientData(GatherDataEvent.Client event){
-        DataGenerator generator = event.getGenerator();
-        PackOutput packOutput = generator.getPackOutput();
-
+        var packOutput = event.getGenerator().getPackOutput();
         event.addProvider(new ModBlockStateProvider(packOutput));
         event.addProvider(new ModItemModelProvider(packOutput));
     }

@@ -42,8 +42,8 @@ class BlockLootTableGenerationTest {
                 .get("entries").getAsJsonArray().get(0).getAsJsonObject();
 
         assertEquals("extrabiomes:mystic_slab", entry.get("name").getAsString());
-        JsonObject setCount = entry.get("functions").getAsJsonArray().get(0).getAsJsonObject();
-        assertEquals("minecraft:set_count", setCount.get("function").getAsString());
+        JsonObject setCount = entry.get("modifier").getAsJsonArray().get(0).getAsJsonObject();
+        assertEquals("minecraft:set_count", setCount.get("type").getAsString());
         assertEquals(2.0, setCount.get("count").getAsDouble(), 1e-9,
                 "createSlabItemTable should double the drop when the slab block state is \"double\"");
     }
