@@ -1,11 +1,13 @@
 # ExtraBiomes 3.1.0 Beta 4
-This beta brings the Glacier overhaul, Floating Jungle sky islands, snow drifts and a much more natural Sky City to Bedrock, along with a deeper Netherlands and farmable Dense Cloud.
+This beta brings recent java gameplay changes back to Bedrock.
 
 **World generation changes only appear in newly generated chunks, so create a new world (or explore fresh terrain) to see them.**
 
 # Changes
 ## Biomes
 ### Glacier
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/113f5a15-57cf-48d9-ab63-b409d2acc76a" />
+
 Bedrock port of the Java Glacier overhaul.
 - Geothermal caves: basalt-lined lava pools, lavafalls with a basalt cap and landing pad, magma veins, a blue ice depth layer, and snow and basalt pillars.
 - Meltwater and frozen pools underground, plus ice-sealed vault chests with new loot (igloo loot and pottery sherds).
@@ -21,11 +23,15 @@ Bedrock port of the Java Glacier overhaul.
 - Added the snow spire summit loot table.
 
 ### Floating Jungle
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/f1a83fdb-cc1d-4c30-b24c-b70c8ed52158" />
+
 - Added sky islands floating above the biome, in several island and archipelago shapes.
 - Added a floating island carrying a vanilla jungle temple, with its traps and loot chests.
 - Added rare colossal jungle trees, around 40 blocks wide and 100 to 130 blocks tall, that grow from the island peaks.
 
 ### The Netherlands
+<img width="100%" alt="the underground netherlands" src="https://github.com/user-attachments/assets/a4561ef9-855a-46a8-99a9-25e2cab0d5ba" />
+
 - The netherrack layer now runs all the way down to bedrock instead of stopping about 10 blocks under the surface.
 - Ore veins extend down to the bottom of the world.
 - Added underground basalt and blackstone patches and hanging basalt pillars.
@@ -33,6 +39,8 @@ Bedrock port of the Java Glacier overhaul.
 
 ## Structures
 ### Sky City
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/072ebfc6-50c7-4963-94fc-a58e4589d389" />
+
 - Rebuilt the cloud generation: clouds are now soft, lumpy and spread out, with rounded hanging undersides and satellite cloudlets, instead of noisy blocks and square domes.
 - Added more cloud types: cumulus, streaks, mammatus and tower clouds, low cloud banks and rain-streak clouds.
 - Added fuzzy cloud edges, hanging threads, and springs on the island flanks.
@@ -48,6 +56,8 @@ Bedrock port of the Java Glacier overhaul.
 - Added heightmaps to the black sand blocks.
 
 ### Dense Cloud farming
+<img width="100%" alt="Cloud Condenser structure" src="https://github.com/user-attachments/assets/7485706d-bb79-4213-b681-d817241bb0ff" />
+
 - Dense cloud can now be grown instead of only being mined from Sky Cities. Build a column with magma at the bottom, water on top of it, and a blue ice block above the water. Dense cloud then buds outward from any dense cloud next to the ice, in a flattened cloud shape around it.
 - The blue ice must be at Y 200 or higher, and at most 20 blocks above the water. The water has to sit directly on a magma block.
 - Cloud grows out to 10 blocks sideways and 5 blocks up or down from the ice.
@@ -64,7 +74,9 @@ Bedrock port of the Java Glacier overhaul.
 - Jellyfish on beaches now only spawn between Y 62 and 64, instead of anywhere on the sand.
 
 ## Items
-- Replaced the tinted default spawn eggs for the giant tortoise, harpy, hoppleshroom, jellyfish, piranha, puckoo, treefrog and worm with the custom icons from Java.
+<img width="100%" alt="image" src="https://github.com/user-attachments/assets/7a501ee1-d3cb-469d-bb84-d0c3515022e6" />
+
+- Replaced the spawn eggs for all mobs with custom icons to match the new default behavior.
 
 ## Fixes
 - Distant terrain no longer has dark, anti-aliased looking outlines around blocks. The block texture atlas now uses the vanilla mipmap and padding settings, so neighbouring textures stop bleeding into each other at range.
