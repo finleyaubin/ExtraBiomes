@@ -21,6 +21,7 @@ import "./items/bait.js";
 //Runs Scripts
 import "./blocks/dense_cloud_effect.js";
 import "./blocks/dense_cloud_farm.js";
+import "./blocks/netherlands_lava.js";
 import "./blocks/stairs.js"
 import { LeafDecay } from "./blocks/leaf_decay.js";
 import "./entities/worm.js";

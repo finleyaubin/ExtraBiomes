@@ -28,3 +28,4 @@ Dense Cloud is now farmable on Bedrock, with the Java Sky City building that sho
 - Distant terrain no longer has dark, anti-aliased looking outlines around blocks. The block texture atlas now uses the vanilla mipmap and padding settings, so neighbouring textures stop bleeding into each other at range.
 - Snow no longer piles up a block above slabs, stairs and trapdoors, leaving floating snow layers over half-height blocks. The sky, gilded sky, mystic, palm and black sandstone variants now let snow pass through them the way the dense cloud blocks do.
 - The Cloud Condenser's corner stairs now face the right way.
+- Lava springs in the walls of the underground Netherlands now flow when you get near them, instead of sitting still until something disturbed them.
