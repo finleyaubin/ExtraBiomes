@@ -3,7 +3,8 @@ name: Preview Story Slides
 # Manual dry run of the release pipeline's "Render story slides" step. Run it from the Actions
 # tab on the branch you're about to release: it renders the changelog on that branch into the same
 # Instagram story slides the announce job would, and uploads them as an artifact to download and
-# eyeball. It never posts, commits to media-slides, or touches Discord, so it's safe to re-run.
+# eyeball. It also shows them inline in the run summary by force-pushing them to the throwaway
+# slides-preview branch. It never posts, commits to media-slides, or touches Discord, so it's safe to re-run.
 on:
   workflow_dispatch:
     inputs:
@@ -18,7 +19,7 @@ on:
         required: false
 
 permissions:
-  contents: read
+  contents: write  # only to force-push the slides-preview branch the summary links its images from
 
 jobs:
   preview:
@@ -66,10 +67,42 @@ jobs:
           path: slides/*.jpg
           if-no-files-found: error
 
+      # A step summary can't embed an artifact, so the images are hosted on a throwaway branch that is
+      # overwritten (single orphan commit) every run, and the summary links the commit's raw files.
+      - name: Publish preview images
+        id: publish
+        run: |
+          DIR=$(mktemp -d)
+          cp slides/*.jpg "$DIR"/
+          cd "$DIR"
+          git init -q -b slides-preview
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "Preview slides: ${{ inputs.edition }} ${{ steps.changelog.outputs.VERSION }} (run ${{ github.run_id }})"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/$GITHUB_REPOSITORY.git"
+          git push -q --force origin slides-preview
+          echo "SHA=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Summarize
+        env:
+          RAW: https://raw.githubusercontent.com/${{ github.repository }}/${{ steps.publish.outputs.SHA }}
         run: |
           {
             echo "### Story slides preview"
-            echo "Rendered \`${{ steps.changelog.outputs.FILE }}\` as **${{ inputs.edition }} ${{ steps.changelog.outputs.VERSION }}** from \`$GITHUB_REF_NAME\`: $(ls slides/*.jpg | wc -l) slides."
-            echo "Download them from the **Artifacts** section of this run. Nothing was posted."
+            echo "Rendered \`${{ steps.changelog.outputs.FILE }}\` as **${{ inputs.edition }} ${{ steps.changelog.outputs.VERSION }}** from \`$GITHUB_REF_NAME\`: $(ls slides/*.jpg | wc -l) slides. Click one for full size. Nothing was posted."
+            echo
+            echo "<table>"
+            column=0
+            for slide in $(ls slides/*.jpg | sort -V); do
+              name=$(basename "$slide")
+              [ "$column" -eq 0 ] && echo "<tr>"
+              echo "<td><a href=\"$RAW/$name\"><img src=\"$RAW/$name\" width=\"220\" alt=\"$name\"></a></td>"
+              column=$((column + 1))
+              if [ "$column" -eq 4 ]; then echo "</tr>"; column=0; fi
+            done
+            [ "$column" -ne 0 ] && echo "</tr>"
+            echo "</table>"
+            echo
+            echo "The same slides are in the **Artifacts** section as a zip."
           } >> "$GITHUB_STEP_SUMMARY"
