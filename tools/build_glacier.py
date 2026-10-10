@@ -18,6 +18,8 @@ FEATURE_DIR = os.path.join(BP, "features", "glacier")
 RULE_DIR = os.path.join(BP, "feature_rules", "glacier")
 LOOT_TABLE = "loot_tables/chests/ice_vault.json"
 MAX_SPAN = 44
+SINK_DEPTH = 3
+RING_HEADROOM = 10
 
 bfi.STRUCT_DIR = STRUCT_DIR
 bfi.LOOT_TABLE = LOOT_TABLE
@@ -172,6 +174,27 @@ def crevasse(seed, half_length, depth):
     return emit(f"crevasse_{seed}", cells, ground, SURFACE)
 
 
+def line_channel(cells, columns, ground, open_columns=()):
+    """Carves air above each water column ({(x, z): (lowest, highest) water y}) and rings it with ice at water level.
+
+    Beside the trench the layers between the water and the surface are left empty so the surrounding terrain fills
+    them, and the ring from the surface layer upward is air for RING_HEADROOM more blocks.
+    """
+    for (x, z), (_, top) in columns.items():
+        for y in range(top + 1, ground + 2):
+            cells[(x, y, z)] = "air"
+    for (x, z), (bottom, top) in columns.items():
+        for dx in (-1, 0, 1):
+            for dz in (-1, 0, 1):
+                neighbour = (x + dx, z + dz)
+                if neighbour in columns or neighbour in open_columns:
+                    continue
+                for y in range(bottom - 1, top + 1):
+                    cells.setdefault((neighbour[0], y, neighbour[1]), "ice")
+                for y in range(ground - 1, ground + RING_HEADROOM):
+                    cells.setdefault((neighbour[0], y, neighbour[1]), "air")
+
+
 def stream(seed, length, vent):
     phase = rand01(seed, 1) * math.tau
     amp = 2 + rand01(seed, 2) * 2
@@ -187,20 +210,20 @@ def stream(seed, length, vent):
     end = (length + 1, z)
     cells = {}
     pool = {(end[0] + dx, end[1] + dz) for dx in (-1, 0, 1) for dz in (-1, 0, 1)}
+    water_y = ground - 1 - SINK_DEPTH
+    columns = {(x, z): (water_y, water_y) for (x, z) in path}
+    columns.update({cell: (water_y - 1, water_y) for cell in pool})
     for (x, z) in path:
-        cells[(x, ground - 1, z)] = "water"
-        cells[(x, ground - 2, z)] = "blue_ice"
-        cells[(x, ground, z)] = "air"
-        cells[(x, ground + 1, z)] = "air"
+        cells[(x, water_y, z)] = "water"
+        cells[(x, water_y - 1, z)] = "blue_ice"
     for (x, z) in pool:
-        cells[(x, ground - 1, z)] = "water"
-        cells[(x, ground - 2, z)] = "water"
-        cells[(x, ground - 3, z)] = "blue_ice"
-        cells[(x, ground, z)] = "air"
-        cells[(x, ground + 1, z)] = "air"
+        cells[(x, water_y, z)] = "water"
+        cells[(x, water_y - 1, z)] = "water"
+        cells[(x, water_y - 2, z)] = "blue_ice"
     if vent:
-        cells[(end[0], ground - 3, end[1])] = "potent_sulfur"
-        cells[(end[0], ground - 4, end[1])] = "magma"
+        cells[(end[0], water_y - 2, end[1])] = "potent_sulfur"
+        cells[(end[0], water_y - 3, end[1])] = "magma"
+    line_channel(cells, columns, ground)
     return emit(f"stream_{seed}", cells, ground, SURFACE)
 
 
@@ -241,12 +264,13 @@ def shaft(seed, radius, depth, chamber_radius, dogleg):
                 if n not in cells and rand01(seed, x * 73 + y * 179 + z * 331 + dx * 7 + dz * 13) < 0.2:
                     cells[n] = "blue_ice"
     inflow_x = -math.ceil(radius) - 1
-    for step in range(9):
-        x = inflow_x - step
-        cells[(x, ground - 1, 0)] = "water"
-        cells[(x, ground - 2, 0)] = "blue_ice"
-        cells[(x, ground, 0)] = "air"
-        cells[(x, ground + 1, 0)] = "air"
+    water_y = ground - 1 - SINK_DEPTH
+    columns = {(inflow_x - step, 0): (water_y, water_y) for step in range(9)}
+    for (x, z) in columns:
+        cells[(x, water_y, z)] = "water"
+        cells[(x, water_y - 1, z)] = "blue_ice"
+    shaft_end = {(inflow_x + 1, dz) for dz in (-1, 0, 1)}
+    line_channel(cells, columns, ground, open_columns=shaft_end)
     return emit(f"shaft_{seed}", cells, ground, SURFACE)
 
 
