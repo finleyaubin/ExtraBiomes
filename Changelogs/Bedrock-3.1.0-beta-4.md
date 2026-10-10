@@ -5,7 +5,7 @@ also the dense cloud farming mechanics, changes too the sky city's clouds, new s
 # Changes
 ## Biomes
 ### Glacier
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/113f5a15-57cf-48d9-ab63-b409d2acc76a" />
+<img width="100%" alt="Underground glacier" src="https://github.com/user-attachments/assets/113f5a15-57cf-48d9-ab63-b409d2acc76a" />
 
 Bedrock port of the Java Glacier overhaul.
 - Geothermal caves: basalt-lined lava pools, lavafalls with a basalt cap and landing pad, magma veins, a blue ice depth layer, and snow and basalt pillars.
@@ -22,7 +22,7 @@ Bedrock port of the Java Glacier overhaul.
 - Added the snow spire summit loot table.
 
 ### Floating Jungle
-<img width="100%" alt="image" src="https://github.com/user-attachments/assets/f1a83fdb-cc1d-4c30-b24c-b70c8ed52158" />
+<img width="100%" alt="Floating jungle" src="https://github.com/user-attachments/assets/f1a83fdb-cc1d-4c30-b24c-b70c8ed52158" />
 
 - Added sky islands floating above the biome, in several island and archipelago shapes.
 - Added a floating island carrying a vanilla jungle temple, with its traps and loot chests.
@@ -38,7 +38,7 @@ Bedrock port of the Java Glacier overhaul.
 
 ## Structures
 ### Sky City
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/072ebfc6-50c7-4963-94fc-a58e4589d389" />
+<img width="100%" alt="Sky City from below" src="https://github.com/user-attachments/assets/072ebfc6-50c7-4963-94fc-a58e4589d389" />
 
 - Rebuilt the cloud generation: clouds are now soft, lumpy and spread out, with rounded hanging undersides and satellite cloudlets, instead of noisy blocks and square domes.
 - Added more cloud types: cumulus, streaks, mammatus and tower clouds, low cloud banks and rain-streak clouds.
@@ -73,11 +73,14 @@ Bedrock port of the Java Glacier overhaul.
 - Jellyfish on beaches now only spawn between Y 62 and 64, instead of anywhere on the sand to make sure they only wash up on the waters edge and not half way up a hill.
 
 ## Items
-<img width="100%" alt="image" src="https://github.com/user-attachments/assets/7a501ee1-d3cb-469d-bb84-d0c3515022e6" />
+<img width="100%" alt="Spawn Eggs" src="https://github.com/user-attachments/assets/7a501ee1-d3cb-469d-bb84-d0c3515022e6" />
 
 - Replaced the spawn eggs for all mobs with custom icons to match the new default behavior.
 
 ## Fixes
-- Fixed a bug that has been around for a while where distant blocks showed weirdly coloured outlines, I had assumed this was a quirk of my linux dev setup where I am emulating the android version of the game, but turns our I had got the 2 mipmap padding values in the resource pack the wrong way round lmao
+<img width="100%" alt="Mipmapping bug" src="https://github.com/user-attachments/assets/0112d64c-383e-4508-a144-785e62022018" />
+
+
+- Fixed a bug that has been around for a while where distant blocks showed weirdly colored outlines, I had assumed this was a quirk of my linux (I use arch btw) dev setup where I am emulating the android version of the game, but turns our I had got the 2 mipmap padding values in the resource pack the wrong way round and it was causing colour bleed lmao
 - Snow no longer piles up a block above slabs, stairs and trapdoors, leaving floating snow layers over half-height blocks. The sky, gilded sky, mystic, palm and black sandstone variants now let snow pass through them the way the dense cloud blocks do.
 
