@@ -32,8 +32,9 @@ PILLARS = {"extrabiomes:gilded_sky_log", "extrabiomes:stripped_gilded_sky_log", 
 CUSTOM_STAIRS = {"extrabiomes:dense_cloud_brick_stairs", "extrabiomes:dense_cloud_stairs",
                  "extrabiomes:gilded_sky_stairs", "extrabiomes:sky_stairs"}
 # Inverse of block_map.STAIR_CORNER; a Java *_left shape is the *_right shape one quarter turn counter-clockwise.
-STAIR_CORNER_DIRECTION = {("south", "outer_right"): 4, ("east", "outer_right"): 5, ("west", "outer_right"): 6,
-                          ("north", "outer_right"): 7, ("south", "inner_right"): 8, ("east", "inner_right"): 9,
+# In game the north/south outer_right corners render with directions 4 and 7 swapped relative to block_map.STAIR_CORNER.
+STAIR_CORNER_DIRECTION = {("south", "outer_right"): 7, ("east", "outer_right"): 5, ("west", "outer_right"): 6,
+                          ("north", "outer_right"): 4, ("south", "inner_right"): 8, ("east", "inner_right"): 9,
                           ("north", "inner_right"): 10, ("west", "inner_right"): 11}
 COUNTER_CLOCKWISE = {"north": "west", "west": "south", "south": "east", "east": "north"}
 FLOWER_POT_PLANTS = {

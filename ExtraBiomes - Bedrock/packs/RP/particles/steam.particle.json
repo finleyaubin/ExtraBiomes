@@ -1,0 +1,58 @@
+{
+    "format_version": "1.10.0",
+    "particle_effect": {
+        "description": {
+            "identifier": "extrabiomes:steam",
+            "basic_render_parameters": {
+                "material": "particles_blend",
+                "texture": "textures/particle/steam"
+            }
+        },
+        "components": {
+            "minecraft:emitter_rate_instant": {
+                "num_particles": "math.ceil(variable.height * 1.2) + 1"
+            },
+            "minecraft:emitter_lifetime_once": {
+                "active_time": 1
+            },
+            "minecraft:emitter_shape_box": {
+                "offset": [0, "variable.height * 0.5", 0],
+                "half_dimensions": [0.2, "variable.height * 0.5", 0.2],
+                "direction": [0, 1, 0]
+            },
+            "minecraft:particle_lifetime_expression": {
+                "max_lifetime": "math.random(1.2, 2.1)"
+            },
+            "minecraft:particle_initial_speed": "variable.height > 0 ? 0.6 : 0",
+            "minecraft:particle_motion_dynamic": {
+                "linear_acceleration": [
+                    "variable.ax + 0.6 * math.sin(variable.particle_age * 286 + variable.particle_random_3 * 360)",
+                    0,
+                    "variable.az + 0.6 * math.cos(variable.particle_age * 241 + variable.particle_random_3 * 360)"
+                ],
+                "linear_drag_coefficient": 0.6
+            },
+            "minecraft:particle_appearance_billboard": {
+                "size": [
+                    "(0.28 + variable.particle_random_1 * 0.2) * (1 + 0.8 * variable.particle_age / variable.particle_lifetime)",
+                    "(0.28 + variable.particle_random_1 * 0.2) * (1 + 0.8 * variable.particle_age / variable.particle_lifetime)"
+                ],
+                "facing_camera_mode": "lookat_xyz",
+                "uv": {
+                    "texture_width": 48,
+                    "texture_height": 16,
+                    "uv": ["math.floor(variable.particle_random_4 * 3) * 16", 0],
+                    "uv_size": [16, 16]
+                }
+            },
+            "minecraft:particle_appearance_tinting": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    "0.15 * math.min(1, variable.particle_age / variable.particle_lifetime * 5) * (1 - variable.particle_age / variable.particle_lifetime)"
+                ]
+            }
+        }
+    }
+}

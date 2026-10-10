@@ -23,7 +23,6 @@
                 "min_fall_distance": 3
             },
             "minecraft:light_dampening": 0,
-            "extrabiomes:dense_cloud_budding": {},
             "minecraft:precipitation_interactions": {
                 "precipitation_behavior": "none"
             }

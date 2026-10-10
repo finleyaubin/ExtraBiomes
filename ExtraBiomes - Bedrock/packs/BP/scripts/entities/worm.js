@@ -30,6 +30,7 @@ const COMPOSTER_FILL_STATE = "composter_fill_level";
 const COMPOSTER_FLOOR_HEIGHT = 2 / 16;
 const BREEDING_COOLDOWN_TICKS = 6000;
 const COMPOSTER_CHECK_INTERVAL_TICKS = 20;
+const DIMENSION_IDS = ["overworld", "nether", "the_end"];
 const READY_TICK_PROPERTY = "extrabiomes:breed_ready_tick";
 const EXIT_ORDER = [
     { x: 0, y: -1, z: 0 }, { x: 0, y: 0, z: -1 }, { x: 1, y: 0, z: 0 }, { x: 0, y: 0, z: 1 }, { x: -1, y: 0, z: 0 },
@@ -60,7 +61,8 @@ function consumeHeldItem(player) {
 
 // Two ready worms inside a composter that holds compost breed: one compost level is used and the baby drops out.
 system.runInterval(() => {
-    for (const dimension of world.getAllDimensions()) {
+    for (const dimensionId of DIMENSION_IDS) {
+        const dimension = world.getDimension(dimensionId);
         for (const worm of dimension.getEntities({ type: WORM })) breedInComposter(dimension, worm);
     }
 }, COMPOSTER_CHECK_INTERVAL_TICKS);
@@ -91,6 +93,9 @@ function breedInComposter(dimension, worm) {
     const readyTick = system.currentTick + BREEDING_COOLDOWN_TICKS;
     worm.setDynamicProperty(READY_TICK_PROPERTY, readyTick);
     mate.setDynamicProperty(READY_TICK_PROPERTY, readyTick);
+    for (const parent of [worm, mate]) {
+        dimension.spawnParticle("minecraft:heart_particle", { x: parent.location.x, y: parent.location.y + 0.3, z: parent.location.z });
+    }
 
     const baby = dimension.spawnEntity(WORM, { x: exit.x + 0.5, y: exit.y, z: exit.z + 0.5 });
     if (areEasterEggParents(worm, mate)) baby.nameTag = "Pete";
