@@ -8,6 +8,7 @@ import { StripperComponent } from "./blocks/Components/stripper.js";
 import { SlabberComponent } from "./blocks/Components/slabber.js";
 import { LeafLootComponent } from "./blocks/Components/leaf_loot.js";
 import { SaplingGrowComponent } from "./blocks/Components/sapling_grower.js";
+import { DenseCloudBuddingComponent } from "./blocks/Components/dense_cloud_budding.js";
 import { OpenComponent } from "./blocks/Components/open.js";
 import { fence } from "./blocks/Components/fence_place.js";
 import { wall } from "./blocks/Components/wall_place.js";
@@ -35,6 +36,7 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
   blockComponentRegistry.registerCustomComponent("extrabiomes:leaf_loot",LeafLootComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:leaf_decay",LeafDecay);
   blockComponentRegistry.registerCustomComponent("extrabiomes:sapling_grower",SaplingGrowComponent);
+  blockComponentRegistry.registerCustomComponent("extrabiomes:dense_cloud_budding",DenseCloudBuddingComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:open",OpenComponent);
   blockComponentRegistry.registerCustomComponent("extrabiomes:fence",fence);
   blockComponentRegistry.registerCustomComponent("extrabiomes:wall",wall);

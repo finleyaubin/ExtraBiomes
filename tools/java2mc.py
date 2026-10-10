@@ -8,10 +8,11 @@ Deliberately narrow: it maps only the block families the ported structures actua
 use and raises on anything it doesn't know, so an unmapped block is a loud failure
 rather than a silent hole in the structure.
 """
+import json
 import sys
 
 import nbt_edit
-from mcstructure import T_byte, T_comp, T_int, T_list, T_str, save, TAG_COMPOUND, TAG_INT
+from mcstructure import TAG_SHORT, Tag, T_byte, T_comp, T_int, T_list, T_str, save, TAG_COMPOUND, TAG_INT
 
 BLOCK_VERSION = 18168865
 
@@ -25,11 +26,25 @@ WALL_CONNECTION = {"none": "none", "low": "short", "tall": "tall"}
 # Inverse of block_map._ROT_TOP - the jigsaw `rotation` a vertical front encodes.
 ROT_TOP = {"north": 0, "east": 1, "south": 2, "west": 3}
 
-PILLARS = {"extrabiomes:gilded_sky_log", "extrabiomes:stripped_gilded_sky_log",
+PILLARS = {"extrabiomes:gilded_sky_log", "extrabiomes:stripped_gilded_sky_log", "extrabiomes:stripped_gilded_sky_wood",
            "extrabiomes:sky_log", "extrabiomes:sky_wood", "extrabiomes:stripped_sky_log"}
+
+CUSTOM_STAIRS = {"extrabiomes:dense_cloud_brick_stairs", "extrabiomes:dense_cloud_stairs",
+                 "extrabiomes:gilded_sky_stairs", "extrabiomes:sky_stairs"}
+# Inverse of block_map.STAIR_CORNER; a Java *_left shape is the *_right shape one quarter turn counter-clockwise.
+STAIR_CORNER_DIRECTION = {("south", "outer_right"): 4, ("east", "outer_right"): 5, ("west", "outer_right"): 6,
+                          ("north", "outer_right"): 7, ("south", "inner_right"): 8, ("east", "inner_right"): 9,
+                          ("north", "inner_right"): 10, ("west", "inner_right"): 11}
+COUNTER_CLOCKWISE = {"north": "west", "west": "south", "south": "east", "east": "north"}
+FLOWER_POT_PLANTS = {
+    "minecraft:potted_cornflower": ("minecraft:red_flower", {"flower_type": "cornflower"}),
+    "minecraft:potted_blue_orchid": ("minecraft:red_flower", {"flower_type": "orchid"}),
+    "minecraft:potted_torchflower": ("minecraft:torchflower", {}),
+}
 
 # Blocks whose id and (empty) state set are identical on both editions.
 PLAIN = {"extrabiomes:dense_cloud", "extrabiomes:dense_cloud_brick", "minecraft:air",
+         "extrabiomes:gilded_sky_planks", "minecraft:blue_ice",
          "minecraft:polished_tuff", "minecraft:chiseled_tuff", "minecraft:redstone_block",
          "minecraft:gold_block", "minecraft:white_concrete"}
 
@@ -98,6 +113,21 @@ def map_block(name, props):
         bits = sum(bit for side, bit in (("south", 1), ("west", 2), ("north", 4), ("east", 8)) if props.get(side) == "true")
         return name, {"vine_direction_bits": T_int(bits)}
 
+    if name in CUSTOM_STAIRS:
+        facing, shape = props["facing"], props["shape"]
+        if shape == "straight":
+            direction = 0
+        else:
+            kind, side = shape.split("_")
+            if side == "left":
+                facing = COUNTER_CLOCKWISE[facing]
+            direction = STAIR_CORNER_DIRECTION[(facing, kind + "_right")]
+        top = props.get("half") == "top"
+        return name, {"extrabiomes:direction": T_int(direction),
+                      "extrabiomes:is_upside_down": T_byte(1 if top else 0),
+                      "minecraft:cardinal_direction": T_str(props["facing"]),
+                      "minecraft:vertical_half": T_str("top" if top else "bottom")}
+
     if name.endswith("_stairs"):
         # Bedrock has no `shape` state - it derives corner geometry from neighbours,
         # so Java's outer_left/outer_right are dropped here rather than mapped.
@@ -115,6 +145,26 @@ def map_block(name, props):
         direction = {"floor": "up", "ceiling": "down"}.get(face) or props["facing"]
         return name, {"facing_direction": T_int(FACING_DIRECTION[direction]),
                       "button_pressed_bit": T_byte(_bool(props.get("powered", "false")))}
+
+    if name == "minecraft:lantern":
+        return name, {"hanging": T_byte(_bool(props.get("hanging", "false")))}
+
+    if name == "minecraft:water":
+        return name, {"liquid_depth": T_int(int(props.get("level", "0")))}
+
+    if name == "minecraft:magma_block":
+        return "minecraft:magma", {}
+
+    if name == "extrabiomes:sky_fence":
+        return name, {"extrabiomes:" + side: T_byte(_bool(props.get(side, "false")))
+                      for side in ("north", "south", "east", "west")}
+
+    if name == "minecraft:lectern":
+        return name, {"minecraft:cardinal_direction": T_str(props["facing"]),
+                      "powered_bit": T_byte(_bool(props.get("powered", "false")))}
+
+    if name in FLOWER_POT_PLANTS:
+        return "minecraft:flower_pot", {"update_bit": T_byte(0)}
 
     if name == "minecraft:jigsaw":
         front, top = props["orientation"].rsplit("_", 1)
@@ -145,6 +195,31 @@ def _container_entity(nbt):
     if "LootTable" in nbt:
         entity["LootTable"] = T_str("loot_tables/" + nbt["LootTable"].split(":", 1)[1] + ".json")
     return T_comp({"block_entity_data": T_comp(entity)})
+
+
+def _lectern_entity(nbt):
+    book = nbt["Book"]["components"]["minecraft:written_book_content"]
+    pages = [json.loads(page["raw"]) for page in book["pages"]]
+    written_book = {
+        "Count": T_byte(1), "Damage": Tag(TAG_SHORT, 0), "Name": T_str("minecraft:written_book"), "WasPickedUp": T_byte(0),
+        "tag": T_comp({
+            "author": T_str(book["author"]), "generation": T_int(0), "title": T_str(book["title"]["raw"]),
+            "pages": T_list([T_comp({"photoname": T_str(""), "text": T_str(text)}) for text in pages], TAG_COMPOUND),
+        }),
+    }
+    return T_comp({"block_entity_data": T_comp({
+        "book": T_comp(written_book), "hasBook": T_byte(1), "id": T_str("Lectern"), "isMovable": T_byte(1),
+        "page": T_int(nbt.get("Page", 0)), "totalPages": T_int(len(pages)),
+    })})
+
+
+def _flower_pot_entity(java_name):
+    plant, states = FLOWER_POT_PLANTS[java_name]
+    return T_comp({"block_entity_data": T_comp({
+        "PlantBlock": T_comp({"name": T_str(plant), "states": T_comp({k: T_str(v) for k, v in states.items()}),
+                              "version": T_int(BLOCK_VERSION)}),
+        "id": T_str("FlowerPot"), "isMovable": T_byte(1),
+    })})
 
 
 def _py(tag):
@@ -184,6 +259,10 @@ def convert(src):
         layer0[flat] = palette_id(java_name, props)
         if java_name == "minecraft:jigsaw":
             position_data[str(flat)] = _jigsaw_entity(blk["nbt"], x, y, z)
+        elif java_name == "minecraft:lectern":
+            position_data[str(flat)] = _lectern_entity(blk["nbt"])
+        elif java_name in FLOWER_POT_PLANTS:
+            position_data[str(flat)] = _flower_pot_entity(java_name)
         elif java_name in CONTAINER_BLOCK_ENTITIES and "nbt" in blk:
             position_data[str(flat)] = _container_entity(blk["nbt"])
 
