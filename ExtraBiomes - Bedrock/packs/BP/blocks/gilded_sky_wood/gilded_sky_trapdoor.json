@@ -21,7 +21,7 @@
         },
         "components": {
             "minecraft:precipitation_interactions": {
-                "precipitation_behavior": "obstruct_rain"
+                "precipitation_behavior": "none"
             },
             "minecraft:material_instances": {
                 "*": {

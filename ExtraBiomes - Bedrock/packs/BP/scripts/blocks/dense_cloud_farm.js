@@ -168,20 +168,26 @@ function growCloud({ dimension, ice }) {
   if (log) debug(`ice ${at(ice)}: ${clouds.length} cloud block(s), bud attempts ${JSON.stringify(tally)}`);
 }
 
+// The particle reads all three variables, so every spawn has to set all of them.
+function steamVariables(height, ax, az) {
+  const variables = new MolangVariableMap();
+  variables.setFloat("variable.height", height);
+  variables.setFloat("variable.ax", ax);
+  variables.setFloat("variable.az", az);
+  return variables;
+}
+
 // One particle call fills the whole column (the particle sizes it from variable.height), then a few puffs billow out under the first block in the way.
 function emitSteam({ dimension, surface, capY }) {
   if (debugRun("steam")) debug(`steam from water ${at(surface)} up to y=${capY}`);
   const bottom = surface.y + 1;
-  const column = new MolangVariableMap();
-  column.setFloat("variable.height", Math.max(capY - bottom, 0));
+  const column = steamVariables(Math.max(capY - bottom, 0), 0, 0);
   dimension.spawnParticle(STEAM_PARTICLE, { x: surface.x + 0.5, y: bottom, z: surface.z + 0.5 }, column);
 
   for (let i = 0; i < STEAM_BILLOW_PUFFS; i++) {
     const angle = Math.random() * Math.PI * 2;
     const push = 0.4 + Math.random() * 0.8;
-    const billow = new MolangVariableMap();
-    billow.setFloat("variable.ax", Math.cos(angle) * push);
-    billow.setFloat("variable.az", Math.sin(angle) * push);
+    const billow = steamVariables(0, Math.cos(angle) * push, Math.sin(angle) * push);
     dimension.spawnParticle(STEAM_PARTICLE, {
       x: surface.x + 0.5 + (Math.random() - 0.5) * 0.3, y: capY - 0.5, z: surface.z + 0.5 + (Math.random() - 0.5) * 0.3,
     }, billow);

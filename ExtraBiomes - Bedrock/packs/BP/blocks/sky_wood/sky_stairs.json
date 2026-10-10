@@ -22,7 +22,7 @@
         },
         "components": {
             "minecraft:precipitation_interactions": {
-                "precipitation_behavior": "obstruct_rain"
+                "precipitation_behavior": "none"
             },
             "minecraft:geometry": {
                 "identifier": "geometry.extrabiomes_stairs",

@@ -13,10 +13,18 @@ Dense Cloud is now farmable on Bedrock, with the Java Sky City building that sho
 - Cloud grows out to 10 blocks sideways and 5 blocks up or down from the ice.
 - Cloud only buds from existing dense cloud, so place a block of it next to the ice to start the farm. Only full dense cloud blocks bud, not the slabs, stairs or bricks.
 - Cloud never grows into a space a player or mob is standing in.
+- Steam rises off the water of any valid stack, whether or not any cloud has been seeded yet, up to the first block in the way.
 
 ## Mobs
 ### Worms
 - Two worms inside a composter that has compost in it will breed. Each breeding uses one level of compost, and the new worm drops out of the composter.
 - Worm items can be put straight into a composter by right-clicking its top.
 - Worms breeding in a composter have a 5 minute cooldown before they can breed again.
+- Worms show love hearts when they breed in a composter.
+### Jellyfish
 - Jellyfish on beaches now only spawn between Y 62 and 64, instead of anywhere on the sand.
+
+## Fixes
+- Distant terrain no longer has dark, anti-aliased looking outlines around blocks. The block texture atlas now uses the vanilla mipmap and padding settings, so neighbouring textures stop bleeding into each other at range.
+- Snow no longer piles up a block above slabs, stairs and trapdoors, leaving floating snow layers over half-height blocks. The sky, gilded sky, mystic, palm and black sandstone variants now let snow pass through them the way the dense cloud blocks do.
+- The Cloud Condenser's corner stairs now face the right way.

@@ -18,7 +18,7 @@
         },
         "components": {
             "minecraft:precipitation_interactions": {
-                "precipitation_behavior": "obstruct_rain"
+                "precipitation_behavior": "none"
             },
             "minecraft:geometry": "geometry.slab_down",
             "minecraft:map_color": "#262422",
