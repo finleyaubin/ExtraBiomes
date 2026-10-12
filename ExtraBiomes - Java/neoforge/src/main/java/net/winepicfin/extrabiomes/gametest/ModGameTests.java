@@ -75,6 +75,8 @@ public final class ModGameTests {
                     TreeGrowthGameTests::everyTreeGrowsNaturallyFromRandomTicks, "empty", NATURAL_GROWTH_MAX_TICKS, false),
             new Test(TreeGrowthGameTests.class, "everyTreeLeafDecaysOnceItsTrunkIsBroken",
                     TreeGrowthGameTests::everyTreeLeafDecaysOnceItsTrunkIsBroken),
+            new Test(JellyfishBreathingGameTests.class, "jellyfishDoesNotDrownInWaterOrOnLand",
+                    JellyfishBreathingGameTests::jellyfishDoesNotDrownInWaterOrOnLand),
             new Test(DenseCloudBuddingGameTests.class, "cloudCondenserBuildingDemonstratesTheMechanic",
                     DenseCloudBuddingGameTests::cloudCondenserBuildingDemonstratesTheMechanic));
 
