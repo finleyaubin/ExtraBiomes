@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.gametest;
+package net.winepicfin.extrabiomes.gametest.shared;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
