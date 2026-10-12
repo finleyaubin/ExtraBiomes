@@ -406,25 +406,7 @@ jobs:
       - name: Run NeoForge GameTests
         if: matrix.suite == 'neoforge'
         run: |
-          mkfifo neoforge-gametest.fifo
           : > neoforge-gametest.log
-          echo "Booting :neoforge:runGameTestServer (fresh DedicatedServer, will drive /test run extrabiomes:* in 60s)..."
-          # Streamed live via `tee` (not just redirected to neoforge-gametest.log) so world gen
-          # progress, each biome's "found at BlockPos..." line, and every test's own passed/failed
-          # line show up in this step's live Actions log as they happen, instead of only being
-          # visible after the fact in the uploaded gametest log artifact.
-          #
-          # `setsid` + `timeout --foreground` puts the whole tree (timeout, gradlew, the Gradle
-          # daemon, and whatever JVM(s) Architectury's dev-launch further forks for the actual
-          # game process) into one process group whose PGID equals $GPID - `--foreground` stops
-          # `timeout` from creating its own separate nested group for its child, which would
-          # otherwise put the real game process one group away from the one `kill -- -"$GPID"`
-          # below can reach. This is what lets the force-kill fallback actually reach the real
-          # server process instead of only the outer wrapper.
-          setsid timeout --foreground 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo > >(tee neoforge-gametest.log) 2>&1 &
-          GPID=$!
-
-          ( sleep 60; echo "test run extrabiomes:*" || true ) > neoforge-gametest.fifo &
 
           # Waits on each @GameTest method's own "<name>: passed"/"<name>: failed" log line
           # (see forge/.../gametest/*.java), not vanilla's own "N GAME TESTS COMPLETE"/"required
@@ -448,54 +430,91 @@ jobs:
             exit 1
           fi
           echo "Waiting for all $EXPECTED_TESTS tests to report passed/failed..."
-          # Matches both this mod's own "<name>: passed"/"<name>: failed" log lines and vanilla's
-          # own LogTestReporter.onTestFailed line ("<name> failed at <pos>! <error>", no leading
-          # colon, not anchored at line end) - printed unconditionally by the vanilla GameTest
-          # framework itself whenever a test throws (e.g. via helper.assertTrue), which is the
-          # common case and never reaches this mod's own "failed" logging. Without this, a test
-          # that fails in the first few seconds is invisible to this loop, which then burns the
-          # full 2700s before misreporting it below as "server likely didn't boot/finish in time"
-          # instead of as the real failure it is.
-          for i in $(seq 1 2700); do
-            REPORTED=$(grep -cE ': (passed|failed)$| failed at .+!' neoforge-gametest.log || true)
-            if [ "$REPORTED" -ge "$EXPECTED_TESTS" ]; then
-              break
+          for ATTEMPT in 1 2 3; do
+            rm -f neoforge-gametest.fifo
+            mkfifo neoforge-gametest.fifo
+            echo "Booting (attempt $ATTEMPT/3) :neoforge:runGameTestServer (fresh DedicatedServer, will drive /test run extrabiomes:* once it reports Done)..."
+            # Streamed live via `tee` (not just redirected to neoforge-gametest.log) so world gen
+            # progress, each biome's "found at BlockPos..." line, and every test's own passed/failed
+            # line show up in this step's live Actions log as they happen, instead of only being
+            # visible after the fact in the uploaded gametest log artifact.
+            #
+            # `setsid` + `timeout --foreground` puts the whole tree (timeout, gradlew, the Gradle
+            # daemon, and whatever JVM(s) Architectury's dev-launch further forks for the actual
+            # game process) into one process group whose PGID equals $GPID - `--foreground` stops
+            # `timeout` from creating its own separate nested group for its child, which would
+            # otherwise put the real game process one group away from the one `kill -- -"$GPID"`
+            # below can reach. This is what lets the force-kill fallback actually reach the real
+            # server process instead of only the outer wrapper.
+            setsid timeout --foreground 3000 ./gradlew :neoforge:runGameTestServer < neoforge-gametest.fifo > >(tee -a neoforge-gametest.log) 2>&1 &
+            GPID=$!
+
+            START_LINES=$(wc -l < neoforge-gametest.log)
+            # Send the test command once this attempt's server logs "Done (": a fixed 60s sleep lost the command (0 tests reported, 45 min hang) whenever boot was slower.
+            ( for _ in $(seq 1 600); do grep -q "Done (" <(tail -n +$((START_LINES + 1)) neoforge-gametest.log) && break; sleep 1; done; echo "test run extrabiomes:*" || true ) > neoforge-gametest.fifo &
+            FEEDER=$!
+            # Matches both this mod's own "<name>: passed"/"<name>: failed" log lines and vanilla's
+            # own LogTestReporter.onTestFailed line ("<name> failed at <pos>! <error>", no leading
+            # colon, not anchored at line end) - printed unconditionally by the vanilla GameTest
+            # framework itself whenever a test throws (e.g. via helper.assertTrue), which is the
+            # common case and never reaches this mod's own "failed" logging. Without this, a test
+            # that fails in the first few seconds is invisible to this loop, which then burns the
+            # full 2700s before misreporting it below as "server likely didn't boot/finish in time"
+            # instead of as the real failure it is.
+            for i in $(seq 1 2700); do
+              REPORTED=$(grep -cE ': (passed|failed)$| failed at .+!' neoforge-gametest.log || true)
+              if [ "$REPORTED" -ge "$EXPECTED_TESTS" ]; then
+                break
+              fi
+              if ! kill -0 -- -"$GPID" 2>/dev/null; then
+                echo "::warning::Server exited with ${REPORTED}/${EXPECTED_TESTS} tests reported"
+                break
+              fi
+              # A heartbeat every 30s, separate from the tee'd server output above - so a run that's
+              # still genuinely polling (as opposed to one where the server itself has gone silent,
+              # the actual failure mode this is guarding against) is never ambiguous in the log.
+              if (( i % 30 == 0 )); then
+                echo "Still waiting on NeoForge GameTests (${REPORTED}/${EXPECTED_TESTS} reported, ${i}s elapsed)..."
+              fi
+              sleep 1
+            done
+            # Two separate real CI runs have now shown the server not actually shutting down here
+            # once every test has already logged its own passed/failed line: the first attempt
+            # (writing "stop" with no bound) blocked forever opening the fifo for a write with no
+            # reader left; a second attempt (bounding that write, then `kill "$GPID"`) still hung -
+            # the uploaded gametest.log for that run ends right at the last test's "passed" line with
+            # no shutdown message at all, meaning "stop" reaching the console (if it even did) didn't
+            # reliably tear the process down either time. Rather than keep trying to diagnose exactly
+            # where Loom/Architectury's dev-launch stdin plumbing loses it, just don't depend on a
+            # graceful shutdown at all - this is a throwaway CI world with nothing worth saving.
+            # Still attempt "stop" first (bounded, in case it does work and exits cleanly on its
+            # own), then unconditionally force-kill the whole process group (`setsid`/
+            # `timeout --foreground` above put it all under $GPID's own PGID) within a few seconds
+            # regardless of whether the polite attempt took effect.
+            echo "Sending stop..."
+            if kill -0 -- -"$GPID" 2>/dev/null; then
+              timeout 10 bash -c 'echo "stop" > neoforge-gametest.fifo' 2>/dev/null || true
             fi
-            # A heartbeat every 30s, separate from the tee'd server output above - so a run that's
-            # still genuinely polling (as opposed to one where the server itself has gone silent,
-            # the actual failure mode this is guarding against) is never ambiguous in the log.
-            if (( i % 30 == 0 )); then
-              echo "Still waiting on NeoForge GameTests (${REPORTED}/${EXPECTED_TESTS} reported, ${i}s elapsed)..."
+            for i in $(seq 1 10); do
+              kill -0 -- -"$GPID" 2>/dev/null || break
+              sleep 1
+            done
+            if kill -0 -- -"$GPID" 2>/dev/null; then
+              echo "::warning::Server didn't exit within 10s of 'stop' - force-killing its process group directly instead of waiting on the 3000s timeout."
+              kill -TERM -- -"$GPID" 2>/dev/null || true
+              sleep 2
+              kill -KILL -- -"$GPID" 2>/dev/null || true
             fi
-            sleep 1
+            wait "$GPID" 2>/dev/null || true
+            kill "$FEEDER" 2>/dev/null || true
+            if [ "$REPORTED" -eq 0 ] && [ "$ATTEMPT" -lt 3 ]; then
+              echo "::warning::No test results from attempt $ATTEMPT (server hung or crashed during startup); retrying with a fresh server."
+              continue
+            fi
+            break
           done
-          # Two separate real CI runs have now shown the server not actually shutting down here
-          # once every test has already logged its own passed/failed line: the first attempt
-          # (writing "stop" with no bound) blocked forever opening the fifo for a write with no
-          # reader left; a second attempt (bounding that write, then `kill "$GPID"`) still hung -
-          # the uploaded gametest.log for that run ends right at the last test's "passed" line with
-          # no shutdown message at all, meaning "stop" reaching the console (if it even did) didn't
-          # reliably tear the process down either time. Rather than keep trying to diagnose exactly
-          # where Loom/Architectury's dev-launch stdin plumbing loses it, just don't depend on a
-          # graceful shutdown at all - this is a throwaway CI world with nothing worth saving.
-          # Still attempt "stop" first (bounded, in case it does work and exits cleanly on its
-          # own), then unconditionally force-kill the whole process group (`setsid`/
-          # `timeout --foreground` above put it all under $GPID's own PGID) within a few seconds
-          # regardless of whether the polite attempt took effect.
-          echo "Sending stop..."
-          timeout 10 bash -c 'echo "stop" > neoforge-gametest.fifo' 2>/dev/null || true
-          for i in $(seq 1 10); do
-            kill -0 -- -"$GPID" 2>/dev/null || break
-            sleep 1
-          done
-          if kill -0 -- -"$GPID" 2>/dev/null; then
-            echo "::warning::Server didn't exit within 10s of 'stop' - force-killing its process group directly instead of waiting on the 3000s timeout."
-            kill -TERM -- -"$GPID" 2>/dev/null || true
-            sleep 2
-            kill -KILL -- -"$GPID" 2>/dev/null || true
-          fi
-          wait "$GPID" 2>/dev/null || true
           rm -f neoforge-gametest.fifo
+
 
           # Same widened failure regex as the polling loop above, for the same reason - a vanilla
           # LogTestReporter failure line must be counted as a failure here too, not silently
