@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.gametest;
 
+import net.winepicfin.extrabiomes.gametest.shared.TreeGrowthChecks;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.neoforged.neoforge.gametest.GameTestHolder;

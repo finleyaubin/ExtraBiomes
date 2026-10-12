@@ -1,4 +1,4 @@
-package net.winepicfin.extrabiomes.gametest;
+package net.winepicfin.extrabiomes.gametest.shared;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
