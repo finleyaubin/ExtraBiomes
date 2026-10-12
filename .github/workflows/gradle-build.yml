@@ -466,7 +466,8 @@ jobs:
               if [ "$REPORTED" -ge "$EXPECTED_TESTS" ]; then
                 break
               fi
-              if ! kill -0 -- -"$GPID" 2>/dev/null; then
+              # Check the PID, not the group: setsid has not created the group yet on the first iterations.
+              if ! kill -0 "$GPID" 2>/dev/null; then
                 echo "::warning::Server exited with ${REPORTED}/${EXPECTED_TESTS} tests reported"
                 break
               fi
