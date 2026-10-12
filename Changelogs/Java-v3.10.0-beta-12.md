@@ -9,4 +9,4 @@ Palm trees now decay like every other tree, and saplings and jellyfish no longer
 - Jellyfish no longer drown while swimming. They were missing from the "can breathe under water" tag, so they ran out of air in water like a player would; washed-up jellyfish on land were already safe. (Minecraft 1.20.4 and newer; on 1.20.1 and 1.20.2 jellyfish already breathed underwater.)
 
 ## Tests
-- New game tests grow every tree from a sapling with bone meal and with random ticks, break the trunk and check that its leaves decay, and check that jellyfish don't drown in water or on land. (Minecraft 1.21.5 and newer.)
+- New game tests grow every tree from a sapling with bone meal and with random ticks, break the trunk and check that its leaves decay, and check that jellyfish don't drown in water or on land. (All versions.)
