@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Tett Tett Sky
 tile.extrabiomes:dense_cloud_brick.name=Tett Tett Sky Tett Skymurstein
 tile.extrabiomes:dense_cloud_brick_slab.name=Tett Tett Sky Tett Skymurstein Helle
 tile.extrabiomes:dense_cloud_brick_stairs.name=Tett Tett Sky Tett Skymurstein Trapp
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Svart Sand
 tile.extrabiomes:black_sandstone.name=Svart Sandstein

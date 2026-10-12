@@ -17,14 +17,14 @@
         },
         "distribution": {
             "iterations": 200,
-            "coordinate_eval_order": "xyz",
+            "coordinate_eval_order": "xzy",
             "x": {
                 "distribution": "uniform",
                 "extent": [0, 16]
             },
             "y": {
                 "distribution": "uniform",
-                "extent": [-60, 64]
+                "extent": [-60, "query.heightmap(variable.worldx, variable.worldz) - 8"]
             },
             "z": {
                 "distribution": "uniform",

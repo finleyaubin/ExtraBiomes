@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Πυκνό Πυκνό Σύννεφο
 tile.extrabiomes:dense_cloud_brick.name=Πυκνό Πυκνό Σύννεφο Τούβλο Πυκνού Σύννεφου
 tile.extrabiomes:dense_cloud_brick_slab.name=Πυκνό Πυκνό Σύννεφο Τούβλο Πυκνού Σύννεφου Πλάκα
 tile.extrabiomes:dense_cloud_brick_stairs.name=Πυκνό Πυκνό Σύννεφο Τούβλο Πυκνού Σύννεφου Σκάλα
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Μαύρη Άμμος
 tile.extrabiomes:black_sandstone.name=Μαύρος Ψαμμίτης

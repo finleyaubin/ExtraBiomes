@@ -11,7 +11,11 @@ Follows the same technique as the other glacier structures: hand/procedurally
 picked from a weighted_random_feature pool (extrabiomes:glacier/select_snow_drift_feature),
 scattered via feature_rules on the "frozen" biome tag.
 
-Re-runnable: overwrites existing generated files. Does not touch snow_drift_1/2.
+Bedrock: python tools/build_snow_drifts.py          (writes .mcstructure and feature JSON for drifts 3-16)
+Java:    python tools/build_snow_drifts.py --java   (writes .nbt only)
+
+Re-runnable: overwrites existing generated files. Does not touch snow_drift_1/2 structures.
+Keep SELECT_WEIGHTS in sync with GlacierFeatures.java.
 """
 import os, math
 from mcstructure import (
@@ -41,6 +45,7 @@ def palette_block(name, states=None):
 
 SNOW_BLOCK, ICE, BLUE_ICE, PACKED_ICE = "snow_block", "ice", "blue_ice", "packed_ice"
 POWDER_SNOW, GRAVEL, ANDESITE, CALCITE = "powder_snow", "gravel", "andesite", "calcite"
+MAX_SPAN = 44
 SUMMIT_CHEST = "summit_chest"
 SUMMIT_LOOT_TABLE = "loot_tables/chests/snow_spire_summit.json"
 SNOW_LAYER_PREFIX = "layer"  # SNOW_LAYER_PREFIX + height(0..7) keys below
@@ -544,6 +549,21 @@ def write_structure(name, sx, sy, sz, cells):
     root = make_structure(sx, sy, sz, cells)
     save(os.path.join(STRUCT_DIR, f"{name}.mcstructure"), root, "")
 
+# Raw terrain at before_surface_pass is stone plus the veins, ores and patches the underground passes already placed;
+# the Cold Mesa's red sand and terracotta are allowed too for when its bands exist by then.
+GLACIER_BLOCKS = [
+    'minecraft:air', 'minecraft:snow_layer', 'minecraft:snow', 'minecraft:powder_snow', 'minecraft:ice',
+    'minecraft:packed_ice', 'minecraft:blue_ice', 'minecraft:water', 'minecraft:stone', 'minecraft:deepslate',
+    'minecraft:dirt', 'minecraft:gravel', 'minecraft:sand', 'minecraft:clay', 'minecraft:andesite',
+    'minecraft:diorite', 'minecraft:granite', 'minecraft:tuff', 'minecraft:calcite',
+    'minecraft:red_sand', 'minecraft:red_sandstone', 'minecraft:sandstone', 'minecraft:coarse_dirt',
+    'minecraft:hardened_clay',
+] + [f'minecraft:{colour}_terracotta' for colour in (
+    'white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
+    'blue', 'brown', 'green', 'red', 'black')
+] + [f'minecraft:{prefix}{ore}_ore' for prefix in ('', 'deepslate_')
+     for ore in ('coal', 'iron', 'copper', 'gold', 'redstone', 'lapis', 'diamond', 'emerald')]
+
 
 def write_structure_feature(name):
     ident = f"{NAMESPACE}:glacier/{name}_feature"
@@ -553,9 +573,8 @@ def write_structure_feature(name):
             "description": {"identifier": ident},
             "structure_name": f"{NAMESPACE}:{name}",
             "constraints": {
-                "unburied": {},
                 "block_intersection": {
-                    "block_allowlist": ["minecraft:air", "minecraft:snow_layer"]
+                    "block_allowlist": GLACIER_BLOCKS
                 },
                 "grounded": {},
             },
@@ -563,7 +582,7 @@ def write_structure_feature(name):
     }
     import json
     with open(os.path.join(FEATURE_DIR, f"{name}_feature.json"), "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=4)
 
 
 def write_select_feature(entries):
@@ -578,7 +597,7 @@ def write_select_feature(entries):
         },
     }
     with open(os.path.join(FEATURE_DIR, "select_snow_drift_feature.json"), "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=4)
 
 
 # ---------------------------------------------------------------------------
@@ -647,6 +666,7 @@ if __name__ == "__main__":
     java_only = "--java" in sys.argv[1:]
     for name, kind, seed, kwargs in NEW_DRIFTS:
         sx, sy, sz, cells = BUILDERS[kind](seed, **kwargs)
+        assert sx <= MAX_SPAN and sz <= MAX_SPAN, f"{name} is {sx}x{sz}, over the {MAX_SPAN}-block write window"
         if java_only:
             write_java_structure(name, sx, sy, sz, cells)
         else:

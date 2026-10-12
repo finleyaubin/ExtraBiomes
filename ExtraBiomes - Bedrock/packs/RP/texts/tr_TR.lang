@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Yogun Yogun Bulut
 tile.extrabiomes:dense_cloud_brick.name=Yogun Yogun Bulut Yogun Bulut Tugla
 tile.extrabiomes:dense_cloud_brick_slab.name=Yogun Yogun Bulut Yogun Bulut Tugla Basamak
 tile.extrabiomes:dense_cloud_brick_stairs.name=Yogun Yogun Bulut Yogun Bulut Tugla Merdiven
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Siyah Kum
 tile.extrabiomes:black_sandstone.name=Siyah Kum Taşı

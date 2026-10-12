@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Dichte Wolke
 tile.extrabiomes:dense_cloud_brick.name=Dichte Wolke Wolkenziegel
 tile.extrabiomes:dense_cloud_brick_slab.name=Dichte Wolke Wolkenziegel Stufe
 tile.extrabiomes:dense_cloud_brick_stairs.name=Dichte Wolke Wolkenziegel Treppe
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Schwarzer Sand
 tile.extrabiomes:black_sandstone.name=Schwarzer Sandstein

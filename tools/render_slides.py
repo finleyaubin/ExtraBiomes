@@ -30,7 +30,10 @@ LINK_STEP = 40
 HEAD_TOP = 190   # first heading line, just under the profile row Instagram draws over stories
 HEAD_STEP = 118  # line pitch for a heading that wraps onto several lines
 
-BAND_H = round((W - 2 * MARGIN) * 9 / 16)  # changelog screenshots are always 16:9
+BAND_H = round((W - 2 * MARGIN) * 9 / 16)  # changelog screenshots are normally 16:9
+STANDARD_ASPECT = 16 / 9
+ASPECT_TOLERANCE = 0.12  # within this of 16:9 an image is cropped to the band, otherwise it keeps its own shape
+MAX_IMAGE_H = round(BAND_H * 1.4)
 LOGO = Path(__file__).parent / "title.png"
 LOGO_W = W - 2 * MARGIN  # spans the text column exactly, so the wordmark shares its left edge
 IMAGE_CACHE = {}
@@ -71,11 +74,34 @@ def fetch(url):
     return IMAGE_CACHE[url]
 
 
+def image_box(photo):
+    """-> (width, height) of the frame a screenshot is drawn into. Near-16:9 shots fill the standard
+    band; anything else keeps its own aspect ratio, full column width unless that would be taller than
+    MAX_IMAGE_H, in which case it is height-limited and centred."""
+    column = W - 2 * MARGIN
+    aspect = photo.width / photo.height
+    if abs(aspect / STANDARD_ASPECT - 1) <= ASPECT_TOLERANCE:
+        return column, BAND_H
+    height = round(column / aspect)
+    if height > MAX_IMAGE_H:
+        return round(MAX_IMAGE_H * aspect), MAX_IMAGE_H
+    return column, height
+
+
 def paste_image(slide, photo, y, radius=40):
-    width = W - 2 * MARGIN
-    mask = Image.new("L", (width, BAND_H), 0)
-    ImageDraw.Draw(mask).rounded_rectangle([0, 0, width - 1, BAND_H - 1], radius, fill=255)
-    slide.paste(photo.resize((width, BAND_H), Image.LANCZOS), (MARGIN, y), mask)
+    width, height = image_box(photo)
+    if (width, height) == (W - 2 * MARGIN, BAND_H):
+        # Crop to the band's shape rather than stretching a slightly-off screenshot.
+        crop_h = min(photo.height, round(photo.width * BAND_H / width))
+        crop_w = min(photo.width, round(photo.height * width / BAND_H))
+        left, top = (photo.width - crop_w) // 2, (photo.height - crop_h) // 2
+        photo = photo.crop((left, top, left + crop_w, top + crop_h))
+    # Small sources are pixel art (spawn egg strips, icons); smoothing them to blur is worse than blocky.
+    method = Image.NEAREST if photo.width * 2 < width else Image.LANCZOS
+    mask = Image.new("L", (width, height), 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, width - 1, height - 1], min(radius, height // 2), fill=255)
+    left = MARGIN + (W - 2 * MARGIN - width) // 2
+    slide.paste(photo.resize((width, height), method), (left, y), mask)
 
 
 def clean(text):
@@ -101,6 +127,23 @@ def parse(markdown):
             if body:
                 sections[-1][1].append(("bullet", body))
     return [s for s in sections if s[1]]
+
+
+def intro_paragraphs(markdown):
+    """The prose between the "# " title and the next heading, one cleaned string per line of text."""
+    paragraphs, seen_title = [], False
+    for raw in markdown.splitlines():
+        line = raw.strip()
+        if line.startswith("#"):
+            if seen_title:
+                break
+            seen_title = line.startswith("# ")
+            continue
+        if seen_title and line:
+            text = clean(line)
+            if text:
+                paragraphs.append(text)
+    return paragraphs
 
 
 def wrap(draw, text, fnt, width):
@@ -158,7 +201,21 @@ def chrome(image, version, footer):
     return draw
 
 
-def cover_slide(sections, version, footer):
+def intro_block(draw, paragraphs, max_height):
+    """-> (font, line pitch, lines) for the largest text size at which the intro fits max_height, or
+    None when even the smallest size can't fit it."""
+    for size in range(46, 27, -2):
+        fnt = font("regular", size)
+        pitch = round(size * 1.3)
+        lines = []
+        for paragraph in paragraphs:
+            lines += wrap(draw, paragraph, fnt, W - 2 * MARGIN)
+        if len(lines) * pitch <= max_height:
+            return fnt, pitch, lines
+    return None
+
+
+def cover_slide(sections, version, footer, intro=()):
     image = background()
     draw = ImageDraw.Draw(image)
     y = 170
@@ -178,16 +235,25 @@ def cover_slide(sections, version, footer):
     y += size + 40
     draw.text((MARGIN, y + 10), f"{EDITION} Edition", font=font("bold", 58), fill=THEME["accent"])
     y += 100
-    # The contents line is bottom-anchored above the footer and the hero takes whatever is
-    # left, so a longer version or edition string can't push either off the slide.
-    entry_font = font("regular", 46)
-    lines = [heading for heading, _ in sections]
-    contents_top = H - 300 - links_height() - len(lines) * 64
     hero = next((fetch(url) for _, entries in sections for kind, url in entries if kind == "image"), None)
+    hero_h = image_box(hero)[1] if hero is not None else 0
+    # The text under the image is bottom-anchored above the footer and the hero takes whatever is
+    # left, so a longer version or edition string can't push either off the slide. The changelog's
+    # intro goes there when it has one and fits; otherwise the section names do.
+    text_bottom = H - 300 - links_height()
+    text_room = text_bottom - (y + 110 + hero_h + 24) if hero is not None else text_bottom - y
+    block = intro_block(draw, list(intro), text_room) if intro else None
+    if block is None and intro:
+        block = intro_block(draw, list(intro)[:1], text_room)
+    if block is not None:
+        entry_font, pitch, lines = block
+    else:
+        entry_font, pitch, lines = font("regular", 46), 64, [heading for heading, _ in sections]
+    text_top = text_bottom - len(lines) * pitch
     if hero is not None:
-        paste_image(image, hero, y + 110 + (contents_top - y - 170 - BAND_H) // 2)
+        paste_image(image, hero, y + 110 + (text_top - y - 170 - hero_h) // 2)
     for offset, line in enumerate(lines):
-        draw.text((MARGIN, contents_top + offset * 64), line, font=entry_font, fill=THEME["muted"])
+        draw.text((MARGIN, text_top + offset * pitch), line, font=entry_font, fill=THEME["muted"])
     draw.text((MARGIN, H - 190 - links_height()), footer, font=font("regular", 34), fill=THEME["muted"])
     draw_links(draw, H - 140 - links_height())
     return image
@@ -209,12 +275,14 @@ def section_slides(heading, entries, version, footer):
         entry_font = sub_font if kind == "sub" else body_font
         indent = 0 if kind == "sub" else 46
         lines = [] if kind == "image" else wrap(scratch, text, entry_font, W - 2 * MARGIN - indent)
-        needed = BAND_H + 48 if kind == "image" else len(lines) * 58 + (46 if kind == "sub" else 34)
+        needed = image_box(photo)[1] + 48 if kind == "image" else len(lines) * 58 + (46 if kind == "sub" else 34)
         # A subheading alone at the foot of a slide reads as an orphan, so it has to fit
         # whatever follows it too - that only affects the fit test, never the cursor.
         required = needed
         if kind == "sub" and index + 1 < len(entries):
-            required += BAND_H + 48 if entries[index + 1][0] == "image" else 120
+            following = entries[index + 1]
+            next_photo = fetch(following[1]) if following[0] == "image" else None
+            required += image_box(next_photo)[1] + 48 if next_photo is not None else 120
         if image is None or y + required > BODY_BOTTOM - links_height():
             image = background()
             draw = chrome(image, version, footer)
@@ -248,7 +316,7 @@ def pretty_version(version):
 def render(markdown, version, footer, out_dir):
     sections = parse(markdown)
     version = pretty_version(version)
-    slides = [cover_slide(sections, version, footer)]
+    slides = [cover_slide(sections, version, footer, intro_paragraphs(markdown))]
     for heading, entries in sections:
         slides += section_slides(heading, entries, version, footer)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -267,6 +335,21 @@ def selftest():
                      "- made **bigger**\n\n## Empty\n")
     assert sections == [("Structures", [("sub", "Sky City"), ("image", "x.png"),
                                         ("bullet", "made bigger")])], sections
+    assert intro_paragraphs("# Title\nA **bold** intro.\n\n<img src=\"x.png\" />\nSecond line\n# Changes\nnot intro\n") == \
+        ["A bold intro.", "Second line"]
+    assert intro_paragraphs("# Title\n# Changes\n## Biomes\n- x\n") == []
+
+    class Shape:
+        def __init__(self, width, height):
+            self.width, self.height = width, height
+
+    column = W - 2 * MARGIN
+    assert image_box(Shape(2560, 1440)) == (column, BAND_H)
+    assert image_box(Shape(1920, 1080)) == (column, BAND_H)
+    strip = image_box(Shape(431, 58))
+    assert strip[0] == column and strip[1] < BAND_H // 2, strip
+    tall = image_box(Shape(600, 900))
+    assert tall[1] == MAX_IMAGE_H and tall[0] < column, tall
     assert pretty_version("3.10.0-beta-7") == "v3.10.0 Beta 7", pretty_version("3.10.0-beta-7")
     assert pretty_version("v3.10.0") == "v3.10.0"
     assert images_in("![shot](https://e/a.png) and <img width=\"9\" src=\"https://e/b.png\" />") == \

@@ -1,0 +1,19 @@
+{
+    "format_version": "1.13.0",
+    "minecraft:ore_feature": {
+        "description": {
+            "identifier": "extrabiomes:the_netherlands/blackstone_patch_feature"
+        },
+        "count": 40,
+        "replace_rules": [
+            {
+                "places_block": "minecraft:blackstone",
+                "may_replace": [
+                    {
+                        "name": "minecraft:netherrack"
+                    }
+                ]
+            }
+        ]
+    }
+}

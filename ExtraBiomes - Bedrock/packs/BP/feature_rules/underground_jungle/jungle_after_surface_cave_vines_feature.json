@@ -23,7 +23,7 @@
             },
             "y": {
                 "distribution": "uniform",
-                "extent": [-64, 60]
+                "extent": [-64, "query.heightmap(variable.worldx, variable.worldz) - 8"]
             },
             "z": {
                 "distribution": "uniform",

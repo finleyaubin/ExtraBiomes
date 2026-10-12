@@ -48,8 +48,8 @@
                 "controller.render.puckoo.base"
             ],
             "spawn_egg": {
-                "base_color": "#ffffff",
-                "overlay_color": "#ea7630"
+                "texture": "extrabiomes:puckoo_spawn_egg",
+                "texture_index": 0
             }
         }
     }

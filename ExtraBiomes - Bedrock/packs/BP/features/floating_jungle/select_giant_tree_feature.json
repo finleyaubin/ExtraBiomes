@@ -1,0 +1,22 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:floating_jungle/select_giant_tree_feature"
+    },
+    "features": [
+      [
+        "extrabiomes:floating_jungle/giant_tree_1_feature",
+        1
+      ],
+      [
+        "extrabiomes:floating_jungle/giant_tree_2_feature",
+        1
+      ],
+      [
+        "extrabiomes:floating_jungle/giant_tree_3_feature",
+        1
+      ]
+    ]
+  }
+}

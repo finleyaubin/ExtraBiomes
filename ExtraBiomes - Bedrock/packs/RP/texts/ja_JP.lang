@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=濃密な雲
 tile.extrabiomes:dense_cloud_brick.name=濃密な雲レンガ
 tile.extrabiomes:dense_cloud_brick_slab.name=濃密な雲レンガのハーフブロック
 tile.extrabiomes:dense_cloud_brick_stairs.name=濃密な雲レンガの階段
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=黒い砂
 tile.extrabiomes:black_sandstone.name=黒い砂岩

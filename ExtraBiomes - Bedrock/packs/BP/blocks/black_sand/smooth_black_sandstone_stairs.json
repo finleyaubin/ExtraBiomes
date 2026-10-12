@@ -21,6 +21,9 @@
             }
         },
         "components": {
+            "minecraft:precipitation_interactions": {
+                "precipitation_behavior": "none"
+            },
             "minecraft:geometry": {
                 "identifier": "geometry.extrabiomes_stairs",
                 "bone_visibility": {
@@ -1217,6 +1220,14 @@
                             "size": [8, 8, 8]
                         }
                     ]
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:vertical_half') == 'top'",
+                "components": {
+                    "minecraft:precipitation_interactions": {
+                        "precipitation_behavior": "obstruct_rain_accumulate_snow"
+                    }
                 }
             }
         ]

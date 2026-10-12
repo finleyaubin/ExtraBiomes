@@ -35,8 +35,8 @@
             },
             "render_controllers": ["controller.render.harpy"],
             "spawn_egg": {
-                "base_color": "#2319af",
-                "overlay_color": "#e9c600"
+                "texture": "extrabiomes:harpy_spawn_egg",
+                "texture_index": 0
             }
         }
     }

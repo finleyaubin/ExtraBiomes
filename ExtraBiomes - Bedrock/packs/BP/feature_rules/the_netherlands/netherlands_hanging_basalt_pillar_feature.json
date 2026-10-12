@@ -1,0 +1,39 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:feature_rules": {
+        "description": {
+            "identifier": "extrabiomes:netherlands_hanging_basalt_pillar_feature",
+            "places_feature": "extrabiomes:the_netherlands/hanging_basalt_pillar_snap_to_ceiling_feature"
+        },
+        "conditions": {
+            "placement_pass": "after_surface_pass",
+            "minecraft:biome_filter": [
+                {
+                    "any_of": [
+                        {
+                            "test": "has_biome_tag",
+                            "operator": "==",
+                            "value": "the_netherlands"
+                        }
+                    ]
+                }
+            ]
+        },
+        "distribution": {
+            "iterations": 30,
+            "coordinate_eval_order": "zyx",
+            "x": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            },
+            "y": {
+                "distribution": "uniform",
+                "extent": [-56, 40]
+            },
+            "z": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            }
+        }
+    }
+}

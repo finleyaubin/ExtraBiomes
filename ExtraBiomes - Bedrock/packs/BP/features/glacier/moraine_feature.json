@@ -1,0 +1,20 @@
+{
+  "format_version": "1.17.0",
+  "minecraft:ore_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/moraine_feature"
+    },
+    "count": 12,
+    "replace_rules": [
+      {
+        "places_block": "minecraft:gravel",
+        "may_replace": [
+          "minecraft:ice",
+          "minecraft:packed_ice",
+          "minecraft:blue_ice",
+          "minecraft:snow"
+        ]
+      }
+    ]
+  }
+}

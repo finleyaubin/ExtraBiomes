@@ -1,0 +1,26 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/select_snow_pillar_feature"
+    },
+    "features": [
+      [
+        "extrabiomes:glacier/snow_pillar_1_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/snow_pillar_2_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/snow_pillar_3_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/snow_pillar_4_feature",
+        1
+      ]
+    ]
+  }
+}

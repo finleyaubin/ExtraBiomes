@@ -1,0 +1,72 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:structure_template_feature": {
+        "description": {
+            "identifier": "extrabiomes:glacier/snow_drift_8_feature"
+        },
+        "structure_name": "extrabiomes:snow_drift_8",
+        "constraints": {
+            "block_intersection": {
+                "block_allowlist": [
+                    "minecraft:air",
+                    "minecraft:snow_layer",
+                    "minecraft:snow",
+                    "minecraft:powder_snow",
+                    "minecraft:ice",
+                    "minecraft:packed_ice",
+                    "minecraft:blue_ice",
+                    "minecraft:water",
+                    "minecraft:stone",
+                    "minecraft:deepslate",
+                    "minecraft:dirt",
+                    "minecraft:gravel",
+                    "minecraft:sand",
+                    "minecraft:clay",
+                    "minecraft:andesite",
+                    "minecraft:diorite",
+                    "minecraft:granite",
+                    "minecraft:tuff",
+                    "minecraft:calcite",
+                    "minecraft:red_sand",
+                    "minecraft:red_sandstone",
+                    "minecraft:sandstone",
+                    "minecraft:coarse_dirt",
+                    "minecraft:hardened_clay",
+                    "minecraft:white_terracotta",
+                    "minecraft:orange_terracotta",
+                    "minecraft:magenta_terracotta",
+                    "minecraft:light_blue_terracotta",
+                    "minecraft:yellow_terracotta",
+                    "minecraft:lime_terracotta",
+                    "minecraft:pink_terracotta",
+                    "minecraft:gray_terracotta",
+                    "minecraft:light_gray_terracotta",
+                    "minecraft:cyan_terracotta",
+                    "minecraft:purple_terracotta",
+                    "minecraft:blue_terracotta",
+                    "minecraft:brown_terracotta",
+                    "minecraft:green_terracotta",
+                    "minecraft:red_terracotta",
+                    "minecraft:black_terracotta",
+                    "minecraft:coal_ore",
+                    "minecraft:iron_ore",
+                    "minecraft:copper_ore",
+                    "minecraft:gold_ore",
+                    "minecraft:redstone_ore",
+                    "minecraft:lapis_ore",
+                    "minecraft:diamond_ore",
+                    "minecraft:emerald_ore",
+                    "minecraft:deepslate_coal_ore",
+                    "minecraft:deepslate_iron_ore",
+                    "minecraft:deepslate_copper_ore",
+                    "minecraft:deepslate_gold_ore",
+                    "minecraft:deepslate_redstone_ore",
+                    "minecraft:deepslate_lapis_ore",
+                    "minecraft:deepslate_diamond_ore",
+                    "minecraft:deepslate_emerald_ore"
+                ]
+            },
+            "grounded": {}
+        }
+    }
+}

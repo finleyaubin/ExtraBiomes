@@ -1,10 +1,10 @@
 {
-    "format_version": "1.20.100",
+    "format_version": "1.26.0",
     "minecraft:block": {
         "description": {
             "identifier": "extrabiomes:palm_trapdoor",
             "menu_category": {
-                "group": "itemGroup.name.trapdoor",
+                "group": "minecraft:itemGroup.name.trapdoor",
                 "category": "construction"
             },
             "states": {
@@ -20,6 +20,9 @@
             }
         },
         "components": {
+            "minecraft:precipitation_interactions": {
+                "precipitation_behavior": "none"
+            },
             "minecraft:material_instances": {
                 "*": {
                     "texture": "extrabiomes_palm_trapdoor",
@@ -125,6 +128,14 @@
                     "minecraft:collision_box": {
                         "size": [16, 3, 16],
                         "origin": [-8, 13, -8]
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('minecraft:vertical_half') == 'top' && q.block_state('extrabiomes:is_open') == false",
+                "components": {
+                    "minecraft:precipitation_interactions": {
+                        "precipitation_behavior": "obstruct_rain_accumulate_snow"
                     }
                 }
             }

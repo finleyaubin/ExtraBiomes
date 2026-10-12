@@ -20,6 +20,13 @@
         "mob.puckoo.cry": {
             "category": "neutral",
             "sounds": ["sounds/mob/puckoo/cry1", "sounds/mob/puckoo/cry2"]
+        },
+        "ambient.glacier.ice_cracking": {
+            "category": "ambient",
+            "sounds": [
+                "sounds/ambient/glacier/ice_cracking_1",
+                "sounds/ambient/glacier/ice_cracking_2"
+            ]
         }
     }
 }

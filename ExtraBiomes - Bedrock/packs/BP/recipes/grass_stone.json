@@ -1,0 +1,22 @@
+{
+    "format_version": "1.12",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "extrabiomes:grass_stone"
+        },
+        "tags": ["crafting_table"],
+        "pattern": ["#", "S"],
+        "key": {
+            "#": {
+                "item": "minecraft:short_grass"
+            },
+            "S": {
+                "item": "minecraft:stone"
+            }
+        },
+        "result": {
+            "item": "extrabiomes:grass_stone",
+            "count": 1
+        }
+    }
+}

@@ -5,14 +5,21 @@
             "identifier": "extrabiomes:glacier"
         },
         "components": {
+            "minecraft:ambient_sounds": {
+                "addition": "ambient.glacier.ice_cracking"
+            },
             "minecraft:water_appearance": {
-                "surface_color": "#2838c8"
+                "surface_color": "#9EE6FF",
+                "surface_opacity": 0.45
             },
             "minecraft:foliage_appearance": {
                 "color": "#60a0b0"
             },
             "minecraft:grass_appearance": {
                 "color": "#80b0c0"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "extrabiomes:fog_glacier"
             }
         }
     }

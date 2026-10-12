@@ -1,0 +1,26 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/select_meltwater_stream_feature"
+    },
+    "features": [
+      [
+        "extrabiomes:glacier/stream_1_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/stream_2_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/stream_3_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/stream_4_feature",
+        1
+      ]
+    ]
+  }
+}

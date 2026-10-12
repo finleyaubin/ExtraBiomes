@@ -136,6 +136,30 @@
         },
         "extrabiomes:mossy_pebble": {
             "textures": ["textures/items/pebble_mossy"]
+        },
+        "extrabiomes:giant_tortoise_spawn_egg": {
+            "textures": "textures/items/spawn_egg/giant_tortoise_spawn_egg"
+        },
+        "extrabiomes:harpy_spawn_egg": {
+            "textures": "textures/items/spawn_egg/harpy_spawn_egg"
+        },
+        "extrabiomes:hoppleshroom_spawn_egg": {
+            "textures": "textures/items/spawn_egg/hoppleshroom_spawn_egg"
+        },
+        "extrabiomes:jellyfish_spawn_egg": {
+            "textures": "textures/items/spawn_egg/jellyfish_spawn_egg"
+        },
+        "extrabiomes:piranha_spawn_egg": {
+            "textures": "textures/items/spawn_egg/piranha_spawn_egg"
+        },
+        "extrabiomes:puckoo_spawn_egg": {
+            "textures": "textures/items/spawn_egg/puckoo_spawn_egg"
+        },
+        "extrabiomes:treefrog_spawn_egg": {
+            "textures": "textures/items/spawn_egg/treefrog_spawn_egg"
+        },
+        "extrabiomes:worm_spawn_egg": {
+            "textures": "textures/items/spawn_egg/worm_spawn_egg"
         }
     }
 }

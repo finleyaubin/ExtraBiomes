@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Suru Suru Felho
 tile.extrabiomes:dense_cloud_brick.name=Suru Suru Felho Suru Felho Tegla
 tile.extrabiomes:dense_cloud_brick_slab.name=Suru Suru Felho Suru Felho Tegla Lap
 tile.extrabiomes:dense_cloud_brick_stairs.name=Suru Suru Felho Suru Felho Tegla Lepcso
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Fekete Homok
 tile.extrabiomes:black_sandstone.name=Fekete Homokkő

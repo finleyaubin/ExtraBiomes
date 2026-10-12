@@ -1,0 +1,53 @@
+{
+  "format_version": "1.26.20",
+  "minecraft:structure_template_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/lavafall_pad_feature"
+    },
+    "structure_name": "extrabiomes:glacier/lavafall_pad",
+    "facing_direction": "random",
+    "rotate_around_center": true,
+    "constraints": {
+      "block_intersection": {
+        "block_allowlist": [
+          "minecraft:air",
+          "minecraft:stone",
+          "minecraft:andesite",
+          "minecraft:diorite",
+          "minecraft:granite",
+          "minecraft:tuff",
+          "minecraft:deepslate",
+          "minecraft:dirt",
+          "minecraft:gravel",
+          "minecraft:sand",
+          "minecraft:sandstone",
+          "minecraft:calcite",
+          "minecraft:ice",
+          "minecraft:packed_ice",
+          "minecraft:blue_ice",
+          "minecraft:snow",
+          "minecraft:basalt",
+          "minecraft:smooth_basalt",
+          "minecraft:magma",
+          "minecraft:coal_ore",
+          "minecraft:iron_ore",
+          "minecraft:copper_ore",
+          "minecraft:gold_ore",
+          "minecraft:redstone_ore",
+          "minecraft:lapis_ore",
+          "minecraft:diamond_ore",
+          "minecraft:emerald_ore",
+          "minecraft:deepslate_coal_ore",
+          "minecraft:deepslate_iron_ore",
+          "minecraft:deepslate_copper_ore",
+          "minecraft:deepslate_gold_ore",
+          "minecraft:deepslate_redstone_ore",
+          "minecraft:deepslate_lapis_ore",
+          "minecraft:deepslate_diamond_ore",
+          "minecraft:deepslate_emerald_ore"
+        ]
+      }
+    },
+    "ground_level": 2
+  }
+}

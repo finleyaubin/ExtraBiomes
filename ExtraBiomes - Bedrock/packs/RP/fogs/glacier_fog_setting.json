@@ -1,0 +1,16 @@
+{
+    "format_version": "1.16.100",
+    "minecraft:fog_settings": {
+        "description": {
+            "identifier": "extrabiomes:fog_glacier"
+        },
+        "distance": {
+            "water": {
+                "fog_start": 30,
+                "fog_end": 135,
+                "fog_color": "#8FDCF5",
+                "render_distance_type": "fixed"
+            }
+        }
+    }
+}

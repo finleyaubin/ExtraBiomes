@@ -6,5 +6,5 @@ import net.winepicfin.extrabiomes.worldgen.ModConfigureFeatures;
 
 // See MysticTreeGrower's comment - TreeGrower became final as of 1.20.4.
 public class CharredTreeGrower {
-    public static final TreeGrower GROWER = new TreeGrower("charred", WeightedList.of(), WeightedList.of(ModConfigureFeatures.CHARRED_KEY), WeightedList.of(), ModConfigureFeatures.CHARRED_KEY);
+    public static final TreeGrower GROWER = new TreeGrower("charred", WeightedList.of(ModConfigureFeatures.CHARRED_KEY), WeightedList.of(), WeightedList.of(), ModConfigureFeatures.CHARRED_KEY);
 }

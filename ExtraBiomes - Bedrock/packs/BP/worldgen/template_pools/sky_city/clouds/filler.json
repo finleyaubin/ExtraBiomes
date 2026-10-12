@@ -51,6 +51,54 @@
                     "location": "extrabiomes/sky_city/clouds/filler_5",
                     "projection": "rigid"
                 },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/filler_6",
+                    "projection": "rigid"
+                },
+                "weight": 1
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/filler_tree_0",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/filler_tree_1",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/filler_tree_2",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/filler_tree_3",
+                    "projection": "rigid"
+                },
+                "weight": 2
+            },
+            {
+                "element": {
+                    "element_type": "minecraft:single_pool_element",
+                    "location": "extrabiomes/sky_city/clouds/filler_tree_4",
+                    "projection": "rigid"
+                },
                 "weight": 1
             }
         ]

@@ -17,7 +17,10 @@ export const SlabberComponent = {
 
         var slabId;
         const type = block.typeId.split(":")[1].split("_")[0];
-        if (type === "dense") {
+        if (block.typeId === "extrabiomes:dense_cloud_slab") {
+            slabId = 'extrabiomes:dense_cloud_slab';
+        }
+        else if (type === "dense") {
             slabId = 'extrabiomes:dense_cloud_brick_slab';
         }
         else if (type === "gilded") {

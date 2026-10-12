@@ -1,0 +1,22 @@
+{
+  "format_version": "1.14.0",
+  "minecraft:weighted_random_feature": {
+    "description": {
+      "identifier": "extrabiomes:glacier/select_lava_pool_feature"
+    },
+    "features": [
+      [
+        "extrabiomes:glacier/lava_pool_1_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/lava_pool_2_feature",
+        1
+      ],
+      [
+        "extrabiomes:glacier/lava_pool_3_feature",
+        1
+      ]
+    ]
+  }
+}

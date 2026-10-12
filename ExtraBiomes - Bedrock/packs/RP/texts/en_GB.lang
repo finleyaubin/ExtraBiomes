@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Dense Cloud
 tile.extrabiomes:dense_cloud_brick.name=Dense Cloud Brick
 tile.extrabiomes:dense_cloud_brick_slab.name=Dense Cloud Brick Slab
 tile.extrabiomes:dense_cloud_brick_stairs.name=Dense Cloud Brick Stairs
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Black Sand
 tile.extrabiomes:black_sandstone.name=Black Sandstone

@@ -37,6 +37,8 @@ tile.extrabiomes:dense_cloud.name=Tät Tätt Moln
 tile.extrabiomes:dense_cloud_brick.name=Tät Tätt Moln Tätt Molntegel
 tile.extrabiomes:dense_cloud_brick_slab.name=Tät Tätt Moln Tätt Molntegel Häll
 tile.extrabiomes:dense_cloud_brick_stairs.name=Tät Tätt Moln Tätt Molntegel Trappa
+tile.extrabiomes:dense_cloud_slab.name=Dense Cloud Slab
+tile.extrabiomes:dense_cloud_stairs.name=Dense Cloud Stairs
 
 tile.extrabiomes:black_sand.name=Svart Sand
 tile.extrabiomes:black_sandstone.name=Svart Sandsten
