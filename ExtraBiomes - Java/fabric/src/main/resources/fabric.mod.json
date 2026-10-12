@@ -29,8 +29,6 @@
       "net.winepicfin.extrabiomes.fabric.gametest.SpawnEggItemGameTests",
       "net.winepicfin.extrabiomes.fabric.gametest.TreeGrowthGameTests",
       "net.winepicfin.extrabiomes.fabric.gametest.JellyfishBreathingGameTests",
-      "net.winepicfin.extrabiomes.fabric.gametest.TreeGrowthGameTests",
-      "net.winepicfin.extrabiomes.fabric.gametest.JellyfishBreathingGameTests",
       "net.winepicfin.extrabiomes.fabric.gametest.WormBreedingGameTests"
     ],
     "fabric-datagen": [
