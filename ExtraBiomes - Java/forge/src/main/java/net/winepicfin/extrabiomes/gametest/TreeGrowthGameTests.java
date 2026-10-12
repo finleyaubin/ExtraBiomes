@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.gametest;
 
+import net.winepicfin.extrabiomes.gametest.shared.TreeGrowthScenarios;
 import com.mojang.logging.LogUtils;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
