@@ -24,6 +24,7 @@ public final class ModGameTests {
             DeferredRegister.create(Registries.TEST_FUNCTION, ExtraBiomes.MOD_ID);
     private static final int DEFAULT_MAX_TICKS = 100;
     private static final int LONG_MAX_TICKS = 60_000;
+    private static final int NATURAL_GROWTH_MAX_TICKS = 1_200;
 
     private record Test(Class<?> owner, String method, Consumer<GameTestHelper> body, String template, int maxTicks, boolean manualOnly) {
         Test(Class<?> owner, String method, Consumer<GameTestHelper> body) {
@@ -68,6 +69,12 @@ public final class ModGameTests {
                     DenseCloudBuddingGameTests::iceMustBeWithinTwentyBlocksOfTheWater),
             new Test(LogStrippingGameTests.class, "everyModLogAndWoodStripsWithAnAxe",
                     LogStrippingGameTests::everyModLogAndWoodStripsWithAnAxe),
+            new Test(TreeGrowthGameTests.class, "everyTreeGrowsFromSaplingWithBoneMeal",
+                    TreeGrowthGameTests::everyTreeGrowsFromSaplingWithBoneMeal),
+            new Test(TreeGrowthGameTests.class, "everyTreeGrowsNaturallyFromRandomTicks",
+                    TreeGrowthGameTests::everyTreeGrowsNaturallyFromRandomTicks, "empty", NATURAL_GROWTH_MAX_TICKS, false),
+            new Test(TreeGrowthGameTests.class, "everyTreeLeafDecaysOnceItsTrunkIsBroken",
+                    TreeGrowthGameTests::everyTreeLeafDecaysOnceItsTrunkIsBroken),
             new Test(DenseCloudBuddingGameTests.class, "cloudCondenserBuildingDemonstratesTheMechanic",
                     DenseCloudBuddingGameTests::cloudCondenserBuildingDemonstratesTheMechanic));
 

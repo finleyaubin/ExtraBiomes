@@ -8,5 +8,5 @@ import net.winepicfin.extrabiomes.worldgen.ModConfigureFeatures;
 // abstract class overriding getConfiguredFeature) - single-feature growers like this one just
 // build a TreeGrower instance directly, matching vanilla's own AZALEA/BIRCH growers' shape.
 public class MysticTreeGrower {
-    public static final TreeGrower GROWER = new TreeGrower("mystic", WeightedList.of(), WeightedList.of(ModConfigureFeatures.MYSTIC_SELECT_KEY), WeightedList.of(), ModConfigureFeatures.MYSTIC_SELECT_KEY);
+    public static final TreeGrower GROWER = new TreeGrower("mystic", WeightedList.of(ModConfigureFeatures.MYSTIC_SELECT_KEY), WeightedList.of(), WeightedList.of(), ModConfigureFeatures.MYSTIC_SELECT_KEY);
 }
