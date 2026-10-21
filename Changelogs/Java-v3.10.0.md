@@ -1,12 +1,14 @@
 # ExtraBiomes for Java Edition v3.10.0
 
-**The first official release of ExtraBiomes for Java Edition.** ExtraBiomes is a world generation mod that adds 26 new biomes to the overworld, along with the mobs, blocks, structures and loot to fill them, from burnt forests and jellyfish-filled oceans to a floating Sky City above the mountains. It brings the Bedrock addon to Java, and it follows twelve public betas.
+**The first official release of ExtraBiomes for Java Edition.** The Java version of the mod has been in development on and off since 2023 so I am very happy too finally have the first non beta release :D
+this release has been developed to maintain almost full parity with the bedrock version v3.1.0 (yes this is also supposed to be 3.10.0 but made a typo in the first beta so kept it lmao), yet there are some very minor differences between the 2 platforms.
+this changelog is a brief overview of the whole java mod :) 
 
 ## Requirements
 - Minecraft 1.20.1, 1.20.2, 1.20.4, 1.20.6, 1.21.1, 1.21.3, 1.21.4, 1.21.5, 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2 or 26.3.
 - Fabric (every version), NeoForge (1.20.2 and up) or Forge (1.20.1 and 1.20.2).
 - Required mods: [TerraBlender](https://modrinth.com/mod/terrablender), [Architectury API](https://modrinth.com/mod/architectury-api) and [GeckoLib](https://modrinth.com/mod/geckolib), plus [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric.
-- Optional: [Create](https://modrinth.com/mod/create), which gives The Netherlands' windmill moving parts.
+- Optional: [Create](https://modrinth.com/mod/create), which gives The Netherland's windmill moving parts.
 
 ## Biomes
 26 new overworld biomes.
@@ -20,10 +22,10 @@
   - On the surface there are crevasses with snow bridges, and meltwater streams ending in plunge pools, some with geysers of potent sulfur (1.26.2 and up). Streams can sink into shafts that bore down through the ice into large chambers. The water is a clear pale blue.
   - It rains instead of snows, so surface water doesn't freeze.
 - **The Netherlands:** tulip fields, wheat fields and windmills on the surface, with a mini Nether underneath. The netherrack runs down to bedrock, with basalt, blackstone and its own nether ores. **The Netherlands Mutated** swaps the tulips for wheat fields.
-- **Sky City:** see [Structures](#structures).
+- **Sky City:** see [Structures](##structures).
 
 ### Surface biomes
-- **Charred Forest**
+- **Charred Forest** A burnt forest biome with petrified trees, some smoke and fire, plus a thick smokey fog in the air.
 - **Cold Mesa:** a mesa in a cooler climate, with the underground mesa generating beneath it. **Cold Mesa Plateau** is its eroded mountain form, and **Cold Mesa Bryce** adds Bryce pillars.
 - **Deep Dark Forest:** a forest corrupted by sculk.
 - **Desert Bryce:** a desert with towering Bryce pillars.
@@ -31,7 +33,7 @@
 - **Future Desert:** a very rare desert of white concrete "sand" and little futuristic trees.
 - **Grand Oasis:** a desert with streaks of red sand, lots of palm trees, hidden treasure and the bones of giants.
 - **Jellyfish Fields:** a mossy sea floor with custom coral structures and sea pickles, home to jellyfish.
-- **Jungle Marsh**
+- **Jungle Marsh** A swampy jungle biome.
 - **Jungle Pillars:** a jungle with huge stone pillars covered in vegetation and weathered with moss, vines and varied stone.
 - **Lush Mesa:** a mesa humid enough for jungle to spread over its lower sections. **Lush Mesa Bryce** adds Bryce pillars.
 - **Moorlands:** hilly lowlands of long grass, mud and podzol dotted with lakes, with plenty of wildlife.
@@ -43,12 +45,13 @@
 
 ### Underground
 - **Deep Dark Green:** the deep dark competing with the underground jungle.
-- Underground jungles, underground lush mesa, underground mesa and the fungal, fungle jungle and glacial caves.
+- Underground jungles, underground lush mesa, underground mesa and the fungal and fungle jungle.
 - The overhauled vanilla Mushroom Island, with many new mushroom types.
+- **Underground glacier**
+- **Underground mesa**
 
 ### Biome placement
 - Biomes are placed using TerraBlender. The config has biome weights for the primary, secondary, rare and frozen regions.
-- Glacier and Volcanic Moss Tundra are vast, spread-out biomes that turn up less often.
 - Villages can generate in Moorlands, Grand Oasis, Deep Dark Forest and the Taiga Spikes biomes.
 
 ## Structures
@@ -62,35 +65,33 @@
 - Chests use tiered common, rare and epic loot tables, including the razor feather line, golden apples, enchanted books and totems.
 
 ### Others
+<img width="100%" alt="Snow Drifts and spire" src="https://github.com/user-attachments/assets/2df5ecc2-0ae1-48c7-a9ae-49b9e28d9981" />
 - **Windmills** in The Netherlands. They have moving parts when Create is installed.
 - **Snow drifts** in Glacier, Cold Mesa and Taiga Spikes: a cornice ridge, a sastrugi field, a crescent dune, a moraine drift, a giant swirl, a twisting spire, a breaking wave, a spiral cone, and rare 40-block and 150-block spires. The tallest has a reward chest at its summit.
 - Jellycoral structures, Bryce pillars, boulders, stick piles, huge mushrooms, palm groves and oasis fossils.
 
 ## Mobs
-All of them have spawn eggs.
 <img width="100%" alt="Saddled Puckoos" src="https://github.com/user-attachments/assets/10488ce4-9c84-419a-b18c-ef23c84210bd" />
 
 - **Puckoo:** a chicken, koi and duck hybrid that likes eating the moss off pebbles. Tame it with a Mossy Pebble or by riding it. It can be saddled, and spawns on beaches.
-- **Giant Tortoise**
-- **Jellyfish:** found in Jellyfish Fields, and washes up on beaches.
-- **Piranha:** comes in small, normal and large sizes. It is lured away with bait, and there is a config option to make it less aggressive.
-- **Treefrog**
+- **Giant Tortoise** Inspired by the giant tortoises from terraria, a hostile mob that drops scutes.
+- **Jellyfish:** found in Jellyfish Fields, and washes up on beaches and milked for jellyfish jam.
+- **Piranha:** comes in small, normal and large sizes. they are lured away with bait, they spawn in jungle and swamp water, a single one does little damage, but they can spawn in large groups which is where they get scary and there is a config option to make them less aggressive.
+- **Treefrog** spawns in swamps jungles and 
 - **Hoppleshroom:** found in mushroom biomes.
-- **Harpy**
+- **Harpy** a flying mob also inspired by terraria, they throw razer feathers at players which they drop on death. 
 - **Worm:** spawns more often in rain and always in thunderstorms. Place a worm with a right-click, pick it up with shift-right-click, and breed two in a composter with compost.
-- **Snow golems** spawn deep underground in the Glacier.
 
 ## Blocks and Items
-<img width="100%" alt="New Spawn Eggs" src="https://github.com/user-attachments/assets/4fdd19cd-5ef6-4c2e-8634-d5ee4591d886" />
+<img alt="All of the blocks added by the mod" src="https://github.com/user-attachments/assets/b664a534-c310-4971-bcfc-e02434d9d464" />
 
 - **Wood sets:** Mystic, Sky, Gilded Sky and Palm, each with a full set of blocks, stripped logs, doors, signs, hanging signs and boats.
 - **Dense Cloud:** a translucent cloud block with brick, slab and stair variants. It gives a floaty slow fall, and can be farmed (see below).
-- **Nether ores:** coal, copper, emerald, iron, lapis and redstone, found in The Netherlands.
-- **Grass Stone:** forms the sea floor of Jellyfish Fields.
-- **Pebbles and Mossy Pebbles:** hold right-click and release to throw, like a bow.
+- **Nether ores:** coal, copper, emerald, iron, lapis and redstone, found in The underground Netherlands.
+- **Grass Stone:** forms the sea floor of Jellyfish Fields can be crafted with grass and stone.
+- **Pebbles and Mossy Pebbles:** hold right-click and release to throw, like a bow, can be placed on the ground with a shift click and then stacked, and also mossy pebbles are used to breed puckoos.
 - Stick Piles, Black Sand and Black Sandstone, huge colored mushrooms, Goo, and Bait for luring piranhas.
 - **Gear and food:** Frog Helmet, Jellyfishing Net, Razor Feathers (diamond and netherite) and Cooked Piranha.
-- The block and item tags are filled in, so recipes and other mods recognize our wood, saplings, sand, stairs, slabs and ores.
 
 ### Dense Cloud farming
 <img width="100%" alt="Dense Cloud Farm" src="https://github.com/user-attachments/assets/e274c269-ffec-41e7-9d5f-d41a5e558e93" />
@@ -108,7 +109,6 @@ Build a column with magma at the bottom, water on top of it, and a blue ice bloc
 ## Visuals and sound
 - LabPBR normal and specular maps are included for shader packs. Heightmaps and a few blocks still need tweaking.
 - The Glacier has an ambient ice cracking and groaning sound (sources in credits.md).
-- The mod menu entry has an icon and links to the project page and issue tracker.
 
 ## Compatibility
 - **Create:** The Netherlands' windmill generates as a working Create variant.
@@ -118,4 +118,4 @@ Build a column with magma at the bottom, water on top of it, and a blue ice bloc
 ## Licence
 ExtraBiomes is licensed under GPL-3.0.
 
-This is a first release, so please report anything that looks wrong on the GitHub issue tracker.
+There may still be some bugs so please report any on the issue tracker :)
