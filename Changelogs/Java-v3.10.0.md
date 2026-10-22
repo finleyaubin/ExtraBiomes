@@ -1,6 +1,6 @@
 # ExtraBiomes for Java Edition v3.10.0
 
-**The first official release of ExtraBiomes for Java Edition.** The Java version of the mod has been in development on and off since 2023 so I am very happy too finally have the first non beta release :D
+**The first official release of ExtraBiomes for Java Edition.** The Java version of the mod has been in development on and off since 2023 so I am very happy to finally have the first non beta release :D
 this release has been developed to maintain almost full parity with the bedrock version v3.1.0 (yes this is also supposed to be 3.10.0 but made a typo in the first beta so kept it lmao), yet there are some very minor differences between the 2 platforms.
 this changelog is a brief overview of the whole java mod :) 
 
@@ -8,7 +8,7 @@ this changelog is a brief overview of the whole java mod :)
 - Minecraft 1.20.1, 1.20.2, 1.20.4, 1.20.6, 1.21.1, 1.21.3, 1.21.4, 1.21.5, 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2 or 26.3.
 - Fabric (every version), NeoForge (1.20.2 and up) or Forge (1.20.1 and 1.20.2).
 - Required mods: [TerraBlender](https://modrinth.com/mod/terrablender), [Architectury API](https://modrinth.com/mod/architectury-api) and [GeckoLib](https://modrinth.com/mod/geckolib), plus [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric.
-- Optional: [Create](https://modrinth.com/mod/create), which gives The Netherland's windmill moving parts.
+- Optional: [Create](https://modrinth.com/mod/create), which gives The Netherlands' windmill moving parts.
 
 ## Biomes
 26 new overworld biomes.
@@ -19,10 +19,10 @@ this changelog is a brief overview of the whole java mod :)
 - **Floating Jungle:** a jungle on the world's tallest peaks, with sky islands hanging 28 to 60 blocks above them. Islands have vines, roots and waterfalls trailing from their undersides, and some are joined by giant log canopy bridges. The rarest archipelago has an overgrown ruin around a chest of loot, and one rare island carries a vanilla jungle temple. Colossal jungle trees, 100 to 130 blocks tall, rise from the peaks.
 - **Glacier:** an enormous block of ice stretching down to bedrock.
   - Underground, the caves are geothermal. They have basalt-lined lava pools, lavafalls, glowing magma veins, deep blue ice, snow and basalt pillars, meltwater pools and frozen lakes. Chests are sealed inside blocks of ice, and snow golems spawn deep down.
-  - On the surface there are crevasses with snow bridges, and meltwater streams ending in plunge pools, some with geysers of potent sulfur (1.26.2 and up). Streams can sink into shafts that bore down through the ice into large chambers. The water is a clear pale blue.
+  - On the surface there are crevasses with snow bridges, and meltwater streams ending in plunge pools, some with geysers of potent sulfur (26.2 and up). Streams can sink into shafts that bore down through the ice into large chambers. The water is a clear pale blue.
   - It rains instead of snows, so surface water doesn't freeze.
 - **The Netherlands:** tulip fields, wheat fields and windmills on the surface, with a mini Nether underneath. The netherrack runs down to bedrock, with basalt, blackstone and its own nether ores. **The Netherlands Mutated** swaps the tulips for wheat fields.
-- **Sky City:** see [Structures](##structures).
+- **Sky City (structure):** a floating city above the mountains, see [Structures](#structures).
 
 ### Surface biomes
 - **Charred Forest** A burnt forest biome with petrified trees, some smoke and fire, plus a thick smokey fog in the air.
@@ -48,7 +48,6 @@ this changelog is a brief overview of the whole java mod :)
 - Underground jungles, underground lush mesa, underground mesa and the fungal and fungle jungle.
 - The overhauled vanilla Mushroom Island, with many new mushroom types.
 - **Underground glacier**
-- **Underground mesa**
 
 ### Biome placement
 - Biomes are placed using TerraBlender. The config has biome weights for the primary, secondary, rare and frozen regions.
@@ -79,7 +78,7 @@ this changelog is a brief overview of the whole java mod :)
 - **Piranha:** comes in small, normal and large sizes. they are lured away with bait, they spawn in jungle and swamp water, a single one does little damage, but they can spawn in large groups which is where they get scary and there is a config option to make them less aggressive.
 - **Treefrog** spawns in swamps jungles and 
 - **Hoppleshroom:** found in mushroom biomes.
-- **Harpy** a flying mob also inspired by terraria, they throw razer feathers at players which they drop on death. 
+- **Harpy** a flying mob also inspired by terraria, they throw razor feathers at players which they drop on death. 
 - **Worm:** spawns more often in rain and always in thunderstorms. Place a worm with a right-click, pick it up with shift-right-click, and breed two in a composter with compost.
 
 ## Blocks and Items
@@ -118,4 +117,4 @@ Build a column with magma at the bottom, water on top of it, and a blue ice bloc
 ## Licence
 ExtraBiomes is licensed under GPL-3.0.
 
-There may still be some bugs so please report any on the issue tracker :)
+Worlds made on any 3.10.0 beta are compatible with this release. There may still be some bugs so please report any on the issue tracker :)
