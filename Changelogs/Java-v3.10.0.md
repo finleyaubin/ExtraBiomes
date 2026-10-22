@@ -4,7 +4,7 @@
 this release has been developed to maintain almost full parity with the bedrock version v3.1.0 (yes this is also supposed to be 3.10.0 but made a typo in the first beta so kept it lmao), yet there are some very minor differences between the 2 platforms.
 this changelog is a brief overview of the whole java mod :) 
 
-## Requirements
+## Supported versions and Requirements
 - Minecraft 1.20.1, 1.20.2, 1.20.4, 1.20.6, 1.21.1, 1.21.3, 1.21.4, 1.21.5, 1.21.8, 1.21.10, 1.21.11, 26.1.2, 26.2 or 26.3.
 - Fabric (every version), NeoForge (1.20.2 and up) or Forge (1.20.1 and 1.20.2).
 - Required mods: [TerraBlender](https://modrinth.com/mod/terrablender), [Architectury API](https://modrinth.com/mod/architectury-api) and [GeckoLib](https://modrinth.com/mod/geckolib), plus [Fabric API](https://modrinth.com/mod/fabric-api) on Fabric.
@@ -25,6 +25,7 @@ this changelog is a brief overview of the whole java mod :)
 - **Sky City (structure):** a floating city above the mountains, see [Structures](#structures).
 
 ### Surface biomes
+<img width="100%" alt="Jungal Pillars" src="https://github.com/user-attachments/assets/2cc2b2f7-82bb-46de-b193-0e9303086b26" />
 - **Charred Forest** A burnt forest biome with petrified trees, some smoke and fire, plus a thick smokey fog in the air.
 - **Cold Mesa:** a mesa in a cooler climate, with the underground mesa generating beneath it. **Cold Mesa Plateau** is its eroded mountain form, and **Cold Mesa Bryce** adds Bryce pillars.
 - **Deep Dark Forest:** a forest corrupted by sculk.
@@ -44,10 +45,12 @@ this changelog is a brief overview of the whole java mod :)
 - **Volcanic Moss Tundra:** an Iceland-inspired landscape of black sand, black sandstone and blackstone rocks, with lava rivers between basalt walls and moss that grows thicker with height.
 
 ### Underground
+<img width="100%" alt="Glacial Caves at lava level" src="https://github.com/user-attachments/assets/1db2ae89-0cd4-4393-9578-3dab3a70295e" />
+
+- **Underground glacier** this came before the vanilla ice caves were announced lol, I have since tried to revamp it to add some verity compared too the vanilla ice caves with some new fetures loot and sound effects :).
 - **Deep Dark Green:** the deep dark competing with the underground jungle.
 - Underground jungles, underground lush mesa, underground mesa and the fungal and fungle jungle.
 - The overhauled vanilla Mushroom Island, with many new mushroom types.
-- **Underground glacier**
 
 ### Biome placement
 - Biomes are placed using TerraBlender. The config has biome weights for the primary, secondary, rare and frozen regions.
@@ -65,8 +68,9 @@ this changelog is a brief overview of the whole java mod :)
 
 ### Others
 <img width="100%" alt="Snow Drifts and spire" src="https://github.com/user-attachments/assets/2df5ecc2-0ae1-48c7-a9ae-49b9e28d9981" />
+
 - **Windmills** in The Netherlands. They have moving parts when Create is installed.
-- **Snow drifts** in Glacier, Cold Mesa and Taiga Spikes: a cornice ridge, a sastrugi field, a crescent dune, a moraine drift, a giant swirl, a twisting spire, a breaking wave, a spiral cone, and rare 40-block and 150-block spires. The tallest has a reward chest at its summit.
+- **Snow drifts** in Glacier, Cold Mesa and Taiga Spikes, there are a fair few different variations and rare 40-block and 150-block tall spiral snow and ioce spires. The tallest has a reward chest at its summit.
 - Jellycoral structures, Bryce pillars, boulders, stick piles, huge mushrooms, palm groves and oasis fossils.
 
 ## Mobs
@@ -76,7 +80,7 @@ this changelog is a brief overview of the whole java mod :)
 - **Giant Tortoise** Inspired by the giant tortoises from terraria, a hostile mob that drops scutes.
 - **Jellyfish:** found in Jellyfish Fields, and washes up on beaches and milked for jellyfish jam.
 - **Piranha:** comes in small, normal and large sizes. they are lured away with bait, they spawn in jungle and swamp water, a single one does little damage, but they can spawn in large groups which is where they get scary and there is a config option to make them less aggressive.
-- **Treefrog** spawns in swamps jungles and 
+- **Treefrog** spawns in swamps jungles and drops frogs legs which can bee food or turned into a frog helmet.
 - **Hoppleshroom:** found in mushroom biomes.
 - **Harpy** a flying mob also inspired by terraria, they throw razor feathers at players which they drop on death. 
 - **Worm:** spawns more often in rain and always in thunderstorms. Place a worm with a right-click, pick it up with shift-right-click, and breed two in a composter with compost.
