@@ -1,5 +1,5 @@
 # ExtraBiomes 3.1.0
-This release brings the Bedrock edition much closer to Java: three new biomes (Deep Dark Forest, Volcanic Moss Tundra and the Glacier), a floating Jungle, a revamped underground Netherlands, snow drifts, a rebuilt Sky City with farmable dense cloud, chest boats, new villages, worm breeding and a lot of fixes.
+This release Comes with the release of the first full java version of the mod too! it adds 2 new biomes and overhauled some existing biomes too, this includes the glacier and glacial caves to try too differentiate them from the new vanilla ice caves a bit :)
 
 # Changes
 ## Biomes
