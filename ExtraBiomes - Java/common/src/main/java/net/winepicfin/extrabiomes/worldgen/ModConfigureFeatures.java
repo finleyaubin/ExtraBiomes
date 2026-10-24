@@ -45,6 +45,7 @@ public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_SELECT_KEY = registerKey("mystic_select");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SKY_KEY = registerKey("sky");
     public static final ResourceKey<ConfiguredFeature<?, ?>> CHARRED_KEY = registerKey("charred");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> LARCH_KEY = registerKey("larch");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> LUSH_GRASS_KEY = registerKey("lush_grass");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRAND_OASIS_DEAD_BUSH_KEY = registerKey("grand_oasis_dead_bush");
@@ -94,6 +95,13 @@ public class ModConfigureFeatures {
                 BlockStateProvider.simple(Blocks.AIR),
                 new BlobFoliagePlacer(ConstantInt.of(0),ConstantInt.of(0),0),
                 new TwoLayersFeatureSize(0, 0, 0), belowTrunk).build()
+        );
+        register(context, LARCH_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.LARCH_LOG.get()),
+                new StraightTrunkPlacer(30, 10, 0),
+                BlockStateProvider.simple(ModBlocks.LARCH_LEAVES.get()),
+                new SpruceFoliagePlacer(ConstantInt.of(4), ConstantInt.of(2), UniformInt.of(3, 5)),
+                new TwoLayersFeatureSize(15, 10, 6)).build()
         );
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));
