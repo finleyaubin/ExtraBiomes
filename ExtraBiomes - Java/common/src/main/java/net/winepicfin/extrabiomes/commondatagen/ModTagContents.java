@@ -19,22 +19,22 @@ public final class ModTagContents {
     }
 
     public static final List<RegistrySupplier<Block>> WOODEN_STAIRS = List.of(
-            ModBlocks.MYSTIC_STAIRS, ModBlocks.SKY_STAIRS, ModBlocks.PALM_STAIRS, ModBlocks.GILDED_SKY_STAIRS);
+            ModBlocks.MYSTIC_STAIRS, ModBlocks.SKY_STAIRS, ModBlocks.PALM_STAIRS, ModBlocks.LARCH_STAIRS, ModBlocks.GILDED_SKY_STAIRS);
 
     public static final List<RegistrySupplier<Block>> WOODEN_SLABS = List.of(
-            ModBlocks.MYSTIC_SLAB, ModBlocks.SKY_SLAB, ModBlocks.PALM_SLAB, ModBlocks.GILDED_SKY_SLAB);
+            ModBlocks.MYSTIC_SLAB, ModBlocks.SKY_SLAB, ModBlocks.PALM_SLAB, ModBlocks.LARCH_SLAB, ModBlocks.GILDED_SKY_SLAB);
 
     public static final List<RegistrySupplier<Block>> WOODEN_BUTTONS = List.of(
-            ModBlocks.MYSTIC_BUTTON, ModBlocks.SKY_BUTTON, ModBlocks.PALM_BUTTON, ModBlocks.GILDED_SKY_BUTTON);
+            ModBlocks.MYSTIC_BUTTON, ModBlocks.SKY_BUTTON, ModBlocks.PALM_BUTTON, ModBlocks.LARCH_BUTTON, ModBlocks.GILDED_SKY_BUTTON);
 
     public static final List<RegistrySupplier<Block>> WOODEN_PRESSURE_PLATES = List.of(
-            ModBlocks.MYSTIC_PRESSURE_PLATE, ModBlocks.SKY_PRESSURE_PLATE, ModBlocks.PALM_PRESSURE_PLATE, ModBlocks.GILDED_SKY_PRESSURE_PLATE);
+            ModBlocks.MYSTIC_PRESSURE_PLATE, ModBlocks.SKY_PRESSURE_PLATE, ModBlocks.PALM_PRESSURE_PLATE, ModBlocks.LARCH_PRESSURE_PLATE, ModBlocks.GILDED_SKY_PRESSURE_PLATE);
 
     public static final List<RegistrySupplier<Block>> WOODEN_DOORS = List.of(
-            ModBlocks.MYSTIC_DOOR, ModBlocks.SKY_DOOR, ModBlocks.PALM_DOOR, ModBlocks.GILDED_SKY_DOOR);
+            ModBlocks.MYSTIC_DOOR, ModBlocks.SKY_DOOR, ModBlocks.PALM_DOOR, ModBlocks.LARCH_DOOR, ModBlocks.GILDED_SKY_DOOR);
 
     public static final List<RegistrySupplier<Block>> WOODEN_TRAPDOORS = List.of(
-            ModBlocks.MYSTIC_TRAPDOOR, ModBlocks.SKY_TRAPDOOR, ModBlocks.PALM_TRAPDOOR, ModBlocks.GILDED_SKY_TRAPDOOR);
+            ModBlocks.MYSTIC_TRAPDOOR, ModBlocks.SKY_TRAPDOOR, ModBlocks.PALM_TRAPDOOR, ModBlocks.LARCH_TRAPDOOR, ModBlocks.GILDED_SKY_TRAPDOOR);
 
     /** Non-wooden stairs/slabs/walls (the wooden ones are added through the wooden_* tags). */
     public static final List<RegistrySupplier<Block>> STONE_STAIRS = List.of(
@@ -48,35 +48,35 @@ public final class ModTagContents {
     public static final List<RegistrySupplier<Block>> WALLS = List.of(ModBlocks.BLACK_SANDSTONE_WALL);
 
     public static final List<RegistrySupplier<Block>> STANDING_SIGNS = List.of(
-            ModBlocks.MYSTIC_SIGN, ModBlocks.SKY_SIGN, ModBlocks.PALM_SIGN, ModBlocks.GILDED_SKY_SIGN);
+            ModBlocks.MYSTIC_SIGN, ModBlocks.SKY_SIGN, ModBlocks.PALM_SIGN, ModBlocks.LARCH_SIGN, ModBlocks.GILDED_SKY_SIGN);
 
     public static final List<RegistrySupplier<Block>> WALL_SIGNS = List.of(
-            ModBlocks.MYSTIC_WALL_SIGN, ModBlocks.SKY_WALL_SIGN, ModBlocks.PALM_WALL_SIGN, ModBlocks.GILDED_SKY_WALL_SIGN);
+            ModBlocks.MYSTIC_WALL_SIGN, ModBlocks.SKY_WALL_SIGN, ModBlocks.PALM_WALL_SIGN, ModBlocks.LARCH_WALL_SIGN, ModBlocks.GILDED_SKY_WALL_SIGN);
 
     public static final List<RegistrySupplier<Block>> CEILING_HANGING_SIGNS = List.of(
-            ModBlocks.MYSTIC_HANGING_SIGN, ModBlocks.SKY_HANGING_SIGN, ModBlocks.PALM_HANGING_SIGN, ModBlocks.GILDED_SKY_HANGING_SIGN);
+            ModBlocks.MYSTIC_HANGING_SIGN, ModBlocks.SKY_HANGING_SIGN, ModBlocks.PALM_HANGING_SIGN, ModBlocks.LARCH_HANGING_SIGN, ModBlocks.GILDED_SKY_HANGING_SIGN);
 
     public static final List<RegistrySupplier<Block>> WALL_HANGING_SIGNS = List.of(
-            ModBlocks.MYSTIC_WALL_HANGING_SIGN, ModBlocks.SKY_WALL_HANGING_SIGN, ModBlocks.PALM_WALL_HANGING_SIGN, ModBlocks.GILDED_SKY_WALL_HANGING_SIGN);
+            ModBlocks.MYSTIC_WALL_HANGING_SIGN, ModBlocks.SKY_WALL_HANGING_SIGN, ModBlocks.PALM_WALL_HANGING_SIGN, ModBlocks.LARCH_WALL_HANGING_SIGN, ModBlocks.GILDED_SKY_WALL_HANGING_SIGN);
 
     public static final List<RegistrySupplier<Item>> SIGN_ITEMS = List.of(
-            ModItems.MYSTIC_SIGN, ModItems.SKY_SIGN, ModItems.PALM_SIGN, ModItems.GILDED_SKY_SIGN);
+            ModItems.MYSTIC_SIGN, ModItems.SKY_SIGN, ModItems.PALM_SIGN, ModItems.LARCH_SIGN, ModItems.GILDED_SKY_SIGN);
 
     public static final List<RegistrySupplier<Item>> HANGING_SIGN_ITEMS = List.of(
-            ModItems.MYSTIC_HANGING_SIGN, ModItems.SKY_HANGING_SIGN, ModItems.PALM_HANGING_SIGN, ModItems.GILDED_SKY_HANGING_SIGN);
+            ModItems.MYSTIC_HANGING_SIGN, ModItems.SKY_HANGING_SIGN, ModItems.PALM_HANGING_SIGN, ModItems.LARCH_HANGING_SIGN, ModItems.GILDED_SKY_HANGING_SIGN);
 
     public static final List<RegistrySupplier<Block>> SAPLINGS = List.of(
-            ModBlocks.MYSTIC_SAPLING, ModBlocks.SKY_SAPLING, ModBlocks.PALM_SAPLING);
+            ModBlocks.MYSTIC_SAPLING, ModBlocks.SKY_SAPLING, ModBlocks.PALM_SAPLING, ModBlocks.LARCH_SAPLING);
 
     public static final List<RegistrySupplier<Block>> SAND = List.of(ModBlocks.BLACK_SAND);
 
     /** Logs with the bark stripped, for c:stripped_logs. */
     public static final List<RegistrySupplier<Block>> STRIPPED_LOGS = List.of(
-            ModBlocks.STRIPPED_MYSTIC_LOG, ModBlocks.STRIPPED_SKY_LOG, ModBlocks.STRIPPED_PALM_LOG, ModBlocks.STRIPPED_GILDED_SKY_LOG);
+            ModBlocks.STRIPPED_MYSTIC_LOG, ModBlocks.STRIPPED_SKY_LOG, ModBlocks.STRIPPED_PALM_LOG, ModBlocks.STRIPPED_LARCH_LOG, ModBlocks.STRIPPED_GILDED_SKY_LOG);
 
     /** The all-bark "wood" blocks with the bark stripped, for c:stripped_woods. */
     public static final List<RegistrySupplier<Block>> STRIPPED_WOODS = List.of(
-            ModBlocks.STRIPPED_MYSTIC_WOOD, ModBlocks.STRIPPED_SKY_WOOD, ModBlocks.STRIPPED_PALM_WOOD, ModBlocks.STRIPPED_GILDED_SKY_WOOD);
+            ModBlocks.STRIPPED_MYSTIC_WOOD, ModBlocks.STRIPPED_SKY_WOOD, ModBlocks.STRIPPED_PALM_WOOD, ModBlocks.STRIPPED_LARCH_WOOD, ModBlocks.STRIPPED_GILDED_SKY_WOOD);
 
     /** Nether ores, for c:ores. */
     public static final List<RegistrySupplier<Block>> ORES = List.of(
