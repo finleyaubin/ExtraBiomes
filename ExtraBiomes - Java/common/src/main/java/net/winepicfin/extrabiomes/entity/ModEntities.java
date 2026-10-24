@@ -77,7 +77,8 @@ public class ModEntities {
     public static final RegistrySupplier<EntityType<ChestBoat>> SKY_CHEST_BOAT = registerChestBoat("sky_chest_boat", () -> ModItems.SKY_CHEST_BOAT.get());
     public static final RegistrySupplier<EntityType<Boat>> GILDED_SKY_BOAT = registerBoat("gilded_sky_boat", () -> ModItems.GILDED_SKY_BOAT.get());
     public static final RegistrySupplier<EntityType<ChestBoat>> GILDED_SKY_CHEST_BOAT = registerChestBoat("gilded_sky_chest_boat", () -> ModItems.GILDED_SKY_CHEST_BOAT.get());
-
+    public static final RegistrySupplier<EntityType<Boat>> LARCH_BOAT = registerBoat("larch_boat", () -> ModItems.LARCH_BOAT.get());
+    public static final RegistrySupplier<EntityType<ChestBoat>> LARCH_CHEST_BOAT = registerChestBoat("larch_chest_boat", () -> ModItems.LARCH_CHEST_BOAT.get());
     private static RegistrySupplier<EntityType<Boat>> registerBoat(String name, Supplier<Item> dropItem) {
         return ENTITIES.register(name, () -> EntityType.Builder.<Boat>of(
                         (type, level) -> new Boat(type, level, dropItem), MobCategory.MISC)

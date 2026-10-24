@@ -10,4 +10,5 @@ public class ModWoodTypes {
     public static final WoodType PALM = ExtraBiomesExpectPlatform.registerWoodType(new WoodType(ExtraBiomes.MOD_ID+":palm", BlockSetType.OAK));
     public static final WoodType SKY = ExtraBiomesExpectPlatform.registerWoodType(new WoodType(ExtraBiomes.MOD_ID+":sky", BlockSetType.OAK));
     public static final WoodType GILDED_SKY = ExtraBiomesExpectPlatform.registerWoodType(new WoodType(ExtraBiomes.MOD_ID+":gilded_sky", BlockSetType.OAK));
+    public static final WoodType LARCH = ExtraBiomesExpectPlatform.registerWoodType(new WoodType(ExtraBiomes.MOD_ID+":larch", BlockSetType.OAK));
 }

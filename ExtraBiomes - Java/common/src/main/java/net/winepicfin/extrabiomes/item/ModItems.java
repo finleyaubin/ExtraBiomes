@@ -53,6 +53,9 @@ public class ModItems {
     public static final RegistrySupplier<Item> SKY_HANGING_SIGN = ITEMS.register("sky_hanging_sign",()-> new HangingSignItem(ModBlocks.SKY_HANGING_SIGN.get(),ModBlocks.SKY_WALL_HANGING_SIGN.get(),new Item.Properties().setId(itemId("sky_hanging_sign")).stacksTo(16)));
     public static final RegistrySupplier<Item> GILDED_SKY_SIGN = ITEMS.register("gilded_sky_sign",()-> new StandingAndWallBlockItem(ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get(), net.minecraft.core.Direction.DOWN, new Item.Properties().setId(itemId("gilded_sky_sign")).stacksTo(16)));
     public static final RegistrySupplier<Item> GILDED_SKY_HANGING_SIGN = ITEMS.register("gilded_sky_hanging_sign",()-> new HangingSignItem(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),new Item.Properties().setId(itemId("gilded_sky_hanging_sign")).stacksTo(16)));
+    public static final RegistrySupplier<Item> LARCH_SIGN = ITEMS.register("larch_sign",()-> new StandingAndWallBlockItem(ModBlocks.LARCH_SIGN.get(),ModBlocks.LARCH_WALL_SIGN.get(), net.minecraft.core.Direction.DOWN, new Item.Properties().setId(itemId("larch_sign")).stacksTo(16)));
+    public static final RegistrySupplier<Item> LARCH_HANGING_SIGN = ITEMS.register("larch_hanging_sign",()-> new HangingSignItem(ModBlocks.LARCH_HANGING_SIGN.get(),ModBlocks.LARCH_WALL_HANGING_SIGN.get(),new Item.Properties().setId(itemId("larch_hanging_sign")).stacksTo(16)));
+
 
     public static final RegistrySupplier<Item> MYSTIC_BOAT = ITEMS.register("mystic_boat",()-> new BoatItem(ModEntities.MYSTIC_BOAT.get(), new Item.Properties().setId(itemId("mystic_boat")).stacksTo(1)));
     public static final RegistrySupplier<Item> MYSTIC_CHEST_BOAT = ITEMS.register("mystic_chest_boat",()-> new BoatItem(ModEntities.MYSTIC_CHEST_BOAT.get(), new Item.Properties().setId(itemId("mystic_chest_boat")).stacksTo(1)));
@@ -62,14 +65,17 @@ public class ModItems {
     public static final RegistrySupplier<Item> SKY_CHEST_BOAT = ITEMS.register("sky_chest_boat",()-> new BoatItem(ModEntities.SKY_CHEST_BOAT.get(), new Item.Properties().setId(itemId("sky_chest_boat")).stacksTo(1)));
     public static final RegistrySupplier<Item> GILDED_SKY_BOAT = ITEMS.register("gilded_sky_boat",()-> new BoatItem(ModEntities.GILDED_SKY_BOAT.get(), new Item.Properties().setId(itemId("gilded_sky_boat")).stacksTo(1)));
     public static final RegistrySupplier<Item> GILDED_SKY_CHEST_BOAT = ITEMS.register("gilded_sky_chest_boat",()-> new BoatItem(ModEntities.GILDED_SKY_CHEST_BOAT.get(), new Item.Properties().setId(itemId("gilded_sky_chest_boat")).stacksTo(1)));
+    public static final RegistrySupplier<Item> LARCH_BOAT = ITEMS.register("larch_boat",()-> new BoatItem(ModEntities.LARCH_BOAT.get(), new Item.Properties().setId(itemId("larch_boat")).stacksTo(1)));
+    public static final RegistrySupplier<Item> LARCH_CHEST_BOAT = ITEMS.register("larch_chest_boat",()-> new BoatItem(ModEntities.LARCH_CHEST_BOAT.get(), new Item.Properties().setId(itemId("larch_chest_boat")).stacksTo(1)));
+
 
     // Shared across all 3 loaders' datagen (item tags, item models, creative tab) so the "which wood
     // types have boats, and which texture each uses" list only lives once. BoatModelEntry's texture is
     // the filename stem under textures/item/ - every boat and chest boat item now has its own editable
     // file (chest boat icons are placeholder copies of vanilla's oak_chest_boat.png - see
     // ModItemModelProvider's boatItem() javadoc-comment in each loader for the full texture story).
-    public static final List<RegistrySupplier<Item>> BOAT_ITEMS = List.of(MYSTIC_BOAT, PALM_BOAT, SKY_BOAT, GILDED_SKY_BOAT);
-    public static final List<RegistrySupplier<Item>> CHEST_BOAT_ITEMS = List.of(MYSTIC_CHEST_BOAT, PALM_CHEST_BOAT, SKY_CHEST_BOAT, GILDED_SKY_CHEST_BOAT);
+    public static final List<RegistrySupplier<Item>> BOAT_ITEMS = List.of(MYSTIC_BOAT, PALM_BOAT, SKY_BOAT, GILDED_SKY_BOAT, LARCH_BOAT);
+    public static final List<RegistrySupplier<Item>> CHEST_BOAT_ITEMS = List.of(MYSTIC_CHEST_BOAT, PALM_CHEST_BOAT, SKY_CHEST_BOAT, GILDED_SKY_CHEST_BOAT, LARCH_CHEST_BOAT);
 
     public record BoatModelEntry(RegistrySupplier<Item> item, String texture) {
     }
@@ -82,7 +88,9 @@ public class ModItems {
             new BoatModelEntry(SKY_BOAT, "boat_sky"),
             new BoatModelEntry(SKY_CHEST_BOAT, "boat_sky_chest"),
             new BoatModelEntry(GILDED_SKY_BOAT, "boat_gilded_sky"),
-            new BoatModelEntry(GILDED_SKY_CHEST_BOAT, "boat_gilded_sky_chest")
+            new BoatModelEntry(GILDED_SKY_CHEST_BOAT, "boat_gilded_sky_chest"),
+            new BoatModelEntry(LARCH_BOAT, "boat_larch"),
+            new BoatModelEntry(LARCH_CHEST_BOAT, "boat_larch_chest")
     );
     // Colors match the Bedrock addon's spawn_egg base_color/overlay_color exactly (see the entity
     // .entity.json files under ExtraBiomes - Bedrock/packs/RP/entity/) so the egg tint is consistent
