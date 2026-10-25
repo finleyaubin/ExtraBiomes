@@ -96,6 +96,19 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_SIGN.get(),
                 ModBlocks.SKY_HANGING_SIGN.get(),
                 ModBlocks.SKY_WALL_SIGN.get(),
+                ModBlocks.LARCH_PLANKS.get(),
+                ModBlocks.LARCH_STAIRS.get(),
+                ModBlocks.LARCH_SLAB.get(),
+                ModBlocks.LARCH_BUTTON.get(),
+                ModBlocks.LARCH_PRESSURE_PLATE.get(),
+                ModBlocks.LARCH_FENCE.get(),
+                ModBlocks.LARCH_FENCE_GATE.get(),
+                ModBlocks.LARCH_DOOR.get(),
+                ModBlocks.LARCH_TRAPDOOR.get(),
+                ModBlocks.LARCH_SIGN.get(),
+                ModBlocks.LARCH_HANGING_SIGN.get(),
+                ModBlocks.LARCH_WALL_SIGN.get(),
+                ModBlocks.LARCH_WALL_HANGING_SIGN.get(),
                 ModBlocks.SKY_WALL_HANGING_SIGN.get(),
                 // palm wood
                 ModBlocks.PALM_PLANKS.get(),
@@ -138,6 +151,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.MYSTIC_FENCE.get(),
                 ModBlocks.SKY_FENCE.get(),
                 ModBlocks.PALM_FENCE.get(),
+                ModBlocks.LARCH_FENCE.get(),
                 ModBlocks.GILDED_SKY_FENCE.get()
         );
 
@@ -145,6 +159,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.SKY_FENCE_GATE.get(),
                 ModBlocks.PALM_FENCE_GATE.get(),
+                ModBlocks.LARCH_FENCE_GATE.get(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get()
         );
 
@@ -164,6 +179,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.GILDED_SKY_LOG.get(),
                 ModBlocks.GILDED_SKY_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
+                ModBlocks.LARCH_LOG.get(),
+                ModBlocks.STRIPPED_LARCH_LOG.get(),
+                ModBlocks.LARCH_WOOD.get(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         );
         this.tag(BlockTags.LOGS_THAT_BURN).add(
@@ -182,17 +201,23 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.GILDED_SKY_LOG.get(),
                 ModBlocks.GILDED_SKY_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
+                ModBlocks.LARCH_LOG.get(),
+                ModBlocks.STRIPPED_LARCH_LOG.get(),
+                ModBlocks.LARCH_WOOD.get(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()
         );
         this.tag(BlockTags.LEAVES).add(
                 ModBlocks.MYSTIC_LEAVES.getKey(),
                 ModBlocks.SKY_LEAVES.getKey(),
+                ModBlocks.LARCH_LEAVES.getKey(),
                 ModBlocks.PALM_LEAVES.getKey()
         );
         this.tag(BlockTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get(),
                 ModBlocks.SKY_PLANKS.get(),
                 ModBlocks.PALM_PLANKS.get(),
+                ModBlocks.LARCH_PLANKS.get(),
                 ModBlocks.GILDED_SKY_PLANKS.get()
         );
 
