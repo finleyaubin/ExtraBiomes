@@ -64,6 +64,8 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModModelLayers.SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
         event.registerLayerDefinition(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBodyModel);
         event.registerLayerDefinition(ModModelLayers.GILDED_SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.LARCH_BOAT, BoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.LARCH_CHEST_BOAT, ChestBoatModel::createBodyModel);
     }
 
     @SubscribeEvent

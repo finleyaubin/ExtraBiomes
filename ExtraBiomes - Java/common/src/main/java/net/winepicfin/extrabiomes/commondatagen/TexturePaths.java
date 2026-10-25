@@ -6,7 +6,7 @@ import java.util.Set;
 // Single source of truth for which subfolder under textures/block and textures/item a texture stem lives in.
 public final class TexturePaths {
     private static final String STRIPPED = "stripped_";
-    private static final List<String> WOOD_SETS = List.of("gilded_sky", "mystic", "palm", "sky");
+    private static final List<String> WOOD_SETS = List.of("gilded_sky", "larch", "mystic", "palm", "sky");
     private static final Set<String> FOOD_ITEMS = Set.of("frogs_legs", "cooked_frogs_legs", "cooked_piranha", "jellyfish_jam_bottle");
 
     private TexturePaths() {

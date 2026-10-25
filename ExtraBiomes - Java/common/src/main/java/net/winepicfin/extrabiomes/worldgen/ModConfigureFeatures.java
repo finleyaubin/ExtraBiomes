@@ -95,10 +95,10 @@ public class ModConfigureFeatures {
         );
         register(context, LARCH_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.LARCH_LOG.get()),
-                new StraightTrunkPlacer(30, 10, 0),
+                new StraightTrunkPlacer(14, 6, 0),
                 BlockStateProvider.simple(ModBlocks.LARCH_LEAVES.get()),
-                new SpruceFoliagePlacer(ConstantInt.of(4), ConstantInt.of(2), UniformInt.of(3, 5)),
-                new TwoLayersFeatureSize(15, 10, 6)).build()
+                new SpruceFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(1), UniformInt.of(3, 4)),
+                new TwoLayersFeatureSize(2, 1, 2)).build()
         );
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));
