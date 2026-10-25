@@ -95,6 +95,17 @@ public class ModItemModelProvider extends ItemModelProvider {
         saplingItem(ModBlocks.SKY_SAPLING);
         simpleItem(ModItems.SKY_SIGN);
         simpleItem(ModItems.SKY_HANGING_SIGN);
+        simpleBlockItem(ModBlocks.LARCH_DOOR);
+        fenceItem(ModBlocks.LARCH_FENCE, ModBlocks.LARCH_PLANKS);
+        buttonItem(ModBlocks.LARCH_BUTTON, ModBlocks.LARCH_PLANKS);
+        trapdoorItem(ModBlocks.LARCH_TRAPDOOR);
+        evenSimplerBlockItem(ModBlocks.LARCH_STAIRS);
+        evenSimplerBlockItem(ModBlocks.LARCH_SLAB);
+        evenSimplerBlockItem(ModBlocks.LARCH_PRESSURE_PLATE);
+        evenSimplerBlockItem(ModBlocks.LARCH_FENCE_GATE);
+        saplingItem(ModBlocks.LARCH_SAPLING);
+        simpleItem(ModItems.LARCH_SIGN);
+        simpleItem(ModItems.LARCH_HANGING_SIGN);
         // Palm Wood
         simpleBlockItem(ModBlocks.PALM_DOOR);
         fenceItem(ModBlocks.PALM_FENCE, ModBlocks.PALM_PLANKS);

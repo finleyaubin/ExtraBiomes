@@ -245,6 +245,8 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT));
         }
     }
 }

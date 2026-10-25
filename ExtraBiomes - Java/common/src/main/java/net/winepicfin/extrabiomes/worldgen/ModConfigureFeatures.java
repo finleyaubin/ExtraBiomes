@@ -98,10 +98,10 @@ public class ModConfigureFeatures {
         );
         context.register(LARCH_KEY, new TreeFeature.Builder(
                 BlockStateProvider.of(ModBlocks.LARCH_LOG.get()),
-                new StraightTrunkPlacer(30, 10, 0),
+                new StraightTrunkPlacer(14, 6, 0),
                 BlockStateProvider.of(ModBlocks.LARCH_LEAVES.get()),
-                new SpruceFoliagePlacer(ConstantInt.of(4), ConstantInt.of(2), UniformInt.of(3, 5)),
-                new TwoLayersFeatureSize(15, 10, 6), belowTrunk).build()
+                new SpruceFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(1), UniformInt.of(3, 4)),
+                new TwoLayersFeatureSize(2, 1, 2), belowTrunk).build()
         );
         List<BlockReplacement> grassBlob = List.of(BlockReplacement.replace(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         context.register(LUSH_GRASS_KEY, new OreFeature(grassBlob, 30, 0));

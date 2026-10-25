@@ -23,6 +23,8 @@ public class ModDataMapProvider extends DataMapProvider {
         strip(transformables, ModBlocks.MYSTIC_WOOD, ModBlocks.STRIPPED_MYSTIC_WOOD);
         strip(transformables, ModBlocks.SKY_LOG, ModBlocks.STRIPPED_SKY_LOG);
         strip(transformables, ModBlocks.SKY_WOOD, ModBlocks.STRIPPED_SKY_WOOD);
+        strip(transformables, ModBlocks.LARCH_LOG, ModBlocks.STRIPPED_LARCH_LOG);
+        strip(transformables, ModBlocks.LARCH_WOOD, ModBlocks.STRIPPED_LARCH_WOOD);
         strip(transformables, ModBlocks.GILDED_SKY_LOG, ModBlocks.STRIPPED_GILDED_SKY_LOG);
         strip(transformables, ModBlocks.GILDED_SKY_WOOD, ModBlocks.STRIPPED_GILDED_SKY_WOOD);
         strip(transformables, ModBlocks.PALM_LOG, ModBlocks.STRIPPED_PALM_LOG);

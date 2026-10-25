@@ -219,6 +219,7 @@ public class ExtraBiomesForge
             Sheets.addWoodType(ModWoodTypes.PALM);
             Sheets.addWoodType(ModWoodTypes.SKY);
             Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
+            Sheets.addWoodType(ModWoodTypes.LARCH);
             ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
 
@@ -248,6 +249,8 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT));
         }
     }
 }

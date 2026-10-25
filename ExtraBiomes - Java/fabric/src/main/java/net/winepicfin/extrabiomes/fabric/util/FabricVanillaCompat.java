@@ -76,6 +76,22 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.GILDED_SKY_FENCE_GATE.get(), 5, 20);
         registerFlammable(ModBlocks.GILDED_SKY_DOOR.get(), 5, 20);
         registerFlammable(ModBlocks.GILDED_SKY_TRAPDOOR.get(), 5, 20);
+        // Larch Wood
+        registerFlammable(ModBlocks.LARCH_PLANKS.get(), 5, 5);
+        registerFlammable(ModBlocks.LARCH_LOG.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_WOOD.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_STAIRS.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_SLAB.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_BUTTON.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_PRESSURE_PLATE.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_FENCE.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_FENCE_GATE.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_DOOR.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_TRAPDOOR.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_LARCH_LOG.get(), 5, 20);
+        registerFlammable(ModBlocks.STRIPPED_LARCH_WOOD.get(), 5, 20);
+        registerFlammable(ModBlocks.LARCH_LEAVES.get(), 30, 60);
+        registerFlammable(ModBlocks.LARCH_SAPLING.get(), 5, 20);
 
         // Axe stripping - matches forge/.../block/custom/ModLogs.java's getToolModifiedState
         BlockTransformerHelper.registerStripping(ModBlocks.MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get());
@@ -84,6 +100,8 @@ public class FabricVanillaCompat {
         BlockTransformerHelper.registerStripping(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_WOOD.get());
         BlockTransformerHelper.registerStripping(ModBlocks.GILDED_SKY_LOG.get(), ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
         BlockTransformerHelper.registerStripping(ModBlocks.GILDED_SKY_WOOD.get(), ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.LARCH_LOG.get(), ModBlocks.STRIPPED_LARCH_LOG.get());
+        BlockTransformerHelper.registerStripping(ModBlocks.LARCH_WOOD.get(), ModBlocks.STRIPPED_LARCH_WOOD.get());
         BlockTransformerHelper.registerStripping(ModBlocks.PALM_LOG.get(), ModBlocks.STRIPPED_PALM_LOG.get());
         BlockTransformerHelper.registerStripping(ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPPED_PALM_WOOD.get());
     }

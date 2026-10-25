@@ -159,6 +159,23 @@ public class ModBlockStateProvider implements DataProvider {
         trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), texLoc("sky_trapdoor"));
         signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.SKY_HANGING_SIGN.get(), ModBlocks.SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        blockWithItem(ModBlocks.LARCH_PLANKS);
+        logBlock(ModBlocks.LARCH_LOG.get());
+        logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
+        axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
+        axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
+        blockWithItemCutout(ModBlocks.LARCH_LEAVES);
+        saplingBlock(ModBlocks.LARCH_SAPLING.get());
+        stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        buttonBlock(ModBlocks.LARCH_BUTTON.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        pressurePlateBlock(ModBlocks.LARCH_PRESSURE_PLATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceBlock(ModBlocks.LARCH_FENCE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceGateBlock(ModBlocks.LARCH_FENCE_GATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        doorBlockState(ModBlocks.LARCH_DOOR.get(), texLoc("larch_door_bottom"), texLoc("larch_door_top"));
+        trapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
+        signBlockState(ModBlocks.LARCH_SIGN.get(), ModBlocks.LARCH_WALL_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        hangingSignBlockState(ModBlocks.LARCH_HANGING_SIGN.get(), ModBlocks.LARCH_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock(ModBlocks.PALM_LOG.get());
