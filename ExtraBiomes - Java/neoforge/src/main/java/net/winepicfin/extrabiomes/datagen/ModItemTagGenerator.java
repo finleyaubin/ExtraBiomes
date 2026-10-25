@@ -27,66 +27,78 @@ public class ModItemTagGenerator extends ItemTagsProvider {
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         //this.tag(ItemTags.TRIMMABLE_ARMOR).add(ModItems.FROG_HELMET.get()); does now work with the gecolib model
 
-        this.tag(ItemTags.FENCES).add(
-                ModBlocks.MYSTIC_FENCE.get().asItem(),
-                ModBlocks.SKY_FENCE.get().asItem(),
-                ModBlocks.PALM_FENCE.get().asItem(),
-                ModBlocks.GILDED_SKY_FENCE.get().asItem()
+        this.tag(ItemTags.WOODEN_FENCES).add(
+                ModBlocks.MYSTIC_FENCE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_FENCE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_FENCE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_FENCE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.GILDED_SKY_FENCE.get().asItem().builtInRegistryHolder().key()
         );
 
         this.tag(ItemTags.FENCE_GATES).add(
-                ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
-                ModBlocks.SKY_FENCE_GATE.get().asItem(),
-                ModBlocks.PALM_FENCE_GATE.get().asItem(),
-                ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
+                ModBlocks.MYSTIC_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem().builtInRegistryHolder().key()
         );
 
         this.tag(ItemTags.LOGS).add(
-                ModBlocks.MYSTIC_LOG.get().asItem(),
-                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
-                ModBlocks.MYSTIC_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
-                ModBlocks.SKY_LOG.get().asItem(),
-                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
-                ModBlocks.SKY_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.GILDED_SKY_LOG.get().asItem(),
-                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
-                ModBlocks.GILDED_SKY_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
-                ModBlocks.PALM_LOG.get().asItem(),
-                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
-                ModBlocks.PALM_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
+                ModBlocks.MYSTIC_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.MYSTIC_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.GILDED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_PALM_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_PALM_WOOD.get().asItem().builtInRegistryHolder().key()
         );
         this.tag(ItemTags.LOGS_THAT_BURN).add(
-                ModBlocks.MYSTIC_LOG.get().asItem(),
-                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem(),
-                ModBlocks.MYSTIC_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
-                ModBlocks.SKY_LOG.get().asItem(),
-                ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
-                ModBlocks.SKY_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.GILDED_SKY_LOG.get().asItem(),
-                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
-                ModBlocks.GILDED_SKY_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
-                ModBlocks.PALM_LOG.get().asItem(),
-                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
-                ModBlocks.PALM_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
+                ModBlocks.MYSTIC_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_MYSTIC_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.MYSTIC_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.GILDED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_PALM_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_PALM_WOOD.get().asItem().builtInRegistryHolder().key()
         );
         this.tag(ItemTags.LEAVES).add(
-                ModBlocks.MYSTIC_LEAVES.get().asItem(),
-                ModBlocks.SKY_LEAVES.get().asItem(),
-                ModBlocks.PALM_LEAVES.get().asItem()
+                ModBlocks.MYSTIC_LEAVES.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_LEAVES.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_LEAVES.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_LEAVES.get().asItem().builtInRegistryHolder().key()
         );
         this.tag(ItemTags.PLANKS).add(
-                ModBlocks.MYSTIC_PLANKS.get().asItem(),
-                ModBlocks.SKY_PLANKS.get().asItem(),
-                ModBlocks.PALM_PLANKS.get().asItem(),
-                ModBlocks.GILDED_SKY_PLANKS.get().asItem()
+                ModBlocks.MYSTIC_PLANKS.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.SKY_PLANKS.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_PLANKS.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.PALM_PLANKS.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.GILDED_SKY_PLANKS.get().asItem().builtInRegistryHolder().key()
         );
 
         this.tag(ItemTags.BOATS).add(ModItems.BOAT_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));

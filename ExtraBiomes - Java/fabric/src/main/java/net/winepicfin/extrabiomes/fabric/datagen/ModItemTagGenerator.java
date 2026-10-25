@@ -33,6 +33,7 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         this.valueLookupBuilder(ItemTags.FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
                 ModBlocks.SKY_FENCE.get().asItem(),
+                ModBlocks.LARCH_FENCE.get().asItem(),
                 ModBlocks.PALM_FENCE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem()
         ));
@@ -40,6 +41,7 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         this.valueLookupBuilder(ItemTags.FENCE_GATES).add(keys(
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem(),
+                ModBlocks.LARCH_FENCE_GATE.get().asItem(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
         ));
@@ -53,6 +55,10 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -71,6 +77,10 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -83,11 +93,13 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         this.valueLookupBuilder(ItemTags.LEAVES).add(keys(
                 ModBlocks.MYSTIC_LEAVES.get().asItem(),
                 ModBlocks.SKY_LEAVES.get().asItem(),
+                ModBlocks.LARCH_LEAVES.get().asItem(),
                 ModBlocks.PALM_LEAVES.get().asItem()
         ));
         this.valueLookupBuilder(ItemTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
                 ModBlocks.SKY_PLANKS.get().asItem(),
+                ModBlocks.LARCH_PLANKS.get().asItem(),
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         ));
