@@ -253,6 +253,8 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT, new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_sky.png"), true));
             EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT, new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_gilded_sky.png"), false));
             EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT, new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_gilded_sky.png"), true));
+            EntityRenderers.register(ModEntities.LARCH_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.LARCH_BOAT, new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_larch.png"), false));
+            EntityRenderers.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT, new ResourceLocation(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_larch.png"), true));
         }
     }
 }
