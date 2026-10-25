@@ -5,10 +5,10 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.winepicfin.extrabiomes.entity.client.state.WormRenderState;
 import net.minecraft.util.Mth;
 
-public class WormModel<T extends LivingEntityRenderState> extends EntityModel<T> {
+public class WormModel<T extends WormRenderState> extends EntityModel<T> {
 	private final ModelPart body;
 	private final ModelPart head;
 	private final ModelPart head1;
@@ -48,9 +48,9 @@ public class WormModel<T extends LivingEntityRenderState> extends EntityModel<T>
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		float limbSwing = state.walkAnimationPos;
 		// "Archie" easter egg: the long extra tail only shows when the worm is renamed to Archie.
-		this.Archie.visible = state.nameTag != null && "Archie".equals(state.nameTag.getString());
+		this.Archie.visible = state.isArchie;
 		// "Ciaran" easter egg: the worm renamed to Ciaran loses its long rear segment (and the Archie tail attached to it), so it is half as long.
-		this.body2.visible = !(state.nameTag != null && "Ciaran".equalsIgnoreCase(state.nameTag.getString()));
+		this.body2.visible = !state.isCiaran;
 		// animation.worm.move
 		this.head1.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * 45f)) * 0.017453292f;
 		this.head2.xRot += ((Math.abs(Mth.sin(((limbSwing * 50f)) * 0.017453292f)) * (-45f))) * 0.017453292f;
