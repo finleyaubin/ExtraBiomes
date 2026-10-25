@@ -104,6 +104,19 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_HANGING_SIGN.getKey(),
                 ModBlocks.SKY_WALL_SIGN.getKey(),
                 ModBlocks.SKY_WALL_HANGING_SIGN.getKey(),
+                ModBlocks.LARCH_PLANKS.getKey(),
+                ModBlocks.LARCH_STAIRS.getKey(),
+                ModBlocks.LARCH_SLAB.getKey(),
+                ModBlocks.LARCH_BUTTON.getKey(),
+                ModBlocks.LARCH_PRESSURE_PLATE.getKey(),
+                ModBlocks.LARCH_FENCE.getKey(),
+                ModBlocks.LARCH_FENCE_GATE.getKey(),
+                ModBlocks.LARCH_DOOR.getKey(),
+                ModBlocks.LARCH_TRAPDOOR.getKey(),
+                ModBlocks.LARCH_SIGN.getKey(),
+                ModBlocks.LARCH_HANGING_SIGN.getKey(),
+                ModBlocks.LARCH_WALL_SIGN.getKey(),
+                ModBlocks.LARCH_WALL_HANGING_SIGN.getKey(),
                 // palm wood
                 ModBlocks.PALM_PLANKS.getKey(),
                 ModBlocks.PALM_STAIRS.getKey(),
@@ -201,6 +214,18 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_PLANKS.getKey(),
                 ModBlocks.PALM_PLANKS.getKey(),
                 ModBlocks.GILDED_SKY_PLANKS.getKey()
+                ModBlocks.LARCH_FENCE.getKey(),
+                ModBlocks.LARCH_FENCE_GATE.getKey(),
+                ModBlocks.LARCH_LOG.getKey(),
+                ModBlocks.STRIPPED_LARCH_LOG.getKey(),
+                ModBlocks.LARCH_WOOD.getKey(),
+                ModBlocks.STRIPPED_LARCH_WOOD.getKey(),
+                ModBlocks.LARCH_LOG.getKey(),
+                ModBlocks.STRIPPED_LARCH_LOG.getKey(),
+                ModBlocks.LARCH_WOOD.getKey(),
+                ModBlocks.STRIPPED_LARCH_WOOD.getKey(),
+                ModBlocks.LARCH_LEAVES.getKey(),
+                ModBlocks.LARCH_PLANKS.getKey(),
         );
 
         this.tag(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
