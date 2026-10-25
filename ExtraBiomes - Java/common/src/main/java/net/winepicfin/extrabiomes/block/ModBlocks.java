@@ -157,7 +157,6 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> GILDED_SKY_HANGING_SIGN = GILDED_SKY_SIGNS.hangingSign();
     public static final RegistrySupplier<Block> GILDED_SKY_WALL_HANGING_SIGN = GILDED_SKY_SIGNS.wallHangingSign();
 
-
     private static final StandardWoodSet LARCH_WOOD_SET = registerStandardWoodSet("larch", ModWoodTypes.LARCH);
     public static final RegistrySupplier<Block> LARCH_PLANKS = LARCH_WOOD_SET.planks();
     public static final RegistrySupplier<Block> LARCH_LOG = registerBlock("larch_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_LOG).setId(blockId("larch_log")).strength(ModLogsTuning.DESTROY_SECONDS)));
@@ -180,7 +179,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> LARCH_HANGING_SIGN = LARCH_SIGNS.hangingSign();
     public static final RegistrySupplier<Block> LARCH_WALL_HANGING_SIGN = LARCH_SIGNS.wallHangingSign();
 
-	// Bonemeal on each grows that colour's own huge mushroom structure (MushroomFeatures).
+    // Bonemeal on each grows that colour's own huge mushroom structure (MushroomFeatures).
     public static final RegistrySupplier<Block>  BLACK_MUSHROOM= registerBlock("black_mushroom", () -> new MushroomBlock(MushroomFeatures.HUGE_BLACK_MUSHROOM_KEY, BlockBehaviour.Properties.ofLegacyCopy(Blocks.RED_MUSHROOM).setId(blockId("black_mushroom"))));
     public static final RegistrySupplier<Block>  BLUE_MUSHROOM= registerBlock("blue_mushroom", () -> new MushroomBlock(MushroomFeatures.HUGE_BLUE_MUSHROOM_KEY, BlockBehaviour.Properties.ofLegacyCopy(Blocks.RED_MUSHROOM).setId(blockId("blue_mushroom"))));
     public static final RegistrySupplier<Block>  CYAN_MUSHROOM= registerBlock("cyan_mushroom", () -> new MushroomBlock(MushroomFeatures.HUGE_CYAN_MUSHROOM_KEY, BlockBehaviour.Properties.ofLegacyCopy(Blocks.RED_MUSHROOM).setId(blockId("cyan_mushroom"))));
