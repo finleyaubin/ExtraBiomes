@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.item.custom;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -19,6 +20,7 @@ public class JellyfishJamBottleItem extends Item {
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         super.finishUsingItem(stack, level, entity);
+        entity.removeEffect(MobEffects.POISON);
         if (entity instanceof ServerPlayer serverPlayer) {
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
         }

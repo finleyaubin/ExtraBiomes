@@ -4,11 +4,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 
+// All nutrition/saturation values below mirror the matching Bedrock behaviour pack item in
+// ExtraBiomes - Bedrock/packs/BP/items/ so the two platforms stay in parity.
 public class ModFoods {
-    public static final FoodProperties FROGS_LEGS = new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).meat().effect(new MobEffectInstance(MobEffects.JUMP,600,1),0.8F).build();
-    public static final FoodProperties COOKED_FROGS_LEGS = new FoodProperties.Builder().nutrition(7).saturationMod(0.6f).meat().build();
-    public static final FoodProperties PIRANHA = new FoodProperties.Builder().nutrition(2).saturationMod(0.1f).build();
-    public static final FoodProperties COOKED_PIRANHA = new FoodProperties.Builder().nutrition(5).saturationMod(0.6f).build();
-    public static final FoodProperties JELLYFISH_JAM = new FoodProperties.Builder().nutrition(4).saturationMod(0.3f).effect(new MobEffectInstance(MobEffects.POISON,100,0),0.3F).build();
+    public static final FoodProperties FROGS_LEGS = new FoodProperties.Builder().nutrition(2).saturationMod(0.2f).meat().effect(new MobEffectInstance(MobEffects.JUMP,600,1),0.8F).build();
+    public static final FoodProperties COOKED_FROGS_LEGS = new FoodProperties.Builder().nutrition(6).saturationMod(0.7f).meat().build();
+    public static final FoodProperties PIRANHA = new FoodProperties.Builder().nutrition(4).saturationMod(0.3f).build();
+    public static final FoodProperties COOKED_PIRANHA = new FoodProperties.Builder().nutrition(8).saturationMod(0.7f).build();
+    public static final FoodProperties JELLYFISH_JAM = new FoodProperties.Builder().nutrition(8).saturationMod(0.8f).build();
 
 }
