@@ -37,4 +37,11 @@ class JellyfishParityTest {
         assertEquals(bedrock.getDouble("minecraft:entity", "components", "minecraft:movement", "value"),
                 JellyfishTuning.MOVEMENT_SPEED);
     }
+
+    // Bedrock counts timer time in seconds, JellyfishEntity in ticks.
+    @Test
+    void milkCooldownMatchesBedrock() {
+        assertEquals(bedrock.getDouble("minecraft:entity", "component_groups", "milk_cooldown", "minecraft:timer", "time") * 20.0,
+                JellyfishTuning.MILK_COOLDOWN_TICKS);
+    }
 }

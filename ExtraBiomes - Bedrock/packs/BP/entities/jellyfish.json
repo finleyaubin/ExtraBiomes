@@ -27,6 +27,105 @@
             "instant_despawn": {
                 "minecraft:instant_despawn": {}
             },
+            // Milking is gated by a component group rather than a plain interaction, because
+            // Bedrock's interact component has no per-interaction cooldown: the jellyfish is
+            // re-added once the "milk_cooldown" timer below runs out. Both interactions live in
+            // this group so replacing it doesn't drop the jellyfishing-net catch.
+            "milk_available": {
+                "minecraft:interact": {
+                    "interactions": [
+                        {
+                            "on_interact": {
+                                "filters": {
+                                    "all_of": [
+                                        {
+                                            "test": "is_family",
+                                            "subject": "other",
+                                            "value": "player"
+                                        },
+                                        {
+                                            "test": "has_equipment",
+                                            "domain": "hand",
+                                            "subject": "other",
+                                            "value": "glass_bottle"
+                                        }
+                                    ]
+                                },
+                                "event": "extrabiomes:begin_milk_cooldown",
+                                "target": "self"
+                            },
+                            "use_item": true,
+                            "transform_to_item": "extrabiomes:jellyfish_jam_bottle",
+                            "play_sounds": "milk",
+                            "interact_text": "action.interact.milk"
+                        },
+                        {
+                            "on_interact": {
+                                "filters": {
+                                    "all_of": [
+                                        {
+                                            "test": "is_family",
+                                            "subject": "other",
+                                            "value": "player"
+                                        },
+                                        {
+                                            "test": "has_equipment",
+                                            "domain": "hand",
+                                            "subject": "other",
+                                            "value": "extrabiomes:jellyfishing_net_empty"
+                                        }
+                                    ]
+                                },
+                                "event": "extrabiomes:instant_despawn",
+                                "target": "self"
+                            },
+                            "use_item": true,
+                            "transform_to_item": "extrabiomes:jellyfishing_net_full",
+                            "interact_text": "catch",
+                            "swing": true
+                        }
+                    ]
+                }
+            },
+            "milk_cooldown": {
+                "minecraft:interact": {
+                    "interactions": [
+                        {
+                            "on_interact": {
+                                "filters": {
+                                    "all_of": [
+                                        {
+                                            "test": "is_family",
+                                            "subject": "other",
+                                            "value": "player"
+                                        },
+                                        {
+                                            "test": "has_equipment",
+                                            "domain": "hand",
+                                            "subject": "other",
+                                            "value": "extrabiomes:jellyfishing_net_empty"
+                                        }
+                                    ]
+                                },
+                                "event": "extrabiomes:instant_despawn",
+                                "target": "self"
+                            },
+                            "use_item": true,
+                            "transform_to_item": "extrabiomes:jellyfishing_net_full",
+                            "interact_text": "catch",
+                            "swing": true
+                        }
+                    ]
+                },
+                "minecraft:timer": {
+                    "looping": false,
+                    "time": 30,
+                    "time_down_event": {
+                        "event": "extrabiomes:end_milk_cooldown",
+                        "target": "self"
+                    }
+                }
+            },
             "projectile": {
                 "minecraft:projectile": {
                     "anchor": 1,
@@ -34,6 +133,16 @@
                     "gravity": 0,
                     "angle_offset": 0,
                     "offset": [0, -0.1, 0]
+                },
+                // Kept inside the group rather than in the base components so it can't be
+                // overwritten by the milk cooldown's own timer (an entity only holds one
+                // minecraft:timer at a time).
+                "minecraft:timer": {
+                    "time": 2,
+                    "time_down_event": {
+                        "event": "extrabiomes:remove_projectile",
+                        "target": "self"
+                    }
                 }
             }
         },
@@ -113,13 +222,6 @@
                         "event": "extrabiomes:enter_water"
                     }
                 ]
-            },
-            "minecraft:timer": {
-                "time": 2,
-                "time_down_event": {
-                    "event": "extrabiomes:remove_projectile",
-                    "target": "self"
-                }
             },
             "minecraft:loot": {
                 "table": "loot_tables/entities/jellyfish.json"
@@ -202,58 +304,8 @@
                 "block_distance": 2,
                 "block_weight": 0.85
             },
-            "minecraft:interact": {
-                "interactions": [
-                    {
-                        "on_interact": {
-                            "filters": {
-                                "all_of": [
-                                    {
-                                        "test": "is_family",
-                                        "subject": "other",
-                                        "value": "player"
-                                    },
-                                    {
-                                        "test": "has_equipment",
-                                        "domain": "hand",
-                                        "subject": "other",
-                                        "value": "glass_bottle"
-                                    }
-                                ]
-                            }
-                        },
-                        "use_item": true,
-                        "transform_to_item": "extrabiomes:jellyfish_jam_bottle",
-                        "play_sounds": "milk",
-                        "interact_text": "action.interact.milk"
-                    },
-                    {
-                        "on_interact": {
-                            "filters": {
-                                "all_of": [
-                                    {
-                                        "test": "is_family",
-                                        "subject": "other",
-                                        "value": "player"
-                                    },
-                                    {
-                                        "test": "has_equipment",
-                                        "domain": "hand",
-                                        "subject": "other",
-                                        "value": "extrabiomes:jellyfishing_net_empty"
-                                    }
-                                ]
-                            },
-                            "event": "extrabiomes:instant_despawn",
-                            "target": "self"
-                        },
-                        "use_item": true,
-                        "transform_to_item": "extrabiomes:jellyfishing_net_full",
-                        "interact_text": "catch",
-                        "swing": true
-                    }
-                ]
-            },
+            // The interact component (milking + jellyfishing net) lives in the "milk_available"
+            // component group instead, so the cooldown can swap it out.
             "minecraft:nameable": {},
             "minecraft:physics": {
                 "has_gravity": true
@@ -268,6 +320,9 @@
             "minecraft:entity_spawned": {
                 "sequence": [
                     {
+                        "add": {
+                            "component_groups": ["milk_available"]
+                        },
                         "randomize": [
                             {
                                 "weight": 3,
@@ -289,7 +344,7 @@
                 "sequence": [
                     {
                         "add": {
-                            "component_groups": ["projectile"]
+                            "component_groups": ["projectile", "milk_available"]
                         },
                         "randomize": [
                             {
@@ -312,6 +367,34 @@
                 "add": {
                     "component_groups": ["instant_despawn"]
                 }
+            },
+            "extrabiomes:begin_milk_cooldown": {
+                "sequence": [
+                    {
+                        "remove": {
+                            "component_groups": ["milk_available"]
+                        }
+                    },
+                    {
+                        "add": {
+                            "component_groups": ["milk_cooldown"]
+                        }
+                    }
+                ]
+            },
+            "extrabiomes:end_milk_cooldown": {
+                "sequence": [
+                    {
+                        "remove": {
+                            "component_groups": ["milk_cooldown"]
+                        }
+                    },
+                    {
+                        "add": {
+                            "component_groups": ["milk_available"]
+                        }
+                    }
+                ]
             },
             "extrabiomes:remove_projectile": {
                 "remove": {
