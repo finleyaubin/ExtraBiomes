@@ -12,6 +12,11 @@ public final class JellyfishTuning {
     // Per valid beach spawn attempt; the WATER_AMBIENT cap alone would otherwise fill every beach, since jellyfish is its only entry there.
     public static final float BEACH_SPAWN_CHANCE = 0.02F;
 
+    // 30 s between milkings, mirroring Bedrock's "milk_cooldown" timer component (time is in
+    // seconds there, ticks here).
+    public static final double MILK_COOLDOWN_SECONDS = 30.0;
+    public static final int MILK_COOLDOWN_TICKS = (int) (MILK_COOLDOWN_SECONDS * 20);
+
     public static final int BEACH_MIN_Y = 62;
     public static final int BEACH_MAX_Y = 64;
     public static final int BEACH_WATER_RANGE = 5;
