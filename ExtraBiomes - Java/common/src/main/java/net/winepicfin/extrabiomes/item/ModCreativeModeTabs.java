@@ -65,6 +65,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.MYSTIC_FENCE_GATE.get());
                 pOutput.accept(ModBlocks.MYSTIC_DOOR.get());
                 pOutput.accept(ModBlocks.MYSTIC_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.MYSTIC_SHELF.get());
                 pOutput.accept(ModBlocks.MYSTIC_LOG.get());
                 pOutput.accept(ModBlocks.MYSTIC_WOOD.get());
                 pOutput.accept(ModBlocks.STRIPPED_MYSTIC_LOG.get());
@@ -82,6 +83,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.SKY_FENCE_GATE.get());
                 pOutput.accept(ModBlocks.SKY_DOOR.get());
                 pOutput.accept(ModBlocks.SKY_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.SKY_SHELF.get());
                 pOutput.accept(ModBlocks.SKY_LOG.get());
                 pOutput.accept(ModBlocks.SKY_WOOD.get());
                 pOutput.accept(ModBlocks.STRIPPED_SKY_LOG.get());
@@ -99,6 +101,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.PALM_FENCE_GATE.get());
                 pOutput.accept(ModBlocks.PALM_DOOR.get());
                 pOutput.accept(ModBlocks.PALM_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.PALM_SHELF.get());
                 pOutput.accept(ModBlocks.PALM_LOG.get());
                 pOutput.accept(ModBlocks.PALM_WOOD.get());
                 pOutput.accept(ModBlocks.STRIPPED_PALM_LOG.get());
@@ -116,6 +119,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.GILDED_SKY_FENCE_GATE.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_DOOR.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.GILDED_SKY_SHELF.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_LOG.get());
                 pOutput.accept(ModBlocks.GILDED_SKY_WOOD.get());
                 pOutput.accept(ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
@@ -131,6 +135,7 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.LARCH_FENCE_GATE.get());
                 pOutput.accept(ModBlocks.LARCH_DOOR.get());
                 pOutput.accept(ModBlocks.LARCH_TRAPDOOR.get());
+                pOutput.accept(ModBlocks.LARCH_SHELF.get());
                 pOutput.accept(ModBlocks.LARCH_LOG.get());
                 pOutput.accept(ModBlocks.LARCH_WOOD.get());
                 pOutput.accept(ModBlocks.STRIPPED_LARCH_LOG.get());
