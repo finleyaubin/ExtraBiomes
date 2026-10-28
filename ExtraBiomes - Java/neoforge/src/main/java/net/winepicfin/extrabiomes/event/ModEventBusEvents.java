@@ -4,7 +4,7 @@ import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -40,7 +40,7 @@ public class ModEventBusEvents {
 
     @SubscribeEvent
     public static void addShelvesToVanillaShelfBlockEntity(BlockEntityTypeAddBlocksEvent event) {
-        event.modify(BlockEntityType.SHELF, ModTagContents.WOODEN_SHELVES.stream().map(RegistrySupplier::get).toArray(Block[]::new));
+        event.modify(BlockEntityTypes.SHELF, ModTagContents.WOODEN_SHELVES.stream().map(RegistrySupplier::get).toArray(Block[]::new));
     }
 
     @SubscribeEvent

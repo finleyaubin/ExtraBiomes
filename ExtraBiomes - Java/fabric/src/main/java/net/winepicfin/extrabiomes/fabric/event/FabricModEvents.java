@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.entity.ModEntities;
@@ -24,7 +24,7 @@ import net.winepicfin.extrabiomes.entity.custom.WormEntity;
 // Operation.REPLACE-aware event - fine here since this is the only registration site).
 public class FabricModEvents {
     public static void register() {
-        ModTagContents.WOODEN_SHELVES.forEach(shelf -> BlockEntityType.SHELF.addValidBlock(shelf.get()));
+        ModTagContents.WOODEN_SHELVES.forEach(shelf -> BlockEntityTypes.SHELF.addValidBlock(shelf.get()));
 
         FabricDefaultAttributeRegistry.register(ModEntities.PUCKOO.get(), PuckooEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.WORM.get(), WormEntity.createAttributes());
