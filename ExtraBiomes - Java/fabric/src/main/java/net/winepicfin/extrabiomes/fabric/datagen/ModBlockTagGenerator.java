@@ -85,6 +85,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.MYSTIC_DOOR.get(),
                 ModBlocks.MYSTIC_TRAPDOOR.get(),
+                ModBlocks.MYSTIC_SHELF.get(),
                 ModBlocks.MYSTIC_SIGN.get(),
                 ModBlocks.MYSTIC_HANGING_SIGN.get(),
                 ModBlocks.MYSTIC_WALL_SIGN.get(),
@@ -99,6 +100,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.SKY_FENCE_GATE.get(),
                 ModBlocks.SKY_DOOR.get(),
                 ModBlocks.SKY_TRAPDOOR.get(),
+                ModBlocks.SKY_SHELF.get(),
                 ModBlocks.SKY_SIGN.get(),
                 ModBlocks.SKY_HANGING_SIGN.get(),
                 ModBlocks.SKY_WALL_SIGN.get(),
@@ -113,6 +115,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.PALM_FENCE_GATE.get(),
                 ModBlocks.PALM_DOOR.get(),
                 ModBlocks.PALM_TRAPDOOR.get(),
+                ModBlocks.PALM_SHELF.get(),
                 ModBlocks.PALM_SIGN.get(),
                 ModBlocks.PALM_HANGING_SIGN.get(),
                 ModBlocks.PALM_WALL_SIGN.get(),
@@ -127,6 +130,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.GILDED_SKY_FENCE_GATE.get(),
                 ModBlocks.GILDED_SKY_DOOR.get(),
                 ModBlocks.GILDED_SKY_TRAPDOOR.get(),
+                ModBlocks.GILDED_SKY_SHELF.get(),
                 ModBlocks.GILDED_SKY_SIGN.get(),
                 ModBlocks.GILDED_SKY_HANGING_SIGN.get(),
                 ModBlocks.GILDED_SKY_WALL_SIGN.get(),
@@ -211,6 +215,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(keys(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.tag(BlockTags.WOODEN_DOORS).add(keys(ModTagContents.WOODEN_DOORS));
         this.tag(BlockTags.WOODEN_TRAPDOORS).add(keys(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(BlockTags.WOODEN_SHELVES).add(keys(ModTagContents.WOODEN_SHELVES));
         this.tag(BlockTags.STANDING_SIGNS).add(keys(ModTagContents.STANDING_SIGNS));
         this.tag(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
         this.tag(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));

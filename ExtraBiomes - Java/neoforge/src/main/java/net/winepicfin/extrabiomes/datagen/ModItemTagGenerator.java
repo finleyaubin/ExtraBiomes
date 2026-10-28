@@ -109,6 +109,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.WOODEN_PRESSURE_PLATES).add(itemKeys(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.tag(ItemTags.WOODEN_DOORS).add(itemKeys(ModTagContents.WOODEN_DOORS));
         this.tag(ItemTags.WOODEN_TRAPDOORS).add(itemKeys(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(ItemTags.WOODEN_SHELVES).add(itemKeys(ModTagContents.WOODEN_SHELVES));
         this.tag(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::getKey).toArray(ResourceKey[]::new));
         this.tag(ItemTags.HANGING_SIGNS).add(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::getKey).toArray(ResourceKey[]::new));
         this.tag(ItemTags.SAPLINGS).add(itemKeys(ModTagContents.SAPLINGS));

@@ -32,6 +32,7 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.MYSTIC_FENCE_GATE.get(), 5, 20);
         registerFlammable(ModBlocks.MYSTIC_DOOR.get(), 5, 20);
         registerFlammable(ModBlocks.MYSTIC_TRAPDOOR.get(), 5, 20);
+        registerFlammable(ModBlocks.MYSTIC_SHELF.get(), 5, 20);
         // Palm Wood
         registerFlammable(ModBlocks.PALM_PLANKS.get(), 5, 5);
         registerFlammable(ModBlocks.PALM_LOG.get(), 5, 20);
@@ -48,6 +49,7 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.PALM_FENCE_GATE.get(), 5, 20);
         registerFlammable(ModBlocks.PALM_DOOR.get(), 5, 20);
         registerFlammable(ModBlocks.PALM_TRAPDOOR.get(), 5, 20);
+        registerFlammable(ModBlocks.PALM_SHELF.get(), 5, 20);
         // Sky Wood
         registerFlammable(ModBlocks.SKY_PLANKS.get(), 5, 5);
         registerFlammable(ModBlocks.SKY_LOG.get(), 5, 20);
@@ -64,6 +66,7 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.SKY_FENCE_GATE.get(), 5, 20);
         registerFlammable(ModBlocks.SKY_DOOR.get(), 5, 20);
         registerFlammable(ModBlocks.SKY_TRAPDOOR.get(), 5, 20);
+        registerFlammable(ModBlocks.SKY_SHELF.get(), 5, 20);
         // Gilded Sky Wood
         registerFlammable(ModBlocks.GILDED_SKY_PLANKS.get(), 5, 5);
         registerFlammable(ModBlocks.GILDED_SKY_LOG.get(), 5, 20);
@@ -76,6 +79,7 @@ public class FabricVanillaCompat {
         registerFlammable(ModBlocks.GILDED_SKY_FENCE_GATE.get(), 5, 20);
         registerFlammable(ModBlocks.GILDED_SKY_DOOR.get(), 5, 20);
         registerFlammable(ModBlocks.GILDED_SKY_TRAPDOOR.get(), 5, 20);
+        registerFlammable(ModBlocks.GILDED_SKY_SHELF.get(), 5, 20);
 
         // Axe stripping - matches forge/.../block/custom/ModLogs.java's getToolModifiedState
         BlockTransformerHelper.registerStripping(ModBlocks.MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get());

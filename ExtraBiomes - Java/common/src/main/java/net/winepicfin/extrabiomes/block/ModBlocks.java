@@ -87,6 +87,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> MYSTIC_FENCE_GATE = MYSTIC_WOOD_SET.fenceGate();
     public static final RegistrySupplier<Block> MYSTIC_DOOR = MYSTIC_WOOD_SET.door();
     public static final RegistrySupplier<Block> MYSTIC_TRAPDOOR = MYSTIC_WOOD_SET.trapdoor();
+    public static final RegistrySupplier<Block> MYSTIC_SHELF = MYSTIC_WOOD_SET.shelf();
     private static final StandardWoodSigns MYSTIC_SIGNS = registerWoodSigns("mystic", ModWoodTypes.MYSTIC, Blocks.WARPED_SIGN, Blocks.WARPED_WALL_SIGN, Blocks.WARPED_HANGING_SIGN, Blocks.WARPED_WALL_HANGING_SIGN);
     public static final RegistrySupplier<Block> MYSTIC_SIGN = MYSTIC_SIGNS.sign();
     public static final RegistrySupplier<Block> MYSTIC_WALL_SIGN = MYSTIC_SIGNS.wallSign();
@@ -108,6 +109,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> SKY_FENCE_GATE = SKY_WOOD_SET.fenceGate();
     public static final RegistrySupplier<Block> SKY_DOOR = SKY_WOOD_SET.door();
     public static final RegistrySupplier<Block> SKY_TRAPDOOR = SKY_WOOD_SET.trapdoor();
+    public static final RegistrySupplier<Block> SKY_SHELF = SKY_WOOD_SET.shelf();
     private static final StandardWoodSigns SKY_SIGNS = registerWoodSigns("sky", ModWoodTypes.SKY, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.OAK_HANGING_SIGN, Blocks.OAK_WALL_HANGING_SIGN);
     public static final RegistrySupplier<Block> SKY_SIGN = SKY_SIGNS.sign();
     public static final RegistrySupplier<Block> SKY_WALL_SIGN = SKY_SIGNS.wallSign();
@@ -129,6 +131,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> PALM_FENCE_GATE = PALM_WOOD_SET.fenceGate();
     public static final RegistrySupplier<Block> PALM_DOOR = PALM_WOOD_SET.door();
     public static final RegistrySupplier<Block> PALM_TRAPDOOR = PALM_WOOD_SET.trapdoor();
+    public static final RegistrySupplier<Block> PALM_SHELF = PALM_WOOD_SET.shelf();
     private static final StandardWoodSigns PALM_SIGNS = registerWoodSigns("palm", ModWoodTypes.PALM, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.OAK_HANGING_SIGN, Blocks.OAK_WALL_HANGING_SIGN);
     public static final RegistrySupplier<Block> PALM_SIGN = PALM_SIGNS.sign();
     public static final RegistrySupplier<Block> PALM_WALL_SIGN = PALM_SIGNS.wallSign();
@@ -148,6 +151,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> GILDED_SKY_FENCE_GATE = GILDED_SKY_WOOD_SET.fenceGate();
     public static final RegistrySupplier<Block> GILDED_SKY_DOOR = GILDED_SKY_WOOD_SET.door();
     public static final RegistrySupplier<Block> GILDED_SKY_TRAPDOOR = GILDED_SKY_WOOD_SET.trapdoor();
+    public static final RegistrySupplier<Block> GILDED_SKY_SHELF = GILDED_SKY_WOOD_SET.shelf();
     private static final StandardWoodSigns GILDED_SKY_SIGNS = registerWoodSigns("gilded_sky", ModWoodTypes.GILDED_SKY, Blocks.OAK_SIGN, Blocks.OAK_WALL_SIGN, Blocks.OAK_HANGING_SIGN, Blocks.OAK_WALL_HANGING_SIGN);
     public static final RegistrySupplier<Block> GILDED_SKY_SIGN = GILDED_SKY_SIGNS.sign();
     public static final RegistrySupplier<Block> GILDED_SKY_WALL_SIGN = GILDED_SKY_SIGNS.wallSign();
@@ -193,7 +197,7 @@ public class ModBlocks {
     }
 
     // planks/stairs/slab/etc. follow an identical pattern across every wood set - only the name prefix and wood type differ.
-    private record StandardWoodSet(RegistrySupplier<Block> planks, RegistrySupplier<Block> stairs, RegistrySupplier<Block> slab, RegistrySupplier<Block> button, RegistrySupplier<Block> pressurePlate, RegistrySupplier<Block> fence, RegistrySupplier<Block> fenceGate, RegistrySupplier<Block> door, RegistrySupplier<Block> trapdoor) {
+    private record StandardWoodSet(RegistrySupplier<Block> planks, RegistrySupplier<Block> stairs, RegistrySupplier<Block> slab, RegistrySupplier<Block> button, RegistrySupplier<Block> pressurePlate, RegistrySupplier<Block> fence, RegistrySupplier<Block> fenceGate, RegistrySupplier<Block> door, RegistrySupplier<Block> trapdoor, RegistrySupplier<Block> shelf) {
     }
 
     private static StandardWoodSet registerStandardWoodSet(String name, WoodType woodType) {
@@ -210,7 +214,8 @@ public class ModBlocks {
         RegistrySupplier<Block> fenceGate = registerBlock(name + "_fence_gate", () -> new FenceGateBlock(woodType, BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_PLANKS).setId(blockId(name + "_fence_gate"))));
         RegistrySupplier<Block> door = registerBlock(name + "_door", () -> new DoorBlock(BlockSetType.OAK, BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_PLANKS).setId(blockId(name + "_door")).noOcclusion()));
         RegistrySupplier<Block> trapdoor = registerBlock(name + "_trapdoor", () -> new TrapDoorBlock(BlockSetType.OAK, BlockBehaviour.Properties.ofLegacyCopy(Blocks.WARPED_PLANKS).setId(blockId(name + "_trapdoor")).noOcclusion()));
-        return new StandardWoodSet(planks, stairs, slab, button, pressurePlate, fence, fenceGate, door, trapdoor);
+        RegistrySupplier<Block> shelf = registerBlock(name + "_shelf", () -> new ShelfBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.OAK_SHELF).setId(blockId(name + "_shelf"))));
+        return new StandardWoodSet(planks, stairs, slab, button, pressurePlate, fence, fenceGate, door, trapdoor, shelf);
     }
 
     // Sign block parents vary by wood set (mystic copies the warped signs, the rest copy oak), so they're passed in rather than hard-coded.

@@ -94,9 +94,9 @@ public abstract class CommonRecipes extends RecipeProvider {
         pebbleRecipes(pWriter);
         razorFeatherRecipes(pWriter);
         stickPileRecipes(pWriter);
-        woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_WOOD.get(), ModBlocks.MYSTIC_STAIRS.get(), ModBlocks.MYSTIC_SLAB.get(), ModBlocks.MYSTIC_BUTTON.get(), ModBlocks.MYSTIC_PRESSURE_PLATE.get(), ModBlocks.MYSTIC_FENCE_GATE.get(), ModBlocks.MYSTIC_FENCE.get(), ModBlocks.MYSTIC_DOOR.get(), ModBlocks.MYSTIC_TRAPDOOR.get(),ModBlocks.MYSTIC_SIGN.get());
-        woodRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModBlocks.PALM_LOG.get(), ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPPED_PALM_LOG.get(), ModBlocks.STRIPPED_PALM_WOOD.get(), ModBlocks.PALM_STAIRS.get(), ModBlocks.PALM_SLAB.get(), ModBlocks.PALM_BUTTON.get(), ModBlocks.PALM_PRESSURE_PLATE.get(), ModBlocks.PALM_FENCE_GATE.get(), ModBlocks.PALM_FENCE.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.PALM_SIGN.get());
-        woodRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModBlocks.SKY_LOG.get(), ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_LOG.get(), ModBlocks.STRIPPED_SKY_WOOD.get(), ModBlocks.SKY_STAIRS.get(), ModBlocks.SKY_SLAB.get(), ModBlocks.SKY_BUTTON.get(), ModBlocks.SKY_PRESSURE_PLATE.get(), ModBlocks.SKY_FENCE_GATE.get(), ModBlocks.SKY_FENCE.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.SKY_TRAPDOOR.get(),ModBlocks.SKY_SIGN.get());
+        woodRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModBlocks.MYSTIC_LOG.get(), ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPPED_MYSTIC_LOG.get(), ModBlocks.STRIPPED_MYSTIC_WOOD.get(), ModBlocks.MYSTIC_STAIRS.get(), ModBlocks.MYSTIC_SLAB.get(), ModBlocks.MYSTIC_BUTTON.get(), ModBlocks.MYSTIC_PRESSURE_PLATE.get(), ModBlocks.MYSTIC_FENCE_GATE.get(), ModBlocks.MYSTIC_FENCE.get(), ModBlocks.MYSTIC_DOOR.get(), ModBlocks.MYSTIC_TRAPDOOR.get(),ModBlocks.MYSTIC_SIGN.get(), ModBlocks.MYSTIC_SHELF.get());
+        woodRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModBlocks.PALM_LOG.get(), ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPPED_PALM_LOG.get(), ModBlocks.STRIPPED_PALM_WOOD.get(), ModBlocks.PALM_STAIRS.get(), ModBlocks.PALM_SLAB.get(), ModBlocks.PALM_BUTTON.get(), ModBlocks.PALM_PRESSURE_PLATE.get(), ModBlocks.PALM_FENCE_GATE.get(), ModBlocks.PALM_FENCE.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.PALM_SIGN.get(), ModBlocks.PALM_SHELF.get());
+        woodRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModBlocks.SKY_LOG.get(), ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_LOG.get(), ModBlocks.STRIPPED_SKY_WOOD.get(), ModBlocks.SKY_STAIRS.get(), ModBlocks.SKY_SLAB.get(), ModBlocks.SKY_BUTTON.get(), ModBlocks.SKY_PRESSURE_PLATE.get(), ModBlocks.SKY_FENCE_GATE.get(), ModBlocks.SKY_FENCE.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.SKY_TRAPDOOR.get(),ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_SHELF.get());
         boatRecipes(pWriter, ModBlocks.MYSTIC_PLANKS.get(), ModItems.MYSTIC_BOAT.get(), ModItems.MYSTIC_CHEST_BOAT.get());
         boatRecipes(pWriter, ModBlocks.PALM_PLANKS.get(), ModItems.PALM_BOAT.get(), ModItems.PALM_CHEST_BOAT.get());
         boatRecipes(pWriter, ModBlocks.SKY_PLANKS.get(), ModItems.SKY_BOAT.get(), ModItems.SKY_CHEST_BOAT.get());
@@ -121,7 +121,8 @@ public abstract class CommonRecipes extends RecipeProvider {
                         ModBlocks.SKY_FENCE.get(),
                         ModBlocks.SKY_DOOR.get(),
                         ModBlocks.SKY_TRAPDOOR.get(),
-                        ModBlocks.SKY_SIGN.get()
+                        ModBlocks.SKY_SIGN.get(),
+                        ModBlocks.SKY_SHELF.get()
                 ), List.of(
                         ModBlocks.GILDED_SKY_PLANKS.get(),
                         ModBlocks.GILDED_SKY_LOG.get(),
@@ -134,7 +135,8 @@ public abstract class CommonRecipes extends RecipeProvider {
                         ModBlocks.GILDED_SKY_FENCE.get(),
                         ModBlocks.GILDED_SKY_DOOR.get(),
                         ModBlocks.GILDED_SKY_TRAPDOOR.get(),
-                        ModBlocks.GILDED_SKY_SIGN.get()
+                        ModBlocks.GILDED_SKY_SIGN.get(),
+                        ModBlocks.GILDED_SKY_SHELF.get()
                 ));
     }
 
@@ -192,7 +194,7 @@ public abstract class CommonRecipes extends RecipeProvider {
         }
     }
 
-    private void woodRecipes(RecipeOutput recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block strippedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign) {
+    private void woodRecipes(RecipeOutput recipeOutput, Block plank, Block log, Block wood, Block strippedLog, Block strippedWood, Block stairs, Block slab, Block button, Block pressurePlate, Block fenceGate, Block fence, Block door, Block trapDoor, Block sign, Block shelf) {
         List<ItemLike> woods = List.of(log, strippedLog, wood, strippedWood);
         planks(recipeOutput, woods, plank);
         wood(recipeOutput, log, wood);
@@ -203,6 +205,7 @@ public abstract class CommonRecipes extends RecipeProvider {
         fenceGate(recipeOutput, plank, fenceGate);
         door(recipeOutput, plank, door);
         trapDoor(recipeOutput, plank, trapDoor);
+        shelf(recipeOutput, strippedLog, shelf);
         pressurePlate(recipeOutput, plank, pressurePlate);
         sign(recipeOutput,plank, sign);
         oneToOne(recipeOutput, plank, button);
@@ -280,6 +283,17 @@ public abstract class CommonRecipes extends RecipeProvider {
                 .pattern("&&&")
                 .pattern("&&&")
                 .define('&', ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
+    }
+
+    private void shelf(RecipeOutput recipeOutput, Block ingredient, Block output) {
+        shaped(RecipeCategory.MISC, output, 6)
+                .pattern("&&&")
+                .pattern("   ")
+                .pattern("&&&")
+                .define('&', ingredient)
+                .group("shelf")
                 .unlockedBy(getHasName(ingredient), has(ingredient))
                 .save(recipeOutput, ExtraBiomes.MOD_ID + ":" + getItemName(output) + "_from_" + getItemName(ingredient));
     }

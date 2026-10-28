@@ -36,6 +36,9 @@ public final class ModTagContents {
     public static final List<RegistrySupplier<Block>> WOODEN_TRAPDOORS = List.of(
             ModBlocks.MYSTIC_TRAPDOOR, ModBlocks.SKY_TRAPDOOR, ModBlocks.PALM_TRAPDOOR, ModBlocks.GILDED_SKY_TRAPDOOR);
 
+    public static final List<RegistrySupplier<Block>> WOODEN_SHELVES = List.of(
+            ModBlocks.MYSTIC_SHELF, ModBlocks.SKY_SHELF, ModBlocks.PALM_SHELF, ModBlocks.GILDED_SKY_SHELF);
+
     /** Non-wooden stairs/slabs/walls (the wooden ones are added through the wooden_* tags). */
     public static final List<RegistrySupplier<Block>> STONE_STAIRS = List.of(
             ModBlocks.DENSE_CLOUD_STAIRS, ModBlocks.DENSE_CLOUD_BRICK_STAIRS,

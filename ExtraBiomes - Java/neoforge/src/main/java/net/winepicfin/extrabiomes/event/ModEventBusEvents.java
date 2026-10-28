@@ -3,12 +3,17 @@ package net.winepicfin.extrabiomes.event;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.custom.GiantTortoiseEntity;
 import net.winepicfin.extrabiomes.entity.custom.HarpyEntity;
@@ -31,6 +36,11 @@ public class ModEventBusEvents {
         event.put(ModEntities.JELLYFISH.get(), JellyfishEntity.createAttributes().build());
         event.put(ModEntities.PIRANHA.get(), PiranhaEntity.createAttributes().build());
         event.put(ModEntities.HARPY.get(), HarpyEntity.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public static void addShelvesToVanillaShelfBlockEntity(BlockEntityTypeAddBlocksEvent event) {
+        event.modify(BlockEntityType.SHELF, ModTagContents.WOODEN_SHELVES.stream().map(RegistrySupplier::get).toArray(Block[]::new));
     }
 
     @SubscribeEvent
