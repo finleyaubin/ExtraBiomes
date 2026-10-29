@@ -93,6 +93,8 @@ public class ModItemModelProvider implements DataProvider {
         simpleItem(ModItems.MYSTIC_HANGING_SIGN.get());
         simpleItem(ModItems.SKY_SIGN.get());
         simpleItem(ModItems.SKY_HANGING_SIGN.get());
+        simpleItem(ModItems.LARCH_SIGN.get());
+        simpleItem(ModItems.LARCH_HANGING_SIGN.get());
         simpleItem(ModItems.PALM_SIGN.get());
         simpleItem(ModItems.PALM_HANGING_SIGN.get());
         simpleItem(ModItems.GILDED_SKY_SIGN.get());
@@ -101,6 +103,7 @@ public class ModItemModelProvider implements DataProvider {
         // Doors delegate to their block model instead (see ModBlockStateProvider.doorBlockState).
         simpleItem(ModBlocks.MYSTIC_DOOR.get().asItem());
         simpleItem(ModBlocks.SKY_DOOR.get().asItem());
+        simpleItem(ModBlocks.LARCH_DOOR.get().asItem());
         simpleItem(ModBlocks.PALM_DOOR.get().asItem());
         simpleItem(ModBlocks.GILDED_SKY_DOOR.get().asItem());
 
