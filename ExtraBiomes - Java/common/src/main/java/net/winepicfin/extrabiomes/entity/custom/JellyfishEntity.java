@@ -62,9 +62,7 @@ public class JellyfishEntity extends WaterAnimal {
     private float grayAmount;
     private float scaleY = 1.0F;
 
-    // Ticks left before this jellyfish can be milked again. Not synched: mobInteract runs on both
-    // sides for the same click, so each side arms its own copy from the same interaction and both
-    // tick down in lockstep.
+    // Not synched: mobInteract runs on both sides, so each arms its own copy.
     private int milkCooldownTicks;
 
     public JellyfishEntity(EntityType<? extends WaterAnimal> type, Level level) {
@@ -127,7 +125,7 @@ public class JellyfishEntity extends WaterAnimal {
     }
 
     public int milkCooldownRemaining() {
-        return Math.max(0, this.milkCooldownTicks);
+        return this.milkCooldownTicks;
     }
 
     // Beaches only roll BEACH_SPAWN_CHANCE (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
@@ -190,14 +188,9 @@ public class JellyfishEntity extends WaterAnimal {
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
         if (held.is(Items.GLASS_BOTTLE) && this.isAlive()) {
-            // Bedrock parity: jellyfish.json puts the milking interaction in a "milk_available"
-            // component group that is removed on the milk and re-added by a 30 s "milk_cooldown"
-            // timer, so a jellyfish can only be milked once every 30 seconds. The client-side check
-            // matters as much as the server-side one - CONSUME would otherwise eat the player's
-            // bottle locally even when the server refused the milking.
+            // FAIL, not PASS: PASS would fall through to the bottle's own use and fill it with water.
             if (this.milkCooldownTicks > 0) {
-                // PASS rather than FAIL: nothing happens, and the player's bottle is left alone.
-                return InteractionResult.PASS;
+                return InteractionResult.FAIL;
             }
             this.milkCooldownTicks = JellyfishTuning.MILK_COOLDOWN_TICKS;
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
