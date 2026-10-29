@@ -119,6 +119,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.GILDED_SKY_FENCE_GATE);
         simpleItem(ModItems.GILDED_SKY_SIGN);
         simpleItem(ModItems.GILDED_SKY_HANGING_SIGN);
+        simpleItem(ModItems.LARCH_SIGN);
+        simpleItem(ModItems.LARCH_HANGING_SIGN);
         // Spawn Eggs
         withExistingParent(ModItems.PUCKOO_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(ModItems.WORM_SPAWN_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
