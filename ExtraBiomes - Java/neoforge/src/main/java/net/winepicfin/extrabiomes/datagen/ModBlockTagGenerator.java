@@ -241,6 +241,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(Tags.Blocks.STRIPPED_LOGS).add(blocks(ModTagContents.STRIPPED_LOGS));
         this.tag(Tags.Blocks.STRIPPED_WOODS).add(blocks(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Blocks.ORES).add(blocks(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(blocks(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(blocks(ModTagContents.MUSHROOMS));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'

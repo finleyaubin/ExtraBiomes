@@ -11,8 +11,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import java.io.IOException;
 
 /**
- * textures/colormap/larch_leaves.png: x runs from the coldest biomes (autumn gold) to the warmest
- * (summer green), y picks the shade within that so neighbouring trees differ.
+ * textures/colormap/larch_leaves.png: x runs from autumn gold to summer green, y from orange to yellow.
  */
 public final class LarchLeavesColormap {
     public static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "larch_leaves_colormap");
@@ -23,9 +22,9 @@ public final class LarchLeavesColormap {
 
     private static int[] pixels = new int[SIZE * SIZE];
 
-    public static int colorAt(float warmth, float variation) {
-        int x = Math.round(Mth.clamp(warmth, 0.0F, 1.0F) * (SIZE - 1));
-        int y = Math.round(Mth.clamp(variation, 0.0F, 1.0F) * (SIZE - 1));
+    public static int colorAt(float greenness, float shade) {
+        int x = Math.round(Mth.clamp(greenness, 0.0F, 1.0F) * (SIZE - 1));
+        int y = Math.round(Mth.clamp(shade, 0.0F, 1.0F) * (SIZE - 1));
         return pixels[y * SIZE + x] | OPAQUE;
     }
 
