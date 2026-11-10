@@ -2,7 +2,12 @@ package net.winepicfin.extrabiomes.event;
 
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.resources.model.sprite.Material;
+import java.util.List;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTintSource;
 import net.neoforged.neoforge.client.fluid.FluidTintSources;
 import net.winepicfin.extrabiomes.neoforge.fluid.ModFluids;
 import net.minecraft.client.model.object.boat.BoatModel;
@@ -93,6 +98,21 @@ public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
         event.registerEntityModifier(WolfRenderer.class, (Wolf wolf, WolfRenderState state) -> state.setRenderData(WolfFrogHatLayer.WOLF, wolf));
+    }
+
+    @SubscribeEvent
+    public static void registerReloadListeners(AddClientReloadListenersEvent event) {
+        event.addListener(LarchLeavesColormap.RELOAD_LISTENER_ID, new LarchLeavesColormap.ReloadListener());
+    }
+
+    @SubscribeEvent
+    public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
+        event.register(LarchLeavesTintSource.WARMTH_RESOLVER);
+    }
+
+    @SubscribeEvent
+    public static void registerBlockTintSources(RegisterColorHandlersEvent.BlockTintSources event) {
+        event.register(List.of(new LarchLeavesTintSource()), ModBlocks.LARCH_LEAVES.get());
     }
 
     @SubscribeEvent

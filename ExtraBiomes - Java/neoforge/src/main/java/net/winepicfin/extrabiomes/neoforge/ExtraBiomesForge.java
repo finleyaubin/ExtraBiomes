@@ -49,7 +49,9 @@ import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.ModFoliagePlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
+import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
@@ -85,6 +87,7 @@ public class ExtraBiomesForge
         ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
+        ModFoliagePlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
@@ -92,6 +95,7 @@ public class ExtraBiomesForge
         GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
+        LarchForestFeatures.register();
         NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();

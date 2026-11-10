@@ -47,6 +47,7 @@ public class ModSurfaceRules {
     // waiting on random ticks to notice the buried water pockets one at a time.
     private static final SurfaceRules.RuleSource FARMLAND = SurfaceRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7));
     private static final SurfaceRules.RuleSource MUD = makeStateRule(Blocks.MUD);
+    private static final SurfaceRules.RuleSource COARSE_DIRT = makeStateRule(Blocks.COARSE_DIRT);
     private static final SurfaceRules.RuleSource PODZOL = makeStateRule(Blocks.PODZOL);
     private static final SurfaceRules.RuleSource PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
     private static final SurfaceRules.RuleSource MYCELIUM = makeStateRule(Blocks.MYCELIUM);
@@ -223,6 +224,14 @@ public class ModSurfaceRules {
                                                         SurfaceRules.ifTrue(SurfaceRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.50, 0.6), MUD),
                                                         moorlandPodzol()))),
                                 grassOverStone)),
+
+                // No base rule needed (vanilla default grass/dirt); only brown heath patches are added. abovePreliminarySurface() keeps them off cave floors.
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.LARCH_FOREST),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                                SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(),
+                                        SurfaceRules.sequence(
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.MEDIUM_PATCH, 0.3, 0.6), PODZOL),
+                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(ModNoiseParameters.SMALL_PATCH, 0.4, 1.0), COARSE_DIRT))))),
 
                 // No base rule needed (Bedrock top/mid already match vanilla default grass/dirt); only the mycelium noise patch is added.
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(biomes, ModBiomes.FUNGLE_JUNGLE),

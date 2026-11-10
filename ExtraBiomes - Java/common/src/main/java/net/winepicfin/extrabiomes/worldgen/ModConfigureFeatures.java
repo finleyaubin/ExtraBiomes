@@ -35,6 +35,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.LarchFoliagePlacer;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.MysticTrunkPlacer;
 
 import java.util.List;
@@ -98,10 +99,10 @@ public class ModConfigureFeatures {
         );
         register(context, LARCH_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.LARCH_LOG.get()),
-                new StraightTrunkPlacer(14, 6, 0),
+                new StraightTrunkPlacer(10, 4, 0),
                 BlockStateProvider.simple(ModBlocks.LARCH_LEAVES.get()),
-                new SpruceFoliagePlacer(UniformInt.of(2, 3), ConstantInt.of(1), UniformInt.of(3, 4)),
-                new TwoLayersFeatureSize(2, 1, 2)).build()
+                new LarchFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(2, 3)),
+                new TwoLayersFeatureSize(2, 0, 2)).build()
         );
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));
