@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -56,6 +57,7 @@ import net.winepicfin.extrabiomes.worldgen.placement.LakeSafeOrigin;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.RiverNoiseFilter;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.WindmillStructure;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.LarchFoliagePlacer;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.MysticTrunkPlacer;
 
 import java.lang.reflect.Constructor;
@@ -177,6 +179,7 @@ public final class DatapackRegistries {
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "bryce_pillars", BrycePillarsFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_double_tall_grass", DoubleTallGrassFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "moorland_waterlily_fixup", WaterLilyFixupFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "snow_patch", net.winepicfin.extrabiomes.worldgen.features.larchforest.SnowPatchFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "mystic_goo_conversion", GooConversionFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "netherlands_wheat_field", NetherlandsWheatFieldFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "netherlands_tulip_field", NetherlandsTulipFieldFeature.CODEC);
@@ -215,6 +218,11 @@ public final class DatapackRegistries {
                 newTrunkPlacerType(MysticTrunkPlacer.CODEC));
         BuiltInRegistries.TRUNK_PLACER_TYPE.freeze();
 
+        setFrozen(BuiltInRegistries.FOLIAGE_PLACER_TYPE, false);
+        register(BuiltInRegistries.FOLIAGE_PLACER_TYPE, Registries.FOLIAGE_PLACER_TYPE, "larch_foliage_placer",
+                newFoliagePlacerType(LarchFoliagePlacer.CODEC));
+        BuiltInRegistries.FOLIAGE_PLACER_TYPE.freeze();
+
         setFrozen(BuiltInRegistries.TRIGGER_TYPES, false);
         register(BuiltInRegistries.TRIGGER_TYPES, Registries.TRIGGER_TYPE, "lured_piranha_with_bait", new BaitLureTrigger());
         BuiltInRegistries.TRIGGER_TYPES.freeze();
@@ -241,6 +249,17 @@ public final class DatapackRegistries {
             Constructor<TrunkPlacerType> ctor = TrunkPlacerType.class.getDeclaredConstructor(MapCodec.class);
             ctor.setAccessible(true);
             return (TrunkPlacerType<P>) ctor.newInstance(codec);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <P extends net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer> FoliagePlacerType<P> newFoliagePlacerType(MapCodec<P> codec) {
+        try {
+            Constructor<FoliagePlacerType> ctor = FoliagePlacerType.class.getDeclaredConstructor(MapCodec.class);
+            ctor.setAccessible(true);
+            return (FoliagePlacerType<P>) ctor.newInstance(codec);
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
         }

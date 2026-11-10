@@ -49,6 +49,7 @@ public class ModSurfaceRules {
     // waiting on random ticks to notice the buried water pockets one at a time.
     private static final MaterialRule FARMLAND = MaterialRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7));
     private static final MaterialRule MUD = makeStateRule(Blocks.MUD);
+    private static final MaterialRule COARSE_DIRT = makeStateRule(Blocks.COARSE_DIRT);
     private static final MaterialRule PODZOL = makeStateRule(Blocks.PODZOL);
     private static final MaterialRule PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
     private static final MaterialRule MYCELIUM = makeStateRule(Blocks.MYCELIUM);
@@ -225,6 +226,14 @@ public class ModSurfaceRules {
                                                         MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.50, 0.6), MUD),
                                                         moorlandPodzol()))),
                                 grassOverStone)),
+
+                // No base rule needed (vanilla default grass/dirt); only brown heath patches are added. abovePreliminarySurface() keeps them off cave floors.
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.LARCH_FOREST),
+                        MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
+                                MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(),
+                                        MaterialRules.sequence(
+                                                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.3, 0.6), PODZOL),
+                                                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.SMALL_PATCH, 0.4, 1.0), COARSE_DIRT))))),
 
                 // No base rule needed (Bedrock top/mid already match vanilla default grass/dirt); only the mycelium noise patch is added.
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.FUNGLE_JUNGLE),

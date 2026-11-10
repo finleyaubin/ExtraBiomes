@@ -32,12 +32,12 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
                 .add(ModBiomes.CHARRED_FOREST, ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,
                         ModBiomes.DEEP_DARK_FOREST, ModBiomes.DEEP_DARK_GREEN, ModBiomes.DESERT_BRYCE, ModBiomes.FLOATING_JUNGLE,
                         ModBiomes.FUNGLE_JUNGLE, ModBiomes.FUTURE_DESERT, ModBiomes.GLACIER, ModBiomes.GRAND_OASIS,
-                        ModBiomes.JELLYFISH_FIELDS, ModBiomes.JUNGLE_MARSH, ModBiomes.JUNGLE_PILLARS, ModBiomes.LUSH_MESA,
-                        ModBiomes.LUSH_MESA_BRYCE, ModBiomes.MOORLANDS, ModBiomes.MYSTIC_FOREST, ModBiomes.SHATTERED_SWAMP,
+                        ModBiomes.JELLYFISH_FIELDS, ModBiomes.JUNGLE_MARSH, ModBiomes.JUNGLE_PILLARS, ModBiomes.LARCH_FOREST,
+                        ModBiomes.LUSH_MESA, ModBiomes.LUSH_MESA_BRYCE, ModBiomes.MOORLANDS, ModBiomes.MYSTIC_FOREST, ModBiomes.SHATTERED_SWAMP,
                         ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.THE_NETHERLANDS, ModBiomes.THE_NETHERLANDS_MUTATED,
                         ModBiomes.TAIGA_SPIKES, ModBiomes.TROPICAL_ISLAND);
 
-        this.tag(BiomeTags.IS_FOREST).add(ModBiomes.CHARRED_FOREST, ModBiomes.DEEP_DARK_FOREST);
+        this.tag(BiomeTags.IS_FOREST).add(ModBiomes.CHARRED_FOREST, ModBiomes.DEEP_DARK_FOREST, ModBiomes.LARCH_FOREST);
         this.tag(BiomeTags.IS_JUNGLE).add(ModBiomes.DEEP_DARK_GREEN, ModBiomes.FLOATING_JUNGLE, ModBiomes.FUNGLE_JUNGLE,
                 ModBiomes.JUNGLE_MARSH, ModBiomes.JUNGLE_PILLARS, ModBiomes.LUSH_MESA, ModBiomes.LUSH_MESA_BRYCE);
         this.tag(BiomeTags.IS_TAIGA).add(ModBiomes.DEEP_DARK_FOREST, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES);
@@ -59,7 +59,7 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         this.tag(BiomeTags.MINESHAFT_BLOCKING).add(ModBiomes.DEEP_DARK_GREEN);
 
         this.tag(BiomeTags.SPAWNS_COLD_VARIANT_FROGS).add(ModBiomes.DEEP_DARK_GREEN, ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE,
-                ModBiomes.COLD_MESA_PLATEAU, ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES, ModBiomes.VOLCANIC_MOSS_TUNDRA);
+                ModBiomes.COLD_MESA_PLATEAU, ModBiomes.GLACIER, ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.TAIGA_SPIKES, ModBiomes.VOLCANIC_MOSS_TUNDRA, ModBiomes.LARCH_FOREST);
         this.tag(BiomeTags.SPAWNS_WARM_VARIANT_FROGS).add(ModBiomes.CHARRED_FOREST, ModBiomes.DESERT_BRYCE, ModBiomes.FUTURE_DESERT,
                 ModBiomes.GRAND_OASIS, ModBiomes.JELLYFISH_FIELDS, ModBiomes.TROPICAL_ISLAND);
         this.tag(BiomeTags.SPAWNS_SNOW_FOXES).add(ModBiomes.COLD_MESA, ModBiomes.COLD_MESA_BRYCE, ModBiomes.COLD_MESA_PLATEAU,

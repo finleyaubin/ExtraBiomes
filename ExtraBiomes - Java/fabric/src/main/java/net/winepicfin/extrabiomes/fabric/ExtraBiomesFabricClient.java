@@ -1,7 +1,15 @@
 package net.winepicfin.extrabiomes.fabric;
 
+import java.util.List;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorResolverRegistry;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.minecraft.server.packs.PackType;
+import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTintSource;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
@@ -75,6 +83,10 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
                         new Material(GooFluid.FLOWING_TEXTURE, true),
                         new Material(GooFluid.OVERLAY_TEXTURE, true),
                         BlockTintSources.constant(0xFFFFFFFF)));
+
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(LarchLeavesColormap.RELOAD_LISTENER_ID, new LarchLeavesColormap.ReloadListener());
+        ColorResolverRegistry.register(LarchLeavesTintSource.WARMTH_RESOLVER);
+        BlockColorRegistry.register(List.of(new LarchLeavesTintSource()), ModBlocks.LARCH_LEAVES.get());
 
         registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), StandingSignRenderer::new);
         registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);

@@ -42,6 +42,8 @@ public final class BiomeClimateTuning {
     public static final Climate TAIGA_SPIKES = register("taiga_spikes", 0.0f, 1.0f);
     public static final Climate TROPICAL_ISLAND = register("tropical_island", 1.0f, 0.9f);
     public static final Climate VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra", 0.2f, 0.85f);
+    // Java-only biome, so it stays out of BY_BEDROCK_KEY; 0.25 puts vanilla's snowline only on its highest slopes.
+    public static final Climate LARCH_FOREST = new Climate(0.25f, 0.6f);
 
     private BiomeClimateTuning() {
     }

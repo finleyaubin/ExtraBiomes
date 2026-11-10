@@ -13,6 +13,7 @@ import net.winepicfin.extrabiomes.worldgen.features.oasis.OasisFossilFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.boulder.BoulderFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moss.MossFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFeatures;
@@ -69,6 +70,7 @@ public class ModWorldGenProvider {
                 BryceMesaPillarFeatures.bootstrapConfigured(context);
                 PalmTreeFeatures.bootstrapConfigured(context);
                 VolcanicMossTundraFeatures.bootstrapConfigured(context);
+                LarchForestFeatures.bootstrapConfigured(context);
             })
             .add(Registries.PLACED_FEATURE, context -> {
                 ModPlacedFeatures.bootstrap(context);
@@ -94,6 +96,7 @@ public class ModWorldGenProvider {
                 TropicalIslandFeatures.bootstrapPlaced(context);
                 BryceMesaPillarFeatures.bootstrapPlaced(context);
                 VolcanicMossTundraFeatures.bootstrapPlaced(context);
+                LarchForestFeatures.bootstrapPlaced(context);
             })
             .add(Registries.TEMPLATE_POOL, WindmillStructures::bootstrapTemplatePool)
             .add(Registries.STRUCTURE, WindmillStructures::bootstrapStructure)
