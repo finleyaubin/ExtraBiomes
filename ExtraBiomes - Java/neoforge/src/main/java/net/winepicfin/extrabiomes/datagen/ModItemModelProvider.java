@@ -95,12 +95,15 @@ public class ModItemModelProvider implements DataProvider {
         simpleItem(ModItems.PALM_HANGING_SIGN.get());
         simpleItem(ModItems.GILDED_SKY_SIGN.get());
         simpleItem(ModItems.GILDED_SKY_HANGING_SIGN.get());
+        simpleItem(ModItems.LARCH_SIGN.get());
+        simpleItem(ModItems.LARCH_HANGING_SIGN.get());
 
         // Doors delegate to their block model instead (see ModBlockStateProvider.doorBlockState).
         simpleItem(ModBlocks.MYSTIC_DOOR.get().asItem());
         simpleItem(ModBlocks.SKY_DOOR.get().asItem());
         simpleItem(ModBlocks.PALM_DOOR.get().asItem());
         simpleItem(ModBlocks.GILDED_SKY_DOOR.get().asItem());
+        simpleItem(ModBlocks.LARCH_DOOR.get().asItem());
 
         // Black Sandstone Wall - "wall_inventory" parent needs an explicit item entry (walls, unlike
         // most blocks, use a dedicated inventory-only model rather than reusing a placed-block model).
