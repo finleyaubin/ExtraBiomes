@@ -231,6 +231,30 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
         this.tag(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
         this.tag(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
+        this.tag(BlockTags.WALLS).add(blocks(ModTagContents.WALLS));
+        this.tag(BlockTags.STAIRS).add(blocks(ModTagContents.STONE_STAIRS));
+        this.tag(BlockTags.SLABS).add(blocks(ModTagContents.STONE_SLABS));
+
+        // The vanilla stairs/slabs/doors/trapdoors/buttons/pressure_plates/signs tags already nest
+        // these wooden_* tags, so filling the wooden_* ones is enough for the parent tags too.
+        this.tag(BlockTags.WOODEN_STAIRS).add(blocks(ModTagContents.WOODEN_STAIRS));
+        this.tag(BlockTags.WOODEN_SLABS).add(blocks(ModTagContents.WOODEN_SLABS));
+        this.tag(BlockTags.WOODEN_BUTTONS).add(blocks(ModTagContents.WOODEN_BUTTONS));
+        this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(blocks(ModTagContents.WOODEN_PRESSURE_PLATES));
+        this.tag(BlockTags.WOODEN_DOORS).add(blocks(ModTagContents.WOODEN_DOORS));
+        this.tag(BlockTags.WOODEN_TRAPDOORS).add(blocks(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(BlockTags.STANDING_SIGNS).add(blocks(ModTagContents.STANDING_SIGNS));
+        this.tag(BlockTags.WALL_SIGNS).add(blocks(ModTagContents.WALL_SIGNS));
+        this.tag(BlockTags.CEILING_HANGING_SIGNS).add(blocks(ModTagContents.CEILING_HANGING_SIGNS));
+        this.tag(BlockTags.WALL_HANGING_SIGNS).add(blocks(ModTagContents.WALL_HANGING_SIGNS));
+        this.tag(BlockTags.SAPLINGS).add(blocks(ModTagContents.SAPLINGS));
+        this.tag(BlockTags.SAND).add(blocks(ModTagContents.SAND));
+
+        this.tag(Tags.Blocks.STRIPPED_LOGS).add(blocks(ModTagContents.STRIPPED_LOGS));
+        this.tag(Tags.Blocks.STRIPPED_WOODS).add(blocks(ModTagContents.STRIPPED_WOODS));
+        this.tag(Tags.Blocks.ORES).add(blocks(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(blocks(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(blocks(ModTagContents.MUSHROOMS));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
