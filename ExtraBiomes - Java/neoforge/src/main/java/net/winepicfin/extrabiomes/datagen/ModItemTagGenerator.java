@@ -123,6 +123,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(Tags.Items.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
         this.tag(Tags.Items.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Items.ORES).add(items(ModTagContents.ORES));
+        this.tag(Tags.Items.MUSHROOMS).add(items(ModTagContents.MUSHROOMS));
     }
 
     private static Item[] items(List<RegistrySupplier<Block>> blocks) {
