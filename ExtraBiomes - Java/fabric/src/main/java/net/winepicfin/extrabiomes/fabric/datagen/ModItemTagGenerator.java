@@ -124,6 +124,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ConventionalItemTags.STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
         this.valueLookupBuilder(ConventionalItemTags.STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
         this.valueLookupBuilder(ConventionalItemTags.ORES).add(itemKeys(ModTagContents.ORES));
+        this.valueLookupBuilder(ConventionalItemTags.MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
     }
 
     private static Item[] itemKeys(List<RegistrySupplier<Block>> blocks) {
