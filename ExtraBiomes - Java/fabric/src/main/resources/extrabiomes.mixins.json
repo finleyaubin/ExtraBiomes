@@ -13,7 +13,6 @@
     "WoodTypeAccessor"
   ],
   "client": [
-    "ClientLevelTintCacheMixin",
     "WolfModelAccessor"
   ],
   "injectors": {
