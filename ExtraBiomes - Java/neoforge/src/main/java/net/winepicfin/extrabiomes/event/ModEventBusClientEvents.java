@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.neoforged.api.distmarker.Dist;
@@ -19,7 +20,12 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.winepicfin.extrabiomes.client.DenseCloudSteam;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.client.SteamParticle;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.particle.ModParticles;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
@@ -139,4 +145,19 @@ public class ModEventBusClientEvents {
     // written as bare 0xRRGGBB literals with a zero alpha byte, so a manual registration here
     // that just forwards getColor(layer) without forcing alpha opaque overrides vanilla's
     // correct mapping with a fully-transparent one, rendering the eggs invisible).
+
+    @SubscribeEvent
+    public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener((ResourceManagerReloadListener) LarchLeavesColormap::reload);
+    }
+
+    @SubscribeEvent
+    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
+    }
 }
