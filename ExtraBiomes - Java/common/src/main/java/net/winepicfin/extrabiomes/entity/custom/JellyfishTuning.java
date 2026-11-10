@@ -14,8 +14,6 @@ public final class JellyfishTuning {
 
     public static final int MILK_COOLDOWN_TICKS = 30 * 20;
 
-    public static final int MILK_COOLDOWN_TICKS = 30 * 20;
-
     public static final int BEACH_MIN_Y = 62;
     public static final int BEACH_MAX_Y = 64;
     public static final int BEACH_WATER_RANGE = 5;

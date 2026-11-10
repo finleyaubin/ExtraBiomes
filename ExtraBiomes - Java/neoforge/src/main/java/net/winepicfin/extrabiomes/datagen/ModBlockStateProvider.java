@@ -101,22 +101,27 @@ public class ModBlockStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SKY_TRAPDOOR.get()), texLoc("sky_trapdoor"),true,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.SKY_SIGN.get()),((WallSignBlock) ModBlocks.SKY_WALL_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlock((ModBlocks.SKY_HANGING_SIGN.get()),( ModBlocks.SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
+        // larch wood
         blockWithItem(ModBlocks.LARCH_PLANKS);
-        logBlock(ModBlocks.LARCH_LOG.get());
-        logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
-        axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
-        axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
-        blockWithItemCutout(ModBlocks.LARCH_LEAVES);
-        saplingBlock(ModBlocks.LARCH_SAPLING.get());
-        stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
-        slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
-        buttonBlock(ModBlocks.LARCH_BUTTON.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
-        pressurePlateBlock(ModBlocks.LARCH_PRESSURE_PLATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
-        fenceBlock(ModBlocks.LARCH_FENCE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
-        fenceGateBlock(ModBlocks.LARCH_FENCE_GATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
-        doorBlockState(ModBlocks.LARCH_DOOR.get(), texLoc("larch_door_bottom"), texLoc("larch_door_top"));
-        trapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
-        signBlockState(ModBlocks.LARCH_SIGN.get(), ModBlocks.LARCH_WALL_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        logBlock((RotatedPillarBlock) ModBlocks.LARCH_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_LARCH_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.LARCH_WOOD.get()), blockTexture(ModBlocks.LARCH_LOG.get()),blockTexture(ModBlocks.LARCH_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_LARCH_WOOD.get()), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()),blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
+        saplingBlock(ModBlocks.LARCH_SAPLING);
+        simpleBlockItem(ModBlocks.LARCH_LOG.get(),models().withExistingParent("extrabiomes:larch_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.LARCH_WOOD.get(),models().withExistingParent("extrabiomes:larch_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_LARCH_LOG.get(),models().withExistingParent("extrabiomes:stripped_larch_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_LARCH_WOOD.get(),models().withExistingParent("extrabiomes:stripped_larch_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.LARCH_STAIRS.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.LARCH_SLAB.get()), blockModel(ModBlocks.LARCH_PLANKS.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.LARCH_BUTTON.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.LARCH_PRESSURE_PLATE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.LARCH_FENCE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.LARCH_FENCE_GATE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.LARCH_DOOR.get()), texLoc("larch_door_bottom"),texLoc("larch_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.LARCH_TRAPDOOR.get()), texLoc("larch_trapdoor"),true,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.LARCH_SIGN.get()),((WallSignBlock) ModBlocks.LARCH_WALL_SIGN.get()),blockTexture(ModBlocks.LARCH_PLANKS.get()));
         hangingSignBlock((ModBlocks.LARCH_HANGING_SIGN.get()),( ModBlocks.LARCH_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
@@ -190,6 +195,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
     // the removed runtime ItemBlockRenderTypes.setRenderLayer(Block, RenderType) API).
     private void blockWithItemCutout(RegistrySupplier<Block> blockRegistryObject){
         simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(name(blockRegistryObject.get()), blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    // Larch leaves are tinted by LarchLeavesTint, so they need block/leaves' tintindex that cube_all lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject){
+        Block block = blockRegistryObject.get();
+        simpleBlockWithItem(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", blockTexture(block)).renderType("cutout"));
     }
 
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject){

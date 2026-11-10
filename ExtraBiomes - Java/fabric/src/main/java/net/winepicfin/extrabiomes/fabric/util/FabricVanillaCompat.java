@@ -100,7 +100,7 @@ public class FabricVanillaCompat {
         StrippableBlockRegistry.register(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_WOOD.get());
         StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_LOG.get(), ModBlocks.STRIPPED_GILDED_SKY_LOG.get());
         StrippableBlockRegistry.register(ModBlocks.GILDED_SKY_WOOD.get(), ModBlocks.STRIPPED_GILDED_SKY_WOOD.get());
-        BlockTransformerHelper.registerStripping(ModBlocks.LARCH_LOG.get(), ModBlocks.STRIPPED_LARCH_LOG.get());
+        StrippableBlockRegistry.register(ModBlocks.LARCH_LOG.get(), ModBlocks.STRIPPED_LARCH_LOG.get());
         StrippableBlockRegistry.register(ModBlocks.LARCH_WOOD.get(), ModBlocks.STRIPPED_LARCH_WOOD.get());
         StrippableBlockRegistry.register(ModBlocks.PALM_LOG.get(), ModBlocks.STRIPPED_PALM_LOG.get());
         StrippableBlockRegistry.register(ModBlocks.PALM_WOOD.get(), ModBlocks.STRIPPED_PALM_WOOD.get());

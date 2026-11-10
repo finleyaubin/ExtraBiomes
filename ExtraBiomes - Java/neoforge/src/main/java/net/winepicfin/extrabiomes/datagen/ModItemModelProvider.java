@@ -119,6 +119,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         evenSimplerBlockItem(ModBlocks.GILDED_SKY_FENCE_GATE);
         simpleItem(ModItems.GILDED_SKY_SIGN);
         simpleItem(ModItems.GILDED_SKY_HANGING_SIGN);
+        // Larch Wood
+        simpleBlockItem(ModBlocks.LARCH_DOOR);
+        fenceItem(ModBlocks.LARCH_FENCE, ModBlocks.LARCH_PLANKS);
+        buttonItem(ModBlocks.LARCH_BUTTON, ModBlocks.LARCH_PLANKS);
+        trapdoorItem(ModBlocks.LARCH_TRAPDOOR);
+        evenSimplerBlockItem(ModBlocks.LARCH_STAIRS);
+        evenSimplerBlockItem(ModBlocks.LARCH_SLAB);
+        evenSimplerBlockItem(ModBlocks.LARCH_PRESSURE_PLATE);
+        evenSimplerBlockItem(ModBlocks.LARCH_FENCE_GATE);
+        saplingItem(ModBlocks.LARCH_SAPLING);
         simpleItem(ModItems.LARCH_SIGN);
         simpleItem(ModItems.LARCH_HANGING_SIGN);
         // Spawn Eggs
