@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 
@@ -157,7 +159,7 @@ public class ModBlockStateProvider implements DataProvider {
         logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
         axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
         axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
-        blockWithItem(ModBlocks.LARCH_LEAVES);
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES, LarchLeavesTint.OUT_OF_WORLD_COLOR);
         saplingBlock(ModBlocks.LARCH_SAPLING.get());
         stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
@@ -263,6 +265,30 @@ public class ModBlockStateProvider implements DataProvider {
         blockStates.put(block, generator);
         ResourceLocation inventory = ModelTemplates.CUBE_ALL.createWithSuffix(block, "_inventory", new TextureMapping().put(TextureSlot.ALL, texture), models::put);
         delegateItemModel(block, inventory);
+    }
+
+    // The colour comes from LarchLeavesTint: the block model needs block/leaves' tintindex, and the item its own constant tint.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject, int itemTint) {
+        Block block = blockRegistryObject.get();
+        ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
+        simpleBlockState(block, model);
+        delegateItemModel(block, model);
+        tintClientItem(block, itemTint);
+    }
+
+    private void tintClientItem(Block block, int tint) {
+        ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
+        Supplier<JsonElement> untintedItem = items.get(itemId);
+        items.put(itemId, () -> {
+            JsonObject constantTint = new JsonObject();
+            constantTint.addProperty("type", "minecraft:constant");
+            constantTint.addProperty("value", tint);
+            JsonArray tints = new JsonArray();
+            tints.add(constantTint);
+            JsonObject json = untintedItem.get().getAsJsonObject();
+            json.getAsJsonObject("model").add("tints", tints);
+            return json;
+        });
     }
 
     private void cubeAllBlock(Block block, ResourceLocation texture) {

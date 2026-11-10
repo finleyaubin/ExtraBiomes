@@ -1,5 +1,10 @@
 package net.winepicfin.extrabiomes.event;
 
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -103,16 +108,16 @@ public class ModEventBusClientEvents {
     public static void setupClient(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             for (var block : new net.minecraft.world.level.block.Block[]{
-                    ModBlocks.MYSTIC_SAPLING.get(), ModBlocks.SKY_SAPLING.get(), ModBlocks.PALM_SAPLING.get(),
+                    ModBlocks.MYSTIC_SAPLING.get(), ModBlocks.SKY_SAPLING.get(), ModBlocks.PALM_SAPLING.get(), ModBlocks.LARCH_SAPLING.get(),
                     ModBlocks.BLACK_MUSHROOM.get(), ModBlocks.BLUE_MUSHROOM.get(), ModBlocks.CYAN_MUSHROOM.get(),
                     ModBlocks.GREEN_MUSHROOM.get(), ModBlocks.ORANGE_MUSHROOM.get(), ModBlocks.PURPLE_MUSHROOM.get(),
                     ModBlocks.WHITE_MUSHROOM.get(), ModBlocks.YELLOW_MUSHROOM.get(), ModBlocks.GLOW_MUSHROOM.get(),
                     ModBlocks.BLACK_MUSHROOM_BLOCK.get(), ModBlocks.BLUE_MUSHROOM_BLOCK.get(), ModBlocks.CYAN_MUSHROOM_BLOCK.get(),
                     ModBlocks.GREEN_MUSHROOM_BLOCK.get(), ModBlocks.ORANGE_MUSHROOM_BLOCK.get(), ModBlocks.PURPLE_MUSHROOM_BLOCK.get(),
                     ModBlocks.WHITE_MUSHROOM_BLOCK.get(), ModBlocks.YELLOW_MUSHROOM_BLOCK.get(), ModBlocks.GLOW_MUSHROOM_BLOCK.get(),
-                    ModBlocks.MYSTIC_LEAVES.get(), ModBlocks.SKY_LEAVES.get(), ModBlocks.PALM_LEAVES.get(),
-                    ModBlocks.MYSTIC_DOOR.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.GILDED_SKY_DOOR.get(),
-                    ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get()}) {
+                    ModBlocks.MYSTIC_LEAVES.get(), ModBlocks.SKY_LEAVES.get(), ModBlocks.PALM_LEAVES.get(), ModBlocks.LARCH_LEAVES.get(),
+                    ModBlocks.MYSTIC_DOOR.get(), ModBlocks.SKY_DOOR.get(), ModBlocks.PALM_DOOR.get(), ModBlocks.GILDED_SKY_DOOR.get(), ModBlocks.LARCH_DOOR.get(),
+                    ModBlocks.MYSTIC_TRAPDOOR.get(), ModBlocks.SKY_TRAPDOOR.get(), ModBlocks.PALM_TRAPDOOR.get(), ModBlocks.GILDED_SKY_TRAPDOOR.get(), ModBlocks.LARCH_TRAPDOOR.get()}) {
                 ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout());
             }
             for (var block : new net.minecraft.world.level.block.Block[]{
@@ -139,4 +144,14 @@ public class ModEventBusClientEvents {
     // written as bare 0xRRGGBB literals with a zero alpha byte, so a manual registration here
     // that just forwards getColor(layer) without forcing alpha opaque overrides vanilla's
     // correct mapping with a fully-transparent one, rendering the eggs invisible).
+
+    @SubscribeEvent
+    public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener((ResourceManagerReloadListener) LarchLeavesColormap::reload);
+    }
+
+    @SubscribeEvent
+    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
+    }
 }
