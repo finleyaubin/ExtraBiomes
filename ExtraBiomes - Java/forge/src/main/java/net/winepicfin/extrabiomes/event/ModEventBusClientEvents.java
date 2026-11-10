@@ -87,11 +87,6 @@ public class ModEventBusClientEvents {
     }
 
     @SubscribeEvent
-    public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
-        event.register(LarchLeavesTint.WARMTH_RESOLVER);
-    }
-
-    @SubscribeEvent
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
     }
