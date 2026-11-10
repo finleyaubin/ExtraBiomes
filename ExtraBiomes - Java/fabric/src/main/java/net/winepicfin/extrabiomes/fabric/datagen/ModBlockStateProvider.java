@@ -152,7 +152,7 @@ public class ModBlockStateProvider implements DataProvider {
         logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
         axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
         axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
-        blockWithItem(ModBlocks.LARCH_LEAVES);
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
         saplingBlock(ModBlocks.LARCH_SAPLING.get());
         stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
@@ -242,6 +242,13 @@ public class ModBlockStateProvider implements DataProvider {
         cubeAllBlock(blockRegistryObject.get(), blockTexture(blockRegistryObject.get()));
     }
 
+    // The colour comes from LarchLeavesTint: ModelTemplates.LEAVES carries the tintindex that cubeAll lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
+        simpleBlockState(block, model);
+        delegateItemModel(block, model);
+    }
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
         ResourceLocation texture = blockTexture(block);

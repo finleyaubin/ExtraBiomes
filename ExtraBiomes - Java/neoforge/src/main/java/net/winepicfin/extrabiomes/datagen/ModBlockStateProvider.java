@@ -150,7 +150,7 @@ public class ModBlockStateProvider implements DataProvider {
         logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
         axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
         axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
-        blockWithItemCutout(ModBlocks.LARCH_LEAVES);
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
         saplingBlock(ModBlocks.LARCH_SAPLING.get());
         stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
@@ -246,6 +246,12 @@ public class ModBlockStateProvider implements DataProvider {
     // produce it here, so this now matches Fabric's runtime-registration approach instead.
     private void blockWithItemCutout(RegistrySupplier<Block> blockRegistryObject) {
         blockWithItem(blockRegistryObject);
+    }
+
+    // The colour comes from LarchLeavesTint: vanilla's block/leaves parent carries the tintindex that cubeAll lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        simpleBlockWithItem(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", blockTexture(block)));
     }
 
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
