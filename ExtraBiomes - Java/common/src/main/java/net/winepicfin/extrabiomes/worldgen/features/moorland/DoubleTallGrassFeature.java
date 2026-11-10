@@ -50,7 +50,7 @@ public class DoubleTallGrassFeature implements Feature {
         if (!level.getBiome(lower).is(ModBiomes.MOORLANDS)
                 || !(lowerState.isAir() || lowerState.is(Blocks.SHORT_GRASS))
                 || !level.getBlockState(upper).isAir()
-                || !level.getBlockState(lower.below()).is(BlockTags.DIRT)) {
+                || !level.getBlockState(lower.below()).is(BlockTags.SUBSTRATE_OVERWORLD)) {
             return false;
         }
         level.setBlock(lower, Blocks.TALL_GRASS.defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 2);
