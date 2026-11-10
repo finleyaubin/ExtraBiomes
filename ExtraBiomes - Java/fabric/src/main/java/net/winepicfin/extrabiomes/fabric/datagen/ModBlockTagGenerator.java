@@ -252,6 +252,8 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         this.tag(ConventionalBlockTags.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
         this.tag(ConventionalBlockTags.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
         this.tag(ConventionalBlockTags.ORES).add(keys(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(keys(ModTagContents.MUSHROOMS));
     }
 
     private static ResourceKey<Block>[] keys(List<RegistrySupplier<Block>> blocks) {

@@ -106,11 +106,6 @@ public class ModEventBusClientEvents {
     }
 
     @SubscribeEvent
-    public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
-        event.register(LarchLeavesTintSource.WARMTH_RESOLVER);
-    }
-
-    @SubscribeEvent
     public static void registerBlockTintSources(RegisterColorHandlersEvent.BlockTintSources event) {
         event.register(List.of(new LarchLeavesTintSource()), ModBlocks.LARCH_LEAVES.get());
     }

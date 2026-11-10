@@ -254,6 +254,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(Tags.Blocks.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
         this.tag(Tags.Blocks.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Blocks.ORES).add(keys(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(keys(ModTagContents.MUSHROOMS));
     }
 
     @SuppressWarnings("unchecked")

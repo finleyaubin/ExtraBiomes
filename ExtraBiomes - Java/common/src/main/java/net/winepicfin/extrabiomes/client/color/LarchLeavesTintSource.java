@@ -4,21 +4,26 @@ import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.ColorResolver;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 
-/** Tints larch leaves from {@link LarchLeavesColormap}: biome temperature picks gold or green, position picks the shade. */
+/** Tints larch leaves from {@link LarchLeavesColormap} by world position alone, so every biome shows the same mix. */
 public class LarchLeavesTintSource implements BlockTintSource {
     /** Autumn gold, for leaves shown without a world around them (inventory, held item). */
     public static final int OUT_OF_WORLD_COLOR = 0xFFEDB42B;
 
-    /** Encodes biome temperature as a grey level so vanilla's biome blending smooths it across biome borders. */
-    public static final ColorResolver WARMTH_RESOLVER = (biome, x, z) -> greyLevel(biome.getBaseTemperature());
+    // Noises use fixed seeds: leaf colour is cosmetic, so it needn't follow the world seed.
+    // Broad patches, ~50 blocks across, so whole stands lean gold or green together.
+    private static final double GREENNESS_NOISE_FREQUENCY = 0.02;
+    private static final SimplexNoise GREENNESS_NOISE = new SimplexNoise(new LegacyRandomSource(0x6EE7L));
+    // Centre and spread on the colour map's gold-to-green axis: mostly gold, with the odd greener patch.
+    private static final float TYPICAL_GREENNESS = 0.3F;
+    private static final float GREENNESS_SPREAD = 0.4F;
 
-    // Roughly one shade change every 12 blocks, so each tree reads as its own colour.
-    private static final double VARIATION_NOISE_FREQUENCY = 0.08;
-    private static final int OPAQUE = 0xFF000000;
+    // Roughly one shade change every 12 blocks, sideways and up, so trees differ and shift along their height.
+    private static final double SHADE_NOISE_FREQUENCY = 0.08;
+    private static final SimplexNoise SHADE_NOISE = new SimplexNoise(new LegacyRandomSource(0x1A4C4L));
 
     @Override
     public int color(BlockState state) {
@@ -27,17 +32,16 @@ public class LarchLeavesTintSource implements BlockTintSource {
 
     @Override
     public int colorInWorld(BlockState state, BlockAndTintGetter level, BlockPos pos) {
-        float warmth = (level.getBlockTint(pos, WARMTH_RESOLVER) & 0xFF) / 255.0F;
-        return LarchLeavesColormap.colorAt(warmth, variationAt(pos));
+        return LarchLeavesColormap.colorAt(greennessAt(pos), shadeAt(pos));
     }
 
-    private static float variationAt(BlockPos pos) {
-        float noise = Biome.BIOME_INFO_NOISE.get(pos.getX() * VARIATION_NOISE_FREQUENCY, pos.getZ() * VARIATION_NOISE_FREQUENCY);
+    private static float greennessAt(BlockPos pos) {
+        float noise = GREENNESS_NOISE.get(pos.getX() * GREENNESS_NOISE_FREQUENCY, pos.getZ() * GREENNESS_NOISE_FREQUENCY);
+        return Mth.clamp(TYPICAL_GREENNESS + noise * GREENNESS_SPREAD, 0.0F, 1.0F);
+    }
+
+    private static float shadeAt(BlockPos pos) {
+        float noise = SHADE_NOISE.get(pos.getX() * SHADE_NOISE_FREQUENCY, pos.getY() * SHADE_NOISE_FREQUENCY, pos.getZ() * SHADE_NOISE_FREQUENCY);
         return (noise + 1.0F) / 2.0F;
-    }
-
-    private static int greyLevel(float temperature) {
-        int level = Math.round(Mth.clamp(temperature, 0.0F, 1.0F) * 255.0F);
-        return OPAQUE | level << 16 | level << 8 | level;
     }
 }

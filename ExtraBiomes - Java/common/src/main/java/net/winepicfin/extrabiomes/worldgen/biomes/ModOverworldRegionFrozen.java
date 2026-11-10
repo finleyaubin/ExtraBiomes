@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 /**
  * A small fourth region for the two "vast but spaced out" frozen biomes, Glacier and Volcanic Moss
- * Tundra, plus Larch Forest on the non-frozen half of vanilla Grove's slopes. Registered with the Rare region's weight (see {@link ModTerrablender}), so each patch is
+ * Tundra, plus Larch Forest on vanilla Grove's COOL-band slopes. Registered with the Rare region's weight (see {@link ModTerrablender}), so each patch is
  * large but they turn up about as seldom as the Rare region's biomes.
  * <p>
  * Why its own region: both want wide, smooth-noise boxes (FROZEN temperature, COAST-MID_INLAND, every
@@ -66,14 +66,16 @@ public class ModOverworldRegionFrozen extends Region {
         builder.build().forEach(mapper::accept);
     }
 
-    // Reuses vanilla Grove's own climate points so Larch Forest lands on exactly the slopes Grove would. Grove's FROZEN points are left to vanilla: Glacier and Volcanic Moss Tundra already claim that temperature band in this region.
+    // Reuses vanilla Grove's own climate points so Larch Forest lands on exactly the slopes Grove would, but only the COOL band: FROZEN belongs to Glacier and Volcanic Moss Tundra here, and NEUTRAL is left to Grove so larch stays uncommon.
     private static void addLarchForestOverGrove(VanillaParameterOverlayBuilder builder) {
         long warmestFrozenTemperature = ParameterUtils.Temperature.FROZEN.parameter().max();
+        long warmestCoolTemperature = ParameterUtils.Temperature.COOL.parameter().max();
 
         new ModifiedVanillaOverworldBuilder().build().stream()
                 .filter(vanillaPoint -> vanillaPoint.getSecond() == Biomes.GROVE)
                 .map(Pair::getFirst)
                 .filter(grovePoint -> grovePoint.temperature().max() > warmestFrozenTemperature)
+                .filter(grovePoint -> grovePoint.temperature().max() <= warmestCoolTemperature)
                 .forEach(grovePoint -> builder.add(grovePoint, ModBiomes.LARCH_FOREST));
     }
 }

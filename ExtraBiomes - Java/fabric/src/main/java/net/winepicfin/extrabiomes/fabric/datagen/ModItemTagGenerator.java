@@ -128,6 +128,7 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         this.tag(ConventionalItemTags.STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
         this.tag(ConventionalItemTags.STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
         this.tag(ConventionalItemTags.ORES).add(itemKeys(ModTagContents.ORES));
+        this.tag(ConventionalItemTags.MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
     }
 
     @SuppressWarnings("unchecked")

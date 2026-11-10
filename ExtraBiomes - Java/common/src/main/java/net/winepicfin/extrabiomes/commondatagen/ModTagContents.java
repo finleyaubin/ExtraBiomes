@@ -86,4 +86,16 @@ public final class ModTagContents {
             ModBlocks.NETHER_COAL_ORE, ModBlocks.NETHER_COPPER_ORE, ModBlocks.NETHER_DIAMOND_ORE, ModBlocks.NETHER_EMERALD_ORE,
             ModBlocks.NETHER_IRON_ORE, ModBlocks.NETHER_LAPIS_ORE, ModBlocks.NETHER_REDSTONE_ORE);
 
+    /** Giant mushroom cap and stem blocks, mined with an axe. */
+    public static final List<RegistrySupplier<Block>> HUGE_MUSHROOM_BLOCKS = List.of(
+            ModBlocks.BLACK_MUSHROOM_BLOCK, ModBlocks.BLUE_MUSHROOM_BLOCK, ModBlocks.CYAN_MUSHROOM_BLOCK,
+            ModBlocks.GREEN_MUSHROOM_BLOCK, ModBlocks.ORANGE_MUSHROOM_BLOCK, ModBlocks.PURPLE_MUSHROOM_BLOCK,
+            ModBlocks.WHITE_MUSHROOM_BLOCK, ModBlocks.YELLOW_MUSHROOM_BLOCK, ModBlocks.GLOW_MUSHROOM_BLOCK);
+
+    /** Small mushrooms, for c:mushrooms. */
+    public static final List<RegistrySupplier<Block>> MUSHROOMS = List.of(
+            ModBlocks.BLACK_MUSHROOM, ModBlocks.BLUE_MUSHROOM, ModBlocks.CYAN_MUSHROOM,
+            ModBlocks.GREEN_MUSHROOM, ModBlocks.ORANGE_MUSHROOM, ModBlocks.PURPLE_MUSHROOM,
+            ModBlocks.WHITE_MUSHROOM, ModBlocks.YELLOW_MUSHROOM, ModBlocks.GLOW_MUSHROOM);
+
 }
