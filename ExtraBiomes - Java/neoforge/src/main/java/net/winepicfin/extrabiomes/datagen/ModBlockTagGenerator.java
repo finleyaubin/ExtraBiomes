@@ -9,22 +9,32 @@ import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import java.util.List;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagGenerator extends BlockTagsProvider {
     private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_logs"));
     private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_woods"));
 
+
+    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_logs"));
+    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_woods"));
 
     public ModBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, ExtraBiomes.MOD_ID, existingFileHelper);
@@ -115,6 +125,18 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_WALL_SIGN.get(),
                 ModBlocks.LARCH_WALL_SIGN.get(),
                 ModBlocks.SKY_WALL_HANGING_SIGN.get(),
+                ModBlocks.LARCH_PLANKS.get(),
+                ModBlocks.LARCH_STAIRS.get(),
+                ModBlocks.LARCH_SLAB.get(),
+                ModBlocks.LARCH_BUTTON.get(),
+                ModBlocks.LARCH_PRESSURE_PLATE.get(),
+                ModBlocks.LARCH_FENCE.get(),
+                ModBlocks.LARCH_FENCE_GATE.get(),
+                ModBlocks.LARCH_DOOR.get(),
+                ModBlocks.LARCH_TRAPDOOR.get(),
+                ModBlocks.LARCH_SIGN.get(),
+                ModBlocks.LARCH_HANGING_SIGN.get(),
+                ModBlocks.LARCH_WALL_SIGN.get(),
                 ModBlocks.LARCH_WALL_HANGING_SIGN.get(),
                 // palm wood
                 ModBlocks.PALM_PLANKS.get(),
@@ -185,6 +207,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_WOOD.get(),
                 ModBlocks.LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_SKY_WOOD.get(),
+                ModBlocks.LARCH_LOG.get(),
+                ModBlocks.STRIPPED_LARCH_LOG.get(),
+                ModBlocks.LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.GILDED_SKY_LOG.get(),
                 ModBlocks.GILDED_SKY_WOOD.get(),
@@ -207,6 +232,9 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_WOOD.get(),
                 ModBlocks.LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_SKY_WOOD.get(),
+                ModBlocks.LARCH_LOG.get(),
+                ModBlocks.STRIPPED_LARCH_LOG.get(),
+                ModBlocks.LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.GILDED_SKY_LOG.get(),
                 ModBlocks.GILDED_SKY_WOOD.get(),
@@ -254,6 +282,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(STRIPPED_LOGS).add(blocks(ModTagContents.STRIPPED_LOGS));
         this.tag(STRIPPED_WOODS).add(blocks(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Blocks.ORES).add(blocks(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(blocks(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(blocks(ModTagContents.MUSHROOMS));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
@@ -267,8 +297,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
                 Blocks.NETHERRACK
         );
+    }
 
-
+    private static Block[] blocks(List<RegistrySupplier<Block>> blocks) {
+        return blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new);
     }
 
     private static Block[] blocks(List<RegistrySupplier<Block>> blocks) {

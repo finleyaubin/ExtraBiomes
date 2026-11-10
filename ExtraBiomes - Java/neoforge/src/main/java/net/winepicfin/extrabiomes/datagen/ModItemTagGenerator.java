@@ -9,23 +9,32 @@ import java.util.List;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.neoforged.neoforge.common.Tags;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagGenerator extends ItemTagsProvider {
     private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_logs"));
     private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_woods"));
 
+
+    private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_logs"));
+    private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_woods"));
 
     public ModItemTagGenerator(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
         super(packOutput, lookupProvider, blockTags, ExtraBiomes.MOD_ID, existingFileHelper);
@@ -129,6 +138,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
         this.tag(STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Items.ORES).add(items(ModTagContents.ORES));
+        this.tag(Tags.Items.MUSHROOMS).add(items(ModTagContents.MUSHROOMS));
     }
 
     private static Item[] items(List<RegistrySupplier<Block>> blocks) {
