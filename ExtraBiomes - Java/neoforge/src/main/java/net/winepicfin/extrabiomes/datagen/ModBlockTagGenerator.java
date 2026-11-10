@@ -255,6 +255,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(Tags.Blocks.STRIPPED_LOGS).add(blocks(ModTagContents.STRIPPED_LOGS));
         this.tag(Tags.Blocks.STRIPPED_WOODS).add(blocks(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Blocks.ORES).add(blocks(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(blocks(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(blocks(ModTagContents.MUSHROOMS));
     }
     private static Block[] blocks(List<RegistrySupplier<Block>> blocks) {
         return blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new);

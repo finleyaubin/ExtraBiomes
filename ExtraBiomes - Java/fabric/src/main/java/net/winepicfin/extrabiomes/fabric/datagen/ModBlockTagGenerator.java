@@ -224,6 +224,9 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
         this.tag(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
         this.tag(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
 
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(keys(ModTagContents.MUSHROOMS));
+
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
         // regular-terracotta bands fine but leave the glazed-terracotta bands standing untouched -
