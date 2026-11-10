@@ -120,9 +120,14 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new));
         this.valueLookupBuilder(ItemTags.HANGING_SIGNS).add(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new));
 
-        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
-        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
-        this.valueLookupBuilder(ConventionalItemTags.ORES).add(items(ModTagContents.ORES));
+        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
+        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
+        this.valueLookupBuilder(ConventionalItemTags.ORES).add(itemKeys(ModTagContents.ORES));
+        this.valueLookupBuilder(ConventionalItemTags.MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
+    }
+
+    private static Item[] itemKeys(List<RegistrySupplier<Block>> blocks) {
+        return blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new);
     }
 
     // valueLookupBuilder()'s TagAppender takes Item directly (Fabric API 1.21.6+), so this is now an identity passthrough.
