@@ -124,6 +124,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(ConventionalItemTags.STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
         this.tag(ConventionalItemTags.STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
         this.tag(ConventionalItemTags.ORES).add(itemKeys(ModTagContents.ORES));
+        this.tag(ConventionalItemTags.MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
     }
 
     private static net.minecraft.resources.ResourceKey<Item>[] itemKeys(List<RegistrySupplier<Block>> blocks) {
