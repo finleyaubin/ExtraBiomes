@@ -183,7 +183,7 @@ public class LarchForestFeatures {
 
     private static Holder<ConfiguredFeature<?, ?>> erratic(Block rock) {
         return Holder.direct(new ConfiguredFeature<>(Feature.BLOCK_BLOB, new BlockBlobConfiguration(rock.defaultBlockState(),
-                BlockPredicate.anyOf(BlockPredicate.matchesTag(BlockTags.DIRT), BlockPredicate.matchesBlocks(Blocks.STONE, Blocks.GRAVEL, Blocks.SNOW_BLOCK)))));
+                BlockPredicate.anyOf(BlockPredicate.matchesTag(BlockTags.SUBSTRATE_OVERWORLD), BlockPredicate.matchesBlocks(Blocks.STONE, Blocks.GRAVEL, Blocks.SNOW_BLOCK)))));
     }
 
     private static List<PlacementModifier> dryGrassPatches(int patchesPerChunk, Block dryGrass) {

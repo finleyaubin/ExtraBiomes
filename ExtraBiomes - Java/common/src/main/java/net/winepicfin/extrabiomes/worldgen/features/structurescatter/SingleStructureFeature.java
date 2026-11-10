@@ -213,7 +213,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
     /**
      * The shallowest stone-like top across every column of {@code [minX,maxX] x [minZ,maxZ]} -
      * per column, walks down from that column's own {@code WORLD_SURFACE_WG} height through any
-     * {@link BlockTags#DIRT} blocks (grass/dirt/podzol/coarse dirt/mycelium/rooted dirt) until it
+     * {@link BlockTags#SUBSTRATE_OVERWORLD} blocks (dirt, grass blocks, mud, moss) until it
      * hits stone or bedrock. Taking the shallowest (highest) result across the whole footprint,
      * rather than just the origin column, is what keeps a wide structure from having part of its
      * base still floating over a dip once it's re-anchored - see embedInStone's javadoc.
@@ -227,7 +227,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
                 pos.set(x, y, z);
                 while (y > level.getMinY()) {
                     BlockState state = level.getBlockState(pos);
-                    if (!state.isAir() && !state.is(BlockTags.DIRT)) {
+                    if (!state.isAir() && !state.is(BlockTags.SUBSTRATE_OVERWORLD)) {
                         break;
                     }
                     y--;
