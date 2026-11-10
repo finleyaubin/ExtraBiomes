@@ -3,6 +3,13 @@ package net.winepicfin.extrabiomes.fabric;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
@@ -75,6 +82,20 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.translucentBlocks().toArray(Block[]::new));
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.SOURCE_GOO.get(), ModFluids.FLOWING_GOO.get(),
                 new SimpleFluidRenderHandler(GooFluid.STILL_TEXTURE, GooFluid.FLOWING_TEXTURE, GooFluid.OVERLAY_TEXTURE, 0xFFFFFFFF));
+
+        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public ResourceLocation getFabricId() {
+                return LarchLeavesColormap.RELOAD_LISTENER_ID;
+            }
+
+            @Override
+            public void onResourceManagerReload(ResourceManager resourceManager) {
+                LarchLeavesColormap.reload(resourceManager);
+            }
+        });
+        ColorProviderRegistry.BLOCK.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
+        ColorProviderRegistry.ITEM.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
 
         registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), SignRenderer::new);
         registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);

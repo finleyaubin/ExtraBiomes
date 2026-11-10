@@ -106,7 +106,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_LARCH_LOG.get());
         axisBlock(((RotatedPillarBlock) ModBlocks.LARCH_WOOD.get()), blockTexture(ModBlocks.LARCH_LOG.get()),blockTexture(ModBlocks.LARCH_LOG.get()));
         axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_LARCH_WOOD.get()), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()),blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
-        blockWithItemCutout(ModBlocks.LARCH_LEAVES);
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
         saplingBlock(ModBlocks.LARCH_SAPLING);
         simpleBlockItem(ModBlocks.LARCH_LOG.get(),models().withExistingParent("extrabiomes:larch_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.LARCH_WOOD.get(),models().withExistingParent("extrabiomes:larch_wood", "minecraft:block/cube_column"));
@@ -196,6 +196,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(name(blockRegistryObject.get()), blockTexture(blockRegistryObject.get())).renderType("cutout"));
     }
 
+    // The colour comes from LarchLeavesTint: vanilla's block/leaves parent carries the tintindex that cubeAll lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject){
+        Block block = blockRegistryObject.get();
+        simpleBlockWithItem(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", blockTexture(block)).renderType("cutout"));
+    }
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject){
         Block block = blockRegistryObject.get();
         ModelFile cap = models().singleTexture(name(block), mcLoc("block/template_single_face"), "texture", blockTexture(block)).renderType("cutout");
