@@ -29,7 +29,10 @@ public class GlacierGenerationGameTests {
 
     public static void glacierGeothermalFeaturesGenerate(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        Pair<BlockPos, Holder<Biome>> glacier = level.findClosestBiome3d(holder -> holder.is(ModBiomes.GLACIER), new BlockPos(0, 80, 0), 15_000, 32, 128);
+        // Searched at the scan's own sample height: a 3D search can land on a mountaintop glacier whose y=80 is solid rock.
+        Pair<BlockPos, Holder<Biome>> glacier = level.getChunkSource().getGenerator().getBiomeSource().findBiomeHorizontal(
+                0, BIOME_SAMPLE_Y, 0, 15_000, 32, holder -> holder.is(ModBiomes.GLACIER), level.getRandom(), true,
+                level.getChunkSource().randomState());
         helper.assertTrue(glacier != null, Component.literal("no glacier within 15000 blocks of spawn"));
 
         int centerChunkX = SectionPos.blockToSectionCoord(glacier.getFirst().getX());
