@@ -1,0 +1,14 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "extrabiomes:stonecutter_tallowstone_to_brick_slab"
+        },
+        "tags": ["stonecutter"],
+        "ingredients": [{ "item": "extrabiomes:tallowstone" }],
+        "result": {
+            "item": "extrabiomes:tallowstone_brick_slab",
+            "count": 2
+        }
+    }
+}

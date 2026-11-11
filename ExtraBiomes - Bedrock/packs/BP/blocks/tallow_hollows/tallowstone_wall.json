@@ -16,6 +16,7 @@
             }
         },
         "components": {
+            "minecraft:map_color": "#F7E9A3",
             "minecraft:destructible_by_mining": {
                 "seconds_to_destroy": 1.5
             },

@@ -315,7 +315,7 @@ def build_decorations():
                  5, 2), "after_surface_pass", 3, 50)
 
     drip = single_block_feature("wax_drip_feature", WAX_DRIP)
-    feature_rule("wax_drips", snap_feature("wax_drip_snap_feature", drip, "ceiling"), "after_surface_pass", 48)
+    feature_rule("wax_drips", snap_feature("wax_drip_snap_feature", drip, "ceiling"), "after_surface_pass", 96)
 
 
 if __name__ == "__main__":

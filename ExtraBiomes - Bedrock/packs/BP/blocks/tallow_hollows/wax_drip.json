@@ -34,6 +34,7 @@
                             "extrabiomes:tallowstone",
                             "extrabiomes:tallowstone_bricks",
                             "minecraft:honeycomb_block",
+                            "minecraft:bookshelf",
                             "minecraft:stone",
                             "minecraft:cobblestone",
                             "minecraft:deepslate",
@@ -43,7 +44,10 @@
                             "minecraft:granite",
                             "minecraft:tuff",
                             "minecraft:calcite",
-                            "minecraft:dripstone_block"
+                            "minecraft:dripstone_block",
+                            "minecraft:dirt",
+                            "minecraft:grass_block",
+                            "minecraft:gravel"
                         ],
                         "allowed_faces": ["down"]
                     }
