@@ -45,6 +45,7 @@ public class FabricConfig {
         int secondaryBiomeWeight = readInt(properties, "secondaryBiomeWeight", Config.DEFAULT_SECONDARY_BIOME_WEIGHT);
         int rareBiomeWeight = readInt(properties, "rareBiomeWeight", Config.DEFAULT_RARE_BIOME_WEIGHT);
         int frozenBiomeWeight = readInt(properties, "frozenBiomeWeight", Config.DEFAULT_FROZEN_BIOME_WEIGHT);
+        int caveBiomeWeight = readInt(properties, "caveBiomeWeight", Config.DEFAULT_CAVE_BIOME_WEIGHT);
         boolean weakerPiranhas = readBoolean(properties, "weakerPiranhas", Config.DEFAULT_WEAKER_PIRANHAS);
 
         // Persist the real configured values, not the gametest override, so a gametest run
@@ -53,9 +54,10 @@ public class FabricConfig {
         properties.setProperty("secondaryBiomeWeight", String.valueOf(secondaryBiomeWeight));
         properties.setProperty("rareBiomeWeight", String.valueOf(rareBiomeWeight));
         properties.setProperty("frozenBiomeWeight", String.valueOf(frozenBiomeWeight));
+        properties.setProperty("caveBiomeWeight", String.valueOf(caveBiomeWeight));
         properties.setProperty("weakerPiranhas", String.valueOf(weakerPiranhas));
         try (OutputStream out = Files.newOutputStream(CONFIG_PATH)) {
-            properties.store(out, "ExtraBiomes config - biomeWeight/secondaryBiomeWeight/rareBiomeWeight/frozenBiomeWeight control how frequently this mod's TerraBlender biome regions are picked (see ModTerrablender); weakerPiranhas makes piranhas deal less damage and spawn less often");
+            properties.store(out, "ExtraBiomes config - biomeWeight/secondaryBiomeWeight/rareBiomeWeight/frozenBiomeWeight/caveBiomeWeight control how frequently this mod's TerraBlender biome regions are picked (see ModTerrablender); weakerPiranhas makes piranhas deal less damage and spawn less often");
         } catch (IOException e) {
             LOGGER.error("Failed to write {}", CONFIG_PATH, e);
         }
@@ -64,6 +66,8 @@ public class FabricConfig {
         Config.secondaryBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : secondaryBiomeWeight;
         Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : rareBiomeWeight;
         Config.frozenBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : frozenBiomeWeight;
+        // No gametest override: BiomeGenerationGameTests never searches for Tallow Hollows, so its region stays at its real size.
+        Config.caveBiomeWeight = caveBiomeWeight;
         Config.weakerPiranhas = weakerPiranhas;
 
         Config.load();

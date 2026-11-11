@@ -35,6 +35,10 @@ public class ForgeConfig
             .comment("The Weight of ExtraBiomes' frozen biomes (Glacier, Volcanic Moss Tundra), the default value is " + Config.DEFAULT_FROZEN_BIOME_WEIGHT)
             .defineInRange("Frozen Biome Weight", Config.DEFAULT_FROZEN_BIOME_WEIGHT, 0, Integer.MAX_VALUE);
 
+    private static final ModConfigSpec.IntValue CAVEBIOMEWEIGHT = BUILDER
+            .comment("The Weight of ExtraBiomes' cave region (Tallow Hollows in place of Dripstone Caves), the default value is " + Config.DEFAULT_CAVE_BIOME_WEIGHT)
+            .defineInRange("Cave Biome Weight", Config.DEFAULT_CAVE_BIOME_WEIGHT, 0, Integer.MAX_VALUE);
+
     private static final ModConfigSpec.BooleanValue WEAKERPIRANHAS = BUILDER
             .comment("When true, piranhas deal less attack damage and spawn less frequently, the default value is " + Config.DEFAULT_WEAKER_PIRANHAS)
             .define("Weaker Piranhas", Config.DEFAULT_WEAKER_PIRANHAS);
@@ -53,6 +57,8 @@ public class ForgeConfig
         Config.secondaryBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : SECONDARYBIOMEWEIGHT.get();
         Config.rareBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : RAREBIOMEWEIGHT.get();
         Config.frozenBiomeWeight = isGametest ? GAMETEST_BIOME_WEIGHT : FROZENBIOMEWEIGHT.get();
+        // No gametest override: BiomeGenerationGameTests never searches for Tallow Hollows, so its region stays at its real size.
+        Config.caveBiomeWeight = CAVEBIOMEWEIGHT.get();
         Config.weakerPiranhas = WEAKERPIRANHAS.get();
         Config.load();
     }
