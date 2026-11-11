@@ -33,6 +33,9 @@ public class ModSurfaceRules {
     // Depth split for sand-topped biomes: top material for the shallow band, foundation for the deeper band below it, then normal stone resumes.
     private static final int TOP_DEPTH = 3;
     private static final int FOUNDATION_DEPTH = 10;
+    // Extra blocks of tallowstone below each cave floor and above each cave ceiling, on top of the exposed block itself.
+    private static final int TALLOW_FLOOR_DEPTH = 2;
+    private static final int TALLOW_CEILING_DEPTH = 1;
 
     private static final MaterialRule DIRT = makeStateRule(Blocks.DIRT);
     private static final MaterialRule GRASS_BLOCK = makeStateRule(Blocks.GRASS_BLOCK);
@@ -58,6 +61,7 @@ public class ModSurfaceRules {
     private static final MaterialRule SANDSTONE = makeStateRule(Blocks.SANDSTONE);
     private static final MaterialRule BLACK_SAND = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.BLACK_SAND.get());
     private static final MaterialRule BLACK_SANDSTONE = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.BLACK_SANDSTONE.get());
+    private static final MaterialRule TALLOWSTONE = makeStateRule(net.winepicfin.extrabiomes.block.ModBlocks.TALLOWSTONE.get());
     private static final MaterialRule WHITE_GLAZED_TERRACOTTA = makeStateRule(Blocks.GLAZED_TERRACOTTA.white());
     private static final MaterialRule ORANGE_GLAZED_TERRACOTTA = makeStateRule(Blocks.GLAZED_TERRACOTTA.orange());
     private static final MaterialRule RED_GLAZED_TERRACOTTA = makeStateRule(Blocks.GLAZED_TERRACOTTA.red());
@@ -271,6 +275,14 @@ public class ModSurfaceRules {
                                         MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(),
                                                 MaterialRules.ifTrue(isAtOrBelowWaterLevel, FARMLAND))),
                                 netherrackDownToBedrock)),
+
+                // Cave-only biome, so no abovePreliminarySurface() guard: every floor and ceiling it has is underground.
+                // Stops above the bedrock layer, which this sequence runs ahead of and would otherwise overwrite.
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.TALLOW_HOLLOWS),
+                        MaterialRules.ifTrue(MaterialRules.yBlockCheck(VerticalAnchor.aboveBottom(5), 0),
+                                MaterialRules.sequence(
+                                        MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(TALLOW_FLOOR_DEPTH, false, CaveSurface.FLOOR), TALLOWSTONE),
+                                        MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(TALLOW_CEILING_DEPTH, false, CaveSurface.CEILING), TALLOWSTONE)))),
 
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.VOLCANIC_MOSS_TUNDRA),
                         sandOverFoundation(BLACK_SAND, BLACK_SANDSTONE)),

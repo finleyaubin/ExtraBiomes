@@ -110,6 +110,7 @@ public abstract class CommonRecipes extends RecipeProvider {
         slab(pWriter, ModBlocks.DENSE_CLOUD_BRICK.get(), ModBlocks.DENSE_CLOUD_BRICK_SLAB.get());
         grassStoneRecipe(pWriter);
         blackSandRecipes(pWriter);
+        tallowRecipes(pWriter);
         gildRecipes(pWriter,
                 List.of(
                         ModBlocks.SKY_PLANKS.get(),
@@ -422,6 +423,47 @@ public abstract class CommonRecipes extends RecipeProvider {
         stonecutting(recipeOutput, ModBlocks.CUT_BLACK_SANDSTONE.get(), ModBlocks.CUT_BLACK_SANDSTONE_SLAB.get(), 2);
         stonecutting(recipeOutput, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(), 2);
         stonecutting(recipeOutput, ModBlocks.SMOOTH_BLACK_SANDSTONE.get(), ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(), 1);
+    }
+
+    // String above tallow, mirroring vanilla's string-above-honeycomb candle.
+    private void tallowRecipes(RecipeOutput recipeOutput) {
+        shaped(RecipeCategory.DECORATIONS, Items.CANDLE)
+                .pattern("S")
+                .pattern("T")
+                .define('S', Items.STRING)
+                .define('T', ModItems.TALLOW_LUMP.get())
+                .unlockedBy(getHasName(ModItems.TALLOW_LUMP.get()), has(ModItems.TALLOW_LUMP.get()))
+                .save(recipeOutput, ExtraBiomes.MOD_ID + ":candle_from_tallow_lump");
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.TALLOWSTONE.get())
+                .pattern("##")
+                .pattern("##")
+                .define('#', ModItems.TALLOW_LUMP.get())
+                .unlockedBy(getHasName(ModItems.TALLOW_LUMP.get()), has(ModItems.TALLOW_LUMP.get()))
+                .save(recipeOutput);
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.TALLOWSTONE_BRICKS.get(), 4)
+                .pattern("##")
+                .pattern("##")
+                .define('#', ModBlocks.TALLOWSTONE.get())
+                .unlockedBy(getHasName(ModBlocks.TALLOWSTONE.get()), has(ModBlocks.TALLOWSTONE.get()))
+                .save(recipeOutput);
+        stonecutting(recipeOutput, ModBlocks.TALLOWSTONE.get(), ModBlocks.TALLOWSTONE_BRICKS.get(), 1);
+
+        stoneShapeRecipes(recipeOutput, ModBlocks.TALLOWSTONE.get(), ModBlocks.TALLOWSTONE_SLAB.get(), ModBlocks.TALLOWSTONE_STAIRS.get(), ModBlocks.TALLOWSTONE_WALL.get());
+        stoneShapeRecipes(recipeOutput, ModBlocks.TALLOWSTONE_BRICKS.get(), ModBlocks.TALLOWSTONE_BRICK_SLAB.get(), ModBlocks.TALLOWSTONE_BRICK_STAIRS.get(), ModBlocks.TALLOWSTONE_BRICK_WALL.get());
+        stonecutShapes(recipeOutput, ModBlocks.TALLOWSTONE.get(), ModBlocks.TALLOWSTONE_BRICK_SLAB.get(), ModBlocks.TALLOWSTONE_BRICK_STAIRS.get(), ModBlocks.TALLOWSTONE_BRICK_WALL.get());
+    }
+
+    private void stoneShapeRecipes(RecipeOutput recipeOutput, Block base, Block slab, Block stairs, Block wall) {
+        slab(recipeOutput, base, slab);
+        stair(recipeOutput, base, stairs);
+        wall(recipeOutput, base, wall);
+        stonecutShapes(recipeOutput, base, slab, stairs, wall);
+    }
+
+    private void stonecutShapes(RecipeOutput recipeOutput, Block base, Block slab, Block stairs, Block wall) {
+        stonecutting(recipeOutput, base, slab, 2);
+        stonecutting(recipeOutput, base, stairs, 1);
+        stonecutting(recipeOutput, base, wall, 1);
     }
 
     private void wall(RecipeOutput recipeOutput, Block ingredient, Block output) {

@@ -70,7 +70,15 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.get(),
                 ModBlocks.BLACK_SANDSTONE_STAIRS.get(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.get(),
-                ModBlocks.BLACK_SANDSTONE_WALL.get()
+                ModBlocks.BLACK_SANDSTONE_WALL.get(),
+                ModBlocks.TALLOWSTONE.get(),
+                ModBlocks.TALLOWSTONE_SLAB.get(),
+                ModBlocks.TALLOWSTONE_STAIRS.get(),
+                ModBlocks.TALLOWSTONE_WALL.get(),
+                ModBlocks.TALLOWSTONE_BRICKS.get(),
+                ModBlocks.TALLOWSTONE_BRICK_SLAB.get(),
+                ModBlocks.TALLOWSTONE_BRICK_STAIRS.get(),
+                ModBlocks.TALLOWSTONE_BRICK_WALL.get()
         ));
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(

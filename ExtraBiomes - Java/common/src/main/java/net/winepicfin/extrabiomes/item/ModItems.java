@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.item;
 
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -26,6 +27,8 @@ import java.util.List;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.ITEM);
+    // Vanilla has no 400-tick burn time to reuse, so tallow lump ships its own in data/extrabiomes/context_int_provider.
+    private static final ResourceKey<ContextIntProvider> TALLOW_LUMP_BURN_TIME = ResourceKey.create(Registries.CONTEXT_INT_PROVIDER, Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "cooking/time_tallow_lump"));
     public  static final RegistrySupplier<Item> PEBBLE = ITEMS.register("pebble",()-> new PebbleItem(new Item.Properties().setId(itemId("pebble"))));
     public  static final RegistrySupplier<Item> MOSSY_PEBBLE = ITEMS.register("mossy_pebble",()-> new PebbleItem(new Item.Properties().setId(itemId("mossy_pebble"))));
     public static final RegistrySupplier<Item> BUCKET_OF_GOO = ITEMS.register("bucket_of_goo",()-> ExtraBiomesExpectPlatform.createBucketOfGooItem(new Item.Properties().setId(itemId("bucket_of_goo")).craftRemainder(Items.BUCKET).stacksTo(1)));
@@ -41,6 +44,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> PIRANHA = ITEMS.register("piranha",()-> new Item(new Item.Properties().setId(itemId("piranha")).food(ModFoods.PIRANHA)));
     public static final RegistrySupplier<Item> COOKED_PIRANHA = ITEMS.register("cooked_piranha",()-> new Item(new Item.Properties().setId(itemId("cooked_piranha")).food(ModFoods.COOKED_PIRANHA)));
     public static final RegistrySupplier<Item> WORM = ITEMS.register("worm",()-> new WormItem(new Item.Properties().setId(itemId("worm"))));
+    public static final RegistrySupplier<Item> TALLOW_LUMP = ITEMS.register("tallow_lump",()-> new Item(new Item.Properties().setId(itemId("tallow_lump")).cookingFuel(TALLOW_LUMP_BURN_TIME)));
     public static final RegistrySupplier<Item> JELLYFISH_JAM_BOTTLE = ITEMS.register("jellyfish_jam_bottle",()-> new JellyfishJamBottleItem(new Item.Properties().setId(itemId("jellyfish_jam_bottle")).food(ModFoods.JELLYFISH_JAM, ModFoods.JELLYFISH_JAM_CONSUMABLE).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_EMPTY = ITEMS.register("jellyfishing_net_empty",()-> new Item(new Item.Properties().setId(itemId("jellyfishing_net_empty")).stacksTo(1)));
     public static final RegistrySupplier<Item> JELLYFISHING_NET_FULL = ITEMS.register("jellyfishing_net_full",()-> new JellyfishingNetItem(new Item.Properties().setId(itemId("jellyfishing_net_full")).stacksTo(1)));

@@ -52,7 +52,7 @@ public class ModAdvancements extends AdvancementSubProvider {
             ModBiomes.JELLYFISH_FIELDS, ModBiomes.JUNGLE_MARSH, ModBiomes.JUNGLE_PILLARS, ModBiomes.LARCH_FOREST,
             ModBiomes.LUSH_MESA, ModBiomes.LUSH_MESA_BRYCE, ModBiomes.MOORLANDS, ModBiomes.MYSTIC_FOREST, ModBiomes.SHATTERED_SWAMP,
             ModBiomes.SHATTERED_TAIGA_SPIKES, ModBiomes.THE_NETHERLANDS, ModBiomes.THE_NETHERLANDS_MUTATED,
-            ModBiomes.TAIGA_SPIKES, ModBiomes.TROPICAL_ISLAND, ModBiomes.VOLCANIC_MOSS_TUNDRA);
+            ModBiomes.TAIGA_SPIKES, ModBiomes.TALLOW_HOLLOWS, ModBiomes.TROPICAL_ISLAND, ModBiomes.VOLCANIC_MOSS_TUNDRA);
 
     private final HolderGetter<Biome> biomes;
     private final HolderGetter<net.minecraft.world.entity.EntityType<?>> entityTypes;

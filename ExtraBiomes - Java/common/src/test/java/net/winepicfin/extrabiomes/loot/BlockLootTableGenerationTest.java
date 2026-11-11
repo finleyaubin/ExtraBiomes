@@ -71,6 +71,14 @@ class BlockLootTableGenerationTest {
     }
 
     @Test
+    void waxDripDropsATallowLumpNotItself() {
+        JsonObject table = JavaDatapackJson.load(BLOCKS_DIR + "wax_drip.json");
+        String name = table.get("pools").getAsJsonArray().get(0).getAsJsonObject()
+                .get("entries").getAsJsonArray().get(0).getAsJsonObject().get("name").getAsString();
+        assertEquals("extrabiomes:tallow_lump", name);
+    }
+
+    @Test
     void wallSignDropsTheStandingSignItemNotTheWallBlockItself() {
         JsonObject table = JavaDatapackJson.load(BLOCKS_DIR + "mystic_wall_sign.json");
         String name = table.get("pools").getAsJsonArray().get(0).getAsJsonObject()

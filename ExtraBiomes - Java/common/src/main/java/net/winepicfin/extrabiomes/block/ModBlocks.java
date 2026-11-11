@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -70,6 +72,17 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> BLACK_SANDSTONE_WALL = registerBlock("black_sandstone_wall", () -> new WallBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SANDSTONE_WALL).setId(blockId("black_sandstone_wall")).mapColor(MapColor.COLOR_BLACK)));
 
     public static final RegistrySupplier<Block> GRASS_STONE = registerBlock("grass_stone", () -> new Block(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("grass_stone")).mapColor(MapColor.GRASS).strength(3f)));
+
+    public static final RegistrySupplier<Block> TALLOWSTONE = registerFuelBlock("tallowstone", ContextIntProviders.COOKING_TIME_COAL, () -> new Block(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("tallowstone")).mapColor(MapColor.SAND)));
+    public static final RegistrySupplier<Block> TALLOWSTONE_BRICKS = registerBlock("tallowstone_bricks", () -> new Block(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STONE).setId(blockId("tallowstone_bricks")).mapColor(MapColor.SAND)));
+    public static final RegistrySupplier<Block> TALLOWSTONE_SLAB = registerBlock("tallowstone_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofLegacyCopy(ModBlocks.TALLOWSTONE.get()).setId(blockId("tallowstone_slab"))));
+    public static final RegistrySupplier<Block> TALLOWSTONE_STAIRS = registerBlock("tallowstone_stairs", () -> new StairBlock(ModBlocks.TALLOWSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofLegacyCopy(ModBlocks.TALLOWSTONE.get()).setId(blockId("tallowstone_stairs"))));
+    public static final RegistrySupplier<Block> TALLOWSTONE_WALL = registerBlock("tallowstone_wall", () -> new WallBlock(BlockBehaviour.Properties.ofLegacyCopy(ModBlocks.TALLOWSTONE.get()).setId(blockId("tallowstone_wall")).forceSolidOn()));
+    public static final RegistrySupplier<Block> TALLOWSTONE_BRICK_SLAB = registerBlock("tallowstone_brick_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofLegacyCopy(ModBlocks.TALLOWSTONE_BRICKS.get()).setId(blockId("tallowstone_brick_slab"))));
+    public static final RegistrySupplier<Block> TALLOWSTONE_BRICK_STAIRS = registerBlock("tallowstone_brick_stairs", () -> new StairBlock(ModBlocks.TALLOWSTONE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofLegacyCopy(ModBlocks.TALLOWSTONE_BRICKS.get()).setId(blockId("tallowstone_brick_stairs"))));
+    public static final RegistrySupplier<Block> TALLOWSTONE_BRICK_WALL = registerBlock("tallowstone_brick_wall", () -> new WallBlock(BlockBehaviour.Properties.ofLegacyCopy(ModBlocks.TALLOWSTONE_BRICKS.get()).setId(blockId("tallowstone_brick_wall")).forceSolidOn()));
+    public static final RegistrySupplier<Block> WAX_DRIP = registerBlock("wax_drip", () -> new WaxDripBlock(BlockBehaviour.Properties.of().setId(blockId("wax_drip")).mapColor(MapColor.SAND).noCollision().noOcclusion().instabreak().sound(SoundType.CANDLE)));
+    public static final RegistrySupplier<Block> EVER_WICK = registerBlock("ever_wick", () -> new EverWickBlock(BlockBehaviour.Properties.of().setId(blockId("ever_wick")).mapColor(MapColor.SAND).noCollision().noOcclusion().instabreak().sound(SoundType.CANDLE).lightLevel(EverWickBlock::lightLevel)));
 
     private static final StandardWoodSet MYSTIC_WOOD_SET = registerStandardWoodSet("mystic", ModWoodTypes.MYSTIC);
     public static final RegistrySupplier<Block> MYSTIC_PLANKS = MYSTIC_WOOD_SET.planks();
@@ -216,6 +229,12 @@ public class ModBlocks {
     private static <T extends Block> RegistrySupplier<T> registerBlock(String name, Supplier<T> block) {
         RegistrySupplier<T> output = BLOCKS.register(name, block);
         registerBlockItem(name, output);
+        return output;
+    }
+
+    private static <T extends Block> RegistrySupplier<T> registerFuelBlock(String name, ResourceKey<ContextIntProvider> burnTime, Supplier<T> block) {
+        RegistrySupplier<T> output = BLOCKS.register(name, block);
+        ModItems.ITEMS.register(name, () -> new BlockItem(output.get(), new Item.Properties().setId(itemId(name)).cookingFuel(burnTime)));
         return output;
     }
 

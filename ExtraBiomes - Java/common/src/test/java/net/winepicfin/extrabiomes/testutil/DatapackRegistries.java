@@ -46,6 +46,8 @@ import net.winepicfin.extrabiomes.worldgen.features.mystic.GooConversionFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsTulipFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFieldFeature;
 import net.winepicfin.extrabiomes.worldgen.features.structurescatter.SingleStructureFeature;
+import net.winepicfin.extrabiomes.worldgen.features.tallowhollows.ForgottenShelvesFeature;
+import net.winepicfin.extrabiomes.worldgen.features.tallowhollows.TallowPillarFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.CaveVineFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.FallenJungleTreeFeature;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.MultiFeature;
@@ -194,6 +196,8 @@ public final class DatapackRegistries {
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_finish", net.winepicfin.extrabiomes.worldgen.features.glacier.GlacierFinishFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_meltwater_stream", net.winepicfin.extrabiomes.worldgen.features.glacier.MeltwaterStreamFeature.CODEC);
         register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "glacier_cave_pillar", net.winepicfin.extrabiomes.worldgen.features.glacier.CavePillarFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "tallow_pillar", TallowPillarFeature.CODEC);
+        register(BuiltInRegistries.FEATURE_TYPE, Registries.FEATURE_TYPE, "forgotten_shelves", ForgottenShelvesFeature.CODEC);
         BuiltInRegistries.FEATURE_TYPE.freeze();
 
         setFrozen(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, false);
@@ -414,12 +418,14 @@ public final class DatapackRegistries {
     // Bootstrap.bootStrap() has run trips the same "Not bootstrapped" failure this method's
     // caller is careful to avoid.
     private static List<RegistryDataLoader.RegistryData<?>> registriesToLoad() {
-        // Advancements reference recipes and loot tables reference predicates by id.
+        // Advancements reference recipes, loot tables reference predicates, and fuel burn times reference other context providers by id.
         Set<ResourceKey<?>> reloadableKeys = Set.of(
                 Registries.RECIPE,
                 Registries.ADVANCEMENT,
                 Registries.LOOT_TABLE,
-                Registries.PREDICATE);
+                Registries.PREDICATE,
+                Registries.CONTEXT_INT_PROVIDER,
+                Registries.CONTEXT_FLOAT_PROVIDER);
         return java.util.stream.Stream.concat(
                         RegistryDataLoader.WORLD_REGISTRIES.stream(),
                         RegistryDataLoader.RELOADABLE_REGISTRIES.stream().filter(data -> reloadableKeys.contains(data.key())))

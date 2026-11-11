@@ -45,6 +45,8 @@ public final class BiomeAppearanceTuning {
     public static final Appearance VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra", 0x2e4a5c, 0x4a7a5a, 0x5a8a6a, 0x7FA1FF);
     // Java-only biome, so it stays out of BY_BEDROCK_KEY and the Bedrock parity tests that iterate it.
     public static final Appearance LARCH_FOREST = new Appearance(0x3a6edb, 0xC9A227, 0xC9B25C, 0x7FA1FF);
+    // Java-first on this branch (its Bedrock files live on Bedrock-Dev), so it stays out of BY_BEDROCK_KEY until the branches meet.
+    public static final Appearance TALLOW_HOLLOWS = new Appearance(0xD9A441, 0xB8A04A, 0xC4AE5A, 0x78A7FF);
 
     private BiomeAppearanceTuning() {
     }

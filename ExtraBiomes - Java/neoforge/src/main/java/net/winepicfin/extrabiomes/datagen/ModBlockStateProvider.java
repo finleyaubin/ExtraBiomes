@@ -34,6 +34,7 @@ import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.client.color.LarchLeavesTintSource;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
+import net.winepicfin.extrabiomes.block.custom.EverWickBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 
 import java.util.ArrayList;
@@ -113,6 +114,16 @@ public class ModBlockStateProvider implements DataProvider {
         pebbleBlock(ModBlocks.MOSSY_PEBBLE.get(), "mossy_pebble", MossyPebbleBlock.SIZE);
         stickPileBlock(ModBlocks.STICK_PILE.get());
         grassStoneBlock(ModBlocks.GRASS_STONE.get());
+        blockWithItem(ModBlocks.TALLOWSTONE);
+        slabBlock(ModBlocks.TALLOWSTONE_SLAB.get(), blockTexture(ModBlocks.TALLOWSTONE.get()));
+        stairsBlock(ModBlocks.TALLOWSTONE_STAIRS.get(), blockTexture(ModBlocks.TALLOWSTONE.get()));
+        wallBlock(ModBlocks.TALLOWSTONE_WALL.get(), blockTexture(ModBlocks.TALLOWSTONE.get()));
+        blockWithItem(ModBlocks.TALLOWSTONE_BRICKS);
+        slabBlock(ModBlocks.TALLOWSTONE_BRICK_SLAB.get(), blockTexture(ModBlocks.TALLOWSTONE_BRICKS.get()));
+        stairsBlock(ModBlocks.TALLOWSTONE_BRICK_STAIRS.get(), blockTexture(ModBlocks.TALLOWSTONE_BRICKS.get()));
+        wallBlock(ModBlocks.TALLOWSTONE_BRICK_WALL.get(), blockTexture(ModBlocks.TALLOWSTONE_BRICKS.get()));
+        saplingBlock(ModBlocks.WAX_DRIP.get());
+        everWickBlock(ModBlocks.EVER_WICK.get());
         // black sand
         blockWithItem(ModBlocks.BLACK_SAND);
         cubeBottomTopBlock(ModBlocks.BLACK_SANDSTONE.get(), blockTexture(ModBlocks.BLACK_SANDSTONE.get()), texLoc("black_sandstone_bottom"), texLoc("black_sandstone_top"));
@@ -718,6 +729,18 @@ public class ModBlockStateProvider implements DataProvider {
                         .select(2, plainVariant(modLoc("medium_" + type)))
                         .select(3, plainVariant(modLoc("large_" + type)))));
         delegateItemModel(block, modLoc("small_" + type));
+    }
+
+    // Lit and snuffed wicks share the cross shape; only the sprite changes. The item shows the lit sprite.
+    private void everWickBlock(Block block) {
+        Identifier lit = ModelTemplates.CROSS.create(block, new TextureMapping().put(TextureSlot.CROSS, mat(blockTexture(block))), models::put);
+        Identifier unlit = ModelTemplates.CROSS.createWithSuffix(block, "_unlit",
+                new TextureMapping().put(TextureSlot.CROSS, mat(texLoc(BuiltInRegistries.BLOCK.getKey(block).getPath() + "_unlit"))), models::put);
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(EverWickBlock.LIT)
+                        .select(true, plainVariant(lit))
+                        .select(false, plainVariant(unlit))));
+        saplingItemModel(block);
     }
 
     private void stickPileBlock(Block block) {

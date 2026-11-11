@@ -26,6 +26,7 @@ public final class TexturePaths {
         if (stem.startsWith("dense_cloud")) return "cloud/";
         if (stem.startsWith("nether_")) return "nether_ore/";
         if (stem.startsWith("grass_stone")) return "grass_stone/";
+        if (stem.startsWith("tallowstone") || stem.startsWith("wax_drip") || stem.startsWith("ever_wick")) return "tallow/";
         String unstripped = stem.startsWith(STRIPPED) ? stem.substring(STRIPPED.length()) : stem;
         for (String wood : WOOD_SETS) {
             if (unstripped.startsWith(wood + "_")) return "wood/" + wood + "/";

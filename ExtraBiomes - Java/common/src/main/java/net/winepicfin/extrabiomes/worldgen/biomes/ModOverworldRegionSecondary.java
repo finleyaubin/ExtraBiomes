@@ -33,7 +33,8 @@ import java.util.function.Consumer;
  * on {@link ModOverworldRegion}'s javadoc), plus the rest of the FROZEN-temperature cluster that
  * isn't already split off into {@link ModOverworldRegionRare} (Cold Mesa Plateau; Glacier and Volcanic Moss Tundra moved to ModOverworldRegionFrozen in beta 11), plus
  * Deep Dark Green (a cave-only biome with no surface climate box to speak of, kept here simply to
- * balance the two regions' biome counts rather than for any climate-overlap reason). Climate boxes
+ * balance the two regions' biome counts rather than for any climate-overlap reason), and Tallow
+ * Hollows (a cave biome on part of vanilla dripstone caves' box, beside Deep Dark Green). Climate boxes
  * themselves are carried over unchanged from their previous home in {@link ModOverworldRegion}.
  */
 public class ModOverworldRegionSecondary extends Region {
@@ -78,6 +79,16 @@ public class ModOverworldRegionSecondary extends Region {
                 .depth(ParameterUtils.Depth.FLOOR)
                 .weirdness(Climate.Parameter.span(-1.0F, -0.4F))
                 .build().forEach(point -> builder.add(point, ModBiomes.DEEP_DARK_GREEN));
+
+        // Tallow Hollows - vanilla dripstone caves' own box (OverworldBiomeBuilder.addUndergroundBiomes) on the top third of weirdness only, so dripstone caves keep the rest.
+        new ParameterUtils.ParameterPointListBuilder()
+                .temperature(ParameterUtils.Temperature.FULL_RANGE)
+                .humidity(ParameterUtils.Humidity.FULL_RANGE)
+                .continentalness(Climate.Parameter.span(0.8F, 1.0F))
+                .erosion(ParameterUtils.Erosion.FULL_RANGE)
+                .depth(Climate.Parameter.span(0.2F, 0.9F))
+                .weirdness(Climate.Parameter.span(0.33F, 1.0F))
+                .build().forEach(point -> builder.add(point, ModBiomes.TALLOW_HOLLOWS));
 
         // Desert Bryce - bedrock temp=2, downfall=0, canyon desert (replace_biomes amount 0.2). Low erosion, positive-weirdness half only - vanilla's own Desert/Badlands reclaims the rest of this climate cell.
         new ParameterUtils.ParameterPointListBuilder()

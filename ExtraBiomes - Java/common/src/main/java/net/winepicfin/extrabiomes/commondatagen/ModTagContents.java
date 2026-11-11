@@ -42,13 +42,15 @@ public final class ModTagContents {
     /** Non-wooden stairs/slabs/walls (the wooden ones are added through the wooden_* tags). */
     public static final List<RegistrySupplier<Block>> STONE_STAIRS = List.of(
             ModBlocks.DENSE_CLOUD_STAIRS, ModBlocks.DENSE_CLOUD_BRICK_STAIRS,
-            ModBlocks.BLACK_SANDSTONE_STAIRS, ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS);
+            ModBlocks.BLACK_SANDSTONE_STAIRS, ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS,
+            ModBlocks.TALLOWSTONE_STAIRS, ModBlocks.TALLOWSTONE_BRICK_STAIRS);
 
     public static final List<RegistrySupplier<Block>> STONE_SLABS = List.of(
             ModBlocks.DENSE_CLOUD_SLAB, ModBlocks.DENSE_CLOUD_BRICK_SLAB,
-            ModBlocks.BLACK_SANDSTONE_SLAB, ModBlocks.CUT_BLACK_SANDSTONE_SLAB, ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB);
+            ModBlocks.BLACK_SANDSTONE_SLAB, ModBlocks.CUT_BLACK_SANDSTONE_SLAB, ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB,
+            ModBlocks.TALLOWSTONE_SLAB, ModBlocks.TALLOWSTONE_BRICK_SLAB);
 
-    public static final List<RegistrySupplier<Block>> WALLS = List.of(ModBlocks.BLACK_SANDSTONE_WALL);
+    public static final List<RegistrySupplier<Block>> WALLS = List.of(ModBlocks.BLACK_SANDSTONE_WALL, ModBlocks.TALLOWSTONE_WALL, ModBlocks.TALLOWSTONE_BRICK_WALL);
 
     public static final List<RegistrySupplier<Block>> STANDING_SIGNS = List.of(
             ModBlocks.MYSTIC_SIGN, ModBlocks.SKY_SIGN, ModBlocks.PALM_SIGN, ModBlocks.LARCH_SIGN, ModBlocks.GILDED_SKY_SIGN);

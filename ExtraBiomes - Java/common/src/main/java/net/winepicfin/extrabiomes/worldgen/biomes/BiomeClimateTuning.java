@@ -44,6 +44,8 @@ public final class BiomeClimateTuning {
     public static final Climate VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra", 0.2f, 0.85f);
     // Java-only biome, so it stays out of BY_BEDROCK_KEY; 0.25 puts vanilla's snowline only on its highest slopes.
     public static final Climate LARCH_FOREST = new Climate(0.25f, 0.6f);
+    // Java-first on this branch (its Bedrock files live on Bedrock-Dev), so it stays out of BY_BEDROCK_KEY until the branches meet.
+    public static final Climate TALLOW_HOLLOWS = new Climate(0.7f, 0.3f);
 
     private BiomeClimateTuning() {
     }

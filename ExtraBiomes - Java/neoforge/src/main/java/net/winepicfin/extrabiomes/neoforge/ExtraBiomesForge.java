@@ -53,6 +53,7 @@ import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.Undergroun
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModFoliagePlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
+import net.winepicfin.extrabiomes.worldgen.features.tallowhollows.TallowHollowsFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
 import terrablender.api.MaterialRuleManager;
@@ -97,6 +98,7 @@ public class ExtraBiomesForge
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
         LarchForestFeatures.register();
+        TallowHollowsFeatures.register();
         NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();

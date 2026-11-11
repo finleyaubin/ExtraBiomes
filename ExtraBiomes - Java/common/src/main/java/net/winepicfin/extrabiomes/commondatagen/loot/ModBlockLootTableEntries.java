@@ -57,6 +57,16 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.MOSSY_PEBBLE.get(), block -> createPebbleTable(blocks, block, MossyPebbleBlock.SIZE, ModItems.MOSSY_PEBBLE.get()));
 
         dropSelf.accept(ModBlocks.GRASS_STONE.get());
+        dropSelf.accept(ModBlocks.TALLOWSTONE.get());
+        dropSelf.accept(ModBlocks.TALLOWSTONE_STAIRS.get());
+        dropSelf.accept(ModBlocks.TALLOWSTONE_WALL.get());
+        add.accept(ModBlocks.TALLOWSTONE_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.TALLOWSTONE_SLAB.get()));
+        dropSelf.accept(ModBlocks.TALLOWSTONE_BRICKS.get());
+        dropSelf.accept(ModBlocks.TALLOWSTONE_BRICK_STAIRS.get());
+        dropSelf.accept(ModBlocks.TALLOWSTONE_BRICK_WALL.get());
+        add.accept(ModBlocks.TALLOWSTONE_BRICK_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.TALLOWSTONE_BRICK_SLAB.get()));
+        dropSelf.accept(ModBlocks.EVER_WICK.get());
+        add.accept(ModBlocks.WAX_DRIP.get(), block -> createSingleItemTable.apply(ModItems.TALLOW_LUMP.get()));
         dropSelf.accept(ModBlocks.BLACK_SAND.get());
         dropSelf.accept(ModBlocks.BLACK_SANDSTONE.get());
         dropSelf.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());

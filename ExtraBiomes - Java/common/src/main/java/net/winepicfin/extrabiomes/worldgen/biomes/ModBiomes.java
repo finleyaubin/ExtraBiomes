@@ -45,6 +45,7 @@ public class ModBiomes
     public static final ResourceKey<Biome> THE_NETHERLANDS = register("the_netherlands");
     public static final ResourceKey<Biome> THE_NETHERLANDS_MUTATED = register("the_netherlands_mutated");
     public static final ResourceKey<Biome> TAIGA_SPIKES = register("taiga_spikes");
+    public static final ResourceKey<Biome> TALLOW_HOLLOWS = register("tallow_hollows");
     public static final ResourceKey<Biome> TROPICAL_ISLAND = register("tropical_island");
     public static final ResourceKey<Biome> VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra");
 
@@ -80,6 +81,7 @@ public class ModBiomes
         context.register(THE_NETHERLANDS, new TheNetherlands().Register(context));
         context.register(THE_NETHERLANDS_MUTATED, new TheNetherlandsMutated().Register(context));
         context.register(TAIGA_SPIKES, new TiagaSpikes().Register(context));
+        context.register(TALLOW_HOLLOWS, new TallowHollows().Register(context));
         context.register(TROPICAL_ISLAND, new TropicalIsland().Register(context));
         context.register(VOLCANIC_MOSS_TUNDRA, new VolcanicMossTundra().Register(context));
     }

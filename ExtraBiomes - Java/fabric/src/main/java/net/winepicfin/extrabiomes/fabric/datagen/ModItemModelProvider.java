@@ -83,6 +83,7 @@ public class ModItemModelProvider implements DataProvider {
         simpleItem(ModItems.JELLYFISHING_NET_EMPTY.get());
         simpleItem(ModItems.JELLYFISHING_NET_FULL.get());
         simpleItem(ModItems.BUCKET_OF_GOO.get());
+        simpleItem(ModItems.TALLOW_LUMP.get());
         trimmedArmorItem(ModItems.FROG_HELMET.get());
 
         // Sign / hanging sign items have their own flat inventory icon, separate from the in-world

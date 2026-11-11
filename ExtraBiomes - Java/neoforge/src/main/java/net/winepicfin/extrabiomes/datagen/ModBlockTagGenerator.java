@@ -69,7 +69,15 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_SLAB.getKey(),
                 ModBlocks.BLACK_SANDSTONE_STAIRS.getKey(),
                 ModBlocks.SMOOTH_BLACK_SANDSTONE_STAIRS.getKey(),
-                ModBlocks.BLACK_SANDSTONE_WALL.getKey()
+                ModBlocks.BLACK_SANDSTONE_WALL.getKey(),
+                ModBlocks.TALLOWSTONE.getKey(),
+                ModBlocks.TALLOWSTONE_SLAB.getKey(),
+                ModBlocks.TALLOWSTONE_STAIRS.getKey(),
+                ModBlocks.TALLOWSTONE_WALL.getKey(),
+                ModBlocks.TALLOWSTONE_BRICKS.getKey(),
+                ModBlocks.TALLOWSTONE_BRICK_SLAB.getKey(),
+                ModBlocks.TALLOWSTONE_BRICK_STAIRS.getKey(),
+                ModBlocks.TALLOWSTONE_BRICK_WALL.getKey()
         );
 
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(

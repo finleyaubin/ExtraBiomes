@@ -44,6 +44,17 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.NETHER_LAPIS_ORE.get());
                 pOutput.accept(ModBlocks.NETHER_REDSTONE_ORE.get());
                 pOutput.accept(ModBlocks.GRASS_STONE.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE_BRICKS.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE_SLAB.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE_STAIRS.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE_WALL.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE_BRICK_SLAB.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE_BRICK_STAIRS.get());
+                pOutput.accept(ModBlocks.TALLOWSTONE_BRICK_WALL.get());
+                pOutput.accept(ModBlocks.WAX_DRIP.get());
+                pOutput.accept(ModBlocks.EVER_WICK.get());
+                pOutput.accept(ModItems.TALLOW_LUMP.get());
                 pOutput.accept(ModBlocks.BLACK_SAND.get());
                 pOutput.accept(ModBlocks.BLACK_SANDSTONE.get());
                 pOutput.accept(ModBlocks.CHISELED_BLACK_SANDSTONE.get());
