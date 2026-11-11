@@ -1,0 +1,19 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "extrabiomes:tallowstone_stairs"
+        },
+        "tags": ["crafting_table"],
+        "pattern": ["#  ", "## ", "###"],
+        "key": {
+            "#": {
+                "item": "extrabiomes:tallowstone"
+            }
+        },
+        "result": {
+            "item": "extrabiomes:tallowstone_stairs",
+            "count": 4
+        }
+    }
+}

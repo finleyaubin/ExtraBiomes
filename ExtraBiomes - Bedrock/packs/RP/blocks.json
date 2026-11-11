@@ -327,5 +327,23 @@
     },
     "extrabiomes:ever_wick": {
         "sound": "candle"
+    },
+    "extrabiomes:tallowstone_slab": {
+        "sound": "stone"
+    },
+    "extrabiomes:tallowstone_stairs": {
+        "sound": "stone"
+    },
+    "extrabiomes:tallowstone_wall": {
+        "sound": "stone"
+    },
+    "extrabiomes:tallowstone_brick_slab": {
+        "sound": "stone"
+    },
+    "extrabiomes:tallowstone_brick_stairs": {
+        "sound": "stone"
+    },
+    "extrabiomes:tallowstone_brick_wall": {
+        "sound": "stone"
     }
 }

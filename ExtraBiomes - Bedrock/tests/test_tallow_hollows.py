@@ -21,7 +21,12 @@ from mcstructure import load as load_structure  # noqa: E402
 
 BIOME_ID = "extrabiomes:tallow_hollows"
 BIOME_TAG = "tallow_hollows"
-BLOCKS = ["extrabiomes:tallowstone", "extrabiomes:tallowstone_bricks", "extrabiomes:wax_drip", "extrabiomes:ever_wick"]
+SHAPE_PARENTS = {"extrabiomes:tallowstone": "extrabiomes:tallowstone", "extrabiomes:tallowstone_brick": "extrabiomes:tallowstone_bricks"}
+SHAPE_RECIPES = {"slab": (["###"], 6), "stairs": (["#  ", "## ", "###"], 4), "wall": (["###", "###"], 6)}
+SHAPE_BLOCKS = [f"{stem}_{shape}" for stem in SHAPE_PARENTS for shape in SHAPE_RECIPES]
+BLOCKS = ["extrabiomes:tallowstone", "extrabiomes:tallowstone_bricks", "extrabiomes:wax_drip",
+          "extrabiomes:ever_wick"] + SHAPE_BLOCKS
+FUEL_SECONDS = {"extrabiomes:tallow_lump": 20}
 ITEMS = ["extrabiomes:tallow_lump"]
 FEATURE_RULES = [f"extrabiomes:tallow_hollows_{name}" for name in (
     "floor_shell", "ceiling_shell", "pillars", "forgotten_shelves", "wick_blooms", "candle_clusters", "wax_drips",
@@ -121,6 +126,28 @@ def texture_paths(entry):
 
 def block_name(value):
     return value if isinstance(value, str) else value["name"]
+
+
+def component_sets(block_body):
+    """The block's base components followed by each permutation's components."""
+    return [block_body["components"]] + [p["components"] for p in block_body.get("permutations", [])]
+
+
+def geometry_identifiers(block_body):
+    ids = set()
+    for components in component_sets(block_body):
+        geometry = components.get("minecraft:geometry")
+        if geometry is not None:
+            ids.add(geometry if isinstance(geometry, str) else geometry["identifier"])
+    return ids
+
+
+def model_geometry_identifiers():
+    ids = set()
+    for path in json_files(os.path.join(RP, "models")):
+        for geometry in read_json(path).get("minecraft:geometry", []):
+            ids.add(geometry["description"]["identifier"])
+    return ids
 
 
 def structure_palette(structure_name):
@@ -296,6 +323,7 @@ class BlockAndItemAssetsTest(unittest.TestCase):
         cls.terrain = read_json(os.path.join(RP, "textures", "terrain_texture.json"))["texture_data"]
         cls.item_textures = read_json(os.path.join(RP, "textures", "item_texture.json"))["texture_data"]
         cls.lang = lang_keys(LANGUAGE)
+        cls.models = model_geometry_identifiers()
 
     def test_blocks_have_sound_textures_and_names(self):
         for block_id in BLOCKS:
@@ -319,11 +347,43 @@ class BlockAndItemAssetsTest(unittest.TestCase):
                 self.assertTrue(texture_on_disk(path), f"{item_id}: {path}")
             self.assertTrue(f"item.{item_id}" in self.lang, f"{item_id} missing from {LANGUAGE}.lang")
 
+    def test_custom_geometry_exists_in_the_resource_pack(self):
+        for block_id in BLOCKS:
+            custom = {g for g in geometry_identifiers(self.blocks[block_id][1]) if not g.startswith("minecraft:")}
+            self.assertEqual(custom - self.models, set(), block_id)
+
     def test_loot_tables_referenced_by_blocks_exist(self):
         for block_id in BLOCKS:
-            loot = self.blocks[block_id][1]["components"].get("minecraft:loot")
-            if loot is not None:
-                self.assertTrue(os.path.isfile(os.path.join(BP, loot)), f"{block_id}: {loot}")
+            for components in component_sets(self.blocks[block_id][1]):
+                loot = components.get("minecraft:loot")
+                if loot is not None:
+                    self.assertTrue(os.path.isfile(os.path.join(BP, loot)), f"{block_id}: {loot}")
+
+    def test_double_slabs_drop_two_of_themselves(self):
+        for block_id in (b for b in SHAPE_BLOCKS if b.endswith("_slab")):
+            [loot] = [c["minecraft:loot"] for c in component_sets(self.blocks[block_id][1]) if "minecraft:loot" in c]
+            [entry] = [e for pool in read_json(os.path.join(BP, loot))["pools"] for e in pool["entries"]]
+            self.assertEqual(entry["name"], block_id)
+            self.assertEqual([f["count"] for f in entry["functions"] if f["function"] == "set_count"], [2])
+
+    def test_shapes_match_their_parent_block(self):
+        for stem, parent_id in SHAPE_PARENTS.items():
+            parent = self.blocks[parent_id][1]["components"]
+            parent_texture = parent["minecraft:material_instances"]["*"]["texture"]
+            for shape in SHAPE_RECIPES:
+                components = self.blocks[f"{stem}_{shape}"][1]["components"]
+                self.assertEqual(components["minecraft:destructible_by_mining"],
+                                 parent["minecraft:destructible_by_mining"], f"{stem}_{shape}")
+                self.assertEqual(components["minecraft:destructible_by_explosion"],
+                                 parent["minecraft:destructible_by_explosion"], f"{stem}_{shape}")
+                self.assertIn("tag:minecraft:is_pickaxe_item_destructible", components, f"{stem}_{shape}")
+                self.assertEqual({i["texture"] for i in components["minecraft:material_instances"].values()},
+                                 {parent_texture}, f"{stem}_{shape}")
+                self.assertEqual(self.blocks_json[f"{stem}_{shape}"], self.blocks_json[parent_id])
+
+    def test_fuel_durations(self):
+        for item_id, seconds in FUEL_SECONDS.items():
+            self.assertEqual(self.items[item_id][1]["components"]["minecraft:fuel"], {"duration": seconds})
 
     def test_wax_drip_drops_a_tallow_lump(self):
         loot = self.blocks["extrabiomes:wax_drip"][1]["components"]["minecraft:loot"]
@@ -336,6 +396,8 @@ class RecipeTest(unittest.TestCase):
     def setUpClass(cls):
         recipes = index_by_identifier(os.path.join(BP, "recipes"))
         cls.shaped = {rid: body for rid, (kind, body, _) in recipes.items() if kind == "minecraft:recipe_shaped"}
+        cls.stonecutter = {rid: body for rid, (kind, body, _) in recipes.items()
+                           if kind == "minecraft:recipe_shapeless" and body["tags"] == ["stonecutter"]}
         cls.known_ids = (set(index_by_identifier(os.path.join(BP, "blocks")))
                          | set(index_by_identifier(os.path.join(BP, "items"))))
 
@@ -363,6 +425,21 @@ class RecipeTest(unittest.TestCase):
         [recipe] = self.recipes_making("extrabiomes:tallowstone_bricks", "extrabiomes:tallowstone")
         self.assertEqual(recipe["pattern"], ["##", "##"])
         self.assertEqual(self.result_of(recipe)["count"], 4)
+
+    def test_shapes_craft_from_their_parent(self):
+        for stem, parent_id in SHAPE_PARENTS.items():
+            for shape, (pattern, count) in SHAPE_RECIPES.items():
+                [recipe] = self.recipes_making(f"{stem}_{shape}", parent_id)
+                self.assertEqual(recipe["pattern"], pattern, f"{stem}_{shape}")
+                self.assertEqual(self.result_of(recipe)["count"], count, f"{stem}_{shape}")
+
+    def test_shapes_have_stonecutter_recipes_like_black_sandstone(self):
+        cut = {(body["ingredients"][0]["item"], self.result_of(body)["item"]): self.result_of(body)["count"]
+               for body in self.stonecutter.values()}
+        for stem, parent_id in SHAPE_PARENTS.items():
+            for shape in SHAPE_RECIPES:
+                expected = 2 if shape == "slab" else 1
+                self.assertEqual(cut.get((parent_id, f"{stem}_{shape}")), expected, f"{stem}_{shape}")
 
     def test_tallow_recipes_reference_known_items(self):
         for recipe_id, body in self.shaped.items():

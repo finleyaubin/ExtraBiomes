@@ -15,30 +15,7 @@ export const SlabberComponent = {
         const held = mainhand.getItem ? mainhand.getItem() : mainhand;
         if (!held) return;
 
-        var slabId;
-        const type = block.typeId.split(":")[1].split("_")[0];
-        if (block.typeId === "extrabiomes:dense_cloud_slab") {
-            slabId = 'extrabiomes:dense_cloud_slab';
-        }
-        else if (type === "dense") {
-            slabId = 'extrabiomes:dense_cloud_brick_slab';
-        }
-        else if (type === "gilded") {
-            slabId = 'extrabiomes:gilded_sky_slab';
-        }
-        else if (type === "black") {
-            slabId = 'extrabiomes:black_sandstone_slab';
-        }
-        else if (type === "cut") {
-            slabId = 'extrabiomes:cut_black_sandstone_slab';
-        }
-        else if (type === "smooth") {
-            slabId = 'extrabiomes:smooth_black_sandstone_slab';
-        }
-        else {
-            slabId = `extrabiomes:${type}_slab`;
-        }
-
+        const slabId = block.typeId;
 
         if (held.typeId !== slabId) return;
 
