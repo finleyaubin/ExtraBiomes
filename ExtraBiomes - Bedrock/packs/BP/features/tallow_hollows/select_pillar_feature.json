@@ -1,0 +1,15 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/select_pillar_feature"
+        },
+        "features": [
+            ["extrabiomes:tallow_hollows/tallow_pillar_1_feature", 1],
+            ["extrabiomes:tallow_hollows/tallow_pillar_2_feature", 1],
+            ["extrabiomes:tallow_hollows/tallow_pillar_3_feature", 1],
+            ["extrabiomes:tallow_hollows/tallow_pillar_4_feature", 1],
+            ["extrabiomes:tallow_hollows/tallow_pillar_5_feature", 1]
+        ]
+    }
+}

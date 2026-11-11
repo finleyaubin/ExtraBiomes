@@ -1,0 +1,14 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/select_forgotten_shelves_feature"
+        },
+        "features": [
+            ["extrabiomes:tallow_hollows/forgotten_shelves_1_feature", 1],
+            ["extrabiomes:tallow_hollows/forgotten_shelves_2_feature", 1],
+            ["extrabiomes:tallow_hollows/forgotten_shelves_3_feature", 1],
+            ["extrabiomes:tallow_hollows/forgotten_shelves_4_feature", 1]
+        ]
+    }
+}

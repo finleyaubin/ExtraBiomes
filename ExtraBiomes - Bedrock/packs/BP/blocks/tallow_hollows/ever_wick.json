@@ -1,0 +1,67 @@
+{
+    "format_version": "1.26.30",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:ever_wick",
+            "menu_category": {
+                "category": "nature"
+            }
+        },
+        "components": {
+            "minecraft:collision_box": false,
+            "minecraft:selection_box": {
+                "origin": [-3, 0, -3],
+                "size": [6, 10, 6]
+            },
+            "minecraft:geometry": "geometry.sapling_model",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_ever_wick",
+                    "render_method": "alpha_test",
+                    "face_dimming": false,
+                    "ambient_occlusion": 1.0
+                }
+            },
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 0
+            },
+            "minecraft:light_dampening": 0,
+            "minecraft:light_emission": 14,
+            "minecraft:placement_filter": {
+                "conditions": [
+                    {
+                        "block_filter": [
+                            "extrabiomes:tallowstone",
+                            "extrabiomes:tallowstone_bricks",
+                            "minecraft:honeycomb_block",
+                            "minecraft:bookshelf",
+                            "minecraft:stone",
+                            "minecraft:cobblestone",
+                            "minecraft:deepslate",
+                            "minecraft:cobbled_deepslate",
+                            "minecraft:andesite",
+                            "minecraft:diorite",
+                            "minecraft:granite",
+                            "minecraft:tuff",
+                            "minecraft:calcite",
+                            "minecraft:dripstone_block",
+                            "minecraft:dirt",
+                            "minecraft:grass_block"
+                        ],
+                        "allowed_faces": ["up"]
+                    }
+                ]
+            },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "can_contain_liquid": true,
+                        "liquid_type": "water",
+                        "on_liquid_touches": "popped"
+                    }
+                ]
+            },
+            "minecraft:map_color": "#FFB52E"
+        }
+    }
+}

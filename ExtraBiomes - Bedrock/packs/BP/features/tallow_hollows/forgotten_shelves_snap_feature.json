@@ -1,0 +1,11 @@
+{
+    "format_version": "1.20.30",
+    "minecraft:snap_to_surface_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/forgotten_shelves_snap_feature"
+        },
+        "feature_to_snap": "extrabiomes:tallow_hollows/select_forgotten_shelves_feature",
+        "vertical_search_range": 12,
+        "surface": "floor"
+    }
+}

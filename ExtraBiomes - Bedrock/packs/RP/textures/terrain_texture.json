@@ -270,6 +270,18 @@
         },
         "extrabiomes_nether_redstone_ore": {
             "textures": ["textures/blocks/the_netherlands/nether_redstone_ore"]
+        },
+        "extrabiomes_tallowstone": {
+            "textures": ["textures/blocks/tallow_hollows/tallowstone"]
+        },
+        "extrabiomes_tallowstone_bricks": {
+            "textures": ["textures/blocks/tallow_hollows/tallowstone_bricks"]
+        },
+        "extrabiomes_wax_drip": {
+            "textures": ["textures/blocks/tallow_hollows/wax_drip"]
+        },
+        "extrabiomes_ever_wick": {
+            "textures": ["textures/blocks/tallow_hollows/ever_wick"]
         }
     }
 }

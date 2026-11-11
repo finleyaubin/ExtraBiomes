@@ -1,0 +1,19 @@
+{
+    "format_version": "1.12",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "extrabiomes:tallowstone_from_tallow_lump"
+        },
+        "tags": ["crafting_table"],
+        "pattern": ["##", "##"],
+        "key": {
+            "#": {
+                "item": "extrabiomes:tallow_lump"
+            }
+        },
+        "result": {
+            "item": "extrabiomes:tallowstone",
+            "count": 1
+        }
+    }
+}

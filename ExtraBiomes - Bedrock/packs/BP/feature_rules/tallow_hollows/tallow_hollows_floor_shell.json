@@ -1,0 +1,35 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:feature_rules": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows_floor_shell",
+            "places_feature": "extrabiomes:tallow_hollows/floor_shell_snap_feature"
+        },
+        "conditions": {
+            "placement_pass": "underground_pass",
+            "minecraft:biome_filter": [
+                {
+                    "test": "has_biome_tag",
+                    "operator": "==",
+                    "value": "tallow_hollows"
+                }
+            ]
+        },
+        "distribution": {
+            "iterations": 24,
+            "scatter_chance": 100,
+            "x": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            },
+            "y": {
+                "distribution": "uniform",
+                "extent": [-64, "query.heightmap(variable.worldx, variable.worldz) - 10"]
+            },
+            "z": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            }
+        }
+    }
+}

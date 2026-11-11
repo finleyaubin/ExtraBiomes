@@ -1,0 +1,21 @@
+{
+    "format_version": "1.17.0",
+    "minecraft:single_block_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/candle_2_feature"
+        },
+        "places_block": {
+            "name": "minecraft:candle",
+            "states": {
+                "candles": 1,
+                "lit": true
+            }
+        },
+        "enforce_survivability_rules": true,
+        "enforce_placement_rules": true,
+        "may_replace": ["minecraft:air"],
+        "may_attach_to": {
+            "bottom": ["extrabiomes:tallowstone"]
+        }
+    }
+}

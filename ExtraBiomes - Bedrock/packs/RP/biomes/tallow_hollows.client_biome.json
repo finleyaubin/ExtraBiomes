@@ -1,0 +1,22 @@
+{
+    "format_version": "1.21.110",
+    "minecraft:client_biome": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows"
+        },
+        "components": {
+            "minecraft:water_appearance": {
+                "surface_color": "#D9A441"
+            },
+            "minecraft:foliage_appearance": {
+                "color": "#B8A04A"
+            },
+            "minecraft:grass_appearance": {
+                "color": "#C4AE5A"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "extrabiomes:fog_tallow_hollows"
+            }
+        }
+    }
+}

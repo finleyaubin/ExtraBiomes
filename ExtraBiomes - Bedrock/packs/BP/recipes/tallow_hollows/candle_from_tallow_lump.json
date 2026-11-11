@@ -1,0 +1,22 @@
+{
+    "format_version": "1.12",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "extrabiomes:candle_from_tallow_lump"
+        },
+        "tags": ["crafting_table"],
+        "pattern": ["S", "#"],
+        "key": {
+            "S": {
+                "item": "minecraft:string"
+            },
+            "#": {
+                "item": "extrabiomes:tallow_lump"
+            }
+        },
+        "result": {
+            "item": "minecraft:candle",
+            "count": 1
+        }
+    }
+}

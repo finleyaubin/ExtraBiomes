@@ -1,0 +1,27 @@
+{
+    "format_version": "1.17.0",
+    "minecraft:ore_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/honeycomb_vein_feature"
+        },
+        "count": 6,
+        "replace_rules": [
+            {
+                "places_block": "minecraft:honeycomb_block",
+                "may_replace": [
+                    "extrabiomes:tallowstone",
+                    "minecraft:stone",
+                    "minecraft:deepslate",
+                    "minecraft:andesite",
+                    "minecraft:diorite",
+                    "minecraft:granite",
+                    "minecraft:tuff",
+                    "minecraft:calcite",
+                    "minecraft:dripstone_block",
+                    "minecraft:dirt",
+                    "minecraft:gravel"
+                ]
+            }
+        ]
+    }
+}

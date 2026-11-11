@@ -315,5 +315,17 @@
     },
     "extrabiomes:nether_redstone_ore": {
         "sound": "nether_gold_ore"
+    },
+    "extrabiomes:tallowstone": {
+        "sound": "stone"
+    },
+    "extrabiomes:tallowstone_bricks": {
+        "sound": "stone"
+    },
+    "extrabiomes:wax_drip": {
+        "sound": "candle"
+    },
+    "extrabiomes:ever_wick": {
+        "sound": "candle"
     }
 }

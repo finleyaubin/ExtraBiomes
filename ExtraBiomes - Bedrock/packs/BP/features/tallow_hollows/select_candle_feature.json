@@ -1,0 +1,14 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/select_candle_feature"
+        },
+        "features": [
+            ["extrabiomes:tallow_hollows/candle_1_feature", 1],
+            ["extrabiomes:tallow_hollows/candle_2_feature", 1],
+            ["extrabiomes:tallow_hollows/candle_3_feature", 1],
+            ["extrabiomes:tallow_hollows/candle_4_feature", 1]
+        ]
+    }
+}

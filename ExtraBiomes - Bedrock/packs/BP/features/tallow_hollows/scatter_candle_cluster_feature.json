@@ -1,0 +1,23 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:scatter_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/scatter_candle_cluster_feature"
+        },
+        "iterations": 5,
+        "x": {
+            "distribution": "gaussian",
+            "extent": [-2, 2]
+        },
+        "y": {
+            "distribution": "gaussian",
+            "extent": [-4, 4]
+        },
+        "z": {
+            "distribution": "gaussian",
+            "extent": [-2, 2]
+        },
+        "coordinate_eval_order": "zyx",
+        "places_feature": "extrabiomes:tallow_hollows/candle_cluster_snap_feature"
+    }
+}

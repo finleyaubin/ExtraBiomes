@@ -160,6 +160,9 @@
         },
         "extrabiomes:worm_spawn_egg": {
             "textures": "textures/items/spawn_egg/worm_spawn_egg"
+        },
+        "extrabiomes:tallow_lump": {
+            "textures": "textures/items/tallow_lump"
         }
     }
 }

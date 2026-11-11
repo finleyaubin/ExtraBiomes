@@ -1,0 +1,16 @@
+{
+    "format_version": "1.16.100",
+    "minecraft:fog_settings": {
+        "description": {
+            "identifier": "extrabiomes:fog_tallow_hollows"
+        },
+        "distance": {
+            "air": {
+                "fog_start": 16,
+                "fog_end": 80,
+                "fog_color": "#3A2410",
+                "render_distance_type": "fixed"
+            }
+        }
+    }
+}

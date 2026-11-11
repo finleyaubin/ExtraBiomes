@@ -1,0 +1,30 @@
+{
+    "format_version": "1.26.0",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:tallowstone",
+            "menu_category": {
+                "category": "nature",
+                "group": "minecraft:itemGroup.name.stone"
+            }
+        },
+        "components": {
+            "minecraft:geometry": "minecraft:geometry.full_block",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_tallowstone",
+                    "render_method": "opaque"
+                }
+            },
+            "minecraft:map_color": "#F7E9A3",
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 1.5
+            },
+            "minecraft:destructible_by_explosion": {
+                "explosion_resistance": 6
+            },
+            "minecraft:light_dampening": 15,
+            "tag:minecraft:is_pickaxe_item_destructible": {}
+        }
+    }
+}

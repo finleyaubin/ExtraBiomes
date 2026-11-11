@@ -1,0 +1,13 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows/select_ceiling_cap_feature"
+        },
+        "features": [
+            ["extrabiomes:tallow_hollows/ceiling_cap_1_feature", 1],
+            ["extrabiomes:tallow_hollows/ceiling_cap_2_feature", 1],
+            ["extrabiomes:tallow_hollows/ceiling_cap_3_feature", 1]
+        ]
+    }
+}

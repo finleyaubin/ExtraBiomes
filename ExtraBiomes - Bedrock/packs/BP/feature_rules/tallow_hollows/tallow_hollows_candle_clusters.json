@@ -1,0 +1,35 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:feature_rules": {
+        "description": {
+            "identifier": "extrabiomes:tallow_hollows_candle_clusters",
+            "places_feature": "extrabiomes:tallow_hollows/scatter_candle_cluster_feature"
+        },
+        "conditions": {
+            "placement_pass": "after_surface_pass",
+            "minecraft:biome_filter": [
+                {
+                    "test": "has_biome_tag",
+                    "operator": "==",
+                    "value": "tallow_hollows"
+                }
+            ]
+        },
+        "distribution": {
+            "iterations": 3,
+            "scatter_chance": 50,
+            "x": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            },
+            "y": {
+                "distribution": "uniform",
+                "extent": [-64, "query.heightmap(variable.worldx, variable.worldz) - 10"]
+            },
+            "z": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            }
+        }
+    }
+}
