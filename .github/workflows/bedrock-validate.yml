@@ -1,0 +1,37 @@
+name: Validate Bedrock Add-on
+
+# Static checks of the Bedrock packs (JSON parses, Tallow Hollows references resolve). Gradle Build Mod skips
+# Bedrock branches, so this is the only CI those branches get. The test reads .mcstructure files via tools/.
+on:
+  push:
+    branches:
+      - '**bedrock**'
+      - '**Bedrock**'
+    paths:
+      - 'ExtraBiomes - Bedrock/**'
+      - 'tools/mcstructure.py'
+      - '.github/workflows/bedrock-validate.yml'
+  pull_request:
+    branches:
+      - '**bedrock**'
+      - '**Bedrock**'
+    paths:
+      - 'ExtraBiomes - Bedrock/**'
+      - 'tools/mcstructure.py'
+      - '.github/workflows/bedrock-validate.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bedrock-validate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bedrock-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run Bedrock validation tests
+        run: python3 -m unittest discover -s "ExtraBiomes - Bedrock/tests" -v

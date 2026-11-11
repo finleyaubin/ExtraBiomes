@@ -77,7 +77,8 @@ def _read_payload(buf, pos, tag_type):
 
 def load(path):
     """Return (root_name, root_tag) from an uncompressed little-endian NBT file."""
-    buf = open(path, "rb").read()
+    with open(path, "rb") as f:
+        buf = f.read()
     tag_type = buf[0]
     name, pos = _read_string(buf, 1)
     root, pos = _read_payload(buf, pos, tag_type)
