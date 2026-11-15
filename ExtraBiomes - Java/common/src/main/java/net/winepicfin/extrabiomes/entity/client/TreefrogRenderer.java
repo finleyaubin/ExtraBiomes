@@ -1,6 +1,5 @@
 package net.winepicfin.extrabiomes.entity.client;
 
-import net.minecraft.SharedConstants;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -10,6 +9,9 @@ import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class TreefrogRenderer extends MobRenderer<TreefrogEntity, TreefrogRenderState, TreefrogModel<TreefrogRenderState>> {
+    // The client shows a mob's position a few ticks late, so the stroke is held back to match its surge.
+    private static final float POSITION_LAG_TICKS = 3f;
+
     public TreefrogRenderer(EntityRendererProvider.Context context) {
         super(context, new TreefrogModel<>(context.bakeLayer(ModModelLayers.TREEFROG)), 0.25f);
     }
@@ -22,8 +24,9 @@ public class TreefrogRenderer extends MobRenderer<TreefrogEntity, TreefrogRender
     @Override
     public void extractRenderState(TreefrogEntity entity, TreefrogRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        // Bedrock's query.vertical_speed is blocks per second, and the client only hears the server's velocity every few ticks, so measure it from the motion actually shown.
-        state.verticalSpeed = (float) (entity.getY() - entity.yo) * SharedConstants.TICKS_PER_SECOND;
+        state.verticalSpeed = entity.getVerticalSpeedInBlocksPerSecond(partialTick);
+        state.swimAmount = entity.getSwimAmount(partialTick);
+        state.strokePhase = entity.getStrokePhase(partialTick - POSITION_LAG_TICKS);
     }
 
     @Override
