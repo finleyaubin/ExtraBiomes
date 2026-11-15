@@ -2,16 +2,19 @@ package net.winepicfin.extrabiomes.entity.client;
 // Generated from treefrog.geo.json by tools/geo2java.py
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.SharedConstants;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
+import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
+import net.winepicfin.extrabiomes.entity.custom.TreefrogStroke;
 
-public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
+public class TreefrogModel<T extends TreefrogEntity> extends HierarchicalModel<T> {
+	private static final float DEGREES = 0.017453292f;
+	// The client shows a mob's position a few ticks late, so the stroke is held back to match its surge.
+	private static final float POSITION_LAG_TICKS = 3f;
 	private final ModelPart modelRoot;
 	private final ModelPart treefrog;
 	private final ModelPart body;
@@ -91,35 +94,59 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 		return LayerDefinition.create(meshdefinition, 32, 32);
 	}
 
+	private static void rotate(ModelPart part, float amount, float xDegrees, float yDegrees, float zDegrees) {
+		part.xRot += amount * xDegrees * DEGREES;
+		part.yRot += amount * yDegrees * DEGREES;
+		part.zRot += amount * zDegrees * DEGREES;
+	}
+
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float vspeed = (float) (entity.getY() - entity.yo) * SharedConstants.TICKS_PER_SECOND;
+		float partialTick = ageInTicks - entity.tickCount;
+		float swim = entity.getSwimAmount(partialTick);
+		playJump(entity.getVerticalSpeedInBlocksPerSecond(partialTick), 1f - swim);
+		playBreaststroke(entity.getStrokePhase(partialTick - POSITION_LAG_TICKS), swim);
+	}
 
-		// animation.treefrog.jump
-		this.body.xRot += ((vspeed * (-5f))) * 0.017453292f;
-		this.leg1.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 142.5f)) * 0.017453292f;
-		this.leg1.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-152.5f))) * 0.017453292f;
-		this.leg1.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 145f)) * 0.017453292f;
-		this.leglow1.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-10f))) * 0.017453292f;
-		this.leglow1.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-140f))) * 0.017453292f;
-		this.bottom1.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 105f)) * 0.017453292f;
-		this.leg4.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 47.5f)) * 0.017453292f;
-		this.leg4.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-87.5f))) * 0.017453292f;
-		this.leg4.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 17.5f)) * 0.017453292f;
-		this.leglow4.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 82.5f)) * 0.017453292f;
-		this.leg2.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-37.5f))) * 0.017453292f;
-		this.leg2.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-200f))) * 0.017453292f;
-		this.leg2.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 42.5f)) * 0.017453292f;
-		this.leglow2.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 132.5f)) * 0.017453292f;
-		this.bottom2.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-102.5f))) * 0.017453292f;
-		this.leg3.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 157.5f)) * 0.017453292f;
-		this.leg3.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 147.5f)) * 0.017453292f;
-		this.leg3.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * 82.5f)) * 0.017453292f;
-		this.leglow3.xRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-2.5f))) * 0.017453292f;
-		this.leglow3.yRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-17.5f))) * 0.017453292f;
-		this.leglow3.zRot += ((Mth.sin(((vspeed * 10f)) * 0.017453292f) * (-10f))) * 0.017453292f;
+	// animation.treefrog.jump, as authored on Bedrock.
+	private void playJump(float vspeed, float weight) {
+		float stretch = Mth.sin(vspeed * 10f * DEGREES) * weight;
+		this.body.xRot += vspeed * -5f * DEGREES * weight;
+		rotate(this.leg1, stretch, 142.5f, -152.5f, 145f);
+		rotate(this.leglow1, stretch, 0f, -10f, -140f);
+		rotate(this.bottom1, stretch, 0f, 0f, 105f);
+		rotate(this.leg4, stretch, 47.5f, -87.5f, 17.5f);
+		rotate(this.leglow4, stretch, 0f, 0f, 82.5f);
+		rotate(this.leg2, stretch, -37.5f, -200f, 42.5f);
+		rotate(this.leglow2, stretch, 0f, 0f, 132.5f);
+		rotate(this.bottom2, stretch, 0f, 0f, -102.5f);
+		rotate(this.leg3, stretch, 157.5f, 147.5f, 82.5f);
+		rotate(this.leglow3, stretch, -2.5f, -17.5f, -10f);
+	}
 
+	// The jump's left legs take lopsided paths that only pass in a blur; a slow stroke needs both sides to match, so the right legs' motion is mirrored.
+	private void playBreaststroke(float strokePhase, float weight) {
+		float kick = TreefrogStroke.kickAt(strokePhase) * weight;
+		float reach = TreefrogStroke.reachAt(strokePhase) * weight;
+		float sweep = TreefrogStroke.sweepAt(strokePhase) * weight;
+		kickHindLeg(this.leg1, this.leglow1, this.bottom1, kick, 1f);
+		kickHindLeg(this.leg2, this.leglow2, this.bottom2, kick, -1f);
+		reachForeLeg(this.leg4, this.leglow4, reach, sweep, 1f);
+		reachForeLeg(this.leg3, this.leglow3, reach, sweep, -1f);
+	}
+
+	private static void kickHindLeg(ModelPart thigh, ModelPart shin, ModelPart ankle, float kick, float side) {
+		rotate(thigh, kick, 142.5f, side * -152.5f, side * 145f);
+		rotate(shin, kick, 0f, side * -10f, side * -140f);
+		rotate(ankle, kick, 0f, 0f, side * 105f);
+	}
+
+	private static void reachForeLeg(ModelPart upper, ModelPart lower, float reach, float sweep, float side) {
+		rotate(upper, reach, 47.5f, side * -87.5f, side * 17.5f);
+		// Swings the stretched leg 45 degrees out to the side.
+		rotate(upper, sweep, 42.6f, side * 15.9f, side * -5.9f);
+		rotate(lower, reach, 0f, 0f, side * 82.5f);
 	}
 
 	@Override
@@ -132,3 +159,4 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 		return this.modelRoot;
 	}
 }
+
