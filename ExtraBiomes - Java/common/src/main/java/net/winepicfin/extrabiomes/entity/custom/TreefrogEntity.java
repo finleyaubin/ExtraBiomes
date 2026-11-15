@@ -1,8 +1,10 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.SharedConstants;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -20,6 +22,15 @@ import org.jetbrains.annotations.Nullable;
 
 // Ported from Bedrock extrabiomes:treefrog — small hopping passive frog. Drops frogs_legs.
 public class TreefrogEntity extends Animal {
+    private static final float SWIM_POSE_BLEND_PER_TICK = 0.15F;
+    // Keeps a pond of frogs from stroking in unison.
+    private static final int STROKE_STAGGER_TICKS = 7;
+
+    private float verticalSpeed;
+    private float lastVerticalSpeed;
+    private float swimAmount;
+    private float lastSwimAmount;
+
     public TreefrogEntity(EntityType<? extends Animal> type, Level level) {
         super(type, level);
     }
@@ -51,6 +62,37 @@ public class TreefrogEntity extends Animal {
     @Override
     protected int calculateFallDamage(float distance, float multiplier) {
         return Math.max(0, super.calculateFallDamage(distance, multiplier) + TreefrogTuning.FALL_DAMAGE_MODIFIER);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.level().isClientSide()) {
+            trackAnimationState();
+        }
+    }
+
+    // Measured from the motion actually shown, since the client only hears the server's velocity every few ticks.
+    private void trackAnimationState() {
+        this.lastVerticalSpeed = this.verticalSpeed;
+        this.verticalSpeed = (float) (this.getY() - this.yo) * SharedConstants.TICKS_PER_SECOND;
+
+        boolean swimming = this.isInWater() && !this.onGround();
+        this.lastSwimAmount = this.swimAmount;
+        this.swimAmount = Mth.clamp(this.swimAmount + (swimming ? SWIM_POSE_BLEND_PER_TICK : -SWIM_POSE_BLEND_PER_TICK), 0.0F, 1.0F);
+    }
+
+    public float getVerticalSpeedInBlocksPerSecond(float partialTick) {
+        return Mth.lerp(partialTick, this.lastVerticalSpeed, this.verticalSpeed);
+    }
+
+    public float getSwimAmount(float partialTick) {
+        return Mth.lerp(partialTick, this.lastSwimAmount, this.swimAmount);
+    }
+
+    // Runs on world time, which both sides share, so the server's thrust and the client's legs stay in step.
+    public float getStrokePhase(float partialTick) {
+        return TreefrogStroke.phaseAt(this.level().getGameTime() + this.getId() * STROKE_STAGGER_TICKS + partialTick);
     }
 
     public void hop(double vx, double vz) {
