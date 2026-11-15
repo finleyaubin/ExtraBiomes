@@ -8,13 +8,18 @@ import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
 import java.util.EnumSet;
 
 // Ported from Bedrock: hops like a slime rather than pathing continuously; delay tuned well beyond Bedrock's 5-15 ticks for long, infrequent leaps.
+// Claims only MOVE so FloatGoal (JUMP) keeps the frog afloat between hops instead of pre-empting them.
 public class TreefrogHopGoal extends Goal {
+    private static final int MIN_LAND_DELAY = 60;
+    // Short, so a frog that lands in water leaps back out instead of drifting.
+    private static final int MIN_SWIM_DELAY = 10;
+
     private final TreefrogEntity treefrog;
     private int hopDelay;
 
     public TreefrogHopGoal(TreefrogEntity treefrog) {
         this.treefrog = treefrog;
-        this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
@@ -32,12 +37,17 @@ public class TreefrogHopGoal extends Goal {
         this.hopDelay = 0;
     }
 
+    private int nextDelay(int minimum) {
+        return minimum + this.treefrog.getRandom().nextInt(minimum + 1);
+    }
+
     @Override
     public void tick() {
-        if (!this.treefrog.onGround() || this.hopDelay-- > 0) {
+        boolean swimming = this.treefrog.isInWater();
+        if (!(this.treefrog.onGround() || swimming) || this.hopDelay-- > 0) {
             return;
         }
-        this.hopDelay = 60 + this.treefrog.getRandom().nextInt(61);
+        this.hopDelay = swimming ? nextDelay(MIN_SWIM_DELAY) : nextDelay(MIN_LAND_DELAY);
 
         float yRot = this.treefrog.getRandom().nextFloat() * 360.0F;
         this.treefrog.setYRot(yRot);
