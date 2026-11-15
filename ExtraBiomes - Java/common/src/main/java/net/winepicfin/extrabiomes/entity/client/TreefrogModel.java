@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.entity.client;
 // Generated from treefrog.geo.json by tools/geo2java.py
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.SharedConstants;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -93,7 +94,7 @@ public class TreefrogModel<T extends Entity> extends HierarchicalModel<T> {
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		float vspeed = (float) entity.getDeltaMovement().y;
+		float vspeed = (float) (entity.getY() - entity.yo) * SharedConstants.TICKS_PER_SECOND;
 
 		// animation.treefrog.jump
 		this.body.xRot += ((vspeed * (-5f))) * 0.017453292f;
