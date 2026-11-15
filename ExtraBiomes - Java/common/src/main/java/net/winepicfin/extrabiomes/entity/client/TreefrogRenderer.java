@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.entity.client;
 
+import net.minecraft.SharedConstants;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.Identifier;
@@ -21,7 +22,8 @@ public class TreefrogRenderer extends MobRenderer<TreefrogEntity, TreefrogRender
     @Override
     public void extractRenderState(TreefrogEntity entity, TreefrogRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        state.verticalSpeed = (float) entity.getDeltaMovement().y;
+        // Bedrock's query.vertical_speed is blocks per second, and the client only hears the server's velocity every few ticks, so measure it from the motion actually shown.
+        state.verticalSpeed = (float) (entity.getY() - entity.yo) * SharedConstants.TICKS_PER_SECOND;
     }
 
     @Override
