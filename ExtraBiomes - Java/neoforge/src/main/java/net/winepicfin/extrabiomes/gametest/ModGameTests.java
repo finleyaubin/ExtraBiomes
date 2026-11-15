@@ -27,6 +27,9 @@ public final class ModGameTests {
     // 600-tick milk cooldown plus the two immediate assertions around it.
     private static final int MILK_COOLDOWN_MAX_TICKS = 1_000;
 
+    // A treefrog swims in random directions, so reaching a bank takes a variable number of kicks.
+    private static final int SWIM_OUT_MAX_TICKS = 600;
+
     private record Test(Class<?> owner, String method, Consumer<GameTestHelper> body, String template, int maxTicks, boolean manualOnly) {
         Test(Class<?> owner, String method, Consumer<GameTestHelper> body) {
             this(owner, method, body, "empty", DEFAULT_MAX_TICKS, false);
@@ -78,8 +81,8 @@ public final class ModGameTests {
                     TreeGrowthGameTests::everyTreeLeafDecaysOnceItsTrunkIsBroken),
             new Test(JellyfishBreathingGameTests.class, "jellyfishDoesNotDrownInWaterOrOnLand",
                     JellyfishBreathingGameTests::jellyfishDoesNotDrownInWaterOrOnLand),
-            new Test(TreefrogSwimGameTests.class, "treefrogHopsOutOfWater",
-                    TreefrogSwimGameTests::treefrogHopsOutOfWater),
+            new Test(TreefrogSwimGameTests.class, "treefrogSwimsOutOfWaterWithoutLeapingOffIt",
+                    TreefrogSwimGameTests::treefrogSwimsOutOfWaterWithoutLeapingOffIt, "empty", SWIM_OUT_MAX_TICKS, false),
             new Test(JellyfishMilkingGameTests.class, "milkingIsOnAThirtySecondCooldown",
                     JellyfishMilkingGameTests::milkingIsOnAThirtySecondCooldown, "empty", MILK_COOLDOWN_MAX_TICKS, false),
             new Test(DenseCloudBuddingGameTests.class, "cloudCondenserBuildingDemonstratesTheMechanic",
