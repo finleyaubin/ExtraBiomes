@@ -24,9 +24,11 @@ public class TreefrogSwimGameTests {
     private static final int SHORE_WIDTH = 2;
     private static final int POOL_RADIUS = 1;
     private static final int POOL_DEPTH = 2;
+    // Vanilla's bank climb lifts a swimmer at 0.3 blocks a tick; a treefrog's leap is far faster.
+    private static final double LEAP_SPEED = 0.5;
 
     @GameTest(template = "empty", batch = "extrabiomes")
-    public static void treefrogHopsOutOfWater(GameTestHelper helper) {
+    public static void treefrogSwimsOutOfWaterWithoutLeapingOffIt(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos poolCentre = helper.absolutePos(POOL_CENTRE);
         buildPool(level, poolCentre);
@@ -35,12 +37,15 @@ public class TreefrogSwimGameTests {
         treefrog.setPos(poolCentre.getX() + 0.5, poolCentre.getY(), poolCentre.getZ() + 0.5);
         level.addFreshEntity(treefrog);
 
+        boolean[] leaptOffWater = {false};
         helper.succeedWhen(() -> {
             double strayedX = Math.abs(treefrog.getX() - (poolCentre.getX() + 0.5));
             double strayedZ = Math.abs(treefrog.getZ() - (poolCentre.getZ() + 0.5));
             boolean leftPool = Math.max(strayedX, strayedZ) > POOL_RADIUS + 0.5;
+            leaptOffWater[0] |= treefrog.isInWater() && !treefrog.onGround() && treefrog.getDeltaMovement().y > LEAP_SPEED;
+            helper.assertTrue(!leaptOffWater[0], Component.literal("Treefrog leapt off the water's surface"));
             helper.assertTrue(leftPool, Component.literal("Treefrog is still in the pool at " + treefrog.position()));
-            LOGGER.info("[TreefrogSwimGameTests] treefrogHopsOutOfWater: passed");
+            LOGGER.info("[TreefrogSwimGameTests] treefrogSwimsOutOfWaterWithoutLeapingOffIt: passed after {} ticks", helper.getTick());
         });
     }
 
