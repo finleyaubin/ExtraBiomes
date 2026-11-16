@@ -61,7 +61,7 @@ public class ExtraBiomesExpectPlatform {
     }
 
     @ExpectPlatform
-    public static <P extends FoliagePlacer> FoliagePlacerType<P> createFoliagePlacerType(Codec<P> codec) {
+    public static <P extends FoliagePlacer> FoliagePlacerType<P> createFoliagePlacerType(MapCodec<P> codec) {
         throw new AssertionError();
     }
 
