@@ -565,26 +565,29 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, up);
     }
 
+    // Mirrors vanilla's (private) BlockModelGenerators.createDoor: right-hinged doors need their own mirrored-UV models.
     private void doorBlockState(Block block, Identifier bottomTexture, Identifier topTexture) {
-        Identifier bottomModel = modelOf(bottomTexture);
-        Identifier topModel = modelOf(topTexture);
         TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, mat(bottomTexture)).put(TextureSlot.TOP, mat(topTexture));
-        ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
-        ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
+        Identifier bottomLeft = ModelTemplates.DOOR_BOTTOM_LEFT.create(block, tm, models::put);
+        Identifier bottomLeftOpen = ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(block, tm, models::put);
+        Identifier bottomRight = ModelTemplates.DOOR_BOTTOM_RIGHT.create(block, tm, models::put);
+        Identifier bottomRightOpen = ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(block, tm, models::put);
+        Identifier topLeft = ModelTemplates.DOOR_TOP_LEFT.create(block, tm, models::put);
+        Identifier topLeftOpen = ModelTemplates.DOOR_TOP_LEFT_OPEN.create(block, tm, models::put);
+        Identifier topRight = ModelTemplates.DOOR_TOP_RIGHT.create(block, tm, models::put);
+        Identifier topRightOpen = ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            Identifier model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
+                            boolean lower = half == DoubleBlockHalf.LOWER;
+                            boolean left = hinge == DoorHingeSide.LEFT;
+                            Identifier model = lower
+                                    ? (left ? (open ? bottomLeftOpen : bottomLeft) : (open ? bottomRightOpen : bottomRight))
+                                    : (left ? (open ? topLeftOpen : topLeft) : (open ? topRightOpen : topRight));
                             int y = rot(facing);
-                            if (open) {
-                                y += 90;
-                                if (hinge == DoorHingeSide.RIGHT) y += 180;
-                            }
-                            MultiVariant v = plainVariant(model);
-                            int normalized = ((y % 360) + 360) % 360;
-                            if (normalized != 0) v = v.with(yRot(normalized));
-                            return v.with(UV_LOCK);
+                            if (open) y += left ? 90 : 270;
+                            return BlockModelGenerators.plainVariant(model).with(yRot(y));
                         })));
     }
 
@@ -615,6 +618,25 @@ public class ModBlockStateProvider implements DataProvider {
                             if (y != 0) v = v.with(yRot(y));
                             return v;
                         })));
+    }
+
+    // Oak-style grid textures are symmetric, so vanilla puts them on the plain template and only rotates the open state.
+    private void nonOrientableTrapdoorBlockState(Block block, Identifier baseTexture) {
+        Identifier baseModelName = modelOf(baseTexture);
+        Identifier bottom = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        Identifier top = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        Identifier open = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+
+        putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseTexture);
+        putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseTexture);
+        putTrapdoorModel(open, "minecraft:block/template_trapdoor_open", baseTexture);
+        delegateItemModel(block, bottom);
+
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+                        .generate((facing, isOpen, half) -> isOpen
+                                ? BlockModelGenerators.plainVariant(open).with(yRot(rot(facing) + 90))
+                                : BlockModelGenerators.plainVariant(half == Half.TOP ? top : bottom))));
     }
 
     private void putTrapdoorModel(Identifier modelId, String parent, Identifier texture) {
