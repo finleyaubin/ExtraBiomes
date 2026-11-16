@@ -19,8 +19,6 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -58,8 +56,8 @@ public class ExtraBiomesExpectPlatformImpl {
         return net.winepicfin.extrabiomes.fabric.mixin.TrunkPlacerTypeAccessor.invokeNew(codec);
     }
 
-    public static <P extends FoliagePlacer> FoliagePlacerType<P> createFoliagePlacerType(Codec<P> codec) {
-        return new FoliagePlacerType<>(codec);
+    public static <P extends FoliagePlacer> FoliagePlacerType<P> createFoliagePlacerType(MapCodec<P> codec) {
+        return net.winepicfin.extrabiomes.fabric.mixin.FoliagePlacerTypeAccessor.invokeNew(codec);
     }
 
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {

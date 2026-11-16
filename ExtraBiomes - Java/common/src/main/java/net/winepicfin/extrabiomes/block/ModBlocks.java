@@ -156,12 +156,12 @@ public class ModBlocks {
 
     private static final StandardWoodSet LARCH_WOOD_SET = registerStandardWoodSet("larch", ModWoodTypes.LARCH);
     public static final RegistrySupplier<Block> LARCH_PLANKS = LARCH_WOOD_SET.planks();
-    public static final RegistrySupplier<Block> LARCH_LOG = registerBlock("larch_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> LARCH_WOOD = registerBlock("larch_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.SPRUCE_WOOD).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> STRIPPED_LARCH_LOG = registerBlock("stripped_larch_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> LARCH_LEAVES = registerBlock("larch_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.copy(Blocks.SPRUCE_LEAVES).sound(SoundType.GRASS)));
-    public static final RegistrySupplier<Block> STRIPPED_LARCH_WOOD = registerBlock("stripped_larch_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
-    public static final RegistrySupplier<Block> LARCH_SAPLING = registerBlock("larch_sapling", () -> new SaplingBlock(new LarchTreeGrower(), BlockBehaviour.Properties.copy(Blocks.SPRUCE_SAPLING).strength(0f)));
+    public static final RegistrySupplier<Block> LARCH_LOG = registerBlock("larch_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> LARCH_WOOD = registerBlock("larch_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_WOOD).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> STRIPPED_LARCH_LOG = registerBlock("stripped_larch_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> LARCH_LEAVES = registerBlock("larch_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_LEAVES).sound(SoundType.GRASS)));
+    public static final RegistrySupplier<Block> STRIPPED_LARCH_WOOD = registerBlock("stripped_larch_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> LARCH_SAPLING = registerBlock("larch_sapling", () -> new SaplingBlock(LarchTreeGrower.GROWER, BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_SAPLING).strength(0f)));
     public static final RegistrySupplier<Block> LARCH_STAIRS = LARCH_WOOD_SET.stairs();
     public static final RegistrySupplier<Block> LARCH_SLAB = LARCH_WOOD_SET.slab();
     public static final RegistrySupplier<Block> LARCH_BUTTON = LARCH_WOOD_SET.button();

@@ -68,8 +68,15 @@ public class ExtraBiomesExpectPlatformImpl {
         }
     }
 
-    public static <P extends FoliagePlacer> FoliagePlacerType<P> createFoliagePlacerType(Codec<P> codec) {
-        return new FoliagePlacerType<>(codec);
+    @SuppressWarnings("unchecked")
+    public static <P extends FoliagePlacer> FoliagePlacerType<P> createFoliagePlacerType(MapCodec<P> codec) {
+        try {
+            Constructor<FoliagePlacerType> constructor = FoliagePlacerType.class.getDeclaredConstructor(MapCodec.class);
+            constructor.setAccessible(true);
+            return (FoliagePlacerType<P>) constructor.newInstance(codec);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static LiquidBlock createGooLiquidBlock(BlockBehaviour.Properties properties) {

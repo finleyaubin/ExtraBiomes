@@ -104,7 +104,7 @@ public class WormEntity extends Animal {
         }
         peter.setCustomName(Component.literal("Peter"));
         peter.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
-        peter.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null, null);
+        peter.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null);
         serverLevel.addFreshEntity(peter);
         runCommandAs(peter, "title @a[distance=..100] times 10 70 20");
         runCommandAs(peter, "title @a[distance=..100] subtitle {\"text\":\"Run.\",\"color\":\"red\"}");
