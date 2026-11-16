@@ -181,17 +181,8 @@ public class ModSurfaceRules {
                                 SurfaceRules.bandlands()))),
 
                 // These sand rules previously had no depth guard (just isBiome(X) -> SAND), which replaced the entire column including load-bearing stone and collapsed the chunk on load.
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(biomes, ModBiomes.DESERT_BRYCE), sandOverFoundation(SAND, SANDSTONE)),
-                // red_sand is checked only at the very top block (Bedrock's top_material scope); sandstone matches anywhere in the band (mid_material scope).
-                SurfaceRules.ifTrue(SurfaceRules.isBiome(biomes, ModBiomes.GRAND_OASIS),
-                        SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), SurfaceRules.sequence(
-                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(TOP_DEPTH, false, CaveSurface.FLOOR),
-                                        SurfaceRules.sequence(
-                                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
-                                                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.15, 0.3), RED_SAND)),
-                                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.45, 0.58), SANDSTONE),
-                                                SAND)),
-                                SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(FOUNDATION_DEPTH, false, CaveSurface.FLOOR), SANDSTONE)))),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(biomes, ModBiomes.DESERT_BRYCE), patchySandOverSandstone(PACKED_MUD, -0.35, -0.15, 0.3, 0.6)),
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(biomes, ModBiomes.GRAND_OASIS), patchySandOverSandstone(RED_SAND, 0.15, 0.3, 0.45, 0.58)),
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(biomes, ModBiomes.TROPICAL_ISLAND), sandOverFoundation(SAND, SANDSTONE)),
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(biomes, ModBiomes.FUTURE_DESERT),
@@ -292,6 +283,17 @@ public class ModSurfaceRules {
         return SurfaceRules.ifTrue(SurfaceRules.abovePreliminarySurface(), SurfaceRules.sequence(
                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(TOP_DEPTH, false, CaveSurface.FLOOR), top),
                 SurfaceRules.ifTrue(SurfaceRules.stoneDepthCheck(FOUNDATION_DEPTH, false, CaveSurface.FLOOR), foundation)));
+    }
+
+    // The top patch only replaces the very top block (Bedrock's top_material scope); sandstone patches fill the whole top band (mid_material scope).
+    private static SurfaceRules.RuleSource patchySandOverSandstone(SurfaceRules.RuleSource topPatch, double topPatchMinNoise, double topPatchMaxNoise, double sandstoneMinNoise, double sandstoneMaxNoise)
+    {
+        SurfaceRules.RuleSource patchyTop = SurfaceRules.sequence(
+                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR,
+                        SurfaceRules.ifTrue(SurfaceRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, topPatchMinNoise, topPatchMaxNoise), topPatch)),
+                SurfaceRules.ifTrue(SurfaceRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, sandstoneMinNoise, sandstoneMaxNoise), SANDSTONE),
+                SAND);
+        return sandOverFoundation(patchyTop, SANDSTONE);
     }
 
     // Big podzol blobs; a larger-scale noise widens them in "dense" regions and shrinks them in "sparse" ones, like Bedrock's per-region podzol count.
