@@ -5,7 +5,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
@@ -93,7 +93,7 @@ public class LarchForestFeatures {
     public static final ResourceKey<PlacedFeature> ERRATIC_PLACED_KEY = placedKey("larch_forest_erratic");
     public static final ResourceKey<PlacedFeature> KETTLE_LAKE_PLACED_KEY = placedKey("larch_forest_kettle_lake");
 
-    public static void bootstrapConfigured(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(TALL_LARCH_KEY, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.LARCH_LOG.get()),
                 new StraightTrunkPlacer(16, 5, 0),
@@ -142,7 +142,7 @@ public class LarchForestFeatures {
         context.register(KETTLE_LAKE_KEY, GlacierFeatures.pool(Blocks.WATER, Blocks.STONE));
     }
 
-    public static void bootstrapPlaced(BootstapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         register(context, TREES_PLACED_KEY, configuredFeatures.getOrThrow(TREES_KEY),
@@ -173,7 +173,7 @@ public class LarchForestFeatures {
         return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
     }
 
-    private static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers) {
+    private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(feature, List.copyOf(modifiers)));
     }
 }
