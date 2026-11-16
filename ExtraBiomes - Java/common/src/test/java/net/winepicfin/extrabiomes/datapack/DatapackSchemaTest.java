@@ -18,7 +18,6 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.winepicfin.extrabiomes.testutil.DatapackRegistries;
 import org.junit.jupiter.api.Test;
 
@@ -115,7 +114,6 @@ class DatapackSchemaTest {
         ADVANCEMENT(Advancement.CODEC, "advancement"),
         RECIPE(Recipe.CODEC, "recipe"),
         TAG(TagFile.CODEC, "tags"),
-        CONTEXT_INT_PROVIDER(ContextIntProviders.DIRECT_CODEC, "context_int_provider"),
         // Sentinels, never matched against a folder prefix directly.
         SKIP(null),
         UNKNOWN(null);

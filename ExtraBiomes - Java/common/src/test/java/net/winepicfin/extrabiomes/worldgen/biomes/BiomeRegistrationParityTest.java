@@ -45,12 +45,8 @@ class BiomeRegistrationParityTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("biomes")
     void treesComeBeforeDefaultFlowerInEveryStep(Map.Entry<String, BiomeClimateTuning.Climate> entry) {
-        assertTreesComeBeforeDefaultFlower(entry.getKey());
-    }
-
-    static void assertTreesComeBeforeDefaultFlower(String biomeKey) {
         JsonObject generated = JavaDatapackJson.load(
-                "src/generated/resources/data/extrabiomes/worldgen/biome/" + biomeKey + ".json");
+                "src/generated/resources/data/extrabiomes/worldgen/biome/" + entry.getKey() + ".json");
         JsonArray steps = generated.getAsJsonArray("features");
         for (JsonElement stepElement : steps) {
             JsonArray step = stepElement.getAsJsonArray();
@@ -66,7 +62,7 @@ class BiomeRegistrationParityTest {
                 }
             }
             assertFalse(firstFlowerIndex != -1 && firstFlowerIndex < lastTreeIndex,
-                    biomeKey + " lists minecraft:flower_default before a tree feature: " + step);
+                    entry.getKey() + " lists minecraft:flower_default before a tree feature: " + step);
         }
     }
 
@@ -110,7 +106,7 @@ class BiomeRegistrationParityTest {
         }
     }
 
-    static void assertNeverCombines(String biomeKey, String featureA, String featureB) {
+    private static void assertNeverCombines(String biomeKey, String featureA, String featureB) {
         JsonObject generated = JavaDatapackJson.load(
                 "src/generated/resources/data/extrabiomes/worldgen/biome/" + biomeKey + ".json");
         JsonArray steps = generated.getAsJsonArray("features");

@@ -33,7 +33,6 @@ import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModFoliagePlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
-import net.winepicfin.extrabiomes.worldgen.features.tallowhollows.TallowHollowsFeatures;
 import terrablender.api.MaterialRuleManager;
 
 // Fabric bootstrap entry point - see forge/.../forge/ExtraBiomesForge.java for the Forge
@@ -69,7 +68,6 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
         LarchForestFeatures.register();
-        TallowHollowsFeatures.register();
         NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();
