@@ -5,7 +5,23 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SpeleothemBlock;
+import net.minecraft.world.level.block.state.properties.SpeleothemThickness;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.BlockColumnFeature;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
@@ -22,7 +38,7 @@ import java.util.List;
  * cold_mesa_bryce.biome.json / lush_mesa_bryce.biome.json:
  *   hard_clay_material: hardened_clay, clay_material: stained_hardened_clay -> TERRACOTTA_KEY
  * desert_bryce.biome.json:
- *   hard_clay_material: sand,          clay_material: sand                 -> SAND_KEY
+ *   hard_clay_material: sand,          clay_material: sand                 -> SAND_KEY (sandstone-bodied on Java)
  * shattered_swamp.biome.json / shattered_taiga_spikes.biome.json:
  *   hard_clay_material: stone,         clay_material: tuff                 -> TUFF_KEY
  * jungle_pillars.biome.json:
@@ -45,12 +61,22 @@ public class BryceMesaPillarFeatures {
     public static final ResourceKey<Feature> TUFF_KEY = registerKey("bryce_pillars_tuff");
     public static final ResourceKey<Feature> STONE_KEY = registerKey("bryce_pillars_stone");
 
+    public static final ResourceKey<Feature> SHORT_MUD_STALAGMITE_KEY = registerKey("desert_bryce_short_mud_stalagmite");
+    public static final ResourceKey<Feature> TALL_MUD_STALAGMITE_KEY = registerKey("desert_bryce_tall_mud_stalagmite");
+    public static final ResourceKey<PlacedFeature> SHORT_MUD_STALAGMITE_PLACED_KEY = placedKey("desert_bryce_short_mud_stalagmite");
+    public static final ResourceKey<PlacedFeature> TALL_MUD_STALAGMITE_PLACED_KEY = placedKey("desert_bryce_tall_mud_stalagmite");
+
+    // Most attempts miss: only the ones landing on a packed mud patch pass the placement filter.
+    private static final int SHORT_MUD_STALAGMITE_ATTEMPTS_PER_CHUNK = 16;
+    private static final int TALL_MUD_STALAGMITE_ATTEMPTS_PER_CHUNK = 8;
+
     public static final ResourceKey<PlacedFeature> TERRACOTTA_PLACED_KEY = placedKey("bryce_pillars_terracotta");
     public static final ResourceKey<PlacedFeature> SAND_PLACED_KEY = placedKey("bryce_pillars_sand");
     public static final ResourceKey<PlacedFeature> TUFF_PLACED_KEY = placedKey("bryce_pillars_tuff");
     public static final ResourceKey<PlacedFeature> STONE_PLACED_KEY = placedKey("bryce_pillars_stone");
 
     public static void bootstrapConfigured(BootstrapContext<Feature> context) {
+        registerMudStalagmites(context);
         // streakPalette supplies the occasional colour bands scattered through the plain TERRACOTTA background; see generateBands() in BrycePillarsFeature for the distribution.
         List<BlockState> terracottaStreaks = List.of(
                 Blocks.DYED_TERRACOTTA.orange().defaultBlockState(),
@@ -65,9 +91,17 @@ public class BryceMesaPillarFeatures {
         // Terracotta is the namesake Bryce Canyon material - kept at the original, moderate tuning every other entry is now tuned relative to.
         context.register(TERRACOTTA_KEY,
                 new BrycePillarsFeature(Blocks.TERRACOTTA.defaultBlockState(), terracottaStreaks, 10, 40, 0.97F, 6, 1.5F, java.util.Optional.empty()));
-        // Sand can't hold a tall thin wall without slumping - shorter cap, a thicker base, and heavier edge wobble so the outline reads as soft/rounded rather than a sandstone-sharp fin.
+        // Loose sand fins collapse on the first block update, so the body is banded smooth sandstone and only the weathered cap is sand.
+        // Streaks cover most of the band array, so repeating the body block in the palette is what keeps accent bands occasional instead of every few layers.
+        BlockState smoothSandstone = Blocks.SMOOTH_SANDSTONE.defaultBlockState();
+        List<BlockState> sandstoneStreaks = List.of(
+                smoothSandstone, smoothSandstone, smoothSandstone, smoothSandstone,
+                Blocks.SANDSTONE.defaultBlockState(),
+                Blocks.DRIPSTONE_BLOCK.defaultBlockState(),
+                Blocks.DYED_TERRACOTTA.white().defaultBlockState()
+        );
         context.register(SAND_KEY,
-                new BrycePillarsFeature(Blocks.SAND.defaultBlockState(), List.of(), 6, 22, 0.96F, 8, 2.2F, java.util.Optional.empty()));
+                new BrycePillarsFeature(smoothSandstone, sandstoneStreaks, 10, 34, 0.96F, 6, 1.6F, java.util.Optional.of(Blocks.SAND.defaultBlockState())));
         // Tuff is hard rock - taller, thinner fins with a lighter edge wobble so they stay sharp instead of crumbling; this is the material the shattered_swamp/shattered_taiga_spikes reference screenshot is aiming for.
         context.register(TUFF_KEY,
                 new BrycePillarsFeature(Blocks.STONE.defaultBlockState(), List.of(Blocks.TUFF.defaultBlockState()), 12, 34, 0.97F, 4, 0.9F, java.util.Optional.empty()));
@@ -77,9 +111,41 @@ public class BryceMesaPillarFeatures {
                 new BrycePillarsFeature(Blocks.STONE.defaultBlockState(), List.of(), 10, 28, 0.97F, 6, 1.0F, java.util.Optional.of(Blocks.GRASS_BLOCK.defaultBlockState())));
     }
 
+    private static void registerMudStalagmites(BootstrapContext<Feature> context) {
+        context.register(SHORT_MUD_STALAGMITE_KEY, stalagmite(
+                BlockColumnFeature.layer(UniformInt.of(0, 1), dripstone(SpeleothemThickness.FRUSTUM)),
+                BlockColumnFeature.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.TIP))));
+        context.register(TALL_MUD_STALAGMITE_KEY, stalagmite(
+                BlockColumnFeature.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.BASE)),
+                BlockColumnFeature.layer(UniformInt.of(0, 2), dripstone(SpeleothemThickness.MIDDLE)),
+                BlockColumnFeature.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.FRUSTUM)),
+                BlockColumnFeature.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.TIP))));
+    }
+
+    private static BlockColumnFeature stalagmite(BlockColumnFeature.Layer... bottomToTopLayers) {
+        return new BlockColumnFeature(List.of(bottomToTopLayers), Direction.UP, BlockPredicate.ONLY_IN_AIR_PREDICATE, true);
+    }
+
+    private static BlockStateProvider dripstone(SpeleothemThickness thickness) {
+        return BlockStateProvider.of(Blocks.POINTED_DRIPSTONE.defaultBlockState()
+                .setValue(SpeleothemBlock.TIP_DIRECTION, Direction.UP)
+                .setValue(SpeleothemBlock.THICKNESS, thickness));
+    }
+
+    private static List<PlacementModifier> onPackedMud(int attemptsPerChunk) {
+        return List.of(
+                CountPlacement.of(attemptsPerChunk),
+                InSquarePlacement.spread(),
+                HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(new Vec3i(0, -1, 0), List.of(Blocks.PACKED_MUD))),
+                BiomeFilter.biome());
+    }
+
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<Feature> configuredFeatures = context.lookup(Registries.FEATURE);
-        List<net.minecraft.world.level.levelgen.placement.PlacementModifier> modifiers = List.of(BiomeFilter.biome());
+        context.register(SHORT_MUD_STALAGMITE_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SHORT_MUD_STALAGMITE_KEY), onPackedMud(SHORT_MUD_STALAGMITE_ATTEMPTS_PER_CHUNK)));
+        context.register(TALL_MUD_STALAGMITE_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(TALL_MUD_STALAGMITE_KEY), onPackedMud(TALL_MUD_STALAGMITE_ATTEMPTS_PER_CHUNK)));
+        List<PlacementModifier> modifiers = List.of(BiomeFilter.biome());
 
         context.register(TERRACOTTA_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(TERRACOTTA_KEY), modifiers));
         context.register(SAND_PLACED_KEY, new PlacedFeature(configuredFeatures.getOrThrow(SAND_KEY), modifiers));
