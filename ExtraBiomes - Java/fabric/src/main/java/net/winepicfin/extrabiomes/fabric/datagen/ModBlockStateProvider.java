@@ -168,7 +168,7 @@ public class ModBlockStateProvider implements DataProvider {
         fenceBlock(ModBlocks.LARCH_FENCE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         fenceGateBlock(ModBlocks.LARCH_FENCE_GATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         doorBlockState(ModBlocks.LARCH_DOOR.get(), texLoc("larch_door_bottom"), texLoc("larch_door_top"));
-        trapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
+        nonOrientableTrapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
         signBlockState(ModBlocks.LARCH_SIGN.get(), ModBlocks.LARCH_WALL_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         hangingSignBlockState(ModBlocks.LARCH_HANGING_SIGN.get(), ModBlocks.LARCH_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
@@ -561,30 +561,29 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // The model JSON these blockstates reference was never actually generated on Fabric, leaving doors/trapdoors as the missing-model placeholder.
+    // Mirrors vanilla's (private) BlockModelGenerators.createDoor: right-hinged doors need their own mirrored-UV models.
     private void doorBlockState(Block block, ResourceLocation bottomTexture, ResourceLocation topTexture) {
-        ResourceLocation bottomModel = modelOf(bottomTexture);
-        ResourceLocation topModel = modelOf(topTexture);
-        // Uses the closed/left-hinge DOOR_BOTTOM_LEFT/TOP_LEFT template; Y_ROT alone approximates the other facing/open/hinge combos well enough.
         TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
-        ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
-        ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
+        ResourceLocation bottomLeft = ModelTemplates.DOOR_BOTTOM_LEFT.create(block, tm, models::put);
+        ResourceLocation bottomLeftOpen = ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(block, tm, models::put);
+        ResourceLocation bottomRight = ModelTemplates.DOOR_BOTTOM_RIGHT.create(block, tm, models::put);
+        ResourceLocation bottomRightOpen = ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(block, tm, models::put);
+        ResourceLocation topLeft = ModelTemplates.DOOR_TOP_LEFT.create(block, tm, models::put);
+        ResourceLocation topLeftOpen = ModelTemplates.DOOR_TOP_LEFT_OPEN.create(block, tm, models::put);
+        ResourceLocation topRight = ModelTemplates.DOOR_TOP_RIGHT.create(block, tm, models::put);
+        ResourceLocation topRightOpen = ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
+                            boolean lower = half == DoubleBlockHalf.LOWER;
+                            boolean left = hinge == DoorHingeSide.LEFT;
+                            ResourceLocation model = lower
+                                    ? (left ? (open ? bottomLeftOpen : bottomLeft) : (open ? bottomRightOpen : bottomRight))
+                                    : (left ? (open ? topLeftOpen : topLeft) : (open ? topRightOpen : topRight));
                             int y = rot(facing);
-                            if (open) {
-                                // +90 matches vanilla's own left-hinge-open rotation exactly; a
-                                // right-hinged door swings to the mirrored side, which vanilla's
-                                // separate right-hinge model expresses as +180 from the left-hinge
-                                // rotation at the same facing (verified against oak_door.json) - the
-                                // old formula collapsed both hinges to the same +90, so a right-hinged
-                                // door opened identically to a left-hinged one instead of mirroring.
-                                y += 90;
-                                if (hinge == DoorHingeSide.RIGHT) y += 180;
-                            }
-                            return plain(model).with(yRot(y)).with(BlockModelGenerators.UV_LOCK);
+                            if (open) y += left ? 90 : 270;
+                            return BlockModelGenerators.plainVariant(model).with(yRot(y));
                         })));
     }
 
@@ -625,6 +624,25 @@ public class ModBlockStateProvider implements DataProvider {
                             }
                             return v.with(yRot(y));
                         })));
+    }
+
+    // Oak-style grid textures are symmetric, so vanilla puts them on the plain template and only rotates the open state.
+    private void nonOrientableTrapdoorBlockState(Block block, ResourceLocation baseTexture) {
+        ResourceLocation baseModelName = modelOf(baseTexture);
+        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+
+        putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseTexture);
+        putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseTexture);
+        putTrapdoorModel(open, "minecraft:block/template_trapdoor_open", baseTexture);
+        delegateItemModel(block, bottom);
+
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+                        .generate((facing, isOpen, half) -> isOpen
+                                ? BlockModelGenerators.plainVariant(open).with(yRot(rot(facing) + 90))
+                                : BlockModelGenerators.plainVariant(half == Half.TOP ? top : bottom))));
     }
 
     private void putTrapdoorModel(ResourceLocation modelId, String parent, ResourceLocation texture) {
