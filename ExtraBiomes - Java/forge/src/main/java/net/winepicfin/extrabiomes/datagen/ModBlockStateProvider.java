@@ -111,7 +111,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.STRIPPED_LARCH_LOG.get(),models().withExistingParent("extrabiomes:stripped_larch_log", "minecraft:block/cube_column"));
         simpleBlockItem(ModBlocks.STRIPPED_LARCH_WOOD.get(),models().withExistingParent("extrabiomes:stripped_larch_wood", "minecraft:block/cube_column"));
         stairsBlock(((StairBlock) ModBlocks.LARCH_STAIRS.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.LARCH_SLAB.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.LARCH_SLAB.get()), blockModel(ModBlocks.LARCH_PLANKS.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         buttonBlock(((ButtonBlock) ModBlocks.LARCH_BUTTON.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         pressurePlateBlock(((PressurePlateBlock) ModBlocks.LARCH_PRESSURE_PLATE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         fenceBlock(((FenceBlock) ModBlocks.LARCH_FENCE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
