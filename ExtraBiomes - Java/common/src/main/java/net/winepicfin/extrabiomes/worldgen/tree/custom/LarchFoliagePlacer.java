@@ -1,6 +1,6 @@
 package net.winepicfin.extrabiomes.worldgen.tree.custom;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
  * the base, separated by thinner rows so the tiers read from a distance, with tips that droop.
  */
 public class LarchFoliagePlacer extends FoliagePlacer {
-    public static final Codec<LarchFoliagePlacer> CODEC = RecordCodecBuilder.create(instance ->
+    public static final MapCodec<LarchFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec(instance ->
             foliagePlacerParts(instance)
                     .and(IntProvider.codec(0, 24).fieldOf("trunk_height").forGetter(placer -> placer.trunkHeight))
                     .apply(instance, LarchFoliagePlacer::new));
