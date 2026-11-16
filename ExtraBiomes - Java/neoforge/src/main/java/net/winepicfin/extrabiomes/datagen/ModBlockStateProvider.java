@@ -120,7 +120,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fenceBlock(((FenceBlock) ModBlocks.LARCH_FENCE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         fenceGateBlock(((FenceGateBlock) ModBlocks.LARCH_FENCE_GATE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         doorBlockWithRenderType(((DoorBlock) ModBlocks.LARCH_DOOR.get()), texLoc("larch_door_bottom"),texLoc("larch_door_top"),"cutout");
-        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.LARCH_TRAPDOOR.get()), texLoc("larch_trapdoor"),true,"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.LARCH_TRAPDOOR.get()), texLoc("larch_trapdoor"),false,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.LARCH_SIGN.get()),((WallSignBlock) ModBlocks.LARCH_WALL_SIGN.get()),blockTexture(ModBlocks.LARCH_PLANKS.get()));
         hangingSignBlock((ModBlocks.LARCH_HANGING_SIGN.get()),( ModBlocks.LARCH_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
