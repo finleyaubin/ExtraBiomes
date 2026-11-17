@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 public class JellyfishMilkingGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = "empty", batch = "extrabiomes")
+    @GameTest(template = "empty", batch = "extrabiomes", timeoutTicks = 800)
     public static void milkingIsOnAThirtySecondCooldown(GameTestHelper helper) {
         JellyfishEntity jellyfish = helper.spawn(ModEntities.JELLYFISH.get(), 2, 3, 2);
         jellyfish.setNoAi(true);
