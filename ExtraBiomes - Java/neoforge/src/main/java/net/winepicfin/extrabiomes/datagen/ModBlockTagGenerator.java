@@ -33,8 +33,6 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
     private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_woods"));
 
 
-    private static final TagKey<Block> STRIPPED_LOGS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_logs"));
-    private static final TagKey<Block> STRIPPED_WOODS = TagKey.create(Registries.BLOCK, new ResourceLocation("forge", "stripped_woods"));
 
     public ModBlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, ExtraBiomes.MOD_ID, existingFileHelper);
@@ -297,10 +295,6 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 // The Netherlands is netherrack down to bedrock (see ModSurfaceRules).
                 Blocks.NETHERRACK
         );
-    }
-
-    private static Block[] blocks(List<RegistrySupplier<Block>> blocks) {
-        return blocks.stream().map(RegistrySupplier::get).toArray(Block[]::new);
     }
 
     private static Block[] blocks(List<RegistrySupplier<Block>> blocks) {
