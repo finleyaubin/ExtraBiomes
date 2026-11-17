@@ -145,6 +145,8 @@ public class ModCreativeModeTabs {
                 pOutput.accept(ModBlocks.LARCH_LEAVES.get());
                 pOutput.accept(ModBlocks.LARCH_SIGN.get());
                 pOutput.accept(ModBlocks.LARCH_HANGING_SIGN.get());
+                pOutput.accept(ModItems.LARCH_BOAT.get());
+                pOutput.accept(ModItems.LARCH_CHEST_BOAT.get());
                 pOutput.accept(ModItems.GILDED_SKY_BOAT.get());
                 pOutput.accept(ModItems.GILDED_SKY_CHEST_BOAT.get());
                 pOutput.accept(ModBlocks.BLACK_MUSHROOM.get());
