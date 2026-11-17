@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.event;
 
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
 import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
@@ -146,8 +146,8 @@ public class ModEventBusClientEvents {
     // correct mapping with a fully-transparent one, rendering the eggs invisible).
 
     @SubscribeEvent
-    public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener((ResourceManagerReloadListener) LarchLeavesColormap::reload);
+    public static void registerReloadListeners(AddClientReloadListenersEvent event) {
+        event.addListener(LarchLeavesColormap.RELOAD_LISTENER_ID, (ResourceManagerReloadListener) LarchLeavesColormap::reload);
     }
 
     @SubscribeEvent

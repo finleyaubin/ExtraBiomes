@@ -23,6 +23,8 @@ import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.SpruceFoliagePlacer;
@@ -48,9 +50,9 @@ import java.util.List;
 
 /**
  * Everything the Larch Forest scatters, modelled on the reference photo in issue #388: a dense belt of
- * golden larches with dark spruces (some 2x2 giants) mixed in, open meadow clearings dotted with young conifers,
- * mossy rocks and a patchy first dusting of snow. Ground the ice sheet left behind shows through as erratic
- * boulders and kettle lakes. The dry grass tufts of the 26.x original don't exist in 1.20.1.
+ * golden larches with dark spruces (some 2x2 giants) mixed in, open meadow clearings dotted with young conifers, dry
+ * grass tufts, mossy rocks and a patchy first dusting of snow. Ground the ice sheet left behind shows through as
+ * erratic boulders and kettle lakes.
  */
 public class LarchForestFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
@@ -72,6 +74,11 @@ public class LarchForestFeatures {
     private static final float MEGA_SPRUCE_CHANCE = 0.1F;
     private static final float YOUNG_SPRUCE_CHANCE = 0.65F;
     private static final int YOUNG_TREES_PER_CHUNK = 3;
+    private static final int SHORT_DRY_GRASS_PATCHES_PER_CHUNK = 4;
+    private static final int TALL_DRY_GRASS_PATCHES_PER_CHUNK = 1;
+    private static final int DRY_GRASS_TRIES_PER_PATCH = 30;
+    private static final int DRY_GRASS_PATCH_XZ_SPREAD = 8;
+    private static final int DRY_GRASS_PATCH_Y_SPREAD = 4;
     private static final int SNOW_PATCHES_PER_CHUNK = 4;
     private static final int CHUNKS_PER_MOSSY_ROCK = 3;
     private static final int CHUNKS_PER_ERRATIC = 4;
@@ -82,12 +89,16 @@ public class LarchForestFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> YOUNG_SPRUCE_KEY = configuredKey("young_spruce");
     public static final ResourceKey<ConfiguredFeature<?, ?>> TREES_KEY = configuredKey("larch_forest_trees");
     public static final ResourceKey<ConfiguredFeature<?, ?>> YOUNG_TREES_KEY = configuredKey("larch_forest_young_trees");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SHORT_DRY_GRASS_KEY = configuredKey("larch_forest_short_dry_grass");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_DRY_GRASS_KEY = configuredKey("larch_forest_tall_dry_grass");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SNOW_PATCH_KEY = configuredKey("larch_forest_snow_patch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ERRATIC_KEY = configuredKey("larch_forest_erratic");
     public static final ResourceKey<ConfiguredFeature<?, ?>> KETTLE_LAKE_KEY = configuredKey("larch_forest_kettle_lake");
 
     public static final ResourceKey<PlacedFeature> TREES_PLACED_KEY = placedKey("larch_forest_trees");
     public static final ResourceKey<PlacedFeature> YOUNG_TREES_PLACED_KEY = placedKey("larch_forest_young_trees");
+    public static final ResourceKey<PlacedFeature> SHORT_DRY_GRASS_PLACED_KEY = placedKey("larch_forest_short_dry_grass");
+    public static final ResourceKey<PlacedFeature> TALL_DRY_GRASS_PLACED_KEY = placedKey("larch_forest_tall_dry_grass");
     public static final ResourceKey<PlacedFeature> SNOW_PATCH_PLACED_KEY = placedKey("larch_forest_snow_patch");
     public static final ResourceKey<PlacedFeature> MOSSY_ROCK_PLACED_KEY = placedKey("larch_forest_mossy_rock");
     public static final ResourceKey<PlacedFeature> ERRATIC_PLACED_KEY = placedKey("larch_forest_erratic");
@@ -131,6 +142,8 @@ public class LarchForestFeatures {
                         YOUNG_SPRUCE_CHANCE)),
                 PlacementUtils.inlinePlaced(configuredFeatures.getOrThrow(YOUNG_LARCH_KEY), larchCanGrowHere))));
 
+        context.register(SHORT_DRY_GRASS_KEY, dryGrassPatch(Blocks.SHORT_DRY_GRASS));
+        context.register(TALL_DRY_GRASS_KEY, dryGrassPatch(Blocks.TALL_DRY_GRASS));
         context.register(SNOW_PATCH_KEY, new ConfiguredFeature<>(SNOW_PATCH_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
         // Erratics are rock the ice carried in from elsewhere, so they're the stones the local slopes aren't made of.
@@ -150,6 +163,11 @@ public class LarchForestFeatures {
         register(context, YOUNG_TREES_PLACED_KEY, configuredFeatures.getOrThrow(YOUNG_TREES_KEY),
                 VegetationPlacements.treePlacement(CountPlacement.of(YOUNG_TREES_PER_CHUNK)));
 
+        register(context, SHORT_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(SHORT_DRY_GRASS_KEY),
+                dryGrassPlacement(SHORT_DRY_GRASS_PATCHES_PER_CHUNK));
+        register(context, TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(TALL_DRY_GRASS_KEY),
+                dryGrassPlacement(TALL_DRY_GRASS_PATCHES_PER_CHUNK));
+
         register(context, SNOW_PATCH_PLACED_KEY, configuredFeatures.getOrThrow(SNOW_PATCH_KEY),
                 List.of(CountPlacement.of(SNOW_PATCHES_PER_CHUNK), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome()));
         register(context, MOSSY_ROCK_PLACED_KEY, configuredFeatures.getOrThrow(MiscOverworldFeatures.FOREST_ROCK),
@@ -161,16 +179,25 @@ public class LarchForestFeatures {
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome()));
     }
 
+    private static ConfiguredFeature<?, ?> dryGrassPatch(Block dryGrass) {
+        return new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(DRY_GRASS_TRIES_PER_PATCH, DRY_GRASS_PATCH_XZ_SPREAD, DRY_GRASS_PATCH_Y_SPREAD,
+                PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(dryGrass)))));
+    }
+
+    private static List<PlacementModifier> dryGrassPlacement(int patchesPerChunk) {
+        return List.of(CountPlacement.of(patchesPerChunk), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome());
+    }
+
     private static Holder<PlacedFeature> erratic(Block rock) {
         return PlacementUtils.inlinePlaced(Feature.FOREST_ROCK, new BlockStateConfiguration(rock.defaultBlockState()));
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers) {
