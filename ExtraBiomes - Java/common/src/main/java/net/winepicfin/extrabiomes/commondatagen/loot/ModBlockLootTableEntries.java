@@ -74,6 +74,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.MYSTIC_BUTTON.get());
         dropSelf.accept(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.MYSTIC_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.MYSTIC_SHELF.get());
         dropSelf.accept(ModBlocks.MYSTIC_FENCE.get());
         dropSelf.accept(ModBlocks.MYSTIC_FENCE_GATE.get());
         add.accept(ModBlocks.MYSTIC_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.MYSTIC_SLAB.get()));
@@ -93,6 +94,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.SKY_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.SKY_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.SKY_SHELF.get());
         dropSelf.accept(ModBlocks.SKY_FENCE.get());
         dropSelf.accept(ModBlocks.SKY_FENCE_GATE.get());
         add.accept(ModBlocks.SKY_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.SKY_SLAB.get()));
@@ -112,6 +114,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.PALM_BUTTON.get());
         dropSelf.accept(ModBlocks.PALM_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.PALM_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.PALM_SHELF.get());
         dropSelf.accept(ModBlocks.PALM_FENCE.get());
         dropSelf.accept(ModBlocks.PALM_FENCE_GATE.get());
         add.accept(ModBlocks.PALM_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.PALM_SLAB.get()));
@@ -131,6 +134,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.GILDED_SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_SHELF.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_FENCE.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_FENCE_GATE.get());
         add.accept(ModBlocks.GILDED_SKY_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.GILDED_SKY_SLAB.get()));
@@ -148,6 +152,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.LARCH_BUTTON.get());
         dropSelf.accept(ModBlocks.LARCH_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.LARCH_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.LARCH_SHELF.get());
         dropSelf.accept(ModBlocks.LARCH_FENCE.get());
         dropSelf.accept(ModBlocks.LARCH_FENCE_GATE.get());
         add.accept(ModBlocks.LARCH_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.LARCH_SLAB.get()));
