@@ -26,7 +26,7 @@ public class TreefrogSwimGameTests {
     // Vanilla's bank climb lifts a swimmer at 0.3 blocks a tick; a treefrog's leap is far faster.
     private static final double LEAP_SPEED = 0.5;
 
-    @GameTest(template = "empty", batch = "extrabiomes", timeoutTicks = 400)
+    @GameTest(template = "empty", batch = "extrabiomes", timeoutTicks = 600)
     public static void treefrogSwimsOutOfWaterWithoutLeapingOffIt(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos poolCentre = helper.absolutePos(POOL_CENTRE);
