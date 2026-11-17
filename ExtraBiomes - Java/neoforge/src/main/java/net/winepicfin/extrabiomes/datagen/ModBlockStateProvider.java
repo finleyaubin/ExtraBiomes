@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.datagen;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 
@@ -164,7 +166,7 @@ public class ModBlockStateProvider implements DataProvider {
         logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
         axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
         axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
-        blockWithItemCutout(ModBlocks.LARCH_LEAVES);
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
         saplingBlock(ModBlocks.LARCH_SAPLING.get());
         stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
@@ -173,7 +175,7 @@ public class ModBlockStateProvider implements DataProvider {
         fenceBlock(ModBlocks.LARCH_FENCE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         fenceGateBlock(ModBlocks.LARCH_FENCE_GATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         doorBlockState(ModBlocks.LARCH_DOOR.get(), texLoc("larch_door_bottom"), texLoc("larch_door_top"));
-        trapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
+        nonOrientableTrapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
         signBlockState(ModBlocks.LARCH_SIGN.get(), ModBlocks.LARCH_WALL_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         hangingSignBlockState(ModBlocks.LARCH_HANGING_SIGN.get(), ModBlocks.LARCH_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
@@ -280,8 +282,28 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, inventory);
     }
 
-    private void cubeAllBlock(Block block, Identifier texture) {
-        Identifier model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, texture), models::put);
+    // The colour comes from LarchLeavesTint: ModelTemplates.LEAVES carries the tintindex that cubeAll lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
+        simpleBlockState(block, model);
+        delegateItemModel(block, model);
+        ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
+        Supplier<JsonElement> untinted = items.get(itemId);
+        items.put(itemId, () -> {
+            JsonObject tint = new JsonObject();
+            tint.addProperty("type", "minecraft:constant");
+            tint.addProperty("value", LarchLeavesTint.OUT_OF_WORLD_COLOR);
+            JsonArray tints = new JsonArray();
+            tints.add(tint);
+            JsonObject json = untinted.get().getAsJsonObject();
+            json.getAsJsonObject("model").add("tints", tints);
+            return json;
+        });
+    }
+
+    private void cubeAllBlock(Block block, ResourceLocation texture) {
+        ResourceLocation model = ModelTemplates.CUBE_ALL.create(block, new TextureMapping().put(TextureSlot.ALL, texture), models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
     }
@@ -561,11 +583,30 @@ public class ModBlockStateProvider implements DataProvider {
     // Our trapdoor textures (mystic/sky/palm/gilded_sky) have a directional plank/slat pattern, the
     // same kind vanilla's acacia/spruce/birch trapdoors use - those all ship on the
     // "template_orientable_trapdoor_*" parent.
-    private void trapdoorBlockState(Block block, Identifier baseTexture) {
-        Identifier baseModelName = modelOf(baseTexture);
-        Identifier bottom = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
-        Identifier top = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
-        Identifier open = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+    // Oak-style grid textures are symmetric, so vanilla puts them on the plain template and only rotates the open state.
+    private void nonOrientableTrapdoorBlockState(Block block, ResourceLocation baseTexture) {
+        ResourceLocation baseModelName = modelOf(baseTexture);
+        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+
+        putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseTexture);
+        putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseTexture);
+        putTrapdoorModel(open, "minecraft:block/template_trapdoor_open", baseTexture);
+        delegateItemModel(block, bottom);
+
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+                        .generate((facing, isOpen, half) -> isOpen
+                                ? plainVariant(open).with(yRot((rot(facing) + 90) % 360))
+                                : plainVariant(half == Half.TOP ? top : bottom))));
+    }
+
+    private void trapdoorBlockState(Block block, ResourceLocation baseTexture) {
+        ResourceLocation baseModelName = modelOf(baseTexture);
+        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
         putTrapdoorModel(bottom, "minecraft:block/template_orientable_trapdoor_bottom", baseTexture);
         putTrapdoorModel(top, "minecraft:block/template_orientable_trapdoor_top", baseTexture);

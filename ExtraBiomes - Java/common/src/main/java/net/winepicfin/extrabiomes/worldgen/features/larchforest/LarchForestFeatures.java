@@ -23,6 +23,7 @@ import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
@@ -37,7 +38,6 @@ import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.NoiseThresholdCountPlacement;
-import net.minecraft.world.level.levelgen.placement.OffsetPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
@@ -144,8 +144,8 @@ public class LarchForestFeatures {
                         YOUNG_SPRUCE_CHANCE)),
                 PlacementUtils.inlinePlaced(configuredFeatures.getOrThrow(YOUNG_LARCH_KEY), larchCanGrowHere))));
 
-        context.register(SHORT_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.SHORT_DRY_GRASS))));
-        context.register(TALL_DRY_GRASS_KEY, new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.TALL_DRY_GRASS))));
+        context.register(SHORT_DRY_GRASS_KEY, dryGrassPatch(Blocks.SHORT_DRY_GRASS));
+        context.register(TALL_DRY_GRASS_KEY, dryGrassPatch(Blocks.TALL_DRY_GRASS));
         context.register(SNOW_PATCH_KEY, new ConfiguredFeature<>(SNOW_PATCH_FEATURE.get(), NoneFeatureConfiguration.INSTANCE));
 
         // Erratics are rock the ice carried in from elsewhere, so they're the stones the local slopes aren't made of.
@@ -166,9 +166,9 @@ public class LarchForestFeatures {
                 VegetationPlacements.treePlacement(CountPlacement.of(YOUNG_TREES_PER_CHUNK)));
 
         register(context, SHORT_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(SHORT_DRY_GRASS_KEY),
-                dryGrassPatches(SHORT_DRY_GRASS_PATCHES_PER_CHUNK, Blocks.SHORT_DRY_GRASS));
+                dryGrassPatches(SHORT_DRY_GRASS_PATCHES_PER_CHUNK));
         register(context, TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(TALL_DRY_GRASS_KEY),
-                dryGrassPatches(TALL_DRY_GRASS_PATCHES_PER_CHUNK, Blocks.TALL_DRY_GRASS));
+                dryGrassPatches(TALL_DRY_GRASS_PATCHES_PER_CHUNK));
 
         register(context, SNOW_PATCH_PLACED_KEY, configuredFeatures.getOrThrow(SNOW_PATCH_KEY),
                 List.of(CountPlacement.of(SNOW_PATCHES_PER_CHUNK), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome()));
@@ -181,12 +181,14 @@ public class LarchForestFeatures {
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome()));
     }
 
-    private static List<PlacementModifier> dryGrassPatches(int patchesPerChunk, Block dryGrass) {
-        BlockPredicate emptyAndPlantable = BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.wouldSurvive(dryGrass.defaultBlockState(), net.minecraft.core.BlockPos.ZERO));
-        return List.of(
-                CountPlacement.of(patchesPerChunk), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(),
-                CountPlacement.of(DRY_GRASS_TRIES_PER_PATCH), OffsetPlacement.ofTriangle(DRY_GRASS_PATCH_XZ_SPREAD, DRY_GRASS_PATCH_Y_SPREAD),
-                BlockPredicateFilter.forPredicate(emptyAndPlantable));
+    private static ConfiguredFeature<?, ?> dryGrassPatch(Block dryGrass) {
+        return new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(DRY_GRASS_TRIES_PER_PATCH, DRY_GRASS_PATCH_XZ_SPREAD, DRY_GRASS_PATCH_Y_SPREAD,
+                PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(dryGrass)),
+                        BlockPredicateFilter.forPredicate(BlockPredicate.ONLY_IN_AIR_PREDICATE))));
+    }
+
+    private static List<PlacementModifier> dryGrassPatches(int patchesPerChunk) {
+        return List.of(CountPlacement.of(patchesPerChunk), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome());
     }
 
     private static Holder<PlacedFeature> erratic(Block rock) {
