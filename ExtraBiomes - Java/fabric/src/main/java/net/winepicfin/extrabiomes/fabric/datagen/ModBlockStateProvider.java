@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Direction;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 
@@ -253,7 +255,24 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
+        tintItemModel(block, LarchLeavesTint.OUT_OF_WORLD_COLOR);
     }
+
+    private void tintItemModel(Block block, int rgb) {
+        ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
+        Supplier<JsonElement> untinted = items.get(itemId);
+        items.put(itemId, () -> {
+            JsonObject tint = new JsonObject();
+            tint.addProperty("type", "minecraft:constant");
+            tint.addProperty("value", rgb);
+            JsonArray tints = new JsonArray();
+            tints.add(tint);
+            JsonObject json = untinted.get().getAsJsonObject();
+            json.getAsJsonObject("model").add("tints", tints);
+            return json;
+        });
+    }
+
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
         Identifier texture = blockTexture(block);
@@ -626,18 +645,18 @@ public class ModBlockStateProvider implements DataProvider {
         ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
         ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
-        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, baseTexture);
-        ModelTemplates.TRAPDOOR_BOTTOM.create(bottom, tm, models::put);
-        ModelTemplates.TRAPDOOR_TOP.create(top, tm, models::put);
-        ModelTemplates.TRAPDOOR_OPEN.create(open, tm, models::put);
+        putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseTexture);
+        putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseTexture);
+        putTrapdoorModel(open, "minecraft:block/template_trapdoor_open", baseTexture);
         delegateItemModel(block, bottom);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> isOpen
-                                ? Variant.variant().with(VariantProperties.MODEL, open).with(VariantProperties.Y_ROT, yRot((rot(facing) + 90) % 360))
-                                : Variant.variant().with(VariantProperties.MODEL, half == Half.TOP ? top : bottom))));
+                                ? plain(open).with(yRot((rot(facing) + 90) % 360))
+                                : plain(half == Half.TOP ? top : bottom))));
     }
+
     // Standing/wall signs render their text via a block entity renderer - the blockstate model is
     // just an invisible placeholder, same as vanilla's own sign blocks. It still needs a "particle"
     // texture key though, or break particles fall back to the missing-texture sprite.

@@ -74,6 +74,10 @@ public final class ModGameTests {
                     TreeGrowthGameTests::everyTreeLeafDecaysOnceItsTrunkIsBroken),
             new Test(JellyfishBreathingGameTests.class, "jellyfishDoesNotDrownInWaterOrOnLand",
                     JellyfishBreathingGameTests::jellyfishDoesNotDrownInWaterOrOnLand),
+            new Test(JellyfishMilkingGameTests.class, "milkingIsOnAThirtySecondCooldown",
+                    JellyfishMilkingGameTests::milkingIsOnAThirtySecondCooldown),
+            new Test(TreefrogSwimGameTests.class, "treefrogSwimsOutOfWaterWithoutLeapingOffIt",
+                    TreefrogSwimGameTests::treefrogSwimsOutOfWaterWithoutLeapingOffIt),
             new Test(DenseCloudBuddingGameTests.class, "cloudCondenserBuildingDemonstratesTheMechanic",
                     DenseCloudBuddingGameTests::cloudCondenserBuildingDemonstratesTheMechanic));
 

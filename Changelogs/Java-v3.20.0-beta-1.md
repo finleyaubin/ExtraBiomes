@@ -7,7 +7,7 @@ The first beta of the next big update! This one brings a brand new Larch Forest 
 - New biome: the **Larch Forest**. It generates in the frozen TerraBlender region, on the same cold climate as vanilla Groves, but without being frozen.
 - Larch trees have their own custom shape: a pointed spire on top, branches that widen as you go down, and drooping tips. There are tall and young variants too.
 - Larch leaves change colour depending on where they are, from autumn gold to summer green, so a forest blends from one colour into the other.
-- The forest mixes larches with spruce, pine and giant spruce, opens up into meadow clearings, and is scattered with young conifers, mossy rocks, snow patches and patches of podzol and coarse dirt.
+- The forest mixes larches with spruce, pine and giant spruce, opens up into meadow clearings, and is scattered with young conifers, mossy rocks, snow patches, tufts of dry grass and patches of podzol and coarse dirt.
 - Features you'd find left behind by a glacier: big erratic boulders and kettle lakes.
 
 ### Desert Bryce
