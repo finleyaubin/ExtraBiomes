@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.custom.JellyfishEntity;
 import net.winepicfin.extrabiomes.entity.custom.JellyfishTuning;
@@ -22,6 +23,9 @@ public class JellyfishMilkingGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void milkingIsOnAThirtySecondCooldown(GameTestHelper helper) {
+        // The "empty" template doesn't clear the terrain, so the jellyfish would suffocate in solid rock.
+        helper.setBlock(new BlockPos(2, 3, 2), Blocks.AIR);
+        helper.setBlock(new BlockPos(2, 4, 2), Blocks.AIR);
         JellyfishEntity jellyfish = helper.spawn(ModEntities.JELLYFISH.get(), 2, 3, 2);
         jellyfish.setNoAi(true);
         // Far enough that the jellyfish's contact damage can't kill the mock player while the
@@ -30,7 +34,7 @@ public class JellyfishMilkingGameTests {
         BlockPos standOff = helper.absolutePos(new BlockPos(0, 3, 0));
         player.teleportTo(standOff.getX() + 0.5, standOff.getY(), standOff.getZ() + 0.5);
 
-        milkOnce(player, jellyfish);
+        milkOnce(helper, player, jellyfish);
         helper.assertTrue(jellyfish.milkCooldownRemaining() == JellyfishTuning.MILK_COOLDOWN_TICKS, Component.literal("Milking did not arm the cooldown, remaining " + jellyfish.milkCooldownRemaining()));
 
         giveBottle(player);
@@ -39,22 +43,18 @@ public class JellyfishMilkingGameTests {
         helper.assertTrue(jellyfish.milkCooldownRemaining() > 0, Component.literal("Cooldown did not survive a blocked milking attempt, remaining " + jellyfish.milkCooldownRemaining()));
 
         helper.runAfterDelay(JellyfishTuning.MILK_COOLDOWN_TICKS + 1, () -> {
-            milkOnce(player, jellyfish);
+            milkOnce(helper, player, jellyfish);
             LOGGER.info("[JellyfishMilkingGameTests] milkingIsOnAThirtySecondCooldown: passed");
             helper.succeed();
         });
     }
 
-    private static void milkOnce(ServerPlayer player, JellyfishEntity jellyfish) {
+    private static void milkOnce(GameTestHelper helper, ServerPlayer player, JellyfishEntity jellyfish) {
         giveBottle(player);
         InteractionResult result = jellyfish.mobInteract(player, InteractionHand.MAIN_HAND);
-        if (result != InteractionResult.SUCCESS) {
-            throw new AssertionError("First milking attempt returned " + result);
-        }
+        helper.assertTrue(result == InteractionResult.SUCCESS, Component.literal("Milking attempt returned " + result));
         ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
-        if (!held.is(ModItems.JELLYFISH_JAM_BOTTLE.get())) {
-            throw new AssertionError("Milking did not produce a jellyfish jam bottle, hand holds " + held.getItem().getDescriptionId());
-        }
+        helper.assertTrue(held.is(ModItems.JELLYFISH_JAM_BOTTLE.get()), Component.literal("Milking did not produce a jellyfish jam bottle, hand holds " + held.getItem().getDescriptionId()));
     }
 
     private static void giveBottle(ServerPlayer player) {
