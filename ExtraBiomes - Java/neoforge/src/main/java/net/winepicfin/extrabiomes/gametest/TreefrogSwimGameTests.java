@@ -7,7 +7,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.winepicfin.extrabiomes.ExtraBiomes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.Blocks;
@@ -43,8 +42,8 @@ public class TreefrogSwimGameTests {
             double strayedZ = Math.abs(treefrog.getZ() - (poolCentre.getZ() + 0.5));
             boolean leftPool = Math.max(strayedX, strayedZ) > POOL_RADIUS + 0.5;
             leaptOffWater[0] |= treefrog.isInWater() && !treefrog.onGround() && treefrog.getDeltaMovement().y > LEAP_SPEED;
-            helper.assertTrue(!leaptOffWater[0], Component.literal("Treefrog leapt off the water's surface"));
-            helper.assertTrue(leftPool, Component.literal("Treefrog is still in the pool at " + treefrog.position()));
+            helper.assertTrue(!leaptOffWater[0], ("Treefrog leapt off the water's surface"));
+            helper.assertTrue(leftPool, ("Treefrog is still in the pool at " + treefrog.position()));
             LOGGER.info("[TreefrogSwimGameTests] treefrogSwimsOutOfWaterWithoutLeapingOffIt: passed after {} ticks", helper.getTick());
         });
     }

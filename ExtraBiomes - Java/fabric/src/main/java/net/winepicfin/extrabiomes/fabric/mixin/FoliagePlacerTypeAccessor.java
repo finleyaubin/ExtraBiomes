@@ -6,7 +6,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-// FoliagePlacerType's constructor is private in vanilla 1.20.6 (same as TrunkPlacerType's).
+// FoliagePlacerType's constructor is private in vanilla 1.21.3 (same as TrunkPlacerType's).
 @Mixin(FoliagePlacerType.class)
 public interface FoliagePlacerTypeAccessor {
     @Invoker("<init>")
