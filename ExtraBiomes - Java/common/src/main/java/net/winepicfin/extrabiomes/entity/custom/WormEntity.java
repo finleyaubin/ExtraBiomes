@@ -77,7 +77,7 @@ public class WormEntity extends Animal {
 
     private void runCommandAs(Mob entity, String command) {
         ServerLevel serverLevel = (ServerLevel) this.level();
-        CommandSourceStack source = entity.createCommandSourceStack()
+        CommandSourceStack source = entity.createCommandSourceStackForNameResolution(serverLevel)
                 .withPermission(COMMAND_PERMISSION_LEVEL)
                 .withSuppressedOutput();
         serverLevel.getServer().getCommands().performPrefixedCommand(source, command);

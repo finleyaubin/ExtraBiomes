@@ -208,6 +208,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.LEAVES).add(
                 ModBlocks.MYSTIC_LEAVES.get(),
                 ModBlocks.SKY_LEAVES.get(),
+                ModBlocks.LARCH_LEAVES.get(),
                 ModBlocks.PALM_LEAVES.get()
         );
         this.tag(BlockTags.PLANKS).add(

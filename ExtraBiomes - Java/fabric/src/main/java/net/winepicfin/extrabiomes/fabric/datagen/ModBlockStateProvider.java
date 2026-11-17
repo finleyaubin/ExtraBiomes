@@ -1,6 +1,7 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Direction;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
 
@@ -243,11 +245,25 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // The colour comes from LarchLeavesTint: ModelTemplates.LEAVES carries the tintindex that cubeAll lacks.
+    // The item has no world to sample, so its client item pins a fixed tint instead.
     private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
         ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
         simpleBlockState(block, model);
-        delegateItemModel(block, model);
+        items.put(BuiltInRegistries.BLOCK.getKey(block), () -> {
+            JsonObject tint = new JsonObject();
+            tint.addProperty("type", "minecraft:constant");
+            tint.addProperty("value", LarchLeavesTint.OUT_OF_WORLD_COLOR);
+            JsonArray tints = new JsonArray();
+            tints.add(tint);
+            JsonObject itemModel = new JsonObject();
+            itemModel.addProperty("type", "minecraft:model");
+            itemModel.addProperty("model", model.toString());
+            itemModel.add("tints", tints);
+            JsonObject json = new JsonObject();
+            json.add("model", itemModel);
+            return json;
+        });
     }
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
