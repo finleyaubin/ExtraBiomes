@@ -1,5 +1,5 @@
 # ExtraBiomes for Java Edition v3.20.0 Beta 1
-The first beta of the next big update! This one brings a brand new Larch Forest biome with its own wood set, shelves for all our wood types, a reworked Desert Bryce, Welsh translations, and a round of mob fixes to get closer to the Bedrock version :)
+The first beta of the next big update! This one brings a brand new Larch Forest biome with its own wood set, a reworked Desert Bryce, Welsh translations, and a round of mob fixes to get closer to the Bedrock version :)
 # Changes
 
 ## World Generation
@@ -23,12 +23,7 @@ The first beta of the next big update! This one brings a brand new Larch Forest 
 ### Larch Wood
 <img width="100%" alt="Larch wood set" src="" />
 
-- A full new wood set for larch: logs, wood, stripped logs and wood, planks, stairs, slabs, fences, gates, doors, trapdoors, buttons, pressure plates, signs, hanging signs, boats, chest boats, a shelf, and larch leaves and saplings so you can grow your own.
-
-### Shelves
-<img width="100%" alt="Shelves" src="" />
-
-- Added wooden shelves for Mystic, Sky, Palm and Gilded Sky wood. They work just like the vanilla shelves.
+- A full new wood set for larch: logs, wood, stripped logs and wood, planks, stairs, slabs, fences, gates, doors, trapdoors, buttons, pressure plates, signs, hanging signs, boats, chest boats, and larch leaves and saplings so you can grow your own.
 
 ### Textures
 - Sky and Gilded Sky wood textures have more contrast so the grain stands out better.
@@ -58,7 +53,7 @@ The first beta of the next big update! This one brings a brand new Larch Forest 
 
 ## Fixes
 - Fixed a bug in door generation that could make door textures appear inverted.
-- On 26.3, Moorlands tall grass wasn't generating, and structures, larch erratics and meltwater erosion weren't treating grass, podzol and mud as soil. This was because Minecraft 26.3 changed what counts as dirt, and it's now fixed.
+- Moorlands tall grass wasn't generating, and structures, larch erratics and meltwater erosion weren't treating grass, podzol and mud as soil. This was because Minecraft changed what counts as dirt, and it's now fixed.
 - Using a bottle on a jellyfish during its milking cooldown no longer fills the bottle with water.
 
 ## Regression Tests
