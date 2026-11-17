@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.larchforest;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -17,12 +18,15 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.SpruceFoliagePlacer;
@@ -30,7 +34,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.NoiseThresholdCountPlacement;
@@ -50,7 +54,7 @@ import java.util.List;
  * Everything the Larch Forest scatters, modelled on the reference photo in issue #388: a dense belt of
  * golden larches with dark spruces (some 2x2 giants) mixed in, open meadow clearings dotted with young conifers,
  * mossy rocks and a patchy first dusting of snow. Ground the ice sheet left behind shows through as erratic
- * boulders and kettle lakes. The dry grass tufts of the 26.x original don't exist in 1.21.3.
+ * boulders and kettle lakes, with sparse dry grass tufts between the trees.
  */
 public class LarchForestFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
@@ -76,6 +80,11 @@ public class LarchForestFeatures {
     private static final int CHUNKS_PER_MOSSY_ROCK = 3;
     private static final int CHUNKS_PER_ERRATIC = 4;
     private static final int CHUNKS_PER_KETTLE_LAKE = 10;
+    private static final int SHORT_DRY_GRASS_PATCHES_PER_CHUNK = 4;
+    private static final int TALL_DRY_GRASS_PATCHES_PER_CHUNK = 1;
+    private static final int DRY_GRASS_TRIES_PER_PATCH = 30;
+    private static final int DRY_GRASS_PATCH_XZ_SPREAD = 8;
+    private static final int DRY_GRASS_PATCH_Y_SPREAD = 4;
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_LARCH_KEY = configuredKey("tall_larch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> YOUNG_LARCH_KEY = configuredKey("young_larch");
@@ -85,6 +94,8 @@ public class LarchForestFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SNOW_PATCH_KEY = configuredKey("larch_forest_snow_patch");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ERRATIC_KEY = configuredKey("larch_forest_erratic");
     public static final ResourceKey<ConfiguredFeature<?, ?>> KETTLE_LAKE_KEY = configuredKey("larch_forest_kettle_lake");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> SHORT_DRY_GRASS_KEY = configuredKey("larch_forest_short_dry_grass");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_DRY_GRASS_KEY = configuredKey("larch_forest_tall_dry_grass");
 
     public static final ResourceKey<PlacedFeature> TREES_PLACED_KEY = placedKey("larch_forest_trees");
     public static final ResourceKey<PlacedFeature> YOUNG_TREES_PLACED_KEY = placedKey("larch_forest_young_trees");
@@ -92,6 +103,8 @@ public class LarchForestFeatures {
     public static final ResourceKey<PlacedFeature> MOSSY_ROCK_PLACED_KEY = placedKey("larch_forest_mossy_rock");
     public static final ResourceKey<PlacedFeature> ERRATIC_PLACED_KEY = placedKey("larch_forest_erratic");
     public static final ResourceKey<PlacedFeature> KETTLE_LAKE_PLACED_KEY = placedKey("larch_forest_kettle_lake");
+    public static final ResourceKey<PlacedFeature> SHORT_DRY_GRASS_PLACED_KEY = placedKey("larch_forest_short_dry_grass");
+    public static final ResourceKey<PlacedFeature> TALL_DRY_GRASS_PLACED_KEY = placedKey("larch_forest_tall_dry_grass");
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(TALL_LARCH_KEY, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -140,6 +153,8 @@ public class LarchForestFeatures {
                         new WeightedPlacedFeature(erratic(Blocks.DIORITE), 0.5F)),
                 erratic(Blocks.ANDESITE))));
         context.register(KETTLE_LAKE_KEY, GlacierFeatures.pool(Blocks.WATER, Blocks.STONE));
+        context.register(SHORT_DRY_GRASS_KEY, dryGrassPatch(Blocks.SHORT_DRY_GRASS));
+        context.register(TALL_DRY_GRASS_KEY, dryGrassPatch(Blocks.TALL_DRY_GRASS));
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
@@ -159,6 +174,20 @@ public class LarchForestFeatures {
         register(context, KETTLE_LAKE_PLACED_KEY, configuredFeatures.getOrThrow(KETTLE_LAKE_KEY),
                 List.of(RarityFilter.onAverageOnceEvery(CHUNKS_PER_KETTLE_LAKE), InSquarePlacement.spread(), LakeSafeOrigin.INSTANCE,
                         HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG), BiomeFilter.biome()));
+        register(context, SHORT_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(SHORT_DRY_GRASS_KEY),
+                dryGrassPatches(SHORT_DRY_GRASS_PATCHES_PER_CHUNK));
+        register(context, TALL_DRY_GRASS_PLACED_KEY, configuredFeatures.getOrThrow(TALL_DRY_GRASS_KEY),
+                dryGrassPatches(TALL_DRY_GRASS_PATCHES_PER_CHUNK));
+    }
+
+    private static List<PlacementModifier> dryGrassPatches(int patchesPerChunk) {
+        return List.of(CountPlacement.of(patchesPerChunk), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome());
+    }
+
+    private static ConfiguredFeature<?, ?> dryGrassPatch(Block dryGrass) {
+        BlockPredicate emptyAndPlantable = BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.wouldSurvive(dryGrass.defaultBlockState(), BlockPos.ZERO));
+        return new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(DRY_GRASS_TRIES_PER_PATCH, DRY_GRASS_PATCH_XZ_SPREAD, DRY_GRASS_PATCH_Y_SPREAD,
+                PlacementUtils.inlinePlaced(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(dryGrass)), BlockPredicateFilter.forPredicate(emptyAndPlantable))));
     }
 
     private static Holder<PlacedFeature> erratic(Block rock) {

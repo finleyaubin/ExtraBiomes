@@ -2,16 +2,13 @@ package net.winepicfin.extrabiomes.gametest;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.custom.JellyfishEntity;
 import net.winepicfin.extrabiomes.entity.custom.JellyfishTuning;
@@ -21,12 +18,9 @@ import org.slf4j.Logger;
 // Mirrors the "milk_available"/"milk_cooldown" component-group swap in
 // ExtraBiomes - Bedrock/packs/BP/entities/jellyfish.json: one jellyfish yields jam once per
 // thirty seconds, and a second bottle pressed before the timer expires is simply ignored.
-@GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
 public class JellyfishMilkingGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    @GameTest(template = "empty", batch = "extrabiomes")
     public static void milkingIsOnAThirtySecondCooldown(GameTestHelper helper) {
         JellyfishEntity jellyfish = helper.spawn(ModEntities.JELLYFISH.get(), 2, 3, 2);
         jellyfish.setNoAi(true);
@@ -38,14 +32,14 @@ public class JellyfishMilkingGameTests {
 
         milkOnce(player, jellyfish);
         helper.assertTrue(jellyfish.milkCooldownRemaining() == JellyfishTuning.MILK_COOLDOWN_TICKS,
-                ("Milking did not arm the cooldown, remaining " + jellyfish.milkCooldownRemaining()));
+                Component.literal("Milking did not arm the cooldown, remaining " + jellyfish.milkCooldownRemaining()));
 
         giveBottle(player);
         jellyfish.mobInteract(player, InteractionHand.MAIN_HAND);
         helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(Items.GLASS_BOTTLE),
-                ("Jellyfish was milked again during its cooldown, hand holds " + player.getItemInHand(InteractionHand.MAIN_HAND).getItem().getDescriptionId()));
+                Component.literal("Jellyfish was milked again during its cooldown, hand holds " + player.getItemInHand(InteractionHand.MAIN_HAND).getItem().getDescriptionId()));
         helper.assertTrue(jellyfish.milkCooldownRemaining() > 0,
-                ("Cooldown did not survive a blocked milking attempt, remaining " + jellyfish.milkCooldownRemaining()));
+                Component.literal("Cooldown did not survive a blocked milking attempt, remaining " + jellyfish.milkCooldownRemaining()));
 
         helper.runAfterDelay(JellyfishTuning.MILK_COOLDOWN_TICKS + 1, () -> {
             milkOnce(player, jellyfish);

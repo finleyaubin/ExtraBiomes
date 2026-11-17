@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.fabric.datagen;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -29,6 +30,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
@@ -74,11 +76,23 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void clientItem(Block block, ResourceLocation modelId) {
+        clientItem(block, modelId, null);
+    }
+
+    private void clientItem(Block block, ResourceLocation modelId, Integer constantTint) {
         ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
         items.put(itemId, () -> {
             JsonObject model = new JsonObject();
             model.addProperty("type", "minecraft:model");
             model.addProperty("model", modelId.toString());
+            if (constantTint != null) {
+                JsonObject tint = new JsonObject();
+                tint.addProperty("type", "minecraft:constant");
+                tint.addProperty("value", constantTint);
+                JsonArray tints = new JsonArray();
+                tints.add(tint);
+                model.add("tints", tints);
+            }
             JsonObject json = new JsonObject();
             json.add("model", model);
             return json;
@@ -252,8 +266,9 @@ public class ModBlockStateProvider implements DataProvider {
         Block block = blockRegistryObject.get();
         ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
         simpleBlockState(block, model);
-        delegateItemModel(block, model);
+        delegateItemModel(block, model, LarchLeavesTint.OUT_OF_WORLD_COLOR);
     }
+
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
         ResourceLocation texture = blockTexture(block);
@@ -304,13 +319,17 @@ public class ModBlockStateProvider implements DataProvider {
     // simpleBlockWithItem behaviour, which never needed a separate ModItemModelProvider entry for
     // these blocks either).
     private void delegateItemModel(Block block, ResourceLocation blockModel) {
+        delegateItemModel(block, blockModel, null);
+    }
+
+    private void delegateItemModel(Block block, ResourceLocation blockModel, Integer constantTint) {
         ResourceLocation itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
         models.put(itemModelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", blockModel.toString());
             return json;
         });
-        clientItem(block, itemModelId);
+        clientItem(block, itemModelId, constantTint);
     }
 
     // Passing the same texture for both sides put bark on the cut ends too; use the dedicated "_top" texture.
@@ -632,12 +651,13 @@ public class ModBlockStateProvider implements DataProvider {
         ModelTemplates.TRAPDOOR_OPEN.create(open, tm, models::put);
         delegateItemModel(block, bottom);
 
-        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
-                PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
                         .generate((facing, isOpen, half) -> isOpen
-                                ? Variant.variant().with(VariantProperties.MODEL, open).with(VariantProperties.Y_ROT, yRot((rot(facing) + 90) % 360))
-                                : Variant.variant().with(VariantProperties.MODEL, half == Half.TOP ? top : bottom))));
+                                ? plain(open).with(yRot((rot(facing) + 90) % 360))
+                                : plain(half == Half.TOP ? top : bottom))));
     }
+
     // Standing/wall signs render their text via a block entity renderer - the blockstate model is
     // just an invisible placeholder, same as vanilla's own sign blocks. It still needs a "particle"
     // texture key though, or break particles fall back to the missing-texture sprite.

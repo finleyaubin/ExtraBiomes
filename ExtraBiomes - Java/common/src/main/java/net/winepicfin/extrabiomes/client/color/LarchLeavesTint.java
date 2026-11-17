@@ -1,10 +1,8 @@
 package net.winepicfin.extrabiomes.client.color;
 
 import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
@@ -12,8 +10,8 @@ import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 import org.jetbrains.annotations.Nullable;
 
 /** Tints larch leaves from {@link LarchLeavesColormap} by world position alone, so every biome shows the same mix. */
-public class LarchLeavesTint implements BlockColor, ItemColor {
-    /** Autumn gold, for leaves shown without a world around them (inventory, held item). */
+public class LarchLeavesTint implements BlockColor {
+    /** Autumn gold, for leaves shown without a world around them; the item model definition uses it as a constant tint. */
     public static final int OUT_OF_WORLD_COLOR = 0xEDB42B;
 
     // Noises use fixed seeds: leaf colour is cosmetic, so it needn't follow the world seed.
@@ -34,11 +32,6 @@ public class LarchLeavesTint implements BlockColor, ItemColor {
             return OUT_OF_WORLD_COLOR;
         }
         return LarchLeavesColormap.colorAt(greennessAt(pos), shadeAt(pos));
-    }
-
-    @Override
-    public int getColor(ItemStack stack, int tintIndex) {
-        return OUT_OF_WORLD_COLOR;
     }
 
     private static float greennessAt(BlockPos pos) {

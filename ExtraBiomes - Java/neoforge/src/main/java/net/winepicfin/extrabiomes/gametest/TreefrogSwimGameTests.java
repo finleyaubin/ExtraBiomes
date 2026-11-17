@@ -2,11 +2,8 @@ package net.winepicfin.extrabiomes.gametest;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
-import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.Blocks;
@@ -14,8 +11,6 @@ import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
 import org.slf4j.Logger;
 
-@GameTestHolder(ExtraBiomes.MOD_ID)
-@PrefixGameTestTemplate(false)
 public class TreefrogSwimGameTests {
     private static final Logger LOGGER = LogUtils.getLogger();
     // Raised clear of the test structure, which sits in the chunks the framework keeps ticking.
@@ -26,7 +21,6 @@ public class TreefrogSwimGameTests {
     // Vanilla's bank climb lifts a swimmer at 0.3 blocks a tick; a treefrog's leap is far faster.
     private static final double LEAP_SPEED = 0.5;
 
-    @GameTest(template = "empty", batch = "extrabiomes")
     public static void treefrogSwimsOutOfWaterWithoutLeapingOffIt(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos poolCentre = helper.absolutePos(POOL_CENTRE);
@@ -42,8 +36,8 @@ public class TreefrogSwimGameTests {
             double strayedZ = Math.abs(treefrog.getZ() - (poolCentre.getZ() + 0.5));
             boolean leftPool = Math.max(strayedX, strayedZ) > POOL_RADIUS + 0.5;
             leaptOffWater[0] |= treefrog.isInWater() && !treefrog.onGround() && treefrog.getDeltaMovement().y > LEAP_SPEED;
-            helper.assertTrue(!leaptOffWater[0], ("Treefrog leapt off the water's surface"));
-            helper.assertTrue(leftPool, ("Treefrog is still in the pool at " + treefrog.position()));
+            helper.assertTrue(!leaptOffWater[0], Component.literal("Treefrog leapt off the water's surface"));
+            helper.assertTrue(leftPool, Component.literal("Treefrog is still in the pool at " + treefrog.position()));
             LOGGER.info("[TreefrogSwimGameTests] treefrogSwimsOutOfWaterWithoutLeapingOffIt: passed after {} ticks", helper.getTick());
         });
     }
