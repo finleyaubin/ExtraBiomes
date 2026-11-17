@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -75,7 +76,7 @@ public class WormEntity extends Animal {
     private void runCommandAs(Mob entity, String command) {
         ServerLevel serverLevel = (ServerLevel) this.level();
         CommandSourceStack source = entity.createCommandSourceStackForNameResolution(serverLevel)
-                .withPermission(4)
+                .withPermission(LevelBasedPermissionSet.OWNER)
                 .withSuppressedOutput();
         serverLevel.getServer().getCommands().performPrefixedCommand(source, command);
     }

@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.BryceMesaPillarFeatures;
+import net.minecraft.world.attribute.BackgroundMusic;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class DesertBryce {
@@ -36,13 +37,10 @@ public class DesertBryce {
                 .mobSpawnSettings(spawnBuilder.build())
                 .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x113290)
                 .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.DESERT_BRYCE.skyColor())
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, DUSTY_HAZE_FOG_COLOR)
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DESERT)))
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.DESERT_BRYCE.waterColor())
-                        .waterFogColor(0x113290)
-                        .skyColor(BiomeAppearanceTuning.DESERT_BRYCE.skyColor())
-                        .fogColor(DUSTY_HAZE_FOG_COLOR)
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DESERT))
                         .foliageColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.foliageColor())
                         .grassColorOverride(BiomeAppearanceTuning.DESERT_BRYCE.grassColor()).build())
                 .build();

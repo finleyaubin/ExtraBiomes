@@ -252,14 +252,14 @@ public class ModBlockStateProvider implements DataProvider {
     // The colour comes from LarchLeavesTint: ModelTemplates.LEAVES carries the tintindex that cubeAll lacks.
     private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
-        ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
+        Identifier model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
         simpleBlockState(block, model);
         delegateItemModel(block, model);
         tintItemModel(block, LarchLeavesTint.OUT_OF_WORLD_COLOR);
     }
 
     private void tintItemModel(Block block, int rgb) {
-        ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
+        Identifier itemId = BuiltInRegistries.BLOCK.getKey(block);
         Supplier<JsonElement> untinted = items.get(itemId);
         items.put(itemId, () -> {
             JsonObject tint = new JsonObject();
@@ -639,11 +639,11 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // Oak-style grid textures are symmetric, so vanilla puts them on the plain template and only rotates the open state.
-    private void nonOrientableTrapdoorBlockState(Block block, ResourceLocation baseTexture) {
-        ResourceLocation baseModelName = modelOf(baseTexture);
-        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
-        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
-        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+    private void nonOrientableTrapdoorBlockState(Block block, Identifier baseTexture) {
+        Identifier baseModelName = modelOf(baseTexture);
+        Identifier bottom = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        Identifier top = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        Identifier open = Identifier.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
         putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseTexture);
         putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseTexture);

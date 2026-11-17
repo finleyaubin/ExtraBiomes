@@ -1,7 +1,7 @@
 package net.winepicfin.extrabiomes.client.color;
 
 import net.minecraft.client.resources.LegacyStuffWrapper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
 import net.winepicfin.extrabiomes.ExtraBiomes;
@@ -12,9 +12,9 @@ import java.io.IOException;
  * textures/colormap/larch_leaves.png: x runs from autumn gold to summer green, y from orange to yellow.
  */
 public final class LarchLeavesColormap {
-    public static final ResourceLocation RELOAD_LISTENER_ID = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "larch_leaves_colormap");
+    public static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "larch_leaves_colormap");
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/colormap/larch_leaves.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/colormap/larch_leaves.png");
     private static final int SIZE = 256;
     private static final int OPAQUE = 0xFF000000;
 
