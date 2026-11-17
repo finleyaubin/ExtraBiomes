@@ -57,7 +57,7 @@ public class JellyfishMilkingGameTests {
     private static void milkOnce(Player player, JellyfishEntity jellyfish) {
         giveBottle(player);
         InteractionResult result = jellyfish.mobInteract(player, InteractionHand.MAIN_HAND);
-        if (result != InteractionResult.SUCCESS) {
+        if (!result.consumesAction()) {
             throw new AssertionError("First milking attempt returned " + result);
         }
         ItemStack held = player.getItemInHand(InteractionHand.MAIN_HAND);
