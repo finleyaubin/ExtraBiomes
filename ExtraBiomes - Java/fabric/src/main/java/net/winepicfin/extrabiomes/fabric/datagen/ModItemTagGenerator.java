@@ -116,6 +116,7 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         this.valueLookupBuilder(ItemTags.WOODEN_PRESSURE_PLATES).add(items(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.valueLookupBuilder(ItemTags.WOODEN_DOORS).add(items(ModTagContents.WOODEN_DOORS));
         this.valueLookupBuilder(ItemTags.WOODEN_TRAPDOORS).add(items(ModTagContents.WOODEN_TRAPDOORS));
+        this.valueLookupBuilder(ItemTags.WOODEN_SHELVES).add(items(ModTagContents.WOODEN_SHELVES));
         this.valueLookupBuilder(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
         this.valueLookupBuilder(ItemTags.HANGING_SIGNS).add(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
         this.valueLookupBuilder(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
