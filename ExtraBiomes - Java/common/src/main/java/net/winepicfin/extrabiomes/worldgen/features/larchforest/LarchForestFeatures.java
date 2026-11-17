@@ -50,7 +50,7 @@ import java.util.List;
  * Everything the Larch Forest scatters, modelled on the reference photo in issue #388: a dense belt of
  * golden larches with dark spruces (some 2x2 giants) mixed in, open meadow clearings dotted with young conifers,
  * mossy rocks and a patchy first dusting of snow. Ground the ice sheet left behind shows through as erratic
- * boulders and kettle lakes. The dry grass tufts of the 26.x original don't exist in 1.20.1.
+ * boulders and kettle lakes. The dry grass tufts of the 26.x original don't exist in 1.21.3.
  */
 public class LarchForestFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ExtraBiomes.MOD_ID, Registries.FEATURE);
@@ -166,11 +166,11 @@ public class LarchForestFeatures {
     }
 
     private static ResourceKey<ConfiguredFeature<?, ?>> configuredKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static ResourceKey<PlacedFeature> placedKey(String name) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(ExtraBiomes.MOD_ID, name));
+        return ResourceKey.create(Registries.PLACED_FEATURE, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name));
     }
 
     private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers) {

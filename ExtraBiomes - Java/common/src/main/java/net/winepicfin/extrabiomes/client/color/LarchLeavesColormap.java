@@ -12,9 +12,9 @@ import java.io.IOException;
  * textures/colormap/larch_leaves.png: x runs from autumn gold to summer green, y from orange to yellow.
  */
 public final class LarchLeavesColormap {
-    public static final ResourceLocation RELOAD_LISTENER_ID = new ResourceLocation(ExtraBiomes.MOD_ID, "larch_leaves_colormap");
+    public static final ResourceLocation RELOAD_LISTENER_ID = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "larch_leaves_colormap");
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ExtraBiomes.MOD_ID, "textures/colormap/larch_leaves.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/colormap/larch_leaves.png");
     private static final int SIZE = 256;
     private static final int OPAQUE = 0xFF000000;
 

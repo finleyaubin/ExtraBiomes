@@ -123,8 +123,10 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(ConventionalItemTags.STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
         this.tag(ConventionalItemTags.STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
         this.tag(ConventionalItemTags.ORES).add(itemKeys(ModTagContents.ORES));
-        this.tag(ConventionalItemTags.MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
+        this.tag(MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
     }
+
+    private static final net.minecraft.tags.TagKey<net.minecraft.world.item.Item> MUSHROOMS = net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("c", "mushrooms"));
 
     private static net.minecraft.resources.ResourceKey<net.minecraft.world.item.Item>[] itemKeys(List<RegistrySupplier<Block>> blocks) {
         return keys(blocks.stream().map(b -> b.get().asItem()).toArray(net.minecraft.world.item.Item[]::new));

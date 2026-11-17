@@ -599,9 +599,9 @@ public class ModBlockStateProvider implements DataProvider {
     // Oak-style grid textures are symmetric, so vanilla puts them on the plain template and only rotates the open state.
     private void nonOrientableTrapdoorBlockState(Block block, ResourceLocation baseTexture) {
         ResourceLocation baseModelName = modelOf(baseTexture);
-        ResourceLocation bottom = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
-        ResourceLocation top = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
-        ResourceLocation open = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
 
         TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, baseTexture);
         ModelTemplates.TRAPDOOR_BOTTOM.create(bottom, tm, models::put);
