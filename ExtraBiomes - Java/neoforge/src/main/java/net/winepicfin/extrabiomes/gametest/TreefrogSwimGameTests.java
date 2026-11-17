@@ -38,7 +38,7 @@ public class TreefrogSwimGameTests {
             leaptOffWater[0] |= treefrog.isInWater() && !treefrog.onGround() && treefrog.getDeltaMovement().y > LEAP_SPEED;
             helper.assertTrue(!leaptOffWater[0], Component.literal("Treefrog leapt off the water's surface"));
             helper.assertTrue(leftPool, Component.literal("Treefrog is still in the pool at " + treefrog.position()));
-            LOGGER.info("[TreefrogSwimGameTests] treefrogSwimsOutOfWaterWithoutLeapingOffIt: passed after {} ticks", helper.getTick());
+            LOGGER.info("[TreefrogSwimGameTests] treefrogSwimsOutOfWaterWithoutLeapingOffIt: passed");
         });
     }
 
