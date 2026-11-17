@@ -100,7 +100,7 @@ public class WormEntity extends Animal {
             return;
         }
         peter.setCustomName(Component.literal("Peter"));
-        peter.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
+        peter.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
         peter.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
         serverLevel.addFreshEntity(peter);
         runCommandAs(peter, "title @a[distance=..100] times 10 70 20");
