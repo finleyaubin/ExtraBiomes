@@ -115,6 +115,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ItemTags.WOODEN_PRESSURE_PLATES).add(items(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.valueLookupBuilder(ItemTags.WOODEN_DOORS).add(items(ModTagContents.WOODEN_DOORS));
         this.valueLookupBuilder(ItemTags.WOODEN_TRAPDOORS).add(items(ModTagContents.WOODEN_TRAPDOORS));
+        this.valueLookupBuilder(ItemTags.WOODEN_SHELVES).add(items(ModTagContents.WOODEN_SHELVES));
         this.valueLookupBuilder(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
         this.valueLookupBuilder(ItemTags.SAND).add(items(ModTagContents.SAND));
         this.valueLookupBuilder(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new));

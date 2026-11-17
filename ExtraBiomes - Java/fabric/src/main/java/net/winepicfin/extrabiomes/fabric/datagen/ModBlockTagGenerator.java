@@ -83,6 +83,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.MYSTIC_FENCE_GATE.get(),
                 ModBlocks.MYSTIC_DOOR.get(),
                 ModBlocks.MYSTIC_TRAPDOOR.get(),
+                ModBlocks.MYSTIC_SHELF.get(),
                 ModBlocks.MYSTIC_SIGN.get(),
                 ModBlocks.MYSTIC_HANGING_SIGN.get(),
                 ModBlocks.MYSTIC_WALL_SIGN.get(),
@@ -97,6 +98,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.SKY_FENCE_GATE.get(),
                 ModBlocks.SKY_DOOR.get(),
                 ModBlocks.SKY_TRAPDOOR.get(),
+                ModBlocks.SKY_SHELF.get(),
                 ModBlocks.SKY_SIGN.get(),
                 ModBlocks.SKY_HANGING_SIGN.get(),
                 ModBlocks.SKY_WALL_SIGN.get(),
@@ -110,6 +112,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.LARCH_FENCE_GATE.get(),
                 ModBlocks.LARCH_DOOR.get(),
                 ModBlocks.LARCH_TRAPDOOR.get(),
+                ModBlocks.LARCH_SHELF.get(),
                 ModBlocks.LARCH_SIGN.get(),
                 ModBlocks.LARCH_HANGING_SIGN.get(),
                 ModBlocks.LARCH_WALL_SIGN.get(),
@@ -124,6 +127,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.PALM_FENCE_GATE.get(),
                 ModBlocks.PALM_DOOR.get(),
                 ModBlocks.PALM_TRAPDOOR.get(),
+                ModBlocks.PALM_SHELF.get(),
                 ModBlocks.PALM_SIGN.get(),
                 ModBlocks.PALM_HANGING_SIGN.get(),
                 ModBlocks.PALM_WALL_SIGN.get(),
@@ -138,6 +142,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
                 ModBlocks.GILDED_SKY_FENCE_GATE.get(),
                 ModBlocks.GILDED_SKY_DOOR.get(),
                 ModBlocks.GILDED_SKY_TRAPDOOR.get(),
+                ModBlocks.GILDED_SKY_SHELF.get(),
                 ModBlocks.GILDED_SKY_SIGN.get(),
                 ModBlocks.GILDED_SKY_HANGING_SIGN.get(),
                 ModBlocks.GILDED_SKY_WALL_SIGN.get(),
@@ -234,6 +239,7 @@ public class ModBlockTagGenerator extends FabricTagProvider.BlockTagProvider {
         this.valueLookupBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(blocks(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.valueLookupBuilder(BlockTags.WOODEN_DOORS).add(blocks(ModTagContents.WOODEN_DOORS));
         this.valueLookupBuilder(BlockTags.WOODEN_TRAPDOORS).add(blocks(ModTagContents.WOODEN_TRAPDOORS));
+        this.valueLookupBuilder(BlockTags.WOODEN_SHELVES).add(blocks(ModTagContents.WOODEN_SHELVES));
         this.valueLookupBuilder(BlockTags.STANDING_SIGNS).add(blocks(ModTagContents.STANDING_SIGNS));
         this.valueLookupBuilder(BlockTags.WALL_SIGNS).add(blocks(ModTagContents.WALL_SIGNS));
         this.valueLookupBuilder(BlockTags.CEILING_HANGING_SIGNS).add(blocks(ModTagContents.CEILING_HANGING_SIGNS));

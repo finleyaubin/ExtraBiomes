@@ -1,5 +1,5 @@
 # ExtraBiomes for Java Edition v3.20.0 Beta 1
-The first beta of the next big update! This one brings a brand new Larch Forest biome with its own wood set, a reworked Desert Bryce, Welsh translations, and a round of mob fixes to get closer to the Bedrock version :)
+The first beta of the next big update! This one brings a brand new Larch Forest biome with its own wood set, shelves for all our wood types, a reworked Desert Bryce, Welsh translations, and a round of mob fixes to get closer to the Bedrock version :)
 # Changes
 
 ## World Generation
@@ -17,7 +17,10 @@ The first beta of the next big update! This one brings a brand new Larch Forest 
 
 ## Blocks
 ### Larch Wood
-- A full new wood set for larch: logs, wood, stripped logs and wood, planks, stairs, slabs, fences, gates, doors, trapdoors, buttons, pressure plates, signs, hanging signs, boats, chest boats, and larch leaves and saplings so you can grow your own.
+- A full new wood set for larch: logs, wood, stripped logs and wood, planks, stairs, slabs, fences, gates, doors, trapdoors, buttons, pressure plates, signs, hanging signs, boats, chest boats, a shelf, and larch leaves and saplings so you can grow your own.
+
+### Shelves
+- Added wooden shelves for Mystic, Sky, Palm and Gilded Sky wood. They work just like the vanilla shelves.
 
 ### Textures
 - Sky and Gilded Sky wood textures have more contrast so the grain stands out better.
