@@ -12,7 +12,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PointedDripstoneBlock;
-import net.minecraft.world.level.block.state.properties.DripstoneThickness;
+import net.minecraft.world.level.block.state.properties.SpeleothemThickness;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -99,7 +99,7 @@ public class BryceMesaPillarFeatures {
                 smoothSandstone, smoothSandstone, smoothSandstone, smoothSandstone,
                 Blocks.SANDSTONE.defaultBlockState(),
                 Blocks.DRIPSTONE_BLOCK.defaultBlockState(),
-                Blocks.WHITE_TERRACOTTA.defaultBlockState()
+                Blocks.DYED_TERRACOTTA.white().defaultBlockState()
         );
         context.register(SAND_KEY, new ConfiguredFeature<>(ModBrycePillarsFeatures.BRYCE_PILLARS.get(),
                 new BrycePillarsConfiguration(smoothSandstone, sandstoneStreaks, 10, 34, 0.96F, 6, 1.6F, java.util.Optional.of(Blocks.SAND.defaultBlockState()))));
@@ -114,13 +114,13 @@ public class BryceMesaPillarFeatures {
 
     private static void registerMudStalagmites(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         context.register(SHORT_MUD_STALAGMITE_KEY, stalagmite(
-                BlockColumnConfiguration.layer(UniformInt.of(0, 1), dripstone(DripstoneThickness.FRUSTUM)),
-                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(DripstoneThickness.TIP))));
+                BlockColumnConfiguration.layer(UniformInt.of(0, 1), dripstone(SpeleothemThickness.FRUSTUM)),
+                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.TIP))));
         context.register(TALL_MUD_STALAGMITE_KEY, stalagmite(
-                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(DripstoneThickness.BASE)),
-                BlockColumnConfiguration.layer(UniformInt.of(0, 2), dripstone(DripstoneThickness.MIDDLE)),
-                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(DripstoneThickness.FRUSTUM)),
-                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(DripstoneThickness.TIP))));
+                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.BASE)),
+                BlockColumnConfiguration.layer(UniformInt.of(0, 2), dripstone(SpeleothemThickness.MIDDLE)),
+                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.FRUSTUM)),
+                BlockColumnConfiguration.layer(ConstantInt.of(1), dripstone(SpeleothemThickness.TIP))));
     }
 
     private static ConfiguredFeature<?, ?> stalagmite(BlockColumnConfiguration.Layer... bottomToTopLayers) {

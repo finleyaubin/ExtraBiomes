@@ -2,6 +2,7 @@ package net.winepicfin.extrabiomes.worldgen.features.larchforest;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.BlockBlobFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockBlobConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
@@ -107,25 +109,26 @@ public class LarchForestFeatures {
     public static final ResourceKey<PlacedFeature> KETTLE_LAKE_PLACED_KEY = placedKey("larch_forest_kettle_lake");
 
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+        BlockStateProvider belowTrunk = TreeConfiguration.defaultPlaceBelowTreeTrunkProvider(context.lookup(Registries.BIOME));
         context.register(TALL_LARCH_KEY, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.LARCH_LOG.get()),
                 new StraightTrunkPlacer(16, 5, 0),
                 BlockStateProvider.simple(ModBlocks.LARCH_LEAVES.get()),
                 new LarchFoliagePlacer(ConstantInt.of(3), ConstantInt.of(1), UniformInt.of(3, 5)),
-                new TwoLayersFeatureSize(2, 0, 2)).build()));
+                new TwoLayersFeatureSize(2, 0, 2), belowTrunk).build()));
         context.register(YOUNG_LARCH_KEY, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.LARCH_LOG.get()),
                 new StraightTrunkPlacer(4, 2, 0),
                 BlockStateProvider.simple(ModBlocks.LARCH_LEAVES.get()),
                 new LarchFoliagePlacer(UniformInt.of(1, 2), ConstantInt.of(1), ConstantInt.of(1)),
-                new TwoLayersFeatureSize(1, 0, 1)).build()));
+                new TwoLayersFeatureSize(1, 0, 1), belowTrunk).build()));
         // Vanilla spruces start at 6 logs; the photo's meadow is dotted with knee-high ones.
         context.register(YOUNG_SPRUCE_KEY, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.SPRUCE_LOG),
                 new StraightTrunkPlacer(2, 1, 0),
                 BlockStateProvider.simple(Blocks.SPRUCE_LEAVES),
                 new SpruceFoliagePlacer(UniformInt.of(1, 2), UniformInt.of(0, 1), ConstantInt.of(1)),
-                new TwoLayersFeatureSize(1, 0, 1)).build()));
+                new TwoLayersFeatureSize(1, 0, 1), belowTrunk).build()));
 
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
@@ -187,7 +190,7 @@ public class LarchForestFeatures {
     }
 
     private static List<PlacementModifier> dryGrassPatches(int patchesPerChunk, Block dryGrass) {
-        BlockPredicate emptyAndPlantable = BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.wouldSurvive(dryGrass));
+        BlockPredicate emptyAndPlantable = BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockPredicate.wouldSurvive(dryGrass.defaultBlockState(), BlockPos.ZERO));
         return List.of(
                 CountPlacement.of(patchesPerChunk), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(),
                 CountPlacement.of(DRY_GRASS_TRIES_PER_PATCH), RandomOffsetPlacement.ofTriangle(DRY_GRASS_PATCH_XZ_SPREAD, DRY_GRASS_PATCH_Y_SPREAD),

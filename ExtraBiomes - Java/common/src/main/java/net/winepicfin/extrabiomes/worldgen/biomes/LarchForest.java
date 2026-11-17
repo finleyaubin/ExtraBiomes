@@ -3,8 +3,6 @@ package net.winepicfin.extrabiomes.worldgen.biomes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.util.ARGB;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.attribute.AmbientSounds;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.EntityTypes;
@@ -26,14 +24,14 @@ public class LarchForest {
     {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
 
-        spawnBuilder.addSpawn(EntityTypes.WOLF, MobCategory.CREATURE, 8, UniformInt.of(4, 4));
-        spawnBuilder.addSpawn(EntityTypes.RABBIT, MobCategory.CREATURE, 4, UniformInt.of(2, 3));
-        spawnBuilder.addSpawn(EntityTypes.FOX, MobCategory.CREATURE, 8, UniformInt.of(2, 4));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 8, new MobSpawnSettings.SpawnerData(EntityTypes.WOLF, 4, 4));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 4, new MobSpawnSettings.SpawnerData(EntityTypes.RABBIT, 2, 3));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, 8, new MobSpawnSettings.SpawnerData(EntityTypes.FOX, 2, 4));
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
-        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CARVER));
+        BiomeGenerationSettings.Builder biomeBuilder = new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
         ModBiomes.globalOverworldGeneration(biomeBuilder);
         biomeBuilder.addFeature(GenerationStep.Decoration.LAKES, LarchForestFeatures.KETTLE_LAKE_PLACED_KEY);
         biomeBuilder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, LarchForestFeatures.MOSSY_ROCK_PLACED_KEY);
@@ -58,9 +56,9 @@ public class LarchForest {
                 .temperature(BiomeClimateTuning.LARCH_FOREST.temperature())
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x113290))
-                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(BiomeAppearanceTuning.LARCH_FOREST.skyColor()))
-                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xC0D8FF))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, 0x113290)
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, BiomeAppearanceTuning.LARCH_FOREST.skyColor())
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, 0xC0D8FF)
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, AmbientSounds.LEGACY_CAVE_SETTINGS)
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(BiomeAppearanceTuning.LARCH_FOREST.waterColor())

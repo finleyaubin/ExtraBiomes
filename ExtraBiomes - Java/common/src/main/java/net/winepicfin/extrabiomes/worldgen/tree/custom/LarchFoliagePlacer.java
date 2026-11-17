@@ -8,7 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 
@@ -41,7 +41,7 @@ public class LarchFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    protected void createFoliage(WorldGenLevel level, FoliageSetter foliageSetter, RandomSource random, TreeFeature config, int treeHeight, FoliageAttachment attachment, int foliageHeight, int leafRadius, int offset) {
+    protected void createFoliage(WorldGenLevel level, FoliageSetter foliageSetter, RandomSource random, TreeConfiguration config, int treeHeight, FoliageAttachment attachment, int foliageHeight, int leafRadius, int offset) {
         BlockPos crownTop = attachment.pos();
         boolean doubleTrunk = attachment.doubleTrunk();
 
@@ -71,7 +71,7 @@ public class LarchFoliagePlacer extends FoliagePlacer {
         return 1 + Math.round((maxRadius - 1) * progressToBase);
     }
 
-    private static void hangDroopingTips(WorldGenLevel level, FoliageSetter foliageSetter, RandomSource random, TreeFeature config, BlockPos centerBelowWhorl, int whorlRadius) {
+    private static void hangDroopingTips(WorldGenLevel level, FoliageSetter foliageSetter, RandomSource random, TreeConfiguration config, BlockPos centerBelowWhorl, int whorlRadius) {
         if (whorlRadius < MIN_DROOPING_RADIUS) return;
 
         for (Direction direction : Direction.Plane.HORIZONTAL) {
@@ -82,7 +82,7 @@ public class LarchFoliagePlacer extends FoliagePlacer {
     }
 
     @Override
-    public int foliageHeight(RandomSource random, int treeHeight, TreeFeature config) {
+    public int foliageHeight(RandomSource random, int treeHeight, TreeConfiguration config) {
         return Math.max(MIN_FOLIAGE_HEIGHT, treeHeight - this.trunkHeight.sample(random));
     }
 

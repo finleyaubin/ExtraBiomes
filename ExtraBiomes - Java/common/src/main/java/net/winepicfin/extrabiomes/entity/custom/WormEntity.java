@@ -96,7 +96,7 @@ public class WormEntity extends Animal {
 
     private void spawnPeter(BlockPos pos) {
         ServerLevel serverLevel = (ServerLevel) this.level();
-        Mob peter = EntityType.HORSE.create(serverLevel, EntitySpawnReason.BREEDING);
+        Mob peter = EntityTypes.HORSE.create(serverLevel, EntitySpawnReason.BREEDING);
         if (peter == null) {
             return;
         }

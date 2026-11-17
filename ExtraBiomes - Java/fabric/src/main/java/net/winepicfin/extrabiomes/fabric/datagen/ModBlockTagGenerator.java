@@ -103,32 +103,32 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.SKY_HANGING_SIGN.get(),
                 ModBlocks.SKY_WALL_SIGN.get(),
                 ModBlocks.SKY_WALL_HANGING_SIGN.get(),
-                ModBlocks.LARCH_PLANKS.get(),
-                ModBlocks.LARCH_STAIRS.get(),
-                ModBlocks.LARCH_SLAB.get(),
-                ModBlocks.LARCH_BUTTON.get(),
-                ModBlocks.LARCH_PRESSURE_PLATE.get(),
-                ModBlocks.LARCH_FENCE.get(),
-                ModBlocks.LARCH_FENCE_GATE.get(),
-                ModBlocks.LARCH_DOOR.get(),
-                ModBlocks.LARCH_TRAPDOOR.get(),
-                ModBlocks.LARCH_SIGN.get(),
-                ModBlocks.LARCH_HANGING_SIGN.get(),
-                ModBlocks.LARCH_WALL_SIGN.get(),
-                ModBlocks.LARCH_WALL_HANGING_SIGN.get(),
                 // palm wood
+                ModBlocks.LARCH_PLANKS.get(),
                 ModBlocks.PALM_PLANKS.get(),
+                ModBlocks.LARCH_STAIRS.get(),
                 ModBlocks.PALM_STAIRS.get(),
+                ModBlocks.LARCH_SLAB.get(),
                 ModBlocks.PALM_SLAB.get(),
+                ModBlocks.LARCH_BUTTON.get(),
                 ModBlocks.PALM_BUTTON.get(),
+                ModBlocks.LARCH_PRESSURE_PLATE.get(),
                 ModBlocks.PALM_PRESSURE_PLATE.get(),
+                ModBlocks.LARCH_FENCE.get(),
                 ModBlocks.PALM_FENCE.get(),
+                ModBlocks.LARCH_FENCE_GATE.get(),
                 ModBlocks.PALM_FENCE_GATE.get(),
+                ModBlocks.LARCH_DOOR.get(),
                 ModBlocks.PALM_DOOR.get(),
+                ModBlocks.LARCH_TRAPDOOR.get(),
                 ModBlocks.PALM_TRAPDOOR.get(),
+                ModBlocks.LARCH_SIGN.get(),
                 ModBlocks.PALM_SIGN.get(),
+                ModBlocks.LARCH_HANGING_SIGN.get(),
                 ModBlocks.PALM_HANGING_SIGN.get(),
+                ModBlocks.LARCH_WALL_SIGN.get(),
                 ModBlocks.PALM_WALL_SIGN.get(),
+                ModBlocks.LARCH_WALL_HANGING_SIGN.get(),
                 ModBlocks.PALM_WALL_HANGING_SIGN.get(),
                 // Gilded_sky wood
                 ModBlocks.GILDED_SKY_PLANKS.get(),
@@ -171,18 +171,18 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
                 ModBlocks.STRIPPED_MYSTIC_WOOD.get(),
+                ModBlocks.LARCH_LOG.get(),
                 ModBlocks.PALM_LOG.get(),
+                ModBlocks.STRIPPED_LARCH_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.LARCH_WOOD.get(),
                 ModBlocks.PALM_WOOD.get(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
                 ModBlocks.STRIPPED_SKY_WOOD.get(),
-                ModBlocks.LARCH_LOG.get(),
-                ModBlocks.STRIPPED_LARCH_LOG.get(),
-                ModBlocks.LARCH_WOOD.get(),
-                ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.GILDED_SKY_LOG.get(),
                 ModBlocks.GILDED_SKY_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
@@ -193,18 +193,18 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
                 ModBlocks.STRIPPED_MYSTIC_LOG.get(),
                 ModBlocks.MYSTIC_WOOD.get(),
                 ModBlocks.STRIPPED_MYSTIC_WOOD.get(),
+                ModBlocks.LARCH_LOG.get(),
                 ModBlocks.PALM_LOG.get(),
+                ModBlocks.STRIPPED_LARCH_LOG.get(),
                 ModBlocks.STRIPPED_PALM_LOG.get(),
+                ModBlocks.LARCH_WOOD.get(),
                 ModBlocks.PALM_WOOD.get(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.STRIPPED_PALM_WOOD.get(),
                 ModBlocks.SKY_LOG.get(),
                 ModBlocks.STRIPPED_SKY_LOG.get(),
                 ModBlocks.SKY_WOOD.get(),
                 ModBlocks.STRIPPED_SKY_WOOD.get(),
-                ModBlocks.LARCH_LOG.get(),
-                ModBlocks.STRIPPED_LARCH_LOG.get(),
-                ModBlocks.LARCH_WOOD.get(),
-                ModBlocks.STRIPPED_LARCH_WOOD.get(),
                 ModBlocks.GILDED_SKY_LOG.get(),
                 ModBlocks.GILDED_SKY_WOOD.get(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get(),
@@ -227,30 +227,6 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         this.tag(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
         this.tag(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
         this.tag(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
-        this.valueLookupBuilder(BlockTags.WALLS).add(keys(ModTagContents.WALLS));
-        this.valueLookupBuilder(BlockTags.STAIRS).add(keys(ModTagContents.STONE_STAIRS));
-        this.valueLookupBuilder(BlockTags.SLABS).add(keys(ModTagContents.STONE_SLABS));
-
-        // The vanilla stairs/slabs/doors/trapdoors/buttons/pressure_plates/signs tags already nest
-        // these wooden_* tags, so filling the wooden_* ones is enough for the parent tags too.
-        this.valueLookupBuilder(BlockTags.WOODEN_STAIRS).add(keys(ModTagContents.WOODEN_STAIRS));
-        this.valueLookupBuilder(BlockTags.WOODEN_SLABS).add(keys(ModTagContents.WOODEN_SLABS));
-        this.valueLookupBuilder(BlockTags.WOODEN_BUTTONS).add(keys(ModTagContents.WOODEN_BUTTONS));
-        this.valueLookupBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(keys(ModTagContents.WOODEN_PRESSURE_PLATES));
-        this.valueLookupBuilder(BlockTags.WOODEN_DOORS).add(keys(ModTagContents.WOODEN_DOORS));
-        this.valueLookupBuilder(BlockTags.WOODEN_TRAPDOORS).add(keys(ModTagContents.WOODEN_TRAPDOORS));
-        this.valueLookupBuilder(BlockTags.STANDING_SIGNS).add(keys(ModTagContents.STANDING_SIGNS));
-        this.valueLookupBuilder(BlockTags.WALL_SIGNS).add(keys(ModTagContents.WALL_SIGNS));
-        this.valueLookupBuilder(BlockTags.CEILING_HANGING_SIGNS).add(keys(ModTagContents.CEILING_HANGING_SIGNS));
-        this.valueLookupBuilder(BlockTags.WALL_HANGING_SIGNS).add(keys(ModTagContents.WALL_HANGING_SIGNS));
-        this.valueLookupBuilder(BlockTags.SAPLINGS).add(keys(ModTagContents.SAPLINGS));
-        this.valueLookupBuilder(BlockTags.SAND).add(keys(ModTagContents.SAND));
-
-        this.valueLookupBuilder(ConventionalBlockTags.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
-        this.valueLookupBuilder(ConventionalBlockTags.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
-        this.valueLookupBuilder(ConventionalBlockTags.ORES).add(keys(ModTagContents.ORES));
-        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE).add(keys(ModTagContents.HUGE_MUSHROOM_BLOCKS));
-        this.valueLookupBuilder(BlockTags.ENDERMAN_HOLDABLE).add(keys(ModTagContents.MUSHROOMS));
 
         // Vanilla's #minecraft:terracotta (part of overworld_carver_replaceables) covers every
         // plain/colored terracotta block, which is why cave carvers cut through ModSurfaceRules'
@@ -283,6 +259,8 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         this.tag(ConventionalBlockTags.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
         this.tag(ConventionalBlockTags.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
         this.tag(ConventionalBlockTags.ORES).add(keys(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(keys(ModTagContents.MUSHROOMS));
     }
 
     private static ResourceKey<Block>[] keys(List<RegistrySupplier<Block>> blocks) {

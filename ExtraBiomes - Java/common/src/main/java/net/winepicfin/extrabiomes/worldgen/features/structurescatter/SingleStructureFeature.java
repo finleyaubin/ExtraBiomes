@@ -112,7 +112,7 @@ public class SingleStructureFeature extends Feature<SingleStructureConfiguration
         BoundingBox structureBox = template.getBoundingBox(settings, origin);
 
         // Must precede any terrain reads: the footprint scan below would otherwise read chunks outside the safe window.
-        if (!fitsWithinSafeWriteArea(structureBox, placementOrigin)) {
+        if (!fitsWithinSafeWriteArea(structureBox, context.origin())) {
             return false;
         }
 

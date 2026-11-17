@@ -58,17 +58,17 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.LARCH_LOG.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
-                ModBlocks.LARCH_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
                 ModBlocks.PALM_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
                 ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
                 ModBlocks.PALM_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
         ));
         this.tag(ItemTags.LOGS_THAT_BURN).add(keys(
@@ -80,17 +80,17 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.LARCH_LOG.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
-                ModBlocks.LARCH_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
                 ModBlocks.PALM_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
                 ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
                 ModBlocks.PALM_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
         ));
         this.tag(ItemTags.LEAVES).add(keys(
@@ -127,10 +127,7 @@ public class ModItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
         this.tag(ConventionalItemTags.STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
         this.tag(ConventionalItemTags.STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
         this.tag(ConventionalItemTags.ORES).add(itemKeys(ModTagContents.ORES));
-        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
-        this.valueLookupBuilder(ConventionalItemTags.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
-        this.valueLookupBuilder(ConventionalItemTags.ORES).add(items(ModTagContents.ORES));
-        this.valueLookupBuilder(ConventionalItemTags.MUSHROOMS).add(items(ModTagContents.MUSHROOMS));
+        this.tag(ConventionalItemTags.MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
     }
 
     @SuppressWarnings("unchecked")

@@ -102,7 +102,7 @@ public class ModConfigureFeatures {
                 new StraightTrunkPlacer(10, 4, 0),
                 BlockStateProvider.simple(ModBlocks.LARCH_LEAVES.get()),
                 new LarchFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(2, 3)),
-                new TwoLayersFeatureSize(2, 0, 2)).build()
+                new TwoLayersFeatureSize(2, 0, 2), belowTrunk).build()
         );
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));
