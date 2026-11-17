@@ -36,12 +36,12 @@ public class LarchLeavesTintSource implements BlockTintSource {
     }
 
     private static float greennessAt(BlockPos pos) {
-        float noise = GREENNESS_NOISE.get(pos.getX() * GREENNESS_NOISE_FREQUENCY, pos.getZ() * GREENNESS_NOISE_FREQUENCY);
+        float noise = (float) GREENNESS_NOISE.getValue(pos.getX() * GREENNESS_NOISE_FREQUENCY, pos.getZ() * GREENNESS_NOISE_FREQUENCY);
         return Mth.clamp(TYPICAL_GREENNESS + noise * GREENNESS_SPREAD, 0.0F, 1.0F);
     }
 
     private static float shadeAt(BlockPos pos) {
-        float noise = SHADE_NOISE.get(pos.getX() * SHADE_NOISE_FREQUENCY, pos.getY() * SHADE_NOISE_FREQUENCY, pos.getZ() * SHADE_NOISE_FREQUENCY);
+        float noise = (float) SHADE_NOISE.getValue(pos.getX() * SHADE_NOISE_FREQUENCY, pos.getY() * SHADE_NOISE_FREQUENCY, pos.getZ() * SHADE_NOISE_FREQUENCY);
         return (noise + 1.0F) / 2.0F;
     }
 }

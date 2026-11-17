@@ -128,7 +128,7 @@ public class BryceMesaPillarFeatures {
                 new BlockColumnConfiguration(List.of(bottomToTopLayers), Direction.UP, BlockPredicate.ONLY_IN_AIR_PREDICATE, true));
     }
 
-    private static BlockStateProvider dripstone(SpeleothemThickness thickness) {
+    private static BlockStateProvider dripstone(DripstoneThickness thickness) {
         return BlockStateProvider.simple(Blocks.POINTED_DRIPSTONE.defaultBlockState()
                 .setValue(PointedDripstoneBlock.TIP_DIRECTION, Direction.UP)
                 .setValue(PointedDripstoneBlock.THICKNESS, thickness));

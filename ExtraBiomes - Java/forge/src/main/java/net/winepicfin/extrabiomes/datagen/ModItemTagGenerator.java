@@ -29,7 +29,6 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.FENCES).add(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
                 ModBlocks.SKY_FENCE.get().asItem(),
-                ModBlocks.LARCH_FENCE.get().asItem(),
                 ModBlocks.PALM_FENCE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem()
         );
@@ -37,7 +36,6 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.FENCE_GATES).add(
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem(),
-                ModBlocks.LARCH_FENCE_GATE.get().asItem(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
         );
@@ -51,10 +49,6 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.LARCH_LOG.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
-                ModBlocks.LARCH_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem()
         );
         this.tag(ItemTags.LOGS_THAT_BURN).add(
@@ -66,16 +60,11 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
-                ModBlocks.LARCH_LOG.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
-                ModBlocks.LARCH_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem()
         );
         this.tag(ItemTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
                 ModBlocks.SKY_PLANKS.get().asItem(),
-                ModBlocks.LARCH_PLANKS.get().asItem(),
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         );
