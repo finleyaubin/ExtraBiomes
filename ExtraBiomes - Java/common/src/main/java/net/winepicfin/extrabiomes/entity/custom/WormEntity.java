@@ -30,7 +30,6 @@ import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -75,7 +74,7 @@ public class WormEntity extends Animal {
 
     private void runCommandAs(Mob entity, String command) {
         ServerLevel serverLevel = (ServerLevel) this.level();
-        CommandSourceStack source = entity.createCommandSourceStack()
+        CommandSourceStack source = entity.createCommandSourceStackForNameResolution(serverLevel)
                 .withPermission(4)
                 .withSuppressedOutput();
         serverLevel.getServer().getCommands().performPrefixedCommand(source, command);
@@ -125,7 +124,7 @@ public class WormEntity extends Animal {
     }
 
     @Override
-    protected void customServerAiStep(@NonNull ServerLevel level) {
+    protected void customServerAiStep(ServerLevel level) {
         super.customServerAiStep(level);
         if (this.tickCount % COMPOSTER_CHECK_INTERVAL_TICKS == 0) {
             breedInComposter();
@@ -194,12 +193,12 @@ public class WormEntity extends Animal {
     }
 
     @Override
-    public boolean isFood(@NonNull ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return false;
     }
 
     @Override
-    public @NotNull InteractionResult mobInteract(Player player, @NonNull InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player.isSecondaryUseActive() && hand == InteractionHand.MAIN_HAND) {
             if (!this.level().isClientSide()) {
                 ItemStack wormItem = new ItemStack(ModItems.WORM.get());
@@ -219,7 +218,7 @@ public class WormEntity extends Animal {
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(@NonNull ServerLevel level, @NonNull AgeableMob partner) {
+    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob partner) {
         return null;
     }
 }
