@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -39,14 +38,14 @@ public class JellyfishMilkingGameTests {
 
         milkOnce(player, jellyfish);
         helper.assertTrue(jellyfish.milkCooldownRemaining() == JellyfishTuning.MILK_COOLDOWN_TICKS,
-                Component.literal("Milking did not arm the cooldown, remaining " + jellyfish.milkCooldownRemaining()));
+                ("Milking did not arm the cooldown, remaining " + jellyfish.milkCooldownRemaining()));
 
         giveBottle(player);
         jellyfish.mobInteract(player, InteractionHand.MAIN_HAND);
         helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).is(Items.GLASS_BOTTLE),
-                Component.literal("Jellyfish was milked again during its cooldown, hand holds " + player.getItemInHand(InteractionHand.MAIN_HAND).getItem().getDescriptionId()));
+                ("Jellyfish was milked again during its cooldown, hand holds " + player.getItemInHand(InteractionHand.MAIN_HAND).getItem().getDescriptionId()));
         helper.assertTrue(jellyfish.milkCooldownRemaining() > 0,
-                Component.literal("Cooldown did not survive a blocked milking attempt, remaining " + jellyfish.milkCooldownRemaining()));
+                ("Cooldown did not survive a blocked milking attempt, remaining " + jellyfish.milkCooldownRemaining()));
 
         helper.runAfterDelay(JellyfishTuning.MILK_COOLDOWN_TICKS + 1, () -> {
             milkOnce(player, jellyfish);
