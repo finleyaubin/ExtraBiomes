@@ -561,26 +561,29 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, up);
     }
 
+    // Mirrors vanilla's (private) BlockModelGenerators.createDoor: right-hinged doors need their own mirrored-UV models.
     private void doorBlockState(Block block, ResourceLocation bottomTexture, ResourceLocation topTexture) {
-        ResourceLocation bottomModel = modelOf(bottomTexture);
-        ResourceLocation topModel = modelOf(topTexture);
         TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
-        ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
-        ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
+        ResourceLocation bottomLeft = ModelTemplates.DOOR_BOTTOM_LEFT.create(block, tm, models::put);
+        ResourceLocation bottomLeftOpen = ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(block, tm, models::put);
+        ResourceLocation bottomRight = ModelTemplates.DOOR_BOTTOM_RIGHT.create(block, tm, models::put);
+        ResourceLocation bottomRightOpen = ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(block, tm, models::put);
+        ResourceLocation topLeft = ModelTemplates.DOOR_TOP_LEFT.create(block, tm, models::put);
+        ResourceLocation topLeftOpen = ModelTemplates.DOOR_TOP_LEFT_OPEN.create(block, tm, models::put);
+        ResourceLocation topRight = ModelTemplates.DOOR_TOP_RIGHT.create(block, tm, models::put);
+        ResourceLocation topRightOpen = ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
+                            boolean lower = half == DoubleBlockHalf.LOWER;
+                            boolean left = hinge == DoorHingeSide.LEFT;
+                            ResourceLocation model = lower
+                                    ? (left ? (open ? bottomLeftOpen : bottomLeft) : (open ? bottomRightOpen : bottomRight))
+                                    : (left ? (open ? topLeftOpen : topLeft) : (open ? topRightOpen : topRight));
                             int y = rot(facing);
-                            if (open) {
-                                y += 90;
-                                if (hinge == DoorHingeSide.RIGHT) y += 180;
-                            }
-                            MultiVariant v = plainVariant(model);
-                            int normalized = ((y % 360) + 360) % 360;
-                            if (normalized != 0) v = v.with(yRot(normalized));
-                            return v.with(UV_LOCK);
+                            if (open) y += left ? 90 : 270;
+                            return plainVariant(model).with(yRot(y));
                         })));
     }
 
