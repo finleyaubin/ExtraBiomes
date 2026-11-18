@@ -566,30 +566,29 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     // The model JSON these blockstates reference was never actually generated on Fabric, leaving doors/trapdoors as the missing-model placeholder.
+    // Mirrors vanilla's (private) BlockModelGenerators.createDoor: right-hinged doors need their own mirrored-UV models.
     private void doorBlockState(Block block, Identifier bottomTexture, Identifier topTexture) {
-        Identifier bottomModel = modelOf(bottomTexture);
-        Identifier topModel = modelOf(topTexture);
-        // Uses the closed/left-hinge DOOR_BOTTOM_LEFT/TOP_LEFT template; Y_ROT alone approximates the other facing/open/hinge combos well enough.
         TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
-        ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
-        ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
+        Identifier bottomLeft = ModelTemplates.DOOR_BOTTOM_LEFT.create(block, tm, models::put);
+        Identifier bottomLeftOpen = ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(block, tm, models::put);
+        Identifier bottomRight = ModelTemplates.DOOR_BOTTOM_RIGHT.create(block, tm, models::put);
+        Identifier bottomRightOpen = ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(block, tm, models::put);
+        Identifier topLeft = ModelTemplates.DOOR_TOP_LEFT.create(block, tm, models::put);
+        Identifier topLeftOpen = ModelTemplates.DOOR_TOP_LEFT_OPEN.create(block, tm, models::put);
+        Identifier topRight = ModelTemplates.DOOR_TOP_RIGHT.create(block, tm, models::put);
+        Identifier topRightOpen = ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            Identifier model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
+                            boolean lower = half == DoubleBlockHalf.LOWER;
+                            boolean left = hinge == DoorHingeSide.LEFT;
+                            Identifier model = lower
+                                    ? (left ? (open ? bottomLeftOpen : bottomLeft) : (open ? bottomRightOpen : bottomRight))
+                                    : (left ? (open ? topLeftOpen : topLeft) : (open ? topRightOpen : topRight));
                             int y = rot(facing);
-                            if (open) {
-                                // +90 matches vanilla's own left-hinge-open rotation exactly; a
-                                // right-hinged door swings to the mirrored side, which vanilla's
-                                // separate right-hinge model expresses as +180 from the left-hinge
-                                // rotation at the same facing (verified against oak_door.json) - the
-                                // old formula collapsed both hinges to the same +90, so a right-hinged
-                                // door opened identically to a left-hinged one instead of mirroring.
-                                y += 90;
-                                if (hinge == DoorHingeSide.RIGHT) y += 180;
-                            }
-                            return plain(model).with(yRot(y)).with(BlockModelGenerators.UV_LOCK);
+                            if (open) y += left ? 90 : 270;
+                            return plain(model).with(yRot(y));
                         })));
     }
 
