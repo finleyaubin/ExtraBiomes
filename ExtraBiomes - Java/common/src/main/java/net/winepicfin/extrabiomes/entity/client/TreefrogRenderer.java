@@ -9,6 +9,9 @@ import net.winepicfin.extrabiomes.entity.custom.TreefrogEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class TreefrogRenderer extends MobRenderer<TreefrogEntity, TreefrogRenderState, TreefrogModel<TreefrogRenderState>> {
+    // The client shows a mob's position a few ticks late, so the stroke is held back to match its surge.
+    private static final float POSITION_LAG_TICKS = 3f;
+
     public TreefrogRenderer(EntityRendererProvider.Context context) {
         super(context, new TreefrogModel<>(context.bakeLayer(ModModelLayers.TREEFROG)), 0.25f);
     }
@@ -21,7 +24,9 @@ public class TreefrogRenderer extends MobRenderer<TreefrogEntity, TreefrogRender
     @Override
     public void extractRenderState(TreefrogEntity entity, TreefrogRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        state.verticalSpeed = (float) entity.getDeltaMovement().y;
+        state.verticalSpeed = entity.getVerticalSpeedInBlocksPerSecond(partialTick);
+        state.swimAmount = entity.getSwimAmount(partialTick);
+        state.strokePhase = entity.getStrokePhase(partialTick - POSITION_LAG_TICKS);
     }
 
     @Override
