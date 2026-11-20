@@ -4,7 +4,13 @@ import net.fabricmc.api.ModInitializer;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
+import net.winepicfin.extrabiomes.fabric.mixin.BlockEntityTypeAccessor;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.fabric.event.FabricModEvents;
 import net.winepicfin.extrabiomes.fabric.event.FabricServerEvents;
@@ -44,6 +50,13 @@ import terrablender.api.SurfaceRuleManager;
 // attribute/spawn-placement registration below (all resolve concrete EntityTypes immediately,
 // unlike Forge's SpawnPlacementRegisterEvent/EntityAttributeCreationEvent).
 public class ExtraBiomesFabric implements ModInitializer {
+    private static void addModdedBlocksToHangingSignBlockEntityType() {
+        BlockEntityTypeAccessor hangingSign = (BlockEntityTypeAccessor) BlockEntityTypes.HANGING_SIGN;
+        Set<Block> validBlocks = new HashSet<>(hangingSign.getValidBlocks());
+        validBlocks.addAll(Arrays.asList(ModBlockEntities.hangingSignBlocks()));
+        hangingSign.setValidBlocks(validBlocks);
+    }
+
     @Override
     public void onInitialize() {
         startDatagenExitWatchdogIfRunningDataGen();
@@ -54,6 +67,7 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModBlocks.register();
         ModItems.register();
         ModBlockEntities.register();
+        addModdedBlocksToHangingSignBlockEntityType();
         ModSounds.register();
         ModParticles.register();
         ModCriteriaTriggers.register();

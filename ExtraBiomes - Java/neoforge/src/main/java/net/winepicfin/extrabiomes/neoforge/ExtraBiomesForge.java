@@ -6,7 +6,9 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.winepicfin.extrabiomes.entity.client.ModModelLayers;
 import net.neoforged.api.distmarker.Dist;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -102,6 +104,7 @@ public class ExtraBiomesForge
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener((BlockEntityTypeAddBlocksEvent event) -> event.modify(BlockEntityTypes.HANGING_SIGN, ModBlockEntities.hangingSignBlocks()));
         modEventBus.addListener((ModConfigEvent event) -> ForgeConfig.load());
 
         // Unlike forge/'s ExtraBiomesForge, no NeoForge.EVENT_BUS.register(this) call here -

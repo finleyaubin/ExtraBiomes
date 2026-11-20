@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.entity;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import dev.architectury.registry.registries.DeferredRegister;
 import net.minecraft.core.registries.Registries;
@@ -19,12 +20,18 @@ public class ModBlockEntities {
             ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get(),
             ModBlocks.LARCH_SIGN.get(),ModBlocks.LARCH_WALL_SIGN.get()));
     public static final RegistrySupplier<BlockEntityType<ModHangingSignBlockEntity>>MOD_HANGING_SIGN=BLOCK_ENTITIES.register("mod_hanging_sign",()->
-            ExtraBiomesExpectPlatform.createBlockEntityType(ModHangingSignBlockEntity::new,
-                    ModBlocks.MYSTIC_HANGING_SIGN.get(),ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),
-                    ModBlocks.PALM_HANGING_SIGN.get(),ModBlocks.PALM_WALL_HANGING_SIGN.get(),
-                    ModBlocks.SKY_HANGING_SIGN.get(),ModBlocks.SKY_WALL_HANGING_SIGN.get(),
-                    ModBlocks.GILDED_SKY_HANGING_SIGN.get(),ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),
-                    ModBlocks.LARCH_HANGING_SIGN.get(),ModBlocks.LARCH_WALL_HANGING_SIGN.get()));
+            ExtraBiomesExpectPlatform.createBlockEntityType(ModHangingSignBlockEntity::new, hangingSignBlocks()));
+
+    // Vanilla validates a HangingSignBlockEntity against BlockEntityType.HANGING_SIGN, so loaders add these blocks to it too.
+    public static Block[] hangingSignBlocks() {
+        return new Block[]{
+                ModBlocks.MYSTIC_HANGING_SIGN.get(), ModBlocks.MYSTIC_WALL_HANGING_SIGN.get(),
+                ModBlocks.PALM_HANGING_SIGN.get(), ModBlocks.PALM_WALL_HANGING_SIGN.get(),
+                ModBlocks.SKY_HANGING_SIGN.get(), ModBlocks.SKY_WALL_HANGING_SIGN.get(),
+                ModBlocks.GILDED_SKY_HANGING_SIGN.get(), ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),
+                ModBlocks.LARCH_HANGING_SIGN.get(), ModBlocks.LARCH_WALL_HANGING_SIGN.get()};
+    }
+
     public static void register() {
         BLOCK_ENTITIES.register();
     }
