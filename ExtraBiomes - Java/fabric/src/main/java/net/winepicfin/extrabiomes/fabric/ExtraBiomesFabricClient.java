@@ -3,6 +3,13 @@ package net.winepicfin.extrabiomes.fabric;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
@@ -74,6 +81,21 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putFluid(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
         BlockRenderLayerMap.INSTANCE.putFluid(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
 
+        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+            @Override
+            public ResourceLocation getFabricId() {
+                return LarchLeavesColormap.RELOAD_LISTENER_ID;
+            }
+
+            @Override
+            public void onResourceManagerReload(ResourceManager resourceManager) {
+                LarchLeavesColormap.reload(resourceManager);
+            }
+        });
+        LarchLeavesTint larchLeavesTint = new LarchLeavesTint();
+        ColorProviderRegistry.BLOCK.register(larchLeavesTint, ModBlocks.LARCH_LEAVES.get());
+        ColorProviderRegistry.ITEM.register(larchLeavesTint, ModBlocks.LARCH_LEAVES.get());
+
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(), ModBlocks.cutoutBlocks().toArray(Block[]::new));
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(), ModBlocks.translucentBlocks().toArray(Block[]::new));
         FluidRenderHandlerRegistry.INSTANCE.register(ModFluids.SOURCE_GOO.get(), ModFluids.FLOWING_GOO.get(),
@@ -99,6 +121,8 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBodyModel);
         EntityModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.LARCH_BOAT, BoatModel::createBodyModel);
+        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.LARCH_CHEST_BOAT, ChestBoatModel::createBodyModel);
 
         EntityRendererRegistry.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
         EntityRendererRegistry.register(ModEntities.WORM.get(), WormRenderer::new);
@@ -122,6 +146,8 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_sky.png"), true));
         EntityRendererRegistry.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_gilded_sky.png"), false));
         EntityRendererRegistry.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_gilded_sky.png"), true));
+        EntityRendererRegistry.register(ModEntities.LARCH_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.LARCH_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_larch.png"), false));
+        EntityRendererRegistry.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_larch.png"), true));
 
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
             if (entityType == EntityType.WOLF && entityRenderer instanceof WolfRenderer wolfRenderer) {

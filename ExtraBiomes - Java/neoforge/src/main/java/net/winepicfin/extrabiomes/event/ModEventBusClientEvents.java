@@ -8,7 +8,13 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -36,6 +42,21 @@ public class ModEventBusClientEvents {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(DenseCloudSteam::init);
+    }
+
+    @SubscribeEvent
+    public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener((ResourceManagerReloadListener) LarchLeavesColormap::reload);
+    }
+
+    @SubscribeEvent
+    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
     }
 
     @SubscribeEvent
@@ -68,6 +89,8 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModModelLayers.SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
         event.registerLayerDefinition(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBodyModel);
         event.registerLayerDefinition(ModModelLayers.GILDED_SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.LARCH_BOAT, BoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.LARCH_CHEST_BOAT, ChestBoatModel::createBodyModel);
     }
 
     @SubscribeEvent

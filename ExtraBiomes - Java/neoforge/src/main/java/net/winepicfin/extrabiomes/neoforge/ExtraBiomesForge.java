@@ -53,7 +53,9 @@ import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.ModFoliagePlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
+import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
@@ -88,6 +90,7 @@ public class ExtraBiomesForge
         ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
+        ModFoliagePlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
@@ -95,6 +98,7 @@ public class ExtraBiomesForge
         GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
+        LarchForestFeatures.register();
         NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();
@@ -251,6 +255,8 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_sky.png"), true));
             EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_gilded_sky.png"), false));
             EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_gilded_sky.png"), true));
+            EntityRenderers.register(ModEntities.LARCH_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.LARCH_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/boat/boat_larch.png"), false));
+            EntityRenderers.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new ModBoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT, ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, "textures/entity/chest_boat/boat_larch.png"), true));
         }
     }
 }

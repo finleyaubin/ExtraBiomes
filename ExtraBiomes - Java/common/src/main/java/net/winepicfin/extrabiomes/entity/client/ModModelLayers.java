@@ -22,6 +22,8 @@ public class ModModelLayers {
     public static final ModelLayerLocation SKY_CHEST_BOAT = layer("sky_chest_boat");
     public static final ModelLayerLocation GILDED_SKY_BOAT = layer("gilded_sky_boat");
     public static final ModelLayerLocation GILDED_SKY_CHEST_BOAT = layer("gilded_sky_chest_boat");
+    public static final ModelLayerLocation LARCH_BOAT = layer("larch_boat");
+    public static final ModelLayerLocation LARCH_CHEST_BOAT = layer("larch_chest_boat");
 
     private static ModelLayerLocation layer(String name) {
         return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(ExtraBiomes.MOD_ID, name), "main");

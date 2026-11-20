@@ -50,6 +50,8 @@ public class ModItems {
     public static final RegistrySupplier<Item> SKY_SIGN = ITEMS.register("sky_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.SKY_SIGN.get(),ModBlocks.SKY_WALL_SIGN.get()));
     public static final RegistrySupplier<Item> SKY_HANGING_SIGN = ITEMS.register("sky_hanging_sign",()-> new HangingSignItem(ModBlocks.SKY_HANGING_SIGN.get(),ModBlocks.SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> GILDED_SKY_SIGN = ITEMS.register("gilded_sky_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.GILDED_SKY_SIGN.get(),ModBlocks.GILDED_SKY_WALL_SIGN.get()));
+    public static final RegistrySupplier<Item> LARCH_SIGN = ITEMS.register("larch_sign",()-> new SignItem(new Item.Properties().stacksTo(16), ModBlocks.LARCH_SIGN.get(),ModBlocks.LARCH_WALL_SIGN.get()));
+    public static final RegistrySupplier<Item> LARCH_HANGING_SIGN = ITEMS.register("larch_hanging_sign",()-> new HangingSignItem(ModBlocks.LARCH_HANGING_SIGN.get(),ModBlocks.LARCH_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
     public static final RegistrySupplier<Item> GILDED_SKY_HANGING_SIGN = ITEMS.register("gilded_sky_hanging_sign",()-> new HangingSignItem(ModBlocks.GILDED_SKY_HANGING_SIGN.get(),ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(),new Item.Properties().stacksTo(16)));
 
     public static final RegistrySupplier<Item> MYSTIC_BOAT = ITEMS.register("mystic_boat",()-> new ModBoatItem(ModEntities.MYSTIC_BOAT, new Item.Properties().stacksTo(1)));
@@ -59,13 +61,15 @@ public class ModItems {
     public static final RegistrySupplier<Item> SKY_BOAT = ITEMS.register("sky_boat",()-> new ModBoatItem(ModEntities.SKY_BOAT, new Item.Properties().stacksTo(1)));
     public static final RegistrySupplier<Item> SKY_CHEST_BOAT = ITEMS.register("sky_chest_boat",()-> new ModBoatItem(ModEntities.SKY_CHEST_BOAT, new Item.Properties().stacksTo(1)));
     public static final RegistrySupplier<Item> GILDED_SKY_BOAT = ITEMS.register("gilded_sky_boat",()-> new ModBoatItem(ModEntities.GILDED_SKY_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> LARCH_BOAT = ITEMS.register("larch_boat",()-> new ModBoatItem(ModEntities.LARCH_BOAT, new Item.Properties().stacksTo(1)));
+    public static final RegistrySupplier<Item> LARCH_CHEST_BOAT = ITEMS.register("larch_chest_boat",()-> new ModBoatItem(ModEntities.LARCH_CHEST_BOAT, new Item.Properties().stacksTo(1)));
     public static final RegistrySupplier<Item> GILDED_SKY_CHEST_BOAT = ITEMS.register("gilded_sky_chest_boat",()-> new ModBoatItem(ModEntities.GILDED_SKY_CHEST_BOAT, new Item.Properties().stacksTo(1)));
 
     // Item id (path) is "<wood>_boat" - matching this mod's other wood items - but the pre-staged
     // art (ported from the Bedrock module) is named "boat_<wood>", so ModItemModelProvider's
     // boatItem() datagen helper takes the texture stem explicitly rather than deriving it.
-    public static final List<RegistrySupplier<Item>> BOAT_ITEMS = List.of(MYSTIC_BOAT, PALM_BOAT, SKY_BOAT, GILDED_SKY_BOAT);
-    public static final List<RegistrySupplier<Item>> CHEST_BOAT_ITEMS = List.of(MYSTIC_CHEST_BOAT, PALM_CHEST_BOAT, SKY_CHEST_BOAT, GILDED_SKY_CHEST_BOAT);
+    public static final List<RegistrySupplier<Item>> BOAT_ITEMS = List.of(MYSTIC_BOAT, PALM_BOAT, SKY_BOAT, GILDED_SKY_BOAT, LARCH_BOAT);
+    public static final List<RegistrySupplier<Item>> CHEST_BOAT_ITEMS = List.of(MYSTIC_CHEST_BOAT, PALM_CHEST_BOAT, SKY_CHEST_BOAT, GILDED_SKY_CHEST_BOAT, LARCH_CHEST_BOAT);
 
     public record BoatModelEntry(RegistrySupplier<Item> item, String texture) {
     }
@@ -78,7 +82,9 @@ public class ModItems {
             new BoatModelEntry(SKY_BOAT, "boat_sky"),
             new BoatModelEntry(SKY_CHEST_BOAT, "boat_sky_chest"),
             new BoatModelEntry(GILDED_SKY_BOAT, "boat_gilded_sky"),
-            new BoatModelEntry(GILDED_SKY_CHEST_BOAT, "boat_gilded_sky_chest")
+            new BoatModelEntry(GILDED_SKY_CHEST_BOAT, "boat_gilded_sky_chest"),
+            new BoatModelEntry(LARCH_BOAT, "boat_larch"),
+            new BoatModelEntry(LARCH_CHEST_BOAT, "boat_larch_chest")
     );
     // Colors match the Bedrock addon's spawn_egg base_color/overlay_color exactly (see the entity
     // .entity.json files under ExtraBiomes - Bedrock/packs/RP/entity/) so the egg tint is consistent

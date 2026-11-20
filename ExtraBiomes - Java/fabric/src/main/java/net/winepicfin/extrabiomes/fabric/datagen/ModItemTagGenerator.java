@@ -38,6 +38,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(ItemTags.FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
                 ModBlocks.SKY_FENCE.get().asItem(),
+                ModBlocks.LARCH_FENCE.get().asItem(),
                 ModBlocks.PALM_FENCE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem()
         ));
@@ -45,6 +46,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(ItemTags.FENCE_GATES).add(keys(
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem(),
+                ModBlocks.LARCH_FENCE_GATE.get().asItem(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
         ));
@@ -58,6 +60,10 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -76,6 +82,10 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -88,11 +98,13 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(ItemTags.LEAVES).add(keys(
                 ModBlocks.MYSTIC_LEAVES.get().asItem(),
                 ModBlocks.SKY_LEAVES.get().asItem(),
+                ModBlocks.LARCH_LEAVES.get().asItem(),
                 ModBlocks.PALM_LEAVES.get().asItem()
         ));
         this.tag(ItemTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
                 ModBlocks.SKY_PLANKS.get().asItem(),
+                ModBlocks.LARCH_PLANKS.get().asItem(),
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         ));
@@ -114,11 +126,13 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.tag(STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
         this.tag(STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
         this.tag(ORES).add(itemKeys(ModTagContents.ORES));
+        this.tag(MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
     }
 
     private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "stripped_logs"));
     private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "stripped_woods"));
     private static final TagKey<Item> ORES = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ores"));
+    private static final TagKey<Item> MUSHROOMS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "mushrooms"));
 
     private static net.minecraft.resources.ResourceKey<Item>[] itemKeys(List<RegistrySupplier<Block>> blocks) {
         return keys(blocks.stream().map(b -> b.get().asItem()).toArray(Item[]::new));
