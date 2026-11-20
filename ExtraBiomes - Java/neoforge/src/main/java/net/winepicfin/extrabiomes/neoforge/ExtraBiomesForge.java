@@ -43,6 +43,7 @@ import net.winepicfin.extrabiomes.neoforge.util.ModVanillaCompat;
 import net.winepicfin.extrabiomes.neoforge.worldgen.ModSpawnCaps;
 import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.biomes.surface.ModSurfaceRules;
+import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.moorland.MoorlandFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.netherlands.NetherlandsWheatFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.mystic.MysticFeatures;
@@ -52,6 +53,7 @@ import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.ModFoliagePlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
@@ -87,6 +89,7 @@ public class ExtraBiomesForge
         ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
+        ModFoliagePlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
@@ -94,6 +97,7 @@ public class ExtraBiomesForge
         GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
+        LarchForestFeatures.register();
         NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();
@@ -222,6 +226,7 @@ public class ExtraBiomesForge
             Sheets.addWoodType(ModWoodTypes.PALM);
             Sheets.addWoodType(ModWoodTypes.SKY);
             Sheets.addWoodType(ModWoodTypes.GILDED_SKY);
+            Sheets.addWoodType(ModWoodTypes.LARCH);
             ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_GOO.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_GOO.get(), RenderType.translucent());
 
@@ -251,6 +256,8 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT));
         }
     }
 }
