@@ -126,6 +126,23 @@ public class ModBlockStateProvider implements DataProvider {
         trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), texLoc("sky_trapdoor"));
         signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.SKY_HANGING_SIGN.get(), ModBlocks.SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        blockWithItem(ModBlocks.LARCH_PLANKS);
+        logBlock(ModBlocks.LARCH_LOG.get());
+        logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
+        axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
+        axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
+        saplingBlock(ModBlocks.LARCH_SAPLING.get());
+        stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        buttonBlock(ModBlocks.LARCH_BUTTON.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        pressurePlateBlock(ModBlocks.LARCH_PRESSURE_PLATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceBlock(ModBlocks.LARCH_FENCE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceGateBlock(ModBlocks.LARCH_FENCE_GATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        doorBlockState(ModBlocks.LARCH_DOOR.get(), texLoc("larch_door_bottom"), texLoc("larch_door_top"));
+        nonOrientableTrapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
+        signBlockState(ModBlocks.LARCH_SIGN.get(), ModBlocks.LARCH_WALL_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        hangingSignBlockState(ModBlocks.LARCH_HANGING_SIGN.get(), ModBlocks.LARCH_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock(ModBlocks.PALM_LOG.get());
@@ -204,6 +221,13 @@ public class ModBlockStateProvider implements DataProvider {
         cubeAllBlock(blockRegistryObject.get(), blockTexture(blockRegistryObject.get()));
     }
 
+    // The colour comes from LarchLeavesTint: ModelTemplates.LEAVES carries the tintindex that cubeAll lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
+        simpleBlockState(block, model);
+        delegateItemModel(block, model);
+    }
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
         ResourceLocation texture = blockTexture(block);
@@ -532,6 +556,25 @@ public class ModBlockStateProvider implements DataProvider {
                         })));
     }
 
+    // Oak-style grid textures are symmetric, so vanilla puts them on the plain template and only rotates the open state.
+    private void nonOrientableTrapdoorBlockState(Block block, ResourceLocation baseTexture) {
+        ResourceLocation baseModelName = modelOf(baseTexture);
+        ResourceLocation bottom = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        ResourceLocation top = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        ResourceLocation open = new ResourceLocation(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+
+        TextureMapping tm = new TextureMapping().put(TextureSlot.TEXTURE, baseTexture);
+        ModelTemplates.TRAPDOOR_BOTTOM.create(bottom, tm, models::put);
+        ModelTemplates.TRAPDOOR_TOP.create(top, tm, models::put);
+        ModelTemplates.TRAPDOOR_OPEN.create(open, tm, models::put);
+        delegateItemModel(block, bottom);
+
+        blockStates.put(block, MultiVariantGenerator.multiVariant(block).with(
+                PropertyDispatch.properties(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+                        .generate((facing, isOpen, half) -> isOpen
+                                ? Variant.variant().with(VariantProperties.MODEL, open).with(VariantProperties.Y_ROT, yRot((rot(facing) + 90) % 360))
+                                : Variant.variant().with(VariantProperties.MODEL, half == Half.TOP ? top : bottom))));
+    }
     // Standing/wall signs render their text via a block entity renderer - the blockstate model is
     // just an invisible placeholder, same as vanilla's own sign blocks. It still needs a "particle"
     // texture key though, or break particles fall back to the missing-texture sprite.

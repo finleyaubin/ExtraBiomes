@@ -89,6 +89,22 @@ public class ModVanillaCompat {
         registerFlammable(ModBlocks.GILDED_SKY_FENCE_GATE.get(),5,20);
         registerFlammable(ModBlocks.GILDED_SKY_DOOR.get(),5,20);
         registerFlammable(ModBlocks.GILDED_SKY_TRAPDOOR.get(),5,20);
+        // Larch Wood
+        registerFlammable(ModBlocks.LARCH_PLANKS.get(),5,5);
+        registerFlammable(ModBlocks.LARCH_LOG.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_WOOD.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_STAIRS.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_SLAB.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_BUTTON.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_PRESSURE_PLATE.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_FENCE.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_FENCE_GATE.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_DOOR.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_TRAPDOOR.get(),5,20);
+        registerFlammable(ModBlocks.STRIPPED_LARCH_LOG.get(),5,20);
+        registerFlammable(ModBlocks.STRIPPED_LARCH_WOOD.get(),5,20);
+        registerFlammable(ModBlocks.LARCH_LEAVES.get(),30,60);
+        registerFlammable(ModBlocks.LARCH_SAPLING.get(),5,20);
     }
 
     public static void registerFlammable(Block block, int probability, int flammability)
