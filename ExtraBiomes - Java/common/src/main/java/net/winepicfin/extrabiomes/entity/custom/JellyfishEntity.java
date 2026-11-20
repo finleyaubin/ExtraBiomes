@@ -62,6 +62,9 @@ public class JellyfishEntity extends WaterAnimal {
     private float grayAmount;
     private float scaleY = 1.0F;
 
+    // Not synched: mobInteract runs on both sides, so each arms its own copy.
+    private int milkCooldownTicks;
+
     public JellyfishEntity(EntityType<? extends WaterAnimal> type, Level level) {
         super(type, level);
         this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
@@ -111,12 +114,18 @@ public class JellyfishEntity extends WaterAnimal {
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Variant", this.getVariant());
+        tag.putInt("MilkCooldown", this.milkCooldownTicks);
     }
 
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         this.setVariant(tag.getIntOr("Variant", 0));
+        this.milkCooldownTicks = tag.getIntOr("MilkCooldown", 0);
+    }
+
+    public int milkCooldownRemaining() {
+        return this.milkCooldownTicks;
     }
 
     // Beaches only roll BEACH_SPAWN_CHANCE (SPAWN_PLACEMENT's ON_GROUND check already requires dry sand);
@@ -153,6 +162,10 @@ public class JellyfishEntity extends WaterAnimal {
     public void tick() {
         super.tick();
 
+        if (this.milkCooldownTicks > 0) {
+            this.milkCooldownTicks--;
+        }
+
         boolean inWater = this.isInWater();
         this.grayAmount = Mth.clamp(this.grayAmount + Mth.clamp((inWater ? 0.0F : 1.0F) - this.grayAmount, -JellyfishTuning.GRAY_STEP_PER_TICK, JellyfishTuning.GRAY_STEP_PER_TICK), 0.0F, 1.0F);
         this.scaleY = Mth.clamp(this.scaleY + Mth.clamp((inWater ? 1.0F : 0.1F) - this.scaleY, -JellyfishTuning.SCALE_Y_STEP_PER_TICK, JellyfishTuning.SCALE_Y_STEP_PER_TICK), 0.1F, 1.0F);
@@ -175,6 +188,11 @@ public class JellyfishEntity extends WaterAnimal {
     public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
         if (held.is(Items.GLASS_BOTTLE) && this.isAlive()) {
+            // FAIL, not PASS: PASS would fall through to the bottle's own use and fill it with water.
+            if (this.milkCooldownTicks > 0) {
+                return InteractionResult.FAIL;
+            }
+            this.milkCooldownTicks = JellyfishTuning.MILK_COOLDOWN_TICKS;
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             ItemStack jam = ItemUtils.createFilledResult(held, player, new ItemStack(ModItems.JELLYFISH_JAM_BOTTLE.get()));
             player.setItemInHand(hand, jam);

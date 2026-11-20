@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -81,6 +83,17 @@ public class ExtraBiomesExpectPlatformImpl {
             constructor.setAccessible(true);
             Set<Block> blocks = new LinkedHashSet<>(Arrays.asList(validBlocks));
             return (BlockEntityType<T>) constructor.newInstance(factory, blocks);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <P extends FoliagePlacer> FoliagePlacerType<P> createFoliagePlacerType(MapCodec<P> codec) {
+        try {
+            Constructor<FoliagePlacerType> constructor = FoliagePlacerType.class.getDeclaredConstructor(MapCodec.class);
+            constructor.setAccessible(true);
+            return (FoliagePlacerType<P>) constructor.newInstance(codec);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }

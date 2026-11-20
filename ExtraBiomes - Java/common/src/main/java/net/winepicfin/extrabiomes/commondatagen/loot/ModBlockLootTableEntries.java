@@ -74,6 +74,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.MYSTIC_BUTTON.get());
         dropSelf.accept(ModBlocks.MYSTIC_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.MYSTIC_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.MYSTIC_SHELF.get());
         dropSelf.accept(ModBlocks.MYSTIC_FENCE.get());
         dropSelf.accept(ModBlocks.MYSTIC_FENCE_GATE.get());
         add.accept(ModBlocks.MYSTIC_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.MYSTIC_SLAB.get()));
@@ -93,6 +94,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.SKY_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.SKY_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.SKY_SHELF.get());
         dropSelf.accept(ModBlocks.SKY_FENCE.get());
         dropSelf.accept(ModBlocks.SKY_FENCE_GATE.get());
         add.accept(ModBlocks.SKY_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.SKY_SLAB.get()));
@@ -112,6 +114,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.PALM_BUTTON.get());
         dropSelf.accept(ModBlocks.PALM_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.PALM_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.PALM_SHELF.get());
         dropSelf.accept(ModBlocks.PALM_FENCE.get());
         dropSelf.accept(ModBlocks.PALM_FENCE_GATE.get());
         add.accept(ModBlocks.PALM_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.PALM_SLAB.get()));
@@ -131,6 +134,7 @@ public class ModBlockLootTableEntries {
         dropSelf.accept(ModBlocks.GILDED_SKY_BUTTON.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_PRESSURE_PLATE.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.GILDED_SKY_SHELF.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_FENCE.get());
         dropSelf.accept(ModBlocks.GILDED_SKY_FENCE_GATE.get());
         add.accept(ModBlocks.GILDED_SKY_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.GILDED_SKY_SLAB.get()));
@@ -139,6 +143,26 @@ public class ModBlockLootTableEntries {
         add.accept(ModBlocks.GILDED_SKY_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_SIGN.get()));
         add.accept(ModBlocks.GILDED_SKY_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_HANGING_SIGN.get()));
         add.accept(ModBlocks.GILDED_SKY_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.GILDED_SKY_HANGING_SIGN.get()));
+        dropSelf.accept(ModBlocks.LARCH_PLANKS.get());
+        dropSelf.accept(ModBlocks.LARCH_LOG.get());
+        dropSelf.accept(ModBlocks.LARCH_WOOD.get());
+        dropSelf.accept(ModBlocks.STRIPPED_LARCH_LOG.get());
+        dropSelf.accept(ModBlocks.STRIPPED_LARCH_WOOD.get());
+        dropSelf.accept(ModBlocks.LARCH_STAIRS.get());
+        dropSelf.accept(ModBlocks.LARCH_BUTTON.get());
+        dropSelf.accept(ModBlocks.LARCH_PRESSURE_PLATE.get());
+        dropSelf.accept(ModBlocks.LARCH_TRAPDOOR.get());
+        dropSelf.accept(ModBlocks.LARCH_SHELF.get());
+        dropSelf.accept(ModBlocks.LARCH_FENCE.get());
+        dropSelf.accept(ModBlocks.LARCH_FENCE_GATE.get());
+        add.accept(ModBlocks.LARCH_SLAB.get(), block -> createSlabItemTable.apply(ModBlocks.LARCH_SLAB.get()));
+        add.accept(ModBlocks.LARCH_DOOR.get(), block -> createDoorTable.apply(ModBlocks.LARCH_DOOR.get()));
+        dropSelf.accept(ModBlocks.LARCH_SAPLING.get());
+        add.accept(ModBlocks.LARCH_LEAVES.get(), block -> createLeavesDrops.apply(block, ModBlocks.LARCH_SAPLING.get()));
+        add.accept(ModBlocks.LARCH_SIGN.get(), block -> createSingleItemTable.apply(ModItems.LARCH_SIGN.get()));
+        add.accept(ModBlocks.LARCH_WALL_SIGN.get(), block -> createSingleItemTable.apply(ModItems.LARCH_SIGN.get()));
+        add.accept(ModBlocks.LARCH_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.LARCH_HANGING_SIGN.get()));
+        add.accept(ModBlocks.LARCH_WALL_HANGING_SIGN.get(), block -> createSingleItemTable.apply(ModItems.LARCH_HANGING_SIGN.get()));
         dropSelf.accept(ModBlocks.BLACK_MUSHROOM.get());
         dropSelf.accept(ModBlocks.BLUE_MUSHROOM.get());
         dropSelf.accept(ModBlocks.CYAN_MUSHROOM.get());
