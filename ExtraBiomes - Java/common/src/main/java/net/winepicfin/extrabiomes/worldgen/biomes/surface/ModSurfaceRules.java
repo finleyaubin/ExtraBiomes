@@ -208,15 +208,15 @@ public class ModSurfaceRules {
                                 grassOverStone)))),
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.JUNGLE_PILLARS), grassOverStone),
                 // mud patch is sequenced before grassOverStone so it takes priority when its noise band matches.
-                // abovePreliminarySurface() keeps the patch off cave floors, since stoneDepthCheck/ON_FLOOR alone also match those underground.
+                // abovePreliminarySurface() keeps mud, podzol and grass off cave floors, since stoneDepthCheck/ON_FLOOR alone also match those underground.
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.MOORLANDS),
-                        MaterialRules.sequence(
-                                MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
-                                        MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(),
+                        MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(),
+                                MaterialRules.sequence(
+                                        MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
                                                 MaterialRules.sequence(
                                                         MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.50, 0.6), MUD),
-                                                        moorlandPodzol()))),
-                                grassOverStone)),
+                                                        moorlandPodzol())),
+                                        grassOverStone))),
 
                 // No base rule needed (vanilla default grass/dirt); only brown heath patches are added. abovePreliminarySurface() keeps them off cave floors.
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.LARCH_FOREST),
