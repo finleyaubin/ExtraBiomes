@@ -36,6 +36,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.LarchFoliagePlacer;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.MysticTrunkPlacer;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class ModConfigureFeatures {
     public static final ResourceKey<Feature> MYSTIC_SELECT_KEY = registerKey("mystic_select");
     public static final ResourceKey<Feature> SKY_KEY = registerKey("sky");
     public static final ResourceKey<Feature> CHARRED_KEY = registerKey("charred");
-
+    public static final ResourceKey<Feature> LARCH_KEY = registerKey("larch");
     public static final ResourceKey<Feature> LUSH_GRASS_KEY = registerKey("lush_grass");
     public static final ResourceKey<Feature> GRAND_OASIS_DEAD_BUSH_KEY = registerKey("grand_oasis_dead_bush");
 
@@ -95,6 +96,13 @@ public class ModConfigureFeatures {
                 BlockStateProvider.of(Blocks.AIR),
                 new BlobFoliagePlacer(ConstantInt.of(0),ConstantInt.of(0),0),
                 new TwoLayersFeatureSize(0, 0, 0), belowTrunk).build()
+        );
+        context.register(LARCH_KEY, new TreeFeature.Builder(
+                BlockStateProvider.of(ModBlocks.LARCH_LOG.get()),
+                new StraightTrunkPlacer(10, 4, 0),
+                BlockStateProvider.of(ModBlocks.LARCH_LEAVES.get()),
+                new LarchFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(2, 3)),
+                new TwoLayersFeatureSize(2, 0, 2), belowTrunk).build()
         );
         List<BlockReplacement> grassBlob = List.of(BlockReplacement.replace(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         context.register(LUSH_GRASS_KEY, new OreFeature(grassBlob, 30, 0));

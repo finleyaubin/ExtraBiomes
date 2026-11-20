@@ -186,7 +186,7 @@ public class MeltwaterStreamFeature implements Feature {
         if (state.hasBlockEntity() || state.is(Blocks.BEDROCK)) {
             return CavernPlan.HARD + 1;
         }
-        boolean erodible = state.is(BlockTags.ICE) || state.is(BlockTags.SNOW) || state.is(BlockTags.SAND) || state.is(BlockTags.DIRT)
+        boolean erodible = state.is(BlockTags.ICE) || state.is(BlockTags.SNOW) || state.is(BlockTags.SAND) || state.is(BlockTags.SUBSTRATE_OVERWORLD)
                 || state.is(Blocks.GRAVEL) || state.is(Blocks.CLAY) || state.is(Blocks.CALCITE) || state.is(Blocks.TUFF) || state.is(Blocks.SANDSTONE);
         return erodible ? 1 : CavernPlan.HARD;
     }

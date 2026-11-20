@@ -134,6 +134,9 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
      */
     private static final int WRITE_RADIUS_CHUNKS = 1;
 
+    // placeInWorld updates block shapes one block outside the template box, which would read the chunk beyond the write window.
+    private static final int EDGE_MARGIN = 1;
+
     // One block above the max thickness of Java's randomized 1-5-block bedrock floor (y=-64); matches MesaFeatures/ModSurfaceRules' own margin.
     private static final int BEDROCK_MARGIN_Y = -59;
 
@@ -188,6 +191,11 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
 
         BoundingBox structureBox = template.getBoundingBox(settings, origin);
 
+        // Must precede any terrain reads: the footprint scan below would otherwise read chunks outside the safe window.
+        if (!fitsWithinSafeWriteArea(structureBox, placementOrigin)) {
+            return false;
+        }
+
         // Re-anchor to the shallowest real stone under the whole footprint instead of the origin
         // column's dirt/grass surface - see SingleStructureConfiguration#embedInStone.
         if (config.embedInStone()) {
@@ -198,10 +206,6 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
                 origin = origin.offset(0, deltaY, 0);
                 structureBox = template.getBoundingBox(settings, origin);
             }
-        }
-
-        if (!fitsWithinSafeWriteArea(structureBox, placementOrigin)) {
-            return false;
         }
 
         // Skip the whole placement rather than letting PreserveBedrockProcessor drop individual blocks - block-by-block skipping produced a floating-cap/clipped-through-walls look.
@@ -289,7 +293,7 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
     /**
      * The shallowest stone-like top across every column of {@code [minX,maxX] x [minZ,maxZ]} -
      * per column, walks down from that column's own {@code WORLD_SURFACE_WG} height through any
-     * {@link BlockTags#DIRT} blocks (grass/dirt/podzol/coarse dirt/mycelium/rooted dirt) until it
+     * {@link BlockTags#SUBSTRATE_OVERWORLD} blocks (dirt, grass blocks, mud, moss) until it
      * hits stone or bedrock. Taking the shallowest (highest) result across the whole footprint,
      * rather than just the origin column, is what keeps a wide structure from having part of its
      * base still floating over a dip once it's re-anchored - see embedInStone's javadoc.
@@ -303,7 +307,7 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
                 pos.set(x, y, z);
                 while (y > level.getMinY()) {
                     BlockState state = level.getBlockState(pos);
-                    if (!state.isAir() && !state.is(BlockTags.DIRT)) {
+                    if (!state.isAir() && !state.is(BlockTags.SUBSTRATE_OVERWORLD)) {
                         break;
                     }
                     y--;
@@ -340,10 +344,10 @@ public record SingleStructureFeature(Identifier structure, Optional<Rotation> ro
      */
     private static boolean fitsWithinSafeWriteArea(BoundingBox structureBox, BlockPos decoratingColumn) {
         ChunkPos chunk = new ChunkPos(decoratingColumn.getX() >> 4, decoratingColumn.getZ() >> 4);
-        int minX = chunk.getMinBlockX() - (WRITE_RADIUS_CHUNKS * 16);
-        int maxX = chunk.getMaxBlockX() + (WRITE_RADIUS_CHUNKS * 16);
-        int minZ = chunk.getMinBlockZ() - (WRITE_RADIUS_CHUNKS * 16);
-        int maxZ = chunk.getMaxBlockZ() + (WRITE_RADIUS_CHUNKS * 16);
+        int minX = chunk.getMinBlockX() - (WRITE_RADIUS_CHUNKS * 16) + EDGE_MARGIN;
+        int maxX = chunk.getMaxBlockX() + (WRITE_RADIUS_CHUNKS * 16) - EDGE_MARGIN;
+        int minZ = chunk.getMinBlockZ() - (WRITE_RADIUS_CHUNKS * 16) + EDGE_MARGIN;
+        int maxZ = chunk.getMaxBlockZ() + (WRITE_RADIUS_CHUNKS * 16) - EDGE_MARGIN;
         return structureBox.minX() >= minX && structureBox.maxX() <= maxX
                 && structureBox.minZ() >= minZ && structureBox.maxZ() <= maxZ;
     }

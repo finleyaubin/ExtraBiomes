@@ -38,6 +38,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.WOODEN_FENCES).add(
                 ModBlocks.MYSTIC_FENCE.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.SKY_FENCE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_FENCE.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.PALM_FENCE.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem().builtInRegistryHolder().key()
         );
@@ -45,6 +46,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.FENCE_GATES).add(
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem().builtInRegistryHolder().key()
         );
@@ -58,6 +60,10 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
@@ -76,6 +82,10 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem().builtInRegistryHolder().key(),
@@ -88,11 +98,13 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.LEAVES).add(
                 ModBlocks.MYSTIC_LEAVES.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.SKY_LEAVES.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_LEAVES.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.PALM_LEAVES.get().asItem().builtInRegistryHolder().key()
         );
         this.tag(ItemTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.SKY_PLANKS.get().asItem().builtInRegistryHolder().key(),
+                ModBlocks.LARCH_PLANKS.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.PALM_PLANKS.get().asItem().builtInRegistryHolder().key(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem().builtInRegistryHolder().key()
         );
@@ -109,6 +121,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.WOODEN_PRESSURE_PLATES).add(itemKeys(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.tag(ItemTags.WOODEN_DOORS).add(itemKeys(ModTagContents.WOODEN_DOORS));
         this.tag(ItemTags.WOODEN_TRAPDOORS).add(itemKeys(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(ItemTags.WOODEN_SHELVES).add(itemKeys(ModTagContents.WOODEN_SHELVES));
         this.tag(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::getKey).toArray(ResourceKey[]::new));
         this.tag(ItemTags.HANGING_SIGNS).add(ModTagContents.HANGING_SIGN_ITEMS.stream().map(RegistrySupplier::getKey).toArray(ResourceKey[]::new));
         this.tag(ItemTags.SAPLINGS).add(itemKeys(ModTagContents.SAPLINGS));
@@ -117,6 +130,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(Tags.Items.STRIPPED_LOGS).add(itemKeys(ModTagContents.STRIPPED_LOGS));
         this.tag(Tags.Items.STRIPPED_WOODS).add(itemKeys(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Items.ORES).add(itemKeys(ModTagContents.ORES));
+        this.tag(Tags.Items.MUSHROOMS).add(itemKeys(ModTagContents.MUSHROOMS));
     }
 
     @SuppressWarnings("unchecked")

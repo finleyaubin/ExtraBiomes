@@ -1,7 +1,14 @@
 package net.winepicfin.extrabiomes.fabric;
 
+import java.util.List;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.minecraft.server.packs.PackType;
+import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTintSource;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
@@ -76,6 +83,9 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
                         new Material(GooFluid.OVERLAY_TEXTURE, true),
                         BlockTintSources.constant(0xFFFFFFFF)));
 
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(LarchLeavesColormap.RELOAD_LISTENER_ID, new LarchLeavesColormap.ReloadListener());
+        BlockColorRegistry.register(List.of(new LarchLeavesTintSource()), ModBlocks.LARCH_LEAVES.get());
+
         registerBlockEntityRenderer(ModBlockEntities.MOD_SIGN.get(), StandingSignRenderer::new);
         registerBlockEntityRenderer(ModBlockEntities.MOD_HANGING_SIGN.get(), HangingSignRenderer::new);
 
@@ -96,6 +106,8 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         ModelLayerRegistry.registerModelLayer(ModModelLayers.SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
         ModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBoatModel);
         ModelLayerRegistry.registerModelLayer(ModModelLayers.GILDED_SKY_CHEST_BOAT, BoatModel::createChestBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.LARCH_BOAT, BoatModel::createBoatModel);
+        ModelLayerRegistry.registerModelLayer(ModModelLayers.LARCH_CHEST_BOAT, BoatModel::createChestBoatModel);
 
         EntityRendererRegistry.register(ModEntities.PUCKOO.get(), PuckooRenderer::new);
         EntityRendererRegistry.register(ModEntities.WORM.get(), WormRenderer::new);
@@ -119,6 +131,8 @@ public class ExtraBiomesFabricClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT));
         EntityRendererRegistry.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
         EntityRendererRegistry.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
+        EntityRendererRegistry.register(ModEntities.LARCH_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_BOAT));
+        EntityRendererRegistry.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT));
 
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
             if (entityType == EntityTypes.WOLF && entityRenderer instanceof WolfRenderer wolfRenderer) {

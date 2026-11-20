@@ -1,5 +1,7 @@
 package net.winepicfin.extrabiomes.entity.custom;
 
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.permissions.PermissionSet;
 import net.minecraft.util.Prediction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,9 +12,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -32,8 +32,11 @@ import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 // Ported from Bedrock extrabiomes:worm — a tiny passive ground critter.
@@ -45,6 +48,12 @@ public class WormEntity extends Animal {
     private static final int BREEDING_COOLDOWN_TICKS = 6000;
     private static final int COMPOSTER_CHECK_INTERVAL_TICKS = 20;
     private static final List<Direction> EXIT_ORDER = List.of(Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+    private static final int LIGHTNING_HALF_RING_BOLTS = 30;
+    private static final double LIGHTNING_RING_RADIUS = 50.0;
+    private static final int LIGHTNING_BOLT_INTERVAL_TICKS = 4;
+
+    private BlockPos peterSpawnPos;
+    private int nextLightningStep;
 
     public WormEntity(EntityType<? extends Animal> type, Level level) {
         super(type, level);
@@ -60,6 +69,45 @@ public class WormEntity extends Animal {
                 : serverLevel.isRaining() ? SPAWN_CHANCE_RAIN
                 : SPAWN_CHANCE_CLEAR;
         return random.nextFloat() < chance;
+    }
+    private boolean isArchieCiaranPair(WormEntity other) {
+        return (isArchie() && other.isCiaran()) || (isCiaran() && other.isArchie());
+    }
+
+    private void runCommandAs(Mob entity, String command) {
+        ServerLevel serverLevel = (ServerLevel) this.level();
+        CommandSourceStack source = entity.createCommandSourceStackForNameResolution(serverLevel)
+                .withPermission(PermissionSet.ALL_PERMISSIONS)
+                .withSuppressedOutput();
+        serverLevel.getServer().getCommands().performPrefixedCommand(source, command);
+    }
+
+    private void summonNextLightningBoltPair() {
+        for (int half = 0; half < 2; half++) {
+            double angle = Math.PI * half + Math.PI * nextLightningStep / LIGHTNING_HALF_RING_BOLTS;
+            double x = peterSpawnPos.getX() + 0.5 + LIGHTNING_RING_RADIUS * Math.cos(angle);
+            double z = peterSpawnPos.getZ() + 0.5 + LIGHTNING_RING_RADIUS * Math.sin(angle);
+            runCommandAs(this, String.format(Locale.ROOT, "summon lightning_bolt %.2f %d %.2f", x, peterSpawnPos.getY(), z));
+        }
+        if (++nextLightningStep == LIGHTNING_HALF_RING_BOLTS) {
+            spawnPeter(peterSpawnPos);
+            peterSpawnPos = null;
+        }
+    }
+
+    private void spawnPeter(BlockPos pos) {
+        ServerLevel serverLevel = (ServerLevel) this.level();
+        Mob peter = EntityTypes.HORSE.create(serverLevel, EntitySpawnReason.BREEDING);
+        if (peter == null) {
+            return;
+        }
+        peter.setCustomName(Component.literal("Peter"));
+        peter.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
+        peter.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
+        serverLevel.addFreshEntity(peter);
+        runCommandAs(peter, "title @a[distance=..100] times 10 70 20");
+        runCommandAs(peter, "title @a[distance=..100] subtitle {\"text\":\"Run.\",\"color\":\"red\"}");
+        runCommandAs(peter, "title @a[distance=..100] title {\"text\":\"Peter the horse is here\"}");
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -78,10 +126,13 @@ public class WormEntity extends Animal {
     }
 
     @Override
-    protected void customServerAiStep(ServerLevel level) {
+    protected void customServerAiStep(@NonNull ServerLevel level) {
         super.customServerAiStep(level);
         if (this.tickCount % COMPOSTER_CHECK_INTERVAL_TICKS == 0) {
             breedInComposter();
+        }
+        if (peterSpawnPos != null && this.tickCount % LIGHTNING_BOLT_INTERVAL_TICKS == 0) {
+            summonNextLightningBoltPair();
         }
     }
 
@@ -100,16 +151,18 @@ public class WormEntity extends Animal {
         if (mate.isEmpty() || exit.isEmpty()) {
             return;
         }
-        WormEntity baby = ModEntities.WORM.get().create(this.level(), EntitySpawnReason.BREEDING);
-        if (baby == null) {
-            return;
-        }
         this.level().setBlock(composterPos, composter.setValue(ComposterBlock.LEVEL, compost - 1), 3);
         this.level().levelEvent(1500, composterPos, 1);
         this.setAge(BREEDING_COOLDOWN_TICKS);
         mate.get().setAge(BREEDING_COOLDOWN_TICKS);
-        if ((this.isArchie() && mate.get().isCiaran()) || (this.isCiaran() && mate.get().isArchie())) {
-            baby.setCustomName(Component.literal("Pete"));
+        if (isArchieCiaranPair(mate.get())) {
+            peterSpawnPos = exit.get();
+            nextLightningStep = 0;
+            return;
+        }
+        WormEntity baby = ModEntities.WORM.get().create(this.level(), EntitySpawnReason.BREEDING);
+        if (baby == null) {
+            return;
         }
         baby.snapTo(exit.get().getX() + 0.5, exit.get().getY(), exit.get().getZ() + 0.5, this.random.nextFloat() * 360.0F, 0.0F);
         this.level().addFreshEntity(baby);
@@ -133,21 +186,21 @@ public class WormEntity extends Animal {
                 && this.level().getFluidState(pos).isEmpty();
     }
 
-    private boolean isArchie() {
-        return this.hasCustomName() && "Archie".equals(this.getCustomName().getString());
+    public boolean isArchie() {
+        return this.hasCustomName() && "Archie".equals(Objects.requireNonNull(this.getCustomName()).getString());
     }
 
-    private boolean isCiaran() {
-        return this.hasCustomName() && "Ciaran".equalsIgnoreCase(this.getCustomName().getString());
+    public boolean isCiaran() {
+        return this.hasCustomName() && "Ciaran".equalsIgnoreCase(Objects.requireNonNull(this.getCustomName()).getString());
     }
 
     @Override
-    public boolean isFood(ItemStack stack) {
+    public boolean isFood(@NonNull ItemStack stack) {
         return false;
     }
 
     @Override
-    public @NotNull InteractionResult mobInteract(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NonNull InteractionHand hand) {
         if (player.isSecondaryUseActive() && hand == InteractionHand.MAIN_HAND) {
             if (!this.level().isClientSide()) {
                 ItemStack wormItem = new ItemStack(ModItems.WORM.get());
@@ -167,7 +220,7 @@ public class WormEntity extends Animal {
 
     @Nullable
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob partner) {
+    public AgeableMob getBreedOffspring(@NonNull ServerLevel level, @NonNull AgeableMob partner) {
         return null;
     }
 }

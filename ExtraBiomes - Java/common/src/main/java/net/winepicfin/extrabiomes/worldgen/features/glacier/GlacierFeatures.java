@@ -178,7 +178,7 @@ public class GlacierFeatures {
                 .toList();
     }
 
-    private static LakeFeature pool(Block fluid, Block barrier) {
+    public static LakeFeature pool(Block fluid, Block barrier) {
         return new LakeFeature(
                 BlockStateProvider.holderOf(fluid),
                 BlockStateProvider.holderOf(barrier),
