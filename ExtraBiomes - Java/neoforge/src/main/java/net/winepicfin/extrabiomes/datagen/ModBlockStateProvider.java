@@ -1,5 +1,6 @@
 package net.winepicfin.extrabiomes.datagen;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
@@ -29,6 +30,7 @@ import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.*;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.block.custom.MossyPebbleBlock;
 import net.winepicfin.extrabiomes.block.custom.PebbleBlock;
@@ -80,11 +82,23 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void clientItem(Block block, ResourceLocation modelId) {
+        clientItem(block, modelId, null);
+    }
+
+    private void clientItem(Block block, ResourceLocation modelId, Integer constantTint) {
         ResourceLocation itemId = BuiltInRegistries.BLOCK.getKey(block);
         items.put(itemId, () -> {
             JsonObject model = new JsonObject();
             model.addProperty("type", "minecraft:model");
             model.addProperty("model", modelId.toString());
+            if (constantTint != null) {
+                JsonObject tint = new JsonObject();
+                tint.addProperty("type", "minecraft:constant");
+                tint.addProperty("value", constantTint);
+                JsonArray tints = new JsonArray();
+                tints.add(tint);
+                model.add("tints", tints);
+            }
             JsonObject json = new JsonObject();
             json.add("model", model);
             return json;
@@ -158,6 +172,24 @@ public class ModBlockStateProvider implements DataProvider {
         trapdoorBlockState(ModBlocks.SKY_TRAPDOOR.get(), texLoc("sky_trapdoor"));
         signBlockState(ModBlocks.SKY_SIGN.get(), ModBlocks.SKY_WALL_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlockState(ModBlocks.SKY_HANGING_SIGN.get(), ModBlocks.SKY_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.SKY_PLANKS.get()));
+        // larch wood
+        blockWithItem(ModBlocks.LARCH_PLANKS);
+        logBlock(ModBlocks.LARCH_LOG.get());
+        logBlock(ModBlocks.STRIPPED_LARCH_LOG.get());
+        axisBlock(ModBlocks.LARCH_WOOD.get(), blockTexture(ModBlocks.LARCH_LOG.get()));
+        axisBlock(ModBlocks.STRIPPED_LARCH_WOOD.get(), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
+        saplingBlock(ModBlocks.LARCH_SAPLING.get());
+        stairsBlock(ModBlocks.LARCH_STAIRS.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        slabBlock(ModBlocks.LARCH_SLAB.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        buttonBlock(ModBlocks.LARCH_BUTTON.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        pressurePlateBlock(ModBlocks.LARCH_PRESSURE_PLATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceBlock(ModBlocks.LARCH_FENCE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceGateBlock(ModBlocks.LARCH_FENCE_GATE.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        doorBlockState(ModBlocks.LARCH_DOOR.get(), texLoc("larch_door_bottom"), texLoc("larch_door_top"));
+        nonOrientableTrapdoorBlockState(ModBlocks.LARCH_TRAPDOOR.get(), texLoc("larch_trapdoor"));
+        signBlockState(ModBlocks.LARCH_SIGN.get(), ModBlocks.LARCH_WALL_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        hangingSignBlockState(ModBlocks.LARCH_HANGING_SIGN.get(), ModBlocks.LARCH_WALL_HANGING_SIGN.get(), blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock(ModBlocks.PALM_LOG.get());
@@ -244,6 +276,14 @@ public class ModBlockStateProvider implements DataProvider {
         blockWithItem(blockRegistryObject);
     }
 
+    // The colour comes from LarchLeavesTint: ModelTemplates.LEAVES carries the tintindex that cubeAll lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject) {
+        Block block = blockRegistryObject.get();
+        ResourceLocation model = ModelTemplates.LEAVES.create(block, new TextureMapping().put(TextureSlot.ALL, blockTexture(block)), models::put);
+        simpleBlockState(block, model);
+        delegateItemModel(block, model, LarchLeavesTint.OUT_OF_WORLD_COLOR);
+    }
+
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject) {
         Block block = blockRegistryObject.get();
         ResourceLocation texture = blockTexture(block);
@@ -291,13 +331,17 @@ public class ModBlockStateProvider implements DataProvider {
     }
 
     private void delegateItemModel(Block block, ResourceLocation blockModel) {
+        delegateItemModel(block, blockModel, null);
+    }
+
+    private void delegateItemModel(Block block, ResourceLocation blockModel, Integer constantTint) {
         ResourceLocation itemModelId = ModelLocationUtils.getModelLocation(block.asItem());
         models.put(itemModelId, () -> {
             JsonObject json = new JsonObject();
             json.addProperty("parent", blockModel.toString());
             return json;
         });
-        clientItem(block, itemModelId);
+        clientItem(block, itemModelId, constantTint);
     }
 
     private void logBlock(Block block) {
@@ -517,26 +561,29 @@ public class ModBlockStateProvider implements DataProvider {
         delegateItemModel(block, up);
     }
 
+    // Mirrors vanilla's (private) BlockModelGenerators.createDoor: right-hinged doors need their own mirrored-UV models.
     private void doorBlockState(Block block, ResourceLocation bottomTexture, ResourceLocation topTexture) {
-        ResourceLocation bottomModel = modelOf(bottomTexture);
-        ResourceLocation topModel = modelOf(topTexture);
         TextureMapping tm = new TextureMapping().put(TextureSlot.BOTTOM, bottomTexture).put(TextureSlot.TOP, topTexture);
-        ModelTemplates.DOOR_BOTTOM_LEFT.create(bottomModel, tm, models::put);
-        ModelTemplates.DOOR_TOP_LEFT.create(topModel, tm, models::put);
+        ResourceLocation bottomLeft = ModelTemplates.DOOR_BOTTOM_LEFT.create(block, tm, models::put);
+        ResourceLocation bottomLeftOpen = ModelTemplates.DOOR_BOTTOM_LEFT_OPEN.create(block, tm, models::put);
+        ResourceLocation bottomRight = ModelTemplates.DOOR_BOTTOM_RIGHT.create(block, tm, models::put);
+        ResourceLocation bottomRightOpen = ModelTemplates.DOOR_BOTTOM_RIGHT_OPEN.create(block, tm, models::put);
+        ResourceLocation topLeft = ModelTemplates.DOOR_TOP_LEFT.create(block, tm, models::put);
+        ResourceLocation topLeftOpen = ModelTemplates.DOOR_TOP_LEFT_OPEN.create(block, tm, models::put);
+        ResourceLocation topRight = ModelTemplates.DOOR_TOP_RIGHT.create(block, tm, models::put);
+        ResourceLocation topRightOpen = ModelTemplates.DOOR_TOP_RIGHT_OPEN.create(block, tm, models::put);
 
         blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
                 PropertyDispatch.initial(DoorBlock.FACING, DoorBlock.OPEN, DoorBlock.HINGE, DoorBlock.HALF)
                         .generate((facing, open, hinge, half) -> {
-                            ResourceLocation model = half == DoubleBlockHalf.LOWER ? bottomModel : topModel;
+                            boolean lower = half == DoubleBlockHalf.LOWER;
+                            boolean left = hinge == DoorHingeSide.LEFT;
+                            ResourceLocation model = lower
+                                    ? (left ? (open ? bottomLeftOpen : bottomLeft) : (open ? bottomRightOpen : bottomRight))
+                                    : (left ? (open ? topLeftOpen : topLeft) : (open ? topRightOpen : topRight));
                             int y = rot(facing);
-                            if (open) {
-                                y += 90;
-                                if (hinge == DoorHingeSide.RIGHT) y += 180;
-                            }
-                            MultiVariant v = plainVariant(model);
-                            int normalized = ((y % 360) + 360) % 360;
-                            if (normalized != 0) v = v.with(yRot(normalized));
-                            return v.with(UV_LOCK);
+                            if (open) y += left ? 90 : 270;
+                            return plainVariant(model).with(yRot(y));
                         })));
     }
 
@@ -567,6 +614,25 @@ public class ModBlockStateProvider implements DataProvider {
                             if (y != 0) v = v.with(yRot(y));
                             return v;
                         })));
+    }
+
+    // Oak-style grid textures are symmetric, so vanilla puts them on the plain template and only rotates the open state.
+    private void nonOrientableTrapdoorBlockState(Block block, ResourceLocation baseTexture) {
+        ResourceLocation baseModelName = modelOf(baseTexture);
+        ResourceLocation bottom = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_bottom");
+        ResourceLocation top = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_top");
+        ResourceLocation open = ResourceLocation.fromNamespaceAndPath(baseModelName.getNamespace(), baseModelName.getPath() + "_open");
+
+        putTrapdoorModel(bottom, "minecraft:block/template_trapdoor_bottom", baseTexture);
+        putTrapdoorModel(top, "minecraft:block/template_trapdoor_top", baseTexture);
+        putTrapdoorModel(open, "minecraft:block/template_trapdoor_open", baseTexture);
+        delegateItemModel(block, bottom);
+
+        blockStates.put(block, MultiVariantGenerator.dispatch(block).with(
+                PropertyDispatch.initial(TrapDoorBlock.FACING, TrapDoorBlock.OPEN, TrapDoorBlock.HALF)
+                        .generate((facing, isOpen, half) -> isOpen
+                                ? plainVariant(open).with(yRot((rot(facing) + 90) % 360))
+                                : plainVariant(half == Half.TOP ? top : bottom))));
     }
 
     private void putTrapdoorModel(ResourceLocation modelId, String parent, ResourceLocation texture) {

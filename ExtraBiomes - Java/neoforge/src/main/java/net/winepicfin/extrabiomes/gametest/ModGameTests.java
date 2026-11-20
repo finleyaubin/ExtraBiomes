@@ -24,6 +24,8 @@ public final class ModGameTests {
     private static final int DEFAULT_MAX_TICKS = 100;
     private static final int LONG_MAX_TICKS = 60_000;
     private static final int NATURAL_GROWTH_MAX_TICKS = 1_200;
+    private static final int MILK_COOLDOWN_MAX_TICKS = 1_000;
+    private static final int SWIM_OUT_MAX_TICKS = 600;
 
     private record Test(Class<?> owner, String method, Consumer<GameTestHelper> body, String template, int maxTicks, boolean manualOnly) {
         Test(Class<?> owner, String method, Consumer<GameTestHelper> body) {
@@ -76,6 +78,10 @@ public final class ModGameTests {
                     TreeGrowthGameTests::everyTreeLeafDecaysOnceItsTrunkIsBroken),
             new Test(JellyfishBreathingGameTests.class, "jellyfishDoesNotDrownInWaterOrOnLand",
                     JellyfishBreathingGameTests::jellyfishDoesNotDrownInWaterOrOnLand),
+            new Test(TreefrogSwimGameTests.class, "treefrogSwimsOutOfWaterWithoutLeapingOffIt",
+                    TreefrogSwimGameTests::treefrogSwimsOutOfWaterWithoutLeapingOffIt, "empty", SWIM_OUT_MAX_TICKS, false),
+            new Test(JellyfishMilkingGameTests.class, "milkingIsOnAThirtySecondCooldown",
+                    JellyfishMilkingGameTests::milkingIsOnAThirtySecondCooldown, "empty", MILK_COOLDOWN_MAX_TICKS, false),
             new Test(DenseCloudBuddingGameTests.class, "cloudCondenserBuildingDemonstratesTheMechanic",
                     DenseCloudBuddingGameTests::cloudCondenserBuildingDemonstratesTheMechanic));
 
