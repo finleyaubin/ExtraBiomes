@@ -27,6 +27,8 @@ public class LogStrippingGameTests {
                 new Strip(ModBlocks.MYSTIC_WOOD.get(), ModBlocks.STRIPPED_MYSTIC_WOOD.get()),
                 new Strip(ModBlocks.SKY_LOG.get(), ModBlocks.STRIPPED_SKY_LOG.get()),
                 new Strip(ModBlocks.SKY_WOOD.get(), ModBlocks.STRIPPED_SKY_WOOD.get()),
+                new Strip(ModBlocks.LARCH_LOG.get(), ModBlocks.STRIPPED_LARCH_LOG.get()),
+                new Strip(ModBlocks.LARCH_WOOD.get(), ModBlocks.STRIPPED_LARCH_WOOD.get()),
                 new Strip(ModBlocks.GILDED_SKY_LOG.get(), ModBlocks.STRIPPED_GILDED_SKY_LOG.get()),
                 new Strip(ModBlocks.GILDED_SKY_WOOD.get(), ModBlocks.STRIPPED_GILDED_SKY_WOOD.get()),
                 new Strip(ModBlocks.PALM_LOG.get(), ModBlocks.STRIPPED_PALM_LOG.get()),

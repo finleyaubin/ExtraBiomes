@@ -49,6 +49,7 @@ public class ModSurfaceRules {
     // waiting on random ticks to notice the buried water pockets one at a time.
     private static final MaterialRule FARMLAND = MaterialRules.state(Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7));
     private static final MaterialRule MUD = makeStateRule(Blocks.MUD);
+    private static final MaterialRule COARSE_DIRT = makeStateRule(Blocks.COARSE_DIRT);
     private static final MaterialRule PODZOL = makeStateRule(Blocks.PODZOL);
     private static final MaterialRule PACKED_MUD = makeStateRule(Blocks.PACKED_MUD);
     private static final MaterialRule MYCELIUM = makeStateRule(Blocks.MYCELIUM);
@@ -182,17 +183,8 @@ public class ModSurfaceRules {
                                 MaterialRules.bandlands()))),
 
                 // These sand rules previously had no depth guard (just isBiome(X) -> SAND), which replaced the entire column including load-bearing stone and collapsed the chunk on load.
-                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.DESERT_BRYCE), sandOverFoundation(SAND, SANDSTONE)),
-                // red_sand is checked only at the very top block (Bedrock's top_material scope); sandstone matches anywhere in the band (mid_material scope).
-                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.GRAND_OASIS),
-                        MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(), MaterialRules.sequence(
-                                MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(TOP_DEPTH, false, CaveSurface.FLOOR),
-                                        MaterialRules.sequence(
-                                                MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
-                                                        MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.15, 0.3), RED_SAND)),
-                                                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.45, 0.58), SANDSTONE),
-                                                SAND)),
-                                MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(FOUNDATION_DEPTH, false, CaveSurface.FLOOR), SANDSTONE)))),
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.DESERT_BRYCE), patchySandOverSandstone(PACKED_MUD, -0.35, -0.15, 0.3, 0.6)),
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.GRAND_OASIS), patchySandOverSandstone(RED_SAND, 0.15, 0.3, 0.45, 0.58)),
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.TROPICAL_ISLAND), sandOverFoundation(SAND, SANDSTONE)),
 
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.FUTURE_DESERT),
@@ -216,15 +208,23 @@ public class ModSurfaceRules {
                                 grassOverStone)))),
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.JUNGLE_PILLARS), grassOverStone),
                 // mud patch is sequenced before grassOverStone so it takes priority when its noise band matches.
-                // abovePreliminarySurface() keeps the patch off cave floors, since stoneDepthCheck/ON_FLOOR alone also match those underground.
+                // abovePreliminarySurface() keeps mud, podzol and grass off cave floors, since stoneDepthCheck/ON_FLOOR alone also match those underground.
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.MOORLANDS),
-                        MaterialRules.sequence(
-                                MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
-                                        MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(),
+                        MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(),
+                                MaterialRules.sequence(
+                                        MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
                                                 MaterialRules.sequence(
                                                         MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.50, 0.6), MUD),
-                                                        moorlandPodzol()))),
-                                grassOverStone)),
+                                                        moorlandPodzol())),
+                                        grassOverStone))),
+
+                // No base rule needed (vanilla default grass/dirt); only brown heath patches are added. abovePreliminarySurface() keeps them off cave floors.
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.LARCH_FOREST),
+                        MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
+                                MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(),
+                                        MaterialRules.sequence(
+                                                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, 0.3, 0.6), PODZOL),
+                                                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.SMALL_PATCH, 0.4, 1.0), COARSE_DIRT))))),
 
                 // No base rule needed (Bedrock top/mid already match vanilla default grass/dirt); only the mycelium noise patch is added.
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, ModBiomes.FUNGLE_JUNGLE),
@@ -285,6 +285,17 @@ public class ModSurfaceRules {
         return MaterialRules.ifTrue(MaterialRules.abovePreliminarySurface(), MaterialRules.sequence(
                 MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(TOP_DEPTH, false, CaveSurface.FLOOR), top),
                 MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(FOUNDATION_DEPTH, false, CaveSurface.FLOOR), foundation)));
+    }
+
+    // The top patch only replaces the very top block (Bedrock's top_material scope); sandstone patches fill the whole top band (mid_material scope).
+    private static MaterialRule patchySandOverSandstone(MaterialRule topPatch, double topPatchMinNoise, double topPatchMaxNoise, double sandstoneMinNoise, double sandstoneMaxNoise)
+    {
+        MaterialRule patchyTop = MaterialRules.sequence(
+                MaterialRules.ifTrue(MaterialRules.stoneDepthCheck(0, false, CaveSurface.FLOOR),
+                        MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, topPatchMinNoise, topPatchMaxNoise), topPatch)),
+                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(ModNoiseParameters.MEDIUM_PATCH, sandstoneMinNoise, sandstoneMaxNoise), SANDSTONE),
+                SAND);
+        return sandOverFoundation(patchyTop, SANDSTONE);
     }
 
     // Big podzol blobs; a larger-scale noise widens them in "dense" regions and shrinks them in "sparse" ones, like Bedrock's per-region podzol count.

@@ -5,7 +5,13 @@ import net.minecraft.core.registries.Registries;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.advancements.ModCriteriaTriggers;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
+import net.winepicfin.extrabiomes.fabric.mixin.BlockEntityTypeAccessor;
 import net.winepicfin.extrabiomes.entity.ModEntities;
 import net.winepicfin.extrabiomes.fabric.event.FabricModEvents;
 import net.winepicfin.extrabiomes.fabric.event.FabricServerEvents;
@@ -30,7 +36,9 @@ import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.structure.windmill.ModStructureTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.ModFoliagePlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
+import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
 import terrablender.api.MaterialRuleManager;
 
 // Fabric bootstrap entry point - see forge/.../forge/ExtraBiomesForge.java for the Forge
@@ -43,6 +51,13 @@ import terrablender.api.MaterialRuleManager;
 // attribute/spawn-placement registration below (all resolve concrete EntityTypes immediately,
 // unlike Forge's SpawnPlacementRegisterEvent/EntityAttributeCreationEvent).
 public class ExtraBiomesFabric implements ModInitializer {
+    private static void addModdedBlocksToHangingSignBlockEntityType() {
+        BlockEntityTypeAccessor hangingSign = (BlockEntityTypeAccessor) BlockEntityTypes.HANGING_SIGN;
+        Set<Block> validBlocks = new HashSet<>(hangingSign.getValidBlocks());
+        validBlocks.addAll(Arrays.asList(ModBlockEntities.hangingSignBlocks()));
+        hangingSign.setValidBlocks(validBlocks);
+    }
+
     @Override
     public void onInitialize() {
         startDatagenExitWatchdogIfRunningDataGen();
@@ -53,10 +68,12 @@ public class ExtraBiomesFabric implements ModInitializer {
         ModBlocks.register();
         ModItems.register();
         ModBlockEntities.register();
+        addModdedBlocksToHangingSignBlockEntityType();
         ModSounds.register();
         ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
+        ModFoliagePlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
@@ -64,6 +81,7 @@ public class ExtraBiomesFabric implements ModInitializer {
         GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
+        LarchForestFeatures.register();
         NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();

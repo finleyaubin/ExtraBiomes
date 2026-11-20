@@ -104,6 +104,20 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.SKY_HANGING_SIGN.getKey(),
                 ModBlocks.SKY_WALL_SIGN.getKey(),
                 ModBlocks.SKY_WALL_HANGING_SIGN.getKey(),
+                ModBlocks.LARCH_PLANKS.getKey(),
+                ModBlocks.LARCH_STAIRS.getKey(),
+                ModBlocks.LARCH_SLAB.getKey(),
+                ModBlocks.LARCH_BUTTON.getKey(),
+                ModBlocks.LARCH_PRESSURE_PLATE.getKey(),
+                ModBlocks.LARCH_FENCE.getKey(),
+                ModBlocks.LARCH_FENCE_GATE.getKey(),
+                ModBlocks.LARCH_DOOR.getKey(),
+                ModBlocks.LARCH_TRAPDOOR.getKey(),
+                ModBlocks.LARCH_SHELF.getKey(),
+                ModBlocks.LARCH_SIGN.getKey(),
+                ModBlocks.LARCH_HANGING_SIGN.getKey(),
+                ModBlocks.LARCH_WALL_SIGN.getKey(),
+                ModBlocks.LARCH_WALL_HANGING_SIGN.getKey(),
                 // palm wood
                 ModBlocks.PALM_PLANKS.getKey(),
                 ModBlocks.PALM_STAIRS.getKey(),
@@ -146,6 +160,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.WOODEN_FENCES).add(
                 ModBlocks.MYSTIC_FENCE.getKey(),
                 ModBlocks.SKY_FENCE.getKey(),
+                ModBlocks.LARCH_FENCE.getKey(),
                 ModBlocks.PALM_FENCE.getKey(),
                 ModBlocks.GILDED_SKY_FENCE.getKey()
         );
@@ -153,6 +168,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.FENCE_GATES).add(
                 ModBlocks.MYSTIC_FENCE_GATE.getKey(),
                 ModBlocks.SKY_FENCE_GATE.getKey(),
+                ModBlocks.LARCH_FENCE_GATE.getKey(),
                 ModBlocks.PALM_FENCE_GATE.getKey(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.getKey()
         );
@@ -170,6 +186,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.getKey(),
                 ModBlocks.SKY_WOOD.getKey(),
                 ModBlocks.STRIPPED_SKY_WOOD.getKey(),
+                ModBlocks.LARCH_LOG.getKey(),
+                ModBlocks.STRIPPED_LARCH_LOG.getKey(),
+                ModBlocks.LARCH_WOOD.getKey(),
+                ModBlocks.STRIPPED_LARCH_WOOD.getKey(),
                 ModBlocks.GILDED_SKY_LOG.getKey(),
                 ModBlocks.GILDED_SKY_WOOD.getKey(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.getKey(),
@@ -188,6 +208,10 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 ModBlocks.STRIPPED_SKY_LOG.getKey(),
                 ModBlocks.SKY_WOOD.getKey(),
                 ModBlocks.STRIPPED_SKY_WOOD.getKey(),
+                ModBlocks.LARCH_LOG.getKey(),
+                ModBlocks.STRIPPED_LARCH_LOG.getKey(),
+                ModBlocks.LARCH_WOOD.getKey(),
+                ModBlocks.STRIPPED_LARCH_WOOD.getKey(),
                 ModBlocks.GILDED_SKY_LOG.getKey(),
                 ModBlocks.GILDED_SKY_WOOD.getKey(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.getKey(),
@@ -196,11 +220,13 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.LEAVES).add(
                 ModBlocks.MYSTIC_LEAVES.getKey(),
                 ModBlocks.SKY_LEAVES.getKey(),
+                ModBlocks.LARCH_LEAVES.getKey(),
                 ModBlocks.PALM_LEAVES.getKey()
         );
         this.tag(BlockTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.getKey(),
                 ModBlocks.SKY_PLANKS.getKey(),
+                ModBlocks.LARCH_PLANKS.getKey(),
                 ModBlocks.PALM_PLANKS.getKey(),
                 ModBlocks.GILDED_SKY_PLANKS.getKey()
         );
@@ -228,6 +254,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(Tags.Blocks.STRIPPED_LOGS).add(keys(ModTagContents.STRIPPED_LOGS));
         this.tag(Tags.Blocks.STRIPPED_WOODS).add(keys(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Blocks.ORES).add(keys(ModTagContents.ORES));
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(keys(ModTagContents.HUGE_MUSHROOM_BLOCKS));
+        this.tag(BlockTags.ENDERMAN_HOLDABLE).add(keys(ModTagContents.MUSHROOMS));
     }
 
     @SuppressWarnings("unchecked")
