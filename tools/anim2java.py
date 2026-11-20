@@ -17,7 +17,7 @@ Conventions (verified against the geo2java geometry transform + vanilla Keyframe
 
 query/variable -> Java driver mapping:
   query.modified_distance_moved -> limbSwing         query.modified_move_speed -> limbSwingAmount
-  query.life_time               -> ageInTicks/20     query.vertical_speed      -> vspeed (deltaMovement.y)
+  query.life_time               -> ageInTicks/20     query.vertical_speed      -> vspeed (blocks/second)
   query.anim_time               -> limbSwing if the animation's anim_time_update is
                                     query.modified_distance_moved, else ageInTicks/20
   query.has_target              -> hasTarget (1f/0f)
@@ -310,7 +310,7 @@ def main():
 
     preamble = []
     if needs['vspeed']:
-        preamble.append("\t\tfloat vspeed = (float) entity.getDeltaMovement().y;")
+        preamble.append("\t\tfloat vspeed = (float) entity.getDeltaMovement().y * 20f;")
     if needs['hasTarget']:
         preamble.append("\t\tfloat hasTarget = (entity instanceof net.minecraft.world.entity.Mob __m && __m.getTarget() != null) ? 1.0f : 0.0f;")
 
