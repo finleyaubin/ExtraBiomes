@@ -18,6 +18,7 @@ public class TreefrogSwimGameTests {
     private static final int SHORE_WIDTH = 2;
     private static final int POOL_RADIUS = 1;
     private static final int POOL_DEPTH = 2;
+    private static final int CLEARED_HEIGHT_ABOVE_SHORE = 3;
     // Vanilla's bank climb lifts a swimmer at 0.3 blocks a tick; a treefrog's leap is far faster.
     private static final double LEAP_SPEED = 0.5;
 
@@ -44,6 +45,10 @@ public class TreefrogSwimGameTests {
 
     private static void buildPool(ServerLevel level, BlockPos centre) {
         int reach = POOL_RADIUS + SHORE_WIDTH;
+        // The empty template doesn't clear terrain, and at world-bottom heights rock walls in the pool.
+        for (BlockPos pos : BlockPos.betweenClosed(centre.offset(-reach, 1, -reach), centre.offset(reach, CLEARED_HEIGHT_ABOVE_SHORE, reach))) {
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        }
         for (BlockPos pos : BlockPos.betweenClosed(centre.offset(-reach, -POOL_DEPTH, -reach), centre.offset(reach, 0, reach))) {
             boolean water = pos.getY() > centre.getY() - POOL_DEPTH
                     && Math.abs(pos.getX() - centre.getX()) <= POOL_RADIUS
