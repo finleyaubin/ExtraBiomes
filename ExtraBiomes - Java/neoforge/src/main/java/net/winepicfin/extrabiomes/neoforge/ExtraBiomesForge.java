@@ -6,7 +6,9 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.winepicfin.extrabiomes.entity.client.ModModelLayers;
 import net.neoforged.api.distmarker.Dist;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -49,7 +51,9 @@ import net.winepicfin.extrabiomes.entity.custom.GlacierSnowGolemSpawner;
 import net.winepicfin.extrabiomes.worldgen.features.volcanicmosstundra.ModVolcanicPlacementModifiers;
 import net.winepicfin.extrabiomes.worldgen.features.brycepillars.ModBrycePillarsFeatures;
 import net.winepicfin.extrabiomes.worldgen.features.undergroundjungle.UndergroundJungleFeatures;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.ModFoliagePlacerTypes;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTrunkPlacerTypes;
+import net.winepicfin.extrabiomes.worldgen.features.larchforest.LarchForestFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
 import terrablender.api.SurfaceRuleManager;
@@ -85,6 +89,7 @@ public class ExtraBiomesForge
         ModParticles.register();
         ModCriteriaTriggers.register();
         ModTrunkPlacerTypes.register();
+        ModFoliagePlacerTypes.register();
         ModTreeDecoratorTypes.register();
         ModStructureScatterFeatures.register();
         ModStructureTypes.register();
@@ -92,12 +97,14 @@ public class ExtraBiomesForge
         GlacierSnowGolemSpawner.register();
         ModBrycePillarsFeatures.register();
         MoorlandFeatures.register();
+        LarchForestFeatures.register();
         NetherlandsWheatFeatures.register();
         MysticFeatures.register();
         UndergroundJungleFeatures.register();
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener((BlockEntityTypeAddBlocksEvent event) -> event.modify(BlockEntityTypes.HANGING_SIGN, ModBlockEntities.hangingSignBlocks()));
         modEventBus.addListener((ModConfigEvent event) -> ForgeConfig.load());
 
         // Unlike forge/'s ExtraBiomesForge, no NeoForge.EVENT_BUS.register(this) call here -
@@ -242,6 +249,8 @@ public class ExtraBiomesForge
             EntityRenderers.register(ModEntities.SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.SKY_CHEST_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_BOAT));
             EntityRenderers.register(ModEntities.GILDED_SKY_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.GILDED_SKY_CHEST_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_BOAT));
+            EntityRenderers.register(ModEntities.LARCH_CHEST_BOAT.get(), ctx -> new BoatRenderer(ctx, ModModelLayers.LARCH_CHEST_BOAT));
         }
     }
 }

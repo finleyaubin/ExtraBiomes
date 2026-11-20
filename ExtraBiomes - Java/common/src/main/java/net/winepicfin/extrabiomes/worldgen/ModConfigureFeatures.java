@@ -35,6 +35,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.winepicfin.extrabiomes.ExtraBiomes;
 import net.winepicfin.extrabiomes.block.ModBlocks;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.CaveVineTreeDecorator;
+import net.winepicfin.extrabiomes.worldgen.tree.custom.LarchFoliagePlacer;
 import net.winepicfin.extrabiomes.worldgen.tree.custom.MysticTrunkPlacer;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class ModConfigureFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> MYSTIC_SELECT_KEY = registerKey("mystic_select");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SKY_KEY = registerKey("sky");
     public static final ResourceKey<ConfiguredFeature<?, ?>> CHARRED_KEY = registerKey("charred");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> LARCH_KEY = registerKey("larch");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> LUSH_GRASS_KEY = registerKey("lush_grass");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GRAND_OASIS_DEAD_BUSH_KEY = registerKey("grand_oasis_dead_bush");
@@ -94,6 +96,13 @@ public class ModConfigureFeatures {
                 BlockStateProvider.simple(Blocks.AIR),
                 new BlobFoliagePlacer(ConstantInt.of(0),ConstantInt.of(0),0),
                 new TwoLayersFeatureSize(0, 0, 0), belowTrunk).build()
+        );
+        register(context, LARCH_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.LARCH_LOG.get()),
+                new StraightTrunkPlacer(10, 4, 0),
+                BlockStateProvider.simple(ModBlocks.LARCH_LEAVES.get()),
+                new LarchFoliagePlacer(ConstantInt.of(2), ConstantInt.of(1), UniformInt.of(2, 3)),
+                new TwoLayersFeatureSize(2, 0, 2), belowTrunk).build()
         );
         List<OreConfiguration.TargetBlockState> grassBlob = List.of(OreConfiguration.target(new TagMatchTest(BlockTags.TERRACOTTA), Blocks.GRASS_BLOCK.defaultBlockState()));
         register(context, LUSH_GRASS_KEY, Feature.ORE, new OreConfiguration(grassBlob, 30, 0));

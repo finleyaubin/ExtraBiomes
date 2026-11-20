@@ -5,7 +5,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
+import terrablender.api.ModifiedVanillaOverworldBuilder;
 import terrablender.api.ParameterUtils;
 import terrablender.api.Region;
 import terrablender.api.RegionType;
@@ -15,7 +17,7 @@ import java.util.function.Consumer;
 
 /**
  * A small fourth region for the two "vast but spaced out" frozen biomes, Glacier and Volcanic Moss
- * Tundra. Registered with the Rare region's weight (see {@link ModTerrablender}), so each patch is
+ * Tundra, plus Larch Forest on vanilla Grove's COOL-band slopes. Registered with the Rare region's weight (see {@link ModTerrablender}), so each patch is
  * large but they turn up about as seldom as the Rare region's biomes.
  * <p>
  * Why its own region: both want wide, smooth-noise boxes (FROZEN temperature, COAST-MID_INLAND, every
@@ -59,6 +61,21 @@ public class ModOverworldRegionFrozen extends Region {
                 .weirdness(ParameterUtils.Weirdness.FULL_RANGE)
                 .build().forEach(point -> builder.add(point, ModBiomes.VOLCANIC_MOSS_TUNDRA));
 
+        addLarchForestOverGrove(builder);
+
         builder.build().forEach(mapper::accept);
+    }
+
+    // Reuses vanilla Grove's own climate points so Larch Forest lands on exactly the slopes Grove would, but only the COOL band: FROZEN belongs to Glacier and Volcanic Moss Tundra here, and NEUTRAL is left to Grove so larch stays uncommon.
+    private static void addLarchForestOverGrove(VanillaParameterOverlayBuilder builder) {
+        long warmestFrozenTemperature = ParameterUtils.Temperature.FROZEN.parameter().max();
+        long warmestCoolTemperature = ParameterUtils.Temperature.COOL.parameter().max();
+
+        new ModifiedVanillaOverworldBuilder().build().stream()
+                .filter(vanillaPoint -> vanillaPoint.getSecond() == Biomes.GROVE)
+                .map(Pair::getFirst)
+                .filter(grovePoint -> grovePoint.temperature().max() > warmestFrozenTemperature)
+                .filter(grovePoint -> grovePoint.temperature().max() <= warmestCoolTemperature)
+                .forEach(grovePoint -> builder.add(grovePoint, ModBiomes.LARCH_FOREST));
     }
 }
