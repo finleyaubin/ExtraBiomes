@@ -43,6 +43,8 @@ public final class BiomeAppearanceTuning {
     public static final Appearance TROPICAL_ISLAND = register("tropical_island", 0x28c8e0, 0x40b020, 0x60c840, 0x7BA4FF);
     // Bedrock 3.1.0-beta-2 shipped no client_biome.json for this biome, so these values were authored alongside the port rather than ported.
     public static final Appearance VOLCANIC_MOSS_TUNDRA = register("volcanic_moss_tundra", 0x2e4a5c, 0x4a7a5a, 0x5a8a6a, 0x7FA1FF);
+    // Java-only biome, so it stays out of BY_BEDROCK_KEY and the Bedrock parity tests that iterate it.
+    public static final Appearance LARCH_FOREST = new Appearance(0x3a6edb, 0xC9A227, 0xC9B25C, 0x7FA1FF);
 
     private BiomeAppearanceTuning() {
     }

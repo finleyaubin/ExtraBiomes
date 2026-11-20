@@ -9,22 +9,29 @@ import java.util.List;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.neoforged.neoforge.common.Tags;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.commondatagen.ModTagContents;
 import net.winepicfin.extrabiomes.item.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ModItemTagGenerator extends ItemTagsProvider {
     private static final TagKey<Item> STRIPPED_LOGS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_logs"));
     private static final TagKey<Item> STRIPPED_WOODS = TagKey.create(Registries.ITEM, new ResourceLocation("forge", "stripped_woods"));
+
 
 
     public ModItemTagGenerator(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, @Nullable ExistingFileHelper existingFileHelper) {
@@ -41,6 +48,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.FENCES).add(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
                 ModBlocks.SKY_FENCE.get().asItem(),
+                ModBlocks.LARCH_FENCE.get().asItem(),
                 ModBlocks.PALM_FENCE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem()
         );
@@ -48,6 +56,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.FENCE_GATES).add(
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem(),
+                ModBlocks.LARCH_FENCE_GATE.get().asItem(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
         );
@@ -58,9 +67,13 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
                 ModBlocks.SKY_LOG.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -76,9 +89,13 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.MYSTIC_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_MYSTIC_WOOD.get().asItem(),
                 ModBlocks.SKY_LOG.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -91,11 +108,13 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.LEAVES).add(
                 ModBlocks.MYSTIC_LEAVES.get().asItem(),
                 ModBlocks.SKY_LEAVES.get().asItem(),
+                ModBlocks.LARCH_LEAVES.get().asItem(),
                 ModBlocks.PALM_LEAVES.get().asItem()
         );
         this.tag(ItemTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
                 ModBlocks.SKY_PLANKS.get().asItem(),
+                ModBlocks.LARCH_PLANKS.get().asItem(),
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         );
@@ -117,6 +136,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
         this.tag(STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Items.ORES).add(items(ModTagContents.ORES));
+        this.tag(Tags.Items.MUSHROOMS).add(items(ModTagContents.MUSHROOMS));
     }
 
     private static Item[] items(List<RegistrySupplier<Block>> blocks) {

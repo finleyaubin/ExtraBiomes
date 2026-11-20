@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.api.distmarker.Dist;
@@ -18,7 +19,11 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.winepicfin.extrabiomes.client.DenseCloudSteam;
 import net.winepicfin.extrabiomes.client.SteamParticle;
 import net.winepicfin.extrabiomes.particle.ModParticles;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.winepicfin.extrabiomes.ExtraBiomes;
+import net.winepicfin.extrabiomes.block.ModBlocks;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesColormap;
+import net.winepicfin.extrabiomes.client.color.LarchLeavesTint;
 import net.winepicfin.extrabiomes.entity.ModBlockEntities;
 import net.winepicfin.extrabiomes.item.ModItems;
 import net.winepicfin.extrabiomes.entity.client.BaitModel;
@@ -71,6 +76,8 @@ public class ModEventBusClientEvents {
         event.registerLayerDefinition(ModModelLayers.SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
         event.registerLayerDefinition(ModModelLayers.GILDED_SKY_BOAT, BoatModel::createBodyModel);
         event.registerLayerDefinition(ModModelLayers.GILDED_SKY_CHEST_BOAT, ChestBoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.LARCH_BOAT, BoatModel::createBodyModel);
+        event.registerLayerDefinition(ModModelLayers.LARCH_CHEST_BOAT, ChestBoatModel::createBodyModel);
     }
 
     @SubscribeEvent
@@ -81,6 +88,15 @@ public class ModEventBusClientEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener((ResourceManagerReloadListener) LarchLeavesColormap::reload);
+    }
+
+    @SubscribeEvent
+    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
+    }
     // Vanilla's own ItemColors.createDefault() tints every spawn egg by iterating
     // SpawnEggItem.eggs() (backed by SpawnEggItem's private static BY_ID map), and
     // SpawnEggItem's constructor only adds itself to that map when its EntityType argument is
@@ -102,5 +118,6 @@ public class ModEventBusClientEvents {
                 ModItems.JELLYFISH_SPAWN_EGG.get(),
                 ModItems.PIRANHA_SPAWN_EGG.get(),
                 ModItems.HARPY_SPAWN_EGG.get());
+        event.register(new LarchLeavesTint(), ModBlocks.LARCH_LEAVES.get());
     }
 }
