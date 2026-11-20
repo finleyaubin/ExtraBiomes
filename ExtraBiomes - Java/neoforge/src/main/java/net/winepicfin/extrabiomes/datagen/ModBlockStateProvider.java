@@ -101,6 +101,27 @@ public class ModBlockStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.SKY_TRAPDOOR.get()), texLoc("sky_trapdoor"),true,"cutout");
         signBlock(((StandingSignBlock) ModBlocks.SKY_SIGN.get()),((WallSignBlock) ModBlocks.SKY_WALL_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
         hangingSignBlock((ModBlocks.SKY_HANGING_SIGN.get()),( ModBlocks.SKY_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.SKY_PLANKS.get()));
+        blockWithItem(ModBlocks.LARCH_PLANKS);
+        logBlock((RotatedPillarBlock) ModBlocks.LARCH_LOG.get());
+        logBlock((RotatedPillarBlock) ModBlocks.STRIPPED_LARCH_LOG.get());
+        axisBlock(((RotatedPillarBlock) ModBlocks.LARCH_WOOD.get()), blockTexture(ModBlocks.LARCH_LOG.get()),blockTexture(ModBlocks.LARCH_LOG.get()));
+        axisBlock(((RotatedPillarBlock) ModBlocks.STRIPPED_LARCH_WOOD.get()), blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()),blockTexture(ModBlocks.STRIPPED_LARCH_LOG.get()));
+        tintedLeavesBlock(ModBlocks.LARCH_LEAVES);
+        saplingBlock(ModBlocks.LARCH_SAPLING);
+        simpleBlockItem(ModBlocks.LARCH_LOG.get(),models().withExistingParent("extrabiomes:larch_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.LARCH_WOOD.get(),models().withExistingParent("extrabiomes:larch_wood", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_LARCH_LOG.get(),models().withExistingParent("extrabiomes:stripped_larch_log", "minecraft:block/cube_column"));
+        simpleBlockItem(ModBlocks.STRIPPED_LARCH_WOOD.get(),models().withExistingParent("extrabiomes:stripped_larch_wood", "minecraft:block/cube_column"));
+        stairsBlock(((StairBlock) ModBlocks.LARCH_STAIRS.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        slabBlock(((SlabBlock) ModBlocks.LARCH_SLAB.get()), blockModel(ModBlocks.LARCH_PLANKS.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        buttonBlock(((ButtonBlock) ModBlocks.LARCH_BUTTON.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        pressurePlateBlock(((PressurePlateBlock) ModBlocks.LARCH_PRESSURE_PLATE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceBlock(((FenceBlock) ModBlocks.LARCH_FENCE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        fenceGateBlock(((FenceGateBlock) ModBlocks.LARCH_FENCE_GATE.get()), blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        doorBlockWithRenderType(((DoorBlock) ModBlocks.LARCH_DOOR.get()), texLoc("larch_door_bottom"),texLoc("larch_door_top"),"cutout");
+        trapdoorBlockWithRenderType(((TrapDoorBlock) ModBlocks.LARCH_TRAPDOOR.get()), texLoc("larch_trapdoor"),false,"cutout");
+        signBlock(((StandingSignBlock) ModBlocks.LARCH_SIGN.get()),((WallSignBlock) ModBlocks.LARCH_WALL_SIGN.get()),blockTexture(ModBlocks.LARCH_PLANKS.get()));
+        hangingSignBlock((ModBlocks.LARCH_HANGING_SIGN.get()),( ModBlocks.LARCH_WALL_HANGING_SIGN.get()),blockTexture(ModBlocks.LARCH_PLANKS.get()));
         // palm wood
         blockWithItem(ModBlocks.PALM_PLANKS);
         logBlock((RotatedPillarBlock) ModBlocks.PALM_LOG.get());
@@ -175,6 +196,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(blockRegistryObject.get(), models().cubeAll(name(blockRegistryObject.get()), blockTexture(blockRegistryObject.get())).renderType("cutout"));
     }
 
+    // The colour comes from LarchLeavesTint: vanilla's block/leaves parent carries the tintindex that cubeAll lacks.
+    private void tintedLeavesBlock(RegistrySupplier<Block> blockRegistryObject){
+        Block block = blockRegistryObject.get();
+        simpleBlockWithItem(block, models().withExistingParent(name(block), mcLoc("block/leaves")).texture("all", blockTexture(block)).renderType("cutout"));
+    }
     private void hugeMushroomBlock(RegistrySupplier<Block> blockRegistryObject){
         Block block = blockRegistryObject.get();
         ModelFile cap = models().singleTexture(name(block), mcLoc("block/template_single_face"), "texture", blockTexture(block)).renderType("cutout");

@@ -35,6 +35,7 @@ public class ModBiomes
     public static final ResourceKey<Biome> JELLYFISH_FIELDS = register("jellyfish_fields");
     public static final ResourceKey<Biome> JUNGLE_MARSH = register("jungle_marsh");
     public static final ResourceKey<Biome> JUNGLE_PILLARS = register("jungle_pillars");
+    public static final ResourceKey<Biome> LARCH_FOREST = register("larch_forest");
     public static final ResourceKey<Biome> LUSH_MESA = register("lush_mesa");
     public static final ResourceKey<Biome> LUSH_MESA_BRYCE = register("lush_mesa_bryce");
     public static final ResourceKey<Biome> MOORLANDS = register("moorlands");
@@ -69,6 +70,7 @@ public class ModBiomes
         context.register(JELLYFISH_FIELDS, new JellyfishFields().Register(context));
         context.register(JUNGLE_MARSH, new JungleMarsh().Register(context));
         context.register(JUNGLE_PILLARS, new JunglePillars().Register(context));
+        context.register(LARCH_FOREST, new LarchForest().Register(context));
         context.register(LUSH_MESA, new LushMesa().Register(context));
         context.register(LUSH_MESA_BRYCE, new LushMesaBryce().Register(context));
         context.register(MOORLANDS, new Moorlands().Register(context));

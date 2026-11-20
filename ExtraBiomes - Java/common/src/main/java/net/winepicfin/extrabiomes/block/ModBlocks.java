@@ -21,6 +21,7 @@ import net.winepicfin.extrabiomes.platform.ExtraBiomesExpectPlatform;
 import net.winepicfin.extrabiomes.util.ModWoodTypes;
 import net.winepicfin.extrabiomes.worldgen.features.mushroom.MushroomFeatures;
 import net.winepicfin.extrabiomes.worldgen.tree.MysticTreeGrower;
+import net.winepicfin.extrabiomes.worldgen.tree.LarchTreeGrower;
 import net.winepicfin.extrabiomes.worldgen.tree.PalmTreeGrower;
 import net.winepicfin.extrabiomes.worldgen.tree.SkyTreeGrower;
 
@@ -152,6 +153,28 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> GILDED_SKY_WALL_SIGN = GILDED_SKY_SIGNS.wallSign();
     public static final RegistrySupplier<Block> GILDED_SKY_HANGING_SIGN = GILDED_SKY_SIGNS.hangingSign();
     public static final RegistrySupplier<Block> GILDED_SKY_WALL_HANGING_SIGN = GILDED_SKY_SIGNS.wallHangingSign();
+
+    private static final StandardWoodSet LARCH_WOOD_SET = registerStandardWoodSet("larch", ModWoodTypes.LARCH);
+    public static final RegistrySupplier<Block> LARCH_PLANKS = LARCH_WOOD_SET.planks();
+    public static final RegistrySupplier<Block> LARCH_LOG = registerBlock("larch_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> LARCH_WOOD = registerBlock("larch_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_WOOD).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> STRIPPED_LARCH_LOG = registerBlock("stripped_larch_log", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> LARCH_LEAVES = registerBlock("larch_leaves", () -> new ModLeavesWithSupport(BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_LEAVES).sound(SoundType.GRASS)));
+    public static final RegistrySupplier<Block> STRIPPED_LARCH_WOOD = registerBlock("stripped_larch_wood", () -> ExtraBiomesExpectPlatform.createLogBlock(BlockBehaviour.Properties.ofLegacyCopy(Blocks.STRIPPED_SPRUCE_LOG).strength(ModLogsTuning.DESTROY_SECONDS)));
+    public static final RegistrySupplier<Block> LARCH_SAPLING = registerBlock("larch_sapling", () -> new SaplingBlock(LarchTreeGrower.GROWER, BlockBehaviour.Properties.ofLegacyCopy(Blocks.SPRUCE_SAPLING).strength(0f)));
+    public static final RegistrySupplier<Block> LARCH_STAIRS = LARCH_WOOD_SET.stairs();
+    public static final RegistrySupplier<Block> LARCH_SLAB = LARCH_WOOD_SET.slab();
+    public static final RegistrySupplier<Block> LARCH_BUTTON = LARCH_WOOD_SET.button();
+    public static final RegistrySupplier<Block> LARCH_PRESSURE_PLATE = LARCH_WOOD_SET.pressurePlate();
+    public static final RegistrySupplier<Block> LARCH_FENCE = LARCH_WOOD_SET.fence();
+    public static final RegistrySupplier<Block> LARCH_FENCE_GATE = LARCH_WOOD_SET.fenceGate();
+    public static final RegistrySupplier<Block> LARCH_DOOR = LARCH_WOOD_SET.door();
+    public static final RegistrySupplier<Block> LARCH_TRAPDOOR = LARCH_WOOD_SET.trapdoor();
+    private static final StandardWoodSigns LARCH_SIGNS = registerWoodSigns("larch", ModWoodTypes.LARCH, Blocks.SPRUCE_SIGN, Blocks.SPRUCE_WALL_SIGN, Blocks.SPRUCE_HANGING_SIGN, Blocks.SPRUCE_WALL_HANGING_SIGN);
+    public static final RegistrySupplier<Block> LARCH_SIGN = LARCH_SIGNS.sign();
+    public static final RegistrySupplier<Block> LARCH_WALL_SIGN = LARCH_SIGNS.wallSign();
+    public static final RegistrySupplier<Block> LARCH_HANGING_SIGN = LARCH_SIGNS.hangingSign();
+    public static final RegistrySupplier<Block> LARCH_WALL_HANGING_SIGN = LARCH_SIGNS.wallHangingSign();
     // Bonemeal on each grows that colour's own huge mushroom structure (MushroomFeatures).
     public static final RegistrySupplier<Block>  BLACK_MUSHROOM= registerBlock("black_mushroom", () -> new MushroomBlock(MushroomFeatures.HUGE_BLACK_MUSHROOM_KEY, BlockBehaviour.Properties.ofLegacyCopy(Blocks.RED_MUSHROOM)));
     public static final RegistrySupplier<Block>  BLUE_MUSHROOM= registerBlock("blue_mushroom", () -> new MushroomBlock(MushroomFeatures.HUGE_BLUE_MUSHROOM_KEY, BlockBehaviour.Properties.ofLegacyCopy(Blocks.RED_MUSHROOM)));
@@ -227,14 +250,14 @@ public class ModBlocks {
     // Transparent texture pixels render opaque black unless these are registered for cutout on each loader.
     public static List<Block> cutoutBlocks() {
         return Stream.of(
-                MYSTIC_SAPLING, SKY_SAPLING, PALM_SAPLING,
+                MYSTIC_SAPLING, SKY_SAPLING, PALM_SAPLING, LARCH_SAPLING,
                 BLACK_MUSHROOM, BLUE_MUSHROOM, CYAN_MUSHROOM, GREEN_MUSHROOM, ORANGE_MUSHROOM,
                 PURPLE_MUSHROOM, WHITE_MUSHROOM, YELLOW_MUSHROOM, GLOW_MUSHROOM,
                 BLACK_MUSHROOM_BLOCK, BLUE_MUSHROOM_BLOCK, CYAN_MUSHROOM_BLOCK, GREEN_MUSHROOM_BLOCK, ORANGE_MUSHROOM_BLOCK,
                 PURPLE_MUSHROOM_BLOCK, WHITE_MUSHROOM_BLOCK, YELLOW_MUSHROOM_BLOCK, GLOW_MUSHROOM_BLOCK,
-                MYSTIC_LEAVES, SKY_LEAVES, PALM_LEAVES,
-                MYSTIC_DOOR, SKY_DOOR, PALM_DOOR, GILDED_SKY_DOOR,
-                MYSTIC_TRAPDOOR, SKY_TRAPDOOR, PALM_TRAPDOOR, GILDED_SKY_TRAPDOOR
+                MYSTIC_LEAVES, SKY_LEAVES, PALM_LEAVES, LARCH_LEAVES,
+                MYSTIC_DOOR, SKY_DOOR, PALM_DOOR, GILDED_SKY_DOOR, LARCH_DOOR,
+                MYSTIC_TRAPDOOR, SKY_TRAPDOOR, PALM_TRAPDOOR, GILDED_SKY_TRAPDOOR, LARCH_TRAPDOOR
         ).map(Supplier::get).toList();
     }
 
