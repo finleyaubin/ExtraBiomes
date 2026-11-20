@@ -32,6 +32,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ItemTags.FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
                 ModBlocks.SKY_FENCE.get().asItem(),
+                ModBlocks.LARCH_FENCE.get().asItem(),
                 ModBlocks.PALM_FENCE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem()
         ));
@@ -39,6 +40,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ItemTags.FENCE_GATES).add(keys(
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem(),
+                ModBlocks.LARCH_FENCE_GATE.get().asItem(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
         ));
@@ -52,6 +54,10 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -70,6 +76,10 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
                 ModBlocks.STRIPPED_SKY_LOG.get().asItem(),
                 ModBlocks.SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_SKY_WOOD.get().asItem(),
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem(),
                 ModBlocks.GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
@@ -82,11 +92,13 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ItemTags.LEAVES).add(keys(
                 ModBlocks.MYSTIC_LEAVES.get().asItem(),
                 ModBlocks.SKY_LEAVES.get().asItem(),
+                ModBlocks.LARCH_LEAVES.get().asItem(),
                 ModBlocks.PALM_LEAVES.get().asItem()
         ));
         this.valueLookupBuilder(ItemTags.PLANKS).add(keys(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
                 ModBlocks.SKY_PLANKS.get().asItem(),
+                ModBlocks.LARCH_PLANKS.get().asItem(),
                 ModBlocks.PALM_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         ));
@@ -103,6 +115,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ItemTags.WOODEN_PRESSURE_PLATES).add(items(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.valueLookupBuilder(ItemTags.WOODEN_DOORS).add(items(ModTagContents.WOODEN_DOORS));
         this.valueLookupBuilder(ItemTags.WOODEN_TRAPDOORS).add(items(ModTagContents.WOODEN_TRAPDOORS));
+        this.valueLookupBuilder(ItemTags.WOODEN_SHELVES).add(items(ModTagContents.WOODEN_SHELVES));
         this.valueLookupBuilder(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
         this.valueLookupBuilder(ItemTags.SAND).add(items(ModTagContents.SAND));
         this.valueLookupBuilder(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(net.minecraft.world.item.Item[]::new));
@@ -111,6 +124,7 @@ public class ModItemTagGenerator extends FabricTagProvider.ItemTagProvider {
         this.valueLookupBuilder(ConventionalItemTags.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
         this.valueLookupBuilder(ConventionalItemTags.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
         this.valueLookupBuilder(ConventionalItemTags.ORES).add(items(ModTagContents.ORES));
+        this.valueLookupBuilder(ConventionalItemTags.MUSHROOMS).add(items(ModTagContents.MUSHROOMS));
     }
 
     // valueLookupBuilder()'s TagAppender takes Item directly (Fabric API 1.21.6+), so this is now an identity passthrough.

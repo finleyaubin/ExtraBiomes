@@ -35,6 +35,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.MYSTIC_FENCE.get().asItem(),
                 ModBlocks.SKY_FENCE.get().asItem(),
                 ModBlocks.PALM_FENCE.get().asItem(),
+                ModBlocks.LARCH_FENCE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE.get().asItem()
         );
 
@@ -42,6 +43,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.MYSTIC_FENCE_GATE.get().asItem(),
                 ModBlocks.SKY_FENCE_GATE.get().asItem(),
                 ModBlocks.PALM_FENCE_GATE.get().asItem(),
+                ModBlocks.LARCH_FENCE_GATE.get().asItem(),
                 ModBlocks.GILDED_SKY_FENCE_GATE.get().asItem()
         );
 
@@ -58,10 +60,10 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
-                ModBlocks.PALM_LOG.get().asItem(),
-                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
-                ModBlocks.PALM_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem()
         );
         this.tag(ItemTags.LOGS_THAT_BURN).add(
                 ModBlocks.MYSTIC_LOG.get().asItem(),
@@ -76,20 +78,22 @@ public class ModItemTagGenerator extends ItemTagsProvider {
                 ModBlocks.STRIPPED_GILDED_SKY_LOG.get().asItem(),
                 ModBlocks.GILDED_SKY_WOOD.get().asItem(),
                 ModBlocks.STRIPPED_GILDED_SKY_WOOD.get().asItem(),
-                ModBlocks.PALM_LOG.get().asItem(),
-                ModBlocks.STRIPPED_PALM_LOG.get().asItem(),
-                ModBlocks.PALM_WOOD.get().asItem(),
-                ModBlocks.STRIPPED_PALM_WOOD.get().asItem()
+                ModBlocks.LARCH_LOG.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_LOG.get().asItem(),
+                ModBlocks.LARCH_WOOD.get().asItem(),
+                ModBlocks.STRIPPED_LARCH_WOOD.get().asItem()
         );
         this.tag(ItemTags.LEAVES).add(
                 ModBlocks.MYSTIC_LEAVES.get().asItem(),
                 ModBlocks.SKY_LEAVES.get().asItem(),
+                ModBlocks.LARCH_LEAVES.get().asItem(),
                 ModBlocks.PALM_LEAVES.get().asItem()
         );
         this.tag(ItemTags.PLANKS).add(
                 ModBlocks.MYSTIC_PLANKS.get().asItem(),
                 ModBlocks.SKY_PLANKS.get().asItem(),
                 ModBlocks.PALM_PLANKS.get().asItem(),
+                ModBlocks.LARCH_PLANKS.get().asItem(),
                 ModBlocks.GILDED_SKY_PLANKS.get().asItem()
         );
 
@@ -105,6 +109,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(ItemTags.WOODEN_PRESSURE_PLATES).add(items(ModTagContents.WOODEN_PRESSURE_PLATES));
         this.tag(ItemTags.WOODEN_DOORS).add(items(ModTagContents.WOODEN_DOORS));
         this.tag(ItemTags.WOODEN_TRAPDOORS).add(items(ModTagContents.WOODEN_TRAPDOORS));
+        this.tag(ItemTags.WOODEN_SHELVES).add(items(ModTagContents.WOODEN_SHELVES));
         this.tag(ItemTags.SAPLINGS).add(items(ModTagContents.SAPLINGS));
         this.tag(ItemTags.SAND).add(items(ModTagContents.SAND));
         this.tag(ItemTags.SIGNS).add(ModTagContents.SIGN_ITEMS.stream().map(RegistrySupplier::get).toArray(Item[]::new));
@@ -113,6 +118,7 @@ public class ModItemTagGenerator extends ItemTagsProvider {
         this.tag(Tags.Items.STRIPPED_LOGS).add(items(ModTagContents.STRIPPED_LOGS));
         this.tag(Tags.Items.STRIPPED_WOODS).add(items(ModTagContents.STRIPPED_WOODS));
         this.tag(Tags.Items.ORES).add(items(ModTagContents.ORES));
+        this.tag(Tags.Items.MUSHROOMS).add(items(ModTagContents.MUSHROOMS));
     }
 
     private static Item[] items(List<RegistrySupplier<Block>> blocks) {
