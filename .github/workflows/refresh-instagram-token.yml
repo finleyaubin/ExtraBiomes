@@ -1,0 +1,25 @@
+name: Refresh Instagram Token
+
+on:
+  schedule:
+    - cron: '0 6 1,15 * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      # Instagram tokens last 60 days and can only be refreshed while still valid, so this runs twice a month.
+      # GITHUB_TOKEN cannot write secrets; SECRETS_WRITE_TOKEN is a fine-grained PAT with Secrets: read and write on this repo.
+      - name: Refresh the token and store the new one
+        env:
+          IG_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          GH_TOKEN: ${{ secrets.SECRETS_WRITE_TOKEN }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -sS --fail-with-body "https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=$IG_TOKEN")
+          NEW_TOKEN=$(jq -er .access_token <<<"$RESPONSE")
+          echo "::add-mask::$NEW_TOKEN"
+          gh secret set INSTAGRAM_TOKEN --repo "$GITHUB_REPOSITORY" --body "$NEW_TOKEN"
