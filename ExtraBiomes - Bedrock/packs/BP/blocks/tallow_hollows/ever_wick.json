@@ -10,8 +10,8 @@
         "components": {
             "minecraft:collision_box": false,
             "minecraft:selection_box": {
-                "origin": [-2, 0, -2],
-                "size": [4, 10, 4]
+                "origin": [-3, 0, -3],
+                "size": [6, 10, 6]
             },
             "minecraft:geometry": "geometry.sapling_model",
             "minecraft:material_instances": {
@@ -46,8 +46,7 @@
                             "minecraft:calcite",
                             "minecraft:dripstone_block",
                             "minecraft:dirt",
-                            "minecraft:grass_block",
-                            "minecraft:gravel"
+                            "minecraft:grass_block"
                         ],
                         "allowed_faces": ["up"]
                     }
