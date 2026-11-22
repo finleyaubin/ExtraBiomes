@@ -160,6 +160,18 @@
         },
         "extrabiomes:worm_spawn_egg": {
             "textures": "textures/items/spawn_egg/worm_spawn_egg"
+        },
+        "extrabiomes:larch_sapling": {
+            "textures": "textures/blocks/larch wood/sapling_larch"
+        },
+        "extrabiomes:larch_boat": {
+            "textures": "textures/items/boat_larch"
+        },
+        "extrabiomes:larch_chest_boat": {
+            "textures": "textures/items/boat_larch_chest"
+        },
+        "extrabiomes:larch_door": {
+            "textures": ["textures/blocks/larch wood/larch_door"]
         }
     }
 }

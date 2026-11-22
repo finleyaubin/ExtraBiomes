@@ -1,0 +1,11 @@
+{
+    "format_version": "1.20.30",
+    "minecraft:snap_to_surface_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/granite_erratic_snap_feature"
+        },
+        "feature_to_snap": "extrabiomes:larch_forest/select_granite_erratic_feature",
+        "vertical_search_range": 12,
+        "surface": "floor"
+    }
+}

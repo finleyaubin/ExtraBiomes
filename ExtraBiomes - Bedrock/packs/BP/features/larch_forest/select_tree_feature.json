@@ -1,0 +1,17 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/select_tree_feature"
+        },
+        "features": [
+            ["extrabiomes:larch_forest/larch_1_feature", 10],
+            ["extrabiomes:larch_forest/larch_2_feature", 10],
+            ["extrabiomes:larch_forest/larch_3_feature", 10],
+            ["extrabiomes:larch_forest/larch_4_feature", 10],
+            ["extrabiomes:larch_forest/tall_larch_1_feature", 7],
+            ["extrabiomes:larch_forest/tall_larch_2_feature", 7],
+            ["extrabiomes:larch_forest/tall_larch_3_feature", 6]
+        ]
+    }
+}

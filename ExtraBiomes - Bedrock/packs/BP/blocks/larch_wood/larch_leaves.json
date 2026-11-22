@@ -1,0 +1,159 @@
+{
+    "format_version": "1.20.100",
+    "minecraft:block": {
+        "description": {
+            "identifier": "extrabiomes:larch_leaves",
+            "menu_category": {
+                "category": "nature",
+                "group": "itemGroup.name.leaves"
+            },
+            "states": {
+                "extrabiomes:persist": [0, 1],
+                "extrabiomes:placed": [false, true],
+                "extrabiomes:decay": [0, 1],
+                "extrabiomes:shade": [1, 0, 2, 3, 4, 5, 6, 7, 8]
+            }
+        },
+        "components": {
+            "minecraft:flammable": {
+                "burn_odds": 50,
+                "flame_odds": 50
+            },
+            "minecraft:map_color": "#d9902a",
+            "minecraft:material_instances": {
+                "*": {
+                    "texture": "extrabiomes_larch_leaves_1",
+                    "render_method": "blend",
+                    "ambient_occlusion": true,
+                    "face_dimming": true
+                }
+            },
+            "minecraft:loot": "loot_tables/empty.json",
+            "minecraft:destructible_by_mining": {
+                "seconds_to_destroy": 0.3
+            },
+            "minecraft:liquid_detection": {
+                "detection_rules": [
+                    {
+                        "liquid_type": "water",
+                        "can_contain_liquid": true,
+                        "on_liquid_touches": "blocking"
+                    }
+                ]
+            },
+            "minecraft:light_dampening": 0,
+            "extrabiomes:leaf_loot": {},
+            "extrabiomes:leaf_decay": {},
+            "tag:minecraft:leaves": {},
+            "tag:minecraft:is_hoe_item_destructible": {},
+            "tag:minecraft:is_shears_item_destructible": {},
+            "tag:extrabiomes:larch_leaves": {}
+        },
+        "permutations": [
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 0",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_0",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 2",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_2",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 3",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_3",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 4",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_4",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 5",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_5",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 6",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_6",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 7",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_7",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            },
+            {
+                "condition": "q.block_state('extrabiomes:shade') == 8",
+                "components": {
+                    "minecraft:material_instances": {
+                        "*": {
+                            "texture": "extrabiomes_larch_leaves_8",
+                            "render_method": "blend",
+                            "ambient_occlusion": true,
+                            "face_dimming": true
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

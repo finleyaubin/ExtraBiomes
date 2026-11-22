@@ -44,6 +44,12 @@ export const SaplingGrowComponent = {
           }
           break;
 
+        case "larch": {
+          const variant = Math.floor(Math.random() * 4) + 1;
+          dimension.runCommand(`structure load extrabiomes:larch_forest/larch_${variant} ${block.location.x - 2} ${block.location.y} ${block.location.z - 2}`);
+          break;
+        }
+
         case "sky":
           dimension.runCommand(`structure load extrabiomes:sky_tree ${block.location.x - 2} ${block.location.y} ${block.location.z - 2}`);
           break;

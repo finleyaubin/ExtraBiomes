@@ -1,0 +1,13 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/select_kettle_lake_feature"
+        },
+        "features": [
+            ["extrabiomes:larch_forest/kettle_lake_1_feature", 1],
+            ["extrabiomes:larch_forest/kettle_lake_2_feature", 1],
+            ["extrabiomes:larch_forest/kettle_lake_3_feature", 1]
+        ]
+    }
+}

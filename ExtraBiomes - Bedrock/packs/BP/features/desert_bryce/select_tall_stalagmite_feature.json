@@ -1,0 +1,13 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:desert_bryce/select_tall_stalagmite_feature"
+        },
+        "features": [
+            ["extrabiomes:desert_bryce/tall_stalagmite_1_on_mud_feature", 1],
+            ["extrabiomes:desert_bryce/tall_stalagmite_2_on_mud_feature", 1],
+            ["extrabiomes:desert_bryce/tall_stalagmite_3_on_mud_feature", 1]
+        ]
+    }
+}

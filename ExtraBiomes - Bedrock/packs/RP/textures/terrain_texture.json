@@ -145,9 +145,7 @@
             "textures": ["textures/blocks/sky wood/sky_door_top"]
         },
         "extrabiomes_gilded_sky_door_bottom": {
-            "textures": [
-                "textures/blocks/gilded sky wood/gilded_sky_door_bottom"
-            ]
+            "textures": ["textures/blocks/gilded sky wood/gilded_sky_door_bottom"]
         },
         "extrabiomes_gilded_sky_door_top": {
             "textures": ["textures/blocks/gilded sky wood/gilded_sky_door_top"]
@@ -156,9 +154,7 @@
             "textures": ["textures/blocks/gilded sky wood/log_gilded_sky"]
         },
         "extrabiomes_gilded_sky_stripped_log": {
-            "textures": [
-                "textures/blocks/gilded sky wood/log_gilded_sky_stripped"
-            ]
+            "textures": ["textures/blocks/gilded sky wood/log_gilded_sky_stripped"]
         },
         "extrabiomes_gilded_sky_planks": {
             "textures": ["textures/blocks/gilded sky wood/planks_gilded_sky"]
@@ -270,6 +266,75 @@
         },
         "extrabiomes_nether_redstone_ore": {
             "textures": ["textures/blocks/the_netherlands/nether_redstone_ore"]
+        },
+        "extrabiomes_larch_sapling": {
+            "textures": ["textures/blocks/larch wood/sapling_larch"]
+        },
+        "extrabiomes_larch_log_top": {
+            "textures": ["textures/blocks/larch wood/log_larch_top"]
+        },
+        "extrabiomes_larch_stripped_log_top": {
+            "textures": ["textures/blocks/larch wood/stripped_larch_log_top"]
+        },
+        "extrabiomes_larch_log": {
+            "textures": ["textures/blocks/larch wood/log_larch"]
+        },
+        "extrabiomes_larch_stripped_log": {
+            "textures": ["textures/blocks/larch wood/stripped_larch_log"]
+        },
+        "extrabiomes_larch_planks": {
+            "textures": ["textures/blocks/larch wood/planks_larch"]
+        },
+        "extrabiomes_larch_trapdoor": {
+            "textures": ["textures/blocks/larch wood/larch_trapdoor"]
+        },
+        "extrabiomes_larch_door_bottom": {
+            "textures": ["textures/blocks/larch wood/larch_door_bottom"]
+        },
+        "extrabiomes_larch_door_top": {
+            "textures": ["textures/blocks/larch wood/larch_door_top"]
+        },
+        "extrabiomes_larch_leaves_0": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_0"]
+        },
+        "extrabiomes_larch_leaves_1": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_1"]
+        },
+        "extrabiomes_larch_leaves_2": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_2"]
+        },
+        "extrabiomes_larch_leaves_3": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_3"]
+        },
+        "extrabiomes_larch_leaves_4": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_4"]
+        },
+        "extrabiomes_larch_leaves_5": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_5"]
+        },
+        "extrabiomes_larch_leaves_6": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_6"]
+        },
+        "extrabiomes_larch_leaves_7": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_7"]
+        },
+        "extrabiomes_larch_leaves_8": {
+            "textures": ["textures/blocks/larch wood/leaves_larch_8"]
+        },
+        "extrabiomes_mystic_shelf": {
+            "textures": ["textures/blocks/mystic wood/mystic_shelf"]
+        },
+        "extrabiomes_palm_shelf": {
+            "textures": ["textures/blocks/palm wood/palm_shelf"]
+        },
+        "extrabiomes_sky_shelf": {
+            "textures": ["textures/blocks/sky wood/sky_shelf"]
+        },
+        "extrabiomes_gilded_sky_shelf": {
+            "textures": ["textures/blocks/gilded sky wood/gilded_sky_shelf"]
+        },
+        "extrabiomes_larch_shelf": {
+            "textures": ["textures/blocks/larch wood/larch_shelf"]
         }
     }
 }

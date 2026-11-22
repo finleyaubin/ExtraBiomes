@@ -1,6 +1,6 @@
 import { BlockPermutation, ItemStack } from "@minecraft/server";
 
-const doorWoodTypes = ['gilded_sky', 'mystic', 'palm', 'sky'];
+const doorWoodTypes = ['gilded_sky', 'larch', 'mystic', 'palm', 'sky'];
 
 function getWoodType(id) {
     const [, rest] = id.split(':');

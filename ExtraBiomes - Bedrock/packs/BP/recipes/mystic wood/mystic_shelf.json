@@ -1,0 +1,21 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "extrabiomes:mystic_shelf"
+        },
+        "tags": ["crafting_table"],
+        "pattern": ["###", "   ", "###"],
+        "key": {
+            "#": {
+                "item": "extrabiomes:stripped_mystic_log"
+            }
+        },
+        "result": [
+            {
+                "item": "extrabiomes:mystic_shelf",
+                "count": 6
+            }
+        ]
+    }
+}

@@ -13,6 +13,9 @@
             },
             "minecraft:grass_appearance": {
                 "color": "#c8a040"
+            },
+            "minecraft:fog_appearance": {
+                "fog_identifier": "extrabiomes:fog_desert_bryce"
             }
         }
     }

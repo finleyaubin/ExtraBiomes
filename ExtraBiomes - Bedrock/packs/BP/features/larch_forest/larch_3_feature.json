@@ -1,0 +1,32 @@
+{
+    "format_version": "1.26.20",
+    "minecraft:structure_template_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/larch_3_feature"
+        },
+        "structure_name": "extrabiomes:larch_forest/larch_3",
+        "facing_direction": "random",
+        "rotate_around_center": true,
+        "constraints": {
+            "block_intersection": {
+                "block_allowlist": [
+                    "minecraft:air",
+                    "minecraft:short_grass",
+                    "minecraft:tall_grass",
+                    "minecraft:fern",
+                    "minecraft:large_fern",
+                    "minecraft:short_dry_grass",
+                    "minecraft:tall_dry_grass",
+                    "minecraft:snow_layer",
+                    "minecraft:sweet_berry_bush",
+                    "minecraft:red_flower",
+                    "minecraft:yellow_flower",
+                    "minecraft:double_plant",
+                    "extrabiomes:larch_leaves",
+                    "minecraft:spruce_leaves"
+                ]
+            }
+        },
+        "ground_level": 3
+    }
+}

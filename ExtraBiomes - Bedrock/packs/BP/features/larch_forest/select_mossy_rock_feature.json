@@ -1,0 +1,11 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/select_mossy_rock_feature"
+        },
+        "features": [
+            ["extrabiomes:larch_forest/mossy_rock_1_feature", 1]
+        ]
+    }
+}

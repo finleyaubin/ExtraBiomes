@@ -1,0 +1,32 @@
+{
+    "format_version": "1.10.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "extrabiomes:shelf_block",
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "textures": {
+                "default": "textures/entity/shelf_item"
+            },
+            "geometry": {
+                "default": "geometry.shelf_item"
+            },
+            "scripts": {
+                "initialize": [
+                    "v.offset_x = 0; v.offset_y = -6.4; v.offset_z = 0; v.body_yaw = 0; v.arm_pitch = -90; v.item_yaw = 45; v.item_thickness = 0.05;"
+                ],
+                "scale": "0.65",
+                "animate": [
+                    "pose"
+                ]
+            },
+            "render_controllers": [
+                "controller.render.shelf_item"
+            ],
+            "animations": {
+                "pose": "animation.shelf_item.pose"
+            }
+        }
+    }
+}

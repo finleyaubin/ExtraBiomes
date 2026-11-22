@@ -1,0 +1,32 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:feature_rules": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest_podzol",
+            "places_feature": "extrabiomes:larch_forest/podzol_feature"
+        },
+        "conditions": {
+            "placement_pass": "after_surface_pass",
+            "minecraft:biome_filter": [
+                {
+                    "test": "has_biome_tag",
+                    "operator": "==",
+                    "value": "larch_forest"
+                }
+            ]
+        },
+        "distribution": {
+            "iterations": "math.clamp(math.trunc(math.ceil((query.noise(math.trunc(variable.originx / 80), math.trunc(variable.originz / 80)) + 0.3) * 120)), 15, 160)",
+            "scatter_chance": 100,
+            "x": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            },
+            "y": "query.heightmap(variable.worldx, variable.worldz)",
+            "z": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            }
+        }
+    }
+}

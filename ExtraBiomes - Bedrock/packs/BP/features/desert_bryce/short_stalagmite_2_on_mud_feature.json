@@ -1,0 +1,13 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:aggregate_feature": {
+        "description": {
+            "identifier": "extrabiomes:desert_bryce/short_stalagmite_2_on_mud_feature"
+        },
+        "early_out": "first_failure",
+        "features": [
+            "extrabiomes:desert_bryce/short_stalagmite_2_bottom_feature",
+            "extrabiomes:desert_bryce/short_stalagmite_2_feature"
+        ]
+    }
+}

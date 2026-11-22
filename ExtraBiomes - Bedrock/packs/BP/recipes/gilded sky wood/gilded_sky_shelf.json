@@ -1,0 +1,21 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "extrabiomes:gilded_sky_shelf"
+        },
+        "tags": ["crafting_table"],
+        "pattern": ["###", "   ", "###"],
+        "key": {
+            "#": {
+                "item": "extrabiomes:stripped_gilded_sky_log"
+            }
+        },
+        "result": [
+            {
+                "item": "extrabiomes:gilded_sky_shelf",
+                "count": 6
+            }
+        ]
+    }
+}

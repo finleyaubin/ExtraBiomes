@@ -1,0 +1,27 @@
+{
+    "format_version": "1.16.0",
+    "minecraft:recipe_shaped": {
+        "description": {
+            "identifier": "extrabiomes:bed_red_from_larch"
+        },
+        "tags": ["crafting_table"],
+        "pattern": ["###", "~~~"],
+        "key": {
+            "~": {
+                "item": "extrabiomes:larch_planks",
+                "data": 0
+            },
+            "#": {
+                "item": "minecraft:wool",
+                "data": 14
+            }
+        },
+        "result": [
+            {
+                "item": "minecraft:bed",
+                "data": 14,
+                "count": 1
+            }
+        ]
+    }
+}

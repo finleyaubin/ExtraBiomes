@@ -1,0 +1,29 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:item": {
+        "description": {
+            "identifier": "extrabiomes:larch_sapling",
+            "menu_category": {
+                "group": "itemGroup.name.sapling",
+                "category": "Nature"
+            }
+        },
+        "components": {
+            "minecraft:icon": {
+                "texture": "extrabiomes:larch_sapling"
+            },
+            "minecraft:fuel": {
+                "duration": 5
+            },
+            "minecraft:block_placer": {
+                "block": "extrabiomes:larch_sapling_block",
+                "use_on": [
+                    "minecraft:dirt",
+                    "minecraft:grass",
+                    "minecraft:farmland",
+                    "minecraft:sand"
+                ]
+            }
+        }
+    }
+}

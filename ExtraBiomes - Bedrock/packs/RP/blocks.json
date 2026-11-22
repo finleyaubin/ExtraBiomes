@@ -315,5 +315,71 @@
     },
     "extrabiomes:nether_redstone_ore": {
         "sound": "nether_gold_ore"
+    },
+    "extrabiomes:larch_door_bottom": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_door_bottom_flipped": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_door_top": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_door_top_flipped": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_trapdoor": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_log": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_planks": {
+        "sound": "wood",
+        "textures": "extrabiomes_larch_planks"
+    },
+    "extrabiomes:larch_slab": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_stairs": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_leaves": {
+        "sound": "grass",
+        "isotropic": true,
+        "textures": "extrabiomes_larch_leaves_1"
+    },
+    "extrabiomes:larch_sapling_block": {
+        "sound": "grass"
+    },
+    "extrabiomes:stripped_larch_wood": {
+        "sound": "wood"
+    },
+    "extrabiomes:stripped_larch_log": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_wood": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_fence_gate": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_fence": {
+        "sound": "wood"
+    },
+    "extrabiomes:mystic_shelf": {
+        "sound": "wood"
+    },
+    "extrabiomes:palm_shelf": {
+        "sound": "wood"
+    },
+    "extrabiomes:sky_shelf": {
+        "sound": "wood"
+    },
+    "extrabiomes:gilded_sky_shelf": {
+        "sound": "wood"
+    },
+    "extrabiomes:larch_shelf": {
+        "sound": "wood"
     }
 }

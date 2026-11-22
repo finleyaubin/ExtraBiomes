@@ -2,7 +2,7 @@ import { BlockPermutation } from "@minecraft/server";
 
 // Known wood-type prefixes, longest-first so multi-word types (e.g. "gilded_sky")
 // are matched before a shorter substring type (e.g. "sky") could match instead.
-const woodTypes = ['gilded_sky', 'mystic', 'palm', 'sky'].sort((a, b) => b.length - a.length);
+const woodTypes = ['gilded_sky', 'larch', 'mystic', 'palm', 'sky'].sort((a, b) => b.length - a.length);
 
 function getWoodType(id) {
     const [, rest] = id.split(':');

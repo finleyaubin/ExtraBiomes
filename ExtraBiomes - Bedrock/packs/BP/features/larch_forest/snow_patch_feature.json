@@ -1,0 +1,23 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:scatter_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/snow_patch_feature"
+        },
+        "iterations": 14,
+        "x": {
+            "distribution": "gaussian",
+            "extent": [-3, 3]
+        },
+        "y": {
+            "distribution": "gaussian",
+            "extent": [-4, 4]
+        },
+        "z": {
+            "distribution": "gaussian",
+            "extent": [-3, 3]
+        },
+        "coordinate_eval_order": "zyx",
+        "places_feature": "extrabiomes:larch_forest/snow_snap_feature"
+    }
+}

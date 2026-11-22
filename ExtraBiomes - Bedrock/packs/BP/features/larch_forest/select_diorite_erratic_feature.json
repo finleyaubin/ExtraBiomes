@@ -1,0 +1,13 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/select_diorite_erratic_feature"
+        },
+        "features": [
+            ["extrabiomes:larch_forest/diorite_erratic_1_feature", 1],
+            ["extrabiomes:larch_forest/diorite_erratic_2_feature", 1],
+            ["extrabiomes:larch_forest/diorite_erratic_3_feature", 1]
+        ]
+    }
+}

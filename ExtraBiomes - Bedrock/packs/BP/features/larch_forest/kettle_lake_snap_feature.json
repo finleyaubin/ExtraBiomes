@@ -1,0 +1,11 @@
+{
+    "format_version": "1.20.30",
+    "minecraft:snap_to_surface_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/kettle_lake_snap_feature"
+        },
+        "feature_to_snap": "extrabiomes:larch_forest/select_kettle_lake_feature",
+        "vertical_search_range": 12,
+        "surface": "floor"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "format_version": "1.14.0",
+    "minecraft:weighted_random_feature": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest/select_young_tree_feature"
+        },
+        "features": [
+            ["extrabiomes:larch_forest/young_spruce_1_feature", 22],
+            ["extrabiomes:larch_forest/young_spruce_2_feature", 22],
+            ["extrabiomes:larch_forest/young_spruce_3_feature", 21],
+            ["extrabiomes:larch_forest/young_larch_1_feature", 12],
+            ["extrabiomes:larch_forest/young_larch_2_feature", 12],
+            ["extrabiomes:larch_forest/young_larch_3_feature", 11]
+        ]
+    }
+}

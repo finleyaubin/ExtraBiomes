@@ -1,0 +1,38 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:feature_rules": {
+        "description": {
+            "identifier": "extrabiomes:larch_forest_short_dry_grass",
+            "places_feature": "extrabiomes:moorland/moorlands_scatter_small_dry_grass_feature"
+        },
+        "conditions": {
+            "placement_pass": "surface_pass",
+            "minecraft:biome_filter": [
+                {
+                    "test": "has_biome_tag",
+                    "operator": "==",
+                    "value": "larch_forest"
+                }
+            ]
+        },
+        "distribution": {
+            "iterations": 4,
+            "scatter_chance": 100,
+            "x": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            },
+            "y": {
+                "distribution": "uniform",
+                "extent": [
+                    "query.heightmap(variable.worldx, variable.worldz)-4",
+                    "query.heightmap(variable.worldx, variable.worldz)+4"
+                ]
+            },
+            "z": {
+                "distribution": "uniform",
+                "extent": [0, 16]
+            }
+        }
+    }
+}
