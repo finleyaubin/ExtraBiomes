@@ -1,0 +1,7 @@
+{
+    "format_version": "1.21.30",
+    "minecraft:texture_set": {
+        "color": "mystic_door_top",
+        "heightmap": "mystic_door_top_heightmap"
+    }
+}

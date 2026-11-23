@@ -1,0 +1,7 @@
+{
+    "format_version": "1.21.30",
+    "minecraft:texture_set": {
+        "color": "grass_stone_side",
+        "heightmap": "grass_stone_side_heightmap"
+    }
+}
