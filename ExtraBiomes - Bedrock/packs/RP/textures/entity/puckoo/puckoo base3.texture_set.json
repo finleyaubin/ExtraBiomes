@@ -1,0 +1,7 @@
+{
+    "format_version": "1.21.30",
+    "minecraft:texture_set": {
+        "color": "puckoo base3",
+        "heightmap": "puckoo base3_heightmap"
+    }
+}
