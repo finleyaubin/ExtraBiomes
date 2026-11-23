@@ -16,34 +16,7 @@
             },
             "bones": [
                 {
-                    "name": "root",
-                    "pivot": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                {
-                    "name": "body",
-                    "parent": "root",
-                    "pivot": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                {
-                    "name": "rightArm",
-                    "parent": "body",
-                    "pivot": [
-                        0,
-                        0,
-                        0
-                    ]
-                },
-                {
                     "name": "rightItem",
-                    "parent": "rightArm",
                     "pivot": [
                         0,
                         0,

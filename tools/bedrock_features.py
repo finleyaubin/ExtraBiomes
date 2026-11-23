@@ -102,8 +102,12 @@ class FeatureWriter:
             body["may_attach_to"] = {"bottom": attach_bottom}
         return self.feature(name, "minecraft:single_block_feature", "1.17.0", body)
 
-    def feature_rule(self, name, places, pass_name, iterations, y, scatter_chance=100):
+    def feature_rule(self, name, places, pass_name, iterations, y, scatter_chance=100, every_column=False):
+        """every_column visits each of the chunk's 256 columns once instead of scattering `iterations` random ones."""
         rule_name = f"{self.biome_tag}_{name}"
+        horizontal = {"distribution": "fixed_grid" if every_column else "uniform", "extent": [0, 16]}
+        if every_column:
+            iterations = 16 * 16
         write_json(self.rule_dir, rule_name, {
             "format_version": "1.20.20",
             "minecraft:feature_rules": {
@@ -115,9 +119,9 @@ class FeatureWriter:
                 "distribution": {
                     "iterations": iterations,
                     "scatter_chance": scatter_chance,
-                    "x": {"distribution": "uniform", "extent": [0, 16]},
+                    "x": horizontal,
                     "y": y,
-                    "z": {"distribution": "uniform", "extent": [0, 16]},
+                    "z": horizontal,
                 },
             },
         })

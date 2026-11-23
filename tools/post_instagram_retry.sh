@@ -29,7 +29,7 @@ WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 cp "$CHANGELOG" "$WORK/changelog.md"
 
-pip install --quiet pillow
+python3 -c "import PIL" 2>/dev/null || { echo "Pillow is required: pacman -S python-pillow" >&2; exit 1; }
 python3 tools/render_slides.py "$WORK/changelog.md" \
   --version "$VERSION" --edition "$EDITION" --out "$WORK/slides"
 

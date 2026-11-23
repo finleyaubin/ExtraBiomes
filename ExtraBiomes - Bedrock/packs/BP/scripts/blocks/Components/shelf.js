@@ -2,14 +2,14 @@ import { BlockTypes, EquipmentSlot, GameMode } from "@minecraft/server";
 
 const SLOT_COUNT = 3;
 const SLOT_WIDTH = 1 / SLOT_COUNT;
-const ITEM_SPACING = 5 / 16;
-const ITEM_DEPTH_FROM_CENTER = 0.27;
-const ITEM_HEIGHT = 0.5;
+const FRONT_FACE_DEPTH = 3 / 16;
+const ITEM_DEPTH = 0.27;
+// The held-item pose draws the item this far in front of the holding entity.
+const HELD_ITEM_REACH = 0.165;
+// Held blocks are drawn corner-first, so their entity turns this far to show a flat face.
+const BLOCK_TURN = 45;
+const DISPLAY_TYPE = "extrabiomes:shelf_item";
 const DISPLAY_FAMILY = "shelf_item";
-
-// Held sprites and held blocks need different poses; each entity's client file lines its kind up on the slot centre.
-const SPRITE_DISPLAY = "extrabiomes:shelf_item";
-const BLOCK_DISPLAY = "extrabiomes:shelf_block";
 
 // Keyed by the placement trait's cardinal_direction: the way the player faced, so the shelf front points back at them.
 const FRONT_BY_PLAYER_FACING = {
@@ -23,36 +23,42 @@ function frontOf(block) {
     return FRONT_BY_PLAYER_FACING[block.permutation.getState("minecraft:cardinal_direction")];
 }
 
-function slotTag(slot) {
-    return `shelf_slot_${slot}`;
+function slotTag(block, slot) {
+    const { x, y, z } = block.location;
+    return `shelf_${x}_${y}_${z}_${slot}`;
 }
 
-function displayTypeFor(item) {
-    return BlockTypes.get(item.typeId) ? BLOCK_DISPLAY : SPRITE_DISPLAY;
+// Lateral is measured along the viewer's right, so slot 0 is the viewer's left.
+function lateralOffset(front, x, z) {
+    return x * front.z - z * front.x;
 }
 
-function slotPosition(block, front, slot) {
-    const sideways = (slot - 1) * ITEM_SPACING;
-    const rightX = front.z;
-    const rightZ = -front.x;
-    return {
-        x: block.location.x + 0.5 - front.x * ITEM_DEPTH_FROM_CENTER + rightX * sideways,
-        y: block.location.y + ITEM_HEIGHT,
-        z: block.location.z + 0.5 - front.z * ITEM_DEPTH_FROM_CENTER + rightZ * sideways,
-    };
-}
-
-function clickedSlot(front, faceLocation) {
-    const lateral = (faceLocation.x - 0.5) * front.z + (faceLocation.z - 0.5) * -front.x;
+// Casts the player's view onto the shelf front rather than trusting faceLocation, which came out mirrored.
+function clickedSlot(block, front, player) {
+    const eye = player.getHeadLocation();
+    const view = player.getViewDirection();
+    const centre = block.center();
+    const toFace = (centre.x - eye.x - front.x * FRONT_FACE_DEPTH) * front.x + (centre.z - eye.z - front.z * FRONT_FACE_DEPTH) * front.z;
+    const along = toFace / (view.x * front.x + view.z * front.z);
+    const lateral = lateralOffset(front, eye.x + view.x * along - centre.x, eye.z + view.z * along - centre.z);
     return Math.min(SLOT_COUNT - 1, Math.max(0, Math.floor(lateral / SLOT_WIDTH + SLOT_COUNT / 2)));
+}
+
+function slotCentre(block, front, slot) {
+    const sideways = (slot - 1) * SLOT_WIDTH;
+    return {
+        x: block.location.x + 0.5 - front.x * ITEM_DEPTH + front.z * sideways,
+        y: block.location.y + 0.5,
+        z: block.location.z + 0.5 - front.z * ITEM_DEPTH - front.x * sideways,
+    };
 }
 
 function findDisplays(block, slot) {
     return block.dimension.getEntities({
         families: [DISPLAY_FAMILY],
-        tags: [slotTag(slot)],
+        tags: [slotTag(block, slot)],
         location: block.center(),
-        maxDistance: 1,
+        maxDistance: 2,
     });
 }
 
@@ -62,9 +68,13 @@ function storedItem(display) {
 
 // The inventory keeps the exact stack; the mainhand copy exists only so the entity renders the item.
 function spawnDisplay(block, front, slot, item) {
-    const display = block.dimension.spawnEntity(displayTypeFor(item), slotPosition(block, front, slot));
-    display.addTag(slotTag(slot));
-    display.setRotation({ x: 0, y: front.yaw });
+    const yaw = front.yaw + (BlockTypes.get(item.typeId) ? BLOCK_TURN : 0);
+    const radians = (yaw * Math.PI) / 180;
+    const target = slotCentre(block, front, slot);
+    const holder = { x: target.x + Math.sin(radians) * HELD_ITEM_REACH, y: target.y, z: target.z - Math.cos(radians) * HELD_ITEM_REACH };
+    const display = block.dimension.spawnEntity(DISPLAY_TYPE, holder);
+    display.addTag(slotTag(block, slot));
+    display.setRotation({ x: 0, y: yaw });
     display.getComponent("minecraft:inventory").container.setItem(0, item);
     display.runCommand(`replaceitem entity @s slot.weapon.mainhand 0 ${item.typeId} ${item.amount}`);
     return display;
@@ -76,11 +86,11 @@ function handSlot(player) {
 
 /** @type {import("@minecraft/server").BlockCustomComponent} */
 export const ShelfComponent = {
-    onPlayerInteract({ block, player, face, faceLocation }) {
+    onPlayerInteract({ block, player, face }) {
         const front = frontOf(block);
         if (face !== front.face) return;
 
-        const slot = clickedSlot(front, faceLocation);
+        const slot = clickedSlot(block, front, player);
         const hand = handSlot(player);
         const held = hand.getItem();
         const [existing] = findDisplays(block, slot);

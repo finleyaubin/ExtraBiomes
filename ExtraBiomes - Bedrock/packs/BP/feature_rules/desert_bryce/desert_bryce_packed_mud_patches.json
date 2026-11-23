@@ -1,0 +1,32 @@
+{
+    "format_version": "1.20.20",
+    "minecraft:feature_rules": {
+        "description": {
+            "identifier": "extrabiomes:desert_bryce_packed_mud_patches",
+            "places_feature": "extrabiomes:desert_bryce/packed_mud_patch_feature"
+        },
+        "conditions": {
+            "placement_pass": "surface_pass",
+            "minecraft:biome_filter": [
+                {
+                    "test": "has_biome_tag",
+                    "operator": "==",
+                    "value": "desert_bryce"
+                }
+            ]
+        },
+        "distribution": {
+            "iterations": 256,
+            "scatter_chance": 100,
+            "x": {
+                "distribution": "fixed_grid",
+                "extent": [0, 16]
+            },
+            "y": "query.above_top_solid(variable.worldx, variable.worldz) - ((query.noise(variable.worldx / 16, variable.worldz / 16) >= -0.35 && query.noise(variable.worldx / 16, variable.worldz / 16) < -0.15) ? 1 : 0)",
+            "z": {
+                "distribution": "fixed_grid",
+                "extent": [0, 16]
+            }
+        }
+    }
+}

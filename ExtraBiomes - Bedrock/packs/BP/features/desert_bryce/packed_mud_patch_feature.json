@@ -1,0 +1,12 @@
+{
+    "format_version": "1.17.0",
+    "minecraft:single_block_feature": {
+        "description": {
+            "identifier": "extrabiomes:desert_bryce/packed_mud_patch_feature"
+        },
+        "places_block": "minecraft:packed_mud",
+        "enforce_survivability_rules": false,
+        "enforce_placement_rules": false,
+        "may_replace": ["minecraft:sand"]
+    }
+}

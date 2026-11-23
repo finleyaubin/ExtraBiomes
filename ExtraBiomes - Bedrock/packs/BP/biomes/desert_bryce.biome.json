@@ -23,24 +23,6 @@
                     }
                 ]
             },
-            "minecraft:surface_material_adjustments": {
-                "adjustments": [
-                    {
-                        "materials": {
-                            "top_material": "minecraft:packed_mud"
-                        },
-                        "noise_frequency_scale": 0.1,
-                        "noise_range": [-0.35, -0.15]
-                    },
-                    {
-                        "materials": {
-                            "mid_material": "minecraft:sandstone"
-                        },
-                        "noise_frequency_scale": 0.1,
-                        "noise_range": [0.3, 0.6]
-                    }
-                ]
-            },
             "minecraft:surface_builder": {
                 "builder": {
                     "type": "minecraft:mesa",
