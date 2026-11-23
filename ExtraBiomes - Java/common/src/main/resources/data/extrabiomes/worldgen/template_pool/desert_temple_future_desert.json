@@ -1,0 +1,15 @@
+{
+  "name": "extrabiomes:desert_temple_future_desert",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "extrabiomes:desert_temple/future_desert",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

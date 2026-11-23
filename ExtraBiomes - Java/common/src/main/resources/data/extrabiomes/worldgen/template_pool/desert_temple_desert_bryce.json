@@ -1,0 +1,15 @@
+{
+  "name": "extrabiomes:desert_temple_desert_bryce",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "extrabiomes:desert_temple/desert_bryce",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}
