@@ -152,7 +152,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(
                 ModBlocks.BLACK_SAND.getKey()
         );
-        this.tag(BlockTags.MINEABLE_WITH_HOE);
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(keys(ModTagContents.LEAVES));
         this.tag(Tags.Blocks.NEEDS_WOOD_TOOL).add(
                 ModBlocks.DENSE_CLOUD.getKey()
         );

@@ -153,7 +153,7 @@ public class ModBlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(keys(
                 ModBlocks.BLACK_SAND.get()
         ));
-        this.tag(BlockTags.MINEABLE_WITH_HOE);
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(keys(ModTagContents.LEAVES));
 
         this.tag(BlockTags.FENCES).add(keys(
                 ModBlocks.MYSTIC_FENCE.get(),

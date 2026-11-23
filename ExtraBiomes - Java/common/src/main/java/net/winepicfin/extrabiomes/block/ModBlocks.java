@@ -7,6 +7,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -220,7 +221,17 @@ public class ModBlocks {
     }
 
     private static <T extends Block> RegistrySupplier<Item> registerBlockItem(String name, RegistrySupplier<T> block) {
-        return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties().setId(itemId(name))));
+        return ModItems.ITEMS.register(name, () -> {
+            Item.Properties properties = new Item.Properties().setId(itemId(name));
+            if (isCompostable(name)) {
+                properties.compostable(ContextIntProviders.COMPOSTABLE_LOW);
+            }
+            return new BlockItem(block.get(), properties);
+        });
+    }
+
+    private static boolean isCompostable(String name) {
+        return name.endsWith("_leaves") || name.endsWith("_sapling");
     }
 
     // planks/stairs/slab/etc. follow an identical pattern across every wood set - only the name prefix and wood type differ.

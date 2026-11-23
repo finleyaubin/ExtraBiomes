@@ -68,6 +68,9 @@ public final class ModTagContents {
     public static final List<RegistrySupplier<Item>> HANGING_SIGN_ITEMS = List.of(
             ModItems.MYSTIC_HANGING_SIGN, ModItems.SKY_HANGING_SIGN, ModItems.PALM_HANGING_SIGN, ModItems.LARCH_HANGING_SIGN, ModItems.GILDED_SKY_HANGING_SIGN);
 
+    public static final List<RegistrySupplier<Block>> LEAVES = List.of(
+            ModBlocks.MYSTIC_LEAVES, ModBlocks.SKY_LEAVES, ModBlocks.LARCH_LEAVES, ModBlocks.PALM_LEAVES);
+
     public static final List<RegistrySupplier<Block>> SAPLINGS = List.of(
             ModBlocks.MYSTIC_SAPLING, ModBlocks.SKY_SAPLING, ModBlocks.PALM_SAPLING, ModBlocks.LARCH_SAPLING);
 
