@@ -7,6 +7,7 @@ Requires Pillow + numpy (pip install pillow numpy). Run with any python3:
     python3 tools/pbr2java.py --list                 # show Bedrock/Java name matches
     python3 tools/pbr2java.py black_sandstone_top     # convert one texture (test case)
     python3 tools/pbr2java.py --all                   # convert every matched texture
+    add --vision to any mode to let an Ollama vision model assign each colour's height (tools/vision_heights.py)
 
 Output: for a matched Java texture assets/extrabiomes/textures/block/**/<name>.png, writes
 <name>_n.png (LabPBR normal+AO+height) and <name>_s.png (LabPBR specular) next to it.
@@ -46,7 +47,8 @@ import numpy as np
 from PIL import Image
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BEDROCK_BLOCKS = os.path.join(REPO_ROOT, "ExtraBiomes - Bedrock", "packs", "RP", "textures", "blocks")
+BEDROCK_RP = os.path.join(REPO_ROOT, "ExtraBiomes - Bedrock", "packs", "RP", "textures")
+BEDROCK_BLOCKS = os.path.join(BEDROCK_RP, "blocks")
 JAVA_BLOCKS = os.path.join(REPO_ROOT, "ExtraBiomes - Java", "common", "src", "main", "resources",
                             "assets", "extrabiomes", "textures", "block")
 
@@ -124,6 +126,10 @@ def java_dir_for(java_base):
     return JAVA_BLOCKS
 
 
+def java_color_path(java_base):
+    return os.path.join(java_dir_for(java_base), java_base + ".png")
+
+
 def java_name_for(bedrock_base):
     if bedrock_base in NAME_ALIASES:
         return NAME_ALIASES[bedrock_base]
@@ -176,19 +182,53 @@ def build_specular(java_base, metalness, emissive, roughness, subsurface, has_su
     return Image.fromarray(out, mode="RGBA")
 
 
-def build_normal(height_path, shape, strength=1.5):
-    h, w = shape
-    if height_path is not None:
-        height_img = Image.open(height_path).convert("L").resize((w, h), Image.NEAREST)
-        height = np.asarray(height_img).astype(np.float32) / 255.0
-    else:
-        height = np.full((h, w), 1.0, dtype=np.float32)
+HEIGHT_LEVELS = 6
+HEIGHT_FLOOR = 0.25
+USE_VISION = False
 
-    # Sobel gradient (wrap at edges -- these are tileable block textures).
-    hL = np.roll(height, 1, axis=1)
-    hR = np.roll(height, -1, axis=1)
-    hU = np.roll(height, 1, axis=0)
-    hD = np.roll(height, -1, axis=0)
+
+def _shift(a, step, axis, tileable):
+    if tileable:
+        return np.roll(a, step, axis)
+    edge = np.take(a, [0 if step > 0 else -1], axis)
+    body = np.take(a, range(a.shape[axis] - 1) if step > 0 else range(1, a.shape[axis]), axis)
+    return np.concatenate([edge, body] if step > 0 else [body, edge], axis)
+
+
+def _tent_blur(a, tileable=True):
+    for axis in (0, 1):
+        a = (_shift(a, 1, axis, tileable) + 2 * a + _shift(a, -1, axis, tileable)) / 4
+    return a
+
+
+def clean_height(color_path, height_path=None, tileable=True, levels=HEIGHT_LEVELS):
+    """Denoised 0-1 height: Bedrock heightmap (or colour luminance when there is none),
+    posterized to a few plateaus, then blurred so edges stay soft."""
+    if USE_VISION:
+        from vision_heights import level_map
+        h = level_map(color_path)
+        if h.max() - h.min() < 1e-3:
+            return np.ones_like(h)
+        return HEIGHT_FLOOR + (1 - HEIGHT_FLOOR) * _tent_blur(h, tileable)
+    color = Image.open(color_path).convert("RGBA")
+    if height_path is not None:
+        src = np.asarray(Image.open(height_path).convert("L").resize(color.size, Image.NEAREST), dtype=np.float32) / 255
+    else:
+        rgba = np.asarray(color, dtype=np.float32) / 255
+        src = (0.299 * rgba[:, :, 0] + 0.587 * rgba[:, :, 1] + 0.114 * rgba[:, :, 2]) * (rgba[:, :, 3] > 0.5)
+    h = src
+    span = h.max() - h.min()
+    if span < 1e-3:
+        return np.ones_like(h)
+    h = np.round((h - h.min()) / span * (levels - 1)) / (levels - 1)
+    return HEIGHT_FLOOR + (1 - HEIGHT_FLOOR) * _tent_blur(h, tileable)
+
+
+def build_normal(height, strength=1.5, tileable=True):
+    h, w = height.shape
+
+    hL, hR = _shift(height, 1, 1, tileable), _shift(height, -1, 1, tileable)
+    hU, hD = _shift(height, 1, 0, tileable), _shift(height, -1, 0, tileable)
     dx = (hR - hL) * strength
     dy = (hD - hU) * strength
 
@@ -211,7 +251,7 @@ def convert_one(java_base, bset, dry_run=False):
 
     metalness, emissive, roughness, subsurface = load_mer(bset["mer_path"])
     spec = build_specular(java_base, metalness, emissive, roughness, subsurface, bset["has_subsurface"])
-    norm = build_normal(bset["height_path"], roughness.shape)
+    norm = build_normal(clean_height(java_color_path(java_base), bset["height_path"]))
 
     out_dir = java_dir_for(java_base)
     s_path = os.path.join(out_dir, java_base + "_s.png")
@@ -225,7 +265,111 @@ def convert_one(java_base, bset, dry_run=False):
     return True
 
 
+SKIP_NAME = _re.compile(r"(_mer|_sign|_hanging_sign)$")
+
+
+def derive_missing_java_normals():
+    """Write _n for Java textures that have none, deriving height from the colour."""
+    n = 0
+    for root, _dirs, files in os.walk(JAVA_BLOCKS):
+        for f in sorted(files):
+            base = f[:-4]
+            if not f.endswith(".png") or base.endswith(("_n", "_s")) or SKIP_NAME.search(base):
+                continue
+            if os.path.exists(os.path.join(root, base + "_n.png")):
+                continue
+            build_normal(clean_height(os.path.join(root, f))).save(os.path.join(root, base + "_n.png"))
+            print(f"  {base}_n.png (from colour)")
+            n += 1
+    print(f"\nDerived {n} normals.")
+
+
+ENTITY_LEVELS = 4
+ENTITY_STRENGTH = 1.0
+
+
+def derive_entity_normals(root):
+    """Write _n for every entity texture under root that has none (UV layouts, so no edge wrapping)."""
+    n = 0
+    for dirpath, _dirs, files in os.walk(root):
+        for f in sorted(files):
+            base = f[:-4]
+            if not f.endswith(".png") or base.endswith(("_n", "_s")) or os.path.exists(os.path.join(dirpath, base + "_n.png")):
+                continue
+            height = clean_height(os.path.join(dirpath, f), tileable=False, levels=ENTITY_LEVELS)
+            build_normal(height, ENTITY_STRENGTH, tileable=False).save(os.path.join(dirpath, base + "_n.png"))
+            n += 1
+    print(f"Derived {n} entity normals.")
+
+
+def write_bedrock_entity_heightmaps():
+    """Add a heightmap and texture set beside every Bedrock entity texture that has none."""
+    root = os.path.join(BEDROCK_RP, "entity")
+    n = 0
+    for dirpath, _dirs, files in os.walk(root):
+        for f in sorted(files):
+            base = f[:-4]
+            if not f.endswith(".png") or base.endswith(("_heightmap", "_mer")) or os.path.exists(os.path.join(dirpath, base + ".texture_set.json")):
+                continue
+            save_heightmap(clean_height(os.path.join(dirpath, f), tileable=False, levels=ENTITY_LEVELS),
+                           os.path.join(dirpath, base + "_heightmap.png"))
+            with open(os.path.join(dirpath, base + ".texture_set.json"), "w", encoding="utf-8") as fh:
+                json.dump({"format_version": "1.21.30",
+                           "minecraft:texture_set": {"color": base, "heightmap": base + "_heightmap"}}, fh, indent=4)
+                fh.write("\n")
+            n += 1
+    print(f"Added {n} entity heightmaps.")
+
+
+def write_bedrock_heightmaps():
+    """Replace every Bedrock heightmap with the cleaned one; add one (and a texture set) where missing."""
+    for root, _dirs, files in os.walk(BEDROCK_BLOCKS):
+        for f in sorted(files):
+            if not f.endswith(".texture_set.json"):
+                continue
+            path = os.path.join(root, f)
+            with open(path, "r", encoding="utf-8-sig") as fh:
+                data = json.load(fh)["minecraft:texture_set"]
+            color = os.path.join(root, data["color"] + ".png")
+            height = _first_existing(root, data["heightmap"], [("", ".png")]) if "heightmap" in data else None
+            out = os.path.join(root, data.get("heightmap", data["color"] + "_heightmap") + ".png")
+            save_heightmap(clean_height(color, height), out)
+            print(f"  {os.path.relpath(out, BEDROCK_BLOCKS)}")
+    for root, _dirs, files in os.walk(BEDROCK_BLOCKS):
+        for f in sorted(files):
+            base = f[:-4]
+            if not f.endswith(".png") or base.endswith(("_mer", "_heightmap", "_height", "_normal")) or base == "air":
+                continue
+            if os.path.exists(os.path.join(root, base + ".texture_set.json")):
+                continue
+            if "_mer" in base or base.endswith("_door"):
+                continue
+            save_heightmap(clean_height(os.path.join(root, f)), os.path.join(root, base + "_heightmap.png"))
+            with open(os.path.join(root, base + ".texture_set.json"), "w", encoding="utf-8") as fh:
+                json.dump({"format_version": "1.21.30",
+                           "minecraft:texture_set": {"color": base, "heightmap": base + "_heightmap"}}, fh, indent=4)
+                fh.write("\n")
+            print(f"  NEW {base}_heightmap.png + texture set")
+
+
+def save_heightmap(height, path):
+    Image.fromarray(np.round(height * 255).astype(np.uint8), mode="L").save(path)
+
+
 def main(argv):
+    global USE_VISION
+    if "--vision" in argv:
+        USE_VISION = True
+        argv = [a for a in argv if a != "--vision"]
+    if argv and argv[0] == "--java-missing":
+        return derive_missing_java_normals()
+    if argv and argv[0] == "--java-entities":
+        return derive_entity_normals(os.path.join(os.path.dirname(JAVA_BLOCKS), "entity"))
+    if argv and argv[0] == "--bedrock-entities":
+        return write_bedrock_entity_heightmaps()
+    if argv and argv[0] == "--bedrock-heights":
+        return write_bedrock_heightmaps()
+
     matched, unmatched = match_all()
 
     if not argv or argv[0] == "--list":
